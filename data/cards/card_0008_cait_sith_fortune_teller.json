@@ -1,0 +1,44 @@
+{
+  "id": "card_0008",
+  "name": "Cait Sith, Fortune Teller",
+  "slug": "cait_sith_fortune_teller",
+  "setId": "set_ffvii",
+  "typeLine": "Legendary Artifact Creature - Cat Moogle",
+  "manaCost": "{3}{R}",
+  "manaValue": 4,
+  "colors": [
+    "R"
+  ],
+  "colorIdentity": [
+    "R"
+  ],
+  "rarity": "rare",
+  "oracleText": "Lucky Slots - At the beginning of combat on your turn, scry 1, then exile the top card of your library. You may play that card this turn. When you exile a card this way, target creature you control gets +X/+0 until end of turn, where X is that card's mana value.",
+  "flavorText": "I'm friend to one and all, thanks to my crystal ball!",
+  "power": "3",
+  "toughness": "3",
+  "loyalty": null,
+  "defense": null,
+  "artist": "Kevin Sidharta",
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "scry",
+    "impulse-draw",
+    "power-boost"
+  ],
+  "tags": [
+    "final-fantasy",
+    "final-fantasy-vii",
+    "cait-sith",
+    "moogle",
+    "cat"
+  ],
+  "status": "approved",
+  "notes": "Parsed from a photographed physical card. Image intentionally omitted per request and represented with a placeholder image reference. Printed details not modeled as first-class fields in Cloud Arcanum include collector number 54, printed language EN, set-code/collector line formatting, expansion symbol treatment, and copyright/legal line.",
+  "createdAt": "2026-03-27T21:00:00-05:00",
+  "updatedAt": "2026-03-27T21:00:00-05:00"
+}

@@ -1,0 +1,47 @@
+{
+  "id": "card_0011",
+  "name": "Baal, Tyrant of Storms",
+  "slug": "baal_tyrant_of_storms",
+  "setId": "set_angeldemons",
+  "typeLine": "Legendary Creature - Demon",
+  "manaCost": null,
+  "manaValue": null,
+  "colors": [
+    "B",
+    "R",
+    "G"
+  ],
+  "colorIdentity": [
+    "B",
+    "R",
+    "G"
+  ],
+  "rarity": null,
+  "oracleText": null,
+  "flavorText": "Thunder obeys him as a lash obeys the tyrant's hand.",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "local",
+    "path": "images/cards/card_0009_lucifer_fallen_angel_of_light.webp"
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "trample",
+    "burn",
+    "stormcall"
+  ],
+  "tags": [
+    "demon",
+    "storm",
+    "baal",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Initial demonic figure record for the Angels and Demons set.",
+  "createdAt": "2026-03-28T00:07:00-05:00",
+  "updatedAt": "2026-03-28T00:29:00-05:00"
+}

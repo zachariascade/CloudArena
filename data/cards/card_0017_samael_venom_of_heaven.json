@@ -1,0 +1,47 @@
+{
+  "id": "card_0017",
+  "name": "Samael, Venom of Heaven",
+  "slug": "samael_venom_of_heaven",
+  "setId": "set_angeldemons",
+  "typeLine": "Legendary Creature - Angel Demon",
+  "manaCost": null,
+  "manaValue": null,
+  "colors": [
+    "W",
+    "B",
+    "G"
+  ],
+  "colorIdentity": [
+    "W",
+    "B",
+    "G"
+  ],
+  "rarity": null,
+  "oracleText": null,
+  "flavorText": "His judgments are so pure they curdle into poison.",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "local",
+    "path": "images/cards/card_0009_lucifer_fallen_angel_of_light.webp"
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "deathtouch",
+    "lifelink",
+    "graveyard"
+  ],
+  "tags": [
+    "demon",
+    "heavenly",
+    "samael",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Initial demonic figure record for the Angels and Demons set.",
+  "createdAt": "2026-03-28T00:13:00-05:00",
+  "updatedAt": "2026-03-28T00:29:00-05:00"
+}

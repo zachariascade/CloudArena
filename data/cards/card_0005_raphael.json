@@ -1,0 +1,44 @@
+{
+  "id": "card_0005",
+  "name": "Raphael, Wing of Restored Grace",
+  "slug": "raphael_wing_of_restored_grace",
+  "setId": "set_angeldemons",
+  "typeLine": "Legendary Creature - Angel",
+  "manaCost": null,
+  "manaValue": null,
+  "colors": [
+    "W",
+    "G"
+  ],
+  "colorIdentity": [
+    "W",
+    "G"
+  ],
+  "rarity": null,
+  "oracleText": null,
+  "flavorText": "Mercy moves in his wake like a balm over broken wings.",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "local",
+    "path": "images/cards/card_0003_michael.avif"
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "flying",
+    "lifegain"
+  ],
+  "tags": [
+    "angel",
+    "archangel",
+    "healer",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Initial angelic figure record for the Angels and Demons set.",
+  "createdAt": "2026-03-27T20:42:00-05:00",
+  "updatedAt": "2026-03-27T23:55:00-05:00"
+}

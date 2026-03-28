@@ -1,0 +1,25 @@
+{
+  "id": "deck_patriarchs",
+  "name": "Tribe of Promise",
+  "universeId": "universe_biblical",
+  "setIds": [
+    "set_genesis"
+  ],
+  "format": "commander",
+  "commander": "card_0001",
+  "cards": [
+    {
+      "cardId": "card_0001",
+      "quantity": 1
+    },
+    {
+      "cardId": "card_0002",
+      "quantity": 1
+    }
+  ],
+  "tags": [
+    "sample",
+    "patriarchs"
+  ],
+  "notes": "Seed deck for testing deck references and future deck-building workflows."
+}

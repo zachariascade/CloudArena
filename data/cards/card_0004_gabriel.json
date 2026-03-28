@@ -1,0 +1,44 @@
+{
+  "id": "card_0004",
+  "name": "Gabriel, Trumpet of the Final Dawn",
+  "slug": "gabriel_trumpet_of_the_final_dawn",
+  "setId": "set_angeldemons",
+  "typeLine": "Legendary Creature - Angel",
+  "manaCost": null,
+  "manaValue": null,
+  "colors": [
+    "W",
+    "U"
+  ],
+  "colorIdentity": [
+    "W",
+    "U"
+  ],
+  "rarity": null,
+  "oracleText": null,
+  "flavorText": "His voice arrives like a trumpet before the judgment it foretells.",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "local",
+    "path": "images/cards/card_0003_michael.avif"
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "flying",
+    "scry"
+  ],
+  "tags": [
+    "angel",
+    "archangel",
+    "messenger",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Initial angelic figure record for the Angels and Demons set.",
+  "createdAt": "2026-03-27T20:41:00-05:00",
+  "updatedAt": "2026-03-27T23:55:00-05:00"
+}

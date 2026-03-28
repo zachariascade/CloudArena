@@ -1,0 +1,45 @@
+{
+  "id": "card_0013",
+  "name": "Belial, Father of Rebellion",
+  "slug": "belial_father_of_rebellion",
+  "setId": "set_angeldemons",
+  "typeLine": "Legendary Creature - Demon",
+  "manaCost": null,
+  "manaValue": null,
+  "colors": [
+    "B",
+    "R"
+  ],
+  "colorIdentity": [
+    "B",
+    "R"
+  ],
+  "rarity": null,
+  "oracleText": null,
+  "flavorText": "No throne stands long once he teaches kneeling creatures to hate the floor.",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "local",
+    "path": "images/cards/card_0009_lucifer_fallen_angel_of_light.webp"
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "menace",
+    "goad",
+    "sacrifice"
+  ],
+  "tags": [
+    "demon",
+    "rebellion",
+    "belial",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Initial demonic figure record for the Angels and Demons set.",
+  "createdAt": "2026-03-28T00:09:00-05:00",
+  "updatedAt": "2026-03-28T00:29:00-05:00"
+}

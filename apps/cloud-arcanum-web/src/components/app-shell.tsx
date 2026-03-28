@@ -1,0 +1,51 @@
+import type { ReactElement, ReactNode } from "react";
+import { NavLink } from "react-router-dom";
+
+type NavigationItem = {
+  to: string;
+  label: string;
+  end?: boolean;
+};
+
+type AppShellProps = {
+  apiBaseUrl: string;
+  children: ReactNode;
+};
+
+const navigationItems: NavigationItem[] = [
+  { to: "/cards", label: "Cards" },
+  { to: "/decks", label: "Decks" },
+  { to: "/sets", label: "Sets" },
+  { to: "/universes", label: "Universes" },
+];
+
+export function AppShell({ apiBaseUrl, children }: AppShellProps): ReactElement {
+  return (
+    <main className="app-shell">
+      <header className="app-header">
+        <section className="panel brand-block">
+          <div className="eyebrow">Card catalog</div>
+          <h1>Cloud Arcanum</h1>
+          <p>Browse cards first, then move into decks, sets, and universes from a single header.</p>
+        </section>
+        <nav className="panel nav" aria-label="Primary">
+          {navigationItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              className={({ isActive }) => (isActive ? "active" : undefined)}
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
+      </header>
+      <div className="status">
+        API base: <code>{apiBaseUrl}</code>
+      </div>
+      <div style={{ height: "1.5rem" }} />
+      {children}
+    </main>
+  );
+}

@@ -1,0 +1,340 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cloud-arcanum.local/schemas/card.schema.json",
+  "title": "Cloud Arcanum Card",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "slug",
+    "setId",
+    "typeLine",
+    "manaCost",
+    "manaValue",
+    "colors",
+    "colorIdentity",
+    "rarity",
+    "oracleText",
+    "flavorText",
+    "power",
+    "toughness",
+    "loyalty",
+    "defense",
+    "artist",
+    "image",
+    "imagePrompt",
+    "mechanics",
+    "tags",
+    "status",
+    "notes",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^card_[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "setId": {
+      "type": "string",
+      "pattern": "^set_[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "typeLine": {
+      "type": "string",
+      "minLength": 1
+    },
+    "manaCost": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "manaValue": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "colors": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "W",
+          "U",
+          "B",
+          "R",
+          "G",
+          "C"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "colorIdentity": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "W",
+          "U",
+          "B",
+          "R",
+          "G",
+          "C"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "rarity": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "common",
+        "uncommon",
+        "rare",
+        "mythic",
+        "special",
+        "bonus",
+        null
+      ]
+    },
+    "oracleText": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "flavorText": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "power": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "toughness": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "loyalty": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "defense": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "artist": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "image": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "path"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "local",
+            "remote",
+            "generated",
+            "placeholder"
+          ]
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "imagePrompt": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "subject",
+        "scene",
+        "composition",
+        "lighting",
+        "palette",
+        "mood",
+        "medium",
+        "styleProfile",
+        "negativePrompt",
+        "notes"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "const": "v1"
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scene": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "composition": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "lighting": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "palette": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "mood": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "medium": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "styleProfile": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "negativePrompt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "mechanics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "templating",
+        "balanced",
+        "approved"
+      ]
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": [
+              "balanced",
+              "approved"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "manaCost": {
+            "type": "string",
+            "minLength": 1
+          },
+          "manaValue": {
+            "type": "number",
+            "minimum": 0
+          },
+          "rarity": {
+            "type": "string"
+          },
+          "oracleText": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "manaCost",
+          "manaValue",
+          "rarity",
+          "oracleText"
+        ]
+      }
+    }
+  ]
+}

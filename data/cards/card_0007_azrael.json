@@ -1,0 +1,44 @@
+{
+  "id": "card_0007",
+  "name": "Azrael, Keeper of the Last Veil",
+  "slug": "azrael_keeper_of_the_last_veil",
+  "setId": "set_angeldemons",
+  "typeLine": "Legendary Creature - Angel",
+  "manaCost": null,
+  "manaValue": null,
+  "colors": [
+    "W",
+    "B"
+  ],
+  "colorIdentity": [
+    "W",
+    "B"
+  ],
+  "rarity": null,
+  "oracleText": null,
+  "flavorText": "He is feared not for cruelty, but for certainty.",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "local",
+    "path": "images/cards/card_0003_michael.avif"
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "flying",
+    "graveyard"
+  ],
+  "tags": [
+    "angel",
+    "archangel",
+    "death",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Initial angelic figure record for the Angels and Demons set.",
+  "createdAt": "2026-03-27T20:44:00-05:00",
+  "updatedAt": "2026-03-27T23:55:00-05:00"
+}
