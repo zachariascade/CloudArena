@@ -1,0 +1,450 @@
+import type { ChangeEvent, FormEvent, ReactElement } from "react";
+import { useSearchParams } from "react-router-dom";
+
+import type {
+  CardListItem,
+  CardsListMeta,
+  FilterMetadata,
+} from "../../../../src/cloud-arcanum/api-contract.js";
+import {
+  cardColors,
+  cardRarities,
+  cardStatuses,
+} from "../../../../src/domain/index.js";
+import {
+  CardFaceTile,
+  EmptyState,
+  ErrorState,
+  LoadingState,
+  PageLayout,
+} from "../components/index.js";
+import {
+  CloudArcanumApiClientError,
+  buildCardListQueryString,
+  createCloudArcanumApiClient,
+  parseCardListQuery,
+  useApiRequest,
+} from "../lib/index.js";
+
+type CardsPageProps = {
+  apiBaseUrl: string;
+};
+
+type ListResourceState<TItem, TMeta extends { total: number; filtersApplied: Record<string, unknown> }> =
+  {
+    data: {
+      items: TItem[];
+      meta: TMeta;
+    } | null;
+    error: Error | CloudArcanumApiClientError | null;
+    status: "idle" | "loading" | "success" | "error";
+  };
+
+function formatApiErrorDetails(error: Error | CloudArcanumApiClientError): ReactElement {
+  if (error instanceof CloudArcanumApiClientError) {
+    return (
+      <p>
+        Route <code>{error.route}</code> returned status <code>{error.status}</code>
+        {error.code ? (
+          <>
+            {" "}
+            with code <code>{error.code}</code>
+          </>
+        ) : null}
+        .
+      </p>
+    );
+  }
+
+  return <p>{error.message}</p>;
+}
+
+function buildFallbackFilterMetadata(): FilterMetadata {
+  return {
+    colors: [...cardColors],
+    decks: [],
+    rarities: [...cardRarities],
+    sets: [],
+    statuses: [...cardStatuses],
+    universes: [],
+  };
+}
+
+function mergeFilterMetadata(
+  metadata: FilterMetadata | null,
+  fallback: FilterMetadata,
+): FilterMetadata {
+  return {
+    colors: metadata?.colors.length ? metadata.colors : fallback.colors,
+    decks: metadata?.decks ?? fallback.decks,
+    rarities: metadata?.rarities.length ? metadata.rarities : fallback.rarities,
+    sets: metadata?.sets ?? fallback.sets,
+    statuses: metadata?.statuses.length ? metadata.statuses : fallback.statuses,
+    universes: metadata?.universes ?? fallback.universes,
+  };
+}
+
+function toggleStringInArray(values: string[] | undefined, value: string): string[] | undefined {
+  const current = values ?? [];
+  const next = current.includes(value)
+    ? current.filter((item) => item !== value)
+    : [...current, value];
+
+  return next.length > 0 ? next : undefined;
+}
+
+function updateSearchParams(
+  currentSearchParams: URLSearchParams,
+  nextQueryString: string,
+  setSearchParams: ReturnType<typeof useSearchParams>[1],
+): void {
+  const nextSearchParams = new URLSearchParams(nextQueryString);
+  const current = currentSearchParams.toString();
+  const next = nextSearchParams.toString();
+
+  if (current === next) {
+    return;
+  }
+
+  setSearchParams(nextSearchParams, { preventScrollReset: true });
+}
+
+function CardsFilters({
+  filterMetadata,
+  filterMetadataUnavailable,
+  query,
+  searchParams,
+  setSearchParams,
+}: {
+  filterMetadata: FilterMetadata;
+  filterMetadataUnavailable: boolean;
+  query: ReturnType<typeof parseCardListQuery>;
+  searchParams: URLSearchParams;
+  setSearchParams: ReturnType<typeof useSearchParams>[1];
+}): ReactElement {
+  function pushQuery(nextQuery: ReturnType<typeof parseCardListQuery>): void {
+    updateSearchParams(searchParams, buildCardListQueryString(nextQuery), setSearchParams);
+  }
+
+  function handleSearchSubmit(event: FormEvent<HTMLFormElement>): void {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const q = String(formData.get("q") ?? "").trim();
+
+    pushQuery({
+      ...query,
+      page: undefined,
+      q: q.length > 0 ? q : undefined,
+    });
+  }
+
+  function handleSelectChange(event: ChangeEvent<HTMLSelectElement>): void {
+    const { name, value } = event.currentTarget;
+    pushQuery({
+      ...query,
+      page: undefined,
+      [name]: value.length > 0 ? value : undefined,
+    });
+  }
+
+  function handleBooleanChange(event: ChangeEvent<HTMLSelectElement>): void {
+    const { name, value } = event.currentTarget;
+    const nextValue =
+      value === "true" ? true : value === "false" ? false : undefined;
+
+    pushQuery({
+      ...query,
+      page: undefined,
+      [name]: nextValue,
+    });
+  }
+
+  function handleMultiToggle(
+    key: "color" | "rarity" | "status",
+    value: string,
+  ): void {
+    pushQuery({
+      ...query,
+      page: undefined,
+      [key]: toggleStringInArray(query[key], value),
+    });
+  }
+
+  function clearFilters(): void {
+    setSearchParams(new URLSearchParams(), { preventScrollReset: true });
+  }
+
+  return (
+    <section className="panel filters-panel">
+      <div className="filters-header">
+        <div>
+          <strong>Search and filters</strong>
+          <p>Filter the card catalog and keep the current view easy to return to.</p>
+        </div>
+        <button className="ghost-button" onClick={clearFilters} type="button">
+          Clear all
+        </button>
+      </div>
+
+      <form className="search-form" onSubmit={handleSearchSubmit}>
+        <label className="field">
+          <span>Search cards</span>
+          <input defaultValue={query.q ?? ""} name="q" placeholder="Name, slug, type, tag..." />
+        </label>
+        <button className="primary-button" type="submit">
+          Apply
+        </button>
+      </form>
+
+      <details className="filters-disclosure">
+        <summary className="filters-disclosure-toggle">Show filters and sorting</summary>
+
+        <div className="filters-disclosure-content">
+          <div className="filters-grid">
+            <label className="field">
+              <span>Deck</span>
+              <select name="deckId" onChange={handleSelectChange} value={query.deckId ?? ""}>
+                <option value="">All decks</option>
+                {filterMetadata.decks.map((deck) => (
+                  <option key={deck.id} value={deck.id}>
+                    {deck.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="field">
+              <span>Universe</span>
+              <select name="universeId" onChange={handleSelectChange} value={query.universeId ?? ""}>
+                <option value="">All universes</option>
+                {filterMetadata.universes.map((universe) => (
+                  <option key={universe.id} value={universe.id}>
+                    {universe.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="field">
+              <span>Set</span>
+              <select name="setId" onChange={handleSelectChange} value={query.setId ?? ""}>
+                <option value="">All sets</option>
+                {filterMetadata.sets.map((set) => (
+                  <option key={set.id} value={set.id}>
+                    {set.name} ({set.code})
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="field">
+              <span>Sort</span>
+              <select name="sort" onChange={handleSelectChange} value={query.sort ?? "name"}>
+                <option value="name">Name</option>
+                <option value="updatedAt">Updated</option>
+                <option value="createdAt">Created</option>
+                <option value="status">Status</option>
+              </select>
+            </label>
+
+            <label className="field">
+              <span>Direction</span>
+              <select
+                name="direction"
+                onChange={handleSelectChange}
+                value={query.direction ?? "asc"}
+              >
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+            </label>
+
+            <label className="field">
+              <span>Has image</span>
+              <select
+                name="hasImage"
+                onChange={handleBooleanChange}
+                value={
+                  query.hasImage === undefined ? "" : query.hasImage ? "true" : "false"
+                }
+              >
+                <option value="">Any</option>
+                <option value="true">Image available</option>
+                <option value="false">No image</option>
+              </select>
+            </label>
+
+            <label className="field">
+              <span>Unresolved mechanics</span>
+              <select
+                name="hasUnresolvedMechanics"
+                onChange={handleBooleanChange}
+                value={
+                  query.hasUnresolvedMechanics === undefined
+                    ? ""
+                    : query.hasUnresolvedMechanics
+                      ? "true"
+                      : "false"
+                }
+              >
+                <option value="">Any</option>
+                <option value="true">Has unresolved fields</option>
+                <option value="false">Resolved only</option>
+              </select>
+            </label>
+          </div>
+
+          <div className="toggle-groups">
+            <fieldset className="toggle-group">
+              <legend>Status</legend>
+              <div className="toggle-row">
+                {filterMetadata.statuses.map((status) => (
+                  <label key={status} className="toggle-chip">
+                    <input
+                      checked={query.status?.includes(status) ?? false}
+                      onChange={() => handleMultiToggle("status", status)}
+                      type="checkbox"
+                    />
+                    <span>{status}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+
+            <fieldset className="toggle-group">
+              <legend>Colors</legend>
+              <div className="toggle-row">
+                {filterMetadata.colors.map((color) => (
+                  <label key={color} className="toggle-chip">
+                    <input
+                      checked={query.color?.includes(color) ?? false}
+                      onChange={() => handleMultiToggle("color", color)}
+                      type="checkbox"
+                    />
+                    <span>{color}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+
+            <fieldset className="toggle-group">
+              <legend>Rarity</legend>
+              <div className="toggle-row">
+                {filterMetadata.rarities.map((rarity) => (
+                  <label key={rarity} className="toggle-chip">
+                    <input
+                      checked={query.rarity?.includes(rarity) ?? false}
+                      onChange={() => handleMultiToggle("rarity", rarity)}
+                      type="checkbox"
+                    />
+                    <span>{rarity}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          </div>
+
+          {filterMetadataUnavailable ? (
+            <p>Some filter options may be limited until the catalog metadata is available.</p>
+          ) : null}
+        </div>
+      </details>
+    </section>
+  );
+}
+
+export function CardsPage({ apiBaseUrl }: CardsPageProps): ReactElement {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = parseCardListQuery(searchParams);
+  const api = createCloudArcanumApiClient({ baseUrl: apiBaseUrl });
+
+  const cardsState = useApiRequest(
+    async (signal) => {
+      const response = await api.listCards(query, { signal });
+      return { items: response.data, meta: response.meta };
+    },
+    [apiBaseUrl, searchParams.toString()],
+  ) as ListResourceState<CardListItem, CardsListMeta>;
+
+  const filtersState = useApiRequest(
+    async (signal) => {
+      const response = await api.getMetaFilters({ signal });
+      return response.data;
+    },
+    [apiBaseUrl],
+  );
+
+  const fallbackFilters = buildFallbackFilterMetadata();
+  const filterMetadata = mergeFilterMetadata(filtersState.data, fallbackFilters);
+  const filterMetadataUnavailable = filtersState.status === "error";
+
+  return (
+    <PageLayout
+      kicker="Browse cards"
+      title="Cards"
+      description="Search, filter, and sort the card catalog."
+    >
+      <CardsFilters
+        filterMetadata={filterMetadata}
+        filterMetadataUnavailable={filterMetadataUnavailable}
+        query={query}
+        searchParams={searchParams}
+        setSearchParams={setSearchParams}
+      />
+
+      <div style={{ height: "1rem" }} />
+
+      {cardsState.status === "loading" || cardsState.status === "idle" ? (
+        <LoadingState
+          title="Loading cards"
+          description="Getting the latest card list."
+        />
+      ) : null}
+
+      {cardsState.status === "error" && cardsState.error ? (
+        <ErrorState
+          title="Cards unavailable"
+          description="We couldn't load cards right now."
+          details={
+            <>
+              {formatApiErrorDetails(cardsState.error)}
+              <p>Please try again in a moment.</p>
+            </>
+          }
+        />
+      ) : null}
+
+      {cardsState.status === "success" && cardsState.data ? (
+        cardsState.data.items.length > 0 ? (
+          <>
+            <div className="summary-row">
+              <div className="summary-pill">
+                Total <strong>{cardsState.data.meta.total}</strong>
+              </div>
+              <div className="summary-pill">
+                Loaded <strong>{cardsState.data.items.length}</strong>
+              </div>
+              <div className="summary-pill">
+                Sort <strong>{String(cardsState.data.meta.filtersApplied.sort ?? "name")}</strong>
+              </div>
+            </div>
+            <section className="cards-gallery">
+              {cardsState.data.items.map((card) => (
+                <CardFaceTile key={card.id} card={card} />
+              ))}
+            </section>
+          </>
+        ) : (
+          <EmptyState
+            title="No cards matched"
+            description="No cards match the current filters."
+            actions={
+              <p>Try clearing filters or broadening your search.</p>
+            }
+          />
+        )
+      ) : null}
+    </PageLayout>
+  );
+}
