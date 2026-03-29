@@ -4,15 +4,21 @@
   "slug": "joseph_of_arimathea_keeper_of_the_new_tomb",
   "setId": "set_messianicfulfillment",
   "typeLine": "Legendary Creature - Human Noble",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{2}{W}{B}",
+  "manaValue": 4,
+  "colors": [
+    "W",
+    "B"
+  ],
+  "colorIdentity": [
+    "W",
+    "B"
+  ],
   "rarity": "rare",
-  "oracleText": null,
+  "oracleText": "When Joseph of Arimathea enters the battlefield, return target creature card from your graveyard to your hand.\nAt the beginning of your end step, if a creature died this turn, create a 1/1 white Spirit creature token with flying.",
   "flavorText": "\"And laid it in his own new tomb, which he had hewn out in the rock.\" — Matthew 27:60",
-  "power": null,
-  "toughness": null,
+  "power": "3",
+  "toughness": "4",
   "loyalty": null,
   "defense": null,
   "artist": null,
@@ -21,7 +27,11 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "recursion",
+    "tokens",
+    "graveyard"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +39,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics, mana, colors, and stats added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses Albrecht Durer's \"Entombment of Christ\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": "Keeper of the New Tomb"
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": "Keeper of the New Tomb",
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Durer_Entombment_of_Christ.jpg",
+      "artist": "Albrecht Durer",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Durer_Entombment_of_Christ.jpg",
+      "license": "Public domain; Wikimedia Commons hosts a faithful reproduction of a public-domain work.",
+      "creditText": "Albrecht Durer, Entombment of Christ",
+      "sourceNotes": "An entombment scene gives Joseph of Arimathea a strong and readable burial context."
+    }
+  }
 }

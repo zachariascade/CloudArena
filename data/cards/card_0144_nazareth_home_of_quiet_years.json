@@ -5,11 +5,11 @@
   "setId": "set_messianicfulfillment",
   "typeLine": "Legendary Land - Town",
   "manaCost": null,
-  "manaValue": null,
+  "manaValue": 0,
   "colors": [],
   "colorIdentity": [],
   "rarity": "rare",
-  "oracleText": null,
+  "oracleText": "Nazareth, Home of Quiet Years enters the battlefield tapped.\n{T}: Add {W}.\n{1}{W}, {T}: Scry 1. Activate only if you control a legendary creature.",
   "flavorText": "\"And was subject unto them.\" — Luke 2:51",
   "power": null,
   "toughness": null,
@@ -21,7 +21,11 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "land",
+    "scry",
+    "white-mana"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +33,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mana, colors, and mechanics were added, but final tuning remains pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses David Roberts's \"Shrine of the Annunciation, Nazareth\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": "Home of Quiet Years"
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": "Home of Quiet Years",
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Shrine_of_the_Annunciation_Nazareth_April_20th_1839_-_David_Roberts,_R.A._LCCN2002717479.jpg",
+      "artist": "David Roberts",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Shrine_of_the_Annunciation_Nazareth_April_20th_1839_-_David_Roberts,_R.A._LCCN2002717479.jpg",
+      "license": "Public domain; Library of Congress lithograph on Wikimedia Commons.",
+      "creditText": "David Roberts, Shrine of the Annunciation, Nazareth",
+      "sourceNotes": "A nineteenth-century Nazareth lithograph gives the location card a strong classics treatment."
+    }
+  }
 }

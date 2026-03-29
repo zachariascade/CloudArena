@@ -36,8 +36,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. First-pass mechanics added in this pass; mana, colors, and rules text remain provisional.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. First-pass mechanics added in this pass; mana, colors, and rules text remain provisional. Classics theme art uses Karoly Marko's \"The Baptism of Christ in the River Jordan\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T13:15:00-05:00",
-  "title": "River of Baptism"
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": "River of Baptism",
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Mark%C3%B3,_K%C3%A1roly_-_The_Baptism_of_Christ_in_the_River_Jordan_%281840-1%29.jpg",
+      "artist": "Karoly Marko",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mark%C3%B3,_K%C3%A1roly_-_The_Baptism_of_Christ_in_the_River_Jordan_%281840-1%29.jpg",
+      "license": "Public domain; Wikimedia Commons hosts a faithful reproduction of a public-domain work.",
+      "creditText": "Karoly Marko, The Baptism of Christ in the River Jordan",
+      "sourceNotes": "This gives the Jordan card a direct sacred-river association in a classical composition."
+    }
+  }
 }

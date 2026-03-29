@@ -4,12 +4,18 @@
   "slug": "the_soldier_s_spear",
   "setId": "set_messianicfulfillment",
   "typeLine": "Artifact - Equipment",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{2}{R}{W}",
+  "manaValue": 4,
+  "colors": [
+    "R",
+    "W"
+  ],
+  "colorIdentity": [
+    "R",
+    "W"
+  ],
   "rarity": "uncommon",
-  "oracleText": null,
+  "oracleText": "Equipped creature gets +2/+0 and has first strike.\nWhenever equipped creature deals combat damage to a player, scry 1.\nEquip {2}",
   "flavorText": "\"One of the soldiers with a spear pierced his side.\" — John 19:34",
   "power": null,
   "toughness": null,
@@ -21,7 +27,11 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "first-strike",
+    "scry",
+    "equipment"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +39,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mana, colors, and mechanics were added, but final tuning remains pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses Richard de Montbaston and collaborators's \"Saint Longinus\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": null
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Saint_Longinus.jpg",
+      "artist": "Richard de Montbaston and collaborators",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Saint_Longinus.jpg",
+      "license": "Public domain medieval manuscript image on Wikimedia Commons.",
+      "creditText": "Richard de Montbaston and collaborators, Saint Longinus",
+      "sourceNotes": "Longinus is the cleanest classics stand-in for the soldier’s spear."
+    }
+  }
 }

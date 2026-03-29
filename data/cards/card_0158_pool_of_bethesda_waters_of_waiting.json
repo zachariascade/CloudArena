@@ -36,8 +36,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. First-pass mechanics added in this pass; mana, colors, and rules text remain provisional.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. First-pass mechanics added in this pass; mana, colors, and rules text remain provisional. Classics theme art uses L. Maier's \"Pool of Bethesda\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T13:15:00-05:00",
-  "title": "Waters of Waiting"
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": "Waters of Waiting",
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Pool_of_Bethesda.jpg",
+      "artist": "L. Maier",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pool_of_Bethesda.jpg",
+      "license": "Public domain; Wikimedia Commons hosts a faithful reproduction of a public-domain work.",
+      "creditText": "L. Maier, Pool of Bethesda",
+      "sourceNotes": "An eighteenth-century Bethesda image gives the location card a clear sacred-site identity."
+    }
+  }
 }

@@ -4,15 +4,21 @@
   "slug": "andrew_first_called_brother",
   "setId": "set_messianicfulfillment",
   "typeLine": "Legendary Creature - Human Scout",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{1}{G}{W}",
+  "manaValue": 3,
+  "colors": [
+    "G",
+    "W"
+  ],
+  "colorIdentity": [
+    "G",
+    "W"
+  ],
   "rarity": "rare",
-  "oracleText": null,
+  "oracleText": "When Andrew enters the battlefield, search your library for a creature card with mana value 2 or less, reveal it, put it into your hand, then shuffle.\nWhenever another creature with power 2 or less enters the battlefield under your control, you gain 1 life.",
   "flavorText": "\"He first findeth his own brother Simon.\" — John 1:41",
-  "power": null,
-  "toughness": null,
+  "power": "2",
+  "toughness": "2",
   "loyalty": null,
   "defense": null,
   "artist": null,
@@ -21,7 +27,11 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "tutor",
+    "lifegain",
+    "small-creature-support"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +39,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics, mana, colors, and stats added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses James Tissot's \"Saint Andrew\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": "First-Called Brother"
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": "First-Called Brother",
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_Saint_Andrew_%28Saint_Andr%C3%A9%29_-_James_Tissot_-_overall.jpg",
+      "artist": "James Tissot",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_Saint_Andrew_%28Saint_Andr%C3%A9%29_-_James_Tissot_-_overall.jpg",
+      "license": "Public domain; Brooklyn Museum Commons upload marked with no known restrictions.",
+      "creditText": "James Tissot, Saint Andrew",
+      "sourceNotes": "This saint portrait gives Andrew a direct and readable classics depiction."
+    }
+  }
 }

@@ -39,8 +39,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics were added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics were added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses James Tissot's \"Herod\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T13:15:00-05:00",
-  "title": "Tetrarch of Mockery"
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": "Tetrarch of Mockery",
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Herod_tissot.jpg",
+      "artist": "James Tissot",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Herod_tissot.jpg",
+      "license": "Public domain; Wikimedia Commons hosts a faithful reproduction of a public-domain work.",
+      "creditText": "James Tissot, Herod",
+      "sourceNotes": "A direct Tissot Herod portrait gives the tetrarch card a focused classics treatment."
+    }
+  }
 }

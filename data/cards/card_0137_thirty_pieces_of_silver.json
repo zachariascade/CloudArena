@@ -4,12 +4,12 @@
   "slug": "thirty_pieces_of_silver",
   "setId": "set_messianicfulfillment",
   "typeLine": "Artifact - Treasure",
-  "manaCost": null,
-  "manaValue": null,
+  "manaCost": "{2}",
+  "manaValue": 2,
   "colors": [],
   "colorIdentity": [],
   "rarity": "uncommon",
-  "oracleText": null,
+  "oracleText": "When Thirty Pieces of Silver enters the battlefield, create three Treasure tokens.\n{T}, Sacrifice Thirty Pieces of Silver: Add one mana of any color.",
   "flavorText": "\"They covenanted with him for thirty pieces of silver.\" — Matthew 26:15",
   "power": null,
   "toughness": null,
@@ -21,7 +21,11 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "treasure",
+    "mana-ramp",
+    "sacrifice"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +33,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mana, colors, and mechanics were added, but final tuning remains pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses Rembrandt's \"Judas Repentant, Returning the Pieces of Silver\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": null
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Judas_Returning_the_Thirty_Silver_Pieces_-_Rembrandt.jpg",
+      "artist": "Rembrandt",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Judas_Returning_the_Thirty_Silver_Pieces_-_Rembrandt.jpg",
+      "license": "Public domain; Wikimedia Commons hosts a faithful reproduction of a public-domain work.",
+      "creditText": "Rembrandt, Judas Repentant, Returning the Pieces of Silver",
+      "sourceNotes": "This is the strongest classics subject match for the silver card."
+    }
+  }
 }

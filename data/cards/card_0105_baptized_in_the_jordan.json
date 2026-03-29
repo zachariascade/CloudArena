@@ -37,8 +37,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics were added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics were added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses James Tissot's \"The Baptism of Jesus\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T13:15:00-05:00",
-  "title": null
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Baptism_of_Jesus_%28Bapt%C3%AAme_de_J%C3%A9sus%29_-_James_Tissot_-_overall.jpg",
+      "artist": "James Tissot",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Baptism_of_Jesus_%28Bapt%C3%AAme_de_J%C3%A9sus%29_-_James_Tissot_-_overall.jpg",
+      "license": "Public domain; Brooklyn Museum Commons upload marked with no known restrictions.",
+      "creditText": "James Tissot, The Baptism of Jesus",
+      "sourceNotes": "This is the exact baptism scene for the card."
+    }
+  }
 }

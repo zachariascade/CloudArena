@@ -4,15 +4,21 @@
   "slug": "john_the_baptist_voice_in_the_wilderness",
   "setId": "set_messianicfulfillment",
   "typeLine": "Legendary Creature - Human Cleric",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{1}{G}{W}",
+  "manaValue": 3,
+  "colors": [
+    "G",
+    "W"
+  ],
+  "colorIdentity": [
+    "G",
+    "W"
+  ],
   "rarity": "mythic",
-  "oracleText": null,
+  "oracleText": "Vigilance\nWhen John the Baptist enters the battlefield, search your library for a basic Plains or Forest card, reveal it, put it into your hand, then shuffle.\nWhenever a land enters the battlefield under your control, target creature you control gets +1/+1 until end of turn.",
   "flavorText": "\"The voice of one crying in the wilderness.\" — Luke 3:4",
-  "power": null,
-  "toughness": null,
+  "power": "2",
+  "toughness": "2",
   "loyalty": null,
   "defense": null,
   "artist": null,
@@ -21,7 +27,11 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "vigilance",
+    "land-search",
+    "pump"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +39,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics, mana, colors, and stats added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses James Tissot's \"The Voice in the Desert\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": "Voice in the Wilderness"
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": "Voice in the Wilderness",
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Voice_in_the_Desert_%28La_voix_dans_le_d%C3%A9sert%29_-_James_Tissot_-_overall.jpg",
+      "artist": "James Tissot",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Voice_in_the_Desert_%28La_voix_dans_le_d%C3%A9sert%29_-_James_Tissot_-_overall.jpg",
+      "license": "Public domain; Brooklyn Museum Commons upload marked with no known restrictions.",
+      "creditText": "James Tissot, The Voice in the Desert",
+      "sourceNotes": "This is an exact classics-theme match for John the Baptist’s wilderness proclamation."
+    }
+  }
 }

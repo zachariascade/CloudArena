@@ -36,8 +36,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. First-pass mechanics added in this pass; mana, colors, and rules text remain provisional.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. First-pass mechanics added in this pass; mana, colors, and rules text remain provisional. Classics theme art uses Unknown author's \"Ruins of Capernaum in 1890\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T13:15:00-05:00",
-  "title": "Harbor of Teaching"
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": "Harbor of Teaching",
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Capernaum_1890.jpg",
+      "artist": "Unknown author",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Capernaum_1890.jpg",
+      "license": "Public domain historical photograph on Wikimedia Commons.",
+      "creditText": "Unknown author, Ruins of Capernaum in 1890",
+      "sourceNotes": "A historical view of Capernaum gives the card a grounded sacred-land setting."
+    }
+  }
 }

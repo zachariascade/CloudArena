@@ -4,15 +4,19 @@
   "slug": "thomas_doubter",
   "setId": "set_messianicfulfillment",
   "typeLine": "Legendary Creature - Human Artificer",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{1}{U}",
+  "manaValue": 2,
+  "colors": [
+    "U"
+  ],
+  "colorIdentity": [
+    "U"
+  ],
   "rarity": "rare",
-  "oracleText": null,
+  "oracleText": "Whenever you draw your second card each turn, investigate.\nWhenever you sacrifice a Clue, scry 1.",
   "flavorText": "\"Be not faithless, but believing.\" — John 20:27",
-  "power": null,
-  "toughness": null,
+  "power": "2",
+  "toughness": "3",
   "loyalty": null,
   "defense": null,
   "artist": null,
@@ -21,7 +25,11 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "investigate",
+    "scry",
+    "card-advantage"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +37,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics, mana, colors, and stats added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses Caravaggio's \"The Incredulity of Saint Thomas\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": "Doubter"
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": "Doubter",
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/The_Incredulity_of_Saint_Thomas.jpg",
+      "artist": "Caravaggio",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Incredulity_of_Saint_Thomas.jpg",
+      "license": "Public domain; Wikimedia Commons hosts a faithful reproduction of a public-domain work.",
+      "creditText": "Caravaggio, The Incredulity of Saint Thomas",
+      "sourceNotes": "This is the canonical old-master image for Thomas’s doubt and confession."
+    }
+  }
 }

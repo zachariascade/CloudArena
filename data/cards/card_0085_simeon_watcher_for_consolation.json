@@ -4,15 +4,19 @@
   "slug": "simeon_watcher_for_consolation",
   "setId": "set_messianicfulfillment",
   "typeLine": "Legendary Creature - Human Cleric",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{2}{W}",
+  "manaValue": 3,
+  "colors": [
+    "W"
+  ],
+  "colorIdentity": [
+    "W"
+  ],
   "rarity": "mythic",
-  "oracleText": null,
+  "oracleText": "Vigilance\nWhen Simeon enters the battlefield, scry 1 and you gain 2 life.\nWhenever you gain life, put a +1/+1 counter on up to one other target creature you control.",
   "flavorText": "\"Lord, now lettest thou thy servant depart in peace.\" — Luke 2:29",
-  "power": null,
-  "toughness": null,
+  "power": "1",
+  "toughness": "4",
   "loyalty": null,
   "defense": null,
   "artist": null,
@@ -21,7 +25,11 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "vigilance",
+    "lifegain",
+    "counters"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +37,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics, mana, colors, and stats added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses James Tissot's \"The Presentation of Jesus in the Temple\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": "Watcher for Consolation"
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": "Watcher for Consolation",
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Presentation_of_Jesus_in_the_Temple_%28La_pr%C3%A9sentation_de_J%C3%A9sus_au_Temple%29_-_James_Tissot_-_overall.jpg",
+      "artist": "James Tissot",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Presentation_of_Jesus_in_the_Temple_%28La_pr%C3%A9sentation_de_J%C3%A9sus_au_Temple%29_-_James_Tissot_-_overall.jpg",
+      "license": "Public domain; Brooklyn Museum Commons upload marked with no known restrictions.",
+      "creditText": "James Tissot, The Presentation of Jesus in the Temple",
+      "sourceNotes": "This temple presentation scene gives Simeon an exact and dignified classics setting."
+    }
+  }
 }

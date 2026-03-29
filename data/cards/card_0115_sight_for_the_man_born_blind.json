@@ -5,7 +5,7 @@
   "setId": "set_messianicfulfillment",
   "typeLine": "Sorcery",
   "manaCost": "{1}{W}{U}",
-  "manaValue": 2,
+  "manaValue": 3,
   "colors": [
     "W",
     "U"

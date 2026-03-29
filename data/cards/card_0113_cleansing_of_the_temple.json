@@ -37,8 +37,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics were added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics were added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses Rembrandt's \"Christ Driving the Money-changers from the Temple\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T13:15:00-05:00",
-  "title": null
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Rembrandt_Christ_Driving_the_Money_Changers_from_the_Temple.jpg",
+      "artist": "Rembrandt",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rembrandt_Christ_Driving_the_Money_Changers_from_the_Temple.jpg",
+      "license": "Public domain; Wikimedia Commons hosts a faithful reproduction of a public-domain work.",
+      "creditText": "Rembrandt, Christ Driving the Money-changers from the Temple",
+      "sourceNotes": "This is a strong exact-scene match for the cleansing card."
+    }
+  }
 }

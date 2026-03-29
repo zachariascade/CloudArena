@@ -4,15 +4,21 @@
   "slug": "nicodemus_teacher_by_night",
   "setId": "set_messianicfulfillment",
   "typeLine": "Legendary Creature - Human Cleric",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{2}{W}{U}",
+  "manaValue": 4,
+  "colors": [
+    "W",
+    "U"
+  ],
+  "colorIdentity": [
+    "W",
+    "U"
+  ],
   "rarity": "rare",
-  "oracleText": null,
+  "oracleText": "Flash\nWhenever Nicodemus enters the battlefield or attacks, scry 2.\nWhenever you cast a spell during an opponent's turn, draw a card. This ability triggers only once each turn.",
   "flavorText": "\"Rabbi, we know that thou art a teacher come from God.\" — John 3:2",
-  "power": null,
-  "toughness": null,
+  "power": "1",
+  "toughness": "4",
   "loyalty": null,
   "defense": null,
   "artist": null,
@@ -21,7 +27,11 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "flash",
+    "scry",
+    "card-draw"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +39,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics, mana, colors, and stats added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses James Tissot's \"Interview between Jesus and Nicodemus\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": "Teacher by Night"
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": "Teacher by Night",
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_Interview_between_Jesus_and_Nicodemus_%28Entretien_de_J%C3%A9sus_et_de_Nicod%C3%A8me%29_-_James_Tissot.jpg",
+      "artist": "James Tissot",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_Interview_between_Jesus_and_Nicodemus_%28Entretien_de_J%C3%A9sus_et_de_Nicod%C3%A8me%29_-_James_Tissot.jpg",
+      "license": "Public domain; Brooklyn Museum Commons upload marked with no known restrictions.",
+      "creditText": "James Tissot, Interview between Jesus and Nicodemus",
+      "sourceNotes": "A direct Nicodemus-by-night scene makes this the strongest fit for the card."
+    }
+  }
 }

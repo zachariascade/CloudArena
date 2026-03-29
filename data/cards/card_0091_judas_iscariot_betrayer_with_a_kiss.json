@@ -4,15 +4,21 @@
   "slug": "judas_iscariot_betrayer_with_a_kiss",
   "setId": "set_messianicfulfillment",
   "typeLine": "Legendary Creature - Human Rogue",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{1}{B}{R}",
+  "manaValue": 3,
+  "colors": [
+    "B",
+    "R"
+  ],
+  "colorIdentity": [
+    "B",
+    "R"
+  ],
   "rarity": "rare",
-  "oracleText": null,
+  "oracleText": "Menace\nWhen Judas enters the battlefield, target opponent discards a card. If a creature card was discarded this way, create a Treasure token.\nWhenever Judas attacks, you may sacrifice another creature. If you do, Judas gains first strike until end of turn.",
   "flavorText": "\"Judas, betrayest thou the Son of man with a kiss?\" — Luke 22:48",
-  "power": null,
-  "toughness": null,
+  "power": "2",
+  "toughness": "2",
   "loyalty": null,
   "defense": null,
   "artist": null,
@@ -21,7 +27,12 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "menace",
+    "discard",
+    "treasure",
+    "sacrifice"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +40,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics, mana, colors, and stats added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses James Tissot's \"The Kiss of Judas\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": "Betrayer with a Kiss"
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": "Betrayer with a Kiss",
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Kiss_of_Judas_%28Le_baiser_de_Judas%29_-_James_Tissot.jpg",
+      "artist": "James Tissot",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Kiss_of_Judas_%28Le_baiser_de_Judas%29_-_James_Tissot.jpg",
+      "license": "Public domain; Brooklyn Museum Commons upload marked with no known restrictions.",
+      "creditText": "James Tissot, The Kiss of Judas",
+      "sourceNotes": "This is the clearest classics treatment for Judas as betrayer with a kiss."
+    }
+  }
 }

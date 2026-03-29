@@ -4,12 +4,18 @@
   "slug": "denial_before_the_rooster_s_cry",
   "setId": "set_messianicfulfillment",
   "typeLine": "Instant",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{1}{W}{U}",
+  "manaValue": 3,
+  "colors": [
+    "W",
+    "U"
+  ],
+  "colorIdentity": [
+    "W",
+    "U"
+  ],
   "rarity": "uncommon",
-  "oracleText": null,
+  "oracleText": "Target creature you control gains hexproof and indestructible until end of turn.\nScry 1.",
   "flavorText": "\"Before the cock crow, thou shalt deny me thrice.\" — Luke 22:34",
   "power": null,
   "toughness": null,
@@ -21,7 +27,11 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "hexproof",
+    "indestructible",
+    "scry"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +39,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mana, colors, and mechanics were added, but final tuning remains pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses James Tissot's \"The Third Denial of Peter. Jesus' Look of Reproach\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": null
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Third_Denial_of_Peter._Jesus%27_Look_of_Reproach_-_James_Tissot.jpg",
+      "artist": "James Tissot",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Third_Denial_of_Peter._Jesus%27_Look_of_Reproach_-_James_Tissot.jpg",
+      "license": "Public domain; Brooklyn Museum Commons upload marked with no known restrictions.",
+      "creditText": "James Tissot, The Third Denial of Peter. Jesus' Look of Reproach",
+      "sourceNotes": "This is a direct and dramatic fit for Peter’s denial."
+    }
+  }
 }

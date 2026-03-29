@@ -4,12 +4,16 @@
   "slug": "alabaster_jar_of_anointing",
   "setId": "set_messianicfulfillment",
   "typeLine": "Artifact",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{1}{W}",
+  "manaValue": 2,
+  "colors": [
+    "W"
+  ],
+  "colorIdentity": [
+    "W"
+  ],
   "rarity": "uncommon",
-  "oracleText": null,
+  "oracleText": "When Alabaster Jar of Anointing enters the battlefield, you gain 2 life and scry 1.\n{2}, {T}, Sacrifice Alabaster Jar of Anointing: Put a +1/+1 counter on target creature. It gains lifelink until end of turn.",
   "flavorText": "\"She began to wash his feet with tears.\" — Luke 7:38",
   "power": null,
   "toughness": null,
@@ -21,7 +25,12 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "lifegain",
+    "scry",
+    "counters",
+    "lifelink"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +38,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mana, colors, and mechanics were added, but final tuning remains pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses Alexander Bida's \"Jesus Anointing\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": null
+  "updatedAt": "2026-03-29T13:15:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Jesus_Anointing.jpg",
+      "artist": "Alexander Bida",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jesus_Anointing.jpg",
+      "license": "Public domain; Commons marks the work and file as freely reusable.",
+      "creditText": "Alexander Bida, Jesus Anointing",
+      "sourceNotes": "Strong anointing scene with the right devotional and classical tone."
+    }
+  }
 }

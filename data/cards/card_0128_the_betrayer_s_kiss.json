@@ -4,12 +4,18 @@
   "slug": "the_betrayer_s_kiss",
   "setId": "set_messianicfulfillment",
   "typeLine": "Instant",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{1}{B}{R}",
+  "manaValue": 3,
+  "colors": [
+    "B",
+    "R"
+  ],
+  "colorIdentity": [
+    "B",
+    "R"
+  ],
   "rarity": "uncommon",
-  "oracleText": null,
+  "oracleText": "Target creature gets -3/-3 until end of turn.\nIf that creature dies this turn, create a Treasure token.",
   "flavorText": "\"Judas, betrayest thou the Son of man with a kiss?\" — Luke 22:48",
   "power": null,
   "toughness": null,
@@ -21,7 +27,11 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "shrink",
+    "treasure",
+    "removal"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +39,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mana, colors, and mechanics were added, but final tuning remains pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses James Tissot's \"The Kiss of Judas\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": null
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Kiss_of_Judas_%28Le_baiser_de_Judas%29_-_James_Tissot.jpg",
+      "artist": "James Tissot",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Kiss_of_Judas_%28Le_baiser_de_Judas%29_-_James_Tissot.jpg",
+      "license": "Public domain; Brooklyn Museum Commons upload marked with no known restrictions.",
+      "creditText": "James Tissot, The Kiss of Judas",
+      "sourceNotes": "An exact betrayal scene fits the card directly."
+    }
+  }
 }

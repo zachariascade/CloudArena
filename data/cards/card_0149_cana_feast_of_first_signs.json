@@ -37,8 +37,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. First-pass mechanics added in this pass; mana, colors, and rules text remain provisional.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. First-pass mechanics added in this pass; mana, colors, and rules text remain provisional. Classics theme art uses Denys Calvaert's \"The Wedding at Cana\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T13:15:00-05:00",
-  "title": "Feast of First Signs"
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": "Feast of First Signs",
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/THE_WEDDING_AT_CANA.PNG",
+      "artist": "Denys Calvaert",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:THE_WEDDING_AT_CANA.PNG",
+      "license": "Public domain; Wikimedia Commons hosts a faithful reproduction of a public-domain work.",
+      "creditText": "Denys Calvaert, The Wedding at Cana",
+      "sourceNotes": "A classic Cana feast painting directly supports the location card."
+    }
+  }
 }

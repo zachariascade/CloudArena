@@ -4,15 +4,21 @@
   "slug": "anna_prophetess_of_the_temple",
   "setId": "set_messianicfulfillment",
   "typeLine": "Legendary Creature - Human Cleric",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{2}{W}{U}",
+  "manaValue": 4,
+  "colors": [
+    "W",
+    "U"
+  ],
+  "colorIdentity": [
+    "W",
+    "U"
+  ],
   "rarity": "mythic",
-  "oracleText": null,
+  "oracleText": "Vigilance\nWhenever you draw your second card each turn, scry 2.\nWhenever you scry, you may gain 1 life.",
   "flavorText": "\"And spake of him to all them that looked for redemption in Jerusalem.\" — Luke 2:38",
-  "power": null,
-  "toughness": null,
+  "power": "2",
+  "toughness": "4",
   "loyalty": null,
   "defense": null,
   "artist": null,
@@ -21,7 +27,12 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "vigilance",
+    "scry",
+    "lifegain",
+    "card-draw"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +40,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics, mana, colors, and stats added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses James Tissot's \"The Presentation of Jesus in the Temple\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": "Prophetess of the Temple"
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": "Prophetess of the Temple",
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Presentation_of_Jesus_in_the_Temple_%28La_pr%C3%A9sentation_de_J%C3%A9sus_au_Temple%29_-_James_Tissot_-_overall.jpg",
+      "artist": "James Tissot",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Presentation_of_Jesus_in_the_Temple_%28La_pr%C3%A9sentation_de_J%C3%A9sus_au_Temple%29_-_James_Tissot_-_overall.jpg",
+      "license": "Public domain; Brooklyn Museum Commons upload marked with no known restrictions.",
+      "creditText": "James Tissot, The Presentation of Jesus in the Temple",
+      "sourceNotes": "Anna shares the same temple moment, so this is a strong exact-scene reuse."
+    }
+  }
 }

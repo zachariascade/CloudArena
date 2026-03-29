@@ -4,15 +4,21 @@
   "slug": "zechariah_struck_silent_in_the_sanctuary",
   "setId": "set_messianicfulfillment",
   "typeLine": "Legendary Creature - Human Cleric",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{2}{W}{U}",
+  "manaValue": 4,
+  "colors": [
+    "W",
+    "U"
+  ],
+  "colorIdentity": [
+    "W",
+    "U"
+  ],
   "rarity": "rare",
-  "oracleText": null,
+  "oracleText": "Flash\nWhenever you cast your first spell each turn, tap target creature an opponent controls. It doesn't untap during its controller's next untap step.\nWhenever you draw your second card each turn, scry 1.",
   "flavorText": "\"Thou shalt be dumb, and not able to speak.\" — Luke 1:20",
-  "power": null,
-  "toughness": null,
+  "power": "1",
+  "toughness": "3",
   "loyalty": null,
   "defense": null,
   "artist": null,
@@ -21,7 +27,11 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "flash",
+    "tap",
+    "scry"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +39,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics, mana, colors, and stats added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses James Tissot's \"The Vision of Zacharias\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": "Struck Silent in the Sanctuary"
+  "updatedAt": "2026-03-29T02:04:16-05:00",
+  "title": "Struck Silent in the Sanctuary",
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Vision_of_Zacharias_%28Vision_de_Zacharie%29_-_James_Tissot_-_overall.jpg",
+      "artist": "James Tissot",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Vision_of_Zacharias_%28Vision_de_Zacharie%29_-_James_Tissot_-_overall.jpg",
+      "license": "Public domain; Brooklyn Museum Commons upload marked with no known restrictions.",
+      "creditText": "James Tissot, The Vision of Zacharias",
+      "sourceNotes": "A direct Zechariah-in-the-sanctuary scene makes this an exact classics fit."
+    }
+  }
 }
