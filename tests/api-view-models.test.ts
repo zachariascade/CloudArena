@@ -50,6 +50,19 @@ describe("cloud arcanum view models", () => {
     expect(summary.reviewLabel).toBe("Draft");
   });
 
+  it("ignores irrelevant loyalty and defense fields for creature cards", async () => {
+    const normalized = await withNormalizedData();
+    const approvedCreature = normalized.indexes.cardsById.get("card_0001");
+
+    expect(approvedCreature).toBeDefined();
+
+    const summary = buildDraftStatusSummary(approvedCreature!.data);
+
+    expect(summary.hasUnresolvedMechanics).toBe(false);
+    expect(summary.unresolvedFields).toEqual([]);
+    expect(summary.reviewLabel).toBe("Approved");
+  });
+
   it("derives renderable local and missing image previews", async () => {
     const normalized = await withNormalizedData();
     const availableImagePaths = new Set(
@@ -79,6 +92,7 @@ describe("cloud arcanum view models", () => {
     expect(localPreview.kind).toBe("local");
     expect(localPreview.publicUrl).toBe(`/${sampleImagePath}`);
     expect(localPreview.isRenderable).toBe(true);
+    expect(localPreview.artist).toBeNull();
     expect(missingPreview.kind).toBe("missing");
     expect(missingPreview.isRenderable).toBe(false);
   });
@@ -143,7 +157,7 @@ describe("cloud arcanum view models", () => {
 
     const cardPath = path.join(
       tempRoot,
-      "data/cards/card_0001_abraham_father_of_nations.json",
+      "data/cards/card_0001_abraham.json",
     );
     const cardRecord = await readJson<Record<string, unknown>>(cardPath);
     cardRecord.setId = "set_missing";
@@ -155,5 +169,45 @@ describe("cloud arcanum view models", () => {
 
     expect(cardListItem.validation.hasErrors).toBe(true);
     expect(cardListItem.validation.errorCount).toBeGreaterThan(0);
+  });
+
+  it("resolves themed card art with fallback while preserving legacy compatibility", async () => {
+    const tempRoot = await createTempProject();
+    tempProjects.push(tempRoot);
+
+    const setPath = path.join(tempRoot, "data/sets/set_genesis_book_of_beginnings.json");
+    const cardPath = path.join(tempRoot, "data/cards/card_0001_abraham.json");
+
+    const setRecord = await readJson<Record<string, unknown>>(setPath);
+    const cardRecord = await readJson<Record<string, unknown>>(cardPath);
+
+    setRecord.themes = [
+      { id: "default", name: "Default" },
+      { id: "classics", name: "Classics" },
+    ];
+    setRecord.defaultThemeId = "default";
+    setRecord.activeThemeId = "classics";
+
+    const legacyImage = cardRecord.image;
+    cardRecord.images = {
+      default: legacyImage,
+    };
+
+    await writeJson(setPath, setRecord);
+    await writeJson(cardPath, cardRecord);
+
+    const loaders = createCloudArcanumApiLoaders({ workspaceRoot: tempRoot });
+    const normalized = normalizeCloudArcanumData(await loaders.loadSnapshot());
+    const card = normalized.indexes.cardsById.get("card_0001")!;
+
+    const preview = buildCardListItem(normalized, card, undefined, {
+      themeId: "classics",
+    }).image;
+
+    expect(preview.isRenderable).toBe(true);
+    expect(preview.requestedThemeId).toBe("classics");
+    expect(preview.resolvedThemeId).toBe("default");
+    expect(preview.fellBack).toBe(true);
+    expect(preview.artist).toBe(card.data.artist);
   });
 });

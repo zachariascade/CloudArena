@@ -1,6 +1,11 @@
 import { cloudArcanumApiRoutes } from "../../../../src/cloud-arcanum/api-contract.js";
 import { buildCardDetail } from "../services/view-models.js";
-import { queryCards } from "../services/queries.js";
+import {
+  countCards,
+  queryCardIds,
+  queryCards,
+  queryCardSummaries,
+} from "../services/queries.js";
 
 import type { CloudArcanumApiRouteModule } from "./index.js";
 import { getInvalidQueryErrorMessage, parseCardListQuery } from "./shared.js";
@@ -9,7 +14,10 @@ export const registerCloudArcanumApiCardRoutes: CloudArcanumApiRouteModule = asy
   app,
   context,
 ): Promise<void> => {
-  app.get(cloudArcanumApiRoutes.cards, async (request, reply) => {
+  async function parseCardsQueryOrSendError(
+    request: { query: unknown },
+    reply: { status: (code: number) => { send: (payload: unknown) => unknown } },
+  ) {
     let parsedQuery;
 
     try {
@@ -25,12 +33,61 @@ export const registerCloudArcanumApiCardRoutes: CloudArcanumApiRouteModule = asy
       });
     }
 
+    return parsedQuery;
+  }
+
+  app.get(cloudArcanumApiRoutes.cards, async (request, reply) => {
+    const parsedQuery = await parseCardsQueryOrSendError(request, reply);
+
+    if (!parsedQuery) {
+      return;
+    }
+
     const normalized = await context.services.loadNormalizedData();
     return queryCards(normalized, parsedQuery);
   });
 
+  app.get(cloudArcanumApiRoutes.cardsCount, async (request, reply) => {
+    const parsedQuery = await parseCardsQueryOrSendError(request, reply);
+
+    if (!parsedQuery) {
+      return;
+    }
+
+    const normalized = await context.services.loadNormalizedData();
+    return {
+      data: countCards(normalized, parsedQuery),
+    };
+  });
+
+  app.get(cloudArcanumApiRoutes.cardsIds, async (request, reply) => {
+    const parsedQuery = await parseCardsQueryOrSendError(request, reply);
+
+    if (!parsedQuery) {
+      return;
+    }
+
+    const normalized = await context.services.loadNormalizedData();
+    return queryCardIds(normalized, parsedQuery);
+  });
+
+  app.get(cloudArcanumApiRoutes.cardsSummary, async (request, reply) => {
+    const parsedQuery = await parseCardsQueryOrSendError(request, reply);
+
+    if (!parsedQuery) {
+      return;
+    }
+
+    const normalized = await context.services.loadNormalizedData();
+    return queryCardSummaries(normalized, parsedQuery);
+  });
+
   app.get(cloudArcanumApiRoutes.cardDetail, async (request, reply) => {
     const { cardId } = request.params as { cardId: string };
+    const themeId =
+      typeof (request.query as { themeId?: unknown } | undefined)?.themeId === "string"
+        ? ((request.query as { themeId?: string }).themeId || undefined)
+        : undefined;
     const normalized = await context.services.loadNormalizedData();
     const cardRecord = normalized.indexes.cardsById.get(cardId);
 
@@ -44,7 +101,7 @@ export const registerCloudArcanumApiCardRoutes: CloudArcanumApiRouteModule = asy
     }
 
     return {
-      data: buildCardDetail(normalized, cardRecord),
+      data: buildCardDetail(normalized, cardRecord, { themeId }),
     };
   });
 };

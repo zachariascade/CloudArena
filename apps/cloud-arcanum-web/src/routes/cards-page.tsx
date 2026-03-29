@@ -1,16 +1,19 @@
 import type { ChangeEvent, FormEvent, ReactElement } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import type {
   CardListItem,
   CardsListMeta,
   FilterMetadata,
+  SetDetail,
 } from "../../../../src/cloud-arcanum/api-contract.js";
 import {
   cardColors,
   cardRarities,
   cardStatuses,
 } from "../../../../src/domain/index.js";
+import type { SetId } from "../../../../src/domain/index.js";
 import {
   CardFaceTile,
   EmptyState,
@@ -144,6 +147,7 @@ function CardsFilters({
     pushQuery({
       ...query,
       page: undefined,
+      themeId: name === "setId" ? undefined : query.themeId,
       [name]: value.length > 0 ? value : undefined,
     });
   }
@@ -190,7 +194,7 @@ function CardsFilters({
       <form className="search-form" onSubmit={handleSearchSubmit}>
         <label className="field">
           <span>Search cards</span>
-          <input defaultValue={query.q ?? ""} name="q" placeholder="Name, slug, type, tag..." />
+          <input defaultValue={query.q ?? ""} name="q" placeholder="Name, title, slug, type, tag..." />
         </label>
         <button className="primary-button" type="submit">
           Apply
@@ -354,8 +358,69 @@ function CardsFilters({
   );
 }
 
+function SetThemePanel({
+  selectedSet,
+  query,
+  searchParams,
+  setSearchParams,
+}: {
+  selectedSet: SetDetail;
+  query: ReturnType<typeof parseCardListQuery>;
+  searchParams: URLSearchParams;
+  setSearchParams: ReturnType<typeof useSearchParams>[1];
+}): ReactElement | null {
+  if (selectedSet.themes.length <= 1) {
+    return null;
+  }
+
+  return (
+    <section className="panel filters-panel">
+      <div className="filters-header">
+        <div>
+          <strong>Set art theme</strong>
+          <p>
+            Preview <strong>{selectedSet.name}</strong> with a different art theme without
+            changing the canonical set JSON.
+          </p>
+        </div>
+      </div>
+
+      <div className="filters-grid">
+        <label className="field">
+          <span>Theme</span>
+          <select
+            value={query.themeId ?? ""}
+            onChange={(event) =>
+              updateSearchParams(
+                searchParams,
+                buildCardListQueryString({
+                  ...query,
+                  page: undefined,
+                  themeId: event.currentTarget.value || undefined,
+                }),
+                setSearchParams,
+              )
+            }
+          >
+            <option value="">
+              Set default
+              {selectedSet.activeThemeId ? ` (${selectedSet.activeThemeId})` : ""}
+            </option>
+            {selectedSet.themes.map((theme) => (
+              <option key={theme.id} value={theme.id}>
+                {theme.name}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+    </section>
+  );
+}
+
 export function CardsPage({ apiBaseUrl }: CardsPageProps): ReactElement {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [activePreviewCardId, setActivePreviewCardId] = useState<string | null>(null);
   const query = parseCardListQuery(searchParams);
   const api = createCloudArcanumApiClient({ baseUrl: apiBaseUrl });
 
@@ -375,16 +440,40 @@ export function CardsPage({ apiBaseUrl }: CardsPageProps): ReactElement {
     [apiBaseUrl],
   );
 
+  const selectedSetState = useApiRequest(
+    async (signal) => {
+      if (!query.setId) {
+        return null;
+      }
+
+      const response = await api.getSetDetailWithQuery(
+        { setId: query.setId as SetId },
+        { themeId: query.themeId },
+        { signal },
+      );
+      return response.data;
+    },
+    [apiBaseUrl, query.setId, query.themeId],
+  );
+
   const fallbackFilters = buildFallbackFilterMetadata();
   const filterMetadata = mergeFilterMetadata(filtersState.data, fallbackFilters);
   const filterMetadataUnavailable = filtersState.status === "error";
+  const previewCards = cardsState.status === "success" && cardsState.data ? cardsState.data.items : [];
+  const activePreviewIndex = previewCards.findIndex((card) => card.id === activePreviewCardId);
+
+  useEffect(() => {
+    if (activePreviewCardId === null) {
+      return;
+    }
+
+    if (!previewCards.some((card) => card.id === activePreviewCardId)) {
+      setActivePreviewCardId(null);
+    }
+  }, [activePreviewCardId, previewCards]);
 
   return (
-    <PageLayout
-      kicker="Browse cards"
-      title="Cards"
-      description="Search, filter, and sort the card catalog."
-    >
+    <PageLayout>
       <CardsFilters
         filterMetadata={filterMetadata}
         filterMetadataUnavailable={filterMetadataUnavailable}
@@ -393,7 +482,14 @@ export function CardsPage({ apiBaseUrl }: CardsPageProps): ReactElement {
         setSearchParams={setSearchParams}
       />
 
-      <div style={{ height: "1rem" }} />
+      {selectedSetState.status === "success" && selectedSetState.data ? (
+        <SetThemePanel
+          selectedSet={selectedSetState.data}
+          query={query}
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
+        />
+      ) : null}
 
       {cardsState.status === "loading" || cardsState.status === "idle" ? (
         <LoadingState
@@ -416,26 +512,47 @@ export function CardsPage({ apiBaseUrl }: CardsPageProps): ReactElement {
       ) : null}
 
       {cardsState.status === "success" && cardsState.data ? (
-        cardsState.data.items.length > 0 ? (
-          <>
-            <div className="summary-row">
-              <div className="summary-pill">
-                Total <strong>{cardsState.data.meta.total}</strong>
+        (() => {
+          const items = cardsState.data.items;
+
+          return items.length > 0 ? (
+            <>
+              <div className="summary-row">
+                <div className="summary-pill">
+                  <strong>{items.length}</strong> of{" "}
+                  <strong>{cardsState.data.meta.total}</strong>
+                </div>
               </div>
-              <div className="summary-pill">
-                Loaded <strong>{cardsState.data.items.length}</strong>
-              </div>
-              <div className="summary-pill">
-                Sort <strong>{String(cardsState.data.meta.filtersApplied.sort ?? "name")}</strong>
-              </div>
-            </div>
-            <section className="cards-gallery">
-              {cardsState.data.items.map((card) => (
-                <CardFaceTile key={card.id} card={card} />
-              ))}
-            </section>
-          </>
-        ) : (
+              <section className="cards-gallery">
+                {items.map((card, index) => (
+                  <CardFaceTile
+                    key={card.id}
+                    card={card}
+                    detailPath={
+                      query.themeId ? `/cards/${card.id}?themeId=${encodeURIComponent(query.themeId)}` : undefined
+                    }
+                    hasNextCard={index < items.length - 1}
+                    hasPreviousCard={index > 0}
+                    isPreviewOpen={card.id === activePreviewCardId}
+                    onClosePreview={() => setActivePreviewCardId(null)}
+                    onOpenPreview={() => setActivePreviewCardId(card.id)}
+                    onShowNextCard={() => {
+                      const nextCard = items[index + 1];
+                      if (nextCard) {
+                        setActivePreviewCardId(nextCard.id);
+                      }
+                    }}
+                    onShowPreviousCard={() => {
+                      const previousCard = items[index - 1];
+                      if (previousCard) {
+                        setActivePreviewCardId(previousCard.id);
+                      }
+                    }}
+                  />
+                ))}
+              </section>
+            </>
+          ) : (
           <EmptyState
             title="No cards matched"
             description="No cards match the current filters."
@@ -443,7 +560,8 @@ export function CardsPage({ apiBaseUrl }: CardsPageProps): ReactElement {
               <p>Try clearing filters or broadening your search.</p>
             }
           />
-        )
+          );
+        })()
       ) : null}
     </PageLayout>
   );

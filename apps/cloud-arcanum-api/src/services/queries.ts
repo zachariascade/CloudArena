@@ -1,6 +1,9 @@
 import type {
+  CardIdListItem,
   CardListItem,
   CardListQuery,
+  CardSummaryItem,
+  CardsCountResponse,
   CardsListMeta,
   DeckListItem,
   DeckListQuery,
@@ -21,6 +24,9 @@ import type {
   NormalizedUniverseRecord,
 } from "./index.js";
 import {
+  buildAvailableImagePathSet,
+  buildCardSummaryItem,
+  buildDraftStatusSummary,
   buildCardListItem,
   buildDeckListItem,
   buildSetListItem,
@@ -87,6 +93,7 @@ function compareNumbers(left: number, right: number, direction: SortDirection): 
 function toCardSearchText(cardRecord: NormalizedCardRecord): string[] {
   return [
     cardRecord.data.name,
+    cardRecord.data.title ?? "",
     cardRecord.data.slug,
     cardRecord.data.typeLine,
     ...cardRecord.data.tags,
@@ -105,10 +112,45 @@ function toUniverseSearchText(universeRecord: NormalizedUniverseRecord): string[
   return [universeRecord.data.name, universeRecord.data.description ?? ""];
 }
 
-export function queryCards(
+function buildCardsListMeta(
+  query: CardListQuery,
+  total: number,
+  page?: number,
+  pageSize?: number,
+): CardsListMeta {
+  const sort = query.sort ?? "name";
+  const direction = query.direction ?? "asc";
+
+  return {
+    total,
+    page,
+    pageSize,
+    filtersApplied: {
+      q: query.q,
+      universeId: query.universeId,
+      setId: query.setId,
+      themeId: query.themeId,
+      status: query.status,
+      color: query.color,
+      rarity: query.rarity,
+      hasImage: query.hasImage,
+      hasUnresolvedMechanics: query.hasUnresolvedMechanics,
+      deckId: query.deckId,
+      sort,
+      direction,
+    },
+  };
+}
+
+function resolveCardQueryRecords(
   normalized: CloudArcanumNormalizedData,
   query: CardListQuery = {},
-): PaginatedResult<CardListItem, CardsListMeta> {
+): {
+  filtered: NormalizedCardRecord[];
+  paginated: ReturnType<typeof applyPagination<NormalizedCardRecord>>;
+  meta: CardsListMeta;
+} {
+  const availableImagePaths = buildAvailableImagePathSet(normalized);
   const filtered = normalized.cards
     .filter((cardRecord) => includesSearchTerm(toCardSearchText(cardRecord), query.q))
     .filter((cardRecord) =>
@@ -129,14 +171,15 @@ export function queryCards(
     .filter((cardRecord) =>
       query.hasImage === undefined
         ? true
-        : query.hasImage
-          ? buildCardListItem(normalized, cardRecord).image.isRenderable
-          : !buildCardListItem(normalized, cardRecord).image.isRenderable,
+        : buildCardSummaryItem(normalized, cardRecord, availableImagePaths, {
+            themeId: query.themeId,
+          }).hasImage ===
+          query.hasImage,
     )
     .filter((cardRecord) =>
       query.hasUnresolvedMechanics === undefined
         ? true
-        : buildCardListItem(normalized, cardRecord).draft.hasUnresolvedMechanics ===
+        : buildDraftStatusSummary(cardRecord.data).hasUnresolvedMechanics ===
           query.hasUnresolvedMechanics,
     )
     .filter((cardRecord) =>
@@ -163,25 +206,69 @@ export function queryCards(
   const paginated = applyPagination(sorted, query);
 
   return {
-    data: paginated.items.map((cardRecord) => buildCardListItem(normalized, cardRecord)),
-    meta: {
-      total,
-      page: paginated.page,
-      pageSize: paginated.pageSize,
-      filtersApplied: {
-        q: query.q,
-        universeId: query.universeId,
-        setId: query.setId,
-        status: query.status,
-        color: query.color,
-        rarity: query.rarity,
-        hasImage: query.hasImage,
-        hasUnresolvedMechanics: query.hasUnresolvedMechanics,
-        deckId: query.deckId,
-        sort,
-        direction,
-      },
-    },
+    filtered: sorted,
+    paginated,
+    meta: buildCardsListMeta(query, total, paginated.page, paginated.pageSize),
+  };
+}
+
+export function queryCards(
+  normalized: CloudArcanumNormalizedData,
+  query: CardListQuery = {},
+): PaginatedResult<CardListItem, CardsListMeta> {
+  const availableImagePaths = buildAvailableImagePathSet(normalized);
+  const { paginated, meta } = resolveCardQueryRecords(normalized, query);
+
+  return {
+    data: paginated.items.map((cardRecord) =>
+      buildCardListItem(normalized, cardRecord, availableImagePaths, {
+        themeId: query.themeId,
+      }),
+    ),
+    meta,
+  };
+}
+
+export function queryCardSummaries(
+  normalized: CloudArcanumNormalizedData,
+  query: CardListQuery = {},
+): PaginatedResult<CardSummaryItem, CardsListMeta> {
+  const availableImagePaths = buildAvailableImagePathSet(normalized);
+  const { paginated, meta } = resolveCardQueryRecords(normalized, query);
+
+  return {
+    data: paginated.items.map((cardRecord) =>
+      buildCardSummaryItem(normalized, cardRecord, availableImagePaths, {
+        themeId: query.themeId,
+      }),
+    ),
+    meta,
+  };
+}
+
+export function queryCardIds(
+  normalized: CloudArcanumNormalizedData,
+  query: CardListQuery = {},
+): PaginatedResult<CardIdListItem, CardsListMeta> {
+  const { paginated, meta } = resolveCardQueryRecords(normalized, query);
+
+  return {
+    data: paginated.items.map((cardRecord) => ({
+      id: cardRecord.data.id,
+    })),
+    meta,
+  };
+}
+
+export function countCards(
+  normalized: CloudArcanumNormalizedData,
+  query: CardListQuery = {},
+): CardsCountResponse {
+  const { meta } = resolveCardQueryRecords(normalized, query);
+
+  return {
+    total: meta.total,
+    filtersApplied: meta.filtersApplied,
   };
 }
 

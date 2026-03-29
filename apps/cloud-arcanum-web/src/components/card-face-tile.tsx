@@ -1,13 +1,39 @@
-import { Fragment, useEffect, useId, useRef, useState } from "react";
+import { Fragment, useEffect, useId, useRef } from "react";
 import type { ReactElement } from "react";
+import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 
 import type { CardListItem } from "../../../../src/cloud-arcanum/api-contract.js";
 import type { CardStatus } from "../../../../src/domain/index.js";
+import { formatCardDisplayName } from "../../../../src/cloud-arcanum/shared-utils.js";
+import mana1Symbol from "../assets/mtg-symbols/mana/1.svg";
+import mana2Symbol from "../assets/mtg-symbols/mana/2.svg";
+import mana3Symbol from "../assets/mtg-symbols/mana/3.svg";
+import manaBSymbol from "../assets/mtg-symbols/mana/B.svg";
+import manaCSymbol from "../assets/mtg-symbols/mana/C.svg";
+import manaGSymbol from "../assets/mtg-symbols/mana/G.svg";
+import manaRSymbol from "../assets/mtg-symbols/mana/R.svg";
+import manaTSymbol from "../assets/mtg-symbols/mana/T.svg";
+import manaUSymbol from "../assets/mtg-symbols/mana/U.svg";
+import manaWSymbol from "../assets/mtg-symbols/mana/W.svg";
+import rarityExpansionSymbol from "../assets/mtg-symbols/rarity/expansion.svg";
 
 export type RulesPreviewLine = {
   kind: "oracle" | "flavor";
   text: string;
+};
+
+const MANA_SYMBOLS: Readonly<Record<string, string>> = {
+  "1": mana1Symbol,
+  "2": mana2Symbol,
+  "3": mana3Symbol,
+  B: manaBSymbol,
+  C: manaCSymbol,
+  G: manaGSymbol,
+  R: manaRSymbol,
+  T: manaTSymbol,
+  U: manaUSymbol,
+  W: manaWSymbol,
 };
 
 function toStatusTone(status: CardStatus): string {
@@ -93,7 +119,7 @@ export function buildRulesPreview(
   ];
 }
 
-function buildCardFaceStats(card: CardListItem): { value: string } {
+function buildCardFaceStats(card: CardListItem): { value: string } | null {
   if (card.power !== null && card.toughness !== null) {
     return {
       value: `${card.power}/${card.toughness}`,
@@ -112,9 +138,7 @@ function buildCardFaceStats(card: CardListItem): { value: string } {
     };
   }
 
-  return {
-    value: "?/?",
-  };
+  return null;
 }
 
 function formatCardRarity(rarity: CardListItem["rarity"]): string {
@@ -154,6 +178,29 @@ function parseManaCostTokens(manaCost: string | null): string[] {
   return matches.map((token) => token.slice(1, -1));
 }
 
+function normalizeManaToken(token: string): string {
+  return token.trim().toUpperCase();
+}
+
+function getManaSymbolSrc(token: string): string | null {
+  return MANA_SYMBOLS[normalizeManaToken(token)] ?? null;
+}
+
+function renderManaSymbol(token: string, className: string): ReactElement {
+  const normalizedToken = normalizeManaToken(token);
+  const symbolSrc = getManaSymbolSrc(normalizedToken);
+
+  if (!symbolSrc) {
+    return <span className={className}>{normalizedToken}</span>;
+  }
+
+  return (
+    <span aria-hidden="true" className={className}>
+      <img alt="" draggable="false" src={symbolSrc} />
+    </span>
+  );
+}
+
 function renderManaCost(manaCost: string | null): ReactElement {
   const tokens = parseManaCostTokens(manaCost);
 
@@ -163,10 +210,10 @@ function renderManaCost(manaCost: string | null): ReactElement {
 
   return (
     <span className="card-face-mana-group" aria-label={manaCost ?? "Mana cost pending"}>
-      {tokens.map((token) => (
-        <span key={token} className={`card-face-mana card-face-mana-token token-${token.toLowerCase()}`}>
-          {token}
-        </span>
+      {tokens.map((token, index) => (
+        <Fragment key={`${token}-${index}`}>
+          {renderManaSymbol(token, "card-face-mana card-face-mana-token")}
+        </Fragment>
       ))}
     </span>
   );
@@ -180,14 +227,7 @@ function renderRulesText(line: string): ReactElement[] {
       const tokenMatch = segment.match(/^\{([^}]+)\}$/);
       if (tokenMatch) {
         const token = tokenMatch[1];
-        return (
-          <span
-            key={`${line}-${index}`}
-            className={`card-face-inline-mana token-${token.toLowerCase()}`}
-          >
-            {token}
-          </span>
-        );
+        return <Fragment key={`${line}-${index}`}>{renderManaSymbol(token, "card-face-inline-mana")}</Fragment>;
       }
 
       if (segment.startsWith("(") && segment.endsWith(")")) {
@@ -203,15 +243,37 @@ function renderRulesText(line: string): ReactElement[] {
 }
 
 function buildFrameTone(card: CardListItem): string {
-  if (card.colors.length === 0) {
+  const coloredCardColors = card.colors.filter(
+    (color): color is "W" | "U" | "B" | "R" | "G" => color !== "C",
+  );
+
+  if (coloredCardColors.length === 0) {
     return "colorless";
   }
 
-  if (card.colors.length > 1) {
+  if (coloredCardColors.length === 2) {
+    type ColoredFrameTone = "W" | "U" | "B" | "R" | "G";
+
+    const colorOrder: readonly ColoredFrameTone[] = ["W", "U", "B", "R", "G"];
+    const toneNames: Record<ColoredFrameTone, string> = {
+      W: "white",
+      U: "blue",
+      B: "black",
+      R: "red",
+      G: "green",
+    };
+    const sortedColors: ColoredFrameTone[] = [...coloredCardColors].sort(
+      (left, right) => colorOrder.indexOf(left) - colorOrder.indexOf(right),
+    );
+
+    return `split-${toneNames[sortedColors[0]]}-${toneNames[sortedColors[1]]}`;
+  }
+
+  if (coloredCardColors.length > 1) {
     return "multicolor";
   }
 
-  switch (card.colors[0]) {
+  switch (coloredCardColors[0]) {
     case "W":
       return "white";
     case "U":
@@ -227,14 +289,39 @@ function buildFrameTone(card: CardListItem): string {
   }
 }
 
-export function CardFaceTile({ card }: { card: CardListItem }): ReactElement {
-  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+type CardFaceTileProps = {
+  card: CardListItem;
+  detailPath?: string;
+  hasNextCard?: boolean;
+  hasPreviousCard?: boolean;
+  isPreviewOpen?: boolean;
+  onClosePreview?: () => void;
+  onOpenPreview?: () => void;
+  onShowNextCard?: () => void;
+  onShowPreviousCard?: () => void;
+};
+
+export function CardFaceTile({
+  card,
+  detailPath = `/cards/${card.id}`,
+  hasNextCard = false,
+  hasPreviousCard = false,
+  isPreviewOpen = false,
+  onClosePreview,
+  onOpenPreview,
+  onShowNextCard,
+  onShowPreviousCard,
+}: CardFaceTileProps): ReactElement {
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const previewButtonRef = useRef<HTMLButtonElement | null>(null);
   const wasPreviewOpenRef = useRef(false);
   const dialogId = useId();
   const rulesPreview = buildRulesPreview(card);
   const stats = buildCardFaceStats(card);
+  const hasFlavorDivider =
+    rulesPreview.some((line) => line.kind === "oracle") &&
+    rulesPreview.some((line) => line.kind === "flavor");
+  const displayName = formatCardDisplayName(card.name, card.title);
   const frameTone = buildFrameTone(card);
   const stateClasses = [
     card.draft.hasUnresolvedMechanics ? "is-incomplete" : null,
@@ -251,7 +338,17 @@ export function CardFaceTile({ card }: { card: CardListItem }): ReactElement {
 
     function handleKeyDown(event: KeyboardEvent): void {
       if (event.key === "Escape") {
-        setIsPreviewOpen(false);
+        onClosePreview?.();
+      }
+
+      if (event.key === "ArrowLeft" && hasPreviousCard) {
+        event.preventDefault();
+        onShowPreviousCard?.();
+      }
+
+      if (event.key === "ArrowRight" && hasNextCard) {
+        event.preventDefault();
+        onShowNextCard?.();
       }
     }
 
@@ -259,7 +356,7 @@ export function CardFaceTile({ card }: { card: CardListItem }): ReactElement {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isPreviewOpen]);
+  }, [hasNextCard, hasPreviousCard, isPreviewOpen, onClosePreview, onShowNextCard, onShowPreviousCard]);
 
   useEffect(() => {
     if (isPreviewOpen) {
@@ -278,7 +375,7 @@ export function CardFaceTile({ card }: { card: CardListItem }): ReactElement {
     <article className="card-face">
       <header className="card-face-header">
         <div className="card-face-title-wrap">
-          <h3>{card.name}</h3>
+          <h3>{displayName}</h3>
         </div>
         <div className="card-face-mana-wrap">
           {renderManaCost(card.manaCost)}
@@ -296,7 +393,18 @@ export function CardFaceTile({ card }: { card: CardListItem }): ReactElement {
             className={`card-face-rarity-badge ${toRarityClassName(card.rarity)}`}
             title={formatCardRarity(card.rarity)}
           >
-            {card.rarity ? "" : "N/A"}
+            {card.rarity ? (
+              <span
+                aria-hidden="true"
+                className="card-face-rarity-badge-mark"
+                style={{
+                  WebkitMaskImage: `url(${rarityExpansionSymbol})`,
+                  maskImage: `url(${rarityExpansionSymbol})`,
+                }}
+              />
+            ) : (
+              "N/A"
+            )}
           </span>
         </div>
 
@@ -304,7 +412,13 @@ export function CardFaceTile({ card }: { card: CardListItem }): ReactElement {
         {rulesPreview.map((line) => (
           <p
             key={`${line.kind}:${line.text}`}
-            className={`card-face-rules-line ${line.kind === "flavor" ? "is-flavor" : ""}`.trim()}
+            className={[
+              "card-face-rules-line",
+              line.kind === "flavor" ? "is-flavor" : null,
+              line.kind === "flavor" && hasFlavorDivider ? "has-flavor-divider" : null,
+            ]
+              .filter(Boolean)
+              .join(" ")}
           >
             {renderRulesText(line.text)}
           </p>
@@ -316,30 +430,88 @@ export function CardFaceTile({ card }: { card: CardListItem }): ReactElement {
           <div className="card-face-footer-printline">
             <span>{card.setCode ?? card.set.name}</span>
           </div>
-          <div className="card-face-footer-stats">
-            <div className="card-face-stats-box">
-              <strong>{stats.value}</strong>
+          {stats ? (
+            <div className="card-face-footer-stats">
+              <div className="card-face-stats-box">
+                <strong>{stats.value}</strong>
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
         <div className="card-face-footer-bottom">
-          <div className="card-face-footer-artist">{card.artist ?? "TBD"}</div>
+          <div className="card-face-footer-artist">
+            {card.image.artist ?? card.artist ?? "TBD"}
+          </div>
           <div className="card-face-collector-number">{formatCollectorNumber(card.id)}</div>
         </div>
       </footer>
     </article>
   );
 
+  const previewModal = isPreviewOpen ? (
+      <div
+        className="card-preview-modal-backdrop"
+        onClick={onClosePreview}
+        role="presentation"
+      >
+      <div
+        id={dialogId}
+        aria-label={`${displayName} preview`}
+        aria-modal="true"
+        className="card-preview-modal"
+        onClick={(event) => event.stopPropagation()}
+        role="dialog"
+      >
+        <div className="card-preview-toolbar">
+          <button
+            aria-label="Close preview"
+            className="card-preview-close"
+            ref={closeButtonRef}
+            onClick={onClosePreview}
+            type="button"
+          >
+            Close
+          </button>
+        </div>
+        <div className="card-preview-stage">
+          <button
+            aria-label="Previous card"
+            className="card-preview-nav card-preview-nav-left"
+            disabled={!hasPreviousCard}
+            onClick={onShowPreviousCard}
+            type="button"
+          >
+            ←
+          </button>
+          <div className={`card-preview-shell tone-${frameTone}`}>
+            <div className="card-face card-face-preview">
+              {cardFace.props.children}
+            </div>
+          </div>
+          <button
+            aria-label="Next card"
+            className="card-preview-nav card-preview-nav-right"
+            disabled={!hasNextCard}
+            onClick={onShowNextCard}
+            type="button"
+          >
+            →
+          </button>
+        </div>
+      </div>
+    </div>
+  ) : null;
+
   return (
     <>
       <div className={`card-face-tile tone-${frameTone} ${stateClasses}`.trim()}>
         <button
-          aria-label={`Open ${card.name}`}
+          aria-label={`Open ${displayName}`}
           aria-controls={dialogId}
           aria-expanded={isPreviewOpen}
           aria-haspopup="dialog"
           className="card-face-link"
-          onClick={() => setIsPreviewOpen(true)}
+          onClick={onOpenPreview}
           ref={previewButtonRef}
           type="button"
         >
@@ -350,43 +522,23 @@ export function CardFaceTile({ card }: { card: CardListItem }): ReactElement {
           <span className={`card-face-status ${toStatusTone(card.status)}`}>
             {card.status}
           </span>
-          <Link className="card-face-preview-button" to={`/cards/${card.id}`}>
+          {card.image.fellBack ? (
+            <span
+              className="card-face-status draft"
+              title="Using fallback art for the selected theme"
+            >
+              fallback art
+            </span>
+          ) : null}
+          <Link className="card-face-preview-button" to={detailPath}>
             Details
           </Link>
         </div>
       </div>
 
-      {isPreviewOpen ? (
-        <div
-          className="card-preview-modal-backdrop"
-          onClick={() => setIsPreviewOpen(false)}
-          role="presentation"
-        >
-          <div
-            id={dialogId}
-            aria-label={`${card.name} preview`}
-            aria-modal="true"
-            className="card-preview-modal"
-            onClick={(event) => event.stopPropagation()}
-            role="dialog"
-          >
-            <button
-              aria-label="Close preview"
-              className="card-preview-close"
-              ref={closeButtonRef}
-              onClick={() => setIsPreviewOpen(false)}
-              type="button"
-            >
-              Close
-            </button>
-            <div className={`card-preview-shell tone-${frameTone}`}>
-              <div className="card-face card-face-preview">
-                {cardFace.props.children}
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : null}
+      {previewModal && typeof document !== "undefined"
+        ? createPortal(previewModal, document.body)
+        : null}
     </>
   );
 }

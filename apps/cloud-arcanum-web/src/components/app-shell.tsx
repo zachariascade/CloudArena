@@ -8,7 +8,6 @@ type NavigationItem = {
 };
 
 type AppShellProps = {
-  apiBaseUrl: string;
   children: ReactNode;
 };
 
@@ -19,14 +18,12 @@ const navigationItems: NavigationItem[] = [
   { to: "/universes", label: "Universes" },
 ];
 
-export function AppShell({ apiBaseUrl, children }: AppShellProps): ReactElement {
+export function AppShell({ children }: AppShellProps): ReactElement {
   return (
     <main className="app-shell">
       <header className="app-header">
         <section className="panel brand-block">
-          <div className="eyebrow">Card catalog</div>
           <h1>Cloud Arcanum</h1>
-          <p>Browse cards first, then move into decks, sets, and universes from a single header.</p>
         </section>
         <nav className="panel nav" aria-label="Primary">
           {navigationItems.map((item) => (
@@ -41,9 +38,6 @@ export function AppShell({ apiBaseUrl, children }: AppShellProps): ReactElement 
           ))}
         </nav>
       </header>
-      <div className="status">
-        API base: <code>{apiBaseUrl}</code>
-      </div>
       <div style={{ height: "1.5rem" }} />
       {children}
     </main>

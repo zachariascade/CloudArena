@@ -52,7 +52,7 @@ describe("project validator", () => {
     );
     const cardPath = path.join(
       tempRoot,
-      "data/cards/card_0001_abraham_father_of_nations.json",
+      "data/cards/card_0001_abraham.json",
     );
     const deckPath = path.join(
       tempRoot,
@@ -89,7 +89,7 @@ describe("project validator", () => {
 
     const cardPath = path.join(
       tempRoot,
-      "data/cards/card_0001_abraham_father_of_nations.json",
+      "data/cards/card_0001_abraham.json",
     );
     const cardRecord = await readJson<Record<string, unknown>>(cardPath);
     cardRecord.id = "card_9999";
@@ -110,7 +110,7 @@ describe("project validator", () => {
       "data/cards/card_0003_duplicate_test.json",
     );
     const duplicateCard = await readJson<Record<string, unknown>>(
-      path.join(tempRoot, "data/cards/card_0001_abraham_father_of_nations.json"),
+      path.join(tempRoot, "data/cards/card_0001_abraham.json"),
     );
     duplicateCard.slug = "duplicate_test";
     await writeJson(duplicateCardPath, duplicateCard);

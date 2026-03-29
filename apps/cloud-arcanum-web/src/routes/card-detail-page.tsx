@@ -1,8 +1,9 @@
 import type { ReactElement } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 
 import type { CardColor, CardId, CardStatus } from "../../../../src/domain/index.js";
 import type { CardDetail } from "../../../../src/cloud-arcanum/api-contract.js";
+import { formatCardDisplayName } from "../../../../src/cloud-arcanum/shared-utils.js";
 import {
   EmptyState,
   ErrorState,
@@ -72,25 +73,37 @@ function ValueOrPlaceholder({
 }
 
 function buildImagePreview(card: CardDetail): ReactElement {
+  const artist = card.image.artist ?? card.artist;
+
   if (card.image.isRenderable && card.image.publicUrl) {
     return (
-      <img
-        alt={card.image.alt}
-        className="card-detail-image"
-        src={card.image.publicUrl}
-      />
+      <figure className="card-detail-media">
+        <img
+          alt={card.image.alt}
+          className="card-detail-image"
+          src={card.image.publicUrl}
+        />
+        <figcaption className="card-detail-image-credit">
+          <span>{artist ? `Illus. ${artist}` : "Illustrator TBD"}</span>
+        </figcaption>
+      </figure>
     );
   }
 
   return (
-    <div className="card-preview-fallback card-detail-fallback" aria-label="Preview pending">
-      <strong>
-        {card.image.kind === "placeholder" || card.image.kind === "missing"
-          ? "Preview pending"
-          : "Image unavailable"}
-      </strong>
-      <span>{card.typeLine}</span>
-    </div>
+    <figure className="card-detail-media">
+      <div className="card-preview-fallback card-detail-fallback" aria-label="Preview pending">
+        <strong>
+          {card.image.kind === "placeholder" || card.image.kind === "missing"
+            ? "Preview pending"
+            : "Image unavailable"}
+        </strong>
+        <span>{card.typeLine}</span>
+      </div>
+      <figcaption className="card-detail-image-credit">
+        <span>{artist ? `Illus. ${artist}` : "Illustrator TBD"}</span>
+      </figcaption>
+    </figure>
   );
 }
 
@@ -115,8 +128,8 @@ function CardDetailView({ card }: { card: CardDetail }): ReactElement {
         <div className="detail-hero-media">{buildImagePreview(card)}</div>
         <div className="detail-hero-body">
           <div className="detail-hero-header">
-            <div>
-              <h2>{card.name}</h2>
+            <div className="detail-card-nameblock">
+              <h2>{formatCardDisplayName(card.name, card.title)}</h2>
               <p>{card.typeLine}</p>
             </div>
             <CardStatusBadge status={card.draft.status} />
@@ -143,6 +156,12 @@ function CardDetailView({ card }: { card: CardDetail }): ReactElement {
               label={card.image.isRenderable ? "Image ready" : "Missing image"}
               tone={card.image.isRenderable ? "neutral" : "warning"}
             />
+            {card.image.fellBack ? (
+              <CardSignalBadge
+                label={`Fallback art from ${card.image.resolvedThemeId ?? "default"}`}
+                tone="warning"
+              />
+            ) : null}
           </div>
 
           <div className="detail-stat-grid">
@@ -173,9 +192,9 @@ function CardDetailView({ card }: { card: CardDetail }): ReactElement {
               </strong>
             </div>
             <div className="meta-tile">
-              <span>Artist</span>
+              <span>Illustrator</span>
               <strong>
-                <ValueOrPlaceholder value={card.artist} />
+                <ValueOrPlaceholder value={card.image.artist ?? card.artist} />
               </strong>
             </div>
           </div>
@@ -205,6 +224,24 @@ function CardDetailView({ card }: { card: CardDetail }): ReactElement {
             <div>
               <dt>Slug</dt>
               <dd><code>{card.slug}</code></dd>
+            </div>
+            <div>
+              <dt>Image theme</dt>
+              <dd>
+                <ValueOrPlaceholder value={card.image.resolvedThemeId} placeholder="default" />
+              </dd>
+            </div>
+            <div>
+              <dt>Image source</dt>
+              <dd>
+                <ValueOrPlaceholder value={card.image.sourceUrl} />
+              </dd>
+            </div>
+            <div>
+              <dt>Image license</dt>
+              <dd>
+                <ValueOrPlaceholder value={card.image.license} />
+              </dd>
             </div>
             <div>
               <dt>Power / Toughness</dt>
@@ -326,7 +363,9 @@ function CardDetailView({ card }: { card: CardDetail }): ReactElement {
 
 export function CardDetailPage({ apiBaseUrl }: CardDetailPageProps): ReactElement {
   const params = useParams();
+  const [searchParams] = useSearchParams();
   const cardId = params.cardId;
+  const themeId = searchParams.get("themeId") || undefined;
   const api = createCloudArcanumApiClient({ baseUrl: apiBaseUrl });
 
   const state = useApiRequest(
@@ -335,10 +374,14 @@ export function CardDetailPage({ apiBaseUrl }: CardDetailPageProps): ReactElemen
         throw new Error("Card id is missing from the route.");
       }
 
-      const response = await api.getCardDetail({ cardId: cardId as CardId }, { signal });
+      const response = await api.getCardDetailWithQuery(
+        { cardId: cardId as CardId },
+        { themeId },
+        { signal },
+      );
       return response.data;
     },
-    [apiBaseUrl, cardId],
+    [apiBaseUrl, cardId, themeId],
   );
 
   return (

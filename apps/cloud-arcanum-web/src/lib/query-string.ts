@@ -3,6 +3,7 @@ import type {
   CardSortKey,
   DeckListQuery,
   DeckSortKey,
+  SetDetailQuery,
   SetListQuery,
   SetSortKey,
   SortDirection,
@@ -109,6 +110,7 @@ export function parseCardListQuery(searchParams: URLSearchParams): CardListQuery
     setId: parseString(searchParams, "setId"),
     sort: parseString(searchParams, "sort") as CardSortKey | undefined,
     status: parseStringList<CardStatus>(searchParams, "status"),
+    themeId: parseString(searchParams, "themeId"),
     universeId: parseString(searchParams, "universeId"),
   };
 }
@@ -131,6 +133,10 @@ export function parseDeckListQuery(searchParams: URLSearchParams): DeckListQuery
 }
 
 export function buildSetListQueryString(query: SetListQuery): string {
+  return buildQueryString(query);
+}
+
+export function buildSetDetailQueryString(query: SetDetailQuery): string {
   return buildQueryString(query);
 }
 

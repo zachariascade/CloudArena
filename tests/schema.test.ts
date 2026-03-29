@@ -20,8 +20,8 @@ describe("schema validation", () => {
   it("accepts the sample records", async () => {
     const universe = await loadJson("data/universes/universe_biblical_biblical_world.json");
     const set = await loadJson("data/sets/set_genesis_book_of_beginnings.json");
-    const approvedCard = await loadJson("data/cards/card_0001_abraham_father_of_nations.json");
-    const draftCard = await loadJson("data/cards/card_0002_sarah_laughter_of_promise.json");
+    const approvedCard = await loadJson("data/cards/card_0001_abraham.json");
+    const draftCard = await loadJson("data/cards/card_0002_sarah.json");
     const deck = await loadJson("data/decks/deck_patriarchs_tribe_of_promise.json");
 
     expect(universeSchema.safeParse(universe).success).toBe(true);
@@ -33,7 +33,7 @@ describe("schema validation", () => {
 
   it("allows explicit draft placeholders", async () => {
     const draftCard = await loadJson<Record<string, unknown>>(
-      "data/cards/card_0002_sarah_laughter_of_promise.json",
+      "data/cards/card_0002_sarah.json",
     );
 
     const result = cardSchema.safeParse(draftCard);
@@ -50,7 +50,7 @@ describe("schema validation", () => {
 
   it("requires finalized mechanics for balanced and approved cards", async () => {
     const approvedCard = await loadJson<Record<string, unknown>>(
-      "data/cards/card_0001_abraham_father_of_nations.json",
+      "data/cards/card_0001_abraham.json",
     );
     approvedCard.manaCost = null;
     approvedCard.manaValue = null;
@@ -67,5 +67,34 @@ describe("schema validation", () => {
       expect(issues).toContain("rarity");
       expect(issues).toContain("oracleText");
     }
+  });
+
+  it("accepts backwards-compatible themed image and set theme fields", async () => {
+    const set = await loadJson<Record<string, unknown>>(
+      "data/sets/set_genesis_book_of_beginnings.json",
+    );
+    const card = await loadJson<Record<string, unknown>>("data/cards/card_0001_abraham.json");
+
+    set.themes = [
+      { id: "default", name: "Default" },
+      { id: "classics", name: "Classics", description: "Renaissance-inspired art." },
+    ];
+    set.defaultThemeId = "default";
+    set.activeThemeId = "classics";
+
+    delete card.image;
+    card.images = {
+      default: {
+        type: "local",
+        path: "images/cards/card_0001_abraham.svg",
+      },
+      classics: {
+        type: "remote",
+        path: "https://example.com/classics-abraham.png",
+      },
+    };
+
+    expect(setSchema.safeParse(set).success).toBe(true);
+    expect(cardSchema.safeParse(card).success).toBe(true);
   });
 });

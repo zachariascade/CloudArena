@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "./scripts/node18.sh ./node_modules/typescript/bin/tsc -p tsconfig.json && ./scripts/node18.sh dist/scripts/build-web-client.js",
+    "benchmark:api": "npm run build && ./scripts/node18.sh dist/scripts/benchmark-api.js",
     "check": "./scripts/node18.sh ./node_modules/typescript/bin/tsc --noEmit -p tsconfig.json",
     "dev": "npm run build && ./scripts/node18.sh dist/scripts/dev.js",
     "dev:once": "npm run build && ./scripts/node18.sh dist/scripts/dev.js --no-watch",

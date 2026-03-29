@@ -2,20 +2,30 @@ import type {
   CardDetail,
   CardDeckUsage,
   CardListItem,
+  CardSummaryItem,
   DeckDetail,
   DeckDetailCard,
   DeckListItem,
-  DraftReviewLabel,
   DraftStatusSummary,
   EntityReference,
   ImagePreview,
+  SetThemeDefinition,
   SetDetail,
   SetListItem,
   UniverseDetail,
   UniverseListItem,
   ValidationSummary,
 } from "../../../../src/cloud-arcanum/api-contract.js";
-import type { Card, CardColor, ImageReference } from "../../../../src/domain/index.js";
+import {
+  deriveDraftStatusSummary,
+  formatCardDisplayName,
+} from "../../../../src/cloud-arcanum/shared-utils.js";
+import type {
+  Card,
+  CardColor,
+  ImageReference,
+  ThemeId,
+} from "../../../../src/domain/index.js";
 import type {
   CloudArcanumNormalizedData,
   NormalizedCardRecord,
@@ -23,17 +33,6 @@ import type {
   NormalizedSetRecord,
   NormalizedUniverseRecord,
 } from "./index.js";
-
-const unresolvedCardFieldResolvers = [
-  ["manaCost", (card: Card) => card.manaCost],
-  ["manaValue", (card: Card) => card.manaValue],
-  ["oracleText", (card: Card) => card.oracleText],
-  ["power", (card: Card) => card.power],
-  ["toughness", (card: Card) => card.toughness],
-  ["loyalty", (card: Card) => card.loyalty],
-  ["defense", (card: Card) => card.defense],
-  ["rarity", (card: Card) => card.rarity],
-] as const;
 
 function createFallbackReference(id: string, label: string): EntityReference {
   return {
@@ -68,47 +67,19 @@ function cloneCardColors(colors: Card["colors"]): CardColor[] {
   return colors.map((color) => color as CardColor);
 }
 
-function buildDraftReviewLabel(summary: {
-  status: Card["status"];
-  hasUnresolvedMechanics: boolean;
-}): DraftReviewLabel {
-  if (summary.status === "approved") {
-    return "Approved";
-  }
-
-  if (summary.status === "balanced") {
-    return summary.hasUnresolvedMechanics ? "Needs review" : "Ready for review";
-  }
-
-  if (summary.status === "templating") {
-    return "Templating";
-  }
-
-  return "Draft";
-}
-
 export function buildDraftStatusSummary(card: Card): DraftStatusSummary {
-  const unresolvedFields = unresolvedCardFieldResolvers
-    .filter(([, getValue]) => getValue(card) === null)
-    .map(([field]) => field);
-  const hasUnresolvedMechanics = unresolvedFields.length > 0;
-
-  return {
-    status: card.status,
-    isDraftLike: card.status === "draft" || card.status === "templating",
-    hasUnresolvedMechanics,
-    unresolvedFields,
-    reviewLabel: buildDraftReviewLabel({
-      status: card.status,
-      hasUnresolvedMechanics,
-    }),
-  };
+  return deriveDraftStatusSummary(card);
 }
 
 export function buildImagePreview(
   image: ImageReference,
   alt: string,
   availableImagePaths: Set<string>,
+  options: {
+    fallbackArtist?: string | null;
+    requestedThemeId?: ThemeId | null;
+    resolvedThemeId?: ThemeId | null;
+  } = {},
 ): ImagePreview {
   if (image.type === "placeholder") {
     return {
@@ -117,6 +88,18 @@ export function buildImagePreview(
       publicUrl: null,
       isRenderable: false,
       alt,
+      artist: image.artist ?? options.fallbackArtist ?? null,
+      sourceUrl: image.sourceUrl ?? null,
+      license: image.license ?? null,
+      creditText: image.creditText ?? null,
+      sourceNotes: image.sourceNotes ?? null,
+      requestedThemeId: options.requestedThemeId ?? null,
+      resolvedThemeId: options.resolvedThemeId ?? null,
+      fellBack:
+        options.requestedThemeId !== undefined &&
+        options.requestedThemeId !== null &&
+        options.resolvedThemeId !== null &&
+        options.requestedThemeId !== options.resolvedThemeId,
     };
   }
 
@@ -127,6 +110,18 @@ export function buildImagePreview(
       publicUrl: image.path,
       isRenderable: image.path !== null,
       alt,
+      artist: image.artist ?? options.fallbackArtist ?? null,
+      sourceUrl: image.sourceUrl ?? image.path,
+      license: image.license ?? null,
+      creditText: image.creditText ?? null,
+      sourceNotes: image.sourceNotes ?? null,
+      requestedThemeId: options.requestedThemeId ?? null,
+      resolvedThemeId: options.resolvedThemeId ?? null,
+      fellBack:
+        options.requestedThemeId !== undefined &&
+        options.requestedThemeId !== null &&
+        options.resolvedThemeId !== null &&
+        options.requestedThemeId !== options.resolvedThemeId,
     };
   }
 
@@ -137,6 +132,14 @@ export function buildImagePreview(
       publicUrl: null,
       isRenderable: false,
       alt,
+      artist: image.artist ?? options.fallbackArtist ?? null,
+      sourceUrl: image.sourceUrl ?? null,
+      license: image.license ?? null,
+      creditText: image.creditText ?? null,
+      sourceNotes: image.sourceNotes ?? null,
+      requestedThemeId: options.requestedThemeId ?? null,
+      resolvedThemeId: options.resolvedThemeId ?? null,
+      fellBack: false,
     };
   }
 
@@ -151,6 +154,18 @@ export function buildImagePreview(
         publicUrl: null,
         isRenderable: false,
         alt,
+        artist: image.artist ?? options.fallbackArtist ?? null,
+        sourceUrl: image.sourceUrl ?? null,
+        license: image.license ?? null,
+        creditText: image.creditText ?? null,
+        sourceNotes: image.sourceNotes ?? null,
+        requestedThemeId: options.requestedThemeId ?? null,
+        resolvedThemeId: options.resolvedThemeId ?? null,
+        fellBack:
+          options.requestedThemeId !== undefined &&
+          options.requestedThemeId !== null &&
+          options.resolvedThemeId !== null &&
+          options.requestedThemeId !== options.resolvedThemeId,
       };
     }
 
@@ -160,6 +175,18 @@ export function buildImagePreview(
       publicUrl: `/${normalizedPath}`,
       isRenderable: true,
       alt,
+      artist: image.artist ?? options.fallbackArtist ?? null,
+      sourceUrl: image.sourceUrl ?? null,
+      license: image.license ?? null,
+      creditText: image.creditText ?? null,
+      sourceNotes: image.sourceNotes ?? null,
+      requestedThemeId: options.requestedThemeId ?? null,
+      resolvedThemeId: options.resolvedThemeId ?? null,
+      fellBack:
+        options.requestedThemeId !== undefined &&
+        options.requestedThemeId !== null &&
+        options.resolvedThemeId !== null &&
+        options.requestedThemeId !== options.resolvedThemeId,
     };
   }
 
@@ -177,6 +204,18 @@ export function buildImagePreview(
         image.path.startsWith("http://") ||
         image.path.startsWith("https://"),
       alt,
+      artist: image.artist ?? options.fallbackArtist ?? null,
+      sourceUrl: image.sourceUrl ?? null,
+      license: image.license ?? null,
+      creditText: image.creditText ?? null,
+      sourceNotes: image.sourceNotes ?? null,
+      requestedThemeId: options.requestedThemeId ?? null,
+      resolvedThemeId: options.resolvedThemeId ?? null,
+      fellBack:
+        options.requestedThemeId !== undefined &&
+        options.requestedThemeId !== null &&
+        options.resolvedThemeId !== null &&
+        options.requestedThemeId !== options.resolvedThemeId,
     };
   }
 
@@ -186,22 +225,145 @@ export function buildImagePreview(
     publicUrl: null,
     isRenderable: false,
     alt,
+    artist: image.artist ?? options.fallbackArtist ?? null,
+    sourceUrl: image.sourceUrl ?? null,
+    license: image.license ?? null,
+    creditText: image.creditText ?? null,
+    sourceNotes: image.sourceNotes ?? null,
+    requestedThemeId: options.requestedThemeId ?? null,
+    resolvedThemeId: options.resolvedThemeId ?? null,
+    fellBack:
+      options.requestedThemeId !== undefined &&
+      options.requestedThemeId !== null &&
+      options.resolvedThemeId !== null &&
+      options.requestedThemeId !== options.resolvedThemeId,
   };
 }
 
-function buildAvailableImagePathSet(normalized: CloudArcanumNormalizedData): Set<string> {
+export function buildAvailableImagePathSet(
+  normalized: CloudArcanumNormalizedData,
+): Set<string> {
   return new Set(normalized.snapshot.cardImages.map((record) => record.relativeFilePath));
 }
 
-function buildCardImagePreview(
-  normalized: CloudArcanumNormalizedData,
-  cardRecord: NormalizedCardRecord,
-): ImagePreview {
-  return buildImagePreview(
-    cardRecord.data.image,
-    `${cardRecord.data.name} artwork`,
-    buildAvailableImagePathSet(normalized),
+function buildSetThemes(setRecord: NormalizedSetRecord | null): SetThemeDefinition[] {
+  return (setRecord?.data.themes ?? []).map((theme) => ({
+    id: theme.id,
+    name: theme.name,
+    description: theme.description ?? null,
+  }));
+}
+
+function buildSetThemeContext(
+  setRecord: NormalizedSetRecord | null,
+  requestedThemeId?: ThemeId,
+): {
+  themes: SetThemeDefinition[];
+  defaultThemeId: ThemeId | null;
+  activeThemeId: ThemeId | null;
+  requestedThemeId: ThemeId | null;
+  resolvedThemeId: ThemeId | null;
+} {
+  const themes = buildSetThemes(setRecord);
+  const declaredThemeIds = themes.map((theme) => theme.id);
+  const defaultThemeId =
+    setRecord?.data.defaultThemeId ??
+    (declaredThemeIds.includes("default") ? "default" : null);
+  const activeThemeId = setRecord?.data.activeThemeId ?? defaultThemeId;
+  const effectiveRequestedThemeId = requestedThemeId ?? activeThemeId ?? defaultThemeId ?? null;
+  const resolvedThemeId = effectiveRequestedThemeId
+    ? declaredThemeIds.includes(effectiveRequestedThemeId)
+      ? effectiveRequestedThemeId
+      : activeThemeId ?? defaultThemeId ?? declaredThemeIds[0] ?? null
+    : activeThemeId ?? defaultThemeId ?? declaredThemeIds[0] ?? null;
+
+  return {
+    themes,
+    defaultThemeId,
+    activeThemeId,
+    requestedThemeId: effectiveRequestedThemeId,
+    resolvedThemeId,
+  };
+}
+
+function buildCardImageVariantMap(card: Card): Record<string, ImageReference> {
+  const variants: Record<string, ImageReference> = {
+    ...(card.images ?? {}),
+  };
+
+  if (card.image && !variants.default) {
+    variants.default = card.image;
+  }
+
+  return variants;
+}
+
+function buildCardImageThemeIds(card: Card): ThemeId[] {
+  return Object.keys(buildCardImageVariantMap(card)).sort((left, right) =>
+    left.localeCompare(right),
   );
+}
+
+function buildCardImagePreview(
+  cardRecord: NormalizedCardRecord,
+  availableImagePaths: Set<string>,
+  requestedThemeId?: ThemeId,
+): ImagePreview {
+  const alt = `${formatCardDisplayName(cardRecord.data.name, cardRecord.data.title)} artwork`;
+  const themeContext = buildSetThemeContext(cardRecord.set, requestedThemeId);
+  const imageVariants = buildCardImageVariantMap(cardRecord.data);
+  const orderedThemeIds = Array.from(
+    new Set([
+      themeContext.requestedThemeId,
+      themeContext.defaultThemeId,
+      "default",
+      ...Object.keys(imageVariants),
+    ].filter((value): value is ThemeId => Boolean(value))),
+  );
+
+  let fallbackPreview: ImagePreview | null = null;
+
+  for (const themeId of orderedThemeIds) {
+    const image = imageVariants[themeId];
+
+    if (!image) {
+      continue;
+    }
+
+    const preview = buildImagePreview(image, alt, availableImagePaths, {
+      fallbackArtist: cardRecord.data.artist,
+      requestedThemeId: themeContext.requestedThemeId,
+      resolvedThemeId: themeId,
+    });
+
+    if (!fallbackPreview) {
+      fallbackPreview = preview;
+    }
+
+    if (preview.isRenderable) {
+      return preview;
+    }
+  }
+
+  if (fallbackPreview) {
+    return fallbackPreview;
+  }
+
+  return {
+    kind: "missing",
+    sourcePath: null,
+    publicUrl: null,
+    isRenderable: false,
+    alt,
+    artist: cardRecord.data.artist ?? null,
+    sourceUrl: null,
+    license: null,
+    creditText: null,
+    sourceNotes: null,
+    requestedThemeId: themeContext.requestedThemeId,
+    resolvedThemeId: null,
+    fellBack: false,
+  };
 }
 
 function buildCardSetReference(cardRecord: NormalizedCardRecord): EntityReference {
@@ -226,10 +388,15 @@ function buildCardUniverseReference(cardRecord: NormalizedCardRecord): EntityRef
 export function buildCardListItem(
   normalized: CloudArcanumNormalizedData,
   cardRecord: NormalizedCardRecord,
+  availableImagePaths = buildAvailableImagePathSet(normalized),
+  options: {
+    themeId?: ThemeId;
+  } = {},
 ): CardListItem {
   return {
     id: cardRecord.data.id,
     name: cardRecord.data.name,
+    title: cardRecord.data.title,
     slug: cardRecord.data.slug,
     typeLine: cardRecord.data.typeLine,
     manaCost: cardRecord.data.manaCost,
@@ -244,11 +411,12 @@ export function buildCardListItem(
     toughness: cardRecord.data.toughness,
     loyalty: cardRecord.data.loyalty,
     defense: cardRecord.data.defense,
-    artist: cardRecord.data.artist,
+    artist: buildCardImagePreview(cardRecord, availableImagePaths, options.themeId).artist,
     set: buildCardSetReference(cardRecord),
     setCode: cardRecord.set?.data.code ?? null,
     universe: buildCardUniverseReference(cardRecord),
-    image: buildCardImagePreview(normalized, cardRecord),
+    image: buildCardImagePreview(cardRecord, availableImagePaths, options.themeId),
+    imageThemes: buildCardImageThemeIds(cardRecord.data),
     draft: buildDraftStatusSummary(cardRecord.data),
     validation: toValidationSummary(normalized, cardRecord.relativeFilePath),
     tags: cardRecord.data.tags,
@@ -256,13 +424,47 @@ export function buildCardListItem(
   };
 }
 
-export function buildCardDetail(
+export function buildCardSummaryItem(
   normalized: CloudArcanumNormalizedData,
   cardRecord: NormalizedCardRecord,
-): CardDetail {
+  availableImagePaths = buildAvailableImagePathSet(normalized),
+  options: {
+    themeId?: ThemeId;
+  } = {},
+): CardSummaryItem {
   return {
     id: cardRecord.data.id,
     name: cardRecord.data.name,
+    title: cardRecord.data.title,
+    slug: cardRecord.data.slug,
+    typeLine: cardRecord.data.typeLine,
+    colors: cloneCardColors(cardRecord.data.colors),
+    rarity: cardRecord.data.rarity,
+    status: cardRecord.data.status,
+    set: buildCardSetReference(cardRecord),
+    setCode: cardRecord.set?.data.code ?? null,
+    universe: buildCardUniverseReference(cardRecord),
+    tags: cardRecord.data.tags,
+    hasImage: buildCardImagePreview(cardRecord, availableImagePaths, options.themeId)
+      .isRenderable,
+    hasUnresolvedMechanics: buildDraftStatusSummary(cardRecord.data).hasUnresolvedMechanics,
+    updatedAt: cardRecord.data.updatedAt,
+  };
+}
+
+export function buildCardDetail(
+  normalized: CloudArcanumNormalizedData,
+  cardRecord: NormalizedCardRecord,
+  options: {
+    themeId?: ThemeId;
+  } = {},
+): CardDetail {
+  const availableImagePaths = buildAvailableImagePathSet(normalized);
+
+  return {
+    id: cardRecord.data.id,
+    name: cardRecord.data.name,
+    title: cardRecord.data.title,
     slug: cardRecord.data.slug,
     setId: cardRecord.data.setId,
     typeLine: cardRecord.data.typeLine,
@@ -277,14 +479,15 @@ export function buildCardDetail(
     toughness: cardRecord.data.toughness,
     loyalty: cardRecord.data.loyalty,
     defense: cardRecord.data.defense,
-    artist: cardRecord.data.artist,
+    artist: buildCardImagePreview(cardRecord, availableImagePaths, options.themeId).artist,
     mechanics: cardRecord.data.mechanics,
     tags: cardRecord.data.tags,
     imagePrompt: cardRecord.data.imagePrompt,
     notes: cardRecord.data.notes,
     createdAt: cardRecord.data.createdAt,
     updatedAt: cardRecord.data.updatedAt,
-    image: buildCardImagePreview(normalized, cardRecord),
+    image: buildCardImagePreview(cardRecord, availableImagePaths, options.themeId),
+    imageThemes: buildCardImageThemeIds(cardRecord.data),
     draft: buildDraftStatusSummary(cardRecord.data),
     validation: toValidationSummary(normalized, cardRecord.relativeFilePath),
     set: cardRecord.set
@@ -303,6 +506,7 @@ export function buildCardDetail(
       .map<CardDeckUsage>(({ deck, quantity }) => ({
         id: deck.data.id,
         name: deck.data.name,
+        title: null,
         quantity,
       }))
       .sort((left, right) => left.name.localeCompare(right.name)),
@@ -323,7 +527,12 @@ export function buildDeckListItem(
     setCount: deckRecord.sets.length,
     cardCount: deckRecord.totalCards,
     uniqueCardCount: deckRecord.uniqueCards,
-    commander: deckRecord.commander ? toEntityReference(deckRecord.commander) : null,
+    commander: deckRecord.commander
+      ? {
+          ...toEntityReference(deckRecord.commander),
+          title: deckRecord.commander.data.title,
+        }
+      : null,
     tags: deckRecord.data.tags,
     validation: toValidationSummary(normalized, deckRecord.relativeFilePath),
   };
@@ -337,16 +546,19 @@ function buildDeckDetailCard(
     return null;
   }
 
+  const availableImagePaths = buildAvailableImagePathSet(normalized);
+
   return {
     quantity: deckCardRecord.quantity,
     card: {
       id: deckCardRecord.card.data.id,
       name: deckCardRecord.card.data.name,
+      title: deckCardRecord.card.data.title,
       typeLine: deckCardRecord.card.data.typeLine,
       manaCost: deckCardRecord.card.data.manaCost,
       manaValue: deckCardRecord.card.data.manaValue,
       status: deckCardRecord.card.data.status,
-      image: buildCardImagePreview(normalized, deckCardRecord.card),
+      image: buildCardImagePreview(deckCardRecord.card, availableImagePaths),
       draft: buildDraftStatusSummary(deckCardRecord.card.data),
       set: buildCardSetReference(deckCardRecord.card),
     },
@@ -357,6 +569,7 @@ export function buildDeckDetail(
   normalized: CloudArcanumNormalizedData,
   deckRecord: NormalizedDeckRecord,
 ): DeckDetail {
+  const availableImagePaths = buildAvailableImagePathSet(normalized);
   const bySet = new Map<string, { set: EntityReference; count: number }>();
 
   for (const deckCardRecord of deckRecord.cards) {
@@ -396,7 +609,8 @@ export function buildDeckDetail(
       ? {
           id: deckRecord.commander.data.id,
           name: deckRecord.commander.data.name,
-          image: buildCardImagePreview(normalized, deckRecord.commander),
+          title: deckRecord.commander.data.title,
+          image: buildCardImagePreview(deckRecord.commander, availableImagePaths),
         }
       : null,
     cards: deckRecord.cards
@@ -418,6 +632,8 @@ export function buildSetListItem(
   normalized: CloudArcanumNormalizedData,
   setRecord: NormalizedSetRecord,
 ): SetListItem {
+  const themeContext = buildSetThemeContext(setRecord);
+
   return {
     id: setRecord.data.id,
     name: setRecord.data.name,
@@ -426,6 +642,9 @@ export function buildSetListItem(
       ? toEntityReference(setRecord.universe)
       : createFallbackReference(setRecord.data.universeId, "Unknown Universe"),
     description: setRecord.data.description,
+    themes: themeContext.themes,
+    defaultThemeId: themeContext.defaultThemeId,
+    activeThemeId: themeContext.activeThemeId,
     cardCount: setRecord.cards.length,
     countsByStatus: setRecord.countsByStatus,
   };
@@ -434,15 +653,21 @@ export function buildSetListItem(
 export function buildSetDetail(
   normalized: CloudArcanumNormalizedData,
   setRecord: NormalizedSetRecord,
+  options: {
+    themeId?: ThemeId;
+  } = {},
 ): SetDetail {
+  const availableImagePaths = buildAvailableImagePathSet(normalized);
+  const themeContext = buildSetThemeContext(setRecord, options.themeId);
   const featuredCards = [...setRecord.cards]
     .sort((left, right) => left.data.name.localeCompare(right.data.name))
     .slice(0, 6)
     .map((cardRecord) => ({
       id: cardRecord.data.id,
       name: cardRecord.data.name,
+      title: cardRecord.data.title,
       status: cardRecord.data.status,
-      image: buildCardImagePreview(normalized, cardRecord),
+      image: buildCardImagePreview(cardRecord, availableImagePaths, themeContext.requestedThemeId ?? undefined),
     }));
 
   return {
@@ -453,6 +678,11 @@ export function buildSetDetail(
     universe: setRecord.universe
       ? toEntityReference(setRecord.universe)
       : createFallbackReference(setRecord.data.universeId, "Unknown Universe"),
+    themes: themeContext.themes,
+    defaultThemeId: themeContext.defaultThemeId,
+    activeThemeId: themeContext.activeThemeId,
+    requestedThemeId: themeContext.requestedThemeId,
+    resolvedThemeId: themeContext.resolvedThemeId,
     cardCount: setRecord.cards.length,
     countsByStatus: setRecord.countsByStatus,
     featuredCards,

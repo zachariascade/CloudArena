@@ -3,6 +3,9 @@ import { afterEach, describe, expect, it } from "vitest";
 import { createCloudArcanumApiLoaders } from "../apps/cloud-arcanum-api/src/loaders/index.js";
 import { normalizeCloudArcanumData } from "../apps/cloud-arcanum-api/src/services/index.js";
 import {
+  countCards,
+  queryCardIds,
+  queryCardSummaries,
   queryCards,
   queryDecks,
   querySets,
@@ -68,6 +71,8 @@ describe("cloud arcanum queries", () => {
       expect(deckResults.some((card) => card.id === cardInDeck.data.id)).toBe(true);
     }
 
+    expect(unresolvedResults.some((card) => card.id === "card_0001")).toBe(false);
+
     const sorted = queryCards(normalized, {
       sort: "updatedAt",
       direction: "desc",
@@ -79,6 +84,30 @@ describe("cloud arcanum queries", () => {
     expect(sorted.meta.total).toBe(normalized.cards.length);
     expect(sorted.meta.page).toBe(1);
     expect(sorted.meta.pageSize).toBe(1);
+  });
+
+  it("keeps count, ids, summary, and full card queries aligned", async () => {
+    const normalized = await withNormalizedData();
+    const query = {
+      hasUnresolvedMechanics: true,
+      sort: "updatedAt" as const,
+      direction: "desc" as const,
+      page: 1,
+      pageSize: 5,
+    };
+
+    const full = queryCards(normalized, query);
+    const ids = queryCardIds(normalized, query);
+    const summary = queryCardSummaries(normalized, query);
+    const count = countCards(normalized, query);
+
+    expect(ids.data.map((item) => item.id)).toEqual(full.data.map((item) => item.id));
+    expect(summary.data.map((item) => item.id)).toEqual(full.data.map((item) => item.id));
+    expect(summary.data.every((item) => item.hasUnresolvedMechanics)).toBe(true);
+    expect(summary.meta.total).toBe(full.meta.total);
+    expect(ids.meta.total).toBe(full.meta.total);
+    expect(count.total).toBe(full.meta.total);
+    expect(count.filtersApplied).toEqual(full.meta.filtersApplied);
   });
 
   it("supports deck search and filtering", async () => {

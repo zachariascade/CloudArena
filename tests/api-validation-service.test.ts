@@ -63,7 +63,7 @@ describe("cloud arcanum validation integration", () => {
 
     const cardPath = path.join(
       tempRoot,
-      "data/cards/card_0001_abraham_father_of_nations.json",
+      "data/cards/card_0001_abraham.json",
     );
     const cardRecord = await readJson<Record<string, unknown>>(cardPath);
     cardRecord.setId = "set_missing";
@@ -76,10 +76,47 @@ describe("cloud arcanum validation integration", () => {
     const normalized = await services.loadNormalizedData();
     const entityValidation = await services.loadEntityValidation("card_0001");
 
-    expect(normalized.validationErrorsByFile.get("data/cards/card_0001_abraham_father_of_nations.json")?.length).toBeGreaterThan(0);
+    expect(normalized.validationErrorsByFile.get("data/cards/card_0001_abraham.json")?.length).toBeGreaterThan(0);
     expect(entityValidation).not.toBeNull();
     expect(entityValidation?.entityId).toBe("card_0001");
     expect(entityValidation?.hasErrors).toBe(true);
     expect(entityValidation?.errors.some((error) => error.message.includes("Unknown setId"))).toBe(true);
+  });
+
+  it("reuses normalized data until a canonical file changes", async () => {
+    const tempRoot = await createTempProject();
+    tempProjects.push(tempRoot);
+
+    const baseLoaders = createCloudArcanumApiLoaders({ workspaceRoot: tempRoot });
+    const loaders = {
+      ...baseLoaders,
+      loadSnapshot: vi.fn(baseLoaders.loadSnapshot),
+      loadDataFingerprint: vi.fn(baseLoaders.loadDataFingerprint),
+    };
+    const services = createCloudArcanumApiServices(loaders, {
+      normalizedDataCacheTtlMs: 60_000,
+    });
+
+    const first = await services.loadNormalizedData();
+    const second = await services.loadNormalizedData();
+
+    expect(first).toBe(second);
+    expect(loaders.loadSnapshot).toHaveBeenCalledTimes(1);
+
+    const cardPath = path.join(
+      tempRoot,
+      "data/cards/card_0001_abraham.json",
+    );
+    const cardRecord = await readJson<Record<string, unknown>>(cardPath);
+    cardRecord.name = "Abraham, Changed For Cache Test";
+    await writeJson(cardPath, cardRecord);
+
+    const third = await services.loadNormalizedData();
+
+    expect(third).not.toBe(first);
+    expect(third.indexes.cardsById.get("card_0001")?.data.name).toBe(
+      "Abraham, Changed For Cache Test",
+    );
+    expect(loaders.loadSnapshot).toHaveBeenCalledTimes(2);
   });
 });

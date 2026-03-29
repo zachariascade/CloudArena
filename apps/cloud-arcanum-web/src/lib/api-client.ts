@@ -6,6 +6,7 @@ import {
   buildCloudArcanumUniverseDetailPath,
   cloudArcanumApiRoutes,
   type ApiErrorResponse,
+  type CardDetailQuery,
   type CloudArcanumApiResponse,
   type CloudArcanumApiRouteName,
   type CloudArcanumApiQuery,
@@ -13,12 +14,14 @@ import {
   type CardRouteParams,
   type DeckRouteParams,
   type SetRouteParams,
+  type SetDetailQuery,
   type UniverseRouteParams,
 } from "../../../../src/cloud-arcanum/api-contract.js";
 
 import {
   buildCardListQueryString,
   buildDeckListQueryString,
+  buildSetDetailQueryString,
   buildSetListQueryString,
   buildUniverseListQueryString,
 } from "./query-string.js";
@@ -127,6 +130,39 @@ export class CloudArcanumApiClient {
     return this.request("metaFilters", cloudArcanumApiRoutes.metaFilters, options);
   }
 
+  countCards(
+    query: CloudArcanumApiQuery<"cardsCount"> = {},
+    options?: { signal?: AbortSignal },
+  ) {
+    const search = buildCardListQueryString(query);
+    const path = search
+      ? `${cloudArcanumApiRoutes.cardsCount}?${search}`
+      : cloudArcanumApiRoutes.cardsCount;
+    return this.request("cardsCount", path, options);
+  }
+
+  listCardIds(
+    query: CloudArcanumApiQuery<"cardsIds"> = {},
+    options?: { signal?: AbortSignal },
+  ) {
+    const search = buildCardListQueryString(query);
+    const path = search
+      ? `${cloudArcanumApiRoutes.cardsIds}?${search}`
+      : cloudArcanumApiRoutes.cardsIds;
+    return this.request("cardsIds", path, options);
+  }
+
+  listCardSummaries(
+    query: CloudArcanumApiQuery<"cardsSummary"> = {},
+    options?: { signal?: AbortSignal },
+  ) {
+    const search = buildCardListQueryString(query);
+    const path = search
+      ? `${cloudArcanumApiRoutes.cardsSummary}?${search}`
+      : cloudArcanumApiRoutes.cardsSummary;
+    return this.request("cardsSummary", path, options);
+  }
+
   listCards(
     query: CloudArcanumApiQuery<"cards"> = {},
     options?: { signal?: AbortSignal },
@@ -138,6 +174,18 @@ export class CloudArcanumApiClient {
 
   getCardDetail(params: CardRouteParams, options?: { signal?: AbortSignal }) {
     return this.request("cardDetail", buildCloudArcanumCardDetailPath(params.cardId), options);
+  }
+
+  getCardDetailWithQuery(
+    params: CardRouteParams,
+    query: CardDetailQuery = {},
+    options?: { signal?: AbortSignal },
+  ) {
+    const search = buildCardListQueryString(query);
+    const path = search
+      ? `${buildCloudArcanumCardDetailPath(params.cardId)}?${search}`
+      : buildCloudArcanumCardDetailPath(params.cardId);
+    return this.request("cardDetail", path, options);
   }
 
   listDecks(
@@ -164,6 +212,18 @@ export class CloudArcanumApiClient {
 
   getSetDetail(params: SetRouteParams, options?: { signal?: AbortSignal }) {
     return this.request("setDetail", buildCloudArcanumSetDetailPath(params.setId), options);
+  }
+
+  getSetDetailWithQuery(
+    params: SetRouteParams,
+    query: SetDetailQuery = {},
+    options?: { signal?: AbortSignal },
+  ) {
+    const search = buildSetDetailQueryString(query);
+    const path = search
+      ? `${buildCloudArcanumSetDetailPath(params.setId)}?${search}`
+      : buildCloudArcanumSetDetailPath(params.setId);
+    return this.request("setDetail", path, options);
   }
 
   listUniverses(

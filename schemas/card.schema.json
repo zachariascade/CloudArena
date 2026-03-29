@@ -7,6 +7,7 @@
   "required": [
     "id",
     "name",
+    "title",
     "slug",
     "setId",
     "typeLine",
@@ -21,8 +22,6 @@
     "toughness",
     "loyalty",
     "defense",
-    "artist",
-    "image",
     "imagePrompt",
     "mechanics",
     "tags",
@@ -31,6 +30,18 @@
     "createdAt",
     "updatedAt"
   ],
+  "anyOf": [
+    {
+      "required": [
+        "image"
+      ]
+    },
+    {
+      "required": [
+        "images"
+      ]
+    }
+  ],
   "properties": {
     "id": {
       "type": "string",
@@ -38,6 +49,13 @@
     },
     "name": {
       "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ],
       "minLength": 1
     },
     "slug": {
@@ -174,6 +192,99 @@
             "string",
             "null"
           ]
+        },
+        "artist": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sourceUrl": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "license": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "creditText": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sourceNotes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "images": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "path"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "local",
+              "remote",
+              "generated",
+              "placeholder"
+            ]
+          },
+          "path": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "artist": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sourceUrl": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri"
+          },
+          "license": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "creditText": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sourceNotes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
         }
       }
     },

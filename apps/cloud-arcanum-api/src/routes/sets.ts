@@ -31,6 +31,10 @@ export const registerCloudArcanumApiSetRoutes: CloudArcanumApiRouteModule = asyn
 
   app.get(cloudArcanumApiRoutes.setDetail, async (request, reply) => {
     const { setId } = request.params as { setId: string };
+    const themeId =
+      typeof (request.query as { themeId?: unknown } | undefined)?.themeId === "string"
+        ? ((request.query as { themeId?: string }).themeId || undefined)
+        : undefined;
     const normalized = await context.services.loadNormalizedData();
     const setRecord = normalized.indexes.setsById.get(setId);
 
@@ -44,7 +48,7 @@ export const registerCloudArcanumApiSetRoutes: CloudArcanumApiRouteModule = asyn
     }
 
     return {
-      data: buildSetDetail(normalized, setRecord),
+      data: buildSetDetail(normalized, setRecord, { themeId }),
     };
   });
 };

@@ -11,12 +11,14 @@ import {
   isoDateTimeSchema,
   setIdSchema,
   slugSchema,
+  themedImageMapSchema,
   uniqueEnumArray,
   uniqueStringArray,
 } from "./types.js";
 
 export const cardSchema = baseNamedEntitySchema(cardIdSchema)
   .extend({
+    title: z.string().min(1).nullable(),
     slug: slugSchema,
     setId: setIdSchema,
     typeLine: z.string().min(1),
@@ -31,8 +33,9 @@ export const cardSchema = baseNamedEntitySchema(cardIdSchema)
     toughness: z.string().nullable(),
     loyalty: z.string().nullable(),
     defense: z.string().nullable(),
-    artist: z.string().nullable(),
-    image: imageReferenceSchema,
+    artist: z.string().nullable().optional(),
+    image: imageReferenceSchema.optional(),
+    images: themedImageMapSchema.optional(),
     imagePrompt: imagePromptSchema.nullable(),
     mechanics: uniqueStringArray(),
     tags: uniqueStringArray(),
@@ -42,6 +45,14 @@ export const cardSchema = baseNamedEntitySchema(cardIdSchema)
     updatedAt: isoDateTimeSchema,
   })
   .superRefine((value, ctx) => {
+    if (!value.image && (!value.images || Object.keys(value.images).length === 0)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Either image or images is required.",
+        path: ["image"],
+      });
+    }
+
     if (value.status === "balanced" || value.status === "approved") {
       if (value.manaCost === null || value.manaCost.length === 0) {
         ctx.addIssue({

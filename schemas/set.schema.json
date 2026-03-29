@@ -33,6 +33,42 @@
         "string",
         "null"
       ]
+    },
+    "themes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "uniqueItems": true
+    },
+    "defaultThemeId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "activeThemeId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
     }
   }
 }

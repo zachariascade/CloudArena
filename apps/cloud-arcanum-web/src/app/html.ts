@@ -48,8 +48,6 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
 
       @media (min-width: 960px) {
         .app-header {
-          grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-          align-items: stretch;
           gap: 1rem;
         }
       }
@@ -81,11 +79,12 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         gap: 0.65rem;
         justify-content: flex-start;
         align-items: center;
+        padding: 0.55rem;
       }
 
       @media (min-width: 960px) {
         .nav {
-          justify-content: flex-end;
+          justify-content: flex-start;
         }
       }
 
@@ -120,17 +119,6 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         color: var(--muted);
       }
 
-      .status {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.6rem;
-        padding: 0.7rem 0.9rem;
-        border-radius: 999px;
-        background: rgba(154, 52, 18, 0.08);
-        color: var(--accent);
-        font-weight: 600;
-      }
-
       code {
         font-family: "SFMono-Regular", Consolas, monospace;
         font-size: 0.95em;
@@ -140,10 +128,10 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         display: inline-flex;
         align-items: center;
         min-height: 2.7rem;
-        padding: 0.75rem 1rem;
-        border-radius: 999px;
-        border: 1px solid var(--border);
-        background: rgba(255, 255, 255, 0.7);
+        padding: 0.75rem 1.1rem;
+        border-radius: 16px;
+        border: 1px solid transparent;
+        background: transparent;
         color: var(--ink);
         text-decoration: none;
         font-weight: 600;
@@ -157,7 +145,7 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
       .nav a:hover {
         transform: translateY(-1px);
         border-color: rgba(154, 52, 18, 0.28);
-        background: rgba(255, 255, 255, 0.86);
+        background: rgba(255, 255, 255, 0.7);
       }
 
       .nav a.active {
@@ -179,11 +167,6 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         .nav a {
           min-height: 2.55rem;
           padding: 0.68rem 0.92rem;
-        }
-
-        .status {
-          width: 100%;
-          justify-content: center;
         }
       }
 
@@ -561,8 +544,8 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         --card-frame-base: #cfab4c;
         --card-frame-ink: rgba(80, 53, 20, 0.24);
         --card-frame-shadow: rgba(55, 31, 8, 0.18);
-        --card-panel-top: rgba(255, 251, 236, 0.98);
-        --card-panel-bottom: rgba(241, 228, 189, 0.92);
+        --card-panel-top: #fffbee;
+        --card-panel-bottom: #efe4bd;
         --card-panel-border: rgba(95, 74, 36, 0.34);
         --card-accent: #7c5b24;
         --card-highlight: rgba(255, 250, 229, 0.55);
@@ -570,10 +553,10 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         --card-art-backdrop: rgba(27, 17, 8, 0.88);
         --card-display-font: "Cochin", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
         --card-rules-font: "Baskerville", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
-        --card-title-size: clamp(0.98rem, 7.1cqw, 1.5rem);
+        --card-title-size: clamp(0.8rem, 5.8cqw, 1.42rem);
         --card-typeline-size: clamp(0.68rem, 3.8cqw, 0.84rem);
         --card-rules-size: clamp(0.68rem, 3.9cqw, 0.9rem);
-        --card-footer-size: clamp(0.58rem, 3.15cqw, 0.72rem);
+        --card-footer-size: clamp(0.5rem, 2.55cqw, 0.62rem);
         display: grid;
         gap: 0.35rem;
         width: min(100%, 22.75rem);
@@ -605,15 +588,17 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         grid-template-rows: auto 1fr auto auto auto;
         width: 100%;
         aspect-ratio: 5 / 7;
-        padding: clamp(0.45rem, 2.2cqw, 0.7rem);
+        --card-face-padding: clamp(0.45rem, 2.2cqw, 0.7rem);
+        padding: var(--card-face-padding);
         border-radius: clamp(18px, 7cqw, 24px);
-        border: 2px solid var(--card-frame-ink);
+        border: 4px solid rgba(10, 8, 7, 0.96);
         background:
           radial-gradient(circle at 50% 0%, var(--card-frame-top), transparent 38%),
           radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.36), transparent 24%),
           linear-gradient(180deg, color-mix(in srgb, var(--card-frame-mid) 40%, white) 0%, var(--card-frame-mid) 22%, color-mix(in srgb, var(--card-frame-mid) 36%, white) 55%, var(--card-frame-base) 100%);
         box-shadow:
           0 10px 24px var(--card-frame-shadow),
+          inset 0 0 0 3px rgba(14, 11, 9, 0.92),
           inset 0 0 0 2px var(--card-highlight),
           inset 0 0 0 4px rgba(255, 255, 255, 0.16);
         transition:
@@ -626,18 +611,20 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         transform: translateY(-2px);
         box-shadow:
           0 16px 30px color-mix(in srgb, var(--card-frame-shadow) 82%, black),
+          inset 0 0 0 3px rgba(14, 11, 9, 0.94),
           inset 0 0 0 2px var(--card-highlight),
           inset 0 0 0 4px rgba(255, 255, 255, 0.18);
       }
 
       .tone-white .card-face {
-        --card-frame-top: rgba(255, 255, 247, 0.88);
-        --card-frame-mid: #ddc98e;
-        --card-frame-base: #ccb273;
-        --card-frame-ink: rgba(97, 83, 48, 0.3);
-        --card-frame-shadow: rgba(69, 54, 26, 0.16);
-        --card-panel-bottom: rgba(245, 238, 213, 0.96);
-        --card-accent: #746036;
+        --card-frame-top: rgba(247, 251, 255, 0.94);
+        --card-frame-mid: #d7dde8;
+        --card-frame-base: #bfc8d8;
+        --card-frame-ink: rgba(96, 108, 132, 0.28);
+        --card-frame-shadow: rgba(83, 96, 122, 0.16);
+        --card-panel-top: #fdfefe;
+        --card-panel-bottom: #e8edf5;
+        --card-accent: #6b778f;
       }
 
       .tone-blue .card-face {
@@ -646,7 +633,8 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         --card-frame-base: #6c8ca6;
         --card-frame-ink: rgba(55, 82, 112, 0.28);
         --card-frame-shadow: rgba(35, 64, 91, 0.19);
-        --card-panel-bottom: rgba(219, 235, 246, 0.94);
+        --card-panel-top: #f1f8ff;
+        --card-panel-bottom: #dbeaf6;
         --card-accent: #295273;
       }
 
@@ -656,7 +644,8 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         --card-frame-base: #6d5f78;
         --card-frame-ink: rgba(69, 56, 80, 0.32);
         --card-frame-shadow: rgba(39, 27, 51, 0.22);
-        --card-panel-bottom: rgba(217, 207, 223, 0.94);
+        --card-panel-top: #f1ebf4;
+        --card-panel-bottom: #d9cfdf;
         --card-accent: #503f5f;
       }
 
@@ -666,7 +655,8 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         --card-frame-base: #be6d47;
         --card-frame-ink: rgba(112, 59, 33, 0.28);
         --card-frame-shadow: rgba(88, 43, 17, 0.2);
-        --card-panel-bottom: rgba(244, 219, 207, 0.94);
+        --card-panel-top: #fff4ed;
+        --card-panel-bottom: #f4dbcf;
         --card-accent: #964b24;
       }
 
@@ -676,7 +666,8 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         --card-frame-base: #779756;
         --card-frame-ink: rgba(69, 93, 45, 0.28);
         --card-frame-shadow: rgba(41, 67, 24, 0.2);
-        --card-panel-bottom: rgba(220, 235, 207, 0.94);
+        --card-panel-top: #f2faec;
+        --card-panel-bottom: #dcebcf;
         --card-accent: #456129;
       }
 
@@ -686,7 +677,8 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         --card-frame-base: #b78b47;
         --card-frame-ink: rgba(102, 72, 24, 0.3);
         --card-frame-shadow: rgba(83, 55, 13, 0.22);
-        --card-panel-bottom: rgba(240, 226, 188, 0.95);
+        --card-panel-top: #fff7e7;
+        --card-panel-bottom: #f0e2bc;
         --card-accent: #8f641e;
       }
 
@@ -696,22 +688,173 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         --card-frame-base: #a8a18e;
         --card-frame-ink: rgba(95, 90, 79, 0.28);
         --card-frame-shadow: rgba(59, 52, 40, 0.18);
-        --card-panel-bottom: rgba(235, 232, 223, 0.95);
+        --card-panel-top: #f6f4ef;
+        --card-panel-bottom: #ebe8df;
         --card-accent: #68604f;
+      }
+
+      [class*="tone-split-"] .card-face {
+        background:
+          radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.28), transparent 38%),
+          radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.3), transparent 24%),
+          linear-gradient(
+            135deg,
+            var(--card-left-mid) 0%,
+            color-mix(in srgb, var(--card-left-mid) 72%, white 28%) 46%,
+            color-mix(in srgb, var(--card-right-mid) 72%, white 28%) 54%,
+            var(--card-right-mid) 100%
+          );
+      }
+
+      [class*="tone-split-"] .card-face-header,
+      [class*="tone-split-"] .card-face-typeline,
+      [class*="tone-split-"] .card-face-rules {
+        background:
+          linear-gradient(
+            90deg,
+            var(--card-left-panel-top) 0%,
+            var(--card-left-panel-bottom) 47%,
+            var(--card-right-panel-bottom) 53%,
+            var(--card-right-panel-top) 100%
+          );
+      }
+
+      .tone-split-white-blue .card-face {
+        --card-left-mid: #d8c793;
+        --card-right-mid: #7ea9c8;
+        --card-left-panel-top: #fffdf1;
+        --card-left-panel-bottom: #f2ead1;
+        --card-right-panel-top: #f1f8ff;
+        --card-right-panel-bottom: #d8e9f7;
+      }
+
+      .tone-split-white-black .card-face {
+        --card-left-mid: #d8c793;
+        --card-right-mid: #7a6c88;
+        --card-left-panel-top: #fffdf1;
+        --card-left-panel-bottom: #f2ead1;
+        --card-right-panel-top: #f1ebf4;
+        --card-right-panel-bottom: #d6cbde;
+      }
+
+      .tone-split-white-red .card-face {
+        --card-left-mid: #d8c793;
+        --card-right-mid: #cf7d57;
+        --card-left-panel-top: #fffdf1;
+        --card-left-panel-bottom: #f2ead1;
+        --card-right-panel-top: #fff4ed;
+        --card-right-panel-bottom: #f2d6c7;
+      }
+
+      .tone-split-white-green .card-face {
+        --card-left-mid: #d8c793;
+        --card-right-mid: #85aa63;
+        --card-left-panel-top: #fffdf1;
+        --card-left-panel-bottom: #f2ead1;
+        --card-right-panel-top: #f2faec;
+        --card-right-panel-bottom: #d7e8c8;
+      }
+
+      .tone-split-blue-black .card-face {
+        --card-left-mid: #7ea9c8;
+        --card-right-mid: #7a6c88;
+        --card-left-panel-top: #f1f8ff;
+        --card-left-panel-bottom: #d8e9f7;
+        --card-right-panel-top: #f1ebf4;
+        --card-right-panel-bottom: #d6cbde;
+      }
+
+      .tone-split-blue-red .card-face {
+        --card-left-mid: #7ea9c8;
+        --card-right-mid: #cf7d57;
+        --card-left-panel-top: #f1f8ff;
+        --card-left-panel-bottom: #d8e9f7;
+        --card-right-panel-top: #fff4ed;
+        --card-right-panel-bottom: #f2d6c7;
+      }
+
+      .tone-split-blue-green .card-face {
+        --card-left-mid: #7ea9c8;
+        --card-right-mid: #85aa63;
+        --card-left-panel-top: #f1f8ff;
+        --card-left-panel-bottom: #d8e9f7;
+        --card-right-panel-top: #f2faec;
+        --card-right-panel-bottom: #d7e8c8;
+      }
+
+      .tone-split-black-red .card-face {
+        --card-left-mid: #7a6c88;
+        --card-right-mid: #cf7d57;
+        --card-left-panel-top: #f1ebf4;
+        --card-left-panel-bottom: #d6cbde;
+        --card-right-panel-top: #fff4ed;
+        --card-right-panel-bottom: #f2d6c7;
+      }
+
+      .tone-split-black-green .card-face {
+        --card-left-mid: #7a6c88;
+        --card-right-mid: #85aa63;
+        --card-left-panel-top: #f1ebf4;
+        --card-left-panel-bottom: #d6cbde;
+        --card-right-panel-top: #f2faec;
+        --card-right-panel-bottom: #d7e8c8;
+      }
+
+      .tone-split-red-green .card-face {
+        --card-left-mid: #cf7d57;
+        --card-right-mid: #85aa63;
+        --card-left-panel-top: #fff4ed;
+        --card-left-panel-bottom: #f2d6c7;
+        --card-right-panel-top: #f2faec;
+        --card-right-panel-bottom: #d7e8c8;
       }
 
       .card-face-header,
       .card-face-typeline,
-      .card-face-rules,
-      .card-face-footer {
-        border: 1px solid var(--card-panel-border);
+      .card-face-rules {
+        border: 1.5px solid transparent;
         background:
-          linear-gradient(180deg, var(--card-panel-top), var(--card-panel-bottom)),
-          linear-gradient(90deg, rgba(255, 255, 255, 0.18), transparent 35%, rgba(255, 255, 255, 0.12));
+          linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--card-panel-top) 94%, white 6%),
+            color-mix(in srgb, var(--card-panel-bottom) 88%, rgba(214, 192, 141, 0.92) 12%)
+          ) padding-box,
+          linear-gradient(90deg, rgba(255, 255, 255, 0.18), transparent 35%, rgba(255, 255, 255, 0.12)) padding-box;
         box-shadow:
-          inset 0 1px 0 rgba(255, 255, 255, 0.72),
-          inset 0 -1px 0 rgba(133, 101, 36, 0.08),
-          0 0.55rem 1rem rgba(94, 65, 19, 0.06);
+          inset 0 1px 0 rgba(255, 255, 255, 0.78),
+          inset 0 -1px 0 rgba(133, 101, 36, 0.12),
+          inset 0 0 0 1px rgba(255, 250, 239, 0.32),
+          0 0.45rem 0.9rem rgba(94, 65, 19, 0.1);
+      }
+
+      .card-face-header,
+      .card-face-typeline {
+        background:
+          radial-gradient(
+            ellipse at center,
+            rgba(255, 255, 255, 0) 56%,
+            rgba(118, 81, 22, 0.12) 86%,
+            rgba(80, 50, 10, 0.2) 100%
+          ) padding-box,
+          linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--card-panel-top) 94%, white 6%),
+            color-mix(in srgb, var(--card-panel-bottom) 88%, rgba(214, 192, 141, 0.92) 12%)
+          ) padding-box,
+          linear-gradient(90deg, rgba(255, 255, 255, 0.18), transparent 35%, rgba(255, 255, 255, 0.12)) padding-box,
+          linear-gradient(
+            135deg,
+            rgba(255, 253, 244, 0.98) 0%,
+            rgba(238, 214, 154, 0.96) 30%,
+            color-mix(in srgb, var(--card-panel-border) 48%, rgba(184, 132, 30, 0.96) 52%) 58%,
+            color-mix(in srgb, var(--card-accent) 36%, rgba(92, 56, 10, 0.9) 64%) 100%
+          ) border-box;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.82),
+          inset 0 -1px 0 rgba(133, 101, 36, 0.14),
+          inset 0 0 0 1px rgba(255, 250, 239, 0.36),
+          0 0 0 1px rgba(121, 82, 20, 0.12),
+          0 0.45rem 0.9rem rgba(94, 65, 19, 0.12);
       }
 
       .card-face-header,
@@ -720,9 +863,9 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         align-items: center;
         justify-content: space-between;
         gap: clamp(0.35rem, 2cqw, 0.6rem);
-        min-height: clamp(2.2rem, 14cqw, 3rem);
-        padding: clamp(0.25rem, 1.6cqw, 0.35rem) clamp(0.4rem, 2.4cqw, 0.6rem);
-        border-radius: clamp(12px, 4.5cqw, 15px);
+        min-height: clamp(1.9rem, 12.4cqw, 2.55rem);
+        padding: clamp(0.16rem, 1.05cqw, 0.26rem) clamp(0.4rem, 2.4cqw, 0.6rem);
+        border-radius: 10px / 18px;
       }
 
       .card-face-title-wrap h3 {
@@ -733,8 +876,17 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         font-family: var(--card-display-font);
       }
 
+      .card-face-title-wrap {
+        display: grid;
+        gap: 0.14rem;
+        min-width: 0;
+      }
+
       .card-face-mana-wrap {
+        display: flex;
+        align-items: center;
         flex-shrink: 0;
+        align-self: center;
       }
 
       .card-face-mana-group {
@@ -742,7 +894,7 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         align-items: center;
         flex-wrap: wrap;
         justify-content: end;
-        gap: clamp(0.14rem, 0.9cqw, 0.22rem);
+        gap: clamp(0.08rem, 0.55cqw, 0.16rem);
         max-width: min(40cqw, 8.5rem);
       }
 
@@ -750,54 +902,26 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: clamp(2.2rem, 15cqw, 3.2rem);
-        min-height: clamp(1.5rem, 9.5cqw, 2rem);
-        padding: clamp(0.12rem, 0.8cqw, 0.2rem) clamp(0.3rem, 1.8cqw, 0.55rem);
-        border-radius: 999px;
-        border: 1px solid var(--card-panel-border);
-        background: rgba(255, 255, 255, 0.88);
+        width: clamp(1rem, 5.7cqw, 1.26rem);
+        height: clamp(1rem, 5.7cqw, 1.26rem);
+        min-width: 0;
+        min-height: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
         font-weight: 700;
         font-size: clamp(0.72rem, 4.1cqw, 0.92rem);
-        box-shadow:
-          inset 0 1px 0 rgba(255, 255, 255, 0.78),
-          0 0.14rem 0.35rem rgba(78, 55, 20, 0.12);
       }
 
       .card-face-mana-token {
-        min-width: clamp(1.35rem, 8.4cqw, 1.8rem);
-        padding-inline: 0;
-        border-radius: 999px;
-      }
-
-      .card-face-mana-token.token-w,
-      .card-face-inline-mana.token-w {
-        background: linear-gradient(180deg, #fffaf0, #ead9ac);
-      }
-
-      .card-face-mana-token.token-u,
-      .card-face-inline-mana.token-u {
-        background: linear-gradient(180deg, #eef8ff, #9ec3e4);
-      }
-
-      .card-face-mana-token.token-b,
-      .card-face-inline-mana.token-b {
-        background: linear-gradient(180deg, #ece6f0, #9a8aa8);
-      }
-
-      .card-face-mana-token.token-r,
-      .card-face-inline-mana.token-r {
-        background: linear-gradient(180deg, #fff0e8, #e3a17a);
-      }
-
-      .card-face-mana-token.token-g,
-      .card-face-inline-mana.token-g {
-        background: linear-gradient(180deg, #eef8e8, #9fc581);
+        flex: 0 0 auto;
       }
 
       .card-face-art {
         overflow: hidden;
         margin: clamp(0.3rem, 1.8cqw, 0.45rem) 0;
-        border-radius: clamp(14px, 5.5cqw, 18px);
+        border-radius: 0;
         border: 2px solid var(--card-art-frame);
         background: var(--card-art-backdrop);
         box-shadow:
@@ -832,62 +956,98 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
       }
 
       .card-face-typeline {
+        position: relative;
+        z-index: 2;
         display: flex;
         justify-content: space-between;
-        align-items: baseline;
+        align-items: center;
         gap: clamp(0.35rem, 2cqw, 0.7rem);
-        margin-bottom: clamp(0.3rem, 1.8cqw, 0.45rem);
+        min-height: clamp(1.45rem, 8.5cqw, 1.8rem);
+        padding: clamp(0.06rem, 0.45cqw, 0.12rem) clamp(0.38rem, 2.2cqw, 0.55rem);
+        border-radius: clamp(6px, 2.2cqw, 8px);
+        margin-top: clamp(-0.72rem, -4.6cqw, -0.38rem);
+        margin-right: clamp(-0.2rem, -1.2cqw, -0.36rem);
+        margin-bottom: clamp(-0.52rem, -3.4cqw, -0.28rem);
+        margin-left: clamp(-0.2rem, -1.2cqw, -0.36rem);
+        background: linear-gradient(
+          180deg,
+          var(--card-panel-top),
+          color-mix(in srgb, var(--card-panel-bottom) 94%, rgba(214, 192, 141, 1) 6%)
+        );
         font-size: var(--card-typeline-size);
         font-weight: 700;
-        line-height: 1.08;
+        line-height: 0.98;
         letter-spacing: 0.01em;
+        isolation: isolate;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.78),
+          inset 0 -1px 0 rgba(133, 101, 36, 0.1),
+          0 0.2rem 0.36rem rgba(74, 49, 15, 0.14);
       }
 
       .card-face-typeline span:first-child {
         min-width: 0;
         flex: 1 1 auto;
+        align-self: center;
       }
 
       .card-face-typeline span:last-child {
         flex-shrink: 0;
+        align-self: center;
       }
 
       .card-face-rarity-badge {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: clamp(0.95rem, 5.4cqw, 1.2rem);
-        height: clamp(0.95rem, 5.4cqw, 1.2rem);
-        border-radius: 999px;
-        border: 1px solid rgba(58, 43, 16, 0.38);
-        box-shadow:
-          inset 0 1px 0 rgba(255, 255, 255, 0.7),
-          0 0.08rem 0.18rem rgba(80, 55, 20, 0.16);
+        width: clamp(0.78rem, 4.2cqw, 1rem);
+        height: clamp(0.72rem, 3.8cqw, 0.9rem);
         font-size: clamp(0.34rem, 1.8cqw, 0.42rem);
         font-weight: 800;
         letter-spacing: 0.03em;
-        color: #20170d;
+        color: #2b1e0f;
         text-transform: uppercase;
       }
 
+      .card-face-rarity-badge-mark {
+        width: 92%;
+        height: 92%;
+        display: block;
+        background-color: currentColor;
+        -webkit-mask-position: center;
+        mask-position: center;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        filter: drop-shadow(0 0.05rem 0.08rem rgba(255, 255, 255, 0.55))
+          drop-shadow(0 0.08rem 0.16rem rgba(69, 45, 12, 0.24));
+      }
+
       .card-face-rarity-badge.is-common {
-        background: linear-gradient(180deg, #57534e, #111827);
+        color: #262626;
       }
 
       .card-face-rarity-badge.is-uncommon {
-        background: linear-gradient(180deg, #f5f5f4, #a8a29e);
+        color: #9ca3af;
       }
 
       .card-face-rarity-badge.is-rare {
-        background: linear-gradient(180deg, #fde68a, #ca8a04);
+        color: #d4a739;
       }
 
       .card-face-rarity-badge.is-mythic {
-        background: linear-gradient(180deg, #fbbf24, #c2410c);
+        color: #d97706;
       }
 
       .card-face-rarity-badge.is-na {
-        background: linear-gradient(180deg, #f8fafc, #cbd5e1);
+        width: auto;
+        min-width: clamp(1.2rem, 7cqw, 1.55rem);
+        padding-inline: 0.22rem;
+        border-radius: 999px;
+        border: 1px solid rgba(58, 43, 16, 0.32);
+        background: rgba(255, 251, 244, 0.8);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
       }
 
       .card-face-meta-row {
@@ -938,7 +1098,8 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
       }
 
       .card-face-preview-button:focus-visible,
-      .card-preview-close:focus-visible {
+      .card-preview-close:focus-visible,
+      .card-preview-nav:focus-visible {
         outline: 2px solid rgba(154, 52, 18, 0.45);
         outline-offset: 3px;
         border-radius: 999px;
@@ -961,8 +1122,13 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         gap: 0.85rem;
       }
 
+      .card-preview-toolbar {
+        display: flex;
+        justify-content: flex-end;
+      }
+
       .card-preview-close {
-        justify-self: end;
+        justify-self: center;
         min-height: 2.25rem;
         padding: 0.45rem 0.8rem;
         border-radius: 999px;
@@ -974,10 +1140,44 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         cursor: pointer;
       }
 
+      .card-preview-nav {
+        min-width: 3.1rem;
+        min-height: 3.1rem;
+        padding: 0;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 248, 241, 0.35);
+        background: rgba(45, 28, 11, 0.72);
+        color: #fff8f1;
+        font: inherit;
+        font-size: 1.4rem;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .card-preview-nav:disabled {
+        opacity: 0.32;
+        cursor: default;
+      }
+
+      .card-preview-stage {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.9rem;
+      }
+
       .card-preview-shell {
         width: min(100%, 32rem);
         justify-self: center;
         container-type: inline-size;
+      }
+
+      .card-preview-nav-left {
+        justify-self: end;
+      }
+
+      .card-preview-nav-right {
+        justify-self: start;
       }
 
       .card-face-preview {
@@ -989,9 +1189,9 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         align-content: start;
         gap: clamp(0.2rem, 1.7cqw, 0.5rem);
         min-height: clamp(4.2rem, 32cqw, 6.75rem);
-        padding: clamp(0.45rem, 3.4cqw, 0.75rem) clamp(0.45rem, 3.4cqw, 0.75rem)
+        padding: clamp(0.72rem, 4.8cqw, 1rem) clamp(0.45rem, 3.4cqw, 0.75rem)
           clamp(0.55rem, 4cqw, 0.9rem);
-        border-radius: clamp(12px, 4.5cqw, 15px);
+        border-radius: 0;
       }
 
       .card-face-rules p {
@@ -1016,19 +1216,29 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         -webkit-line-clamp: 3;
       }
 
+      .card-face-rules-line.has-flavor-divider {
+        margin-top: clamp(0.24rem, 1.8cqw, 0.42rem);
+        padding-top: clamp(0.36rem, 2.5cqw, 0.58rem);
+        border-top: 2px solid rgba(102, 74, 28, 0.42);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58);
+      }
+
       .card-face-inline-mana {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 1.2em;
-        height: 1.2em;
-        margin: 0 0.04em;
-        border: 1px solid rgba(95, 74, 36, 0.28);
-        border-radius: 999px;
-        font-size: 0.72em;
-        font-weight: 700;
-        vertical-align: 0.02em;
-        background: linear-gradient(180deg, #fffaf0, #d7c69a);
+        width: 1em;
+        height: 1em;
+        margin: 0 0.02em;
+        font-size: 0.68em;
+        vertical-align: -0.08em;
+      }
+
+      .card-face-mana-token img,
+      .card-face-inline-mana img {
+        display: block;
+        width: 100%;
+        height: 100%;
       }
 
       .card-face-reminder-text {
@@ -1051,31 +1261,40 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
 
       .card-face-footer {
         display: grid;
-        gap: clamp(0.12rem, 1cqw, 0.25rem);
-        margin-top: clamp(0.3rem, 1.8cqw, 0.45rem);
-        padding: clamp(0.3rem, 2.1cqw, 0.45rem) clamp(0.45rem, 2.8cqw, 0.65rem)
-          clamp(0.38rem, 2.6cqw, 0.55rem);
-        border-radius: clamp(12px, 4.5cqw, 15px);
+        gap: clamp(0.06rem, 0.55cqw, 0.14rem);
+        margin-top: 0;
+        margin-right: calc(var(--card-face-padding) * -1);
+        margin-bottom: calc(var(--card-face-padding) * -1);
+        margin-left: calc(var(--card-face-padding) * -1);
+        padding: clamp(0.2rem, 1.1cqw, 0.32rem) clamp(0.22rem, 1.4cqw, 0.34rem)
+          clamp(0.16rem, 1cqw, 0.24rem);
+        border-radius: 0 0 clamp(12px, 4.5cqw, 18px) clamp(12px, 4.5cqw, 18px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: linear-gradient(180deg, rgba(36, 32, 30, 0.98), rgba(6, 5, 5, 0.99));
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.08),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.6);
         font-size: var(--card-footer-size);
-        line-height: 1.05;
-        color: #2f2414;
+        line-height: 1;
+        color: rgba(244, 238, 228, 0.92);
       }
 
       .card-face-footer-top {
         display: flex;
         justify-content: space-between;
         align-items: end;
-        gap: clamp(0.35rem, 2cqw, 0.7rem);
+        gap: clamp(0.2rem, 1.2cqw, 0.4rem);
       }
 
       .card-face-footer-printline {
         display: flex;
         align-items: flex-end;
-        gap: clamp(0.25rem, 1.8cqw, 0.5rem);
+        gap: clamp(0.14rem, 0.9cqw, 0.28rem);
         min-width: 0;
         flex: 1 1 auto;
         text-transform: uppercase;
         letter-spacing: 0.04em;
+        opacity: 0.88;
       }
 
       .card-face-footer-printline span:first-child {
@@ -1085,7 +1304,7 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
       .card-face-footer-stats {
         display: grid;
         justify-items: center;
-        gap: 0.14rem;
+        gap: 0.08rem;
         flex-shrink: 0;
       }
 
@@ -1094,34 +1313,35 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        font-size: clamp(0.5rem, 2.7cqw, 0.62rem);
+        font-size: clamp(0.44rem, 2.15cqw, 0.54rem);
         letter-spacing: 0.02em;
-        color: color-mix(in srgb, #2f2414 78%, var(--card-accent) 22%);
+        color: rgba(236, 228, 216, 0.78);
       }
 
       .card-face-footer-bottom {
         display: flex;
         justify-content: space-between;
         align-items: baseline;
-        gap: clamp(0.25rem, 1.8cqw, 0.5rem);
+        gap: clamp(0.14rem, 0.9cqw, 0.28rem);
       }
 
       .card-face-stats-box {
         display: grid;
         place-items: center;
-        min-width: clamp(2.5rem, 16cqw, 3.4rem);
-        padding: clamp(0.18rem, 1.2cqw, 0.28rem) clamp(0.32rem, 1.8cqw, 0.48rem);
-        border-radius: clamp(10px, 3.8cqw, 14px);
-        border: 1px solid var(--card-panel-border);
-        background: linear-gradient(180deg, rgba(255, 251, 236, 0.98), rgba(232, 213, 169, 0.92));
+        min-width: clamp(2.05rem, 13.2cqw, 2.75rem);
+        padding: clamp(0.1rem, 0.7cqw, 0.18rem) clamp(0.22rem, 1.25cqw, 0.34rem);
+        border-radius: clamp(8px, 3cqw, 10px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: linear-gradient(180deg, rgba(58, 55, 53, 0.92), rgba(16, 14, 14, 0.96));
         box-shadow:
-          inset 0 1px 0 rgba(255, 255, 255, 0.76),
-          0 0.22rem 0.45rem rgba(80, 55, 20, 0.12);
+          inset 0 1px 0 rgba(255, 255, 255, 0.08),
+          0 0.08rem 0.18rem rgba(0, 0, 0, 0.28);
         text-align: center;
         flex-shrink: 0;
       }
 
       .card-face-stats-box strong {
+        color: rgba(248, 243, 236, 0.96);
         font-size: clamp(0.78rem, 4.4cqw, 1rem);
         line-height: 1;
       }
@@ -1132,7 +1352,7 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         line-height: 1;
         letter-spacing: 0.04em;
         text-transform: uppercase;
-        color: color-mix(in srgb, #2f2414 74%, var(--card-accent) 26%);
+        color: rgba(236, 228, 216, 0.82);
       }
 
       .card-face-tile.is-draftlike {
@@ -1445,6 +1665,12 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         min-height: 18rem;
       }
 
+      .card-detail-media {
+        display: grid;
+        gap: 0.45rem;
+        margin: 0;
+      }
+
       .card-detail-image,
       .card-detail-fallback {
         width: 100%;
@@ -1456,6 +1682,14 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         object-fit: cover;
         border: 1px solid var(--border);
         background: rgba(255, 255, 255, 0.8);
+      }
+
+      .card-detail-image-credit {
+        display: flex;
+        justify-content: flex-end;
+        margin: 0;
+        font-size: 0.82rem;
+        color: var(--muted);
       }
 
       .detail-hero-body {
@@ -1474,6 +1708,15 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
       .detail-hero-header h2 {
         margin: 0 0 0.4rem;
         font-size: clamp(2rem, 4vw, 3rem);
+      }
+
+      .detail-card-nameblock {
+        display: grid;
+        gap: 0.2rem;
+      }
+
+      .detail-card-nameblock > p {
+        margin: 0;
       }
 
       .detail-stat-grid {

@@ -42,6 +42,8 @@ const esbuildArgs = [
   "--bundle",
   "--format=esm",
   "--jsx=automatic",
+  "--loader:.svg=file",
+  "--public-path=/assets",
   `--outfile=${path.join(outputDirectory, "app.js")}`,
   "--platform=browser",
   "--sourcemap",

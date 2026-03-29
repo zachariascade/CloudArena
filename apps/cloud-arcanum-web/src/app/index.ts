@@ -16,10 +16,27 @@ export function createCloudArcanumWebApp(): string {
 }
 
 const distDirectory = path.dirname(fileURLToPath(import.meta.url));
-const clientBundlePath = path.resolve(distDirectory, "../../client/app.js");
+const clientAssetsDirectory = path.resolve(distDirectory, "../../client");
+const clientBundlePath = path.resolve(clientAssetsDirectory, "app.js");
 
 async function readClientBundle(): Promise<string> {
   return readFile(clientBundlePath, "utf8");
+}
+
+function getAssetContentType(assetPath: string): string {
+  if (assetPath.endsWith(".svg")) {
+    return "image/svg+xml";
+  }
+
+  if (assetPath.endsWith(".js")) {
+    return "text/javascript; charset=utf-8";
+  }
+
+  if (assetPath.endsWith(".map")) {
+    return "application/json; charset=utf-8";
+  }
+
+  return "application/octet-stream";
 }
 
 export function startCloudArcanumWebApp(
@@ -33,14 +50,23 @@ export function startCloudArcanumWebApp(
   return new Promise((resolve, reject) => {
     const server = createServer(async (request, response) => {
       try {
-        if (request.url === "/assets/app.js") {
-          const clientBundle = await readClientBundle();
+        if (request.url?.startsWith("/assets/")) {
+          const assetName = request.url.slice("/assets/".length);
+
+          if (assetName.includes("/") || assetName.includes("\\")) {
+            response.writeHead(400, { "content-type": "text/plain; charset=utf-8" });
+            response.end("Invalid asset path.");
+            return;
+          }
+
+          const assetPath = path.resolve(clientAssetsDirectory, assetName);
+          const assetContents = await readFile(assetPath);
 
           response.writeHead(200, {
             "cache-control": "no-store",
-            "content-type": "text/javascript; charset=utf-8",
+            "content-type": getAssetContentType(assetPath),
           });
-          response.end(clientBundle);
+          response.end(assetContents);
           return;
         }
 

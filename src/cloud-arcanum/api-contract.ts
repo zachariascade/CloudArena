@@ -7,6 +7,8 @@ import type {
   CardRarity,
   CardStatus,
   SetId,
+  SetTheme,
+  ThemeId,
   UniverseId,
 } from "../domain/index.js";
 
@@ -14,6 +16,9 @@ export const cloudArcanumApiRoutes = {
   health: "/api/health",
   metaFilters: "/api/meta/filters",
   cards: "/api/cards",
+  cardsCount: "/api/cards/count",
+  cardsIds: "/api/cards/ids",
+  cardsSummary: "/api/cards/summary",
   cardDetail: "/api/cards/:cardId",
   decks: "/api/decks",
   deckDetail: "/api/decks/:deckId",
@@ -30,11 +35,16 @@ export type CloudArcanumApiRoutePath =
   (typeof cloudArcanumApiRoutes)[CloudArcanumApiRouteName];
 
 export type SortDirection = "asc" | "desc";
+export type CardQueryMode = "full" | "summary" | "ids" | "count";
 
 export type CanonicalEntityId = CardId | DeckId | SetId | UniverseId;
 
 export type CardRouteParams = {
   cardId: CardId;
+};
+
+export type CardDetailQuery = {
+  themeId?: ThemeId;
 };
 
 export type DeckRouteParams = {
@@ -43,6 +53,10 @@ export type DeckRouteParams = {
 
 export type SetRouteParams = {
   setId: SetId;
+};
+
+export type SetDetailQuery = {
+  themeId?: ThemeId;
 };
 
 export type UniverseRouteParams = {
@@ -69,6 +83,12 @@ export type EntityReference = {
 export type ValidationMessage = {
   file?: string;
   message: string;
+};
+
+export type SetThemeDefinition = {
+  id: ThemeId;
+  name: string;
+  description: string | null;
 };
 
 export type ValidationSummary = {
@@ -100,6 +120,14 @@ export type ImagePreview = {
   publicUrl: string | null;
   isRenderable: boolean;
   alt: string;
+  artist: string | null;
+  sourceUrl: string | null;
+  license: string | null;
+  creditText: string | null;
+  sourceNotes: string | null;
+  requestedThemeId: ThemeId | null;
+  resolvedThemeId: ThemeId | null;
+  fellBack: boolean;
 };
 
 export type DraftReviewLabel =
@@ -133,6 +161,7 @@ export type CardListQuery = PaginationQuery & {
   q?: string;
   universeId?: string;
   setId?: string;
+  themeId?: ThemeId;
   status?: CardStatus[];
   color?: CardColor[];
   rarity?: CardRarity[];
@@ -141,6 +170,10 @@ export type CardListQuery = PaginationQuery & {
   deckId?: string;
   sort?: CardSortKey;
   direction?: SortDirection;
+};
+
+export type CardIdListItem = {
+  id: string;
 };
 
 export type DeckListQuery = PaginationQuery & {
@@ -196,6 +229,7 @@ export type UniversesListMeta = {
 export type CardListItem = {
   id: string;
   name: string;
+  title: string | null;
   slug: string;
   typeLine: string;
   manaCost: string | null;
@@ -215,21 +249,42 @@ export type CardListItem = {
   setCode: string | null;
   universe: EntityReference;
   image: ImagePreview;
+  imageThemes: ThemeId[];
   draft: DraftStatusSummary;
   validation: ValidationSummary;
   tags: string[];
   updatedAt: string;
 };
 
+export type CardSummaryItem = {
+  id: string;
+  name: string;
+  title: string | null;
+  slug: string;
+  typeLine: string;
+  colors: CardColor[];
+  rarity: CardRarity | null;
+  status: CardStatus;
+  set: EntityReference;
+  setCode: string | null;
+  universe: EntityReference;
+  tags: string[];
+  hasImage: boolean;
+  hasUnresolvedMechanics: boolean;
+  updatedAt: string;
+};
+
 export type CardDeckUsage = {
   id: string;
   name: string;
+  title: string | null;
   quantity: number;
 };
 
 export type CardDetail = {
   id: string;
   name: string;
+  title: string | null;
   slug: string;
   setId: string;
   typeLine: string;
@@ -252,6 +307,7 @@ export type CardDetail = {
   createdAt: string;
   updatedAt: string;
   image: ImagePreview;
+  imageThemes: ThemeId[];
   draft: DraftStatusSummary;
   validation: ValidationSummary;
   set: {
@@ -271,7 +327,7 @@ export type DeckListItem = {
   setCount: number;
   cardCount: number;
   uniqueCardCount: number;
-  commander: EntityReference | null;
+  commander: (EntityReference & { title: string | null }) | null;
   tags: string[];
   validation: ValidationSummary;
 };
@@ -281,6 +337,7 @@ export type DeckDetailCard = {
   card: {
     id: string;
     name: string;
+    title: string | null;
     typeLine: string;
     manaCost: string | null;
     manaValue: number | null;
@@ -306,6 +363,7 @@ export type DeckDetail = {
   commander: {
     id: string;
     name: string;
+    title: string | null;
     image: ImagePreview;
   } | null;
   cards: DeckDetailCard[];
@@ -327,6 +385,9 @@ export type SetListItem = {
   code: string;
   universe: EntityReference;
   description: string | null;
+  themes: SetThemeDefinition[];
+  defaultThemeId: ThemeId | null;
+  activeThemeId: ThemeId | null;
   cardCount: number;
   countsByStatus: CountsByStatus;
 };
@@ -337,11 +398,17 @@ export type SetDetail = {
   code: string;
   description: string | null;
   universe: EntityReference;
+  themes: SetThemeDefinition[];
+  defaultThemeId: ThemeId | null;
+  activeThemeId: ThemeId | null;
+  requestedThemeId: ThemeId | null;
+  resolvedThemeId: ThemeId | null;
   cardCount: number;
   countsByStatus: CountsByStatus;
   featuredCards: Array<{
     id: string;
     name: string;
+    title: string | null;
     status: CardStatus;
     image: ImagePreview;
   }>;
@@ -404,6 +471,11 @@ export type ValidationSummaryResponse = {
   errors: ValidationMessage[];
 };
 
+export type CardsCountResponse = {
+  total: number;
+  filtersApplied: Record<string, unknown>;
+};
+
 export type EntityValidationResponse = {
   entityId: string;
   hasErrors: boolean;
@@ -433,9 +505,27 @@ export type CloudArcanumApiContracts = {
     params: undefined;
     response: ApiListResponse<CardListItem, CardsListMeta>;
   };
+  cardsCount: {
+    route: typeof cloudArcanumApiRoutes.cardsCount;
+    query: CardListQuery;
+    params: undefined;
+    response: ApiSuccessResponse<CardsCountResponse>;
+  };
+  cardsIds: {
+    route: typeof cloudArcanumApiRoutes.cardsIds;
+    query: CardListQuery;
+    params: undefined;
+    response: ApiListResponse<CardIdListItem, CardsListMeta>;
+  };
+  cardsSummary: {
+    route: typeof cloudArcanumApiRoutes.cardsSummary;
+    query: CardListQuery;
+    params: undefined;
+    response: ApiListResponse<CardSummaryItem, CardsListMeta>;
+  };
   cardDetail: {
     route: typeof cloudArcanumApiRoutes.cardDetail;
-    query: undefined;
+    query: CardDetailQuery;
     params: CardRouteParams;
     response: ApiSuccessResponse<CardDetail>;
   };
@@ -459,7 +549,7 @@ export type CloudArcanumApiContracts = {
   };
   setDetail: {
     route: typeof cloudArcanumApiRoutes.setDetail;
-    query: undefined;
+    query: SetDetailQuery;
     params: SetRouteParams;
     response: ApiSuccessResponse<SetDetail>;
   };

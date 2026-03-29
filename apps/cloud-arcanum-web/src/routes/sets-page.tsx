@@ -267,11 +267,7 @@ export function SetsPage({ apiBaseUrl }: SetsPageProps): ReactElement {
   const filterMetadata = metadataState.status === "success" ? metadataState.data : null;
 
   return (
-    <PageLayout
-      kicker="Browse sets"
-      title="Sets"
-      description="Browse sets by universe and review their card counts."
-    >
+    <PageLayout>
       <SetsFilters
         filterMetadata={filterMetadata}
         metadataUnavailable={metadataState.status === "error"}
@@ -300,10 +296,8 @@ export function SetsPage({ apiBaseUrl }: SetsPageProps): ReactElement {
           <div className="data-list">
             <div className="summary-row">
               <div className="summary-pill">
-                Total <strong>{setsState.data.meta.total}</strong>
-              </div>
-              <div className="summary-pill">
-                Loaded <strong>{setsState.data.items.length}</strong>
+                <strong>{setsState.data.items.length}</strong> of{" "}
+                <strong>{setsState.data.meta.total}</strong>
               </div>
             </div>
 

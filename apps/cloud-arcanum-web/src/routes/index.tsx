@@ -35,8 +35,9 @@ type AppRouteContext = {
 };
 
 function AppFrame({ apiBaseUrl }: AppRouteContext): ReactElement {
+  void apiBaseUrl;
   return (
-    <AppShell apiBaseUrl={apiBaseUrl}>
+    <AppShell>
       <Outlet />
     </AppShell>
   );
@@ -293,7 +294,7 @@ export function createCloudArcanumRouter(context: AppRouteContext) {
         },
       ],
       errorElement: (
-        <AppShell apiBaseUrl={context.apiBaseUrl}>
+        <AppShell>
           <RouteErrorBoundary />
         </AppShell>
       ),

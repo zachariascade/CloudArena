@@ -6,6 +6,7 @@ import type {
   DecksListMeta,
   FilterMetadata,
 } from "../../../../src/cloud-arcanum/api-contract.js";
+import { formatCardDisplayName } from "../../../../src/cloud-arcanum/shared-utils.js";
 import {
   EmptyState,
   ErrorState,
@@ -239,6 +240,10 @@ function DecksFilters({
 }
 
 function DeckListCard({ deck }: { deck: DeckListItem }): ReactElement {
+  const commanderName = deck.commander
+    ? formatCardDisplayName(deck.commander.name, deck.commander.title)
+    : "Unassigned";
+
   return (
     <article className="deck-result">
       <div className="deck-result-header">
@@ -286,7 +291,7 @@ function DeckListCard({ deck }: { deck: DeckListItem }): ReactElement {
         </div>
         <div className="meta-tile">
           <span>Commander</span>
-          <strong>{deck.commander?.name ?? "Unassigned"}</strong>
+          <strong>{commanderName}</strong>
         </div>
       </div>
 
@@ -331,11 +336,7 @@ export function DecksPage({ apiBaseUrl }: DecksPageProps): ReactElement {
     metadataState.status === "success" && metadataState.data ? metadataState.data : null;
 
   return (
-    <PageLayout
-      kicker="Browse decks"
-      title="Decks"
-      description="Search decks, review commanders, and open the cards they contain."
-    >
+    <PageLayout>
       <DecksFilters
         filterMetadata={filterMetadata}
         metadataUnavailable={filterMetadataUnavailable}
@@ -364,13 +365,8 @@ export function DecksPage({ apiBaseUrl }: DecksPageProps): ReactElement {
           <div className="data-list">
             <div className="summary-row">
               <div className="summary-pill">
-                Total <strong>{decksState.data.meta.total}</strong>
-              </div>
-              <div className="summary-pill">
-                Loaded <strong>{decksState.data.items.length}</strong>
-              </div>
-              <div className="summary-pill">
-                Query <strong>{query.q ? `"${query.q}"` : "All decks"}</strong>
+                <strong>{decksState.data.items.length}</strong> of{" "}
+                <strong>{decksState.data.meta.total}</strong>
               </div>
             </div>
 

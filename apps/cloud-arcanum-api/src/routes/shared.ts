@@ -125,6 +125,7 @@ export function parseCardListQuery(rawQuery: RawQueryRecord): CardListQuery {
     q: firstQueryValue(rawQuery.q),
     universeId: firstQueryValue(rawQuery.universeId),
     setId: firstQueryValue(rawQuery.setId),
+    themeId: firstQueryValue(rawQuery.themeId),
     status: parseEnumArray(rawQuery.status, statuses, "status"),
     color: parseEnumArray(rawQuery.color, colors, "color"),
     rarity: parseEnumArray(rawQuery.rarity, rarities, "rarity"),

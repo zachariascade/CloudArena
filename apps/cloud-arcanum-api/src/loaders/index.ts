@@ -30,6 +30,7 @@ export type CloudArcanumApiLoaders = {
   loadUniverses: () => Promise<LoadedEntityCollection<Universe>>;
   loadCardImages: () => Promise<LoadedImageCollection>;
   loadSnapshot: () => Promise<CloudArcanumApiDataSnapshot>;
+  loadDataFingerprint: () => Promise<string>;
 };
 
 export type CloudArcanumApiLoaderOptions = {
@@ -109,6 +110,25 @@ async function listFilesRecursively(directory: string): Promise<string[]> {
   );
 
   return nestedFiles.flat().sort((left, right) => left.localeCompare(right));
+}
+
+async function createDirectoryFingerprint(
+  workspaceRoot: string,
+  directory: string,
+): Promise<string> {
+  if (!(await pathExists(directory))) {
+    return `${relative(workspaceRoot, directory)}:missing`;
+  }
+
+  const files = await listFilesRecursively(directory);
+  const fileEntries = await Promise.all(
+    files.map(async (filePath) => {
+      const fileStat = await stat(filePath);
+      return `${relative(workspaceRoot, filePath)}:${fileStat.size}:${fileStat.mtimeMs}`;
+    }),
+  );
+
+  return `${relative(workspaceRoot, directory)}:${fileEntries.join("|")}`;
 }
 
 function formatIssuePath(issuePath: (string | number)[]): string {
@@ -281,6 +301,22 @@ export function createCloudArcanumApiLoaders(
     };
   };
 
+  const loadDataFingerprint = async (): Promise<string> => {
+    const directories = [
+      resolve(paths.dataRoot, "cards"),
+      resolve(paths.dataRoot, "decks"),
+      resolve(paths.dataRoot, "sets"),
+      resolve(paths.dataRoot, "universes"),
+      paths.cardImagesRoot,
+    ];
+
+    const fingerprints = await Promise.all(
+      directories.map((directory) => createDirectoryFingerprint(workspaceRoot, directory)),
+    );
+
+    return fingerprints.join("||");
+  };
+
   return {
     paths,
     loadCards,
@@ -289,5 +325,6 @@ export function createCloudArcanumApiLoaders(
     loadUniverses,
     loadCardImages,
     loadSnapshot,
+    loadDataFingerprint,
   };
 }

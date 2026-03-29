@@ -1,9 +1,9 @@
 import type { ReactElement, ReactNode } from "react";
 
 type PageLayoutProps = {
-  kicker: string;
-  title: string;
-  description: string;
+  kicker?: string;
+  title?: string;
+  description?: string;
   children: ReactNode;
 };
 
@@ -13,13 +13,17 @@ export function PageLayout({
   description,
   children,
 }: PageLayoutProps): ReactElement {
+  const hasHeader = kicker || title || description;
+
   return (
     <section className="panel">
-      <header className="section-header">
-        <div className="section-kicker">{kicker}</div>
-        <h2>{title}</h2>
-        <p>{description}</p>
-      </header>
+      {hasHeader ? (
+        <header className="section-header">
+          {kicker ? <div className="section-kicker">{kicker}</div> : null}
+          {title ? <h2>{title}</h2> : null}
+          {description ? <p>{description}</p> : null}
+        </header>
+      ) : null}
       {children}
     </section>
   );

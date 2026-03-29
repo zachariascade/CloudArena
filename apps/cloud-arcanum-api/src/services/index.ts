@@ -86,6 +86,7 @@ export type CloudArcanumApiServices = {
 };
 
 export type CloudArcanumApiServiceOptions = {
+  normalizedDataCacheTtlMs?: number;
   validationCacheTtlMs?: number;
   validator?: (rootDir: string) => Promise<ValidationSummaryResponse>;
 };
@@ -308,7 +309,15 @@ export function createCloudArcanumApiServices(
   options: CloudArcanumApiServiceOptions = {},
 ): CloudArcanumApiServices {
   const validator = options.validator ?? validateProject;
+  const normalizedDataCacheTtlMs = options.normalizedDataCacheTtlMs ?? 5_000;
   const validationCacheTtlMs = options.validationCacheTtlMs ?? 5_000;
+  let normalizedDataCache:
+    | {
+        dataFingerprint: string;
+        expiresAt: number;
+        result: CloudArcanumNormalizedData;
+      }
+    | null = null;
   let validationCache:
     | {
         expiresAt: number;
@@ -332,31 +341,43 @@ export function createCloudArcanumApiServices(
     return result;
   };
 
+  const loadNormalizedData = async (): Promise<CloudArcanumNormalizedData> => {
+    const now = Date.now();
+    const dataFingerprint = await loaders.loadDataFingerprint();
+
+    if (
+      normalizedDataCache &&
+      normalizedDataCache.expiresAt > now &&
+      normalizedDataCache.dataFingerprint === dataFingerprint
+    ) {
+      return normalizedDataCache.result;
+    }
+
+    const snapshot = await loaders.loadSnapshot();
+    const validation = await loadValidationSummary();
+    const normalized = normalizeCloudArcanumData(snapshot);
+    normalized.validationErrorsByFile = buildValidationErrorsByFile(validation);
+    normalizedDataCache = {
+      dataFingerprint,
+      expiresAt: now + normalizedDataCacheTtlMs,
+      result: normalized,
+    };
+
+    return normalized;
+  };
+
   return {
     app: {
       name: CLOUD_ARCANUM_API_NAME,
     },
     loaders,
-    loadNormalizedData: async (): Promise<CloudArcanumNormalizedData> => {
-      const snapshot = await loaders.loadSnapshot();
-      const validation = await loadValidationSummary();
-      const normalized = normalizeCloudArcanumData(snapshot);
-      normalized.validationErrorsByFile = buildValidationErrorsByFile(validation);
-      return normalized;
-    },
+    loadNormalizedData,
     loadValidationSummary,
     loadEntityValidation: async (
       entityId: string,
     ): Promise<EntityValidationResponse | null> => {
       const [normalized, validation] = await Promise.all([
-        (async () => {
-          const snapshot = await loaders.loadSnapshot();
-          const normalized = normalizeCloudArcanumData(snapshot);
-          normalized.validationErrorsByFile = buildValidationErrorsByFile(
-            await loadValidationSummary(),
-          );
-          return normalized;
-        })(),
+        loadNormalizedData(),
         loadValidationSummary(),
       ]);
 

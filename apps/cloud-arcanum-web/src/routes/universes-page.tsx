@@ -188,11 +188,7 @@ export function UniversesPage({ apiBaseUrl }: UniversesPageProps): ReactElement 
   );
 
   return (
-    <PageLayout
-      kicker="Universe browsing"
-      title="Universes"
-      description="Browse top-level universes and inspect the sets and decks nested inside them."
-    >
+    <PageLayout>
       <UniversesFilters query={query} searchParams={searchParams} setSearchParams={setSearchParams} />
 
       {state.status === "loading" || state.status === "idle" ? (
@@ -215,10 +211,8 @@ export function UniversesPage({ apiBaseUrl }: UniversesPageProps): ReactElement 
           <div className="data-list">
             <div className="summary-row">
               <div className="summary-pill">
-                Total <strong>{state.data.meta.total}</strong>
-              </div>
-              <div className="summary-pill">
-                Loaded <strong>{state.data.items.length}</strong>
+                <strong>{state.data.items.length}</strong> of{" "}
+                <strong>{state.data.meta.total}</strong>
               </div>
             </div>
 

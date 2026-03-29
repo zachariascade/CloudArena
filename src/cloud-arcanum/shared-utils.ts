@@ -33,6 +33,7 @@ export type UnresolvedMechanicsField =
 
 export type DraftStatusInput = Pick<
   Card,
+  | "typeLine"
   | "status"
   | "manaCost"
   | "manaValue"
@@ -49,6 +50,14 @@ export type ImagePreviewInput = {
   alt: string;
   publicUrl?: string | null;
   pathExists?: boolean;
+  artist?: string | null;
+  sourceUrl?: string | null;
+  license?: string | null;
+  creditText?: string | null;
+  sourceNotes?: string | null;
+  requestedThemeId?: string | null;
+  resolvedThemeId?: string | null;
+  fellBack?: boolean;
 };
 
 export const cardSortKeys = [
@@ -66,8 +75,40 @@ export const universeSortKeys = ["name"] as const satisfies readonly UniverseSor
 
 export const sortDirections = ["asc", "desc"] as const satisfies readonly SortDirection[];
 
+export function formatCardDisplayName(
+  name: string,
+  title: string | null | undefined,
+): string {
+  return title ? `${name}, ${title}` : name;
+}
+
 function isNullishOrEmptyString(value: unknown): boolean {
   return value === null || value === undefined || value === "";
+}
+
+function typeLineIncludes(typeLine: string, typeToken: string): boolean {
+  return typeLine.toLowerCase().includes(typeToken.toLowerCase());
+}
+
+function isFieldRelevant(
+  input: DraftStatusInput,
+  field: UnresolvedMechanicsField,
+): boolean {
+  switch (field) {
+    case "power":
+    case "toughness":
+      return typeLineIncludes(input.typeLine, "creature");
+    case "loyalty":
+      return typeLineIncludes(input.typeLine, "planeswalker");
+    case "defense":
+      return typeLineIncludes(input.typeLine, "battle");
+    case "manaCost":
+    case "manaValue":
+    case "oracleText":
+    case "rarity":
+    default:
+      return true;
+  }
 }
 
 export function getDraftReviewLabel(
@@ -92,8 +133,8 @@ export function getDraftReviewLabel(
 export function getUnresolvedMechanicsFields(
   input: DraftStatusInput,
 ): UnresolvedMechanicsField[] {
-  return unresolvedMechanicsFields.filter((field) =>
-    isNullishOrEmptyString(input[field]),
+  return unresolvedMechanicsFields.filter(
+    (field) => isFieldRelevant(input, field) && isNullishOrEmptyString(input[field]),
   );
 }
 
@@ -128,10 +169,23 @@ export function buildImagePreview({
   alt,
   publicUrl,
   pathExists = true,
+  artist,
+  sourceUrl,
+  license,
+  creditText,
+  sourceNotes,
+  requestedThemeId = null,
+  resolvedThemeId = null,
+  fellBack = false,
 }: ImagePreviewInput): ImagePreview {
   const sourcePath = image.path;
   const resolvedPublicUrl = publicUrl ?? sourcePath;
   const hasUsableSource = !isNullishOrEmptyString(sourcePath) && pathExists;
+  const resolvedArtist = artist ?? image.artist ?? null;
+  const resolvedSourceUrl = sourceUrl ?? image.sourceUrl ?? null;
+  const resolvedLicense = license ?? image.license ?? null;
+  const resolvedCreditText = creditText ?? image.creditText ?? null;
+  const resolvedSourceNotes = sourceNotes ?? image.sourceNotes ?? null;
 
   if (!hasUsableSource) {
     return {
@@ -140,6 +194,14 @@ export function buildImagePreview({
       publicUrl: null,
       isRenderable: false,
       alt,
+      artist: resolvedArtist,
+      sourceUrl: resolvedSourceUrl,
+      license: resolvedLicense,
+      creditText: resolvedCreditText,
+      sourceNotes: resolvedSourceNotes,
+      requestedThemeId,
+      resolvedThemeId,
+      fellBack,
     };
   }
 
@@ -149,6 +211,14 @@ export function buildImagePreview({
     publicUrl: resolvedPublicUrl,
     isRenderable: resolvedPublicUrl !== null,
     alt,
+    artist: resolvedArtist,
+    sourceUrl: resolvedSourceUrl,
+    license: resolvedLicense,
+    creditText: resolvedCreditText,
+    sourceNotes: resolvedSourceNotes,
+    requestedThemeId,
+    resolvedThemeId,
+    fellBack,
   };
 }
 

@@ -12,6 +12,7 @@ export type UniverseId = EntityId<"universe">;
 
 export type ISODateTimeString = string;
 export type Slug = string;
+export type ThemeId = string;
 
 export const cardStatuses = [
   "draft",
@@ -57,6 +58,21 @@ export const cardRaritySchema = z.enum(cardRarities);
 export const imageReferenceSchema = z.object({
   type: z.enum(["local", "remote", "generated", "placeholder"]),
   path: z.string().nullable(),
+  artist: z.string().min(1).nullable().optional(),
+  sourceUrl: z.string().url().nullable().optional(),
+  license: z.string().min(1).nullable().optional(),
+  creditText: z.string().min(1).nullable().optional(),
+  sourceNotes: z.string().min(1).nullable().optional(),
+});
+
+export const themeIdSchema = slugSchema;
+
+export const themedImageMapSchema = z.record(themeIdSchema, imageReferenceSchema);
+
+export const setThemeSchema = z.object({
+  id: themeIdSchema,
+  name: z.string().min(1),
+  description: z.string().nullable().optional(),
 });
 
 export const imagePromptSchema = z.object({
@@ -105,6 +121,8 @@ export const uniqueEnumArray = <TValues extends readonly [string, ...string[]]>(
 
 export type ImageReference = z.infer<typeof imageReferenceSchema>;
 export type ImagePrompt = z.infer<typeof imagePromptSchema>;
+export type ThemedImageMap = z.infer<typeof themedImageMapSchema>;
+export type SetTheme = z.infer<typeof setThemeSchema>;
 export type BaseNamedEntity<TId extends EntityId<EntityIdPrefix>> = {
   id: TId;
   name: string;

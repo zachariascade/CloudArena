@@ -84,7 +84,7 @@ describe("cloud arcanum normalization", () => {
     const setPath = path.join(tempRoot, "data/sets/set_genesis_book_of_beginnings.json");
     const cardPath = path.join(
       tempRoot,
-      "data/cards/card_0001_abraham_father_of_nations.json",
+      "data/cards/card_0001_abraham.json",
     );
     const deckPath = path.join(
       tempRoot,
