@@ -1,0 +1,612 @@
+# Magic Type Taxonomy
+
+Source: [Magic Comprehensive Rules, 2026-02-27](./MagicCompRules-2026-02-27.txt)
+
+Extracted from section `205` of the Comprehensive Rules.
+
+## Supertypes
+
+- `basic`
+- `legendary`
+- `ongoing`
+- `snow`
+- `world`
+
+## Card Types
+
+- `artifact`
+- `battle`
+- `conspiracy`
+- `creature`
+- `dungeon`
+- `enchantment`
+- `instant`
+- `kindred`
+- `land`
+- `phenomenon`
+- `plane`
+- `planeswalker`
+- `scheme`
+- `sorcery`
+- `vanguard`
+
+## Subtypes
+
+### Artifact Types
+
+- `Attraction`
+- `Blood`
+- `Bobblehead`
+- `Clue`
+- `Contraption`
+- `Equipment`
+- `Food`
+- `Fortification`
+- `Gold`
+- `Incubator`
+- `Infinity`
+- `Junk`
+- `Lander`
+- `Map`
+- `Mutagen`
+- `Powerstone`
+- `Spacecraft`
+- `Stone`
+- `Treasure`
+- `Vehicle`
+
+### Enchantment Types
+
+- `Aura`
+- `Background`
+- `Cartouche`
+- `Case`
+- `Class`
+- `Curse`
+- `Role`
+- `Room`
+- `Rune`
+- `Saga`
+- `Shard`
+- `Shrine`
+
+### Land Types
+
+- `Cave`
+- `Desert`
+- `Forest`
+- `Gate`
+- `Island`
+- `Lair`
+- `Locus`
+- `Mine`
+- `Mountain`
+- `Plains`
+- `Planet`
+- `Power-Plant`
+- `Sphere`
+- `Swamp`
+- `Tower`
+- `Town`
+- `Urza’s`
+
+Basic land types:
+
+- `Forest`
+- `Island`
+- `Mountain`
+- `Plains`
+- `Swamp`
+
+### Planeswalker Types
+
+- `Ajani`
+- `Aminatou`
+- `Angrath`
+- `Arlinn`
+- `Ashiok`
+- `Bahamut`
+- `Basri`
+- `Bolas`
+- `Calix`
+- `Chandra`
+- `Comet`
+- `Dack`
+- `Dakkon`
+- `Daretti`
+- `Davriel`
+- `Dihada`
+- `Domri`
+- `Dovin`
+- `Ellywick`
+- `Elminster`
+- `Elspeth`
+- `Estrid`
+- `Freyalise`
+- `Garruk`
+- `Gideon`
+- `Grist`
+- `Guff`
+- `Huatli`
+- `Jace`
+- `Jared`
+- `Jaya`
+- `Jeska`
+- `Kaito`
+- `Karn`
+- `Kasmina`
+- `Kaya`
+- `Kiora`
+- `Koth`
+- `Liliana`
+- `Lolth`
+- `Lukka`
+- `Minsc`
+- `Mordenkainen`
+- `Nahiri`
+- `Narset`
+- `Niko`
+- `Nissa`
+- `Nixilis`
+- `Oko`
+- `Quintorius`
+- `Ral`
+- `Rowan`
+- `Saheeli`
+- `Samut`
+- `Sarkhan`
+- `Serra`
+- `Sivitri`
+- `Sorin`
+- `Szat`
+- `Tamiyo`
+- `Tasha`
+- `Teferi`
+- `Teyo`
+- `Tezzeret`
+- `Tibalt`
+- `Tyvar`
+- `Ugin`
+- `Urza`
+- `Venser`
+- `Vivien`
+- `Vraska`
+- `Vronos`
+- `Will`
+- `Windgrace`
+- `Wrenn`
+- `Xenagos`
+- `Yanggu`
+- `Yanling`
+- `Zariel`
+
+### Spell Types
+
+Instants and sorceries share these subtypes.
+
+- `Adventure`
+- `Arcane`
+- `Lesson`
+- `Omen`
+- `Trap`
+
+### Creature Types
+
+Creatures and kindreds share these subtypes.
+
+- `Time Lord`
+- `Advisor`
+- `Aetherborn`
+- `Alien`
+- `Ally`
+- `Angel`
+- `Antelope`
+- `Ape`
+- `Archer`
+- `Archon`
+- `Armadillo`
+- `Army`
+- `Artificer`
+- `Assassin`
+- `Assembly-Worker`
+- `Astartes`
+- `Atog`
+- `Aurochs`
+- `Avatar`
+- `Azra`
+- `Badger`
+- `Balloon`
+- `Barbarian`
+- `Bard`
+- `Basilisk`
+- `Bat`
+- `Bear`
+- `Beast`
+- `Beaver`
+- `Beeble`
+- `Beholder`
+- `Berserker`
+- `Bird`
+- `Bison`
+- `Blinkmoth`
+- `Boar`
+- `Bringer`
+- `Brushwagg`
+- `Camarid`
+- `Camel`
+- `Capybara`
+- `Caribou`
+- `Carrier`
+- `Cat`
+- `Centaur`
+- `Child`
+- `Chimera`
+- `Citizen`
+- `Cleric`
+- `Clown`
+- `Cockatrice`
+- `Construct`
+- `Coward`
+- `Coyote`
+- `Crab`
+- `Crocodile`
+- `C’tan`
+- `Custodes`
+- `Cyberman`
+- `Cyclops`
+- `Dalek`
+- `Dauthi`
+- `Demigod`
+- `Demon`
+- `Deserter`
+- `Detective`
+- `Devil`
+- `Dinosaur`
+- `Djinn`
+- `Doctor`
+- `Dog`
+- `Dragon`
+- `Drake`
+- `Dreadnought`
+- `Drix`
+- `Drone`
+- `Druid`
+- `Dryad`
+- `Dwarf`
+- `Echidna`
+- `Efreet`
+- `Egg`
+- `Elder`
+- `Eldrazi`
+- `Elemental`
+- `Elephant`
+- `Elf`
+- `Elk`
+- `Employee`
+- `Eye`
+- `Faerie`
+- `Ferret`
+- `Fish`
+- `Flagbearer`
+- `Fox`
+- `Fractal`
+- `Frog`
+- `Fungus`
+- `Gamer`
+- `Gargoyle`
+- `Germ`
+- `Giant`
+- `Gith`
+- `Glimmer`
+- `Gnoll`
+- `Gnome`
+- `Goat`
+- `Goblin`
+- `God`
+- `Golem`
+- `Gorgon`
+- `Graveborn`
+- `Gremlin`
+- `Griffin`
+- `Guest`
+- `Hag`
+- `Halfling`
+- `Hamster`
+- `Harpy`
+- `Hedgehog`
+- `Hellion`
+- `Hero`
+- `Hippo`
+- `Hippogriff`
+- `Homarid`
+- `Homunculus`
+- `Horror`
+- `Horse`
+- `Human`
+- `Hydra`
+- `Hyena`
+- `Illusion`
+- `Imp`
+- `Incarnation`
+- `Inkling`
+- `Inquisitor`
+- `Insect`
+- `Jackal`
+- `Jellyfish`
+- `Juggernaut`
+- `Kangaroo`
+- `Kavu`
+- `Kirin`
+- `Kithkin`
+- `Knight`
+- `Kobold`
+- `Kor`
+- `Kraken`
+- `Llama`
+- `Lamia`
+- `Lammasu`
+- `Leech`
+- `Lemur`
+- `Leviathan`
+- `Lhurgoyf`
+- `Licid`
+- `Lizard`
+- `Lobster`
+- `Manticore`
+- `Masticore`
+- `Mercenary`
+- `Merfolk`
+- `Metathran`
+- `Minion`
+- `Minotaur`
+- `Mite`
+- `Mole`
+- `Monger`
+- `Mongoose`
+- `Monk`
+- `Monkey`
+- `Moogle`
+- `Moonfolk`
+- `Mount`
+- `Mouse`
+- `Mutant`
+- `Myr`
+- `Mystic`
+- `Nautilus`
+- `Necron`
+- `Nephilim`
+- `Nightmare`
+- `Nightstalker`
+- `Ninja`
+- `Noble`
+- `Noggle`
+- `Nomad`
+- `Nymph`
+- `Octopus`
+- `Ogre`
+- `Ooze`
+- `Orb`
+- `Orc`
+- `Orgg`
+- `Otter`
+- `Ouphe`
+- `Ox`
+- `Oyster`
+- `Pangolin`
+- `Peasant`
+- `Pegasus`
+- `Pentavite`
+- `Performer`
+- `Pest`
+- `Phelddagrif`
+- `Phoenix`
+- `Phyrexian`
+- `Pilot`
+- `Pincher`
+- `Pirate`
+- `Plant`
+- `Platypus`
+- `Porcupine`
+- `Possum`
+- `Praetor`
+- `Primarch`
+- `Prism`
+- `Processor`
+- `Qu`
+- `Rabbit`
+- `Raccoon`
+- `Ranger`
+- `Rat`
+- `Rebel`
+- `Reflection`
+- `Rhino`
+- `Rigger`
+- `Robot`
+- `Rogue`
+- `Sable`
+- `Salamander`
+- `Samurai`
+- `Sand`
+- `Saproling`
+- `Satyr`
+- `Scarecrow`
+- `Scientist`
+- `Scion`
+- `Scorpion`
+- `Scout`
+- `Sculpture`
+- `Seal`
+- `Serf`
+- `Serpent`
+- `Servo`
+- `Shade`
+- `Shaman`
+- `Shapeshifter`
+- `Shark`
+- `Sheep`
+- `Siren`
+- `Skeleton`
+- `Skunk`
+- `Slith`
+- `Sliver`
+- `Sloth`
+- `Slug`
+- `Snail`
+- `Snake`
+- `Soldier`
+- `Soltari`
+- `Sorcerer`
+- `Spawn`
+- `Specter`
+- `Spellshaper`
+- `Sphinx`
+- `Spider`
+- `Spike`
+- `Spirit`
+- `Splinter`
+- `Sponge`
+- `Squid`
+- `Squirrel`
+- `Starfish`
+- `Surrakar`
+- `Survivor`
+- `Symbiote`
+- `Synth`
+- `Tentacle`
+- `Tetravite`
+- `Thalakos`
+- `Thopter`
+- `Thrull`
+- `Tiefling`
+- `Toy`
+- `Treefolk`
+- `Trilobite`
+- `Triskelavite`
+- `Troll`
+- `Turtle`
+- `Tyranid`
+- `Unicorn`
+- `Utrom`
+- `Vampire`
+- `Varmint`
+- `Vedalken`
+- `Villain`
+- `Volver`
+- `Wall`
+- `Walrus`
+- `Warlock`
+- `Warrior`
+- `Weasel`
+- `Weird`
+- `Werewolf`
+- `Whale`
+- `Wizard`
+- `Wolf`
+- `Wolverine`
+- `Wombat`
+- `Worm`
+- `Wraith`
+- `Wurm`
+- `Yeti`
+- `Zombie`
+- `Zubera`
+
+### Planar Types
+
+- `The Abyss`
+- `Alara`
+- `Alfava Metraxis`
+- `Amonkhet`
+- `Androzani Minor`
+- `Antausia`
+- `Apalapucia`
+- `Arcavios`
+- `Arkhos`
+- `Avishkar`
+- `Azgol`
+- `Belenon`
+- `Bolas’s Meditation Realm`
+- `Capenna`
+- `Cridhe`
+- `The Dalek Asylum`
+- `Darillium`
+- `Dominaria`
+- `Earth`
+- `Echoir`
+- `Eldraine`
+- `Equilor`
+- `Ergamon`
+- `Fabacin`
+- `Fiora`
+- `Gallifrey`
+- `Gargantikar`
+- `Gobakhan`
+- `Horsehead Nebula`
+- `Ikoria`
+- `Innistrad`
+- `Iquatana`
+- `Ir`
+- `Ixalan`
+- `Kaldheim`
+- `Kamigawa`
+- `Kandoka`
+- `Karsus`
+- `Kephalai`
+- `Kinshala`
+- `Kolbahan`
+- `Kylem`
+- `Kyneth`
+- `The Library`
+- `Lorwyn`
+- `Luvion`
+- `Mars`
+- `Mercadia`
+- `Mirrodin`
+- `Moag`
+- `Mongseng`
+- `Moon`
+- `Muraganda`
+- `Necros`
+- `New Earth`
+- `New Phyrexia`
+- `Outside Mutter’s Spiral`
+- `Phyrexia`
+- `Pyrulea`
+- `Rabiah`
+- `Rath`
+- `Ravnica`
+- `Regatha`
+- `Segovia`
+- `Serra’s Realm`
+- `Shadowmoor`
+- `Shandalar`
+- `Shenmeng`
+- `Skaro`
+- `Spacecraft`
+- `Tarkir`
+- `Theros`
+- `Time`
+- `Trenzalore`
+- `Ulgrotha`
+- `Unknown Planet`
+- `Valla`
+- `Vryn`
+- `Wildfire`
+- `Xerex`
+- `Zendikar`
+- `Zhalfir`
+
+### Dungeon Types
+
+- `Undercity`
+
+### Battle Types
+
+- `Siege`
+
+### Types With No Subtypes
+
+- `phenomenon`
+- `scheme`
+- `vanguard`
+- `conspiracy`

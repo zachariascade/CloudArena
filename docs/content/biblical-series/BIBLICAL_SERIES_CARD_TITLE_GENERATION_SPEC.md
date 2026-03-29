@@ -58,7 +58,9 @@ The title-generation initiative should produce five planning artifacts.
 
 ### 4.1 Set Map
 
-A set-level outline of the Biblical series, with each set assigned:
+A set-level outline of the Biblical series, with set definitions anchored to [GREAT_ADVENTURE_BIBLE_TIMELINE.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/content/biblical-series/GREAT_ADVENTURE_BIBLE_TIMELINE.md).
+
+Each title-generation set should be derived from that timeline guide, with each set assigned:
 
 - a time period or narrative focus
 - a tone and naming voice
@@ -76,7 +78,7 @@ This must include:
 - subtype families
 - a practical shortlist of the subtypes most relevant to Biblical content
 
-This is a required work item because title generation improves when each candidate already points toward a plausible Magic type line.
+This is a required work item because title generation improves when each candidate already points toward a plausible Magic type line, whether that line is a creature frame or a noncreature frame.
 
 ### 4.3 Title Prompt System
 
@@ -94,26 +96,26 @@ A lightweight review system for choosing the strongest names from large batches.
 
 Names should not be generated as one giant undifferentiated pool. They should be generated per set, because each set needs its own voice, cast, and thematic vocabulary.
 
-Recommended initial Biblical set map:
+The authoritative planning source for which sets to make is [GREAT_ADVENTURE_BIBLE_TIMELINE.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/content/biblical-series/GREAT_ADVENTURE_BIBLE_TIMELINE.md).
 
-1. `Book of Beginnings`
-   Focus: creation, Eden, flood, Babel, covenant, patriarchs, Joseph
-2. `Exodus and Wilderness`
-   Focus: Moses, Pharaoh, plagues, deliverance, Sinai, tabernacle, wandering
-3. `Judges and Kings`
-   Focus: conquest, judges, Saul, David, Solomon, divided kingdoms
-4. `Prophets and Exile`
-   Focus: Isaiah, Jeremiah, Ezekiel, Daniel, Babylon, return, visions
-5. `Gospels`
-   Focus: Christ, disciples, miracles, parables, conflict, crucifixion, resurrection
-6. `Acts and the Early Church`
-   Focus: apostles, missions, martyrs, Pentecost, persecution, councils
-7. `Revelation and the Last Things`
-   Focus: apocalypse, beasts, angels, judgments, New Jerusalem
-8. `Angels and Demons`
-   Focus: celestial and infernal beings, rebellion, warfare, messengers, cosmic conflict
+For title-generation planning, the current Biblical set structure should follow its 12-epoch sequence:
 
-These are planning sets, not a locked publishing order. The existing `set_genesis` record maps naturally to item 1.
+1. `Early World`
+2. `Patriarchs`
+3. `Egypt & Exodus`
+4. `Desert Wanderings`
+5. `Conquest & Judges`
+6. `Kingdom`
+7. `Divided Kingdom`
+8. `Exile`
+9. `Return`
+10. `Maccabean Revolt`
+11. `Messianic Fulfillment`
+12. `Church`
+
+Each set brief, naming pool, and title batch should reference the matching timeline section's core narrative books, support books, and themes to mine.
+
+The existing `set_genesis` record maps naturally to the early portion of this roadmap, but future Biblical set records should be planned against the timeline document rather than an ad hoc list in this spec.
 
 ## 6. Complete Type Inventory Requirement
 
@@ -152,7 +154,9 @@ For this project, creature types are especially important because Biblical card 
 
 ### 6.2 Project Relevance Layer
 
-From the full official inventory, create a practical Biblical shortlist grouped by usage:
+From the full official inventory, create a practical Biblical shortlist grouped by usage.
+
+This shortlist should be treated as a non-exhaustive working list that can grow over time as new Biblical concepts, card roles, and set needs emerge:
 
 - primary people types: `Human`, `Cleric`, `Monk`, `Prophet-like roles using existing Magic classes such as Cleric, Wizard, Warlock, Scout, Soldier`
 - ruler and warrior types: `Soldier`, `Knight`, `Warrior`, `Archer`, `Assassin`
@@ -162,7 +166,7 @@ From the full official inventory, create a practical Biblical shortlist grouped 
 - story and doctrine frames: `Saga`, `Aura`, `Shrine`, `Curse`, `Room`
 - place and terrain frames: `Desert`, `Plains`, `Swamp`, `Mountain`, `Forest`, `Town`, `Cave`
 
-The rules layer keeps the project complete. The relevance layer keeps naming practical.
+The rules layer keeps the project complete. The relevance layer keeps naming practical, and it should support creature and noncreature naming from the beginning of the project.
 
 ## 7. Candidate Data Shape
 
@@ -187,8 +191,8 @@ Example row:
 
 ```json
 {
-  "setName": "Gospels",
-  "setCodeOrId": "set_gospels",
+  "setName": "Messianic Fulfillment",
+  "setCodeOrId": "set_messianic_fulfillment",
   "characterOrConcept": "John son of Zebedee",
   "sourceReference": "New Testament",
   "cardName": "John, Beloved Disciple",
@@ -232,6 +236,8 @@ For each set, break source material into naming pools:
 
 Before mass title generation, assign each pool a small list of plausible type lines.
 
+Noncreature frames should be included from the first pass whenever they are the best fit for the concept rather than treated as a later expansion.
+
 Examples:
 
 - apostle pool -> `Legendary Creature - Human Cleric`, `Legendary Creature - Human Monk`
@@ -239,6 +245,8 @@ Examples:
 - infernal adversary pool -> `Legendary Creature - Demon`
 - sacred object pool -> `Legendary Artifact - Equipment`, `Artifact - Treasure`
 - story event pool -> `Enchantment - Saga`, `Instant`, `Sorcery`
+- place pool -> `Land`, `Legendary Land`
+- covenant or law pool -> `Enchantment`, `Enchantment - Saga`
 
 ### 8.4 Generate In Batches
 
@@ -307,7 +315,7 @@ Reject or demote names when they:
 
 ## 11. Suggested Execution Order
 
-1. Confirm the Biblical series set map
+1. Confirm the Biblical series set map from [GREAT_ADVENTURE_BIBLE_TIMELINE.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/content/biblical-series/GREAT_ADVENTURE_BIBLE_TIMELINE.md)
 2. Build the full official type inventory from Magic rules
 3. Derive the Biblical relevance shortlist from that inventory
 4. Write one brief per set

@@ -6,8 +6,9 @@ This document turns the Biblical title-generation spec into an execution checkli
 
 It is meant to sit on top of:
 
-- [BIBLICAL_SERIES_CARD_TITLE_GENERATION_SPEC.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/BIBLICAL_SERIES_CARD_TITLE_GENERATION_SPEC.md)
-- [CARD_STYLEGUIDE.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/CARD_STYLEGUIDE.md)
+- [BIBLICAL_SERIES_CARD_TITLE_GENERATION_SPEC.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/content/biblical-series/BIBLICAL_SERIES_CARD_TITLE_GENERATION_SPEC.md)
+- [CARD_STYLEGUIDE.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/content/CARD_STYLEGUIDE.md)
+- [GREAT_ADVENTURE_BIBLE_TIMELINE.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/content/biblical-series/GREAT_ADVENTURE_BIBLE_TIMELINE.md)
 
 The goal is to create a repeatable workflow for generating large numbers of Biblical card titles, grouped by set, with valid Magic-style type lines attached for later review and selection.
 
@@ -24,23 +25,25 @@ The goal is to create a repeatable workflow for generating large numbers of Bibl
 
 These decisions should be made before large-scale title generation starts.
 
+Confirmed decisions are marked complete below.
+
 ### 3.1 Series Scope
 
-- [ ] Decide whether the Biblical series should begin with only the existing `Book of Beginnings` set or with a multi-set roadmap
-- [ ] Decide whether `Angels and Demons` is a standalone set or a cross-set support theme
-- [ ] Decide whether the first title-generation pass should focus on Old Testament, New Testament, or both
+- [x] Use the full `GREAT_ADVENTURE_BIBLE_TIMELINE` roadmap as the overall set plan
+- [x] Start title generation one timeline epoch at a time
+- [x] Focus the first title-generation pass on Old Testament material
 
 Recommended starting choice:
 
-- Start with a multi-set roadmap
-- Keep `Book of Beginnings` as set 1
-- Treat `Angels and Demons` as a flexible support set until the rest of the Biblical roadmap is clearer
+- Start with the full `GREAT_ADVENTURE_BIBLE_TIMELINE` roadmap
+- Generate titles one epoch at a time
+- Use support-material books from the timeline guide as flavor depth, not as a competing set structure
 
 ### 3.2 Canon And Source Boundaries
 
-- [ ] Decide how strict the project should be about sticking to directly Biblical material versus broader tradition
-- [ ] Decide whether extra-biblical figures or traditions are allowed, such as named demonology, apocrypha, or later church tradition
-- [ ] Decide whether cards may combine scriptural identity with fantasy-style epithets that are not directly taken from the text
+- [x] Use the Bible as the primary source boundary
+- [x] Allow extra-biblical figures or traditions only as clearly labeled support material
+- [x] Allow fantasy-style epithets when the underlying identity remains recognizable
 
 Recommended starting choice:
 
@@ -50,36 +53,35 @@ Recommended starting choice:
 
 ### 3.3 Christ And Sacred-Figure Treatment
 
-- [ ] Decide whether Jesus Christ is represented directly as cards, indirectly through titles and events, or reserved for later
-- [ ] Decide how reverent versus mythic the naming should be for Christ, apostles, prophets, and other sacred figures
-- [ ] Decide whether some figures should be excluded entirely from card naming for tone or sensitivity reasons
-
-Recommended starting choice:
-
-- Make this explicit before any `Gospels` generation work begins
+- [x] Do not block current planning work on a sacred-figure policy
+- [x] Allow title generation to proceed, with later manual filtering for anything you do not want to keep
 
 ### 3.4 Set List
 
-- [ ] Confirm the initial set map
-- [ ] Decide whether the set names in the spec are placeholders or intended final set names
-- [ ] Decide publishing order versus planning order
+- [x] Use `GREAT_ADVENTURE_BIBLE_TIMELINE` as the source of truth for which sets to make
+- [x] Treat the timeline epoch names as planning labels for now
+- [x] Keep publishing order aligned with timeline order for now
 
-Suggested initial planning set list:
+Current planning set list from `GREAT_ADVENTURE_BIBLE_TIMELINE`:
 
-- `Book of Beginnings`
-- `Exodus and Wilderness`
-- `Judges and Kings`
-- `Prophets and Exile`
-- `Gospels`
-- `Acts and the Early Church`
-- `Revelation and the Last Things`
-- `Angels and Demons`
+- `Early World`
+- `Patriarchs`
+- `Egypt & Exodus`
+- `Desert Wanderings`
+- `Conquest & Judges`
+- `Kingdom`
+- `Divided Kingdom`
+- `Exile`
+- `Return`
+- `Maccabean Revolt`
+- `Messianic Fulfillment`
+- `Church`
 
 ### 3.5 Naming Voice
 
-- [ ] Decide whether the overall style should lean more scriptural, mythic-fantasy, solemn, martial, poetic, or pulp-heroic
-- [ ] Decide how ornate titles should be
-- [ ] Decide whether common and uncommon cards should use simpler names than legendary cards
+- [x] Use a scriptural-mythic naming voice overall
+- [x] Keep titles elevated without becoming overly ornate
+- [x] Keep common and uncommon names simpler than legendary-card names
 
 Recommended starting choice:
 
@@ -88,21 +90,23 @@ Recommended starting choice:
 
 ### 3.6 Type-Line Philosophy
 
-- [ ] Decide how conservative the type lines should be
-- [ ] Decide whether the project should prefer familiar creature classes like `Cleric`, `Monk`, `Soldier`, and `Warrior` over more experimental mappings
-- [ ] Decide whether some Biblical concepts should deliberately use artifact, enchantment, land, or saga frames more often than creature frames
+- [x] Start with conservative type lines
+- [x] Prefer familiar creature classes like `Cleric`, `Monk`, `Soldier`, and `Warrior` over experimental mappings in the first pass
+- [x] Keep a non-exhaustive working list of possible type lines and expand it as new needs appear
+- [x] Include noncreature frames from the start where they fit naturally, including artifact, enchantment, land, and saga frames
 
 Recommended starting choice:
 
 - Be conservative at first
 - Use broadly recognizable Magic type lines
-- Expand into weirder mappings only after the first title pass is working
+- Keep a growing working list of valid options as the project evolves
+- Use noncreature frames freely for relics, places, doctrines, miracles, judgments, and major story events
 
 ### 3.7 Output Format
 
-- [ ] Decide where generated title candidates should live
-- [ ] Decide whether the working format should be Markdown tables, JSON, CSV, or a mix
-- [ ] Decide how much metadata each candidate needs before selection
+- [x] Use in-repo files for generated title candidates
+- [x] Use Markdown first, with JSON added if batch volume grows
+- [x] Keep enough metadata to track set, source, role, and type line before selection
 
 Recommended starting choice:
 
@@ -113,24 +117,32 @@ Recommended starting choice:
 
 ### 4.1 Confirm Biblical Series Structure
 
-- [ ] Confirm the initial set list
-- [ ] Confirm which set should be first for actual title generation
-- [ ] Confirm whether existing `set_genesis` should remain the canonical anchor for set 1
-- [ ] Decide whether additional set records should be created now or later
+- [x] Confirm `GREAT_ADVENTURE_BIBLE_TIMELINE` as the set-planning source of truth
+- [x] Start actual title generation with `Patriarchs`
+- [x] Treat existing `set_genesis` as test content rather than a binding timeline mapping
+- [x] Create additional set records only as work reaches each set, beginning with finishing `Patriarchs`
 
 ### 4.2 Write Set Briefs
 
-- [ ] Create a one-page brief for `Book of Beginnings`
-- [ ] Create a one-page brief for `Exodus and Wilderness`
-- [ ] Create a one-page brief for `Judges and Kings`
-- [ ] Create a one-page brief for `Prophets and Exile`
-- [ ] Create a one-page brief for `Gospels`
-- [ ] Create a one-page brief for `Acts and the Early Church`
-- [ ] Create a one-page brief for `Revelation and the Last Things`
-- [ ] Create a one-page brief for `Angels and Demons`
+- [x] Create a one-page brief for `Early World`
+- [x] Create a one-page brief for `Patriarchs`
+- [ ] Create a one-page brief for `Egypt & Exodus`
+- [ ] Create a one-page brief for `Desert Wanderings`
+- [ ] Create a one-page brief for `Conquest & Judges`
+- [ ] Create a one-page brief for `Kingdom`
+- [ ] Create a one-page brief for `Divided Kingdom`
+- [ ] Create a one-page brief for `Exile`
+- [ ] Create a one-page brief for `Return`
+- [ ] Create a one-page brief for `Maccabean Revolt`
+- [ ] Create a one-page brief for `Messianic Fulfillment`
+- [ ] Create a one-page brief for `Church`
 
 Each brief should define:
 
+- matching timeline section
+- core narrative books
+- support books
+- themes to mine
 - tone
 - source range
 - named-character roster
@@ -144,6 +156,7 @@ Each brief should define:
 
 ### 5.1 Build The Complete MTG Type Inventory
 
+- [x] Create a dedicated working file for all possible type pools
 - [ ] Create a reference file for supertypes
 - [ ] Create a reference file for card types
 - [ ] Create a reference file for artifact types
@@ -168,14 +181,18 @@ Each brief should define:
 
 ### 6.1 Build Character And Concept Pools
 
-- [ ] Build a named-figure pool for `Book of Beginnings`
-- [ ] Build a named-figure pool for `Exodus and Wilderness`
-- [ ] Build a named-figure pool for `Judges and Kings`
-- [ ] Build a named-figure pool for `Prophets and Exile`
-- [ ] Build a named-figure pool for `Gospels`
-- [ ] Build a named-figure pool for `Acts and the Early Church`
-- [ ] Build a named-figure pool for `Revelation and the Last Things`
-- [ ] Build a named-figure pool for `Angels and Demons`
+- [ ] Build a named-figure pool for `Early World`
+- [ ] Build a named-figure pool for `Patriarchs`
+- [ ] Build a named-figure pool for `Egypt & Exodus`
+- [ ] Build a named-figure pool for `Desert Wanderings`
+- [ ] Build a named-figure pool for `Conquest & Judges`
+- [ ] Build a named-figure pool for `Kingdom`
+- [ ] Build a named-figure pool for `Divided Kingdom`
+- [ ] Build a named-figure pool for `Exile`
+- [ ] Build a named-figure pool for `Return`
+- [ ] Build a named-figure pool for `Maccabean Revolt`
+- [ ] Build a named-figure pool for `Messianic Fulfillment`
+- [ ] Build a named-figure pool for `Church`
 
 - [ ] Build nonlegendary role pools by set
 - [ ] Build relic and sacred-object pools by set
@@ -261,7 +278,7 @@ Each brief should define:
 ## 10. Suggested Order Of Work
 
 1. Confirm the creative decisions in Section 3
-2. Confirm the Biblical set map
+2. Confirm the Biblical set map from `GREAT_ADVENTURE_BIBLE_TIMELINE`
 3. Build the complete MTG type inventory
 4. Build the Biblical relevance shortlist
 5. Write set briefs
@@ -275,6 +292,6 @@ Each brief should define:
 
 If we want to move efficiently, the next three concrete tasks should be:
 
-- [ ] Confirm the initial set list and whether `Angels and Demons` is standalone
+- [ ] Confirm `GREAT_ADVENTURE_BIBLE_TIMELINE` as the roadmap for which sets to make
 - [ ] Decide the source boundary for extra-biblical material
-- [ ] Choose the first set for title generation, likely `Book of Beginnings` or `Gospels`
+- [ ] Choose the first timeline epoch for title generation, likely `Early World`, `Patriarchs`, or `Messianic Fulfillment`

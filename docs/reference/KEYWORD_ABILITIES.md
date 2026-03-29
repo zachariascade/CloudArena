@@ -1,0 +1,226 @@
+# Magic Keyword Abilities
+
+Source: [Magic Comprehensive Rules, 2026-02-27](./MagicCompRules-2026-02-27.txt)
+
+Extracted from section `702` of the Comprehensive Rules.
+
+## Notes
+
+- These are the named keyword abilities defined by the rules.
+- The list below follows Comprehensive Rules order.
+- Some are evergreen or commonly reused; others are set mechanics or highly specialized.
+
+## Common Evergreen / Core Combat Abilities
+
+- `Deathtouch`
+- `Defender`
+- `Double Strike`
+- `Enchant`
+- `Equip`
+- `First Strike`
+- `Flash`
+- `Flying`
+- `Haste`
+- `Hexproof`
+- `Indestructible`
+- `Lifelink`
+- `Protection`
+- `Reach`
+- `Shroud`
+- `Trample`
+- `Vigilance`
+- `Ward`
+- `Menace`
+- `Prowess`
+
+## Full Keyword Ability List
+
+- `Deathtouch`
+- `Defender`
+- `Double Strike`
+- `Enchant`
+- `Equip`
+- `First Strike`
+- `Flash`
+- `Flying`
+- `Haste`
+- `Hexproof`
+- `Indestructible`
+- `Intimidate`
+- `Landwalk`
+- `Lifelink`
+- `Protection`
+- `Reach`
+- `Shroud`
+- `Trample`
+- `Vigilance`
+- `Ward`
+- `Banding`
+- `Rampage`
+- `Cumulative Upkeep`
+- `Flanking`
+- `Phasing`
+- `Buyback`
+- `Shadow`
+- `Cycling`
+- `Echo`
+- `Horsemanship`
+- `Fading`
+- `Kicker`
+- `Flashback`
+- `Madness`
+- `Fear`
+- `Morph`
+- `Amplify`
+- `Provoke`
+- `Storm`
+- `Affinity`
+- `Entwine`
+- `Modular`
+- `Sunburst`
+- `Bushido`
+- `Soulshift`
+- `Splice`
+- `Offering`
+- `Ninjutsu`
+- `Epic`
+- `Convoke`
+- `Dredge`
+- `Transmute`
+- `Bloodthirst`
+- `Haunt`
+- `Replicate`
+- `Forecast`
+- `Graft`
+- `Recover`
+- `Ripple`
+- `Split Second`
+- `Suspend`
+- `Vanishing`
+- `Absorb`
+- `Aura Swap`
+- `Delve`
+- `Fortify`
+- `Frenzy`
+- `Gravestorm`
+- `Poisonous`
+- `Transfigure`
+- `Champion`
+- `Changeling`
+- `Evoke`
+- `Hideaway`
+- `Prowl`
+- `Reinforce`
+- `Conspire`
+- `Persist`
+- `Wither`
+- `Retrace`
+- `Devour`
+- `Exalted`
+- `Unearth`
+- `Cascade`
+- `Annihilator`
+- `Level Up`
+- `Rebound`
+- `Umbra Armor`
+- `Infect`
+- `Battle Cry`
+- `Living Weapon`
+- `Undying`
+- `Miracle`
+- `Soulbond`
+- `Overload`
+- `Scavenge`
+- `Unleash`
+- `Cipher`
+- `Evolve`
+- `Extort`
+- `Fuse`
+- `Bestow`
+- `Tribute`
+- `Dethrone`
+- `Hidden Agenda`
+- `Outlast`
+- `Prowess`
+- `Dash`
+- `Exploit`
+- `Menace`
+- `Renown`
+- `Awaken`
+- `Devoid`
+- `Ingest`
+- `Myriad`
+- `Surge`
+- `Skulk`
+- `Emerge`
+- `Escalate`
+- `Melee`
+- `Crew`
+- `Fabricate`
+- `Partner`
+- `Undaunted`
+- `Improvise`
+- `Aftermath`
+- `Embalm`
+- `Eternalize`
+- `Afflict`
+- `Ascend`
+- `Assist`
+- `Jump-Start`
+- `Mentor`
+- `Afterlife`
+- `Riot`
+- `Spectacle`
+- `Escape`
+- `Companion`
+- `Mutate`
+- `Encore`
+- `Boast`
+- `Foretell`
+- `Demonstrate`
+- `Daybound and Nightbound`
+- `Disturb`
+- `Decayed`
+- `Cleave`
+- `Training`
+- `Compleated`
+- `Reconfigure`
+- `Blitz`
+- `Casualty`
+- `Enlist`
+- `Read Ahead`
+- `Ravenous`
+- `Squad`
+- `Space Sculptor`
+- `Visit`
+- `Prototype`
+- `Living Metal`
+- `More Than Meets the Eye`
+- `For Mirrodin!`
+- `Toxic`
+- `Backup`
+- `Bargain`
+- `Craft`
+- `Disguise`
+- `Solved`
+- `Plot`
+- `Saddle`
+- `Spree`
+- `Freerunning`
+- `Gift`
+- `Offspring`
+- `Impending`
+- `Exhaust`
+- `Max Speed`
+- `Start Your Engines!`
+- `Harmonize`
+- `Mobilize`
+- `Job Select`
+- `Tiered`
+- `Station`
+- `Warp`
+- `∞ (Infinity)`
+- `Mayhem`
+- `Web-slinging`
+- `Firebending`
+- `Sneak`

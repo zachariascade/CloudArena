@@ -6,6 +6,23 @@ When a planning document is fully complete and no longer needs to stay in the ac
 
 ## Compressed History
 
+### 2026-03-28: Cloud Arcanum App Baseline Progress Compressed
+
+Compressed from completed items in `CLOUD_ARCANUM_TODO.md` so the active TODO can focus on remaining work.
+
+Summary:
+
+- Confirmed the V1 product direction around a read-only local browsing app with cards as the primary landing view, secondary deck/set/universe navigation, deep links, and explicit draft-safe placeholder rendering.
+- Locked in the two-app architecture: a Fastify-backed local Node API over canonical JSON plus a separate React web client, with shared route and payload contracts in `src/cloud-arcanum/api-contract.ts`.
+- Implemented the app repository structure under `apps/cloud-arcanum-api/` and `apps/cloud-arcanum-web/`, along with documented local startup commands and combined API/web dev scripts.
+- Built filesystem loaders for cards, decks, sets, universes, and card images, including normalization, relationship expansion, image resolution, and safe handling for malformed data, missing files, and broken references.
+- Added API support for list/detail browsing across cards, decks, sets, and universes, along with card query filters, metadata filter options, validation summary access, and entity-level validation lookups.
+- Delivered the main web UI foundation: shell layout, navigation, route structure, deep-linkable cards/decks/sets/universes screens, loading states, error states, and empty states.
+- Shipped the card browser with search, filtering, sorting, status badges, quick previews, draft highlighting, unresolved-mechanics visibility, validation signals, and image-availability filtering.
+- Shipped the card detail experience with image preview/fallback rendering, canonical metadata, mechanics display, placeholder-safe warnings, set/universe links, and deck usage links.
+- Added baseline test coverage for filesystem loading, normalization and relationship expansion, placeholder-oriented rendering behavior, API routes, and shared view-model behavior.
+- Reached the first useful local-app milestone: the project runs locally, reads canonical data without mutating source-of-truth files, supports core card browsing/detail flows, and exposes enough relationship context for navigation.
+
 ### 2026-03-27: Initial Project Setup Completed
 
 Compressed from the retired `PROJECT_SETUP_CHECKLIST.md`.

@@ -201,4 +201,4 @@ Before accepting AI-authored content into the repo:
 - placeholder fields should be intentional
 - the repo should pass `npm run validate`
 
-For editorial consistency on names, titles, and slugs, follow `docs/CARD_STYLEGUIDE.md` when creating or revising card records.
+For editorial consistency on names, titles, and slugs, follow `docs/content/CARD_STYLEGUIDE.md` when creating or revising card records.
