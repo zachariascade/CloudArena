@@ -1,0 +1,51 @@
+{
+  "id": "card_0036",
+  "name": "Watcher at Eden's Gate",
+  "slug": "watcher_at_edens_gate",
+  "setId": "set_earlyworld",
+  "typeLine": "Creature - Angel",
+  "manaCost": "{3}{W}",
+  "manaValue": 4,
+  "colors": [
+    "W"
+  ],
+  "colorIdentity": [
+    "W"
+  ],
+  "rarity": "uncommon",
+  "oracleText": "Flying, vigilance\nWhen Watcher at Eden's Gate enters the battlefield, exile up to one target artifact or enchantment an opponent controls until Watcher at Eden's Gate leaves the battlefield.",
+  "flavorText": "\"He placed at the east of the garden of Eden Cherubims.\" — Genesis 3:24",
+  "power": "3",
+  "toughness": "4",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "local",
+    "path": "images/cards/card_0036_watcher_at_edens_gate.jpg",
+    "artist": "Domenichino"
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "flying",
+    "vigilance",
+    "temporary-exile"
+  ],
+  "tags": [
+    "early-world",
+    "eden",
+    "angel"
+  ],
+  "status": "draft",
+  "notes": "Early World supporting role card based on the first three entries in the card list batch. Local reference image downloaded from the Wikimedia Commons reusable file page for Domenichino Guardian angel.",
+  "createdAt": "2026-03-28T12:16:00-05:00",
+  "updatedAt": "2026-03-28T16:45:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/card_0036_watcher_at_edens_gate.jpg",
+      "artist": "Domenichino"
+    }
+  }
+}

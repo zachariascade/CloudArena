@@ -1,0 +1,50 @@
+{
+  "id": "card_0054",
+  "name": "Rib of Adam",
+  "slug": "rib_of_adam",
+  "setId": "set_earlyworld",
+  "typeLine": "Sorcery",
+  "manaCost": "{2}{W}",
+  "manaValue": 3,
+  "colors": [
+    "W"
+  ],
+  "colorIdentity": [
+    "W"
+  ],
+  "rarity": "uncommon",
+  "oracleText": "Create a 2/2 white Human Cleric creature token.\nIf you control a legendary Human, create two of those tokens instead.",
+  "flavorText": "\"And the rib, which the Lord God had taken from man, made he a woman.\" — Genesis 2:22",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "tokens",
+    "legendary-matters",
+    "humans-matter"
+  ],
+  "tags": [
+    "early-world",
+    "creation",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Early World card list item; mechanics pending. Classics theme art uses the public-domain Wikimedia Commons file \"The Creation of Eve\".",
+  "createdAt": "2026-03-29T09:45:00-05:00",
+  "updatedAt": "2026-03-29T09:45:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/classics/card_0054_rib_of_adam.png",
+      "artist": "Maerten de Vos"
+    }
+  }
+}

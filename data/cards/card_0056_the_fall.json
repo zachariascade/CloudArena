@@ -1,0 +1,52 @@
+{
+  "id": "card_0056",
+  "name": "The Fall",
+  "slug": "the_fall",
+  "setId": "set_earlyworld",
+  "typeLine": "Enchantment",
+  "manaCost": "{1}{B}{G}",
+  "manaValue": 3,
+  "colors": [
+    "B",
+    "G"
+  ],
+  "colorIdentity": [
+    "B",
+    "G"
+  ],
+  "rarity": "rare",
+  "oracleText": "When The Fall enters the battlefield, each player sacrifices an artifact, creature, or enchantment.\nWhenever a permanent is sacrificed, each opponent loses 1 life and you gain 1 life. This ability triggers only once each turn.",
+  "flavorText": "\"Therefore the Lord God sent him forth from the garden of Eden, to till the ground from whence he was taken.\" — Genesis 3:23",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "edict",
+    "sacrifice",
+    "drain"
+  ],
+  "tags": [
+    "early-world",
+    "fall",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Early World card list item; mechanics pending. Classics theme art uses Lucas Cranach's \"The Fall of Man\" via Wikimedia Commons.",
+  "createdAt": "2026-03-29T09:47:00-05:00",
+  "updatedAt": "2026-03-29T09:47:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/classics/card_0056_the_fall.png",
+      "artist": "Lucas Cranach the Elder"
+    }
+  }
+}

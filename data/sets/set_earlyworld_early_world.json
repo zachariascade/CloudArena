@@ -1,0 +1,20 @@
+{
+  "id": "set_earlyworld",
+  "universeId": "universe_biblical",
+  "name": "Early World",
+  "code": "EWRLD",
+  "description": "A primeval Biblical set centered on creation, the fall, the first generations, the flood, and Babel.",
+  "themes": [
+    {
+      "id": "default",
+      "name": "Default",
+      "description": "Use the card's legacy or baseline art when available."
+    },
+    {
+      "id": "classics",
+      "name": "Classics",
+      "description": "Old-master, Renaissance, engraving, and famous religious-art treatments for Early World."
+    }
+  ],
+  "defaultThemeId": "default"
+}

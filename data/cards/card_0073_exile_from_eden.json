@@ -1,0 +1,52 @@
+{
+  "id": "card_0073",
+  "name": "Exile from Eden",
+  "slug": "exile_from_eden",
+  "setId": "set_earlyworld",
+  "typeLine": "Sorcery",
+  "manaCost": "{2}{W}{B}",
+  "manaValue": 4,
+  "colors": [
+    "W",
+    "B"
+  ],
+  "colorIdentity": [
+    "W",
+    "B"
+  ],
+  "rarity": "rare",
+  "oracleText": "Exile target creature or enchantment.\nCreate a 1/1 white Angel creature token with flying.",
+  "flavorText": "\"So he drove out the man; and he placed at the east of the garden of Eden Cherubims, and a flaming sword...\" — Genesis 3:24",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "exile-removal",
+    "token",
+    "flying"
+  ],
+  "tags": [
+    "early-world",
+    "eden",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Early World card list item; mechanics pending. Classics theme uses a public-domain expulsion-from-Eden work via Wikimedia Commons.",
+  "createdAt": "2026-03-29T10:07:00-05:00",
+  "updatedAt": "2026-03-29T10:07:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/classics/card_0057_garments_of_skin.jpg",
+      "artist": "Lambert de Hondt (I)"
+    }
+  }
+}

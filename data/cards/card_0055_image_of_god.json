@@ -1,0 +1,53 @@
+{
+  "id": "card_0055",
+  "name": "Image of God",
+  "slug": "image_of_god",
+  "setId": "set_earlyworld",
+  "typeLine": "Enchantment",
+  "manaCost": "{1}{G}{W}",
+  "manaValue": 3,
+  "colors": [
+    "W",
+    "G"
+  ],
+  "colorIdentity": [
+    "W",
+    "G"
+  ],
+  "rarity": "rare",
+  "oracleText": "Humans you control get +1/+1.\nWhenever one or more Humans enter the battlefield under your control, you gain 1 life and scry 1. This ability triggers only once each turn.",
+  "flavorText": "\"So God created man in his own image.\" — Genesis 1:27",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "anthem",
+    "humans-matter",
+    "lifegain",
+    "scry"
+  ],
+  "tags": [
+    "early-world",
+    "creation",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Early World card list item; mechanics pending. Classics theme reuses the Michelangelo-derived creation artwork already present in Early World for the Image of God treatment.",
+  "createdAt": "2026-03-29T09:46:00-05:00",
+  "updatedAt": "2026-03-29T09:46:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/classics/card_0055_image_of_god.jpg",
+      "artist": "Michelangelo"
+    }
+  }
+}

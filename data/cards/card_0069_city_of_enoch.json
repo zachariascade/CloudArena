@@ -1,0 +1,46 @@
+{
+  "id": "card_0069",
+  "name": "City of Enoch",
+  "slug": "city_of_enoch",
+  "setId": "set_earlyworld",
+  "typeLine": "Legendary Land - Town",
+  "manaCost": null,
+  "manaValue": 0,
+  "colors": [],
+  "colorIdentity": [],
+  "rarity": "rare",
+  "oracleText": "City of Enoch enters the battlefield tapped.\n{T}: Add {C}.\n{1}, {T}: Create a 1/1 colorless Citizen artifact creature token. Activate only if another creature died this turn.",
+  "flavorText": "\"And he builded a city, and called the name of the city... Enoch.\" — Genesis 4:17",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "land",
+    "tokens",
+    "artifact-creature"
+  ],
+  "tags": [
+    "early-world",
+    "land",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Early World card list item; mechanics pending. Classics theme reuses the existing Early World Babel-era tower artwork for the first city.",
+  "createdAt": "2026-03-29T10:00:00-05:00",
+  "updatedAt": "2026-03-29T10:00:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/classics/card_0069_city_of_enoch.jpg",
+      "artist": "Pieter Bruegel the Elder"
+    }
+  }
+}

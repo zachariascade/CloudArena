@@ -1,0 +1,53 @@
+{
+  "id": "card_0075",
+  "name": "Blood Cries from the Ground",
+  "slug": "blood_cries_from_the_ground",
+  "setId": "set_earlyworld",
+  "typeLine": "Enchantment",
+  "manaCost": "{1}{B}{R}",
+  "manaValue": 3,
+  "colors": [
+    "B",
+    "R"
+  ],
+  "colorIdentity": [
+    "B",
+    "R"
+  ],
+  "rarity": "rare",
+  "oracleText": "Whenever a creature an opponent controls dies, Blood Cries from the Ground deals 1 damage to that player and you may exile target card from their graveyard.\nWhenever a card leaves an opponent's graveyard, scry 1.",
+  "flavorText": "\"The voice of thy brother's blood crieth unto me from the ground.\" — Genesis 4:10",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "death-trigger",
+    "graveyard-hate",
+    "damage",
+    "scry"
+  ],
+  "tags": [
+    "early-world",
+    "cain",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Early World card list item; mechanics pending. Classics theme reuses the existing Early World Cain and Abel old-master artwork to keep the murder-and-judgment imagery visually aligned.",
+  "createdAt": "2026-03-29T10:09:00-05:00",
+  "updatedAt": "2026-03-29T10:09:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/card_0023_cain_marked_exile.jpg",
+      "artist": "Titian"
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "id": "card_0035",
+  "name": "East of Eden",
+  "slug": "east_of_eden_land_of_exile",
+  "setId": "set_earlyworld",
+  "typeLine": "Legendary Land",
+  "manaCost": null,
+  "manaValue": 0,
+  "colors": [],
+  "colorIdentity": [],
+  "rarity": "rare",
+  "oracleText": "East of Eden, Land of Exile enters the battlefield tapped.\n{T}: Add {C}.\nWhenever one or more cards leave your graveyard, each opponent loses 1 life. This ability triggers only once each turn.",
+  "flavorText": "\"And Cain went out from the presence of the Lord, and dwelt in the land of Nod, on the east of Eden.\" — Genesis 4:16",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "local",
+    "path": "images/cards/card_0035_east_of_eden_land_of_exile.jpg",
+    "artist": "Lambert de Hondt (I)"
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "colorless-mana",
+    "graveyard-hate",
+    "drain"
+  ],
+  "tags": [
+    "early-world",
+    "exile",
+    "land"
+  ],
+  "status": "draft",
+  "notes": "Early World major location card based on the first three entries in the card list batch. Local reference image downloaded from the Wikimedia Commons reusable file page for The expulsion from the Garden of Eden.",
+  "createdAt": "2026-03-28T12:15:00-05:00",
+  "updatedAt": "2026-03-28T16:45:00-05:00",
+  "title": "Land of Exile",
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/card_0035_east_of_eden_land_of_exile.jpg",
+      "artist": "Lambert de Hondt (I)"
+    }
+  }
+}

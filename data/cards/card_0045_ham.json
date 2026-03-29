@@ -1,0 +1,51 @@
+{
+  "id": "card_0045",
+  "name": "Ham",
+  "slug": "ham_father_of_canaan",
+  "setId": "set_earlyworld",
+  "typeLine": "Legendary Creature - Human Scout",
+  "manaCost": "{1}{R}",
+  "manaValue": 2,
+  "colors": [
+    "R"
+  ],
+  "colorIdentity": [
+    "R"
+  ],
+  "rarity": "rare",
+  "oracleText": "Haste\nWhenever Ham attacks, target creature can't block this turn.\nWhenever Ham deals combat damage to a player, you may discard a card. If you do, draw two cards.",
+  "flavorText": "\"And Ham, the father of Canaan, saw the nakedness of his father.\" — Genesis 9:22",
+  "power": "3",
+  "toughness": "1",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "haste",
+    "evasion",
+    "discard",
+    "card-draw"
+  ],
+  "tags": [
+    "early-world",
+    "noah",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Early World card list item; mechanics pending. Classics theme art uses the Wikimedia Commons file \"Drunkenness of Noah\" for Ham's old-master treatment.",
+  "createdAt": "2026-03-29T09:36:00-05:00",
+  "updatedAt": "2026-03-29T09:36:00-05:00",
+  "title": "Father of Canaan",
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/classics/card_0045_ham_father_of_canaan.png",
+      "artist": "Guido Cagnacci"
+    }
+  }
+}

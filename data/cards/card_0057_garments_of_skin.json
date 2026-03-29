@@ -1,0 +1,46 @@
+{
+  "id": "card_0057",
+  "name": "Garments of Skin",
+  "slug": "garments_of_skin",
+  "setId": "set_earlyworld",
+  "typeLine": "Artifact - Equipment",
+  "manaCost": "{2}",
+  "manaValue": 2,
+  "colors": [],
+  "colorIdentity": [],
+  "rarity": "uncommon",
+  "oracleText": "When Garments of Skin enters the battlefield, attach it to target creature you control.\nEquipped creature gets +0/+2 and has ward {1}.\nEquip {1}",
+  "flavorText": "\"Unto Adam also and to his wife did the Lord God make coats of skins, and clothed them.\" — Genesis 3:21",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "equipment",
+    "ward",
+    "toughness-boost"
+  ],
+  "tags": [
+    "early-world",
+    "eden",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Early World card list item; mechanics pending. Classics theme art uses a public-domain Wikimedia Commons expulsion-from-Eden work for the post-Fall clothing scene.",
+  "createdAt": "2026-03-29T09:48:00-05:00",
+  "updatedAt": "2026-03-29T09:48:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/classics/card_0057_garments_of_skin.jpg",
+      "artist": "Lambert de Hondt (I)"
+    }
+  }
+}

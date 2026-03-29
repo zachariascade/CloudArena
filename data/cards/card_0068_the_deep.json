@@ -1,0 +1,46 @@
+{
+  "id": "card_0068",
+  "name": "The Deep",
+  "slug": "the_deep_waters_before_order",
+  "setId": "set_earlyworld",
+  "typeLine": "Legendary Land",
+  "manaCost": null,
+  "manaValue": 0,
+  "colors": [],
+  "colorIdentity": [],
+  "rarity": "mythic",
+  "oracleText": "The Deep, Waters Before Order enters the battlefield tapped.\n{T}: Add {C}.\n{3}, {T}: Mill two cards, then return a land card from your graveyard to your hand.",
+  "flavorText": "\"And darkness was upon the face of the deep.\" — Genesis 1:2",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "land",
+    "mill",
+    "land-recursion"
+  ],
+  "tags": [
+    "early-world",
+    "land",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Early World card list item; mechanics pending. Classics theme art uses the public-domain Wikimedia Commons file \"The Deluge\".",
+  "createdAt": "2026-03-29T09:59:00-05:00",
+  "updatedAt": "2026-03-29T09:59:00-05:00",
+  "title": "Waters Before Order",
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/classics/card_0068_the_deep_waters_before_order.jpg",
+      "artist": "Gustave Doré"
+    }
+  }
+}

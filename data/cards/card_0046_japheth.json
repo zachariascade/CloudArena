@@ -1,0 +1,51 @@
+{
+  "id": "card_0046",
+  "name": "Japheth",
+  "slug": "japheth_dweller_of_far_coasts",
+  "setId": "set_earlyworld",
+  "typeLine": "Legendary Creature - Human Scout",
+  "manaCost": "{2}{U}",
+  "manaValue": 3,
+  "colors": [
+    "U"
+  ],
+  "colorIdentity": [
+    "U"
+  ],
+  "rarity": "rare",
+  "oracleText": "Whenever one or more lands enter the battlefield under your control, scry 1. This ability triggers only once each turn.\nWhenever you draw your second card each turn, target creature can't be blocked this turn.",
+  "flavorText": "\"God shall enlarge Japheth, and he shall dwell in the tents of Shem.\" — Genesis 9:27",
+  "power": "2",
+  "toughness": "4",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "landfall",
+    "scry",
+    "card-draw",
+    "evasion"
+  ],
+  "tags": [
+    "early-world",
+    "noah",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Early World card list item; mechanics pending. Classics theme art uses a reusable Wikimedia Commons Medhurst illustration of Noah's family coming out of the ark.",
+  "createdAt": "2026-03-29T09:37:00-05:00",
+  "updatedAt": "2026-03-29T09:37:00-05:00",
+  "title": "Dweller of Far Coasts",
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/classics/card_0046_japheth_dweller_of_far_coasts.jpg",
+      "artist": "Jan Luyken"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "id": "card_0064",
+  "name": "Pishon",
+  "slug": "pishon_river_of_gold",
+  "setId": "set_earlyworld",
+  "typeLine": "Legendary Land",
+  "manaCost": null,
+  "manaValue": 0,
+  "colors": [],
+  "colorIdentity": [],
+  "rarity": "rare",
+  "oracleText": "Pishon, River of Gold enters the battlefield tapped.\n{T}: Add {C}.\nWhenever one or more artifacts enter the battlefield under your control, if this ability hasn't triggered this turn, create a Treasure token.",
+  "flavorText": "\"The gold of that land is good.\" — Genesis 2:12",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "land",
+    "treasure",
+    "artifacts-matter"
+  ],
+  "tags": [
+    "early-world",
+    "land",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Early World card list item; mechanics pending. Classics theme art uses the Walters manuscript page \"Fountain of Life and the Four Rivers of Paradise\" via Wikimedia Commons.",
+  "createdAt": "2026-03-29T09:55:00-05:00",
+  "updatedAt": "2026-03-29T09:55:00-05:00",
+  "title": "River of Gold",
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/classics/card_0064_pishon_river_of_gold.jpg",
+      "artist": "Dirc van Delf"
+    }
+  }
+}

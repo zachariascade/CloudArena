@@ -1,0 +1,53 @@
+{
+  "id": "card_0037",
+  "name": "Builder of the Tower",
+  "slug": "builder_of_the_tower",
+  "setId": "set_earlyworld",
+  "typeLine": "Creature - Human Rogue",
+  "manaCost": "{1}{U}{R}",
+  "manaValue": 3,
+  "colors": [
+    "U",
+    "R"
+  ],
+  "colorIdentity": [
+    "U",
+    "R"
+  ],
+  "rarity": "uncommon",
+  "oracleText": "When Builder of the Tower enters the battlefield, create a Treasure token.\nWhenever you sacrifice an artifact, target creature can't block this turn.\n{T}, Sacrifice an artifact: Draw a card, then discard a card.",
+  "flavorText": "\"Let us build us a city and a tower, whose top may reach unto heaven; and let us make us a name.\" — Genesis 11:4",
+  "power": "2",
+  "toughness": "3",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "local",
+    "path": "images/cards/card_0037_builder_of_the_tower.jpg",
+    "artist": "Pieter Bruegel the Elder"
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "treasure",
+    "artifact-sacrifice",
+    "loot"
+  ],
+  "tags": [
+    "early-world",
+    "babel",
+    "supporting-role"
+  ],
+  "status": "draft",
+  "notes": "Early World supporting role card based on the first three entries in the card list batch. Local reference image downloaded from the Wikimedia Commons reusable file page for Brueghel's Tower of Babel.",
+  "createdAt": "2026-03-28T12:17:00-05:00",
+  "updatedAt": "2026-03-28T16:45:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/card_0037_builder_of_the_tower.jpg",
+      "artist": "Pieter Bruegel the Elder"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "card_0047",
+  "name": "Canaan",
+  "slug": "canaan_heir_of_the_curse",
+  "setId": "set_earlyworld",
+  "typeLine": "Legendary Creature - Human Warlock",
+  "manaCost": "{2}{B}",
+  "manaValue": 3,
+  "colors": [
+    "B"
+  ],
+  "colorIdentity": [
+    "B"
+  ],
+  "rarity": "rare",
+  "oracleText": "Menace\nWhenever a creature an opponent controls becomes tapped, that player loses 1 life.\nWhenever an opponent loses life during your turn, Canaan gets +1/+0 until end of turn.",
+  "flavorText": "\"Cursed be Canaan; a servant of servants shall he be unto his brethren.\" — Genesis 9:25",
+  "power": "3",
+  "toughness": "3",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "menace",
+    "drain",
+    "attack-matters"
+  ],
+  "tags": [
+    "early-world",
+    "noah",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Early World card list item; mechanics pending. Classics theme art uses the Wikimedia Commons file \"Drunkenness of Noah\" for Canaan's old-master treatment.",
+  "createdAt": "2026-03-29T09:38:00-05:00",
+  "updatedAt": "2026-03-29T09:38:00-05:00",
+  "title": "Heir of the Curse",
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/classics/card_0047_canaan_heir_of_the_curse.png",
+      "artist": "Guido Cagnacci"
+    }
+  }
+}

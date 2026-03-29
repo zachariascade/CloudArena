@@ -1,0 +1,53 @@
+{
+  "id": "card_0043",
+  "name": "Nimrod",
+  "slug": "nimrod_hunter_before_the_lord",
+  "setId": "set_earlyworld",
+  "typeLine": "Legendary Creature - Human Warrior",
+  "manaCost": "{2}{R}{G}",
+  "manaValue": 4,
+  "colors": [
+    "R",
+    "G"
+  ],
+  "colorIdentity": [
+    "R",
+    "G"
+  ],
+  "rarity": "mythic",
+  "oracleText": "Reach\nWhenever Nimrod attacks, another target creature you control gets +2/+0 and gains trample until end of turn.\nWhenever a creature an opponent controls dealt damage by a creature you controlled this turn dies, create a Treasure token.",
+  "flavorText": "\"He was a mighty hunter before the Lord.\" — Genesis 10:9",
+  "power": "4",
+  "toughness": "4",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "reach",
+    "attack-trigger",
+    "trample",
+    "treasure"
+  ],
+  "tags": [
+    "early-world",
+    "babel",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Early World card list item; mechanics pending. Classics theme reuses the existing Early World Babel-era tower artwork for Nimrod's old-master treatment.",
+  "createdAt": "2026-03-29T09:34:00-05:00",
+  "updatedAt": "2026-03-29T09:34:00-05:00",
+  "title": "Hunter Before the Lord",
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/classics/card_0043_nimrod_hunter_before_the_lord.jpg",
+      "artist": "Pieter Bruegel the Elder"
+    }
+  }
+}

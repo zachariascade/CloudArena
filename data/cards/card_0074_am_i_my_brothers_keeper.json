@@ -1,0 +1,52 @@
+{
+  "id": "card_0074",
+  "name": "Am I My Brother's Keeper?",
+  "slug": "am_i_my_brothers_keeper",
+  "setId": "set_earlyworld",
+  "typeLine": "Instant",
+  "manaCost": "{B}{R}",
+  "manaValue": 2,
+  "colors": [
+    "B",
+    "R"
+  ],
+  "colorIdentity": [
+    "B",
+    "R"
+  ],
+  "rarity": "uncommon",
+  "oracleText": "Choose one or both —\n• Target creature you control gains indestructible until end of turn.\n• Target creature you don't control gets -2/-2 until end of turn.",
+  "flavorText": "\"And he said, I know not: Am I my brother's keeper?\" — Genesis 4:9",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "combat-trick",
+    "indestructible",
+    "shrink"
+  ],
+  "tags": [
+    "early-world",
+    "cain",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Early World card list item; mechanics pending. Classics theme reuses the existing Early World Cain and Abel old-master artwork for the confrontation scene.",
+  "createdAt": "2026-03-29T10:08:00-05:00",
+  "updatedAt": "2026-03-29T10:08:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/card_0023_cain_marked_exile.jpg",
+      "artist": "Titian"
+    }
+  }
+}

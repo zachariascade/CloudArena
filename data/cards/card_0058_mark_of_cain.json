@@ -1,0 +1,52 @@
+{
+  "id": "card_0058",
+  "name": "Mark of Cain",
+  "slug": "mark_of_cain",
+  "setId": "set_earlyworld",
+  "typeLine": "Enchantment - Aura",
+  "manaCost": "{1}{B}{R}",
+  "manaValue": 3,
+  "colors": [
+    "B",
+    "R"
+  ],
+  "colorIdentity": [
+    "B",
+    "R"
+  ],
+  "rarity": "rare",
+  "oracleText": "Enchant creature\nEnchanted creature gets +2/+0 and has menace.\nWhenever enchanted creature is dealt damage, it deals that much damage to each opponent.",
+  "flavorText": "\"Therefore whosoever slayeth Cain, vengeance shall be taken on him sevenfold.\" — Genesis 4:15",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "aura",
+    "menace",
+    "damage-reflection"
+  ],
+  "tags": [
+    "early-world",
+    "cain",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Early World card list item; mechanics pending. Classics theme reuses the existing Early World Cain artwork to keep the mark and exile imagery visually aligned.",
+  "createdAt": "2026-03-29T09:49:00-05:00",
+  "updatedAt": "2026-03-29T09:49:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/classics/card_0058_mark_of_cain.jpg",
+      "artist": "Titian"
+    }
+  }
+}

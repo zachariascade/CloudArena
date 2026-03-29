@@ -1,0 +1,53 @@
+{
+  "id": "card_0053",
+  "name": "Naming of the Creatures",
+  "slug": "naming_of_the_creatures",
+  "setId": "set_earlyworld",
+  "typeLine": "Sorcery",
+  "manaCost": "{1}{G}{W}",
+  "manaValue": 3,
+  "colors": [
+    "G",
+    "W"
+  ],
+  "colorIdentity": [
+    "G",
+    "W"
+  ],
+  "rarity": "uncommon",
+  "oracleText": "Look at the top five cards of your library. You may reveal a creature card and/or a land card from among them and put them into your hand. Put the rest on the bottom of your library in a random order.\nCreatures you control get +1/+1 until end of turn.",
+  "flavorText": "\"And whatsoever Adam called every living creature, that was the name thereof.\" — Genesis 2:19",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "card-selection",
+    "creatures-matter",
+    "lands-matter",
+    "anthem"
+  ],
+  "tags": [
+    "early-world",
+    "creation",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Early World card list item; mechanics pending. Classics theme art uses Joachim Wtewael's \"Adam in the Garden of Eden, Naming the Animals\" via Wikimedia Commons.",
+  "createdAt": "2026-03-29T09:44:00-05:00",
+  "updatedAt": "2026-03-29T09:44:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/classics/card_0053_naming_of_the_creatures.jpg",
+      "artist": "Joachim Wtewael"
+    }
+  }
+}

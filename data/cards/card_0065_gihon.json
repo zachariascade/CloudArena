@@ -1,0 +1,46 @@
+{
+  "id": "card_0065",
+  "name": "Gihon",
+  "slug": "gihon_river_of_encircling",
+  "setId": "set_earlyworld",
+  "typeLine": "Legendary Land",
+  "manaCost": null,
+  "manaValue": 0,
+  "colors": [],
+  "colorIdentity": [],
+  "rarity": "rare",
+  "oracleText": "Gihon, River of Encircling enters the battlefield tapped.\n{T}: Add {C}.\n{T}: Add one mana of any color. Spend this mana only to cast multicolored spells.",
+  "flavorText": "\"The name of the second river is Gihon: the same is it that compasseth the whole land of Ethiopia.\" — Genesis 2:13",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "land",
+    "mana-fixing",
+    "multicolor-matters"
+  ],
+  "tags": [
+    "early-world",
+    "land",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Early World card list item; mechanics pending. Classics theme art uses the Walters manuscript page \"Fountain of Life and the Four Rivers of Paradise\" via Wikimedia Commons.",
+  "createdAt": "2026-03-29T09:56:00-05:00",
+  "updatedAt": "2026-03-29T09:56:00-05:00",
+  "title": "River of Encircling",
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/classics/card_0065_gihon_river_of_encircling.jpg",
+      "artist": "Dirc van Delf"
+    }
+  }
+}

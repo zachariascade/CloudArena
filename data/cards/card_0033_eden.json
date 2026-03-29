@@ -1,0 +1,49 @@
+{
+  "id": "card_0033",
+  "name": "Eden",
+  "slug": "eden_garden_of_delight",
+  "setId": "set_earlyworld",
+  "typeLine": "Legendary Land - Forest",
+  "manaCost": null,
+  "manaValue": 0,
+  "colors": [],
+  "colorIdentity": [
+    "G"
+  ],
+  "rarity": "mythic",
+  "oracleText": "({T}: Add {G}.)\nEden, Garden of Delight enters the battlefield tapped.\nWhen Eden enters the battlefield, you gain 1 life.\n{T}: Add one mana of any color. Spend this mana only to cast a legendary spell.",
+  "flavorText": "\"And the Lord God planted a garden eastward in Eden; and there he put the man whom he had formed.\" — Genesis 2:8",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "local",
+    "path": "images/cards/card_0033_eden_garden_of_delight.jpg",
+    "artist": "workshop of Jheronimus Bosch"
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "mana",
+    "legendary-matters",
+    "lifegain"
+  ],
+  "tags": [
+    "early-world",
+    "eden",
+    "land"
+  ],
+  "status": "draft",
+  "notes": "Early World major location card based on the first three entries in the card list batch. Local reference image downloaded from the Wikimedia Commons reusable file page for The Garden of Eden (MET DP159806).",
+  "createdAt": "2026-03-28T12:13:00-05:00",
+  "updatedAt": "2026-03-28T16:45:00-05:00",
+  "title": "Garden of Delight",
+  "images": {
+    "classics": {
+      "type": "local",
+      "path": "images/cards/card_0033_eden_garden_of_delight.jpg",
+      "artist": "workshop of Jheronimus Bosch"
+    }
+  }
+}
