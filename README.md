@@ -15,7 +15,8 @@ Active planning and archived project history are tracked separately so the worki
 
 - Active TODOs stay in the repo root for quick access.
 - Long-lived reference and archive docs live in [`docs/`](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs).
-- Completed setup and planning work can be compressed into [PROJECT_HISTORY.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/PROJECT_HISTORY.md).
+- The docs index lives in [docs/README.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/README.md).
+- Completed setup and planning work can be compressed into [PROJECT_HISTORY.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/archive/PROJECT_HISTORY.md).
 
 ## Setup
 
@@ -207,4 +208,4 @@ Create a deck:
 - Keep filename ID prefixes aligned with each record’s `id`.
 - Re-run `npm run validate` after content changes.
 
-For the full workflow, see [AI_AUTHORING_WORKFLOW.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/AI_AUTHORING_WORKFLOW.md).
+For the full workflow, see [AI_AUTHORING_WORKFLOW.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/content/AI_AUTHORING_WORKFLOW.md).

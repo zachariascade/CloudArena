@@ -7,7 +7,7 @@ This document turns the Cloud Arcanum app planning work into an execution checkl
 It is meant to sit on top of:
 
 - [CLOUD_ARCANUM_TODO.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/CLOUD_ARCANUM_TODO.md)
-- [CLOUD_ARCANUM_API_SPEC.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/CLOUD_ARCANUM_API_SPEC.md)
+- [CLOUD_ARCANUM_API_SPEC.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/engineering/CLOUD_ARCANUM_API_SPEC.md)
 - [api-contract.ts](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/src/cloud-arcanum/api-contract.ts)
 
 This checklist is intentionally split into shared, backend, and frontend work so we preserve a clear separation between the API and the UI.
