@@ -4,12 +4,18 @@
   "slug": "sight_for_the_man_born_blind",
   "setId": "set_messianicfulfillment",
   "typeLine": "Sorcery",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{1}{W}{U}",
+  "manaValue": 2,
+  "colors": [
+    "W",
+    "U"
+  ],
+  "colorIdentity": [
+    "W",
+    "U"
+  ],
   "rarity": "uncommon",
-  "oracleText": null,
+  "oracleText": "Scry 2, then draw a card. Untap target creature. It gains vigilance until end of turn.",
   "flavorText": "\"I went and washed, and I received sight.\" — John 9:11",
   "power": null,
   "toughness": null,
@@ -21,7 +27,12 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "scry",
+    "draw",
+    "untap",
+    "vigilance"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +40,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics were added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses El Greco's \"Christ Healing the Blind\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": null
+  "updatedAt": "2026-03-29T13:15:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/El_Greco_(Dom%C3%A9nikos_Theotok%C3%B3poulos)_(1541%E2%80%931614),_Christ_Healing_the_Blind,_c._1570.jpg",
+      "artist": "El Greco",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:El_Greco_(Dom%C3%A9nikos_Theotok%C3%B3poulos)_(1541%E2%80%931614),_Christ_Healing_the_Blind,_c._1570.jpg",
+      "license": "Public domain; Commons tags the MET painting as public-domain.",
+      "creditText": "El Greco, Christ Healing the Blind",
+      "sourceNotes": "Strong, iconically tense treatment for the blind-healing scene."
+    }
+  }
 }

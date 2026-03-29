@@ -4,12 +4,16 @@
   "slug": "the_sower_went_out_to_sow",
   "setId": "set_messianicfulfillment",
   "typeLine": "Enchantment",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{1}{G}",
+  "manaValue": 2,
+  "colors": [
+    "G"
+  ],
+  "colorIdentity": [
+    "G"
+  ],
   "rarity": "uncommon",
-  "oracleText": null,
+  "oracleText": "At the beginning of your end step, if you cast a spell this turn, put a +1/+1 counter on target creature you control. If that creature has three or more +1/+1 counters on it, draw a card.",
   "flavorText": "\"A sower went out to sow his seed.\" — Luke 8:5",
   "power": null,
   "toughness": null,
@@ -21,7 +25,11 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "counters",
+    "draw",
+    "growth"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +37,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics were added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses Alexandre Bida's \"Image of the Sower Parable\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": null
+  "updatedAt": "2026-03-29T13:15:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Parable_Sower.jpg",
+      "artist": "Alexandre Bida",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Parable_Sower.jpg",
+      "license": "Public domain; Commons tags the 1874 work as public-domain.",
+      "creditText": "Alexandre Bida, Image of the Sower Parable",
+      "sourceNotes": "Best-fit classical parable image with a known artist."
+    }
+  }
 }

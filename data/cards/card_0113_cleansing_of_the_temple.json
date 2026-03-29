@@ -4,12 +4,16 @@
   "slug": "cleansing_of_the_temple",
   "setId": "set_messianicfulfillment",
   "typeLine": "Sorcery",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{2}{W}{W}",
+  "manaValue": 4,
+  "colors": [
+    "W"
+  ],
+  "colorIdentity": [
+    "W"
+  ],
   "rarity": "uncommon",
-  "oracleText": null,
+  "oracleText": "Destroy all artifacts and enchantments.",
   "flavorText": "\"Make not my Father's house an house of merchandise.\" — John 2:16",
   "power": null,
   "toughness": null,
@@ -21,7 +25,11 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "artifact-hate",
+    "enchantment-hate",
+    "sweeper"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +37,8 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics were added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
+  "updatedAt": "2026-03-29T13:15:00-05:00",
   "title": null
 }

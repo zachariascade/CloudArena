@@ -4,12 +4,18 @@
   "slug": "feed_the_multitude",
   "setId": "set_messianicfulfillment",
   "typeLine": "Sorcery",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{2}{W}{G}",
+  "manaValue": 4,
+  "colors": [
+    "W",
+    "G"
+  ],
+  "colorIdentity": [
+    "W",
+    "G"
+  ],
   "rarity": "uncommon",
-  "oracleText": null,
+  "oracleText": "Create three Food tokens. If you control a legendary creature, create two additional Food tokens and you gain 3 life.",
   "flavorText": "\"And they did all eat, and were filled.\" — Matthew 14:20",
   "power": null,
   "toughness": null,
@@ -21,7 +27,11 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "tokens",
+    "food",
+    "lifegain"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +39,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics were added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses Gustave Dore's \"Christ Feeding the Multitude\" via Wikimedia Commons.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": null
+  "updatedAt": "2026-03-29T13:15:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/JesusFeedingMultitude.jpg",
+      "artist": "Gustave Dore",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:JesusFeedingMultitude.jpg",
+      "license": "Public domain; Commons identifies the file as a faithful reproduction of a public-domain work.",
+      "creditText": "Gustave Dore, Christ Feeding the Multitude",
+      "sourceNotes": "Strong dramatic feeding scene for the card's miracle theme."
+    }
+  }
 }

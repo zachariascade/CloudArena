@@ -4,12 +4,18 @@
   "slug": "forty_days_in_the_wilderness",
   "setId": "set_messianicfulfillment",
   "typeLine": "Enchantment - Saga",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{2}{W}{G}",
+  "manaValue": 4,
+  "colors": [
+    "W",
+    "G"
+  ],
+  "colorIdentity": [
+    "W",
+    "G"
+  ],
   "rarity": "uncommon",
-  "oracleText": null,
+  "oracleText": "Chapter I - You gain 2 life and scry 2.\nChapter II - Search your library for a basic land card, reveal it, put it into your hand, then shuffle.\nChapter III - Creatures you control gain hexproof until your next turn.",
   "flavorText": "\"When he had fasted forty days and forty nights, he was afterward an hungred.\" — Matthew 4:2",
   "power": null,
   "toughness": null,
@@ -21,7 +27,13 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "saga",
+    "lifegain",
+    "scry",
+    "land-search",
+    "hexproof"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +41,8 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; first-pass mechanics were added. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
+  "updatedAt": "2026-03-29T13:15:00-05:00",
   "title": null
 }
