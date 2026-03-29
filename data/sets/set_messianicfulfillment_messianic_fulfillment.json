@@ -1,0 +1,20 @@
+{
+  "id": "set_messianicfulfillment",
+  "universeId": "universe_biblical",
+  "name": "Messianic Fulfillment",
+  "code": "MFUL",
+  "description": "A Biblical set centered on the incarnation, ministry, miracles, passion, death, and resurrection of Jesus Christ across the Gospel witness, with Luke as the primary narrative spine.",
+  "themes": [
+    {
+      "id": "default",
+      "name": "Default",
+      "description": "Use the card's legacy or baseline art when available."
+    },
+    {
+      "id": "classics",
+      "name": "Classics",
+      "description": "Old-master, iconographic, and famous religious-art treatments for Messianic Fulfillment."
+    }
+  ],
+  "defaultThemeId": "default"
+}

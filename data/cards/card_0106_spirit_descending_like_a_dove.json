@@ -1,0 +1,36 @@
+{
+  "id": "card_0106",
+  "name": "Spirit Descending Like a Dove",
+  "slug": "spirit_descending_like_a_dove",
+  "setId": "set_messianicfulfillment",
+  "typeLine": "Instant",
+  "manaCost": null,
+  "manaValue": null,
+  "colors": [],
+  "colorIdentity": [],
+  "rarity": "uncommon",
+  "oracleText": null,
+  "flavorText": "\"And the Holy Ghost descended in a bodily shape like a dove upon him.\" — Luke 3:22",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [],
+  "tags": [
+    "messianic-fulfillment",
+    "new-testament",
+    "iconic-events",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "createdAt": "2026-03-29T12:00:00-05:00",
+  "updatedAt": "2026-03-29T12:45:00-05:00",
+  "title": null
+}

@@ -1,0 +1,36 @@
+{
+  "id": "card_0168",
+  "name": "Woman with the Issue of Blood",
+  "slug": "woman_with_the_issue_of_blood",
+  "setId": "set_messianicfulfillment",
+  "typeLine": "Creature - Human Citizen",
+  "manaCost": null,
+  "manaValue": null,
+  "colors": [],
+  "colorIdentity": [],
+  "rarity": "common",
+  "oracleText": null,
+  "flavorText": "\"If I may but touch his garment, I shall be whole.\" — Matthew 9:21",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [],
+  "tags": [
+    "messianic-fulfillment",
+    "new-testament",
+    "supporting-roles",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "createdAt": "2026-03-29T12:00:00-05:00",
+  "updatedAt": "2026-03-29T12:45:00-05:00",
+  "title": null
+}
