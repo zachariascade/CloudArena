@@ -4,15 +4,21 @@
   "slug": "pharisee_of_the_synagogue",
   "setId": "set_messianicfulfillment",
   "typeLine": "Creature - Human Cleric",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{1}{W}{B}",
+  "manaValue": 3,
+  "colors": [
+    "W",
+    "B"
+  ],
+  "colorIdentity": [
+    "W",
+    "B"
+  ],
   "rarity": "common",
-  "oracleText": null,
+  "oracleText": "Whenever an opponent casts their first spell each turn, that player loses 1 life unless they pay {1}.\nWhenever you gain life, target opponent loses 1 life.",
   "flavorText": "\"God, I thank thee, that I am not as other men are.\" — Luke 18:11",
-  "power": null,
-  "toughness": null,
+  "power": "2",
+  "toughness": "2",
   "loyalty": null,
   "defense": null,
   "artist": null,
@@ -21,7 +27,10 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "tax",
+    "lifedrain"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +38,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses James Tissot's \"The Pharisee and the Publican\" via Wikimedia Commons. First-pass mechanics added in this pass; mana, colors, and rules text remain provisional.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": null
+  "updatedAt": "2026-03-29T13:15:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Tissot_The_Pharisee_and_the_publican_Brooklyn.jpg",
+      "artist": "James Tissot",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tissot_The_Pharisee_and_the_publican_Brooklyn.jpg",
+      "license": "Public domain; Brooklyn Museum Commons upload marked with no known restrictions.",
+      "creditText": "James Tissot, The Pharisee and the Publican",
+      "sourceNotes": "A textbook Pharisee composition with strong silhouette and immediate narrative clarity."
+    }
+  }
 }

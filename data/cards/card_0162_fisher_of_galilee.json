@@ -4,15 +4,21 @@
   "slug": "fisher_of_galilee",
   "setId": "set_messianicfulfillment",
   "typeLine": "Creature - Human Scout",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{1}{G}{U}",
+  "manaValue": 3,
+  "colors": [
+    "U",
+    "G"
+  ],
+  "colorIdentity": [
+    "U",
+    "G"
+  ],
   "rarity": "common",
-  "oracleText": null,
+  "oracleText": "When Fisher of Galilee enters the battlefield, create a 1/1 blue Fish creature token.\nWhenever a Fish you control attacks, scry 1.",
   "flavorText": "\"Launch out into the deep.\" — Luke 5:4",
-  "power": null,
-  "toughness": null,
+  "power": "2",
+  "toughness": "2",
   "loyalty": null,
   "defense": null,
   "artist": null,
@@ -21,7 +27,10 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "tokens",
+    "scry"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +38,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses Peter Paul Rubens's \"The Miraculous Draught of Fishes\" via Wikimedia Commons. First-pass mechanics added in this pass; mana, colors, and rules text remain provisional.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": null
+  "updatedAt": "2026-03-29T13:15:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Rubens_-_The_Miraculous_Draught_of_Fishes,_1618-19.jpg",
+      "artist": "Peter Paul Rubens",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rubens_-_The_Miraculous_Draught_of_Fishes,_1618-19.jpg",
+      "license": "Public domain; Commons hosts a faithful reproduction of the public-domain work.",
+      "creditText": "Peter Paul Rubens, The Miraculous Draught of Fishes",
+      "sourceNotes": "The net-full-of-fish composition maps cleanly onto Galilee calling imagery."
+    }
+  }
 }

@@ -4,15 +4,21 @@
   "slug": "magus_from_the_east",
   "setId": "set_messianicfulfillment",
   "typeLine": "Creature - Human Wizard",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{1}{W}{U}",
+  "manaValue": 3,
+  "colors": [
+    "W",
+    "U"
+  ],
+  "colorIdentity": [
+    "W",
+    "U"
+  ],
   "rarity": "common",
-  "oracleText": null,
+  "oracleText": "When Magus from the East enters the battlefield, scry 2.\nWhenever you cast a spell with mana value 4 or greater, scry 1.",
   "flavorText": "\"We have seen his star in the east.\" — Matthew 2:2",
-  "power": null,
-  "toughness": null,
+  "power": "1",
+  "toughness": "3",
   "loyalty": null,
   "defense": null,
   "artist": null,
@@ -21,7 +27,10 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "scry",
+    "spellcraft"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +38,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses Gentile da Fabriano's \"Adoration of the Magi\" via Wikimedia Commons. First-pass mechanics added in this pass; mana, colors, and rules text remain provisional.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": null
+  "updatedAt": "2026-03-29T13:15:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Gentile_da_Fabriano_-_Adorazione_dei_Magi_-_Google_Art_ProjectFXD.jpg",
+      "artist": "Gentile da Fabriano",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gentile_da_Fabriano_-_Adorazione_dei_Magi_-_Google_Art_ProjectFXD.jpg",
+      "license": "Public domain; Commons hosts a faithful reproduction of the 1423 Uffizi work.",
+      "creditText": "Gentile da Fabriano, Adoration of the Magi",
+      "sourceNotes": "This gives the magi card a richly iconographic old-master centerpiece."
+    }
+  }
 }

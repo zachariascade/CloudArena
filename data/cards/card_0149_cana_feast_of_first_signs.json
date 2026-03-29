@@ -5,11 +5,14 @@
   "setId": "set_messianicfulfillment",
   "typeLine": "Legendary Land - Town",
   "manaCost": null,
-  "manaValue": null,
+  "manaValue": 0,
   "colors": [],
-  "colorIdentity": [],
+  "colorIdentity": [
+    "W",
+    "U"
+  ],
   "rarity": "rare",
-  "oracleText": null,
+  "oracleText": "Cana enters the battlefield tapped.\n{T}: Add {W} or {U}.\n{2}, {T}: Create a Food token. If you gained life this turn, scry 1.",
   "flavorText": "\"Whatsoever he saith unto you, do it.\" — John 2:5",
   "power": null,
   "toughness": null,
@@ -21,7 +24,12 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "mana-fixing",
+    "Food",
+    "lifegain",
+    "scry"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +37,8 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. First-pass mechanics added in this pass; mana, colors, and rules text remain provisional.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
+  "updatedAt": "2026-03-29T13:15:00-05:00",
   "title": "Feast of First Signs"
 }

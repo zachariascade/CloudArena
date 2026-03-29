@@ -4,15 +4,19 @@
   "slug": "woman_with_the_issue_of_blood",
   "setId": "set_messianicfulfillment",
   "typeLine": "Creature - Human Citizen",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{1}{W}",
+  "manaValue": 2,
+  "colors": [
+    "W"
+  ],
+  "colorIdentity": [
+    "W"
+  ],
   "rarity": "common",
-  "oracleText": null,
+  "oracleText": "Lifelink\nWhenever you gain life, put a +1/+1 counter on Woman with the Issue of Blood.",
   "flavorText": "\"If I may but touch his garment, I shall be whole.\" — Matthew 9:21",
-  "power": null,
-  "toughness": null,
+  "power": "1",
+  "toughness": "4",
   "loyalty": null,
   "defense": null,
   "artist": null,
@@ -21,7 +25,10 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "lifelink",
+    "counter-growth"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +36,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses James Tissot's \"The Woman with an Issue of Blood\" via Wikimedia Commons. First-pass mechanics added in this pass; mana, colors, and rules text remain provisional.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": null
+  "updatedAt": "2026-03-29T13:15:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Woman_with_an_Issue_of_Blood_(L%27h%C3%A9moro%C3%AFsse)_-_James_Tissot.jpg",
+      "artist": "James Tissot",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Woman_with_an_Issue_of_Blood_(L%27h%C3%A9moro%C3%AFsse)_-_James_Tissot.jpg",
+      "license": "Public domain; Brooklyn Museum Commons upload marked with no known restrictions.",
+      "creditText": "James Tissot, The Woman with an Issue of Blood",
+      "sourceNotes": "Exact subject match, with the right devotional and intimate gospel-scene scale."
+    }
+  }
 }

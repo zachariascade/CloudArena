@@ -4,15 +4,19 @@
   "slug": "shepherd_of_bethlehem",
   "setId": "set_messianicfulfillment",
   "typeLine": "Creature - Human Scout",
-  "manaCost": null,
-  "manaValue": null,
-  "colors": [],
-  "colorIdentity": [],
+  "manaCost": "{1}{W}",
+  "manaValue": 2,
+  "colors": [
+    "W"
+  ],
+  "colorIdentity": [
+    "W"
+  ],
   "rarity": "common",
-  "oracleText": null,
+  "oracleText": "Vigilance\nWhen Shepherd of Bethlehem enters the battlefield, create a 1/1 white Sheep creature token.",
   "flavorText": "\"Fear not: for behold, I bring you good tidings of great joy.\" — Luke 2:10",
-  "power": null,
-  "toughness": null,
+  "power": "2",
+  "toughness": "2",
   "loyalty": null,
   "defense": null,
   "artist": null,
@@ -21,7 +25,10 @@
     "path": null
   },
   "imagePrompt": null,
-  "mechanics": [],
+  "mechanics": [
+    "vigilance",
+    "tokens"
+  ],
   "tags": [
     "messianic-fulfillment",
     "new-testament",
@@ -29,8 +36,19 @@
     "draft"
   ],
   "status": "draft",
-  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide.",
+  "notes": "Created from a checked Messianic Fulfillment card list item; mechanics, colors, and art sourcing remain pending. Source boundary is anchored to Luke with Matthew, Mark, and John as support material per the Biblical-series timeline guide. Classics theme art uses Giorgione's \"The Adoration of the Shepherds\" via Wikimedia Commons. First-pass mechanics added in this pass; mana, colors, and rules text remain provisional.",
   "createdAt": "2026-03-29T12:00:00-05:00",
-  "updatedAt": "2026-03-29T12:45:00-05:00",
-  "title": null
+  "updatedAt": "2026-03-29T13:15:00-05:00",
+  "title": null,
+  "images": {
+    "classics": {
+      "type": "remote",
+      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Giorgione,_The_Adoration_of_the_Shepherds,_1505-1510,_NGA_432.jpg",
+      "artist": "Giorgione",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Giorgione,_The_Adoration_of_the_Shepherds,_1505-1510,_NGA_432.jpg",
+      "license": "CC0 reproduction of a public-domain work via the National Gallery of Art Commons file.",
+      "creditText": "Giorgione, The Adoration of the Shepherds",
+      "sourceNotes": "A high-quality Nativity shepherd scene gives the Bethlehem shepherd card the right sacred, monumental tone."
+    }
+  }
 }
