@@ -1,24 +1,20 @@
 {
-  "id": "card_0017",
-  "name": "Samael, Venom of Heaven",
-  "slug": "samael_venom_of_heaven",
+  "id": "card_0019",
+  "name": "Baphomet",
+  "slug": "baphomet_horned_lord_of_the_labyrinth",
   "setId": "set_angeldemons",
-  "typeLine": "Legendary Creature - Angel Demon",
+  "typeLine": "Legendary Creature - Demon",
   "manaCost": null,
   "manaValue": null,
-  "colors": [
-    "W",
-    "B",
-    "G"
-  ],
+  "colors": [],
   "colorIdentity": [
-    "W",
     "B",
+    "R",
     "G"
   ],
   "rarity": null,
   "oracleText": null,
-  "flavorText": "His judgments are so pure they curdle into poison.",
+  "flavorText": "All roads under his gaze become circles with teeth.",
   "power": null,
   "toughness": null,
   "loyalty": null,
@@ -30,18 +26,19 @@
   },
   "imagePrompt": null,
   "mechanics": [
-    "deathtouch",
-    "lifelink",
-    "graveyard"
+    "menace",
+    "fight",
+    "maze"
   ],
   "tags": [
     "demon",
-    "heavenly",
-    "samael",
+    "labyrinth",
+    "baphomet",
     "draft"
   ],
   "status": "draft",
   "notes": "Initial demonic figure record for the Angels and Demons set.",
-  "createdAt": "2026-03-28T00:13:00-05:00",
-  "updatedAt": "2026-03-28T00:29:00-05:00"
+  "createdAt": "2026-03-28T00:15:00-05:00",
+  "updatedAt": "2026-03-28T00:29:00-05:00",
+  "title": "Horned Lord of the Labyrinth"
 }

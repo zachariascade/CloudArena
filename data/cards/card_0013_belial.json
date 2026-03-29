@@ -1,20 +1,19 @@
 {
-  "id": "card_0014",
-  "name": "Mammon, Prince of Greed",
-  "slug": "mammon_prince_of_greed",
+  "id": "card_0013",
+  "name": "Belial",
+  "slug": "belial_father_of_rebellion",
   "setId": "set_angeldemons",
   "typeLine": "Legendary Creature - Demon",
   "manaCost": null,
   "manaValue": null,
-  "colors": [
-    "B"
-  ],
+  "colors": [],
   "colorIdentity": [
-    "B"
+    "B",
+    "R"
   ],
   "rarity": null,
   "oracleText": null,
-  "flavorText": "He weighs every soul and always finds a way to make the scales payable.",
+  "flavorText": "No throne stands long once he teaches kneeling creatures to hate the floor.",
   "power": null,
   "toughness": null,
   "loyalty": null,
@@ -26,18 +25,19 @@
   },
   "imagePrompt": null,
   "mechanics": [
-    "treasure",
-    "life-payment",
-    "drain"
+    "menace",
+    "goad",
+    "sacrifice"
   ],
   "tags": [
     "demon",
-    "greed",
-    "mammon",
+    "rebellion",
+    "belial",
     "draft"
   ],
   "status": "draft",
   "notes": "Initial demonic figure record for the Angels and Demons set.",
-  "createdAt": "2026-03-28T00:10:00-05:00",
-  "updatedAt": "2026-03-28T00:29:00-05:00"
+  "createdAt": "2026-03-28T00:09:00-05:00",
+  "updatedAt": "2026-03-28T00:29:00-05:00",
+  "title": "Father of Rebellion"
 }

@@ -1,24 +1,19 @@
 {
-  "id": "card_0019",
-  "name": "Baphomet, Horned Lord of the Labyrinth",
-  "slug": "baphomet_horned_lord_of_the_labyrinth",
+  "id": "card_0010",
+  "name": "Beelzebub",
+  "slug": "beelzebub_lord_of_flies",
   "setId": "set_angeldemons",
   "typeLine": "Legendary Creature - Demon",
   "manaCost": null,
   "manaValue": null,
-  "colors": [
-    "B",
-    "R",
-    "G"
-  ],
+  "colors": [],
   "colorIdentity": [
     "B",
-    "R",
     "G"
   ],
   "rarity": null,
   "oracleText": null,
-  "flavorText": "All roads under his gaze become circles with teeth.",
+  "flavorText": "Where he alights, rot gathers wings.",
   "power": null,
   "toughness": null,
   "loyalty": null,
@@ -30,18 +25,19 @@
   },
   "imagePrompt": null,
   "mechanics": [
-    "menace",
-    "fight",
-    "maze"
+    "tokens",
+    "deathtouch",
+    "aristocrats"
   ],
   "tags": [
     "demon",
-    "labyrinth",
-    "baphomet",
+    "swarm",
+    "beelzebub",
     "draft"
   ],
   "status": "draft",
   "notes": "Initial demonic figure record for the Angels and Demons set.",
-  "createdAt": "2026-03-28T00:15:00-05:00",
-  "updatedAt": "2026-03-28T00:29:00-05:00"
+  "createdAt": "2026-03-28T00:06:00-05:00",
+  "updatedAt": "2026-03-28T00:29:00-05:00",
+  "title": "Lord of Flies"
 }

@@ -1,14 +1,12 @@
 {
   "id": "card_0002",
-  "name": "Sarah, Laughter of Promise",
+  "name": "Sarah",
   "slug": "sarah_laughter_of_promise",
   "setId": "set_genesis",
   "typeLine": "Legendary Creature - Human Noble",
   "manaCost": null,
   "manaValue": null,
-  "colors": [
-    "W"
-  ],
+  "colors": [],
   "colorIdentity": [
     "W"
   ],
@@ -36,5 +34,6 @@
   "status": "draft",
   "notes": "Deliberately left mechanically incomplete to exercise draft-stage placeholder rules.",
   "createdAt": "2026-03-27T20:35:00-05:00",
-  "updatedAt": "2026-03-27T20:35:00-05:00"
+  "updatedAt": "2026-03-27T20:35:00-05:00",
+  "title": "Laughter of Promise"
 }

@@ -1,22 +1,20 @@
 {
-  "id": "card_0016",
-  "name": "Lilith, Mother of Night",
-  "slug": "lilith_mother_of_night",
+  "id": "card_0017",
+  "name": "Samael",
+  "slug": "samael_venom_of_heaven",
   "setId": "set_angeldemons",
-  "typeLine": "Legendary Creature - Demon",
+  "typeLine": "Legendary Creature - Angel Demon",
   "manaCost": null,
   "manaValue": null,
-  "colors": [
-    "B",
-    "R"
-  ],
+  "colors": [],
   "colorIdentity": [
+    "W",
     "B",
-    "R"
+    "G"
   ],
   "rarity": null,
   "oracleText": null,
-  "flavorText": "She walks where desire becomes hunger and hunger becomes lineage.",
+  "flavorText": "His judgments are so pure they curdle into poison.",
   "power": null,
   "toughness": null,
   "loyalty": null,
@@ -28,18 +26,19 @@
   },
   "imagePrompt": null,
   "mechanics": [
-    "tokens",
-    "menace",
-    "drain"
+    "deathtouch",
+    "lifelink",
+    "graveyard"
   ],
   "tags": [
     "demon",
-    "night",
-    "lilith",
+    "heavenly",
+    "samael",
     "draft"
   ],
   "status": "draft",
   "notes": "Initial demonic figure record for the Angels and Demons set.",
-  "createdAt": "2026-03-28T00:12:00-05:00",
-  "updatedAt": "2026-03-28T00:29:00-05:00"
+  "createdAt": "2026-03-28T00:13:00-05:00",
+  "updatedAt": "2026-03-28T00:29:00-05:00",
+  "title": "Venom of Heaven"
 }

@@ -1,22 +1,20 @@
 {
-  "id": "card_0010",
-  "name": "Beelzebub, Lord of Flies",
-  "slug": "beelzebub_lord_of_flies",
+  "id": "card_0018",
+  "name": "Mephistopheles",
+  "slug": "mephistopheles_bargainer_of_damnation",
   "setId": "set_angeldemons",
   "typeLine": "Legendary Creature - Demon",
   "manaCost": null,
   "manaValue": null,
-  "colors": [
-    "B",
-    "G"
-  ],
+  "colors": [],
   "colorIdentity": [
+    "U",
     "B",
-    "G"
+    "R"
   ],
   "rarity": null,
   "oracleText": null,
-  "flavorText": "Where he alights, rot gathers wings.",
+  "flavorText": "The first offer is always spoken as if mercy wrote it.",
   "power": null,
   "toughness": null,
   "loyalty": null,
@@ -28,18 +26,19 @@
   },
   "imagePrompt": null,
   "mechanics": [
-    "tokens",
-    "deathtouch",
-    "aristocrats"
+    "draw",
+    "life-payment",
+    "tempting-offer"
   ],
   "tags": [
     "demon",
-    "swarm",
-    "beelzebub",
+    "bargain",
+    "mephistopheles",
     "draft"
   ],
   "status": "draft",
   "notes": "Initial demonic figure record for the Angels and Demons set.",
-  "createdAt": "2026-03-28T00:06:00-05:00",
-  "updatedAt": "2026-03-28T00:29:00-05:00"
+  "createdAt": "2026-03-28T00:14:00-05:00",
+  "updatedAt": "2026-03-28T00:29:00-05:00",
+  "title": "Bargainer of Damnation"
 }

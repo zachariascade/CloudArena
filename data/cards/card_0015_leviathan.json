@@ -1,15 +1,12 @@
 {
   "id": "card_0015",
-  "name": "Leviathan, Abyssal World-Serpent",
+  "name": "Leviathan",
   "slug": "leviathan_abyssal_world_serpent",
   "setId": "set_angeldemons",
   "typeLine": "Legendary Creature - Serpent Demon",
   "manaCost": null,
   "manaValue": null,
-  "colors": [
-    "U",
-    "B"
-  ],
+  "colors": [],
   "colorIdentity": [
     "U",
     "B"
@@ -53,5 +50,6 @@
   "status": "draft",
   "notes": "Initial demonic figure record for the Angels and Demons set.",
   "createdAt": "2026-03-28T00:11:00-05:00",
-  "updatedAt": "2026-03-28T01:00:00-05:00"
+  "updatedAt": "2026-03-28T01:00:00-05:00",
+  "title": "Abyssal World-Serpent"
 }

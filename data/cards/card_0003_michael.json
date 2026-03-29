@@ -1,6 +1,6 @@
 {
   "id": "card_0003",
-  "name": "Michael, Seraph of the First Charge",
+  "name": "Michael",
   "slug": "michael_seraph_of_the_first_charge",
   "setId": "set_angeldemons",
   "typeLine": "Legendary Creature - Angel",
@@ -41,5 +41,6 @@
   "status": "approved",
   "notes": "Mythic angelic battle leader for the Angels and Demons set, built to reward attacking with a heavenly host.",
   "createdAt": "2026-03-27T20:40:00-05:00",
-  "updatedAt": "2026-03-28T00:35:00-05:00"
+  "updatedAt": "2026-03-28T00:35:00-05:00",
+  "title": "Seraph of the First Charge"
 }

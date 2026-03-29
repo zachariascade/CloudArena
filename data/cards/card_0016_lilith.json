@@ -1,24 +1,19 @@
 {
-  "id": "card_0018",
-  "name": "Mephistopheles, Bargainer of Damnation",
-  "slug": "mephistopheles_bargainer_of_damnation",
+  "id": "card_0016",
+  "name": "Lilith",
+  "slug": "lilith_mother_of_night",
   "setId": "set_angeldemons",
   "typeLine": "Legendary Creature - Demon",
   "manaCost": null,
   "manaValue": null,
-  "colors": [
-    "U",
-    "B",
-    "R"
-  ],
+  "colors": [],
   "colorIdentity": [
-    "U",
     "B",
     "R"
   ],
   "rarity": null,
   "oracleText": null,
-  "flavorText": "The first offer is always spoken as if mercy wrote it.",
+  "flavorText": "She walks where desire becomes hunger and hunger becomes lineage.",
   "power": null,
   "toughness": null,
   "loyalty": null,
@@ -30,18 +25,19 @@
   },
   "imagePrompt": null,
   "mechanics": [
-    "draw",
-    "life-payment",
-    "tempting-offer"
+    "tokens",
+    "menace",
+    "drain"
   ],
   "tags": [
     "demon",
-    "bargain",
-    "mephistopheles",
+    "night",
+    "lilith",
     "draft"
   ],
   "status": "draft",
   "notes": "Initial demonic figure record for the Angels and Demons set.",
-  "createdAt": "2026-03-28T00:14:00-05:00",
-  "updatedAt": "2026-03-28T00:29:00-05:00"
+  "createdAt": "2026-03-28T00:12:00-05:00",
+  "updatedAt": "2026-03-28T00:29:00-05:00",
+  "title": "Mother of Night"
 }

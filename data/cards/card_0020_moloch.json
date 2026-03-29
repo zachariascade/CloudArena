@@ -1,15 +1,12 @@
 {
   "id": "card_0020",
-  "name": "Moloch, Furnace of Sacrifice",
+  "name": "Moloch",
   "slug": "moloch_furnace_of_sacrifice",
   "setId": "set_angeldemons",
   "typeLine": "Legendary Creature - Demon",
   "manaCost": null,
   "manaValue": null,
-  "colors": [
-    "B",
-    "R"
-  ],
+  "colors": [],
   "colorIdentity": [
     "B",
     "R"
@@ -41,5 +38,6 @@
   "status": "draft",
   "notes": "Initial demonic figure record for the Angels and Demons set.",
   "createdAt": "2026-03-28T00:16:00-05:00",
-  "updatedAt": "2026-03-28T00:29:00-05:00"
+  "updatedAt": "2026-03-28T00:29:00-05:00",
+  "title": "Furnace of Sacrifice"
 }

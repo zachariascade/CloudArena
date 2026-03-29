@@ -1,24 +1,20 @@
 {
-  "id": "card_0009",
-  "name": "Lucifer, Fallen Angel of Light",
-  "slug": "lucifer_fallen_angel_of_light",
+  "id": "card_0011",
+  "name": "Baal",
+  "slug": "baal_tyrant_of_storms",
   "setId": "set_angeldemons",
-  "typeLine": "Legendary Creature - Angel Demon",
+  "typeLine": "Legendary Creature - Demon",
   "manaCost": null,
   "manaValue": null,
-  "colors": [
-    "W",
-    "B",
-    "R"
-  ],
+  "colors": [],
   "colorIdentity": [
-    "W",
     "B",
-    "R"
+    "R",
+    "G"
   ],
   "rarity": null,
   "oracleText": null,
-  "flavorText": "Even in ruin, the memory of radiance clings to him like fire.",
+  "flavorText": "Thunder obeys him as a lash obeys the tyrant's hand.",
   "power": null,
   "toughness": null,
   "loyalty": null,
@@ -30,18 +26,19 @@
   },
   "imagePrompt": null,
   "mechanics": [
-    "flying",
-    "tempting-offer",
-    "sacrifice"
+    "trample",
+    "burn",
+    "stormcall"
   ],
   "tags": [
     "demon",
-    "fallen",
-    "lucifer",
+    "storm",
+    "baal",
     "draft"
   ],
   "status": "draft",
   "notes": "Initial demonic figure record for the Angels and Demons set.",
-  "createdAt": "2026-03-28T00:05:00-05:00",
-  "updatedAt": "2026-03-28T00:29:00-05:00"
+  "createdAt": "2026-03-28T00:07:00-05:00",
+  "updatedAt": "2026-03-28T00:29:00-05:00",
+  "title": "Tyrant of Storms"
 }

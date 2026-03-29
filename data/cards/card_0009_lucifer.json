@@ -1,22 +1,20 @@
 {
-  "id": "card_0013",
-  "name": "Belial, Father of Rebellion",
-  "slug": "belial_father_of_rebellion",
+  "id": "card_0009",
+  "name": "Lucifer",
+  "slug": "lucifer_fallen_angel_of_light",
   "setId": "set_angeldemons",
-  "typeLine": "Legendary Creature - Demon",
+  "typeLine": "Legendary Creature - Angel Demon",
   "manaCost": null,
   "manaValue": null,
-  "colors": [
-    "B",
-    "R"
-  ],
+  "colors": [],
   "colorIdentity": [
+    "W",
     "B",
     "R"
   ],
   "rarity": null,
   "oracleText": null,
-  "flavorText": "No throne stands long once he teaches kneeling creatures to hate the floor.",
+  "flavorText": "Even in ruin, the memory of radiance clings to him like fire.",
   "power": null,
   "toughness": null,
   "loyalty": null,
@@ -28,18 +26,19 @@
   },
   "imagePrompt": null,
   "mechanics": [
-    "menace",
-    "goad",
+    "flying",
+    "tempting-offer",
     "sacrifice"
   ],
   "tags": [
     "demon",
-    "rebellion",
-    "belial",
+    "fallen",
+    "lucifer",
     "draft"
   ],
   "status": "draft",
   "notes": "Initial demonic figure record for the Angels and Demons set.",
-  "createdAt": "2026-03-28T00:09:00-05:00",
-  "updatedAt": "2026-03-28T00:29:00-05:00"
+  "createdAt": "2026-03-28T00:05:00-05:00",
+  "updatedAt": "2026-03-28T00:29:00-05:00",
+  "title": "Fallen Angel of Light"
 }

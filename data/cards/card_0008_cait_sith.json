@@ -1,6 +1,6 @@
 {
   "id": "card_0008",
-  "name": "Cait Sith, Fortune Teller",
+  "name": "Cait Sith",
   "slug": "cait_sith_fortune_teller",
   "setId": "set_ffvii",
   "typeLine": "Legendary Artifact Creature - Cat Moogle",
@@ -22,7 +22,8 @@
   "artist": "Kevin Sidharta",
   "image": {
     "type": "placeholder",
-    "path": null
+    "path": null,
+    "artist": "Kevin Sidharta"
   },
   "imagePrompt": null,
   "mechanics": [
@@ -40,5 +41,6 @@
   "status": "approved",
   "notes": "Parsed from a photographed physical card. Image intentionally omitted per request and represented with a placeholder image reference. Printed details not modeled as first-class fields in Cloud Arcanum include collector number 54, printed language EN, set-code/collector line formatting, expansion symbol treatment, and copyright/legal line.",
   "createdAt": "2026-03-27T21:00:00-05:00",
-  "updatedAt": "2026-03-27T21:00:00-05:00"
+  "updatedAt": "2026-03-27T21:00:00-05:00",
+  "title": "Fortune Teller"
 }

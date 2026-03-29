@@ -1,22 +1,18 @@
 {
-  "id": "card_0012",
-  "name": "Asmodeus, Prince of Desire",
-  "slug": "asmodeus_prince_of_desire",
+  "id": "card_0014",
+  "name": "Mammon",
+  "slug": "mammon_prince_of_greed",
   "setId": "set_angeldemons",
   "typeLine": "Legendary Creature - Demon",
   "manaCost": null,
   "manaValue": null,
-  "colors": [
-    "B",
-    "R"
-  ],
+  "colors": [],
   "colorIdentity": [
-    "B",
-    "R"
+    "B"
   ],
   "rarity": null,
   "oracleText": null,
-  "flavorText": "He never asks for devotion, only appetite.",
+  "flavorText": "He weighs every soul and always finds a way to make the scales payable.",
   "power": null,
   "toughness": null,
   "loyalty": null,
@@ -28,18 +24,19 @@
   },
   "imagePrompt": null,
   "mechanics": [
-    "menace",
-    "tempting-offer",
-    "life-payment"
+    "treasure",
+    "life-payment",
+    "drain"
   ],
   "tags": [
     "demon",
-    "desire",
-    "asmodeus",
+    "greed",
+    "mammon",
     "draft"
   ],
   "status": "draft",
   "notes": "Initial demonic figure record for the Angels and Demons set.",
-  "createdAt": "2026-03-28T00:08:00-05:00",
-  "updatedAt": "2026-03-28T00:29:00-05:00"
+  "createdAt": "2026-03-28T00:10:00-05:00",
+  "updatedAt": "2026-03-28T00:29:00-05:00",
+  "title": "Prince of Greed"
 }

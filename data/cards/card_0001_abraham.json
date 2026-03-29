@@ -1,6 +1,6 @@
 {
   "id": "card_0001",
-  "name": "Abraham, Father of Nations",
+  "name": "Abraham",
   "slug": "abraham_father_of_nations",
   "setId": "set_genesis",
   "typeLine": "Legendary Creature - Human Noble",
@@ -24,7 +24,8 @@
   "artist": "Cloud Arcanum Placeholder",
   "image": {
     "type": "local",
-    "path": "images/cards/card_0001_abraham_father_of_nations.svg"
+    "path": "images/cards/card_0001_abraham_father_of_nations.svg",
+    "artist": "Cloud Arcanum Placeholder"
   },
   "imagePrompt": null,
   "mechanics": [
@@ -38,5 +39,6 @@
   "status": "approved",
   "notes": "Initial sample legendary creature for validator and content workflow testing.",
   "createdAt": "2026-03-27T20:30:00-05:00",
-  "updatedAt": "2026-03-27T20:30:00-05:00"
+  "updatedAt": "2026-03-27T20:30:00-05:00",
+  "title": "Father of Nations"
 }

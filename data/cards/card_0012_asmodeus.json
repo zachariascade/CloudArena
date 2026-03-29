@@ -1,24 +1,19 @@
 {
-  "id": "card_0011",
-  "name": "Baal, Tyrant of Storms",
-  "slug": "baal_tyrant_of_storms",
+  "id": "card_0012",
+  "name": "Asmodeus",
+  "slug": "asmodeus_prince_of_desire",
   "setId": "set_angeldemons",
   "typeLine": "Legendary Creature - Demon",
   "manaCost": null,
   "manaValue": null,
-  "colors": [
-    "B",
-    "R",
-    "G"
-  ],
+  "colors": [],
   "colorIdentity": [
     "B",
-    "R",
-    "G"
+    "R"
   ],
   "rarity": null,
   "oracleText": null,
-  "flavorText": "Thunder obeys him as a lash obeys the tyrant's hand.",
+  "flavorText": "He never asks for devotion, only appetite.",
   "power": null,
   "toughness": null,
   "loyalty": null,
@@ -30,18 +25,19 @@
   },
   "imagePrompt": null,
   "mechanics": [
-    "trample",
-    "burn",
-    "stormcall"
+    "menace",
+    "tempting-offer",
+    "life-payment"
   ],
   "tags": [
     "demon",
-    "storm",
-    "baal",
+    "desire",
+    "asmodeus",
     "draft"
   ],
   "status": "draft",
   "notes": "Initial demonic figure record for the Angels and Demons set.",
-  "createdAt": "2026-03-28T00:07:00-05:00",
-  "updatedAt": "2026-03-28T00:29:00-05:00"
+  "createdAt": "2026-03-28T00:08:00-05:00",
+  "updatedAt": "2026-03-28T00:29:00-05:00",
+  "title": "Prince of Desire"
 }

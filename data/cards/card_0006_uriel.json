@@ -1,15 +1,12 @@
 {
   "id": "card_0006",
-  "name": "Uriel, Flamebearer of Revelation",
+  "name": "Uriel",
   "slug": "uriel_flamebearer_of_revelation",
   "setId": "set_angeldemons",
   "typeLine": "Legendary Creature - Angel",
   "manaCost": null,
   "manaValue": null,
-  "colors": [
-    "W",
-    "R"
-  ],
+  "colors": [],
   "colorIdentity": [
     "W",
     "R"
@@ -40,5 +37,6 @@
   "status": "draft",
   "notes": "Initial angelic figure record for the Angels and Demons set.",
   "createdAt": "2026-03-27T20:43:00-05:00",
-  "updatedAt": "2026-03-27T23:55:00-05:00"
+  "updatedAt": "2026-03-27T23:55:00-05:00",
+  "title": "Flamebearer of Revelation"
 }

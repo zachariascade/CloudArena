@@ -1,15 +1,12 @@
 {
   "id": "card_0007",
-  "name": "Azrael, Keeper of the Last Veil",
+  "name": "Azrael",
   "slug": "azrael_keeper_of_the_last_veil",
   "setId": "set_angeldemons",
   "typeLine": "Legendary Creature - Angel",
   "manaCost": null,
   "manaValue": null,
-  "colors": [
-    "W",
-    "B"
-  ],
+  "colors": [],
   "colorIdentity": [
     "W",
     "B"
@@ -40,5 +37,6 @@
   "status": "draft",
   "notes": "Initial angelic figure record for the Angels and Demons set.",
   "createdAt": "2026-03-27T20:44:00-05:00",
-  "updatedAt": "2026-03-27T23:55:00-05:00"
+  "updatedAt": "2026-03-27T23:55:00-05:00",
+  "title": "Keeper of the Last Veil"
 }
