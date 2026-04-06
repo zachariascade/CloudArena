@@ -1,0 +1,91 @@
+import {
+  LEAN_V1_BOARD_SLOT_COUNT,
+  LEAN_V1_DEFAULT_TURN_ENERGY,
+  LEAN_V1_HAND_SIZE,
+  LEAN_V1_STARTING_PLAYER_HEALTH,
+} from "./constants.js";
+import { cardDefinitions } from "../cards/definitions.js";
+import { drawUpToHandSize } from "./draw.js";
+import { getEnemyPlanStepAtIndexFromInput } from "./enemy-plan.js";
+import type {
+  BattleState,
+  CardDefinitionId,
+  CardInstance,
+  CreateBattleInput,
+} from "./types.js";
+
+function toCardInstances(deck: CardDefinitionId[]): CardInstance[] {
+  return deck.map((definitionId, index) => ({
+    instanceId: `card_${index + 1}`,
+    definitionId,
+  }));
+}
+
+export function createBattle(input: CreateBattleInput): BattleState {
+  const seed = input.seed ?? 1;
+  const playerHealth = input.playerHealth ?? LEAN_V1_STARTING_PLAYER_HEALTH;
+  const resolvedCardDefinitions = input.cardDefinitions ?? cardDefinitions;
+  const initialDrawPile = toCardInstances(input.playerDeck);
+  const initialEnemyPlan = getEnemyPlanStepAtIndexFromInput(input.enemy, 0);
+  const enemyBehavior = "behavior" in input.enemy && input.enemy.behavior ? input.enemy.behavior : [];
+  const enemyCards = "cards" in input.enemy && input.enemy.cards ? input.enemy.cards : [];
+
+  if (!initialEnemyPlan) {
+    throw new Error("Enemy must include at least one behavior step or enemy card.");
+  }
+
+  const state: BattleState = {
+    turnNumber: 1,
+    phase: "player_action",
+    seed,
+    cardDefinitions: resolvedCardDefinitions,
+    player: {
+      health: playerHealth,
+      maxHealth: playerHealth,
+      block: 0,
+      energy: LEAN_V1_DEFAULT_TURN_ENERGY,
+      drawPile: initialDrawPile,
+      hand: [],
+      discardPile: [],
+      graveyard: [],
+    },
+    enemy: {
+      name: input.enemy.name,
+      health: input.enemy.health,
+      maxHealth: input.enemy.health,
+      block: 0,
+      basePower: input.enemy.basePower,
+      intent: initialEnemyPlan.intent,
+      behavior: enemyBehavior,
+      cards: enemyCards,
+      behaviorIndex: 0,
+      currentCard: initialEnemyPlan.card,
+    },
+    battlefield: Array.from({ length: LEAN_V1_BOARD_SLOT_COUNT }, () => null),
+    blockingQueue: [],
+    log: [
+      {
+        type: "battle_created",
+        turnNumber: 1,
+      },
+    ],
+  };
+
+  const openingDraw = drawUpToHandSize(state, LEAN_V1_HAND_SIZE);
+  state.log.push({
+    type: "turn_started",
+    turnNumber: 1,
+    cardsDrawn: openingDraw.count,
+    energy: LEAN_V1_DEFAULT_TURN_ENERGY,
+    enemyIntent: initialEnemyPlan.intent,
+  });
+  for (const card of openingDraw.cards) {
+    state.log.push({
+      type: "card_drawn",
+      turnNumber: 1,
+      cardId: card.definitionId,
+    });
+  }
+
+  return state;
+}

@@ -16,6 +16,7 @@ const navigationItems: NavigationItem[] = [
   { to: "/decks", label: "Decks" },
   { to: "/sets", label: "Sets" },
   { to: "/universes", label: "Universes" },
+  { to: "/cloud-arena/trace-viewer", label: "Cloud Arena" },
 ];
 
 export function AppShell({ children }: AppShellProps): ReactElement {

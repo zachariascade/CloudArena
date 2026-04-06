@@ -1,0 +1,110 @@
+import type { BattleState } from "../core/types.js";
+
+function applyDamageToBlockAndHealth(
+  damage: number,
+  target: { block: number; health: number },
+): number {
+  if (target.block >= damage) {
+    target.block -= damage;
+    return 0;
+  }
+
+  const remainingDamage = damage - target.block;
+  target.block = 0;
+  if (target.health >= remainingDamage) {
+    target.health -= remainingDamage;
+    return 0;
+  }
+
+  const spilloverDamage = remainingDamage - target.health;
+  target.health = 0;
+  return spilloverDamage;
+}
+
+function logEnemyDamage(
+  state: BattleState,
+  amount: number,
+  target: "player" | "permanent",
+  targetId?: string,
+): void {
+  if (amount <= 0) {
+    return;
+  }
+
+  state.log.push({
+    type: "damage_dealt",
+    turnNumber: state.turnNumber,
+    source: "enemy_intent",
+    target,
+    targetId,
+    amount,
+  });
+}
+
+function applyEnemyDamageToPlayerBlock(
+  state: BattleState,
+  damage: number,
+): number {
+  if (state.player.block <= 0) {
+    return damage;
+  }
+
+  if (state.player.block >= damage) {
+    state.player.block -= damage;
+    logEnemyDamage(state, damage, "player");
+    return 0;
+  }
+
+  const absorbedByPlayerBlock = state.player.block;
+  state.player.block = 0;
+  logEnemyDamage(state, absorbedByPlayerBlock, "player");
+  return damage - absorbedByPlayerBlock;
+}
+
+function applyEnemyDamageToDefenders(
+  state: BattleState,
+  damage: number,
+): number {
+  let remainingDamage = damage;
+
+  for (const permanentId of state.blockingQueue) {
+    if (remainingDamage <= 0) {
+      break;
+    }
+
+    const permanent = state.battlefield.find((entry) => entry?.instanceId === permanentId);
+
+    if (!permanent) {
+      continue;
+    }
+
+    const beforeCombined = permanent.block + permanent.health;
+    remainingDamage = applyDamageToBlockAndHealth(remainingDamage, permanent);
+    const absorbedByPermanent = beforeCombined - (permanent.block + permanent.health);
+    logEnemyDamage(state, absorbedByPermanent, "permanent", permanent.instanceId);
+  }
+
+  return remainingDamage;
+}
+
+function applyEnemyDamageToPlayerHealth(
+  state: BattleState,
+  damage: number,
+): void {
+  if (damage <= 0) {
+    return;
+  }
+
+  state.player.health -= damage;
+  logEnemyDamage(state, damage, "player");
+}
+
+export function settleEnemyAttackDamage(state: BattleState, damage: number): BattleState {
+  let remainingDamage = damage;
+
+  remainingDamage = applyEnemyDamageToPlayerBlock(state, remainingDamage);
+  remainingDamage = applyEnemyDamageToDefenders(state, remainingDamage);
+  applyEnemyDamageToPlayerHealth(state, remainingDamage);
+
+  return state;
+}

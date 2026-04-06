@@ -308,6 +308,337 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         color: var(--muted);
       }
 
+      .trace-viewer-layout {
+        display: grid;
+        gap: 0.9rem;
+      }
+
+      .trace-viewer-hero {
+        display: grid;
+        gap: 0.85rem;
+        padding: 1.25rem;
+      }
+
+      .trace-viewer-hero-grid {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      @media (min-width: 980px) {
+        .trace-viewer-hero-grid {
+          grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+          align-items: start;
+        }
+      }
+
+      .trace-viewer-controls,
+      .trace-viewer-current-action,
+      .trace-viewer-log-panel {
+        display: grid;
+        gap: 0.55rem;
+      }
+
+      .trace-viewer-controls,
+      .trace-viewer-current-action {
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
+      }
+
+      .trace-viewer-summary-row,
+      .trace-viewer-button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+      }
+
+      .trace-viewer-inline-meta {
+        margin-bottom: 0;
+      }
+
+      .trace-viewer-keyboard-hint {
+        font-size: 0.92rem;
+      }
+
+      .trace-viewer-content-grid {
+        display: grid;
+        gap: 0.9rem;
+      }
+
+      @media (min-width: 1080px) {
+        .trace-viewer-content-grid {
+          grid-template-columns: minmax(0, 1.25fr) minmax(20rem, 0.95fr);
+          align-items: start;
+        }
+      }
+
+      .trace-viewer-main-column {
+        min-width: 0;
+      }
+
+      .trace-viewer-panels {
+        display: grid;
+        gap: 0.8rem;
+      }
+
+      @media (min-width: 760px) {
+        .trace-viewer-panels {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      .trace-viewer-panel {
+        display: grid;
+        gap: 0.35rem;
+        padding: 1.1rem 1.15rem;
+      }
+
+      .trace-viewer-hand-bar {
+        gap: 0.8rem;
+      }
+
+      .trace-viewer-panel-wide {
+        grid-column: 1 / -1;
+      }
+
+      .trace-viewer-section-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+
+      .trace-viewer-section-header span {
+        color: var(--muted);
+        font-size: 0.84rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .trace-viewer-list,
+      .trace-viewer-log {
+        display: grid;
+        gap: 0.35rem;
+        margin: 0;
+        padding-left: 1rem;
+        color: var(--muted);
+      }
+
+      .trace-viewer-log-panel {
+        padding: 1.1rem 1.15rem;
+      }
+
+      .trace-viewer-log-groups {
+        display: grid;
+        gap: 0.75rem;
+        max-height: 32rem;
+        overflow: auto;
+        padding-right: 0.2rem;
+      }
+
+      .trace-viewer-log-group {
+        display: grid;
+        gap: 0.45rem;
+      }
+
+      .trace-viewer-log-turn {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        width: fit-content;
+        padding: 0.32rem 0.62rem;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: rgba(255, 250, 240, 0.94);
+        color: var(--accent);
+        font-size: 0.84rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .trace-viewer-log {
+        gap: 0.4rem;
+        margin-left: 0;
+        padding-right: 0.35rem;
+      }
+
+      .trace-viewer-log-current {
+        color: var(--ink);
+        font-weight: 700;
+        background: rgba(154, 52, 18, 0.08);
+        border-radius: 12px;
+        padding: 0.3rem 0.45rem;
+      }
+
+      .trace-viewer-card-grid {
+        display: grid;
+        gap: 0.65rem;
+        grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+      }
+
+      .trace-viewer-hand-scroll {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(13rem, 16rem);
+        gap: 0.8rem;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 0.15rem 0.15rem 0.45rem;
+        scroll-snap-type: x proximity;
+      }
+
+      .trace-viewer-hand-card {
+        min-height: 100%;
+        scroll-snap-align: start;
+      }
+
+      .trace-viewer-board-grid {
+        align-items: start;
+      }
+
+      .trace-viewer-card {
+        display: grid;
+        gap: 0.35rem;
+        padding: 0.8rem 0.85rem;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.74);
+      }
+
+      .trace-viewer-card-empty {
+        background: rgba(255, 255, 255, 0.45);
+      }
+
+      .trace-viewer-card-meta {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .trace-viewer-card-header {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+
+      .trace-viewer-card-cost {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 1.9rem;
+        min-height: 1.9rem;
+        padding: 0.2rem 0.45rem;
+        border-radius: 999px;
+        border: 1px solid rgba(154, 52, 18, 0.2);
+        background: linear-gradient(135deg, rgba(251, 191, 36, 0.26), rgba(154, 52, 18, 0.14));
+        color: var(--accent);
+        font-weight: 800;
+        line-height: 1;
+      }
+
+      .trace-viewer-card-stats,
+      .trace-viewer-card-tags,
+      .trace-viewer-zone-row,
+      .trace-viewer-stat-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+      }
+
+      .trace-viewer-card-stats span,
+      .trace-viewer-card-tags span,
+      .trace-viewer-zone-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.28rem 0.52rem;
+        border-radius: 999px;
+        background: rgba(154, 52, 18, 0.08);
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
+      .trace-viewer-zone-row {
+        margin-top: 0.2rem;
+      }
+
+      .trace-viewer-hand-zones {
+        margin-top: 0;
+      }
+
+      .trace-viewer-stat-chip {
+        display: grid;
+        gap: 0.18rem;
+        min-width: 7rem;
+        padding: 0.55rem 0.72rem;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.68);
+      }
+
+      .trace-viewer-stat-chip span {
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .trace-viewer-stat-chip strong {
+        font-size: 0.98rem;
+        line-height: 1.2;
+      }
+
+      .trace-viewer-health-bar {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        height: 0.5rem;
+        border-radius: 999px;
+        background: rgba(17, 24, 39, 0.08);
+      }
+
+      .trace-viewer-health-bar-fill {
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #16a34a, #4ade80);
+        transition: width 180ms ease;
+      }
+
+      .ghost-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 2.45rem;
+        padding: 0.58rem 0.9rem;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.72);
+        color: var(--ink);
+        cursor: pointer;
+        font: inherit;
+        transition:
+          transform 140ms ease,
+          border-color 140ms ease,
+          background 140ms ease;
+      }
+
+      .ghost-button:hover:enabled {
+        transform: translateY(-1px);
+        border-color: rgba(154, 52, 18, 0.28);
+        background: rgba(255, 255, 255, 0.92);
+      }
+
+      .ghost-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
       .query-list {
         display: grid;
         gap: 0.5rem;
@@ -427,8 +758,8 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
 
       .primary-button,
       .ghost-button {
-        min-height: 2.8rem;
-        padding: 0.72rem 1rem;
+        min-height: 2.55rem;
+        padding: 0.64rem 0.95rem;
         border-radius: 999px;
         font: inherit;
         font-weight: 700;
