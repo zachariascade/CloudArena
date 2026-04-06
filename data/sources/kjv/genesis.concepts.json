@@ -1,0 +1,1102 @@
+[
+  {
+    "simple_name": "Adam",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 2,
+    "chapter_end": 5,
+    "confidence": 0.99,
+    "notes": "First man, gardener of Eden, and father at the dawn of the story."
+  },
+  {
+    "simple_name": "Eve",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 2,
+    "chapter_end": 4,
+    "confidence": 0.99,
+    "notes": "First woman, mother of all living, and participant in the fall."
+  },
+  {
+    "simple_name": "Cain",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 4,
+    "chapter_end": 4,
+    "confidence": 1,
+    "notes": "First murderer and marked wanderer."
+  },
+  {
+    "simple_name": "Abel",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 4,
+    "chapter_end": 4,
+    "confidence": 1,
+    "notes": "Righteous brother whose blood cries from the ground."
+  },
+  {
+    "simple_name": "Enoch",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 5,
+    "chapter_end": 5,
+    "confidence": 0.94,
+    "notes": "The man who walked with God and was not."
+  },
+  {
+    "simple_name": "Noah",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 5,
+    "chapter_end": 10,
+    "confidence": 1,
+    "notes": "Righteous survivor, ark-builder, and father of the post-flood world."
+  },
+  {
+    "simple_name": "Shem",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 9,
+    "chapter_end": 11,
+    "confidence": 0.93,
+    "notes": "Noah's son and ancestor of the line of promise."
+  },
+  {
+    "simple_name": "Ham",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 9,
+    "chapter_end": 10,
+    "confidence": 0.93,
+    "notes": "Noah's son tied to the post-flood shame scene."
+  },
+  {
+    "simple_name": "Japheth",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 9,
+    "chapter_end": 10,
+    "confidence": 0.93,
+    "notes": "Noah's son and forefather of many nations."
+  },
+  {
+    "simple_name": "Nimrod",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 10,
+    "chapter_end": 10,
+    "confidence": 0.97,
+    "notes": "Mighty hunter and emblematic early kingdom-builder."
+  },
+  {
+    "simple_name": "Abraham",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 12,
+    "chapter_end": 25,
+    "confidence": 1,
+    "notes": "Central patriarch of promise, covenant, and testing."
+  },
+  {
+    "simple_name": "Sarah",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 12,
+    "chapter_end": 23,
+    "confidence": 0.99,
+    "notes": "Matriarch of promise and mother of Isaac."
+  },
+  {
+    "simple_name": "Lot",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 12,
+    "chapter_end": 19,
+    "confidence": 0.97,
+    "notes": "Abram's nephew whose choices lead into the Sodom judgment arc."
+  },
+  {
+    "simple_name": "Hagar",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 16,
+    "chapter_end": 21,
+    "confidence": 0.98,
+    "notes": "Sarah's servant who encounters God in the wilderness."
+  },
+  {
+    "simple_name": "Ishmael",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 16,
+    "chapter_end": 25,
+    "confidence": 0.99,
+    "notes": "Abraham's son through Hagar, marked for wilderness destiny."
+  },
+  {
+    "simple_name": "Isaac",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 17,
+    "chapter_end": 35,
+    "confidence": 0.99,
+    "notes": "Promise child and patriarch bridging Abraham and Jacob."
+  },
+  {
+    "simple_name": "Rebekah",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 24,
+    "chapter_end": 28,
+    "confidence": 0.99,
+    "notes": "Isaac's bride and strategist in the blessing drama."
+  },
+  {
+    "simple_name": "Jacob",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 27,
+    "chapter_end": 50,
+    "confidence": 1,
+    "notes": "Patriarch of struggle, exile, return, blessing, and descent into Egypt."
+  },
+  {
+    "simple_name": "Esau",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 27,
+    "chapter_end": 36,
+    "confidence": 0.99,
+    "notes": "Brother whose blessing is stolen and whose line becomes Edom."
+  },
+  {
+    "simple_name": "Leah",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 29,
+    "chapter_end": 35,
+    "confidence": 0.98,
+    "notes": "Elder wife of Jacob and mother of many tribes."
+  },
+  {
+    "simple_name": "Rachel",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 29,
+    "chapter_end": 35,
+    "confidence": 0.98,
+    "notes": "Beloved wife of Jacob and mother of Joseph and Benjamin."
+  },
+  {
+    "simple_name": "Laban",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 29,
+    "chapter_end": 31,
+    "confidence": 0.99,
+    "notes": "Jacob's father-in-law and chief manipulator of the exile arc."
+  },
+  {
+    "simple_name": "Joseph",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 37,
+    "chapter_end": 50,
+    "confidence": 1,
+    "notes": "Dreamer, slave, prisoner, ruler, and reconciler of the family."
+  },
+  {
+    "simple_name": "Judah",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 37,
+    "chapter_end": 50,
+    "confidence": 0.99,
+    "notes": "Brother whose arc deepens from betrayal to leadership and blessing."
+  },
+  {
+    "simple_name": "Tamar",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 38,
+    "chapter_end": 38,
+    "confidence": 0.98,
+    "notes": "Judah's daughter-in-law whose bold reversal secures justice."
+  },
+  {
+    "simple_name": "Benjamin",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 35,
+    "chapter_end": 49,
+    "confidence": 0.99,
+    "notes": "Rachel's second son and focal point of Joseph's tests."
+  },
+  {
+    "simple_name": "Melchizedek",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 14,
+    "chapter_end": 14,
+    "confidence": 0.98,
+    "notes": "Priest-king of Salem who blesses Abram."
+  },
+  {
+    "simple_name": "Potiphar",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 39,
+    "chapter_end": 41,
+    "confidence": 0.97,
+    "notes": "Egyptian officer tied to Joseph's slavery and imprisonment."
+  },
+  {
+    "simple_name": "Potiphar's Wife",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Person",
+    "chapter_start": 39,
+    "chapter_end": 39,
+    "confidence": 0.98,
+    "notes": "False accuser in Joseph's temptation narrative."
+  },
+  {
+    "simple_name": "Eden",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Place",
+    "chapter_start": 2,
+    "chapter_end": 3,
+    "confidence": 0.99,
+    "notes": "Garden region where humanity begins."
+  },
+  {
+    "simple_name": "The Garden",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Place",
+    "chapter_start": 2,
+    "chapter_end": 3,
+    "confidence": 0.96,
+    "notes": "First sacred dwelling place and scene of the fall."
+  },
+  {
+    "simple_name": "Ararat",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Place",
+    "chapter_start": 8,
+    "chapter_end": 8,
+    "confidence": 0.95,
+    "notes": "Mountain region where the ark comes to rest."
+  },
+  {
+    "simple_name": "Babel",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Place",
+    "chapter_start": 10,
+    "chapter_end": 11,
+    "confidence": 0.97,
+    "notes": "City of ambition, confusion, and scattering."
+  },
+  {
+    "simple_name": "Shinar",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Place",
+    "chapter_start": 10,
+    "chapter_end": 11,
+    "confidence": 0.95,
+    "notes": "Region tied to Babel and human empire-building."
+  },
+  {
+    "simple_name": "Canaan",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Place",
+    "chapter_start": 12,
+    "chapter_end": 50,
+    "confidence": 0.99,
+    "notes": "Promised land of patriarchal wandering, altars, and burial hope."
+  },
+  {
+    "simple_name": "Egypt",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Place",
+    "chapter_start": 12,
+    "chapter_end": 50,
+    "confidence": 0.99,
+    "notes": "Land of famine refuge, slavery, power, and final descent."
+  },
+  {
+    "simple_name": "Bethel",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Place",
+    "chapter_start": 12,
+    "chapter_end": 35,
+    "confidence": 0.98,
+    "notes": "Site of altar, vow, dream, and renewal."
+  },
+  {
+    "simple_name": "Mamre",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Place",
+    "chapter_start": 13,
+    "chapter_end": 35,
+    "confidence": 0.96,
+    "notes": "Patriarchal dwelling place near Hebron."
+  },
+  {
+    "simple_name": "Sodom",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Place",
+    "chapter_start": 13,
+    "chapter_end": 19,
+    "confidence": 0.98,
+    "notes": "City of grievous sin and fiery overthrow."
+  },
+  {
+    "simple_name": "Gomorrah",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Place",
+    "chapter_start": 13,
+    "chapter_end": 19,
+    "confidence": 0.98,
+    "notes": "Companion city consumed in judgment."
+  },
+  {
+    "simple_name": "Moriah",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Place",
+    "chapter_start": 22,
+    "chapter_end": 22,
+    "confidence": 0.98,
+    "notes": "Mountain of Abraham's great test."
+  },
+  {
+    "simple_name": "Beersheba",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Place",
+    "chapter_start": 21,
+    "chapter_end": 46,
+    "confidence": 0.97,
+    "notes": "Settlement of wells, covenant, and patriarchal worship."
+  },
+  {
+    "simple_name": "Machpelah",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Place",
+    "chapter_start": 23,
+    "chapter_end": 50,
+    "confidence": 0.98,
+    "notes": "Burial cave and first purchased foothold in the promised land."
+  },
+  {
+    "simple_name": "Goshen",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Place",
+    "chapter_start": 45,
+    "chapter_end": 47,
+    "confidence": 0.98,
+    "notes": "Chosen settlement for Jacob's household in Egypt."
+  },
+  {
+    "simple_name": "Shechem",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Place",
+    "chapter_start": 33,
+    "chapter_end": 34,
+    "confidence": 0.94,
+    "notes": "City of Dinah's crisis and Simeon and Levi's revenge."
+  },
+  {
+    "simple_name": "Peniel",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Place",
+    "chapter_start": 32,
+    "chapter_end": 32,
+    "confidence": 0.97,
+    "notes": "Place named for seeing God face to face."
+  },
+  {
+    "simple_name": "Dothan",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Place",
+    "chapter_start": 37,
+    "chapter_end": 37,
+    "confidence": 0.93,
+    "notes": "Field where Joseph is found, stripped, and sold."
+  },
+  {
+    "simple_name": "Tree of Life",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Item",
+    "chapter_start": 2,
+    "chapter_end": 3,
+    "confidence": 0.98,
+    "notes": "Life-giving tree within the garden."
+  },
+  {
+    "simple_name": "Tree of Forbidden Knowledge",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Item",
+    "chapter_start": 2,
+    "chapter_end": 3,
+    "confidence": 0.98,
+    "notes": "Forbidden tree whose fruit triggers the fall."
+  },
+  {
+    "simple_name": "Fig Leaves Sewn Together",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Item",
+    "chapter_start": 3,
+    "chapter_end": 3,
+    "confidence": 0.92,
+    "notes": "First human attempt to cover shame."
+  },
+  {
+    "simple_name": "Garments of Skin",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Item",
+    "chapter_start": 3,
+    "chapter_end": 3,
+    "confidence": 0.94,
+    "notes": "Garments God provides after the fall."
+  },
+  {
+    "simple_name": "Coat of Many Colors",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Item",
+    "chapter_start": 37,
+    "chapter_end": 37,
+    "confidence": 0.99,
+    "notes": "Garment marking Joseph's favored status."
+  },
+  {
+    "simple_name": "The Coat of Many Colors",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Item",
+    "chapter_start": 37,
+    "chapter_end": 37,
+    "confidence": 0.98,
+    "notes": "Favored robe of Joseph in its more title-like card-facing phrasing."
+  },
+  {
+    "simple_name": "Ring of Authority",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Item",
+    "chapter_start": 41,
+    "chapter_end": 41,
+    "confidence": 0.96,
+    "notes": "Pharaoh's signet ring given to Joseph."
+  },
+  {
+    "simple_name": "Joseph's Garment",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Item",
+    "chapter_start": 39,
+    "chapter_end": 39,
+    "confidence": 0.96,
+    "notes": "Garment left behind in the false accusation scene."
+  },
+  {
+    "simple_name": "Silver in the Sack",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Item",
+    "chapter_start": 42,
+    "chapter_end": 44,
+    "confidence": 0.93,
+    "notes": "Returned money that intensifies fear and suspicion."
+  },
+  {
+    "simple_name": "Ark of Gopher Wood",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Relic",
+    "chapter_start": 6,
+    "chapter_end": 8,
+    "confidence": 0.99,
+    "notes": "Great vessel built for survival through the deluge."
+  },
+  {
+    "simple_name": "Flaming Sword of the East",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Relic",
+    "chapter_start": 3,
+    "chapter_end": 3,
+    "confidence": 0.95,
+    "notes": "Sword guarding the way back to life."
+  },
+  {
+    "simple_name": "Bow in the Clouds",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Relic",
+    "chapter_start": 9,
+    "chapter_end": 9,
+    "confidence": 0.99,
+    "notes": "Rainbow sign of restraint and covenant mercy."
+  },
+  {
+    "simple_name": "Stone Pillar of Bethel",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Relic",
+    "chapter_start": 28,
+    "chapter_end": 31,
+    "confidence": 0.95,
+    "notes": "Memorial stone Jacob anoints and sets upright."
+  },
+  {
+    "simple_name": "Rachel's Household Gods",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Relic",
+    "chapter_start": 31,
+    "chapter_end": 31,
+    "confidence": 0.96,
+    "notes": "Stolen images hidden during Jacob's departure."
+  },
+  {
+    "simple_name": "Heap of Witness",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Relic",
+    "chapter_start": 31,
+    "chapter_end": 31,
+    "confidence": 0.95,
+    "notes": "Stone boundary marker of the pact between Jacob and Laban."
+  },
+  {
+    "simple_name": "Judah's Pledge",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Relic",
+    "chapter_start": 38,
+    "chapter_end": 38,
+    "confidence": 0.95,
+    "notes": "Token left as security in the Tamar encounter."
+  },
+  {
+    "simple_name": "Joseph's Silver Cup",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Relic",
+    "chapter_start": 44,
+    "chapter_end": 44,
+    "confidence": 0.97,
+    "notes": "Planted cup that becomes the center of Joseph's final test."
+  },
+  {
+    "simple_name": "Joseph's Bones",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Relic",
+    "chapter_start": 50,
+    "chapter_end": 50,
+    "confidence": 0.98,
+    "notes": "Preserved remains carried forward as a future-exodus relic."
+  },
+  {
+    "simple_name": "Let There Be Light",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 1,
+    "chapter_end": 1,
+    "confidence": 1,
+    "notes": "First creative word that parts light from darkness."
+  },
+  {
+    "simple_name": "The Fall",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 3,
+    "chapter_end": 3,
+    "confidence": 1,
+    "notes": "Humanity's disobedience and corruption in Eden."
+  },
+  {
+    "simple_name": "Exile from Eden",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 3,
+    "chapter_end": 3,
+    "confidence": 0.99,
+    "notes": "Humanity is driven from the garden after the fall."
+  },
+  {
+    "simple_name": "Noah Builds the Ark",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 6,
+    "chapter_end": 6,
+    "confidence": 0.99,
+    "notes": "Noah obeys the preserving command before judgment falls."
+  },
+  {
+    "simple_name": "The Flood",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 7,
+    "chapter_end": 8,
+    "confidence": 1,
+    "notes": "World-covering judgment and reset of creation."
+  },
+  {
+    "simple_name": "The Ark Comes to Rest",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 8,
+    "chapter_end": 8,
+    "confidence": 0.96,
+    "notes": "Ark settles on the mountains after the waters recede."
+  },
+  {
+    "simple_name": "Tower of Babel",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 11,
+    "chapter_end": 11,
+    "confidence": 1,
+    "notes": "Humanity's great tower of pride and unified rebellion."
+  },
+  {
+    "simple_name": "Call of Abram",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 12,
+    "chapter_end": 12,
+    "confidence": 0.99,
+    "notes": "Abram leaves homeland and kindred at God's command."
+  },
+  {
+    "simple_name": "Rescue of Lot",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 14,
+    "chapter_end": 14,
+    "confidence": 0.97,
+    "notes": "Abram arms his house and recovers the captured."
+  },
+  {
+    "simple_name": "Birth of Isaac",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 21,
+    "chapter_end": 21,
+    "confidence": 0.99,
+    "notes": "Promise child is born at the appointed time."
+  },
+  {
+    "simple_name": "The Binding on Moriah",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 22,
+    "chapter_end": 22,
+    "confidence": 1,
+    "notes": "Abraham's climactic test with Isaac on the mountain."
+  },
+  {
+    "simple_name": "Stolen Blessing",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 27,
+    "chapter_end": 27,
+    "confidence": 0.99,
+    "notes": "Jacob receives the blessing meant for Esau."
+  },
+  {
+    "simple_name": "Jacob's Ladder",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Miracle",
+    "chapter_start": 28,
+    "chapter_end": 28,
+    "confidence": 1,
+    "notes": "Dream vision of a stairway joining earth and heaven with angels ascending and descending."
+  },
+  {
+    "simple_name": "Wrestling with God",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 32,
+    "chapter_end": 32,
+    "confidence": 1,
+    "notes": "Night struggle that transforms Jacob's identity."
+  },
+  {
+    "simple_name": "Joseph Sold into Egypt",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 37,
+    "chapter_end": 37,
+    "confidence": 0.99,
+    "notes": "Joseph is betrayed and sold by his brothers."
+  },
+  {
+    "simple_name": "Sold for Silver",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 37,
+    "chapter_end": 37,
+    "confidence": 0.98,
+    "notes": "Card-facing shorthand for Joseph's sale into the hands of traders."
+  },
+  {
+    "simple_name": "Judah and Tamar",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 38,
+    "chapter_end": 38,
+    "confidence": 0.97,
+    "notes": "Pledge, disguise, and vindication in Judah's household crisis."
+  },
+  {
+    "simple_name": "Pharaoh's Dreams",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 41,
+    "chapter_end": 41,
+    "confidence": 0.98,
+    "notes": "The doubled dream sequence that launches Joseph's rise."
+  },
+  {
+    "simple_name": "Joseph Reveals Himself",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 45,
+    "chapter_end": 45,
+    "confidence": 0.99,
+    "notes": "Recognition scene where the hidden brother is unveiled."
+  },
+  {
+    "simple_name": "Jacob Blesses Ephraim and Manasseh",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Event",
+    "chapter_start": 48,
+    "chapter_end": 48,
+    "confidence": 0.98,
+    "notes": "Crossed-hands blessing reshaping the next generation."
+  },
+  {
+    "simple_name": "Blood Cries from the Ground",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Judgment",
+    "chapter_start": 4,
+    "chapter_end": 4,
+    "confidence": 0.98,
+    "notes": "Blood-guilt judgment pronounced after Abel's murder."
+  },
+  {
+    "simple_name": "Fountains of the Great Deep",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Judgment",
+    "chapter_start": 7,
+    "chapter_end": 7,
+    "confidence": 0.99,
+    "notes": "Deep waters burst open as the deluge begins."
+  },
+  {
+    "simple_name": "Windows of Heaven Opened",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Judgment",
+    "chapter_start": 7,
+    "chapter_end": 7,
+    "confidence": 0.99,
+    "notes": "Heavens pour out in the opening of the flood."
+  },
+  {
+    "simple_name": "Confusion of Tongues",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Judgment",
+    "chapter_start": 11,
+    "chapter_end": 11,
+    "confidence": 0.99,
+    "notes": "Language judgment that fractures Babel's unity."
+  },
+  {
+    "simple_name": "Scattering from the Tower",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Judgment",
+    "chapter_start": 11,
+    "chapter_end": 11,
+    "confidence": 0.98,
+    "notes": "Humanity is scattered after Babel is judged."
+  },
+  {
+    "simple_name": "Destruction of Sodom and Gomorrah",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Judgment",
+    "chapter_start": 19,
+    "chapter_end": 19,
+    "confidence": 0.99,
+    "notes": "Fiery overthrow of the cities of the plain."
+  },
+  {
+    "simple_name": "Seven Years of Famine",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Judgment",
+    "chapter_start": 41,
+    "chapter_end": 41,
+    "confidence": 0.98,
+    "notes": "Severe famine that follows the years of plenty."
+  },
+  {
+    "simple_name": "Covenant of the Rainbow",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Law/Rite",
+    "chapter_start": 9,
+    "chapter_end": 9,
+    "confidence": 0.99,
+    "notes": "Covenant sign and promise after the flood."
+  },
+  {
+    "simple_name": "Circumcision as Covenant Token",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Law/Rite",
+    "chapter_start": 17,
+    "chapter_end": 17,
+    "confidence": 0.99,
+    "notes": "Required sign of the covenant for Abraham's house."
+  },
+  {
+    "simple_name": "Tithe to Melchizedek",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Law/Rite",
+    "chapter_start": 14,
+    "chapter_end": 14,
+    "confidence": 0.96,
+    "notes": "Abram gives a tenth to the priest-king of Salem."
+  },
+  {
+    "simple_name": "Covenant of Mizpah",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Law/Rite",
+    "chapter_start": 31,
+    "chapter_end": 31,
+    "confidence": 0.95,
+    "notes": "Boundary pact between Jacob and Laban."
+  },
+  {
+    "simple_name": "Image of God",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Theme/Symbol",
+    "chapter_start": 1,
+    "chapter_end": 1,
+    "confidence": 0.98,
+    "notes": "Humanity's defining identity and commission in creation."
+  },
+  {
+    "simple_name": "Mark of Cain",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Theme/Symbol",
+    "chapter_start": 4,
+    "chapter_end": 4,
+    "confidence": 0.96,
+    "notes": "Protective sign set on the first murderer."
+  },
+  {
+    "simple_name": "Walked with God",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Theme/Symbol",
+    "chapter_start": 5,
+    "chapter_end": 6,
+    "confidence": 0.96,
+    "notes": "Faithful intimacy motif attached to Enoch and Noah."
+  },
+  {
+    "simple_name": "Noah Found Grace",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Theme/Symbol",
+    "chapter_start": 6,
+    "chapter_end": 6,
+    "confidence": 0.97,
+    "notes": "Favor that marks Noah before the flood."
+  },
+  {
+    "simple_name": "Seven Days of Wonder",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Theme/Symbol",
+    "chapter_start": 1,
+    "chapter_end": 2,
+    "confidence": 0.95,
+    "notes": "Ordered creation pattern culminating in Sabbath rest."
+  },
+  {
+    "simple_name": "Covenant of Promise",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Theme/Symbol",
+    "chapter_start": 12,
+    "chapter_end": 22,
+    "confidence": 0.99,
+    "notes": "Promise of land, seed, blessing, and inheritance."
+  },
+  {
+    "simple_name": "Stars Without Number",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Theme/Symbol",
+    "chapter_start": 15,
+    "chapter_end": 15,
+    "confidence": 0.98,
+    "notes": "Promise image for Abraham's innumerable descendants."
+  },
+  {
+    "simple_name": "Promise of Isaac",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Theme/Symbol",
+    "chapter_start": 17,
+    "chapter_end": 18,
+    "confidence": 0.99,
+    "notes": "Announcement of the covenant son through Sarah."
+  },
+  {
+    "simple_name": "Pillar of Salt",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Theme/Symbol",
+    "chapter_start": 19,
+    "chapter_end": 19,
+    "confidence": 0.96,
+    "notes": "Lasting warning image from Lot's wife."
+  },
+  {
+    "simple_name": "Jacob Renamed Israel",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Theme/Symbol",
+    "chapter_start": 32,
+    "chapter_end": 35,
+    "confidence": 0.99,
+    "notes": "Identity transformation after the night struggle."
+  },
+  {
+    "simple_name": "Dreams of Sun and Sheaves",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Theme/Symbol",
+    "chapter_start": 37,
+    "chapter_end": 37,
+    "confidence": 0.99,
+    "notes": "Joseph's dreams of rule that provoke envy."
+  },
+  {
+    "simple_name": "What God Meant for Good",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Theme/Symbol",
+    "chapter_start": 50,
+    "chapter_end": 50,
+    "confidence": 0.99,
+    "notes": "Providence motif that resolves the Joseph story."
+  },
+  {
+    "simple_name": "Lion of Judah",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Theme/Symbol",
+    "chapter_start": 49,
+    "chapter_end": 49,
+    "confidence": 0.99,
+    "notes": "Royal beast image from Jacob's blessing."
+  },
+  {
+    "simple_name": "Scepter of Judah",
+    "source_book": "Genesis",
+    "source_period": "Genesis",
+    "category": "Theme/Symbol",
+    "chapter_start": 49,
+    "chapter_end": 49,
+    "confidence": 0.99,
+    "notes": "Kingship symbol attached to Judah's line."
+  }
+]

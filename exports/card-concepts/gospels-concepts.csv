@@ -1,0 +1,132 @@
+simple_name,source_book,source_period,category,chapter_start,chapter_end,confidence,notes
+Jesus Christ,Matthew,Gospels,Person,1,28,1.00,"Central figure of the fourfold Gospel witness, teacher, healer, and risen Lord."
+Mary,Luke,Gospels,Person,1,2,0.99,"Mother of Jesus, favored recipient of the annunciation and singer of the Magnificat."
+Joseph,Matthew,Gospels,Person,1,2,0.96,Guardian of Jesus in the infancy narrative and obedient dream-receiver.
+John the Baptist,Matthew,Gospels,Person,3,14,0.99,Forerunner in the wilderness whose ministry prepares the way for Jesus.
+Peter,Matthew,Gospels,Person,4,26,0.99,"Foremost disciple, confessor, wavering walker on the sea, and denier restored."
+Andrew,Mark,Gospels,Person,1,13,0.91,Early-called disciple and brother of Peter.
+James Son of Zebedee,Mark,Gospels,Person,1,10,0.89,Member of Jesus' inner circle and son of thunder.
+John Beloved Disciple,John,Gospels,Person,13,21,0.92,"Beloved witness at the supper, the cross, and the empty tomb."
+Matthew the Publican,Matthew,Gospels,Person,9,10,0.91,Tax collector called to discipleship.
+Judas Iscariot,Matthew,Gospels,Person,10,27,0.99,The betrayer whose kiss and silver frame the passion betrayal arc.
+Thomas,John,Gospels,Person,11,20,0.95,Disciple remembered for his demand to see and touch the risen Christ.
+Mary Magdalene,John,Gospels,Person,19,20,0.96,Faithful witness at the tomb and first herald of the resurrection in John.
+Martha,John,Gospels,Person,11,12,0.93,Sister of Lazarus whose confession frames the resurrection sign.
+Lazarus,John,Gospels,Person,11,12,0.97,Friend of Jesus called from the tomb in one of the Gospel's great signs.
+Pontius Pilate,Matthew,Gospels,Person,27,27,0.97,Roman governor who judges Jesus and yields to the crowd.
+Herod the Great,Matthew,Gospels,Person,2,2,0.95,King of the nativity crisis whose fear triggers the flight into Egypt.
+Herod Antipas,Luke,Gospels,Person,3,23,0.92,Tetrarch linked to John the Baptist's death and Jesus' mockery.
+Caiaphas,John,Gospels,Person,11,18,0.90,High priest tied to the plot against Jesus.
+Joseph of Arimathea,John,Gospels,Person,19,19,0.94,Disciple who provides the new tomb for Jesus' burial.
+Nicodemus,John,Gospels,Person,3,19,0.94,Night visitor who appears again at Jesus' burial.
+Mary of Bethany,John,Gospels,Person,11,12,0.94,Sister of Martha who anoints Jesus before the passion.
+Zechariah,Luke,Gospels,Person,1,1,0.95,Priest struck silent in the temple before John's birth.
+Elisabeth,Luke,Gospels,Person,1,1,0.95,Mother of John the Baptist and witness to Mary's visitation.
+Simeon,Luke,Gospels,Person,2,2,0.93,Temple watcher who blesses the child Jesus.
+Anna the Prophetess,Luke,Gospels,Person,2,2,0.92,Aged prophetess who praises God over the child in the temple.
+Gabriel,Luke,Gospels,Person,1,1,0.95,Angel herald of John and Jesus in Luke's opening visions.
+Zacchaeus,Luke,Gospels,Person,19,19,0.94,Tree-climbing tax collector visited by Jesus in Jericho.
+Jairus,Mark,Gospels,Person,5,5,0.92,Ruler of the synagogue whose daughter is restored.
+Samaritan Woman,John,Gospels,Person,4,4,0.95,Well-side conversation partner who becomes an early witness.
+Blind Bartimaeus,Mark,Gospels,Person,10,10,0.93,Persistent roadside beggar healed near Jericho.
+Centurion of Capernaum,Matthew,Gospels,Person,8,8,0.92,Gentile officer whose faith becomes exemplary.
+Roman Centurion at the Cross,Mark,Gospels,Person,15,15,0.91,Execution witness who confesses Jesus at the crucifixion.
+Magi from the East,Matthew,Gospels,Person,2,2,0.92,Star-led visitors who bring kingly gifts.
+Legion,Mark,Gospels,Creature,5,5,0.90,Collective demonic presence driven from the Gerasene man.
+Bethlehem,Matthew,Gospels,Place,2,2,0.98,Birth city of Jesus and city of David memory.
+Nazareth,Matthew,Gospels,Place,2,4,0.96,Home city associated with Jesus' upbringing.
+Jordan River,Matthew,Gospels,Place,3,3,0.98,River of John's baptizing and Jesus' revealed commissioning.
+Wilderness of Temptation,Matthew,Gospels,Place,4,4,0.95,Desert testing ground after the baptism.
+Cana,John,Gospels,Place,2,4,0.94,Village of the wedding sign and later healing word.
+Capernaum,Matthew,Gospels,Place,4,13,0.95,"Major Galilean base of ministry, healing, and teaching."
+Sea of Galilee,Matthew,Gospels,Place,4,15,0.96,"Waters of calling, storms, and miracles."
+Bethsaida,Mark,Gospels,Place,6,8,0.87,Fishing-region setting tied to provision and healing.
+Caesarea Philippi,Matthew,Gospels,Place,16,16,0.92,Site of Peter's confession and the gates-of-hell saying.
+Bethany,John,Gospels,Place,11,12,0.95,"Village of Lazarus, Martha, and Mary near Jerusalem."
+Jericho,Luke,Gospels,Place,18,19,0.92,City tied to mercy on the road and Zacchaeus in the tree.
+Jerusalem,Matthew,Gospels,Place,21,28,0.99,"City of entry, teaching, trial, crucifixion, and resurrection witness."
+Temple Courts,Matthew,Gospels,Place,21,24,0.95,"Charged setting for cleansing, teaching, and confrontation."
+Upper Room,Luke,Gospels,Place,22,24,0.90,Prepared chamber linked to the final meal and resurrection appearances.
+Mount of Olives,Luke,Gospels,Place,19,24,0.95,"Hill of approach, discourse, prayer, and departure."
+Gethsemane,Matthew,Gospels,Place,26,26,0.97,"Garden of prayer, sorrow, and arrest."
+Golgotha,John,Gospels,Place,19,19,0.98,Place of the Skull where Jesus is crucified.
+Emmaus,Luke,Gospels,Place,24,24,0.92,Village of post-resurrection recognition on the road.
+Pool of Bethesda,John,Gospels,Place,5,5,0.90,Poolside setting of the long-disabled man's healing.
+Pool of Siloam,John,Gospels,Place,9,9,0.88,Waters of sending tied to the healing of the man born blind.
+Empty Tomb,John,Gospels,Place,20,20,0.98,Burial place transformed into the sign of resurrection victory.
+Star of Bethlehem,Matthew,Gospels,Relic,2,2,0.96,Guiding sign that leads the Magi to the child.
+Gifts of the Magi,Matthew,Gospels,Item,2,2,0.93,"Gold, frankincense, and myrrh brought to the newborn king."
+Manger,Luke,Gospels,Item,2,2,0.95,Lowly cradle of the nativity scene.
+Wedding Waterpots,John,Gospels,Item,2,2,0.91,Stone vessels transformed into the setting of Jesus' first sign.
+Loaves and Fishes,John,Gospels,Item,6,6,0.96,Provision symbols multiplied in the wilderness feeding.
+Alabaster Jar,Mark,Gospels,Relic,14,14,0.93,Precious vessel broken in an act of anointing before the burial.
+Palm Branches,John,Gospels,Item,12,12,0.91,Victory branches spread during the triumphal entry.
+Thirty Pieces of Silver,Matthew,Gospels,Item,26,27,0.96,Betrayal payment that becomes a haunting passion emblem.
+Basin and Towel,John,Gospels,Item,13,13,0.90,Service implements of the foot-washing scene.
+Crown of Thorns,John,Gospels,Relic,19,19,0.97,Mocking royal emblem placed on Jesus in the passion.
+Seamless Robe,John,Gospels,Relic,19,19,0.90,Garment not torn but cast over by lot at the cross.
+Cross of Crucifixion,John,Gospels,Relic,19,19,0.98,Central instrument of the Gospel passion climax.
+Burial Cloths,John,Gospels,Relic,20,20,0.90,Folded grave linens left behind in the tomb.
+Stone Rolled Away,Matthew,Gospels,Item,28,28,0.91,Barrier-stone moved from the tomb in resurrection imagery.
+Annunciation,Luke,Gospels,Event,1,1,0.97,Gabriel's message to Mary announcing the conception of Jesus.
+Visitation,Luke,Gospels,Event,1,1,0.92,Meeting of Mary and Elisabeth with blessing and song.
+Nativity,Luke,Gospels,Event,2,2,0.99,Birth of Jesus in humble circumstances.
+Adoration of the Shepherds,Luke,Gospels,Event,2,2,0.92,The shepherds' angel-announced visit to the newborn child.
+Visit of the Magi,Matthew,Gospels,Event,2,2,0.95,Eastern sages arrive under the sign of the star.
+Flight into Egypt,Matthew,Gospels,Event,2,2,0.95,Holy family's escape from Herod's threat.
+Baptism of Jesus,Matthew,Gospels,Event,3,3,0.98,Public inauguration scene in the Jordan.
+Spirit Descending Like a Dove,Matthew,Gospels,Miracle,3,3,0.94,Visible sign of divine approval at the baptism.
+Voice from Heaven,Matthew,Gospels,Miracle,3,3,0.93,Heavenly declaration over the beloved Son.
+Temptation in the Wilderness,Matthew,Gospels,Event,4,4,0.98,Forty-day testing of Jesus in the desert.
+Calling of the First Disciples,Matthew,Gospels,Event,4,4,0.93,Fishers are summoned to become fishers of men.
+Sermon on the Mount,Matthew,Gospels,Event,5,7,0.98,Foundational mountain teaching on kingdom life.
+Beatitudes,Matthew,Gospels,Theme/Symbol,5,5,0.96,Blessed-sayings that define upside-down kingdom values.
+Lord's Prayer,Matthew,Gospels,Law/Rite,6,6,0.96,Model prayer placed at the heart of Jesus' instruction.
+Kingdom of Heaven,Matthew,Gospels,Theme/Symbol,4,25,0.97,Signature Gospel proclamation of divine reign breaking in.
+Parable of the Sower,Matthew,Gospels,Theme/Symbol,13,13,0.93,Seed-scattering image for hearing and fruitfulness.
+Mustard Seed,Matthew,Gospels,Theme/Symbol,13,13,0.92,Tiny beginning that becomes a sheltering kingdom image.
+Narrow Gate,Matthew,Gospels,Theme/Symbol,7,7,0.90,Compressed image of difficult but life-giving discipleship.
+Healing of the Leper,Matthew,Gospels,Miracle,8,8,0.91,Purifying touch miracle early in the Galilean ministry.
+Healing of the Paralytic,Mark,Gospels,Miracle,2,2,0.92,Forgiveness and healing converge in the lowered-mat scene.
+Centurion's Servant Healed,Matthew,Gospels,Miracle,8,8,0.90,Distance-healing tied to remarkable faith.
+Calming the Storm,Mark,Gospels,Miracle,4,4,0.95,Wind and waves obey Jesus' rebuke.
+Walking on Water,Matthew,Gospels,Miracle,14,14,0.96,Sea-crossing miracle joined to Peter's wavering steps.
+Feeding of the Five Thousand,John,Gospels,Miracle,6,6,0.98,Loaves-and-fishes provision sign for the multitude.
+Feeding of the Four Thousand,Matthew,Gospels,Miracle,15,15,0.90,Second wilderness feeding miracle with basket imagery.
+Transfiguration,Matthew,Gospels,Event,17,17,0.98,Mountain revelation of glory before chosen disciples.
+Legion Cast into Swine,Mark,Gospels,Miracle,5,5,0.93,Exorcism climax that sends demons into the herd.
+Jairus's Daughter Raised,Mark,Gospels,Miracle,5,5,0.93,Dead child restored with a command to arise.
+Woman with an Issue of Blood,Mark,Gospels,Miracle,5,5,0.92,Healing by touch on the way to Jairus' house.
+The Good Samaritan,Luke,Gospels,Theme/Symbol,10,10,0.98,Mercy parable centered on the wounded traveler and unexpected neighbor.
+The Prodigal Son,Luke,Gospels,Theme/Symbol,15,15,0.98,Homecoming parable of squandered inheritance and lavish welcome.
+The Lost Sheep,Luke,Gospels,Theme/Symbol,15,15,0.94,Search-and-recovery image of divine joy.
+The Rich Fool,Luke,Gospels,Theme/Symbol,12,12,0.91,Barn-building parable against hoarding life.
+The Pharisee and the Publican,Luke,Gospels,Theme/Symbol,18,18,0.92,Prayer contrast between self-righteousness and humility.
+Zacchaeus in the Sycamore,Luke,Gospels,Event,19,19,0.91,Salvation comes to the house of the tree-climbing tax collector.
+Water into Wine,John,Gospels,Miracle,2,2,0.98,First sign in Cana where water becomes choice wine.
+New Birth from Above,John,Gospels,Theme/Symbol,3,3,0.94,Born-again teaching from Jesus' night conversation with Nicodemus.
+Living Water,John,Gospels,Theme/Symbol,4,4,0.95,Well imagery for the Spirit's lasting satisfaction.
+Healing at Bethesda,John,Gospels,Miracle,5,5,0.93,Long-disabled man restored beside the pool.
+Bread of Life,John,Gospels,Theme/Symbol,6,6,0.96,Sustenance metaphor flowing out of the feeding sign.
+Light of the World,John,Gospels,Theme/Symbol,8,9,0.96,Radiant identity claim paired with sight-giving works.
+Healing the Man Born Blind,John,Gospels,Miracle,9,9,0.95,"Sight miracle with clay, washing, and testimony."
+Good Shepherd,John,Gospels,Theme/Symbol,10,10,0.96,"Pastoral image of sacrificial care, voice, and protection."
+Raising of Lazarus,John,Gospels,Miracle,11,11,0.98,Tomb-command sign that intensifies the road to the cross.
+Triumphal Entry,John,Gospels,Event,12,12,0.98,Jesus enters Jerusalem to acclaim and palm branches.
+Cleansing of the Temple,Matthew,Gospels,Event,21,21,0.96,Merchants are driven out of the house of prayer.
+Widow's Mite,Luke,Gospels,Theme/Symbol,21,21,0.90,Small offering made weighty by sacrificial devotion.
+The Last Supper,Luke,Gospels,Event,22,22,0.99,Final meal where covenant words frame bread and cup.
+Washing of the Feet,John,Gospels,Law/Rite,13,13,0.92,Embodied lesson in humble service using basin and towel.
+Vine and Branches,John,Gospels,Theme/Symbol,15,15,0.94,Fruitfulness image grounded in abiding union.
+Betrayer's Kiss,Matthew,Gospels,Event,26,26,0.95,The arrest signal that turns intimacy into betrayal.
+Denial before the Rooster's Crow,Matthew,Gospels,Event,26,26,0.95,Peter's collapse under pressure before dawn.
+Trial before Pilate,John,Gospels,Judgment,18,19,0.97,Roman hearing that culminates in the sentence of crucifixion.
+Crucifixion,John,Gospels,Event,19,19,1.00,The central passion event at Golgotha.
+Darkness over the Land,Luke,Gospels,Judgment,23,23,0.92,Cosmic sign that accompanies the death of Jesus.
+Veil Torn in Two,Matthew,Gospels,Miracle,27,27,0.94,Temple curtain split at the climactic moment of death.
+Resurrection,John,Gospels,Event,20,20,1.00,Victory over death announced at the empty tomb and in appearances.
+Road to Emmaus,Luke,Gospels,Event,24,24,0.96,"Journey of hidden presence, burning hearts, and revealed bread-breaking."
+Doubting Thomas,John,Gospels,Event,20,20,0.93,Resurrection appearance that answers unbelief with wounds.
+Breakfast by the Sea,John,Gospels,Event,21,21,0.90,Risen Jesus feeds his disciples beside the water.
+Great Commission,Matthew,Gospels,Event,28,28,0.97,Mountain sending of the disciples to all nations.
+Ascension,Luke,Gospels,Event,24,24,0.96,Departure blessing that closes Luke's Gospel.

@@ -9,3 +9,4 @@
 - [EARLY_WORLD_BRIEF.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/content/biblical-series/EARLY_WORLD_BRIEF.md)
 - [EARLY_WORLD_FIRST_PASS_CARD_LIST.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/content/biblical-series/EARLY_WORLD_FIRST_PASS_CARD_LIST.md)
 - [PATRIARCHS_BRIEF.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/content/biblical-series/PATRIARCHS_BRIEF.md)
+- [GOSPELS_CONCEPT_PIPELINE_HANDOFF.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/content/biblical-series/GOSPELS_CONCEPT_PIPELINE_HANDOFF.md)

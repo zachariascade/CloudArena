@@ -1,0 +1,7 @@
+{
+  "book": "Genesis",
+  "chapterCount": 50,
+  "sourcePeriod": "Genesis",
+  "rawSourcePath": "data/sources/kjv/genesis.raw.txt",
+  "normalizedSourcePath": "data/sources/kjv/genesis.json"
+}

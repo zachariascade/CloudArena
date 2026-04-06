@@ -1,0 +1,80 @@
+simple_name,source,mtg_classification
+Jesus Christ,Luke,Legendary Creature
+Mary,Luke,Legendary Creature
+Joseph,Luke,Legendary Creature
+Zechariah,Luke,Legendary Creature
+Elisabeth,Luke,Legendary Creature
+John the Baptist,Luke,Legendary Creature
+Gabriel,Luke,Legendary Creature
+Simeon,Luke,Legendary Creature
+Anna the Prophetess,Luke,Legendary Creature
+Peter,Luke,Legendary Creature
+Mary Magdalene,Luke,Legendary Creature
+Martha,Luke,Legendary Creature
+Lazarus,Luke,Legendary Creature
+Zacchaeus,Luke,Legendary Creature
+Herod Antipas,Luke,Legendary Creature
+Pontius Pilate,Luke,Legendary Creature
+Centurion of Capernaum,Luke,Creature
+Good Samaritan,Luke,Creature
+Prodigal Son,Luke,Creature
+Rich Fool,Luke,Creature
+Pharisee and Publican,Luke,Creature
+Thief on the Cross,Luke,Creature
+Two Emmaus Disciples,Luke,Creature
+Bethlehem,Luke,Land
+Nazareth,Luke,Land
+Jordan River,Luke,Land
+Wilderness of Temptation,Luke,Land
+Capernaum,Luke,Land
+Sea of Galilee,Luke,Land
+Samaria,Luke,Land
+Jericho,Luke,Land
+Jerusalem,Luke,Land
+Temple Courts,Luke,Land
+Upper Room,Luke,Land
+Mount of Olives,Luke,Land
+Emmaus,Luke,Land
+Bethany,Luke,Land
+Manger,Luke,Artifact
+Scroll of Isaiah,Luke,Artifact
+Bread and Fish,Luke,Artifact
+Widow's Mite,Luke,Artifact
+Oil and Wine,Luke,Artifact
+Cup of the New Covenant,Luke,Artifact
+Stone Rolled Away,Luke,Artifact
+Cross of Crucifixion,Luke,Artifact
+Myrrh and Spices,Luke,Artifact
+Great Catch of Fish,Luke,Artifact
+Annunciation,Luke,Sorcery
+Visitation,Luke,Sorcery
+Nativity,Luke,Sorcery
+Adoration of the Shepherds,Luke,Sorcery
+Presentation in the Temple,Luke,Sorcery
+Boy Jesus in the Temple,Luke,Sorcery
+Baptism of Jesus,Luke,Sorcery
+Temptation in the Wilderness,Luke,Saga
+Calling of the First Disciples,Luke,Sorcery
+Sermon on the Plain,Luke,Enchantment
+Healing of the Centurion's Servant,Luke,Instant
+Raising of the Widow's Son,Luke,Sorcery
+Transfiguration,Luke,Sorcery
+The Good Samaritan,Luke,Enchantment
+The Rich Fool,Luke,Enchantment
+The Lost Sheep,Luke,Enchantment
+The Lost Coin,Luke,Enchantment
+The Prodigal Son,Luke,Enchantment
+The Pharisee and the Publican,Luke,Enchantment
+Mary and Martha,Luke,Enchantment
+Zacchaeus in the Sycamore,Luke,Sorcery
+The Last Supper,Luke,Enchantment
+Prayer on the Mount of Olives,Luke,Instant
+Betrayal and Arrest,Luke,Battle
+Trial Before Pilate,Luke,Battle
+Crucifixion,Luke,Battle
+Emmaus Road,Luke,Sorcery
+Resurrection,Luke,Sorcery
+Ascension,Luke,Sorcery
+Sending of the Seventy,Luke,Sorcery
+Widow's Offering,Luke,Instant
+Good Thief,Luke,Creature

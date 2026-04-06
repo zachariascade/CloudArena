@@ -1,0 +1,111 @@
+simple_name,source_book,source_period,category,chapter_start,chapter_end,confidence,notes
+Adam,Genesis,Genesis,Person,2,5,0.99,"First man, gardener of Eden, and father at the dawn of the story."
+Eve,Genesis,Genesis,Person,2,4,0.99,"First woman, mother of all living, and participant in the fall."
+Cain,Genesis,Genesis,Person,4,4,1.00,First murderer and marked wanderer.
+Abel,Genesis,Genesis,Person,4,4,1.00,Righteous brother whose blood cries from the ground.
+Enoch,Genesis,Genesis,Person,5,5,0.94,The man who walked with God and was not.
+Noah,Genesis,Genesis,Person,5,10,1.00,"Righteous survivor, ark-builder, and father of the post-flood world."
+Shem,Genesis,Genesis,Person,9,11,0.93,Noah's son and ancestor of the line of promise.
+Ham,Genesis,Genesis,Person,9,10,0.93,Noah's son tied to the post-flood shame scene.
+Japheth,Genesis,Genesis,Person,9,10,0.93,Noah's son and forefather of many nations.
+Nimrod,Genesis,Genesis,Person,10,10,0.97,Mighty hunter and emblematic early kingdom-builder.
+Abraham,Genesis,Genesis,Person,12,25,1.00,"Central patriarch of promise, covenant, and testing."
+Sarah,Genesis,Genesis,Person,12,23,0.99,Matriarch of promise and mother of Isaac.
+Lot,Genesis,Genesis,Person,12,19,0.97,Abram's nephew whose choices lead into the Sodom judgment arc.
+Hagar,Genesis,Genesis,Person,16,21,0.98,Sarah's servant who encounters God in the wilderness.
+Ishmael,Genesis,Genesis,Person,16,25,0.99,"Abraham's son through Hagar, marked for wilderness destiny."
+Isaac,Genesis,Genesis,Person,17,35,0.99,Promise child and patriarch bridging Abraham and Jacob.
+Rebekah,Genesis,Genesis,Person,24,28,0.99,Isaac's bride and strategist in the blessing drama.
+Jacob,Genesis,Genesis,Person,27,50,1.00,"Patriarch of struggle, exile, return, blessing, and descent into Egypt."
+Esau,Genesis,Genesis,Person,27,36,0.99,Brother whose blessing is stolen and whose line becomes Edom.
+Leah,Genesis,Genesis,Person,29,35,0.98,Elder wife of Jacob and mother of many tribes.
+Rachel,Genesis,Genesis,Person,29,35,0.98,Beloved wife of Jacob and mother of Joseph and Benjamin.
+Laban,Genesis,Genesis,Person,29,31,0.99,Jacob's father-in-law and chief manipulator of the exile arc.
+Joseph,Genesis,Genesis,Person,37,50,1.00,"Dreamer, slave, prisoner, ruler, and reconciler of the family."
+Judah,Genesis,Genesis,Person,37,50,0.99,Brother whose arc deepens from betrayal to leadership and blessing.
+Tamar,Genesis,Genesis,Person,38,38,0.98,Judah's daughter-in-law whose bold reversal secures justice.
+Benjamin,Genesis,Genesis,Person,35,49,0.99,Rachel's second son and focal point of Joseph's tests.
+Melchizedek,Genesis,Genesis,Person,14,14,0.98,Priest-king of Salem who blesses Abram.
+Potiphar,Genesis,Genesis,Person,39,41,0.97,Egyptian officer tied to Joseph's slavery and imprisonment.
+Potiphar's Wife,Genesis,Genesis,Person,39,39,0.98,False accuser in Joseph's temptation narrative.
+Eden,Genesis,Genesis,Place,2,3,0.99,Garden region where humanity begins.
+The Garden,Genesis,Genesis,Place,2,3,0.96,First sacred dwelling place and scene of the fall.
+Ararat,Genesis,Genesis,Place,8,8,0.95,Mountain region where the ark comes to rest.
+Babel,Genesis,Genesis,Place,10,11,0.97,"City of ambition, confusion, and scattering."
+Shinar,Genesis,Genesis,Place,10,11,0.95,Region tied to Babel and human empire-building.
+Canaan,Genesis,Genesis,Place,12,50,0.99,"Promised land of patriarchal wandering, altars, and burial hope."
+Egypt,Genesis,Genesis,Place,12,50,0.99,"Land of famine refuge, slavery, power, and final descent."
+Bethel,Genesis,Genesis,Place,12,35,0.98,"Site of altar, vow, dream, and renewal."
+Mamre,Genesis,Genesis,Place,13,35,0.96,Patriarchal dwelling place near Hebron.
+Sodom,Genesis,Genesis,Place,13,19,0.98,City of grievous sin and fiery overthrow.
+Gomorrah,Genesis,Genesis,Place,13,19,0.98,Companion city consumed in judgment.
+Moriah,Genesis,Genesis,Place,22,22,0.98,Mountain of Abraham's great test.
+Beersheba,Genesis,Genesis,Place,21,46,0.97,"Settlement of wells, covenant, and patriarchal worship."
+Machpelah,Genesis,Genesis,Place,23,50,0.98,Burial cave and first purchased foothold in the promised land.
+Goshen,Genesis,Genesis,Place,45,47,0.98,Chosen settlement for Jacob's household in Egypt.
+Shechem,Genesis,Genesis,Place,33,34,0.94,City of Dinah's crisis and Simeon and Levi's revenge.
+Peniel,Genesis,Genesis,Place,32,32,0.97,Place named for seeing God face to face.
+Dothan,Genesis,Genesis,Place,37,37,0.93,"Field where Joseph is found, stripped, and sold."
+Tree of Life,Genesis,Genesis,Item,2,3,0.98,Life-giving tree within the garden.
+Tree of Forbidden Knowledge,Genesis,Genesis,Item,2,3,0.98,Forbidden tree whose fruit triggers the fall.
+Fig Leaves Sewn Together,Genesis,Genesis,Item,3,3,0.92,First human attempt to cover shame.
+Garments of Skin,Genesis,Genesis,Item,3,3,0.94,Garments God provides after the fall.
+Coat of Many Colors,Genesis,Genesis,Item,37,37,0.99,Garment marking Joseph's favored status.
+The Coat of Many Colors,Genesis,Genesis,Item,37,37,0.98,Favored robe of Joseph in its more title-like card-facing phrasing.
+Ring of Authority,Genesis,Genesis,Item,41,41,0.96,Pharaoh's signet ring given to Joseph.
+Joseph's Garment,Genesis,Genesis,Item,39,39,0.96,Garment left behind in the false accusation scene.
+Silver in the Sack,Genesis,Genesis,Item,42,44,0.93,Returned money that intensifies fear and suspicion.
+Ark of Gopher Wood,Genesis,Genesis,Relic,6,8,0.99,Great vessel built for survival through the deluge.
+Flaming Sword of the East,Genesis,Genesis,Relic,3,3,0.95,Sword guarding the way back to life.
+Bow in the Clouds,Genesis,Genesis,Relic,9,9,0.99,Rainbow sign of restraint and covenant mercy.
+Stone Pillar of Bethel,Genesis,Genesis,Relic,28,31,0.95,Memorial stone Jacob anoints and sets upright.
+Rachel's Household Gods,Genesis,Genesis,Relic,31,31,0.96,Stolen images hidden during Jacob's departure.
+Heap of Witness,Genesis,Genesis,Relic,31,31,0.95,Stone boundary marker of the pact between Jacob and Laban.
+Judah's Pledge,Genesis,Genesis,Relic,38,38,0.95,Token left as security in the Tamar encounter.
+Joseph's Silver Cup,Genesis,Genesis,Relic,44,44,0.97,Planted cup that becomes the center of Joseph's final test.
+Joseph's Bones,Genesis,Genesis,Relic,50,50,0.98,Preserved remains carried forward as a future-exodus relic.
+Let There Be Light,Genesis,Genesis,Event,1,1,1.00,First creative word that parts light from darkness.
+The Fall,Genesis,Genesis,Event,3,3,1.00,Humanity's disobedience and corruption in Eden.
+Exile from Eden,Genesis,Genesis,Event,3,3,0.99,Humanity is driven from the garden after the fall.
+Noah Builds the Ark,Genesis,Genesis,Event,6,6,0.99,Noah obeys the preserving command before judgment falls.
+The Flood,Genesis,Genesis,Event,7,8,1.00,World-covering judgment and reset of creation.
+The Ark Comes to Rest,Genesis,Genesis,Event,8,8,0.96,Ark settles on the mountains after the waters recede.
+Tower of Babel,Genesis,Genesis,Event,11,11,1.00,Humanity's great tower of pride and unified rebellion.
+Call of Abram,Genesis,Genesis,Event,12,12,0.99,Abram leaves homeland and kindred at God's command.
+Rescue of Lot,Genesis,Genesis,Event,14,14,0.97,Abram arms his house and recovers the captured.
+Birth of Isaac,Genesis,Genesis,Event,21,21,0.99,Promise child is born at the appointed time.
+The Binding on Moriah,Genesis,Genesis,Event,22,22,1.00,Abraham's climactic test with Isaac on the mountain.
+Stolen Blessing,Genesis,Genesis,Event,27,27,0.99,Jacob receives the blessing meant for Esau.
+Jacob's Ladder,Genesis,Genesis,Miracle,28,28,1.00,Dream vision of a stairway joining earth and heaven with angels ascending and descending.
+Wrestling with God,Genesis,Genesis,Event,32,32,1.00,Night struggle that transforms Jacob's identity.
+Joseph Sold into Egypt,Genesis,Genesis,Event,37,37,0.99,Joseph is betrayed and sold by his brothers.
+Sold for Silver,Genesis,Genesis,Event,37,37,0.98,Card-facing shorthand for Joseph's sale into the hands of traders.
+Judah and Tamar,Genesis,Genesis,Event,38,38,0.97,"Pledge, disguise, and vindication in Judah's household crisis."
+Pharaoh's Dreams,Genesis,Genesis,Event,41,41,0.98,The doubled dream sequence that launches Joseph's rise.
+Joseph Reveals Himself,Genesis,Genesis,Event,45,45,0.99,Recognition scene where the hidden brother is unveiled.
+Jacob Blesses Ephraim and Manasseh,Genesis,Genesis,Event,48,48,0.98,Crossed-hands blessing reshaping the next generation.
+Blood Cries from the Ground,Genesis,Genesis,Judgment,4,4,0.98,Blood-guilt judgment pronounced after Abel's murder.
+Fountains of the Great Deep,Genesis,Genesis,Judgment,7,7,0.99,Deep waters burst open as the deluge begins.
+Windows of Heaven Opened,Genesis,Genesis,Judgment,7,7,0.99,Heavens pour out in the opening of the flood.
+Confusion of Tongues,Genesis,Genesis,Judgment,11,11,0.99,Language judgment that fractures Babel's unity.
+Scattering from the Tower,Genesis,Genesis,Judgment,11,11,0.98,Humanity is scattered after Babel is judged.
+Destruction of Sodom and Gomorrah,Genesis,Genesis,Judgment,19,19,0.99,Fiery overthrow of the cities of the plain.
+Seven Years of Famine,Genesis,Genesis,Judgment,41,41,0.98,Severe famine that follows the years of plenty.
+Covenant of the Rainbow,Genesis,Genesis,Law/Rite,9,9,0.99,Covenant sign and promise after the flood.
+Circumcision as Covenant Token,Genesis,Genesis,Law/Rite,17,17,0.99,Required sign of the covenant for Abraham's house.
+Tithe to Melchizedek,Genesis,Genesis,Law/Rite,14,14,0.96,Abram gives a tenth to the priest-king of Salem.
+Covenant of Mizpah,Genesis,Genesis,Law/Rite,31,31,0.95,Boundary pact between Jacob and Laban.
+Image of God,Genesis,Genesis,Theme/Symbol,1,1,0.98,Humanity's defining identity and commission in creation.
+Mark of Cain,Genesis,Genesis,Theme/Symbol,4,4,0.96,Protective sign set on the first murderer.
+Walked with God,Genesis,Genesis,Theme/Symbol,5,6,0.96,Faithful intimacy motif attached to Enoch and Noah.
+Noah Found Grace,Genesis,Genesis,Theme/Symbol,6,6,0.97,Favor that marks Noah before the flood.
+Seven Days of Wonder,Genesis,Genesis,Theme/Symbol,1,2,0.95,Ordered creation pattern culminating in Sabbath rest.
+Covenant of Promise,Genesis,Genesis,Theme/Symbol,12,22,0.99,"Promise of land, seed, blessing, and inheritance."
+Stars Without Number,Genesis,Genesis,Theme/Symbol,15,15,0.98,Promise image for Abraham's innumerable descendants.
+Promise of Isaac,Genesis,Genesis,Theme/Symbol,17,18,0.99,Announcement of the covenant son through Sarah.
+Pillar of Salt,Genesis,Genesis,Theme/Symbol,19,19,0.96,Lasting warning image from Lot's wife.
+Jacob Renamed Israel,Genesis,Genesis,Theme/Symbol,32,35,0.99,Identity transformation after the night struggle.
+Dreams of Sun and Sheaves,Genesis,Genesis,Theme/Symbol,37,37,0.99,Joseph's dreams of rule that provoke envy.
+What God Meant for Good,Genesis,Genesis,Theme/Symbol,50,50,0.99,Providence motif that resolves the Joseph story.
+Lion of Judah,Genesis,Genesis,Theme/Symbol,49,49,0.99,Royal beast image from Jacob's blessing.
+Scepter of Judah,Genesis,Genesis,Theme/Symbol,49,49,0.99,Kingship symbol attached to Judah's line.

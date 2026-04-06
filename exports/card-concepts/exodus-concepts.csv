@@ -1,0 +1,146 @@
+simple_name,source_book,source_period,category,chapter_start,chapter_end,confidence,notes
+Moses,Exodus,Egypt & Exodus,Person,2,40,1.00,"Central deliverer, covenant mediator, and tabernacle organizer throughout the book."
+Aaron,Exodus,Egypt & Exodus,Person,4,40,0.99,Moses' spokesman and the key priestly figure of the Exodus narrative.
+Pharaoh,Exodus,Egypt & Exodus,Person,1,14,0.98,Egypt's ruler and the principal human antagonist of the deliverance arc.
+Miriam the Prophetess,Exodus,Egypt & Exodus,Person,15,15,0.94,Leads the celebration after the sea crossing with timbrel and dance.
+Jethro,Exodus,Egypt & Exodus,Person,2,18,0.97,"Moses' Midianite father-in-law, priest, and giver of leadership counsel."
+Zipporah,Exodus,Egypt & Exodus,Person,2,18,0.95,"Moses' wife, memorable in the inn-side covenant crisis."
+Joshua,Exodus,Egypt & Exodus,Person,17,32,0.90,Introduced as battlefield commander and later accompanies Moses on Sinai.
+Bezalel,Exodus,Egypt & Exodus,Person,31,38,0.99,Spirit-filled master artisan appointed over the sanctuary work.
+Aholiab,Exodus,Egypt & Exodus,Person,31,38,0.95,Bezalel's appointed partner in sacred craftsmanship.
+Shiphrah,Exodus,Egypt & Exodus,Person,1,1,0.98,Named Hebrew midwife who fears God over Pharaoh.
+Puah,Exodus,Egypt & Exodus,Person,1,1,0.98,Named Hebrew midwife who preserves Hebrew children.
+Pharaoh's Daughter,Exodus,Egypt & Exodus,Person,2,2,0.97,Rescues the infant Moses from the river.
+Hebrew Midwives,Exodus,Egypt & Exodus,Person,1,1,0.93,Collective image of holy resistance against genocidal power.
+Egyptian Magicians,Exodus,Egypt & Exodus,Person,7,10,0.88,Pharaoh's court sorcerers who oppose Moses' signs.
+Seventy Elders of Israel,Exodus,Egypt & Exodus,Person,24,24,0.89,Covenant witnesses who ascend the mountain and share the sacred meal.
+Egypt,Exodus,Egypt & Exodus,Place,1,15,0.99,"Primary setting of oppression, plagues, and the initial deliverance."
+Midian,Exodus,Egypt & Exodus,Place,2,4,0.96,Moses' refuge before his return to confront Pharaoh.
+Horeb,Exodus,Egypt & Exodus,Place,3,17,0.95,Mountain of God associated with the burning bush and the struck rock.
+Sinai,Exodus,Egypt & Exodus,Place,19,34,0.99,"Mountain of covenant, law, glory, and divine revelation."
+Goshen,Exodus,Egypt & Exodus,Place,8,9,0.95,The protected region set apart from plague judgment.
+Pithom,Exodus,Egypt & Exodus,Place,1,1,0.96,Treasure city built under Israel's forced labor.
+Raamses,Exodus,Egypt & Exodus,Place,1,12,0.95,Store-city of oppression and launch point of the departure.
+Marah,Exodus,Egypt & Exodus,Place,15,15,0.90,Bitter-water wilderness stop transformed by divine provision.
+Elim,Exodus,Egypt & Exodus,Place,15,15,0.91,Oasis of wells and palms after Marah.
+Massah,Exodus,Egypt & Exodus,Place,17,17,0.86,Place named for Israel's testing.
+Meribah,Exodus,Egypt & Exodus,Place,17,17,0.86,Place named for Israel's strife.
+Red Sea,Exodus,Egypt & Exodus,Place,13,15,0.98,The sea of Israel's miraculous passage and Egypt's downfall.
+Pi-hahiroth Encampment,Exodus,Egypt & Exodus,Place,14,14,0.85,The trapped campsite by the sea before the crossing miracle.
+Tent of Meeting,Exodus,Egypt & Exodus,Place,33,40,0.94,Meeting place of divine presence outside the camp and later at the sanctuary.
+Cleft of the Rock,Exodus,Egypt & Exodus,Place,33,33,0.90,Shelter where Moses is hidden as God's glory passes by.
+Court of the Tabernacle,Exodus,Egypt & Exodus,Place,38,40,0.94,The enclosed outer court surrounding the sanctuary.
+Ark of Bulrushes,Exodus,Egypt & Exodus,Relic,2,2,0.97,The small ark that carried the infant Moses through the Nile reeds.
+Rod of Signs,Exodus,Egypt & Exodus,Relic,4,17,0.98,"Moses' staff used in signs, plagues, and wilderness provision."
+Joseph's Bones,Exodus,Egypt & Exodus,Relic,13,13,0.95,Portable ancestral relic carried during the departure from Egypt.
+Book of the Covenant,Exodus,Egypt & Exodus,Relic,24,24,0.97,Written covenant text read aloud and sealed at Sinai.
+Ark of the Covenant,Exodus,Egypt & Exodus,Relic,25,40,0.99,Central sacred chest of testimony and divine meeting.
+Mercy Seat,Exodus,Egypt & Exodus,Relic,25,40,0.99,Golden throne-like cover of the ark beneath the cherubim.
+Tablets of Testimony,Exodus,Egypt & Exodus,Relic,31,34,0.97,Stone tablets first shattered and then renewed after the calf rebellion.
+Table of Shewbread,Exodus,Egypt & Exodus,Relic,25,40,0.96,Sacred table for the bread of the presence.
+Golden Lampstand,Exodus,Egypt & Exodus,Relic,25,40,0.97,Seven-branched lampstand of pure gold for the holy place.
+Bronze Altar,Exodus,Egypt & Exodus,Relic,27,40,0.97,Courtyard altar for burnt offerings and sacrificial fire.
+Altar of Incense,Exodus,Egypt & Exodus,Relic,30,40,0.98,Golden altar for the regular offering of incense.
+Bronze Laver,Exodus,Egypt & Exodus,Relic,30,40,0.96,Priestly washbasin for cleansing before holy service.
+Urim and Thummim,Exodus,Egypt & Exodus,Relic,28,28,0.98,Oracular objects placed in the breastplate for judgment.
+Pot of Manna,Exodus,Egypt & Exodus,Relic,16,16,0.93,Memorial portion of manna preserved for future generations.
+Tabernacle,Exodus,Egypt & Exodus,Relic,25,40,0.99,The portable sanctuary where divine glory comes to dwell.
+Veil of the Tabernacle,Exodus,Egypt & Exodus,Relic,26,36,0.93,Curtain dividing the holy place from the innermost holy chamber.
+Anointing Oil,Exodus,Egypt & Exodus,Item,30,37,0.97,Holy oil reserved for consecrating the sanctuary and its servants.
+Holy Incense,Exodus,Egypt & Exodus,Item,30,37,0.95,Sacred incense formula reserved for the holy place.
+Ephod,Exodus,Egypt & Exodus,Item,28,39,0.97,Priestly garment of gold and colored threads.
+Breastplate of Judgment,Exodus,Egypt & Exodus,Item,28,39,0.98,Stone-set priestly breastpiece bearing the tribes of Israel.
+Holy Crown,Exodus,Egypt & Exodus,Item,39,39,0.95,Gold plate worn upon Aaron's turban.
+Holy Garments,Exodus,Egypt & Exodus,Item,28,39,0.94,"Priestly vestments made for glory, beauty, and consecrated service."
+Blood on the Doorposts,Exodus,Egypt & Exodus,Law/Rite,12,12,0.98,Protective sign applied to Israelite homes on Passover night.
+Atonement Money,Exodus,Egypt & Exodus,Item,30,30,0.90,Half-shekel census ransom tied to atonement.
+Angel of the LORD,Exodus,Egypt & Exodus,Creature,3,3,0.95,Appears in the fire of the bush on Horeb.
+Passover Lamb,Exodus,Egypt & Exodus,Creature,12,12,0.97,The sacrificial lamb at the heart of the Passover rite.
+Quail from the Wind,Exodus,Egypt & Exodus,Creature,16,16,0.92,Evening meat provision sent upon the camp in the wilderness.
+Angel Before Israel,Exodus,Egypt & Exodus,Creature,23,23,0.91,Divine messenger sent to guard and guide the people.
+Ram of Consecration,Exodus,Egypt & Exodus,Creature,29,29,0.90,Sacrificial animal central to Aaron's ordination rite.
+Israel in Bondage,Exodus,Egypt & Exodus,Theme/Symbol,1,5,0.96,Foundational oppression motif of Exodus' opening movement.
+Pharaoh's Oppression,Exodus,Egypt & Exodus,Event,1,5,0.95,Forced labor and policy violence imposed on Israel by Egypt's ruler.
+Decree to Kill the Hebrew Sons,Exodus,Egypt & Exodus,Judgment,1,1,0.96,Pharaoh's genocidal command against Hebrew male children.
+Moses Kills the Egyptian,Exodus,Egypt & Exodus,Event,2,2,0.96,The decisive act that forces Moses into exile.
+Moses Fleeing to Midian,Exodus,Egypt & Exodus,Event,2,2,0.95,Moses escapes Pharaoh and begins his wilderness exile.
+The Burning Bush,Exodus,Egypt & Exodus,Event,3,3,1.00,Iconic divine encounter in fire that does not consume the bush.
+I AM THAT I AM,Exodus,Egypt & Exodus,Theme/Symbol,3,3,1.00,The divine self-revelation spoken to Moses at the bush.
+Land Flowing with Milk and Honey,Exodus,Egypt & Exodus,Theme/Symbol,3,3,0.97,Promise-formula of the land awaiting Israel beyond Egypt.
+Divine Commission of Moses,Exodus,Egypt & Exodus,Event,3,4,0.95,Moses is sent to confront Pharaoh and deliver Israel.
+Rod to Serpent,Exodus,Egypt & Exodus,Miracle,4,7,0.98,The staff becomes a serpent as a validating sign and challenge.
+Leprous Hand Sign,Exodus,Egypt & Exodus,Miracle,4,4,0.96,Hand turned leprous and restored as a sign to confirm Moses.
+Circumcision at the Inn,Exodus,Egypt & Exodus,Law/Rite,4,4,0.92,Abrupt covenant enforcement on Moses' return journey.
+Bloody Bridegroom,Exodus,Egypt & Exodus,Event,4,4,0.85,Zipporah's memorable cry in the inn-side circumcision scene.
+Moses Returns to Egypt,Exodus,Egypt & Exodus,Event,4,4,0.94,The commissioned return that begins the liberation campaign.
+Brickmaking Affliction,Exodus,Egypt & Exodus,Event,5,5,0.94,Labor conditions worsen after Moses' first audience with Pharaoh.
+Straw Withheld,Exodus,Egypt & Exodus,Event,5,5,0.93,Egypt increases oppression by removing straw from the brick quota.
+Covenant Remembered,Exodus,Egypt & Exodus,Theme/Symbol,6,6,0.94,"God remembers the covenant with Abraham, Isaac, and Jacob."
+YHWH Revealed,Exodus,Egypt & Exodus,Theme/Symbol,6,6,0.93,The divine name and identity are restated to Moses and Israel.
+Ten Plagues of Egypt,Exodus,Egypt & Exodus,Judgment,7,12,1.00,The full cycle of escalating judgments that break Egypt's resistance.
+Water Turned to Blood,Exodus,Egypt & Exodus,Judgment,7,7,1.00,First plague sign as Nile waters become blood.
+Frogs,Exodus,Egypt & Exodus,Judgment,8,8,0.99,Plague of frogs that overruns Egypt.
+Lice,Exodus,Egypt & Exodus,Judgment,8,8,0.97,Dust of the land becomes a plague against man and beast.
+Swarms of Flies,Exodus,Egypt & Exodus,Judgment,8,8,0.98,Ravaging swarm that spares the land of Goshen.
+Cattle Plague,Exodus,Egypt & Exodus,Judgment,9,9,0.97,Deadly murrain against Egyptian livestock.
+Boils,Exodus,Egypt & Exodus,Judgment,9,9,0.97,Painful plague afflicting people and animals.
+Hail and Fire,Exodus,Egypt & Exodus,Judgment,9,9,0.99,Hail mingled with fire devastates the land.
+Locusts,Exodus,Egypt & Exodus,Judgment,10,10,0.99,Swarming locust judgment that devours what remains.
+Darkness over Egypt,Exodus,Egypt & Exodus,Judgment,10,10,1.00,Thick darkness covers the land for three days.
+Final Plague,Exodus,Egypt & Exodus,Judgment,11,12,0.98,"Death of the firstborn, the final blow against Egypt."
+Passover,Exodus,Egypt & Exodus,Law/Rite,12,12,0.99,The defining memorial rite of deliverance from Egypt.
+Feast of Unleavened Bread,Exodus,Egypt & Exodus,Law/Rite,12,34,0.97,Seven-day memorial feast repeatedly tied to the exodus and covenant.
+Sanctification of the Firstborn,Exodus,Egypt & Exodus,Law/Rite,13,13,0.90,Consecration of firstborn males to the LORD.
+Pillar of Cloud,Exodus,Egypt & Exodus,Miracle,13,40,0.98,Visible sign of divine guidance by day and presence at the sanctuary.
+Pillar of Fire,Exodus,Egypt & Exodus,Miracle,13,40,0.98,Night sign of divine guidance over Israel's camp.
+Parting of the Red Sea,Exodus,Egypt & Exodus,Miracle,14,14,0.99,Signature deliverance miracle that opens a path through the waters.
+Dry Path Through the Sea,Exodus,Egypt & Exodus,Event,14,14,0.96,Israel crosses between walls of water on dry ground.
+Overthrow of Egypt,Exodus,Egypt & Exodus,Judgment,14,14,0.91,Pharaoh's pursuing force is destroyed in the returning sea.
+Song of the Sea,Exodus,Egypt & Exodus,Theme/Symbol,15,15,0.97,Victory hymn celebrating deliverance and divine kingship.
+Bitter Waters Made Sweet,Exodus,Egypt & Exodus,Miracle,15,15,0.95,The healing of Marah's waters after wilderness complaint.
+Manna from Heaven,Exodus,Egypt & Exodus,Item,16,16,0.99,Daily wilderness bread from heaven given to sustain Israel.
+Sabbath Provision,Exodus,Egypt & Exodus,Law/Rite,16,16,0.91,Double gathering on the sixth day to preserve Sabbath rest.
+Water from the Rock at Horeb,Exodus,Egypt & Exodus,Miracle,17,17,0.98,The struck rock gives water to the thirsty camp.
+Battle with Amalek,Exodus,Egypt & Exodus,Event,17,17,0.95,Israel's first major wilderness battle under Joshua.
+Altar of Jehovah-nissi,Exodus,Egypt & Exodus,Relic,17,17,0.88,Memorial altar raised after victory over Amalek.
+Jethro's Counsel,Exodus,Egypt & Exodus,Event,18,18,0.92,Leadership advice that restructures Moses' burden of judgment.
+Judges over the People,Exodus,Egypt & Exodus,Law/Rite,18,18,0.90,"Delegated structure of rulers over thousands, hundreds, fifties, and tens."
+Sinai Covenant,Exodus,Egypt & Exodus,Law/Rite,19,24,0.98,Covenant framework established and ratified at the mountain.
+Kingdom of Priests,Exodus,Egypt & Exodus,Theme/Symbol,19,19,0.96,Identity promise spoken over Israel at Sinai.
+Thick Cloud on Sinai,Exodus,Egypt & Exodus,Miracle,19,19,0.90,Clouded theophany surrounding the mountain before the law.
+Trumpet Blast at Sinai,Exodus,Egypt & Exodus,Miracle,19,19,0.89,Escalating heavenly signal before the LORD's descent.
+Boundaries of Sinai,Exodus,Egypt & Exodus,Law/Rite,19,19,0.88,Forbidden perimeter preserving the mountain's holiness.
+Ten Commandments,Exodus,Egypt & Exodus,Law/Rite,20,20,0.99,Foundational covenant words delivered at Sinai.
+No Other Gods,Exodus,Egypt & Exodus,Law/Rite,20,20,0.94,The opening commandment forbidding rival worship.
+No Graven Images,Exodus,Egypt & Exodus,Law/Rite,20,20,0.93,The commandment against idol-making and idol-worship.
+Sabbath Rest,Exodus,Egypt & Exodus,Law/Rite,20,34,0.95,The seventh-day rest command repeated as a covenant principle.
+Hebrew Servant Law,Exodus,Egypt & Exodus,Judgment,21,21,0.94,Terms of service and release for Hebrew bondservants.
+Eye for Eye,Exodus,Egypt & Exodus,Judgment,21,21,0.99,Famous proportional-justice standard from the case laws.
+Ox That Gores,Exodus,Egypt & Exodus,Judgment,21,21,0.93,Liability law for a dangerous animal that kills or injures.
+Restitution,Exodus,Egypt & Exodus,Judgment,22,22,0.90,Property and theft laws centered on repayment and compensation.
+Witchcraft Ban,Exodus,Egypt & Exodus,Judgment,22,22,0.94,Memorable prohibition against sorcery and occult practice.
+Protections for the Vulnerable,Exodus,Egypt & Exodus,Law/Rite,22,23,0.86,"Commands defending strangers, widows, orphans, and the poor."
+Sabbath Year,Exodus,Egypt & Exodus,Law/Rite,23,23,0.95,The land rests in the seventh year for the poor and the beasts.
+Three Feasts,Exodus,Egypt & Exodus,Law/Rite,23,23,0.93,"Pilgrimage festivals of Unleavened Bread, Harvest, and Ingathering."
+Blood of the Covenant,Exodus,Egypt & Exodus,Event,24,24,0.98,Covenant ratification through blood cast on altar and people.
+Covenant Meal,Exodus,Egypt & Exodus,Event,24,24,0.90,Sacred meal in the divine presence on the mountain.
+Sinai Theophany,Exodus,Egypt & Exodus,Miracle,24,24,0.95,Vision of God and glory on Sinai's pavement of sapphire.
+Priestly Consecration,Exodus,Egypt & Exodus,Law/Rite,29,29,0.96,Ordination rite for Aaron and his sons.
+Continual Burnt Offering,Exodus,Egypt & Exodus,Law/Rite,29,29,0.95,Daily morning and evening offering before the LORD.
+Sabbath as a Sign,Exodus,Egypt & Exodus,Theme/Symbol,31,31,0.95,Sabbath marked as covenant sign between God and Israel.
+Spirit-Filled Craftsmanship,Exodus,Egypt & Exodus,Theme/Symbol,31,31,0.92,Bezalel is filled with the Spirit for holy artistic work.
+Golden Calf,Exodus,Egypt & Exodus,Event,32,32,0.99,The idol forged in the camp during Moses' delay on the mountain.
+Broken Tablets,Exodus,Egypt & Exodus,Relic,32,32,0.91,The first tablets shattered by Moses beneath the mountain.
+Moses Pleads for Israel,Exodus,Egypt & Exodus,Event,32,32,0.95,Moses intercedes after Israel's rebellion with the calf.
+Levites' Sword Purge,Exodus,Egypt & Exodus,Judgment,32,32,0.93,The Levites execute judgment within the camp at Moses' command.
+Plague on the People,Exodus,Egypt & Exodus,Judgment,32,32,0.90,The LORD strikes the people after the calf rebellion.
+Face to Face with God,Exodus,Egypt & Exodus,Theme/Symbol,33,33,0.89,Moses speaks with the LORD in uniquely intimate communion.
+Divine Presence,Exodus,Egypt & Exodus,Theme/Symbol,33,33,0.88,The promise that God's presence will go with his people.
+Covenant Renewal,Exodus,Egypt & Exodus,Event,34,34,0.97,The covenant is renewed after the calf catastrophe.
+The LORD Proclaims His Name,Exodus,Egypt & Exodus,Theme/Symbol,34,34,0.94,The divine name and character are proclaimed on Sinai.
+Veiled Face of Moses,Exodus,Egypt & Exodus,Theme/Symbol,34,34,0.92,Moses covers his shining face after speaking with the LORD.
+Freewill Offering,Exodus,Egypt & Exodus,Law/Rite,35,35,0.92,Voluntary gifts of the people for building the sanctuary.
+Cloud Fills the Tabernacle,Exodus,Egypt & Exodus,Miracle,40,40,0.99,The cloud covers the finished sanctuary.
+Glory Fills the Tabernacle,Exodus,Egypt & Exodus,Miracle,40,40,0.99,The glory of the LORD fills the completed tabernacle.
+Journey by the Cloud,Exodus,Egypt & Exodus,Theme/Symbol,40,40,0.90,Israel moves only when the cloud is taken up from the sanctuary.
+Pharaoh's Hardened Heart,Exodus,Egypt & Exodus,Theme/Symbol,7,14,0.99,Recurring motif that drives the plague cycle and final pursuit.

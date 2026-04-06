@@ -1,0 +1,33 @@
+{
+  "sourcePeriod": "Gospels",
+  "books": [
+    {
+      "book": "Matthew",
+      "bookNumber": 40,
+      "chapterCount": 28,
+      "rawSourcePath": "data/sources/kjv/matthew.raw.txt",
+      "normalizedSourcePath": "data/sources/kjv/matthew.json"
+    },
+    {
+      "book": "Mark",
+      "bookNumber": 41,
+      "chapterCount": 16,
+      "rawSourcePath": "data/sources/kjv/mark.raw.txt",
+      "normalizedSourcePath": "data/sources/kjv/mark.json"
+    },
+    {
+      "book": "Luke",
+      "bookNumber": 42,
+      "chapterCount": 24,
+      "rawSourcePath": "data/sources/kjv/luke.raw.txt",
+      "normalizedSourcePath": "data/sources/kjv/luke.json"
+    },
+    {
+      "book": "John",
+      "bookNumber": 43,
+      "chapterCount": 21,
+      "rawSourcePath": "data/sources/kjv/john.raw.txt",
+      "normalizedSourcePath": "data/sources/kjv/john.json"
+    }
+  ]
+}

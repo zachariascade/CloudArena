@@ -1,0 +1,1452 @@
+[
+  {
+    "simple_name": "Moses",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Person",
+    "chapter_start": 2,
+    "chapter_end": 40,
+    "confidence": 1,
+    "notes": "Central deliverer, covenant mediator, and tabernacle organizer throughout the book."
+  },
+  {
+    "simple_name": "Aaron",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Person",
+    "chapter_start": 4,
+    "chapter_end": 40,
+    "confidence": 0.99,
+    "notes": "Moses' spokesman and the key priestly figure of the Exodus narrative."
+  },
+  {
+    "simple_name": "Pharaoh",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Person",
+    "chapter_start": 1,
+    "chapter_end": 14,
+    "confidence": 0.98,
+    "notes": "Egypt's ruler and the principal human antagonist of the deliverance arc."
+  },
+  {
+    "simple_name": "Miriam the Prophetess",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Person",
+    "chapter_start": 15,
+    "chapter_end": 15,
+    "confidence": 0.94,
+    "notes": "Leads the celebration after the sea crossing with timbrel and dance."
+  },
+  {
+    "simple_name": "Jethro",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Person",
+    "chapter_start": 2,
+    "chapter_end": 18,
+    "confidence": 0.97,
+    "notes": "Moses' Midianite father-in-law, priest, and giver of leadership counsel."
+  },
+  {
+    "simple_name": "Zipporah",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Person",
+    "chapter_start": 2,
+    "chapter_end": 18,
+    "confidence": 0.95,
+    "notes": "Moses' wife, memorable in the inn-side covenant crisis."
+  },
+  {
+    "simple_name": "Joshua",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Person",
+    "chapter_start": 17,
+    "chapter_end": 32,
+    "confidence": 0.9,
+    "notes": "Introduced as battlefield commander and later accompanies Moses on Sinai."
+  },
+  {
+    "simple_name": "Bezalel",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Person",
+    "chapter_start": 31,
+    "chapter_end": 38,
+    "confidence": 0.99,
+    "notes": "Spirit-filled master artisan appointed over the sanctuary work."
+  },
+  {
+    "simple_name": "Aholiab",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Person",
+    "chapter_start": 31,
+    "chapter_end": 38,
+    "confidence": 0.95,
+    "notes": "Bezalel's appointed partner in sacred craftsmanship."
+  },
+  {
+    "simple_name": "Shiphrah",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Person",
+    "chapter_start": 1,
+    "chapter_end": 1,
+    "confidence": 0.98,
+    "notes": "Named Hebrew midwife who fears God over Pharaoh."
+  },
+  {
+    "simple_name": "Puah",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Person",
+    "chapter_start": 1,
+    "chapter_end": 1,
+    "confidence": 0.98,
+    "notes": "Named Hebrew midwife who preserves Hebrew children."
+  },
+  {
+    "simple_name": "Pharaoh's Daughter",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Person",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.97,
+    "notes": "Rescues the infant Moses from the river."
+  },
+  {
+    "simple_name": "Hebrew Midwives",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Person",
+    "chapter_start": 1,
+    "chapter_end": 1,
+    "confidence": 0.93,
+    "notes": "Collective image of holy resistance against genocidal power."
+  },
+  {
+    "simple_name": "Egyptian Magicians",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Person",
+    "chapter_start": 7,
+    "chapter_end": 10,
+    "confidence": 0.88,
+    "notes": "Pharaoh's court sorcerers who oppose Moses' signs."
+  },
+  {
+    "simple_name": "Seventy Elders of Israel",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Person",
+    "chapter_start": 24,
+    "chapter_end": 24,
+    "confidence": 0.89,
+    "notes": "Covenant witnesses who ascend the mountain and share the sacred meal."
+  },
+  {
+    "simple_name": "Egypt",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Place",
+    "chapter_start": 1,
+    "chapter_end": 15,
+    "confidence": 0.99,
+    "notes": "Primary setting of oppression, plagues, and the initial deliverance."
+  },
+  {
+    "simple_name": "Midian",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Place",
+    "chapter_start": 2,
+    "chapter_end": 4,
+    "confidence": 0.96,
+    "notes": "Moses' refuge before his return to confront Pharaoh."
+  },
+  {
+    "simple_name": "Horeb",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Place",
+    "chapter_start": 3,
+    "chapter_end": 17,
+    "confidence": 0.95,
+    "notes": "Mountain of God associated with the burning bush and the struck rock."
+  },
+  {
+    "simple_name": "Sinai",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Place",
+    "chapter_start": 19,
+    "chapter_end": 34,
+    "confidence": 0.99,
+    "notes": "Mountain of covenant, law, glory, and divine revelation."
+  },
+  {
+    "simple_name": "Goshen",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Place",
+    "chapter_start": 8,
+    "chapter_end": 9,
+    "confidence": 0.95,
+    "notes": "The protected region set apart from plague judgment."
+  },
+  {
+    "simple_name": "Pithom",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Place",
+    "chapter_start": 1,
+    "chapter_end": 1,
+    "confidence": 0.96,
+    "notes": "Treasure city built under Israel's forced labor."
+  },
+  {
+    "simple_name": "Raamses",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Place",
+    "chapter_start": 1,
+    "chapter_end": 12,
+    "confidence": 0.95,
+    "notes": "Store-city of oppression and launch point of the departure."
+  },
+  {
+    "simple_name": "Marah",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Place",
+    "chapter_start": 15,
+    "chapter_end": 15,
+    "confidence": 0.9,
+    "notes": "Bitter-water wilderness stop transformed by divine provision."
+  },
+  {
+    "simple_name": "Elim",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Place",
+    "chapter_start": 15,
+    "chapter_end": 15,
+    "confidence": 0.91,
+    "notes": "Oasis of wells and palms after Marah."
+  },
+  {
+    "simple_name": "Massah",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Place",
+    "chapter_start": 17,
+    "chapter_end": 17,
+    "confidence": 0.86,
+    "notes": "Place named for Israel's testing."
+  },
+  {
+    "simple_name": "Meribah",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Place",
+    "chapter_start": 17,
+    "chapter_end": 17,
+    "confidence": 0.86,
+    "notes": "Place named for Israel's strife."
+  },
+  {
+    "simple_name": "Red Sea",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Place",
+    "chapter_start": 13,
+    "chapter_end": 15,
+    "confidence": 0.98,
+    "notes": "The sea of Israel's miraculous passage and Egypt's downfall."
+  },
+  {
+    "simple_name": "Pi-hahiroth Encampment",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Place",
+    "chapter_start": 14,
+    "chapter_end": 14,
+    "confidence": 0.85,
+    "notes": "The trapped campsite by the sea before the crossing miracle."
+  },
+  {
+    "simple_name": "Tent of Meeting",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Place",
+    "chapter_start": 33,
+    "chapter_end": 40,
+    "confidence": 0.94,
+    "notes": "Meeting place of divine presence outside the camp and later at the sanctuary."
+  },
+  {
+    "simple_name": "Cleft of the Rock",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Place",
+    "chapter_start": 33,
+    "chapter_end": 33,
+    "confidence": 0.9,
+    "notes": "Shelter where Moses is hidden as God's glory passes by."
+  },
+  {
+    "simple_name": "Court of the Tabernacle",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Place",
+    "chapter_start": 38,
+    "chapter_end": 40,
+    "confidence": 0.94,
+    "notes": "The enclosed outer court surrounding the sanctuary."
+  },
+  {
+    "simple_name": "Ark of Bulrushes",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Relic",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.97,
+    "notes": "The small ark that carried the infant Moses through the Nile reeds."
+  },
+  {
+    "simple_name": "Rod of Signs",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Relic",
+    "chapter_start": 4,
+    "chapter_end": 17,
+    "confidence": 0.98,
+    "notes": "Moses' staff used in signs, plagues, and wilderness provision."
+  },
+  {
+    "simple_name": "Joseph's Bones",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Relic",
+    "chapter_start": 13,
+    "chapter_end": 13,
+    "confidence": 0.95,
+    "notes": "Portable ancestral relic carried during the departure from Egypt."
+  },
+  {
+    "simple_name": "Book of the Covenant",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Relic",
+    "chapter_start": 24,
+    "chapter_end": 24,
+    "confidence": 0.97,
+    "notes": "Written covenant text read aloud and sealed at Sinai."
+  },
+  {
+    "simple_name": "Ark of the Covenant",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Relic",
+    "chapter_start": 25,
+    "chapter_end": 40,
+    "confidence": 0.99,
+    "notes": "Central sacred chest of testimony and divine meeting."
+  },
+  {
+    "simple_name": "Mercy Seat",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Relic",
+    "chapter_start": 25,
+    "chapter_end": 40,
+    "confidence": 0.99,
+    "notes": "Golden throne-like cover of the ark beneath the cherubim."
+  },
+  {
+    "simple_name": "Tablets of Testimony",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Relic",
+    "chapter_start": 31,
+    "chapter_end": 34,
+    "confidence": 0.97,
+    "notes": "Stone tablets first shattered and then renewed after the calf rebellion."
+  },
+  {
+    "simple_name": "Table of Shewbread",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Relic",
+    "chapter_start": 25,
+    "chapter_end": 40,
+    "confidence": 0.96,
+    "notes": "Sacred table for the bread of the presence."
+  },
+  {
+    "simple_name": "Golden Lampstand",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Relic",
+    "chapter_start": 25,
+    "chapter_end": 40,
+    "confidence": 0.97,
+    "notes": "Seven-branched lampstand of pure gold for the holy place."
+  },
+  {
+    "simple_name": "Bronze Altar",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Relic",
+    "chapter_start": 27,
+    "chapter_end": 40,
+    "confidence": 0.97,
+    "notes": "Courtyard altar for burnt offerings and sacrificial fire."
+  },
+  {
+    "simple_name": "Altar of Incense",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Relic",
+    "chapter_start": 30,
+    "chapter_end": 40,
+    "confidence": 0.98,
+    "notes": "Golden altar for the regular offering of incense."
+  },
+  {
+    "simple_name": "Bronze Laver",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Relic",
+    "chapter_start": 30,
+    "chapter_end": 40,
+    "confidence": 0.96,
+    "notes": "Priestly washbasin for cleansing before holy service."
+  },
+  {
+    "simple_name": "Urim and Thummim",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Relic",
+    "chapter_start": 28,
+    "chapter_end": 28,
+    "confidence": 0.98,
+    "notes": "Oracular objects placed in the breastplate for judgment."
+  },
+  {
+    "simple_name": "Pot of Manna",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Relic",
+    "chapter_start": 16,
+    "chapter_end": 16,
+    "confidence": 0.93,
+    "notes": "Memorial portion of manna preserved for future generations."
+  },
+  {
+    "simple_name": "Tabernacle",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Relic",
+    "chapter_start": 25,
+    "chapter_end": 40,
+    "confidence": 0.99,
+    "notes": "The portable sanctuary where divine glory comes to dwell."
+  },
+  {
+    "simple_name": "Veil of the Tabernacle",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Relic",
+    "chapter_start": 26,
+    "chapter_end": 36,
+    "confidence": 0.93,
+    "notes": "Curtain dividing the holy place from the innermost holy chamber."
+  },
+  {
+    "simple_name": "Anointing Oil",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Item",
+    "chapter_start": 30,
+    "chapter_end": 37,
+    "confidence": 0.97,
+    "notes": "Holy oil reserved for consecrating the sanctuary and its servants."
+  },
+  {
+    "simple_name": "Holy Incense",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Item",
+    "chapter_start": 30,
+    "chapter_end": 37,
+    "confidence": 0.95,
+    "notes": "Sacred incense formula reserved for the holy place."
+  },
+  {
+    "simple_name": "Ephod",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Item",
+    "chapter_start": 28,
+    "chapter_end": 39,
+    "confidence": 0.97,
+    "notes": "Priestly garment of gold and colored threads."
+  },
+  {
+    "simple_name": "Breastplate of Judgment",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Item",
+    "chapter_start": 28,
+    "chapter_end": 39,
+    "confidence": 0.98,
+    "notes": "Stone-set priestly breastpiece bearing the tribes of Israel."
+  },
+  {
+    "simple_name": "Holy Crown",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Item",
+    "chapter_start": 39,
+    "chapter_end": 39,
+    "confidence": 0.95,
+    "notes": "Gold plate worn upon Aaron's turban."
+  },
+  {
+    "simple_name": "Holy Garments",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Item",
+    "chapter_start": 28,
+    "chapter_end": 39,
+    "confidence": 0.94,
+    "notes": "Priestly vestments made for glory, beauty, and consecrated service."
+  },
+  {
+    "simple_name": "Blood on the Doorposts",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 12,
+    "chapter_end": 12,
+    "confidence": 0.98,
+    "notes": "Protective sign applied to Israelite homes on Passover night."
+  },
+  {
+    "simple_name": "Atonement Money",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Item",
+    "chapter_start": 30,
+    "chapter_end": 30,
+    "confidence": 0.9,
+    "notes": "Half-shekel census ransom tied to atonement."
+  },
+  {
+    "simple_name": "Angel of the LORD",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Creature",
+    "chapter_start": 3,
+    "chapter_end": 3,
+    "confidence": 0.95,
+    "notes": "Appears in the fire of the bush on Horeb."
+  },
+  {
+    "simple_name": "Passover Lamb",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Creature",
+    "chapter_start": 12,
+    "chapter_end": 12,
+    "confidence": 0.97,
+    "notes": "The sacrificial lamb at the heart of the Passover rite."
+  },
+  {
+    "simple_name": "Quail from the Wind",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Creature",
+    "chapter_start": 16,
+    "chapter_end": 16,
+    "confidence": 0.92,
+    "notes": "Evening meat provision sent upon the camp in the wilderness."
+  },
+  {
+    "simple_name": "Angel Before Israel",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Creature",
+    "chapter_start": 23,
+    "chapter_end": 23,
+    "confidence": 0.91,
+    "notes": "Divine messenger sent to guard and guide the people."
+  },
+  {
+    "simple_name": "Ram of Consecration",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Creature",
+    "chapter_start": 29,
+    "chapter_end": 29,
+    "confidence": 0.9,
+    "notes": "Sacrificial animal central to Aaron's ordination rite."
+  },
+  {
+    "simple_name": "Israel in Bondage",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Theme/Symbol",
+    "chapter_start": 1,
+    "chapter_end": 5,
+    "confidence": 0.96,
+    "notes": "Foundational oppression motif of Exodus' opening movement."
+  },
+  {
+    "simple_name": "Pharaoh's Oppression",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Event",
+    "chapter_start": 1,
+    "chapter_end": 5,
+    "confidence": 0.95,
+    "notes": "Forced labor and policy violence imposed on Israel by Egypt's ruler."
+  },
+  {
+    "simple_name": "Decree to Kill the Hebrew Sons",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 1,
+    "chapter_end": 1,
+    "confidence": 0.96,
+    "notes": "Pharaoh's genocidal command against Hebrew male children."
+  },
+  {
+    "simple_name": "Moses Kills the Egyptian",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Event",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.96,
+    "notes": "The decisive act that forces Moses into exile."
+  },
+  {
+    "simple_name": "Moses Fleeing to Midian",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Event",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.95,
+    "notes": "Moses escapes Pharaoh and begins his wilderness exile."
+  },
+  {
+    "simple_name": "The Burning Bush",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Event",
+    "chapter_start": 3,
+    "chapter_end": 3,
+    "confidence": 1,
+    "notes": "Iconic divine encounter in fire that does not consume the bush."
+  },
+  {
+    "simple_name": "I AM THAT I AM",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Theme/Symbol",
+    "chapter_start": 3,
+    "chapter_end": 3,
+    "confidence": 1,
+    "notes": "The divine self-revelation spoken to Moses at the bush."
+  },
+  {
+    "simple_name": "Land Flowing with Milk and Honey",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Theme/Symbol",
+    "chapter_start": 3,
+    "chapter_end": 3,
+    "confidence": 0.97,
+    "notes": "Promise-formula of the land awaiting Israel beyond Egypt."
+  },
+  {
+    "simple_name": "Divine Commission of Moses",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Event",
+    "chapter_start": 3,
+    "chapter_end": 4,
+    "confidence": 0.95,
+    "notes": "Moses is sent to confront Pharaoh and deliver Israel."
+  },
+  {
+    "simple_name": "Rod to Serpent",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Miracle",
+    "chapter_start": 4,
+    "chapter_end": 7,
+    "confidence": 0.98,
+    "notes": "The staff becomes a serpent as a validating sign and challenge."
+  },
+  {
+    "simple_name": "Leprous Hand Sign",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Miracle",
+    "chapter_start": 4,
+    "chapter_end": 4,
+    "confidence": 0.96,
+    "notes": "Hand turned leprous and restored as a sign to confirm Moses."
+  },
+  {
+    "simple_name": "Circumcision at the Inn",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 4,
+    "chapter_end": 4,
+    "confidence": 0.92,
+    "notes": "Abrupt covenant enforcement on Moses' return journey."
+  },
+  {
+    "simple_name": "Bloody Bridegroom",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Event",
+    "chapter_start": 4,
+    "chapter_end": 4,
+    "confidence": 0.85,
+    "notes": "Zipporah's memorable cry in the inn-side circumcision scene."
+  },
+  {
+    "simple_name": "Moses Returns to Egypt",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Event",
+    "chapter_start": 4,
+    "chapter_end": 4,
+    "confidence": 0.94,
+    "notes": "The commissioned return that begins the liberation campaign."
+  },
+  {
+    "simple_name": "Brickmaking Affliction",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Event",
+    "chapter_start": 5,
+    "chapter_end": 5,
+    "confidence": 0.94,
+    "notes": "Labor conditions worsen after Moses' first audience with Pharaoh."
+  },
+  {
+    "simple_name": "Straw Withheld",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Event",
+    "chapter_start": 5,
+    "chapter_end": 5,
+    "confidence": 0.93,
+    "notes": "Egypt increases oppression by removing straw from the brick quota."
+  },
+  {
+    "simple_name": "Covenant Remembered",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Theme/Symbol",
+    "chapter_start": 6,
+    "chapter_end": 6,
+    "confidence": 0.94,
+    "notes": "God remembers the covenant with Abraham, Isaac, and Jacob."
+  },
+  {
+    "simple_name": "YHWH Revealed",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Theme/Symbol",
+    "chapter_start": 6,
+    "chapter_end": 6,
+    "confidence": 0.93,
+    "notes": "The divine name and identity are restated to Moses and Israel."
+  },
+  {
+    "simple_name": "Ten Plagues of Egypt",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 7,
+    "chapter_end": 12,
+    "confidence": 1,
+    "notes": "The full cycle of escalating judgments that break Egypt's resistance."
+  },
+  {
+    "simple_name": "Water Turned to Blood",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 7,
+    "chapter_end": 7,
+    "confidence": 1,
+    "notes": "First plague sign as Nile waters become blood."
+  },
+  {
+    "simple_name": "Frogs",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 8,
+    "chapter_end": 8,
+    "confidence": 0.99,
+    "notes": "Plague of frogs that overruns Egypt."
+  },
+  {
+    "simple_name": "Lice",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 8,
+    "chapter_end": 8,
+    "confidence": 0.97,
+    "notes": "Dust of the land becomes a plague against man and beast."
+  },
+  {
+    "simple_name": "Swarms of Flies",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 8,
+    "chapter_end": 8,
+    "confidence": 0.98,
+    "notes": "Ravaging swarm that spares the land of Goshen."
+  },
+  {
+    "simple_name": "Cattle Plague",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 9,
+    "chapter_end": 9,
+    "confidence": 0.97,
+    "notes": "Deadly murrain against Egyptian livestock."
+  },
+  {
+    "simple_name": "Boils",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 9,
+    "chapter_end": 9,
+    "confidence": 0.97,
+    "notes": "Painful plague afflicting people and animals."
+  },
+  {
+    "simple_name": "Hail and Fire",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 9,
+    "chapter_end": 9,
+    "confidence": 0.99,
+    "notes": "Hail mingled with fire devastates the land."
+  },
+  {
+    "simple_name": "Locusts",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 10,
+    "chapter_end": 10,
+    "confidence": 0.99,
+    "notes": "Swarming locust judgment that devours what remains."
+  },
+  {
+    "simple_name": "Darkness over Egypt",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 10,
+    "chapter_end": 10,
+    "confidence": 1,
+    "notes": "Thick darkness covers the land for three days."
+  },
+  {
+    "simple_name": "Final Plague",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 11,
+    "chapter_end": 12,
+    "confidence": 0.98,
+    "notes": "Death of the firstborn, the final blow against Egypt."
+  },
+  {
+    "simple_name": "Passover",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 12,
+    "chapter_end": 12,
+    "confidence": 0.99,
+    "notes": "The defining memorial rite of deliverance from Egypt."
+  },
+  {
+    "simple_name": "Feast of Unleavened Bread",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 12,
+    "chapter_end": 34,
+    "confidence": 0.97,
+    "notes": "Seven-day memorial feast repeatedly tied to the exodus and covenant."
+  },
+  {
+    "simple_name": "Sanctification of the Firstborn",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 13,
+    "chapter_end": 13,
+    "confidence": 0.9,
+    "notes": "Consecration of firstborn males to the LORD."
+  },
+  {
+    "simple_name": "Pillar of Cloud",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Miracle",
+    "chapter_start": 13,
+    "chapter_end": 40,
+    "confidence": 0.98,
+    "notes": "Visible sign of divine guidance by day and presence at the sanctuary."
+  },
+  {
+    "simple_name": "Pillar of Fire",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Miracle",
+    "chapter_start": 13,
+    "chapter_end": 40,
+    "confidence": 0.98,
+    "notes": "Night sign of divine guidance over Israel's camp."
+  },
+  {
+    "simple_name": "Parting of the Red Sea",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Miracle",
+    "chapter_start": 14,
+    "chapter_end": 14,
+    "confidence": 0.99,
+    "notes": "Signature deliverance miracle that opens a path through the waters."
+  },
+  {
+    "simple_name": "Dry Path Through the Sea",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Event",
+    "chapter_start": 14,
+    "chapter_end": 14,
+    "confidence": 0.96,
+    "notes": "Israel crosses between walls of water on dry ground."
+  },
+  {
+    "simple_name": "Overthrow of Egypt",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 14,
+    "chapter_end": 14,
+    "confidence": 0.91,
+    "notes": "Pharaoh's pursuing force is destroyed in the returning sea."
+  },
+  {
+    "simple_name": "Song of the Sea",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Theme/Symbol",
+    "chapter_start": 15,
+    "chapter_end": 15,
+    "confidence": 0.97,
+    "notes": "Victory hymn celebrating deliverance and divine kingship."
+  },
+  {
+    "simple_name": "Bitter Waters Made Sweet",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Miracle",
+    "chapter_start": 15,
+    "chapter_end": 15,
+    "confidence": 0.95,
+    "notes": "The healing of Marah's waters after wilderness complaint."
+  },
+  {
+    "simple_name": "Manna from Heaven",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Item",
+    "chapter_start": 16,
+    "chapter_end": 16,
+    "confidence": 0.99,
+    "notes": "Daily wilderness bread from heaven given to sustain Israel."
+  },
+  {
+    "simple_name": "Sabbath Provision",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 16,
+    "chapter_end": 16,
+    "confidence": 0.91,
+    "notes": "Double gathering on the sixth day to preserve Sabbath rest."
+  },
+  {
+    "simple_name": "Water from the Rock at Horeb",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Miracle",
+    "chapter_start": 17,
+    "chapter_end": 17,
+    "confidence": 0.98,
+    "notes": "The struck rock gives water to the thirsty camp."
+  },
+  {
+    "simple_name": "Battle with Amalek",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Event",
+    "chapter_start": 17,
+    "chapter_end": 17,
+    "confidence": 0.95,
+    "notes": "Israel's first major wilderness battle under Joshua."
+  },
+  {
+    "simple_name": "Altar of Jehovah-nissi",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Relic",
+    "chapter_start": 17,
+    "chapter_end": 17,
+    "confidence": 0.88,
+    "notes": "Memorial altar raised after victory over Amalek."
+  },
+  {
+    "simple_name": "Jethro's Counsel",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Event",
+    "chapter_start": 18,
+    "chapter_end": 18,
+    "confidence": 0.92,
+    "notes": "Leadership advice that restructures Moses' burden of judgment."
+  },
+  {
+    "simple_name": "Judges over the People",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 18,
+    "chapter_end": 18,
+    "confidence": 0.9,
+    "notes": "Delegated structure of rulers over thousands, hundreds, fifties, and tens."
+  },
+  {
+    "simple_name": "Sinai Covenant",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 19,
+    "chapter_end": 24,
+    "confidence": 0.98,
+    "notes": "Covenant framework established and ratified at the mountain."
+  },
+  {
+    "simple_name": "Kingdom of Priests",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Theme/Symbol",
+    "chapter_start": 19,
+    "chapter_end": 19,
+    "confidence": 0.96,
+    "notes": "Identity promise spoken over Israel at Sinai."
+  },
+  {
+    "simple_name": "Thick Cloud on Sinai",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Miracle",
+    "chapter_start": 19,
+    "chapter_end": 19,
+    "confidence": 0.9,
+    "notes": "Clouded theophany surrounding the mountain before the law."
+  },
+  {
+    "simple_name": "Trumpet Blast at Sinai",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Miracle",
+    "chapter_start": 19,
+    "chapter_end": 19,
+    "confidence": 0.89,
+    "notes": "Escalating heavenly signal before the LORD's descent."
+  },
+  {
+    "simple_name": "Boundaries of Sinai",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 19,
+    "chapter_end": 19,
+    "confidence": 0.88,
+    "notes": "Forbidden perimeter preserving the mountain's holiness."
+  },
+  {
+    "simple_name": "Ten Commandments",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 20,
+    "chapter_end": 20,
+    "confidence": 0.99,
+    "notes": "Foundational covenant words delivered at Sinai."
+  },
+  {
+    "simple_name": "No Other Gods",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 20,
+    "chapter_end": 20,
+    "confidence": 0.94,
+    "notes": "The opening commandment forbidding rival worship."
+  },
+  {
+    "simple_name": "No Graven Images",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 20,
+    "chapter_end": 20,
+    "confidence": 0.93,
+    "notes": "The commandment against idol-making and idol-worship."
+  },
+  {
+    "simple_name": "Sabbath Rest",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 20,
+    "chapter_end": 34,
+    "confidence": 0.95,
+    "notes": "The seventh-day rest command repeated as a covenant principle."
+  },
+  {
+    "simple_name": "Hebrew Servant Law",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 21,
+    "chapter_end": 21,
+    "confidence": 0.94,
+    "notes": "Terms of service and release for Hebrew bondservants."
+  },
+  {
+    "simple_name": "Eye for Eye",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 21,
+    "chapter_end": 21,
+    "confidence": 0.99,
+    "notes": "Famous proportional-justice standard from the case laws."
+  },
+  {
+    "simple_name": "Ox That Gores",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 21,
+    "chapter_end": 21,
+    "confidence": 0.93,
+    "notes": "Liability law for a dangerous animal that kills or injures."
+  },
+  {
+    "simple_name": "Restitution",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 22,
+    "chapter_end": 22,
+    "confidence": 0.9,
+    "notes": "Property and theft laws centered on repayment and compensation."
+  },
+  {
+    "simple_name": "Witchcraft Ban",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 22,
+    "chapter_end": 22,
+    "confidence": 0.94,
+    "notes": "Memorable prohibition against sorcery and occult practice."
+  },
+  {
+    "simple_name": "Protections for the Vulnerable",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 22,
+    "chapter_end": 23,
+    "confidence": 0.86,
+    "notes": "Commands defending strangers, widows, orphans, and the poor."
+  },
+  {
+    "simple_name": "Sabbath Year",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 23,
+    "chapter_end": 23,
+    "confidence": 0.95,
+    "notes": "The land rests in the seventh year for the poor and the beasts."
+  },
+  {
+    "simple_name": "Three Feasts",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 23,
+    "chapter_end": 23,
+    "confidence": 0.93,
+    "notes": "Pilgrimage festivals of Unleavened Bread, Harvest, and Ingathering."
+  },
+  {
+    "simple_name": "Blood of the Covenant",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Event",
+    "chapter_start": 24,
+    "chapter_end": 24,
+    "confidence": 0.98,
+    "notes": "Covenant ratification through blood cast on altar and people."
+  },
+  {
+    "simple_name": "Covenant Meal",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Event",
+    "chapter_start": 24,
+    "chapter_end": 24,
+    "confidence": 0.9,
+    "notes": "Sacred meal in the divine presence on the mountain."
+  },
+  {
+    "simple_name": "Sinai Theophany",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Miracle",
+    "chapter_start": 24,
+    "chapter_end": 24,
+    "confidence": 0.95,
+    "notes": "Vision of God and glory on Sinai's pavement of sapphire."
+  },
+  {
+    "simple_name": "Priestly Consecration",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 29,
+    "chapter_end": 29,
+    "confidence": 0.96,
+    "notes": "Ordination rite for Aaron and his sons."
+  },
+  {
+    "simple_name": "Continual Burnt Offering",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 29,
+    "chapter_end": 29,
+    "confidence": 0.95,
+    "notes": "Daily morning and evening offering before the LORD."
+  },
+  {
+    "simple_name": "Sabbath as a Sign",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Theme/Symbol",
+    "chapter_start": 31,
+    "chapter_end": 31,
+    "confidence": 0.95,
+    "notes": "Sabbath marked as covenant sign between God and Israel."
+  },
+  {
+    "simple_name": "Spirit-Filled Craftsmanship",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Theme/Symbol",
+    "chapter_start": 31,
+    "chapter_end": 31,
+    "confidence": 0.92,
+    "notes": "Bezalel is filled with the Spirit for holy artistic work."
+  },
+  {
+    "simple_name": "Golden Calf",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Event",
+    "chapter_start": 32,
+    "chapter_end": 32,
+    "confidence": 0.99,
+    "notes": "The idol forged in the camp during Moses' delay on the mountain."
+  },
+  {
+    "simple_name": "Broken Tablets",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Relic",
+    "chapter_start": 32,
+    "chapter_end": 32,
+    "confidence": 0.91,
+    "notes": "The first tablets shattered by Moses beneath the mountain."
+  },
+  {
+    "simple_name": "Moses Pleads for Israel",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Event",
+    "chapter_start": 32,
+    "chapter_end": 32,
+    "confidence": 0.95,
+    "notes": "Moses intercedes after Israel's rebellion with the calf."
+  },
+  {
+    "simple_name": "Levites' Sword Purge",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 32,
+    "chapter_end": 32,
+    "confidence": 0.93,
+    "notes": "The Levites execute judgment within the camp at Moses' command."
+  },
+  {
+    "simple_name": "Plague on the People",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Judgment",
+    "chapter_start": 32,
+    "chapter_end": 32,
+    "confidence": 0.9,
+    "notes": "The LORD strikes the people after the calf rebellion."
+  },
+  {
+    "simple_name": "Face to Face with God",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Theme/Symbol",
+    "chapter_start": 33,
+    "chapter_end": 33,
+    "confidence": 0.89,
+    "notes": "Moses speaks with the LORD in uniquely intimate communion."
+  },
+  {
+    "simple_name": "Divine Presence",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Theme/Symbol",
+    "chapter_start": 33,
+    "chapter_end": 33,
+    "confidence": 0.88,
+    "notes": "The promise that God's presence will go with his people."
+  },
+  {
+    "simple_name": "Covenant Renewal",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Event",
+    "chapter_start": 34,
+    "chapter_end": 34,
+    "confidence": 0.97,
+    "notes": "The covenant is renewed after the calf catastrophe."
+  },
+  {
+    "simple_name": "The LORD Proclaims His Name",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Theme/Symbol",
+    "chapter_start": 34,
+    "chapter_end": 34,
+    "confidence": 0.94,
+    "notes": "The divine name and character are proclaimed on Sinai."
+  },
+  {
+    "simple_name": "Veiled Face of Moses",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Theme/Symbol",
+    "chapter_start": 34,
+    "chapter_end": 34,
+    "confidence": 0.92,
+    "notes": "Moses covers his shining face after speaking with the LORD."
+  },
+  {
+    "simple_name": "Freewill Offering",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Law/Rite",
+    "chapter_start": 35,
+    "chapter_end": 35,
+    "confidence": 0.92,
+    "notes": "Voluntary gifts of the people for building the sanctuary."
+  },
+  {
+    "simple_name": "Cloud Fills the Tabernacle",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Miracle",
+    "chapter_start": 40,
+    "chapter_end": 40,
+    "confidence": 0.99,
+    "notes": "The cloud covers the finished sanctuary."
+  },
+  {
+    "simple_name": "Glory Fills the Tabernacle",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Miracle",
+    "chapter_start": 40,
+    "chapter_end": 40,
+    "confidence": 0.99,
+    "notes": "The glory of the LORD fills the completed tabernacle."
+  },
+  {
+    "simple_name": "Journey by the Cloud",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Theme/Symbol",
+    "chapter_start": 40,
+    "chapter_end": 40,
+    "confidence": 0.9,
+    "notes": "Israel moves only when the cloud is taken up from the sanctuary."
+  },
+  {
+    "simple_name": "Pharaoh's Hardened Heart",
+    "source_book": "Exodus",
+    "source_period": "Egypt & Exodus",
+    "category": "Theme/Symbol",
+    "chapter_start": 7,
+    "chapter_end": 14,
+    "confidence": 0.99,
+    "notes": "Recurring motif that drives the plague cycle and final pursuit."
+  }
+]

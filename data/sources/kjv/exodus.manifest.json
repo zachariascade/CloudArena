@@ -1,0 +1,7 @@
+{
+  "book": "Exodus",
+  "chapterCount": 40,
+  "sourcePeriod": "Egypt & Exodus",
+  "rawSourcePath": "data/sources/kjv/exodus.raw.txt",
+  "normalizedSourcePath": "data/sources/kjv/exodus.json"
+}

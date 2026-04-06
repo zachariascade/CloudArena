@@ -1,0 +1,1312 @@
+[
+  {
+    "simple_name": "Jesus Christ",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 1,
+    "chapter_end": 28,
+    "confidence": 1,
+    "notes": "Central figure of the fourfold Gospel witness, teacher, healer, and risen Lord."
+  },
+  {
+    "simple_name": "Mary",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 1,
+    "chapter_end": 2,
+    "confidence": 0.99,
+    "notes": "Mother of Jesus, favored recipient of the annunciation and singer of the Magnificat."
+  },
+  {
+    "simple_name": "Joseph",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 1,
+    "chapter_end": 2,
+    "confidence": 0.96,
+    "notes": "Guardian of Jesus in the infancy narrative and obedient dream-receiver."
+  },
+  {
+    "simple_name": "John the Baptist",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 3,
+    "chapter_end": 14,
+    "confidence": 0.99,
+    "notes": "Forerunner in the wilderness whose ministry prepares the way for Jesus."
+  },
+  {
+    "simple_name": "Peter",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 4,
+    "chapter_end": 26,
+    "confidence": 0.99,
+    "notes": "Foremost disciple, confessor, wavering walker on the sea, and denier restored."
+  },
+  {
+    "simple_name": "Andrew",
+    "source_book": "Mark",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 1,
+    "chapter_end": 13,
+    "confidence": 0.91,
+    "notes": "Early-called disciple and brother of Peter."
+  },
+  {
+    "simple_name": "James Son of Zebedee",
+    "source_book": "Mark",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 1,
+    "chapter_end": 10,
+    "confidence": 0.89,
+    "notes": "Member of Jesus' inner circle and son of thunder."
+  },
+  {
+    "simple_name": "John Beloved Disciple",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 13,
+    "chapter_end": 21,
+    "confidence": 0.92,
+    "notes": "Beloved witness at the supper, the cross, and the empty tomb."
+  },
+  {
+    "simple_name": "Matthew the Publican",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 9,
+    "chapter_end": 10,
+    "confidence": 0.91,
+    "notes": "Tax collector called to discipleship."
+  },
+  {
+    "simple_name": "Judas Iscariot",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 10,
+    "chapter_end": 27,
+    "confidence": 0.99,
+    "notes": "The betrayer whose kiss and silver frame the passion betrayal arc."
+  },
+  {
+    "simple_name": "Thomas",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 11,
+    "chapter_end": 20,
+    "confidence": 0.95,
+    "notes": "Disciple remembered for his demand to see and touch the risen Christ."
+  },
+  {
+    "simple_name": "Mary Magdalene",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 19,
+    "chapter_end": 20,
+    "confidence": 0.96,
+    "notes": "Faithful witness at the tomb and first herald of the resurrection in John."
+  },
+  {
+    "simple_name": "Martha",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 11,
+    "chapter_end": 12,
+    "confidence": 0.93,
+    "notes": "Sister of Lazarus whose confession frames the resurrection sign."
+  },
+  {
+    "simple_name": "Lazarus",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 11,
+    "chapter_end": 12,
+    "confidence": 0.97,
+    "notes": "Friend of Jesus called from the tomb in one of the Gospel's great signs."
+  },
+  {
+    "simple_name": "Pontius Pilate",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 27,
+    "chapter_end": 27,
+    "confidence": 0.97,
+    "notes": "Roman governor who judges Jesus and yields to the crowd."
+  },
+  {
+    "simple_name": "Herod the Great",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.95,
+    "notes": "King of the nativity crisis whose fear triggers the flight into Egypt."
+  },
+  {
+    "simple_name": "Herod Antipas",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 3,
+    "chapter_end": 23,
+    "confidence": 0.92,
+    "notes": "Tetrarch linked to John the Baptist's death and Jesus' mockery."
+  },
+  {
+    "simple_name": "Caiaphas",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 11,
+    "chapter_end": 18,
+    "confidence": 0.9,
+    "notes": "High priest tied to the plot against Jesus."
+  },
+  {
+    "simple_name": "Joseph of Arimathea",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 19,
+    "chapter_end": 19,
+    "confidence": 0.94,
+    "notes": "Disciple who provides the new tomb for Jesus' burial."
+  },
+  {
+    "simple_name": "Nicodemus",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 3,
+    "chapter_end": 19,
+    "confidence": 0.94,
+    "notes": "Night visitor who appears again at Jesus' burial."
+  },
+  {
+    "simple_name": "Mary of Bethany",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 11,
+    "chapter_end": 12,
+    "confidence": 0.94,
+    "notes": "Sister of Martha who anoints Jesus before the passion."
+  },
+  {
+    "simple_name": "Zechariah",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 1,
+    "chapter_end": 1,
+    "confidence": 0.95,
+    "notes": "Priest struck silent in the temple before John's birth."
+  },
+  {
+    "simple_name": "Elisabeth",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 1,
+    "chapter_end": 1,
+    "confidence": 0.95,
+    "notes": "Mother of John the Baptist and witness to Mary's visitation."
+  },
+  {
+    "simple_name": "Simeon",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.93,
+    "notes": "Temple watcher who blesses the child Jesus."
+  },
+  {
+    "simple_name": "Anna the Prophetess",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.92,
+    "notes": "Aged prophetess who praises God over the child in the temple."
+  },
+  {
+    "simple_name": "Gabriel",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 1,
+    "chapter_end": 1,
+    "confidence": 0.95,
+    "notes": "Angel herald of John and Jesus in Luke's opening visions."
+  },
+  {
+    "simple_name": "Zacchaeus",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 19,
+    "chapter_end": 19,
+    "confidence": 0.94,
+    "notes": "Tree-climbing tax collector visited by Jesus in Jericho."
+  },
+  {
+    "simple_name": "Jairus",
+    "source_book": "Mark",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 5,
+    "chapter_end": 5,
+    "confidence": 0.92,
+    "notes": "Ruler of the synagogue whose daughter is restored."
+  },
+  {
+    "simple_name": "Samaritan Woman",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 4,
+    "chapter_end": 4,
+    "confidence": 0.95,
+    "notes": "Well-side conversation partner who becomes an early witness."
+  },
+  {
+    "simple_name": "Blind Bartimaeus",
+    "source_book": "Mark",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 10,
+    "chapter_end": 10,
+    "confidence": 0.93,
+    "notes": "Persistent roadside beggar healed near Jericho."
+  },
+  {
+    "simple_name": "Centurion of Capernaum",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 8,
+    "chapter_end": 8,
+    "confidence": 0.92,
+    "notes": "Gentile officer whose faith becomes exemplary."
+  },
+  {
+    "simple_name": "Roman Centurion at the Cross",
+    "source_book": "Mark",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 15,
+    "chapter_end": 15,
+    "confidence": 0.91,
+    "notes": "Execution witness who confesses Jesus at the crucifixion."
+  },
+  {
+    "simple_name": "Magi from the East",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Person",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.92,
+    "notes": "Star-led visitors who bring kingly gifts."
+  },
+  {
+    "simple_name": "Legion",
+    "source_book": "Mark",
+    "source_period": "Gospels",
+    "category": "Creature",
+    "chapter_start": 5,
+    "chapter_end": 5,
+    "confidence": 0.9,
+    "notes": "Collective demonic presence driven from the Gerasene man."
+  },
+  {
+    "simple_name": "Bethlehem",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.98,
+    "notes": "Birth city of Jesus and city of David memory."
+  },
+  {
+    "simple_name": "Nazareth",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 2,
+    "chapter_end": 4,
+    "confidence": 0.96,
+    "notes": "Home city associated with Jesus' upbringing."
+  },
+  {
+    "simple_name": "Jordan River",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 3,
+    "chapter_end": 3,
+    "confidence": 0.98,
+    "notes": "River of John's baptizing and Jesus' revealed commissioning."
+  },
+  {
+    "simple_name": "Wilderness of Temptation",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 4,
+    "chapter_end": 4,
+    "confidence": 0.95,
+    "notes": "Desert testing ground after the baptism."
+  },
+  {
+    "simple_name": "Cana",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 2,
+    "chapter_end": 4,
+    "confidence": 0.94,
+    "notes": "Village of the wedding sign and later healing word."
+  },
+  {
+    "simple_name": "Capernaum",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 4,
+    "chapter_end": 13,
+    "confidence": 0.95,
+    "notes": "Major Galilean base of ministry, healing, and teaching."
+  },
+  {
+    "simple_name": "Sea of Galilee",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 4,
+    "chapter_end": 15,
+    "confidence": 0.96,
+    "notes": "Waters of calling, storms, and miracles."
+  },
+  {
+    "simple_name": "Bethsaida",
+    "source_book": "Mark",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 6,
+    "chapter_end": 8,
+    "confidence": 0.87,
+    "notes": "Fishing-region setting tied to provision and healing."
+  },
+  {
+    "simple_name": "Caesarea Philippi",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 16,
+    "chapter_end": 16,
+    "confidence": 0.92,
+    "notes": "Site of Peter's confession and the gates-of-hell saying."
+  },
+  {
+    "simple_name": "Bethany",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 11,
+    "chapter_end": 12,
+    "confidence": 0.95,
+    "notes": "Village of Lazarus, Martha, and Mary near Jerusalem."
+  },
+  {
+    "simple_name": "Jericho",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 18,
+    "chapter_end": 19,
+    "confidence": 0.92,
+    "notes": "City tied to mercy on the road and Zacchaeus in the tree."
+  },
+  {
+    "simple_name": "Jerusalem",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 21,
+    "chapter_end": 28,
+    "confidence": 0.99,
+    "notes": "City of entry, teaching, trial, crucifixion, and resurrection witness."
+  },
+  {
+    "simple_name": "Temple Courts",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 21,
+    "chapter_end": 24,
+    "confidence": 0.95,
+    "notes": "Charged setting for cleansing, teaching, and confrontation."
+  },
+  {
+    "simple_name": "Upper Room",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 22,
+    "chapter_end": 24,
+    "confidence": 0.9,
+    "notes": "Prepared chamber linked to the final meal and resurrection appearances."
+  },
+  {
+    "simple_name": "Mount of Olives",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 19,
+    "chapter_end": 24,
+    "confidence": 0.95,
+    "notes": "Hill of approach, discourse, prayer, and departure."
+  },
+  {
+    "simple_name": "Gethsemane",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 26,
+    "chapter_end": 26,
+    "confidence": 0.97,
+    "notes": "Garden of prayer, sorrow, and arrest."
+  },
+  {
+    "simple_name": "Golgotha",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 19,
+    "chapter_end": 19,
+    "confidence": 0.98,
+    "notes": "Place of the Skull where Jesus is crucified."
+  },
+  {
+    "simple_name": "Emmaus",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 24,
+    "chapter_end": 24,
+    "confidence": 0.92,
+    "notes": "Village of post-resurrection recognition on the road."
+  },
+  {
+    "simple_name": "Pool of Bethesda",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 5,
+    "chapter_end": 5,
+    "confidence": 0.9,
+    "notes": "Poolside setting of the long-disabled man's healing."
+  },
+  {
+    "simple_name": "Pool of Siloam",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 9,
+    "chapter_end": 9,
+    "confidence": 0.88,
+    "notes": "Waters of sending tied to the healing of the man born blind."
+  },
+  {
+    "simple_name": "Empty Tomb",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Place",
+    "chapter_start": 20,
+    "chapter_end": 20,
+    "confidence": 0.98,
+    "notes": "Burial place transformed into the sign of resurrection victory."
+  },
+  {
+    "simple_name": "Star of Bethlehem",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Relic",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.96,
+    "notes": "Guiding sign that leads the Magi to the child."
+  },
+  {
+    "simple_name": "Gifts of the Magi",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Item",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.93,
+    "notes": "Gold, frankincense, and myrrh brought to the newborn king."
+  },
+  {
+    "simple_name": "Manger",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Item",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.95,
+    "notes": "Lowly cradle of the nativity scene."
+  },
+  {
+    "simple_name": "Wedding Waterpots",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Item",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.91,
+    "notes": "Stone vessels transformed into the setting of Jesus' first sign."
+  },
+  {
+    "simple_name": "Loaves and Fishes",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Item",
+    "chapter_start": 6,
+    "chapter_end": 6,
+    "confidence": 0.96,
+    "notes": "Provision symbols multiplied in the wilderness feeding."
+  },
+  {
+    "simple_name": "Alabaster Jar",
+    "source_book": "Mark",
+    "source_period": "Gospels",
+    "category": "Relic",
+    "chapter_start": 14,
+    "chapter_end": 14,
+    "confidence": 0.93,
+    "notes": "Precious vessel broken in an act of anointing before the burial."
+  },
+  {
+    "simple_name": "Palm Branches",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Item",
+    "chapter_start": 12,
+    "chapter_end": 12,
+    "confidence": 0.91,
+    "notes": "Victory branches spread during the triumphal entry."
+  },
+  {
+    "simple_name": "Thirty Pieces of Silver",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Item",
+    "chapter_start": 26,
+    "chapter_end": 27,
+    "confidence": 0.96,
+    "notes": "Betrayal payment that becomes a haunting passion emblem."
+  },
+  {
+    "simple_name": "Basin and Towel",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Item",
+    "chapter_start": 13,
+    "chapter_end": 13,
+    "confidence": 0.9,
+    "notes": "Service implements of the foot-washing scene."
+  },
+  {
+    "simple_name": "Crown of Thorns",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Relic",
+    "chapter_start": 19,
+    "chapter_end": 19,
+    "confidence": 0.97,
+    "notes": "Mocking royal emblem placed on Jesus in the passion."
+  },
+  {
+    "simple_name": "Seamless Robe",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Relic",
+    "chapter_start": 19,
+    "chapter_end": 19,
+    "confidence": 0.9,
+    "notes": "Garment not torn but cast over by lot at the cross."
+  },
+  {
+    "simple_name": "Cross of Crucifixion",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Relic",
+    "chapter_start": 19,
+    "chapter_end": 19,
+    "confidence": 0.98,
+    "notes": "Central instrument of the Gospel passion climax."
+  },
+  {
+    "simple_name": "Burial Cloths",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Relic",
+    "chapter_start": 20,
+    "chapter_end": 20,
+    "confidence": 0.9,
+    "notes": "Folded grave linens left behind in the tomb."
+  },
+  {
+    "simple_name": "Stone Rolled Away",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Item",
+    "chapter_start": 28,
+    "chapter_end": 28,
+    "confidence": 0.91,
+    "notes": "Barrier-stone moved from the tomb in resurrection imagery."
+  },
+  {
+    "simple_name": "Annunciation",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 1,
+    "chapter_end": 1,
+    "confidence": 0.97,
+    "notes": "Gabriel's message to Mary announcing the conception of Jesus."
+  },
+  {
+    "simple_name": "Visitation",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 1,
+    "chapter_end": 1,
+    "confidence": 0.92,
+    "notes": "Meeting of Mary and Elisabeth with blessing and song."
+  },
+  {
+    "simple_name": "Nativity",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.99,
+    "notes": "Birth of Jesus in humble circumstances."
+  },
+  {
+    "simple_name": "Adoration of the Shepherds",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.92,
+    "notes": "The shepherds' angel-announced visit to the newborn child."
+  },
+  {
+    "simple_name": "Visit of the Magi",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.95,
+    "notes": "Eastern sages arrive under the sign of the star."
+  },
+  {
+    "simple_name": "Flight into Egypt",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.95,
+    "notes": "Holy family's escape from Herod's threat."
+  },
+  {
+    "simple_name": "Baptism of Jesus",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 3,
+    "chapter_end": 3,
+    "confidence": 0.98,
+    "notes": "Public inauguration scene in the Jordan."
+  },
+  {
+    "simple_name": "Spirit Descending Like a Dove",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Miracle",
+    "chapter_start": 3,
+    "chapter_end": 3,
+    "confidence": 0.94,
+    "notes": "Visible sign of divine approval at the baptism."
+  },
+  {
+    "simple_name": "Voice from Heaven",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Miracle",
+    "chapter_start": 3,
+    "chapter_end": 3,
+    "confidence": 0.93,
+    "notes": "Heavenly declaration over the beloved Son."
+  },
+  {
+    "simple_name": "Temptation in the Wilderness",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 4,
+    "chapter_end": 4,
+    "confidence": 0.98,
+    "notes": "Forty-day testing of Jesus in the desert."
+  },
+  {
+    "simple_name": "Calling of the First Disciples",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 4,
+    "chapter_end": 4,
+    "confidence": 0.93,
+    "notes": "Fishers are summoned to become fishers of men."
+  },
+  {
+    "simple_name": "Sermon on the Mount",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 5,
+    "chapter_end": 7,
+    "confidence": 0.98,
+    "notes": "Foundational mountain teaching on kingdom life."
+  },
+  {
+    "simple_name": "Beatitudes",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Theme/Symbol",
+    "chapter_start": 5,
+    "chapter_end": 5,
+    "confidence": 0.96,
+    "notes": "Blessed-sayings that define upside-down kingdom values."
+  },
+  {
+    "simple_name": "Lord's Prayer",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Law/Rite",
+    "chapter_start": 6,
+    "chapter_end": 6,
+    "confidence": 0.96,
+    "notes": "Model prayer placed at the heart of Jesus' instruction."
+  },
+  {
+    "simple_name": "Kingdom of Heaven",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Theme/Symbol",
+    "chapter_start": 4,
+    "chapter_end": 25,
+    "confidence": 0.97,
+    "notes": "Signature Gospel proclamation of divine reign breaking in."
+  },
+  {
+    "simple_name": "Parable of the Sower",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Theme/Symbol",
+    "chapter_start": 13,
+    "chapter_end": 13,
+    "confidence": 0.93,
+    "notes": "Seed-scattering image for hearing and fruitfulness."
+  },
+  {
+    "simple_name": "Mustard Seed",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Theme/Symbol",
+    "chapter_start": 13,
+    "chapter_end": 13,
+    "confidence": 0.92,
+    "notes": "Tiny beginning that becomes a sheltering kingdom image."
+  },
+  {
+    "simple_name": "Narrow Gate",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Theme/Symbol",
+    "chapter_start": 7,
+    "chapter_end": 7,
+    "confidence": 0.9,
+    "notes": "Compressed image of difficult but life-giving discipleship."
+  },
+  {
+    "simple_name": "Healing of the Leper",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Miracle",
+    "chapter_start": 8,
+    "chapter_end": 8,
+    "confidence": 0.91,
+    "notes": "Purifying touch miracle early in the Galilean ministry."
+  },
+  {
+    "simple_name": "Healing of the Paralytic",
+    "source_book": "Mark",
+    "source_period": "Gospels",
+    "category": "Miracle",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.92,
+    "notes": "Forgiveness and healing converge in the lowered-mat scene."
+  },
+  {
+    "simple_name": "Centurion's Servant Healed",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Miracle",
+    "chapter_start": 8,
+    "chapter_end": 8,
+    "confidence": 0.9,
+    "notes": "Distance-healing tied to remarkable faith."
+  },
+  {
+    "simple_name": "Calming the Storm",
+    "source_book": "Mark",
+    "source_period": "Gospels",
+    "category": "Miracle",
+    "chapter_start": 4,
+    "chapter_end": 4,
+    "confidence": 0.95,
+    "notes": "Wind and waves obey Jesus' rebuke."
+  },
+  {
+    "simple_name": "Walking on Water",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Miracle",
+    "chapter_start": 14,
+    "chapter_end": 14,
+    "confidence": 0.96,
+    "notes": "Sea-crossing miracle joined to Peter's wavering steps."
+  },
+  {
+    "simple_name": "Feeding of the Five Thousand",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Miracle",
+    "chapter_start": 6,
+    "chapter_end": 6,
+    "confidence": 0.98,
+    "notes": "Loaves-and-fishes provision sign for the multitude."
+  },
+  {
+    "simple_name": "Feeding of the Four Thousand",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Miracle",
+    "chapter_start": 15,
+    "chapter_end": 15,
+    "confidence": 0.9,
+    "notes": "Second wilderness feeding miracle with basket imagery."
+  },
+  {
+    "simple_name": "Transfiguration",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 17,
+    "chapter_end": 17,
+    "confidence": 0.98,
+    "notes": "Mountain revelation of glory before chosen disciples."
+  },
+  {
+    "simple_name": "Legion Cast into Swine",
+    "source_book": "Mark",
+    "source_period": "Gospels",
+    "category": "Miracle",
+    "chapter_start": 5,
+    "chapter_end": 5,
+    "confidence": 0.93,
+    "notes": "Exorcism climax that sends demons into the herd."
+  },
+  {
+    "simple_name": "Jairus's Daughter Raised",
+    "source_book": "Mark",
+    "source_period": "Gospels",
+    "category": "Miracle",
+    "chapter_start": 5,
+    "chapter_end": 5,
+    "confidence": 0.93,
+    "notes": "Dead child restored with a command to arise."
+  },
+  {
+    "simple_name": "Woman with an Issue of Blood",
+    "source_book": "Mark",
+    "source_period": "Gospels",
+    "category": "Miracle",
+    "chapter_start": 5,
+    "chapter_end": 5,
+    "confidence": 0.92,
+    "notes": "Healing by touch on the way to Jairus' house."
+  },
+  {
+    "simple_name": "The Good Samaritan",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Theme/Symbol",
+    "chapter_start": 10,
+    "chapter_end": 10,
+    "confidence": 0.98,
+    "notes": "Mercy parable centered on the wounded traveler and unexpected neighbor."
+  },
+  {
+    "simple_name": "The Prodigal Son",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Theme/Symbol",
+    "chapter_start": 15,
+    "chapter_end": 15,
+    "confidence": 0.98,
+    "notes": "Homecoming parable of squandered inheritance and lavish welcome."
+  },
+  {
+    "simple_name": "The Lost Sheep",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Theme/Symbol",
+    "chapter_start": 15,
+    "chapter_end": 15,
+    "confidence": 0.94,
+    "notes": "Search-and-recovery image of divine joy."
+  },
+  {
+    "simple_name": "The Rich Fool",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Theme/Symbol",
+    "chapter_start": 12,
+    "chapter_end": 12,
+    "confidence": 0.91,
+    "notes": "Barn-building parable against hoarding life."
+  },
+  {
+    "simple_name": "The Pharisee and the Publican",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Theme/Symbol",
+    "chapter_start": 18,
+    "chapter_end": 18,
+    "confidence": 0.92,
+    "notes": "Prayer contrast between self-righteousness and humility."
+  },
+  {
+    "simple_name": "Zacchaeus in the Sycamore",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 19,
+    "chapter_end": 19,
+    "confidence": 0.91,
+    "notes": "Salvation comes to the house of the tree-climbing tax collector."
+  },
+  {
+    "simple_name": "Water into Wine",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Miracle",
+    "chapter_start": 2,
+    "chapter_end": 2,
+    "confidence": 0.98,
+    "notes": "First sign in Cana where water becomes choice wine."
+  },
+  {
+    "simple_name": "New Birth from Above",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Theme/Symbol",
+    "chapter_start": 3,
+    "chapter_end": 3,
+    "confidence": 0.94,
+    "notes": "Born-again teaching from Jesus' night conversation with Nicodemus."
+  },
+  {
+    "simple_name": "Living Water",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Theme/Symbol",
+    "chapter_start": 4,
+    "chapter_end": 4,
+    "confidence": 0.95,
+    "notes": "Well imagery for the Spirit's lasting satisfaction."
+  },
+  {
+    "simple_name": "Healing at Bethesda",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Miracle",
+    "chapter_start": 5,
+    "chapter_end": 5,
+    "confidence": 0.93,
+    "notes": "Long-disabled man restored beside the pool."
+  },
+  {
+    "simple_name": "Bread of Life",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Theme/Symbol",
+    "chapter_start": 6,
+    "chapter_end": 6,
+    "confidence": 0.96,
+    "notes": "Sustenance metaphor flowing out of the feeding sign."
+  },
+  {
+    "simple_name": "Light of the World",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Theme/Symbol",
+    "chapter_start": 8,
+    "chapter_end": 9,
+    "confidence": 0.96,
+    "notes": "Radiant identity claim paired with sight-giving works."
+  },
+  {
+    "simple_name": "Healing the Man Born Blind",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Miracle",
+    "chapter_start": 9,
+    "chapter_end": 9,
+    "confidence": 0.95,
+    "notes": "Sight miracle with clay, washing, and testimony."
+  },
+  {
+    "simple_name": "Good Shepherd",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Theme/Symbol",
+    "chapter_start": 10,
+    "chapter_end": 10,
+    "confidence": 0.96,
+    "notes": "Pastoral image of sacrificial care, voice, and protection."
+  },
+  {
+    "simple_name": "Raising of Lazarus",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Miracle",
+    "chapter_start": 11,
+    "chapter_end": 11,
+    "confidence": 0.98,
+    "notes": "Tomb-command sign that intensifies the road to the cross."
+  },
+  {
+    "simple_name": "Triumphal Entry",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 12,
+    "chapter_end": 12,
+    "confidence": 0.98,
+    "notes": "Jesus enters Jerusalem to acclaim and palm branches."
+  },
+  {
+    "simple_name": "Cleansing of the Temple",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 21,
+    "chapter_end": 21,
+    "confidence": 0.96,
+    "notes": "Merchants are driven out of the house of prayer."
+  },
+  {
+    "simple_name": "Widow's Mite",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Theme/Symbol",
+    "chapter_start": 21,
+    "chapter_end": 21,
+    "confidence": 0.9,
+    "notes": "Small offering made weighty by sacrificial devotion."
+  },
+  {
+    "simple_name": "The Last Supper",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 22,
+    "chapter_end": 22,
+    "confidence": 0.99,
+    "notes": "Final meal where covenant words frame bread and cup."
+  },
+  {
+    "simple_name": "Washing of the Feet",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Law/Rite",
+    "chapter_start": 13,
+    "chapter_end": 13,
+    "confidence": 0.92,
+    "notes": "Embodied lesson in humble service using basin and towel."
+  },
+  {
+    "simple_name": "Vine and Branches",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Theme/Symbol",
+    "chapter_start": 15,
+    "chapter_end": 15,
+    "confidence": 0.94,
+    "notes": "Fruitfulness image grounded in abiding union."
+  },
+  {
+    "simple_name": "Betrayer's Kiss",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 26,
+    "chapter_end": 26,
+    "confidence": 0.95,
+    "notes": "The arrest signal that turns intimacy into betrayal."
+  },
+  {
+    "simple_name": "Denial before the Rooster's Crow",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 26,
+    "chapter_end": 26,
+    "confidence": 0.95,
+    "notes": "Peter's collapse under pressure before dawn."
+  },
+  {
+    "simple_name": "Trial before Pilate",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Judgment",
+    "chapter_start": 18,
+    "chapter_end": 19,
+    "confidence": 0.97,
+    "notes": "Roman hearing that culminates in the sentence of crucifixion."
+  },
+  {
+    "simple_name": "Crucifixion",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 19,
+    "chapter_end": 19,
+    "confidence": 1,
+    "notes": "The central passion event at Golgotha."
+  },
+  {
+    "simple_name": "Darkness over the Land",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Judgment",
+    "chapter_start": 23,
+    "chapter_end": 23,
+    "confidence": 0.92,
+    "notes": "Cosmic sign that accompanies the death of Jesus."
+  },
+  {
+    "simple_name": "Veil Torn in Two",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Miracle",
+    "chapter_start": 27,
+    "chapter_end": 27,
+    "confidence": 0.94,
+    "notes": "Temple curtain split at the climactic moment of death."
+  },
+  {
+    "simple_name": "Resurrection",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 20,
+    "chapter_end": 20,
+    "confidence": 1,
+    "notes": "Victory over death announced at the empty tomb and in appearances."
+  },
+  {
+    "simple_name": "Road to Emmaus",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 24,
+    "chapter_end": 24,
+    "confidence": 0.96,
+    "notes": "Journey of hidden presence, burning hearts, and revealed bread-breaking."
+  },
+  {
+    "simple_name": "Doubting Thomas",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 20,
+    "chapter_end": 20,
+    "confidence": 0.93,
+    "notes": "Resurrection appearance that answers unbelief with wounds."
+  },
+  {
+    "simple_name": "Breakfast by the Sea",
+    "source_book": "John",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 21,
+    "chapter_end": 21,
+    "confidence": 0.9,
+    "notes": "Risen Jesus feeds his disciples beside the water."
+  },
+  {
+    "simple_name": "Great Commission",
+    "source_book": "Matthew",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 28,
+    "chapter_end": 28,
+    "confidence": 0.97,
+    "notes": "Mountain sending of the disciples to all nations."
+  },
+  {
+    "simple_name": "Ascension",
+    "source_book": "Luke",
+    "source_period": "Gospels",
+    "category": "Event",
+    "chapter_start": 24,
+    "chapter_end": 24,
+    "confidence": 0.96,
+    "notes": "Departure blessing that closes Luke's Gospel."
+  }
+]
