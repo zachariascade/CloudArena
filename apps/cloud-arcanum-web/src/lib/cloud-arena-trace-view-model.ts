@@ -19,6 +19,7 @@ export type TraceViewerCardSnapshot = {
   definitionId: CardDefinitionId;
   name: string;
   cost: number;
+  effectSummary: string;
 };
 
 export type TraceViewerPermanentSnapshot = {
@@ -148,11 +149,44 @@ function toCardSnapshot(
   cardDefinitions: CardDefinitionLibrary,
   card: CardInstance,
 ): TraceViewerCardSnapshot {
+  const definition = getCardDefinitionFromLibrary(cardDefinitions, card.definitionId);
+
   return {
     instanceId: card.instanceId,
     definitionId: card.definitionId,
-    name: getCardDefinitionFromLibrary(cardDefinitions, card.definitionId).name,
-    cost: getCardDefinitionFromLibrary(cardDefinitions, card.definitionId).cost,
+    name: definition.name,
+    cost: definition.cost,
+    effectSummary:
+      definition.type === "permanent"
+        ? definition.actions
+            .map((action) =>
+              typeof action.attackAmount === "number" && action.attackAmount > 0
+                ? `Attack ${action.attackAmount}`
+                : typeof action.blockAmount === "number" && action.blockAmount > 0
+                  ? `Defend ${action.blockAmount}`
+                  : "Utility",
+            )
+            .join(" • ")
+        : definition.onPlay
+            .map((effect) => {
+              if (typeof effect.attackAmount === "number" && effect.attackAmount > 0) {
+                const hits = effect.attackTimes && effect.attackTimes > 1
+                  ? ` x${effect.attackTimes}`
+                  : "";
+                return `Attack ${effect.attackAmount}${hits}`;
+              }
+
+              if (typeof effect.blockAmount === "number" && effect.blockAmount > 0) {
+                return `Defend ${effect.blockAmount}`;
+              }
+
+              if (effect.summonSelf) {
+                return "Summon";
+              }
+
+              return "Effect";
+            })
+            .join(" • "),
   };
 }
 

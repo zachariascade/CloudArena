@@ -373,27 +373,50 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
           grid-template-columns: minmax(0, 1.25fr) minmax(20rem, 0.95fr);
           align-items: start;
         }
+
+        .cloud-arena-content-grid-full {
+          grid-template-columns: minmax(0, 1fr);
+        }
       }
 
       .trace-viewer-main-column {
         min-width: 0;
+        width: 100%;
       }
 
       .trace-viewer-panels {
         display: grid;
         gap: 0.8rem;
+        width: 100%;
       }
 
       @media (min-width: 760px) {
         .trace-viewer-panels {
           grid-template-columns: repeat(2, minmax(0, 1fr));
+          align-items: stretch;
         }
       }
 
       .trace-viewer-panel {
         display: grid;
         gap: 0.35rem;
+        min-width: 0;
         padding: 1.1rem 1.15rem;
+      }
+
+      .cloud-arena-top-panels {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: stretch;
+      }
+
+      .cloud-arena-summary-panel {
+        min-height: 100%;
+      }
+
+      @media (max-width: 699px) {
+        .cloud-arena-top-panels {
+          grid-template-columns: minmax(0, 1fr);
+        }
       }
 
       .trace-viewer-hand-bar {
@@ -497,6 +520,40 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         scroll-snap-align: start;
       }
 
+      .trace-viewer-hand-card-button {
+        width: 100%;
+        border: 1px solid rgba(130, 94, 52, 0.18);
+        background:
+          linear-gradient(180deg, rgba(255, 251, 238, 0.96), rgba(249, 242, 220, 0.92));
+        color: inherit;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .trace-viewer-hand-card-playable {
+        box-shadow:
+          inset 0 0 0 1px rgba(154, 52, 18, 0.12),
+          0 12px 28px rgba(98, 57, 18, 0.12);
+      }
+
+      .trace-viewer-hand-card-disabled {
+        opacity: 0.78;
+      }
+
+      .trace-viewer-hand-card-button:hover:enabled {
+        transform: translateY(-2px);
+        border-color: rgba(154, 52, 18, 0.34);
+        box-shadow:
+          inset 0 0 0 1px rgba(154, 52, 18, 0.16),
+          0 16px 34px rgba(98, 57, 18, 0.16);
+      }
+
+      .trace-viewer-hand-card-button:focus-visible {
+        outline: 3px solid rgba(154, 52, 18, 0.28);
+        outline-offset: 3px;
+      }
+
       .trace-viewer-board-grid {
         align-items: start;
       }
@@ -552,6 +609,7 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
 
       .trace-viewer-card-stats span,
       .trace-viewer-card-tags span,
+      .trace-viewer-inline-action,
       .trace-viewer-zone-chip {
         display: inline-flex;
         align-items: center;
@@ -563,12 +621,39 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         font-size: 0.86rem;
       }
 
+      .trace-viewer-card-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+      }
+
+      .trace-viewer-inline-action {
+        border: 1px solid rgba(130, 94, 52, 0.16);
+        background: rgba(255, 255, 255, 0.72);
+        color: var(--ink);
+        font: inherit;
+        font-size: 0.84rem;
+        font-weight: 700;
+      }
+
+      .trace-viewer-inline-action-available {
+        box-shadow: inset 0 0 0 1px rgba(154, 52, 18, 0.08);
+      }
+
+      .trace-viewer-inline-action-disabled {
+        opacity: 0.7;
+      }
+
       .trace-viewer-zone-row {
         margin-top: 0.2rem;
       }
 
       .trace-viewer-hand-zones {
         margin-top: 0;
+      }
+
+      .trace-viewer-hand-actions {
+        margin-bottom: 0.8rem;
       }
 
       .trace-viewer-stat-chip {

@@ -1,9 +1,14 @@
 import {
+  buildCloudArenaSessionActionsPath,
+  buildCloudArenaSessionPath,
+  buildCloudArenaSessionResetPath,
   buildCloudArcanumCardDetailPath,
   buildCloudArcanumDeckDetailPath,
   buildCloudArcanumEntityValidationPath,
   buildCloudArcanumSetDetailPath,
   buildCloudArcanumUniverseDetailPath,
+  type CloudArenaActionRequest,
+  type CloudArenaCreateSessionRequest,
   cloudArcanumApiRoutes,
   type ApiErrorResponse,
   type CardDetailQuery,
@@ -97,14 +102,24 @@ export class CloudArcanumApiClient {
     route: TName,
     path: string,
     options: {
+      body?: unknown;
+      method?: "GET" | "POST";
       signal?: AbortSignal;
     } = {},
   ): Promise<CloudArcanumApiResponse<TName>> {
+    const headers: Record<string, string> = {
+      accept: "application/json",
+    };
+    const method = options.method ?? "GET";
+
+    if (options.body !== undefined) {
+      headers["content-type"] = "application/json";
+    }
+
     const response = await this.#fetchFn(`${this.#baseUrl}${path}`, {
-      headers: {
-        accept: "application/json",
-      },
-      method: "GET",
+      body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
+      headers,
+      method,
       signal: options.signal,
     });
 
@@ -124,6 +139,48 @@ export class CloudArcanumApiClient {
 
   getHealth(options?: { signal?: AbortSignal }) {
     return this.request("health", cloudArcanumApiRoutes.health, options);
+  }
+
+  createCloudArenaSession(
+    body: CloudArenaCreateSessionRequest = {},
+    options?: { signal?: AbortSignal },
+  ) {
+    return this.request("cloudArenaSessions", cloudArcanumApiRoutes.cloudArenaSessions, {
+      ...options,
+      body,
+      method: "POST",
+    });
+  }
+
+  getCloudArenaSession(sessionId: string, options?: { signal?: AbortSignal }) {
+    return this.request("cloudArenaSessionDetail", buildCloudArenaSessionPath(sessionId), options);
+  }
+
+  applyCloudArenaAction(
+    sessionId: string,
+    body: CloudArenaActionRequest,
+    options?: { signal?: AbortSignal },
+  ) {
+    return this.request(
+      "cloudArenaSessionActions",
+      buildCloudArenaSessionActionsPath(sessionId),
+      {
+        ...options,
+        body,
+        method: "POST",
+      },
+    );
+  }
+
+  resetCloudArenaSession(sessionId: string, options?: { signal?: AbortSignal }) {
+    return this.request(
+      "cloudArenaSessionReset",
+      buildCloudArenaSessionResetPath(sessionId),
+      {
+        ...options,
+        method: "POST",
+      },
+    );
   }
 
   getMetaFilters(options?: { signal?: AbortSignal }) {

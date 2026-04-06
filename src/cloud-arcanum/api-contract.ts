@@ -11,6 +11,14 @@ import type {
   ThemeId,
   UniverseId,
 } from "../domain/index.js";
+import type {
+  BattleAction,
+  BattleEvent,
+  BattlePhase,
+  CardDefinitionId,
+  EnemyIntent,
+  PermanentActionDefinition,
+} from "../cloud-arena/index.js";
 
 export const cloudArcanumApiRoutes = {
   health: "/api/health",
@@ -28,6 +36,10 @@ export const cloudArcanumApiRoutes = {
   universeDetail: "/api/universes/:universeId",
   validationSummary: "/api/validation/summary",
   entityValidation: "/api/validation/entities/:entityId",
+  cloudArenaSessions: "/api/cloud-arena/sessions",
+  cloudArenaSessionDetail: "/api/cloud-arena/sessions/:sessionId",
+  cloudArenaSessionActions: "/api/cloud-arena/sessions/:sessionId/actions",
+  cloudArenaSessionReset: "/api/cloud-arena/sessions/:sessionId/reset",
 } as const;
 
 export type CloudArcanumApiRouteName = keyof typeof cloudArcanumApiRoutes;
@@ -67,12 +79,19 @@ export type EntityValidationRouteParams = {
   entityId: CanonicalEntityId;
 };
 
+export type CloudArenaSessionRouteParams = {
+  sessionId: string;
+};
+
 export type CloudArcanumRouteParams = {
   cardDetail: CardRouteParams;
   deckDetail: DeckRouteParams;
   setDetail: SetRouteParams;
   universeDetail: UniverseRouteParams;
   entityValidation: EntityValidationRouteParams;
+  cloudArenaSessionDetail: CloudArenaSessionRouteParams;
+  cloudArenaSessionActions: CloudArenaSessionRouteParams;
+  cloudArenaSessionReset: CloudArenaSessionRouteParams;
 };
 
 export type EntityReference = {
@@ -97,7 +116,12 @@ export type ValidationSummary = {
 };
 
 export type ApiError = {
-  code: "not_found" | "invalid_query" | "validation_unavailable" | "internal_error";
+  code:
+    | "not_found"
+    | "invalid_query"
+    | "invalid_request"
+    | "validation_unavailable"
+    | "internal_error";
   message: string;
 };
 
@@ -196,6 +220,76 @@ export type UniverseListQuery = PaginationQuery & {
   q?: string;
   sort?: UniverseSortKey;
   direction?: SortDirection;
+};
+
+export type CloudArenaSessionScenarioId = "mixed_guardian";
+
+export type CloudArenaCreateSessionRequest = {
+  scenarioId?: CloudArenaSessionScenarioId;
+  seed?: number;
+};
+
+export type CloudArenaActionRequest = {
+  action: BattleAction;
+};
+
+export type CloudArenaCardSnapshot = {
+  instanceId: string;
+  definitionId: CardDefinitionId;
+  name: string;
+  cost: number;
+  effectSummary: string;
+};
+
+export type CloudArenaPermanentSnapshot = {
+  instanceId: string;
+  sourceCardInstanceId: string;
+  definitionId: CardDefinitionId;
+  name: string;
+  health: number;
+  maxHealth: number;
+  block: number;
+  hasActedThisTurn: boolean;
+  isDefending: boolean;
+  slotIndex: number;
+  actions: PermanentActionDefinition[];
+};
+
+export type CloudArenaActionOption = {
+  action: BattleAction;
+  label: string;
+  source: "hand" | "battlefield" | "turn";
+};
+
+export type CloudArenaSessionSnapshot = {
+  sessionId: string;
+  scenarioId: CloudArenaSessionScenarioId;
+  status: "active" | "finished";
+  turnNumber: number;
+  phase: BattlePhase;
+  seed: number;
+  player: {
+    health: number;
+    maxHealth: number;
+    block: number;
+    energy: number;
+    hand: CloudArenaCardSnapshot[];
+    drawPileCount: number;
+    discardPile: CloudArenaCardSnapshot[];
+    graveyard: CloudArenaCardSnapshot[];
+  };
+  enemy: {
+    name: string;
+    health: number;
+    maxHealth: number;
+    block: number;
+    intent: EnemyIntent;
+    intentLabel: string;
+  };
+  battlefield: Array<CloudArenaPermanentSnapshot | null>;
+  blockingQueue: string[];
+  legalActions: CloudArenaActionOption[];
+  log: BattleEvent[];
 };
 
 export type CardsListMeta = {
@@ -577,6 +671,30 @@ export type CloudArcanumApiContracts = {
     params: EntityValidationRouteParams;
     response: ApiSuccessResponse<EntityValidationResponse>;
   };
+  cloudArenaSessions: {
+    route: typeof cloudArcanumApiRoutes.cloudArenaSessions;
+    query: undefined;
+    params: undefined;
+    response: ApiSuccessResponse<CloudArenaSessionSnapshot>;
+  };
+  cloudArenaSessionDetail: {
+    route: typeof cloudArcanumApiRoutes.cloudArenaSessionDetail;
+    query: undefined;
+    params: CloudArenaSessionRouteParams;
+    response: ApiSuccessResponse<CloudArenaSessionSnapshot>;
+  };
+  cloudArenaSessionActions: {
+    route: typeof cloudArcanumApiRoutes.cloudArenaSessionActions;
+    query: undefined;
+    params: CloudArenaSessionRouteParams;
+    response: ApiSuccessResponse<CloudArenaSessionSnapshot>;
+  };
+  cloudArenaSessionReset: {
+    route: typeof cloudArcanumApiRoutes.cloudArenaSessionReset;
+    query: undefined;
+    params: CloudArenaSessionRouteParams;
+    response: ApiSuccessResponse<CloudArenaSessionSnapshot>;
+  };
 };
 
 export type CloudArcanumApiContractName = keyof CloudArcanumApiContracts;
@@ -612,4 +730,16 @@ export function buildCloudArcanumEntityValidationPath(
   entityId: CanonicalEntityId,
 ): string {
   return `/api/validation/entities/${entityId}`;
+}
+
+export function buildCloudArenaSessionPath(sessionId: string): string {
+  return `/api/cloud-arena/sessions/${sessionId}`;
+}
+
+export function buildCloudArenaSessionActionsPath(sessionId: string): string {
+  return `/api/cloud-arena/sessions/${sessionId}/actions`;
+}
+
+export function buildCloudArenaSessionResetPath(sessionId: string): string {
+  return `/api/cloud-arena/sessions/${sessionId}/reset`;
 }

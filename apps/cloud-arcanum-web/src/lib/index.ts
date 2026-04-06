@@ -5,6 +5,10 @@ export {
 } from "./api-client.js";
 export { cloudArenaSampleTrace, mixedGuardianSampleTrace } from "./cloud-arena-sample-trace.js";
 export {
+  buildBattleViewModelFromSessionSnapshot,
+  buildBattleViewModelFromTraceStep,
+} from "./cloud-arena-battle-view-model.js";
+export {
   buildTraceStepViewModels,
   clampTraceViewerStepIndex,
   formatTraceActionRecord,

@@ -19,6 +19,10 @@ import type {
   CloudArcanumApiLoaders,
   LoadedEntityRecord,
 } from "../loaders/index.js";
+import {
+  createCloudArenaSessionService,
+  type CloudArenaSessionService,
+} from "./cloud-arena-sessions.js";
 
 export type CardDeckMembership = {
   deck: NormalizedDeckRecord;
@@ -79,6 +83,7 @@ export type CloudArcanumApiServices = {
   app: {
     name: string;
   };
+  cloudArenaSessions: CloudArenaSessionService;
   loaders: CloudArcanumApiLoaders;
   loadNormalizedData: () => Promise<CloudArcanumNormalizedData>;
   loadValidationSummary: () => Promise<ValidationSummaryResponse>;
@@ -308,6 +313,7 @@ export function createCloudArcanumApiServices(
   loaders: CloudArcanumApiLoaders,
   options: CloudArcanumApiServiceOptions = {},
 ): CloudArcanumApiServices {
+  const cloudArenaSessions = createCloudArenaSessionService();
   const validator = options.validator ?? validateProject;
   const normalizedDataCacheTtlMs = options.normalizedDataCacheTtlMs ?? 5_000;
   const validationCacheTtlMs = options.validationCacheTtlMs ?? 5_000;
@@ -370,6 +376,7 @@ export function createCloudArcanumApiServices(
     app: {
       name: CLOUD_ARCANUM_API_NAME,
     },
+    cloudArenaSessions,
     loaders,
     loadNormalizedData,
     loadValidationSummary,

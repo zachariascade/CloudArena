@@ -241,4 +241,98 @@ describe("cloud arcanum api routes", () => {
 
     await app.close();
   });
+
+  it("creates, reads, updates, and resets Cloud Arena sessions", async () => {
+    const app = await createTestApp();
+
+    const createResponse = await app.inject({
+      method: "POST",
+      url: "/api/cloud-arena/sessions",
+      payload: {
+        scenarioId: "mixed_guardian",
+        seed: 7,
+      },
+    });
+
+    expect(createResponse.statusCode).toBe(200);
+    expect(createResponse.json().data.sessionId).toBeTypeOf("string");
+    expect(createResponse.json().data.scenarioId).toBe("mixed_guardian");
+    expect(createResponse.json().data.seed).toBe(7);
+    expect(createResponse.json().data.legalActions.length).toBeGreaterThan(0);
+
+    const initialSnapshot = createResponse.json().data;
+    const sessionId = initialSnapshot.sessionId;
+
+    const detailResponse = await app.inject({
+      method: "GET",
+      url: `/api/cloud-arena/sessions/${sessionId}`,
+    });
+
+    expect(detailResponse.statusCode).toBe(200);
+    expect(detailResponse.json().data.sessionId).toBe(sessionId);
+    expect(detailResponse.json().data.player.hand).toEqual(initialSnapshot.player.hand);
+
+    const actionToApply =
+      initialSnapshot.legalActions.find((entry: { action: { type: string } }) => entry.action.type !== "end_turn")
+      ?? initialSnapshot.legalActions[0];
+
+    const actionResponse = await app.inject({
+      method: "POST",
+      url: `/api/cloud-arena/sessions/${sessionId}/actions`,
+      payload: {
+        action: actionToApply.action,
+      },
+    });
+
+    expect(actionResponse.statusCode).toBe(200);
+    expect(actionResponse.json().data.sessionId).toBe(sessionId);
+    expect(actionResponse.json().data.log.length).toBeGreaterThan(initialSnapshot.log.length);
+
+    const resetResponse = await app.inject({
+      method: "POST",
+      url: `/api/cloud-arena/sessions/${sessionId}/reset`,
+    });
+
+    expect(resetResponse.statusCode).toBe(200);
+    expect(resetResponse.json().data.seed).toBe(7);
+    expect(resetResponse.json().data.player.hand).toEqual(initialSnapshot.player.hand);
+    expect(resetResponse.json().data.log).toEqual(initialSnapshot.log);
+
+    await app.close();
+  });
+
+  it("returns Cloud Arena session route errors for missing sessions and invalid actions", async () => {
+    const app = await createTestApp();
+
+    const missingResponse = await app.inject({
+      method: "GET",
+      url: "/api/cloud-arena/sessions/session_missing",
+    });
+
+    expect(missingResponse.statusCode).toBe(404);
+    expect(missingResponse.json().error.code).toBe("not_found");
+
+    const createResponse = await app.inject({
+      method: "POST",
+      url: "/api/cloud-arena/sessions",
+      payload: {},
+    });
+
+    const sessionId = createResponse.json().data.sessionId;
+    const invalidActionResponse = await app.inject({
+      method: "POST",
+      url: `/api/cloud-arena/sessions/${sessionId}/actions`,
+      payload: {
+        action: {
+          type: "play_card",
+          cardInstanceId: "card_missing",
+        },
+      },
+    });
+
+    expect(invalidActionResponse.statusCode).toBe(400);
+    expect(invalidActionResponse.json().error.code).toBe("invalid_request");
+
+    await app.close();
+  });
 });

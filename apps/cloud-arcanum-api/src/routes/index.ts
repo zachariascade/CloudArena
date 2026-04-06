@@ -7,6 +7,7 @@ import { registerCloudArcanumApiDeckRoutes } from "./decks.js";
 import { registerCloudArcanumApiSetRoutes } from "./sets.js";
 import { registerCloudArcanumApiUniverseRoutes } from "./universes.js";
 import { registerCloudArcanumApiValidationRoutes } from "./validation.js";
+import { registerCloudArcanumCloudArenaRoutes } from "./cloud-arena.js";
 import type { CloudArcanumApiLoaders } from "../loaders/index.js";
 import type { CloudArcanumApiServices } from "../services/index.js";
 
@@ -25,6 +26,7 @@ export const cloudArcanumApiRouteModules: CloudArcanumApiRouteModule[] = [
   registerCloudArcanumApiSetRoutes,
   registerCloudArcanumApiUniverseRoutes,
   registerCloudArcanumApiValidationRoutes,
+  registerCloudArcanumCloudArenaRoutes,
 ];
 
 export async function registerCloudArcanumApiRoutes(

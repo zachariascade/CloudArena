@@ -26,6 +26,7 @@ import {
 } from "../lib/index.js";
 import { CardDetailPage } from "./card-detail-page.js";
 import { CardsPage } from "./cards-page.js";
+import { CloudArenaInteractivePage } from "./cloud-arena-interactive-page.js";
 import { CloudArenaTraceViewerPage } from "./cloud-arena-trace-viewer-page.js";
 import { DecksPage } from "./decks-page.js";
 import { SetsPage } from "./sets-page.js";
@@ -288,6 +289,10 @@ export function createCloudArcanumRouter(context: AppRouteContext) {
         {
           path: "universes",
           element: <UniversesPage apiBaseUrl={context.apiBaseUrl} />,
+        },
+        {
+          path: "cloud-arena",
+          element: <CloudArenaInteractivePage apiBaseUrl={context.apiBaseUrl} />,
         },
         {
           path: "cloud-arena/trace-viewer",

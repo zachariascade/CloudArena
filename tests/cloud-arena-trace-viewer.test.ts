@@ -6,10 +6,12 @@ import { describe, expect, it } from "vitest";
 import { AppShell, CloudArenaTraceViewer } from "../apps/cloud-arcanum-web/src/components/index.js";
 import { cloudArenaSampleTrace } from "../apps/cloud-arcanum-web/src/lib/index.js";
 import {
+  buildBattleViewModelFromTraceStep,
   buildTraceStepViewModels,
   groupTraceEventsByTurn,
   getTraceViewerStepIndexAfterCommand,
 } from "../apps/cloud-arcanum-web/src/lib/index.js";
+import { CloudArenaInteractivePage } from "../apps/cloud-arcanum-web/src/routes/cloud-arena-interactive-page.js";
 import { CloudArenaTraceViewerPage } from "../apps/cloud-arcanum-web/src/routes/cloud-arena-trace-viewer-page.js";
 
 describe("cloud arena trace viewer scaffold", () => {
@@ -18,6 +20,17 @@ describe("cloud arena trace viewer scaffold", () => {
 
     expect(html).toContain("Trace Viewer");
     expect(html).toContain("Mixed Guardian");
+  });
+
+  it("renders the interactive battle page shell without crashing", () => {
+    const html = renderToStaticMarkup(
+      createElement(CloudArenaInteractivePage, {
+        apiBaseUrl: "http://127.0.0.1:4310",
+      }),
+    );
+
+    expect(html).toContain("Interactive Battle");
+    expect(html).toContain("Creating battle session");
   });
 
   it("includes the Cloud Arena link in app shell navigation", () => {
@@ -31,8 +44,10 @@ describe("cloud arena trace viewer scaffold", () => {
       ),
     );
 
+    expect(html).toContain("/cloud-arena");
     expect(html).toContain("/cloud-arena/trace-viewer");
     expect(html).toContain("Cloud Arena");
+    expect(html).toContain("Replay");
   });
 
   it("renders sample trace metadata and battle log content", () => {
@@ -62,7 +77,7 @@ describe("cloud arena trace viewer scaffold", () => {
     ]);
     expect(stepViewModels[1]?.battlefield[0]?.instanceId).toBe("guardian_1");
     expect(stepViewModels[4]?.turnNumber).toBe(2);
-    expect(stepViewModels[4]?.player.hand).toHaveLength(4);
+    expect(stepViewModels[4]?.player.hand).toHaveLength(5);
     expect(stepViewModels[4]?.visibleLog.at(-1)?.type).toBe("block_gained");
   });
 
@@ -75,6 +90,17 @@ describe("cloud arena trace viewer scaffold", () => {
 
     expect(groups.map((group) => group.turnNumber)).toEqual([1, 2]);
     expect(groups[1]?.events.at(-1)?.event.type).toBe("block_gained");
+  });
+
+  it("normalizes replay steps into the shared battle view model", () => {
+    const stepViewModels = buildTraceStepViewModels(cloudArenaSampleTrace);
+    const battleViewModel = buildBattleViewModelFromTraceStep(stepViewModels[1]!);
+
+    expect(battleViewModel.turnNumber).toBe(1);
+    expect(battleViewModel.player.hand).toHaveLength(4);
+    expect(battleViewModel.enemy.intentLabel).toContain("attack");
+    expect(battleViewModel.battlefield[0]?.instanceId).toBe("guardian_1");
+    expect(battleViewModel.legalActions).toEqual([]);
   });
 
   it("updates current action and reason when initial step changes", () => {
