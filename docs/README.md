@@ -8,6 +8,14 @@ This folder is organized by purpose so active work, reference material, and arch
 
 Core project direction and longer-range roadmap docs.
 
+- `COMBAT_ENGINE_IMPLEMENTATION_BRIEF.md`
+- `CLOUD_ARENA_RULES_REFERENCE.md`
+- `LEAN_V1_COMBAT_ENGINE_CHECKLIST.md`
+- `LEAN_V1_COMBAT_ENGINE_IMPLEMENTATION_PLAN.md`
+- `LEAN_V1_TRACE_SIMULATOR_TODO.md`
+- `TRACE_VIEWER_UI_IMPLEMENTATION_PLAN.md`
+- `BATTLE_SANDBOX_MVP_DESIGN.md`
+- `TRACE_BASED_SIMULATOR_DESIGN.md`
 - `MVP_PLAN.md`
 - `FUTURE_WORK.md`
 
