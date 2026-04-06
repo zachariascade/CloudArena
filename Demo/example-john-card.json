@@ -1,0 +1,48 @@
+{
+  "id": "card_demo_0001",
+  "name": "Nicodemus",
+  "title": "Teacher by Night",
+  "slug": "nicodemus_teacher_by_night",
+  "setId": "set_demo_john",
+  "typeLine": "Legendary Creature - Human Cleric",
+  "manaCost": "{1}{W}{U}",
+  "manaValue": 3,
+  "colors": [
+    "W",
+    "U"
+  ],
+  "colorIdentity": [
+    "W",
+    "U"
+  ],
+  "rarity": "rare",
+  "oracleText": "Flash\nWhen Nicodemus enters the battlefield, scry 2.\nWhenever you draw your second card each turn, you gain 2 life.",
+  "flavorText": "\"Rabbi, we know that thou art a teacher come from God.\" — John 3:2",
+  "power": "2",
+  "toughness": "3",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "images": {},
+  "imagePrompt": null,
+  "mechanics": [
+    "flash",
+    "scry",
+    "card-draw",
+    "lifegain"
+  ],
+  "tags": [
+    "demo",
+    "john",
+    "gospel-of-john",
+    "draft"
+  ],
+  "status": "draft",
+  "notes": "Example John card object for Demo folder. This is a first-pass draft showing the expected project card shape.",
+  "createdAt": "2026-04-02T12:00:00-05:00",
+  "updatedAt": "2026-04-02T12:00:00-05:00"
+}
