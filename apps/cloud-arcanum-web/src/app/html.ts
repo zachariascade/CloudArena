@@ -14,6 +14,7 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         --muted: #5f544c;
         --accent: #9a3412;
         --border: rgba(95, 84, 76, 0.18);
+        --display-card-width: clamp(13rem, 15vw, 16rem);
       }
 
       * {
@@ -423,6 +424,32 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         gap: 0.8rem;
       }
 
+      .trace-viewer-battle-actions {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 0.9rem;
+      }
+
+      .trace-viewer-battle-action-button {
+        min-width: 11rem;
+      }
+
+      .trace-viewer-hand-footer {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-top: 0.2rem;
+      }
+
+      .trace-viewer-hand-footer span {
+        color: var(--muted);
+        font-size: 0.84rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
       .trace-viewer-panel-wide {
         grid-column: 1 / -1;
       }
@@ -501,13 +528,14 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
       .trace-viewer-card-grid {
         display: grid;
         gap: 0.65rem;
-        grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(var(--display-card-width), var(--display-card-width)));
+        justify-content: start;
       }
 
       .trace-viewer-hand-scroll {
         display: grid;
         grid-auto-flow: column;
-        grid-auto-columns: minmax(13rem, 16rem);
+        grid-auto-columns: var(--display-card-width);
         gap: 0.8rem;
         overflow-x: auto;
         overflow-y: hidden;
@@ -556,6 +584,15 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
 
       .trace-viewer-board-grid {
         align-items: start;
+        grid-template-columns: repeat(3, minmax(var(--display-card-width), var(--display-card-width)));
+        justify-content: space-between;
+      }
+
+      @media (max-width: 959px) {
+        .trace-viewer-board-grid {
+          grid-template-columns: repeat(auto-fit, minmax(var(--display-card-width), var(--display-card-width)));
+          justify-content: center;
+        }
       }
 
       .trace-viewer-card {
@@ -565,6 +602,345 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         border-radius: 16px;
         border: 1px solid var(--border);
         background: rgba(255, 255, 255, 0.74);
+      }
+
+      .display-card {
+        display: grid;
+        gap: 0.7rem;
+        min-width: 0;
+      }
+
+      .display-card-header {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+
+      .display-card-nameblock {
+        display: grid;
+        gap: 0.18rem;
+        min-width: 0;
+      }
+
+      .display-card-nameblock strong {
+        font-size: 1.05rem;
+        line-height: 1.2;
+      }
+
+      .display-card-nameblock span,
+      .display-card-subtitle,
+      .display-card-meta {
+        color: var(--muted);
+      }
+
+      .display-card-subtitle,
+      .display-card-meta {
+        font-size: 0.88rem;
+      }
+
+      .display-card-meta {
+        text-align: right;
+      }
+
+      .display-card-art-shell {
+        display: grid;
+        place-items: center;
+        min-height: 7.5rem;
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid rgba(130, 94, 52, 0.14);
+        background:
+          radial-gradient(circle at top, rgba(251, 191, 36, 0.18), transparent 58%),
+          linear-gradient(135deg, rgba(255, 248, 235, 0.96), rgba(239, 226, 195, 0.9));
+      }
+
+      .display-card-art-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .display-card-art-fallback {
+        padding: 1rem;
+        text-align: center;
+        color: var(--muted);
+      }
+
+      .display-card-art-fallback strong {
+        color: var(--ink);
+      }
+
+      .display-card-art-fallback-player {
+        background:
+          radial-gradient(circle at top, rgba(34, 197, 94, 0.18), transparent 55%),
+          linear-gradient(160deg, rgba(245, 255, 248, 0.95), rgba(221, 242, 228, 0.92));
+      }
+
+      .display-card-art-fallback-enemy {
+        background:
+          radial-gradient(circle at top, rgba(220, 38, 38, 0.2), transparent 55%),
+          linear-gradient(160deg, rgba(255, 245, 245, 0.95), rgba(248, 219, 219, 0.9));
+      }
+
+      .display-card-art-fallback-permanent {
+        background:
+          radial-gradient(circle at top, rgba(59, 130, 246, 0.16), transparent 55%),
+          linear-gradient(160deg, rgba(245, 249, 255, 0.95), rgba(222, 232, 248, 0.9));
+      }
+
+      .display-card-badges,
+      .display-card-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+      }
+
+      .display-card-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.28rem 0.52rem;
+        border-radius: 999px;
+        background: rgba(154, 52, 18, 0.08);
+        color: var(--muted);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .display-card-stats {
+        display: grid;
+        gap: 0.45rem;
+        grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+      }
+
+      .display-card-stat {
+        display: grid;
+        gap: 0.16rem;
+        padding: 0.55rem 0.7rem;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.68);
+      }
+
+      .display-card-stat span {
+        color: var(--muted);
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .display-card-text {
+        display: grid;
+        gap: 0.4rem;
+      }
+
+      .display-card-text-block {
+        margin: 0;
+        color: var(--ink);
+      }
+
+      .display-card-text-flavor {
+        color: var(--muted);
+        font-style: italic;
+      }
+
+      .display-card-action {
+        min-height: 2.2rem;
+      }
+
+      .display-card-action-primary {
+        background: linear-gradient(135deg, rgba(217, 119, 6, 0.18), rgba(154, 52, 18, 0.12));
+        border-color: rgba(154, 52, 18, 0.2);
+      }
+
+      .display-card-shell {
+        display: grid;
+        gap: 0.4rem;
+      }
+
+      .display-card-character-layout {
+        display: grid;
+        grid-template-columns: minmax(0, var(--display-card-width)) minmax(12rem, 1fr);
+        align-items: start;
+        gap: 1.15rem;
+      }
+
+      .display-card-character-layout-enemy {
+        grid-template-columns: minmax(12rem, 1fr) minmax(0, var(--display-card-width));
+      }
+
+      .display-card-main-column {
+        display: grid;
+        gap: 0.4rem;
+        min-width: 0;
+      }
+
+      .display-card-static-face {
+        display: block;
+      }
+
+      .display-card-actions-inline,
+      .display-card-badges-inline {
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 0.45rem;
+      }
+
+      .display-card-stat-row {
+        margin-top: 0.2rem;
+      }
+
+      .display-card-health-panel {
+        display: grid;
+        gap: 0.3rem;
+        padding: 0.5rem 0.65rem;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.62);
+      }
+
+      .display-card-player > .display-card-character-layout > .display-card-health-panel,
+      .display-card-enemy > .display-card-character-layout > .display-card-health-panel {
+        align-self: stretch;
+        min-height: 100%;
+        align-content: end;
+      }
+
+      .display-card-energy-panel {
+        display: grid;
+        gap: 0.3rem;
+      }
+
+      .display-card-health-strip {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: 0.65rem;
+      }
+
+      .display-card-health-meter {
+        display: grid;
+        gap: 0.3rem;
+        min-width: 0;
+      }
+
+      .display-card-health-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .display-card-health-row strong {
+        color: var(--ink);
+        font-size: 0.9rem;
+        letter-spacing: 0;
+        text-transform: none;
+      }
+
+      .display-card-block-pill {
+        display: grid;
+        place-items: center;
+        flex: 0 0 auto;
+      }
+
+      .display-card-block-icon {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 2.7rem;
+        height: 3rem;
+        color: #f6efe1;
+        font-weight: 800;
+        font-size: 1rem;
+        line-height: 1;
+        background: linear-gradient(180deg, #8b97a8, #667384);
+        border: 1px solid rgba(37, 48, 63, 0.28);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.2),
+          0 6px 14px rgba(37, 48, 63, 0.12);
+        clip-path: polygon(50% 0%, 90% 14%, 90% 58%, 50% 100%, 10% 58%, 10% 14%);
+      }
+
+      .display-card-block-value {
+        transform: translateY(-0.06rem);
+      }
+
+      .display-card-energy-bar {
+        display: grid;
+        gap: 0.28rem;
+        width: 100%;
+      }
+
+      .display-card-energy-segment {
+        display: block;
+        min-width: 0;
+        height: 0.68rem;
+        border-radius: 999px;
+        border: 1px solid rgba(59, 130, 246, 0.18);
+        transition:
+          background 180ms ease,
+          opacity 180ms ease;
+      }
+
+      .display-card-energy-segment.is-filled {
+        background: linear-gradient(90deg, #2563eb, #60a5fa);
+        box-shadow: inset 0 0 0 1px rgba(147, 197, 253, 0.22);
+      }
+
+      .display-card-energy-segment.is-empty {
+        background: rgba(148, 163, 184, 0.14);
+      }
+
+      .display-card-intent-banner {
+        padding: 0.5rem 0.65rem;
+        border-radius: 12px;
+        border: 1px solid rgba(185, 28, 28, 0.18);
+        background: linear-gradient(180deg, rgba(254, 242, 242, 0.96), rgba(254, 226, 226, 0.9));
+        color: #991b1b;
+        font-size: 0.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+      }
+
+      @media (max-width: 959px) {
+        .display-card-character-layout,
+        .display-card-character-layout-enemy {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      .cloud-arena-summary-card {
+        justify-self: stretch;
+        width: 100%;
+      }
+
+      .cloud-arena-summary-card.display-card-player,
+      .cloud-arena-summary-card.display-card-enemy {
+        max-width: none;
+      }
+
+      .cloud-arena-summary-card.display-card-player.card-face-tile,
+      .cloud-arena-summary-card.display-card-enemy.card-face-tile {
+        width: 100%;
+      }
+
+      .cloud-arena-summary-card.display-card-player,
+      .cloud-arena-summary-card.display-card-enemy {
+        --card-title-size: clamp(0.68rem, 4.3cqw, 1.02rem);
+      }
+
+      .trace-viewer-hand-card.card-face-tile {
+        min-height: 100%;
       }
 
       .trace-viewer-card-empty {
@@ -650,10 +1026,6 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
 
       .trace-viewer-hand-zones {
         margin-top: 0;
-      }
-
-      .trace-viewer-hand-actions {
-        margin-bottom: 0.8rem;
       }
 
       .trace-viewer-stat-chip {
@@ -921,36 +1293,37 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
 
       .cards-gallery {
         display: grid;
-        grid-template-columns: minmax(0, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(var(--display-card-width), var(--display-card-width)));
         gap: 1rem;
         align-items: start;
+        justify-content: center;
         justify-items: center;
       }
 
       @media (min-width: 640px) {
         .cards-gallery {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(var(--display-card-width), var(--display-card-width)));
           gap: 1.1rem;
         }
       }
 
       @media (min-width: 900px) {
         .cards-gallery {
-          grid-template-columns: repeat(3, minmax(0, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(var(--display-card-width), var(--display-card-width)));
           gap: 1.25rem;
         }
       }
 
       @media (min-width: 1240px) {
         .cards-gallery {
-          grid-template-columns: repeat(4, minmax(0, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(var(--display-card-width), var(--display-card-width)));
           gap: 1.35rem;
         }
       }
 
       @media (min-width: 1680px) {
         .cards-gallery {
-          grid-template-columns: repeat(5, minmax(0, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(var(--display-card-width), var(--display-card-width)));
         }
       }
 
@@ -975,7 +1348,7 @@ export function renderCloudArcanumWebHtml(apiBaseUrl: string): string {
         --card-footer-size: clamp(0.5rem, 2.55cqw, 0.62rem);
         display: grid;
         gap: 0.35rem;
-        width: min(100%, 22.75rem);
+        width: min(100%, var(--display-card-width));
         container-type: inline-size;
       }
 

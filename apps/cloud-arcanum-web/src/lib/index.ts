@@ -9,6 +9,21 @@ export {
   buildBattleViewModelFromTraceStep,
 } from "./cloud-arena-battle-view-model.js";
 export {
+  mapArenaEnemyToDisplayCard,
+  mapArenaHandCardToDisplayCard,
+  mapArenaPermanentToDisplayCard,
+  mapArenaPlayerToDisplayCard,
+  mapCloudArcanumCardToDisplayCard,
+} from "./display-card.js";
+export type {
+  DisplayCardAction,
+  DisplayCardImage,
+  DisplayCardModel,
+  DisplayCardStat,
+  DisplayCardTextBlock,
+  DisplayCardVariant,
+} from "./display-card.js";
+export {
   buildTraceStepViewModels,
   clampTraceViewerStepIndex,
   formatTraceActionRecord,

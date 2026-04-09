@@ -69,6 +69,9 @@ export function createBattle(input: CreateBattleInput): BattleState {
         turnNumber: 1,
       },
     ],
+    rules: [],
+    rulesCursor: 0,
+    choices: [],
   };
 
   const openingDraw = drawUpToHandSize(state, LEAN_V1_HAND_SIZE);

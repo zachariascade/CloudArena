@@ -1,6 +1,5 @@
 import type { ChangeEvent, FormEvent, ReactElement } from "react";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 
 import type {
   CardListItem,
@@ -15,7 +14,7 @@ import {
 } from "../../../../src/domain/index.js";
 import type { SetId } from "../../../../src/domain/index.js";
 import {
-  CardFaceTile,
+  DisplayCard,
   EmptyState,
   ErrorState,
   LoadingState,
@@ -25,6 +24,7 @@ import {
   CloudArcanumApiClientError,
   buildCardListQueryString,
   createCloudArcanumApiClient,
+  mapCloudArcanumCardToDisplayCard,
   parseCardListQuery,
   useApiRequest,
 } from "../lib/index.js";
@@ -420,7 +420,6 @@ function SetThemePanel({
 
 export function CardsPage({ apiBaseUrl }: CardsPageProps): ReactElement {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [activePreviewCardId, setActivePreviewCardId] = useState<string | null>(null);
   const query = parseCardListQuery(searchParams);
   const api = createCloudArcanumApiClient({ baseUrl: apiBaseUrl });
 
@@ -459,18 +458,6 @@ export function CardsPage({ apiBaseUrl }: CardsPageProps): ReactElement {
   const fallbackFilters = buildFallbackFilterMetadata();
   const filterMetadata = mergeFilterMetadata(filtersState.data, fallbackFilters);
   const filterMetadataUnavailable = filtersState.status === "error";
-  const previewCards = cardsState.status === "success" && cardsState.data ? cardsState.data.items : [];
-  const activePreviewIndex = previewCards.findIndex((card) => card.id === activePreviewCardId);
-
-  useEffect(() => {
-    if (activePreviewCardId === null) {
-      return;
-    }
-
-    if (!previewCards.some((card) => card.id === activePreviewCardId)) {
-      setActivePreviewCardId(null);
-    }
-  }, [activePreviewCardId, previewCards]);
 
   return (
     <PageLayout>
@@ -524,32 +511,23 @@ export function CardsPage({ apiBaseUrl }: CardsPageProps): ReactElement {
                 </div>
               </div>
               <section className="cards-gallery">
-                {items.map((card, index) => (
-                  <CardFaceTile
+                {items.map((card) => {
+                  const detailPath = query.themeId
+                    ? `/cards/${card.id}?themeId=${encodeURIComponent(query.themeId)}`
+                    : `/cards/${card.id}`;
+
+                  return (
+                  <Link
                     key={card.id}
-                    card={card}
-                    detailPath={
-                      query.themeId ? `/cards/${card.id}?themeId=${encodeURIComponent(query.themeId)}` : undefined
-                    }
-                    hasNextCard={index < items.length - 1}
-                    hasPreviousCard={index > 0}
-                    isPreviewOpen={card.id === activePreviewCardId}
-                    onClosePreview={() => setActivePreviewCardId(null)}
-                    onOpenPreview={() => setActivePreviewCardId(card.id)}
-                    onShowNextCard={() => {
-                      const nextCard = items[index + 1];
-                      if (nextCard) {
-                        setActivePreviewCardId(nextCard.id);
-                      }
-                    }}
-                    onShowPreviousCard={() => {
-                      const previousCard = items[index - 1];
-                      if (previousCard) {
-                        setActivePreviewCardId(previousCard.id);
-                      }
-                    }}
-                  />
-                ))}
+                    className="card-face-link"
+                    to={detailPath}
+                  >
+                    <DisplayCard
+                      model={mapCloudArcanumCardToDisplayCard(card)}
+                    />
+                  </Link>
+                  );
+                })}
               </section>
             </>
           ) : (

@@ -246,9 +246,13 @@ export type CloudArenaPermanentSnapshot = {
   sourceCardInstanceId: string;
   definitionId: CardDefinitionId;
   name: string;
+  controllerId?: string;
   health: number;
   maxHealth: number;
   block: number;
+  counters?: Record<string, number>;
+  attachments?: string[];
+  attachedTo?: string | null;
   hasActedThisTurn: boolean;
   isDefending: boolean;
   slotIndex: number;

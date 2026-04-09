@@ -1,8 +1,10 @@
+import {
+  dealDamageToEnemy,
+  gainBlockToPermanent,
+} from "../core/effects.js";
+import { getDerivedPermanentActionAmount } from "../core/derived-stats.js";
+import { findPermanentById } from "../core/selectors.js";
 import type { BattleState, PermanentActionMode } from "../core/types.js";
-
-function findPermanentIndex(state: BattleState, permanentId: string): number {
-  return state.battlefield.findIndex((permanent) => permanent?.instanceId === permanentId);
-}
 
 export function usePermanentAction(
   state: BattleState,
@@ -13,13 +15,7 @@ export function usePermanentAction(
     throw new Error("Permanent actions can only be used during the player_action phase.");
   }
 
-  const permanentIndex = findPermanentIndex(state, permanentId);
-
-  if (permanentIndex === -1) {
-    throw new Error(`Permanent ${permanentId} was not found on the battlefield.`);
-  }
-
-  const permanent = state.battlefield[permanentIndex];
+  const permanent = findPermanentById(state, permanentId);
 
   if (!permanent) {
     throw new Error(`Permanent ${permanentId} was not found on the battlefield.`);
@@ -47,40 +43,13 @@ export function usePermanentAction(
   });
 
   if (action === "attack" && typeof actionDefinition.attackAmount === "number") {
-    const totalAttackAmount = actionDefinition.attackAmount * Math.max(1, actionDefinition.attackTimes ?? 1);
-    const damageDealt = Math.max(
-      0,
-      Math.min(totalAttackAmount, state.enemy.block + state.enemy.health),
-    );
-    if (state.enemy.block >= totalAttackAmount) {
-      state.enemy.block -= totalAttackAmount;
-    } else {
-      const remainingDamage = totalAttackAmount - state.enemy.block;
-      state.enemy.block = 0;
-      state.enemy.health -= remainingDamage;
-    }
-    if (damageDealt > 0) {
-      state.log.push({
-        type: "damage_dealt",
-        turnNumber: state.turnNumber,
-        source: "permanent_action",
-        sourceId: permanentId,
-        target: "enemy",
-        amount: damageDealt,
-      });
-    }
+    const totalAttackAmount = getDerivedPermanentActionAmount(state, permanent, actionDefinition);
+    dealDamageToEnemy(state, totalAttackAmount, "permanent_action", permanentId);
     permanent.isDefending = false;
   }
 
   if (action === "defend" && typeof actionDefinition.blockAmount === "number") {
-    permanent.block += actionDefinition.blockAmount;
-    state.log.push({
-      type: "block_gained",
-      turnNumber: state.turnNumber,
-      target: "permanent",
-      targetId: permanentId,
-      amount: actionDefinition.blockAmount,
-    });
+    gainBlockToPermanent(state, permanent, actionDefinition.blockAmount);
     permanent.isDefending = true;
     if (!state.blockingQueue.includes(permanent.instanceId)) {
       state.blockingQueue.push(permanent.instanceId);

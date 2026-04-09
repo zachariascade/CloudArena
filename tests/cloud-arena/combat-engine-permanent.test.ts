@@ -51,8 +51,12 @@ describe("cloud arena combat engine permanent flow", () => {
     expect(battle.player.energy).toBe(1);
     expect(battle.battlefield[0]).not.toBeNull();
     expect(battle.battlefield[0]?.name).toBe("Guardian");
+    expect(battle.battlefield[0]?.controllerId).toBe("player");
     expect(battle.battlefield[0]?.health).toBe(10);
     expect(battle.battlefield[0]?.block).toBe(0);
+    expect(battle.battlefield[0]?.counters).toEqual({});
+    expect(battle.battlefield[0]?.attachments).toEqual([]);
+    expect(battle.battlefield[0]?.abilities).toEqual([]);
     expect(battle.player.discardPile).toHaveLength(0);
 
     applyBattleAction(battle, { type: "end_turn" });

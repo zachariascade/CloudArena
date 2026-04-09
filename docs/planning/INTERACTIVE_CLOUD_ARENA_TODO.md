@@ -356,3 +356,152 @@ Recommended implementation path:
 - Render legal actions from live session data.
 - Wire action submission and state refresh.
 - Add service, API, and UI tests for the first end-to-end flow.
+
+## 18. Layout Overhaul TODO
+
+Goal:
+
+- fit player state, enemy state, battlefield, and hand on one desktop screen without vertical page scrolling during normal play
+- keep cards readable enough to identify at a glance
+- keep one selected card fully readable at all times
+
+### Layout Direction
+
+- Move away from rendering every zone as a full-size card stack.
+- Use a focus-plus-context layout:
+  - enemy summary in a compact top band
+  - battlefield as the main visual center
+  - player hand as a fixed bottom tray
+  - player summary as a compact HUD panel instead of a full card face
+  - a persistent card inspector for full readability
+- Use different visual densities by zone:
+  - player and enemy: summary HUD
+  - battlefield: compact tactical cards
+  - hand: medium decision cards
+  - inspector: full readable card
+- Treat the battle UI as a fixed battle viewport instead of a long scrolling document.
+
+### Layout Tasks
+
+- Refactor the current Cloud Arena battle screen into a fixed-height viewport layout for desktop.
+- Pin the battle surface into a monitor-aware fixed window so the core play area does not grow into a tall scrolling page.
+- Reserve clear screen bands for:
+  - top enemy strip
+  - center battlefield
+  - bottom hand tray
+  - optional side inspector
+- Ensure the main battle view does not require vertical scrolling during ordinary turns on desktop.
+- Prefer internal scrolling only inside secondary regions like logs, drawers, or inspectors when needed.
+- Keep mobile and narrow widths functional even if they still collapse into a more stacked layout.
+
+### Player and Enemy Summary Tasks
+
+- Replace the current full-size player and enemy display cards with compact summary panels.
+- Keep in those panels:
+  - portrait thumbnail or art crop
+  - health
+  - block
+  - energy for the player
+  - intent for the enemy
+  - short passive or status summary if needed
+- Remove or collapse from those panels:
+  - long rules text
+  - full card footer treatment
+  - large empty card-face regions
+
+### Battlefield Tasks
+
+- Make the battlefield the largest visual region on the screen.
+- Replace full battlefield card faces with compact tactical card tiles.
+- Keep battlefield tiles readable for:
+  - name
+  - attack and defend actions
+  - health and block
+  - counters
+  - attachments or equipment markers
+- Collapse or hide by default:
+  - long rules text
+  - decorative footer details
+  - low-value metadata
+- Preserve clear empty-slot rendering so board capacity remains legible.
+
+### Hand Tray Tasks
+
+- Keep the hand visible in a dedicated bottom tray.
+- Render hand cards larger than battlefield tiles but smaller than the current full card treatment.
+- Make the hand tray horizontally scrollable only as a fallback, not the primary way the layout works.
+- Preserve strong playable-state affordances for cards that can currently be used.
+- Ensure hand cards are easy to inspect before playing.
+
+### Card Inspector Tasks
+
+- Add a persistent inspector panel or floating detail view.
+- Show the currently hovered or selected card in a full readable format.
+- Support inspection for:
+  - hand cards
+  - battlefield permanents
+  - player summary
+  - enemy summary
+- Decide whether hover previews, click-to-pin, or both should be supported.
+- Make sure the inspector becomes the primary place for full rules readability.
+
+### Zone and Meta Information Tasks
+
+- Compress discard pile, graveyard, and blocking queue into chips, counters, drawers, or popovers.
+- Avoid rendering long comma-separated card-name strings inline across the main battle surface.
+- Keep turn, phase, and current action visibility strong without taking battlefield space away.
+- Keep recent events visible, but make sure the event log does not dominate the play surface.
+
+### Component Architecture Tasks
+
+- Split the current shared display treatment into distinct presentation modes:
+  - summary HUD
+  - tactical tile
+  - hand card
+  - full inspector card
+- Avoid using the exact same full card-face layout for every zone.
+- Decide whether to extend `DisplayCard` with multiple density modes or introduce separate Cloud Arena-specific presentation components.
+- Keep the data mapping shared even if the visual components diverge by zone.
+
+### Interaction Tasks
+
+- Add hover-to-preview for mouse users.
+- Add click-to-select and keyboard-focus inspection states.
+- Keep action buttons or click targets obvious on compact battlefield tiles.
+- Preserve current playable and disabled state styling after the refactor.
+- Ensure the user can understand enemy intent and legal actions without opening the inspector.
+
+### Suggested Delivery Order
+
+1. Replace player and enemy full cards with compact HUD panels.
+2. Add a persistent inspector panel.
+3. Convert battlefield permanents into compact tactical tiles.
+4. Resize the hand into a medium-density tray.
+5. Compress discard, graveyard, and queue into smaller UI affordances.
+6. Tune responsive behavior for laptop and mobile widths.
+
+### Acceptance Criteria
+
+- On a typical desktop or laptop viewport, player, enemy, battlefield, and hand are visible together without vertical page scrolling.
+- Battlefield cards remain identifiable without opening the inspector.
+- At least one selected or hovered card can always be read in full.
+- Enemy intent remains obvious at a glance.
+- Playable hand cards and battlefield actions remain easy to discover.
+- The layout feels like a battle surface rather than a stack of repeated full card panels.
+
+### Layout Decisions Locked In
+
+- Desktop should include a persistent inspector panel.
+- The main Cloud Arena battle UI should live inside a fixed viewport-style window rather than a vertically expanding page.
+- Player and enemy should use HUD-like summary panels instead of full card-face layouts.
+- The battlefield should be the highest-priority visual region.
+- Hand cards should use medium readability in-place, with full readability delegated to the inspector.
+- Desktop interaction should support hover previews.
+- The inspector should live on the right side on wide desktop layouts.
+- Event log and secondary meta panels should be collapsed or reduced instead of occupying major battle-surface space.
+- Discard pile, graveyard, and similar zones should use compact chips or icon-plus-count affordances that can expand on demand.
+- Cloud Arena should keep one shared data model but use separate presentation modes for summary HUDs, battlefield tiles, hand cards, and inspector cards.
+- Battlefield cards should show almost no rules text by default, with at most a short keyword or status line when needed.
+- Battlefield presentation should be tactical-first with a small amount of art presence.
+- The inspector should remain pinned on wide desktop layouts and collapse into a drawer on smaller laptop widths.
+- Mobile and narrow layouts may stack vertically again; the no-scroll requirement is primarily for desktop play.

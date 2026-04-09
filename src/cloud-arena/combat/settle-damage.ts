@@ -1,3 +1,4 @@
+import { findPermanentById } from "../core/selectors.js";
 import type { BattleState } from "../core/types.js";
 
 function applyDamageToBlockAndHealth(
@@ -72,7 +73,7 @@ function applyEnemyDamageToDefenders(
       break;
     }
 
-    const permanent = state.battlefield.find((entry) => entry?.instanceId === permanentId);
+    const permanent = findPermanentById(state, permanentId);
 
     if (!permanent) {
       continue;

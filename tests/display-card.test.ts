@@ -1,0 +1,272 @@
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { describe, expect, it, vi } from "vitest";
+
+import { DisplayCard } from "../apps/cloud-arcanum-web/src/components/display-card.js";
+import {
+  mapArenaEnemyToDisplayCard,
+  mapArenaHandCardToDisplayCard,
+  mapArenaPermanentToDisplayCard,
+  mapArenaPlayerToDisplayCard,
+  mapCloudArcanumCardToDisplayCard,
+} from "../apps/cloud-arcanum-web/src/lib/display-card.js";
+
+describe("shared display card mappers", () => {
+  it("maps a Cloud Arcanum card into the mtg display model", () => {
+    const model = mapCloudArcanumCardToDisplayCard({
+      name: "Moses",
+      title: "Lawgiver",
+      typeLine: "Legendary Creature - Human Prophet",
+      manaCost: "{2}{W}{U}",
+      power: "3",
+      toughness: "4",
+      loyalty: null,
+      defense: null,
+      image: {
+        kind: "remote",
+        sourcePath: null,
+        publicUrl: "https://example.com/moses.jpg",
+        isRenderable: true,
+        alt: "Moses raising his staff",
+        artist: "Artist",
+        sourceUrl: null,
+        license: null,
+        creditText: null,
+        sourceNotes: null,
+        requestedThemeId: null,
+        resolvedThemeId: null,
+        fellBack: false,
+      },
+      oracleText: "When Moses enters, draw a card.",
+      flavorText: "He led through the waters.",
+      status: "balanced",
+    });
+
+    expect(model.variant).toBe("mtg");
+    expect(model.name).toBe("Moses");
+    expect(model.title).toBe("Lawgiver");
+    expect(model.subtitle).toContain("Legendary Creature");
+    expect(model.image?.url).toBe("https://example.com/moses.jpg");
+    expect(model.textBlocks.map((entry) => entry.text)).toContain("When Moses enters, draw a card.");
+    expect(model.badges).toEqual(["balanced"]);
+  });
+
+  it("maps arena player and enemy summaries into display cards", () => {
+    const player = mapArenaPlayerToDisplayCard({
+      health: 28,
+      maxHealth: 30,
+      block: 5,
+      energy: 2,
+      hand: [],
+      drawPileCount: 10,
+      discardPile: [{ instanceId: "c1", definitionId: "attack", name: "Attack", cost: 1, effectSummary: "Deal 6 damage." }],
+      graveyard: [],
+    });
+    const enemy = mapArenaEnemyToDisplayCard({
+      name: "Long Battle Demon",
+      health: 44,
+      maxHealth: 60,
+      block: 3,
+      intent: { attackAmount: 10, attackTimes: 2 },
+      intentLabel: "attack 10 x2",
+    });
+
+    expect(player.variant).toBe("player");
+    expect(player.name).toBe("Pilgrim Duelist");
+    expect(player.title).toBe("Vanguard of the Arena");
+    expect(player.image?.url).toContain("/images/cards/card_0021_adam_first_of_dust.jpg");
+    expect(player.footerStat).toBeNull();
+    expect(player.healthBar).toEqual({
+      current: 28,
+      max: 30,
+      label: "28/30",
+    });
+    expect(player.energyBar).toEqual({
+      current: 2,
+      max: 3,
+      label: "2/3",
+    });
+    expect(player.stats.find((entry) => entry.label === "HP")).toBeUndefined();
+    expect(player.stats.find((entry) => entry.label === "Energy")).toBeUndefined();
+    expect(enemy.variant).toBe("enemy");
+    expect(enemy.title).toBe("Harbinger of Attrition");
+    expect(enemy.image?.url).toContain("/images/cards/card_0009_lucifer_fallen_angel_of_light.webp");
+    expect(enemy.footerStat).toBeNull();
+    expect(enemy.healthBar).toEqual({
+      current: 44,
+      max: 60,
+      label: "44/60",
+    });
+    expect(enemy.stats.find((entry) => entry.label === "HP")).toBeUndefined();
+    expect(enemy.textBlocks[0]?.text).toContain("is preparing attack 10 x2");
+  });
+
+  it("maps arena hand cards and permanents with actions", () => {
+    const onPlay = vi.fn();
+    const onAttack = vi.fn();
+    const handCard = mapArenaHandCardToDisplayCard(
+      {
+        instanceId: "card_1",
+        definitionId: "guardian",
+        name: "Guardian",
+        cost: 3,
+        effectSummary: "Summon a guardian with 10 health.",
+      },
+      {
+        isPlayable: true,
+        onPlay,
+      },
+    );
+    const permanentCard = mapArenaPermanentToDisplayCard(
+      {
+        instanceId: "guardian_1",
+        sourceCardInstanceId: "card_1",
+        definitionId: "guardian",
+        name: "Guardian",
+        health: 10,
+        maxHealth: 10,
+        block: 2,
+        hasActedThisTurn: false,
+        isDefending: true,
+        slotIndex: 0,
+        actions: [{ attackAmount: 4 }, { blockAmount: 5 }],
+      },
+      {
+        playableActions: [
+          {
+            action: "attack",
+            label: "Attack 4",
+            onSelect: onAttack,
+          },
+        ],
+      },
+    );
+
+    expect(handCard.actions).toHaveLength(1);
+    expect(handCard.title).toBe("Keeper of the Gate");
+    expect(handCard.image?.url).toContain("/images/cards/card_0036_watcher_at_edens_gate.jpg");
+    handCard.actions[0]?.onSelect?.();
+    expect(onPlay).toHaveBeenCalledWith("card_1");
+
+    expect(permanentCard.variant).toBe("permanent");
+    expect(permanentCard.textBlocks.map((entry) => entry.text)).toContain(
+      "This permanent is set to intercept the next enemy assault.",
+    );
+    expect(permanentCard.image?.url).toContain("/images/cards/card_0036_watcher_at_edens_gate.jpg");
+    expect(permanentCard.badges).toContain("defending");
+    expect(permanentCard.actions).toHaveLength(1);
+    permanentCard.actions[0]?.onSelect?.();
+    expect(onAttack).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not render anointed banner as a guardian fallback", () => {
+    const bannerCard = mapArenaPermanentToDisplayCard({
+      instanceId: "anointed_banner_2",
+      sourceCardInstanceId: "card_2",
+      definitionId: "anointed_banner",
+      name: "Anointed Banner",
+      health: 6,
+      maxHealth: 6,
+      block: 0,
+      counters: { "+1/+1": 1 },
+      attachments: [],
+      attachedTo: null,
+      hasActedThisTurn: false,
+      isDefending: false,
+      slotIndex: 1,
+      actions: [{ blockAmount: 2 }],
+    });
+
+    expect(bannerCard.name).toBe("Anointed Banner");
+    expect(bannerCard.title).toBe("Consecrated Standard");
+    expect(bannerCard.subtitle).toBe("Permanent - Relic Banner");
+    expect(bannerCard.textBlocks.map((entry) => entry.text)).not.toContain(
+      "This guardian is ready to press the attack or hold the line.",
+    );
+  });
+});
+
+describe("shared display card component", () => {
+  it("renders mtg and arena variants without requiring identical fields", () => {
+    const mtgHtml = renderToStaticMarkup(
+      createElement(DisplayCard, {
+        model: mapCloudArcanumCardToDisplayCard({
+          name: "Deborah",
+          title: "Judge of Israel",
+          typeLine: "Legendary Creature - Human Advisor",
+          manaCost: "{1}{W}",
+          power: "2",
+          toughness: "3",
+          loyalty: null,
+          defense: null,
+          image: {
+            kind: "placeholder",
+            sourcePath: null,
+            publicUrl: null,
+            isRenderable: false,
+            alt: "Deborah placeholder art",
+            artist: null,
+            sourceUrl: null,
+            license: null,
+            creditText: null,
+            sourceNotes: null,
+            requestedThemeId: null,
+            resolvedThemeId: null,
+            fellBack: false,
+          },
+          oracleText: "Other creatures you control get +0/+1.",
+          flavorText: null,
+          status: "draft",
+        }),
+      }),
+    );
+    const enemyHtml = renderToStaticMarkup(
+      createElement(DisplayCard, {
+        model: mapArenaEnemyToDisplayCard({
+          name: "Long Battle Demon",
+          health: 50,
+          maxHealth: 50,
+          block: 0,
+          intent: { attackAmount: 12 },
+          intentLabel: "attack 12",
+        }),
+      }),
+    );
+    const playerHtml = renderToStaticMarkup(
+      createElement(DisplayCard, {
+        model: mapArenaPlayerToDisplayCard({
+          health: 28,
+          maxHealth: 30,
+          block: 5,
+          energy: 2,
+          hand: [],
+          drawPileCount: 10,
+          discardPile: [],
+          graveyard: [],
+        }),
+      }),
+    );
+
+    expect(mtgHtml).toContain("data-variant=\"mtg\"");
+    expect(mtgHtml).toContain("Judge of Israel");
+    expect(mtgHtml).toContain("Preview pending");
+    expect(playerHtml).toContain("aria-label=\"Pilgrim Duelist energy\"");
+    expect(playerHtml).toContain(">2/3<");
+    expect(playerHtml).toContain("display-card-energy-segment is-filled");
+    expect(playerHtml).toContain("display-card-energy-segment is-empty");
+    expect(playerHtml).toContain("display-card-character-layout display-card-character-layout-player");
+    expect(playerHtml).not.toContain("<span>Energy</span><strong>2</strong>");
+    expect(enemyHtml).toContain("data-variant=\"enemy\"");
+    expect(enemyHtml).toContain("Long Battle Demon");
+    expect(enemyHtml).toContain("Long Battle Demon is preparing attack 12.");
+    expect(enemyHtml).toContain("/images/cards/card_0009_lucifer_fallen_angel_of_light.webp");
+    expect(enemyHtml).toContain("display-card-character-layout display-card-character-layout-enemy");
+    expect(enemyHtml).toContain("aria-label=\"Long Battle Demon block 0\"");
+    expect(enemyHtml).toContain("aria-label=\"Long Battle Demon health\"");
+    expect(enemyHtml).toContain("aria-label=\"Long Battle Demon intent\"");
+    expect(enemyHtml).toContain("display-card-intent-banner");
+    expect(enemyHtml).toContain(">50/50<");
+    expect(enemyHtml).not.toContain("<span>HP</span>");
+    expect(enemyHtml).not.toContain("<span>Block</span>");
+  });
+});

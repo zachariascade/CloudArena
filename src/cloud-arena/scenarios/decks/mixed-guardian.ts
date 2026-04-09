@@ -12,6 +12,7 @@ export const mixedGuardianDeckPreset: CloudArenaDeckPreset = {
     "defend",
     "attack",
     "defend",
+    "anointed_banner",
     "attack",
     "guardian",
     "attack",

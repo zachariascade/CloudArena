@@ -68,6 +68,7 @@ export const TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
 };
 
 type CreateTestBattleInput = {
+  cardDefinitions?: CardDefinitionLibrary;
   playerDeck: CardDefinitionId[];
   playerHealth?: number;
   enemy?: {
@@ -84,7 +85,7 @@ export function createTestBattle(input: CreateTestBattleInput): BattleState {
   return createBattle({
     seed: input.seed ?? 1,
     playerHealth: input.playerHealth ?? 100,
-    cardDefinitions: TEST_CARD_DEFINITIONS,
+    cardDefinitions: input.cardDefinitions ?? TEST_CARD_DEFINITIONS,
     playerDeck: input.playerDeck,
     enemy: {
       name: input.enemy?.name ?? "Test Enemy",

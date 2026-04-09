@@ -4,6 +4,15 @@ export type CardDefinitionId = string;
 export type PermanentActionMode = "attack" | "defend";
 export type EffectTarget = "player" | "enemy";
 export type CardType = "instant" | "permanent";
+export type AbilityKind = "triggered" | "activated" | "static" | "replacement";
+export type ZoneName = "battlefield" | "hand" | "graveyard" | "discard";
+export type SelectorController = "you" | "opponent" | "any";
+export type SelectorRelation = "self" | "another";
+export type SelectorSource = "trigger_subject" | "ability_source";
+export type ConditionOperator = "==" | "!=" | ">" | ">=" | "<" | "<=";
+export type CounterName = string;
+export type DerivedStatName = "damage" | "health" | "block";
+export type ChoiceStrategy = "first_available" | "auto_yes" | "auto_no";
 
 export type CardEffect = {
   attackAmount?: number;
@@ -17,6 +26,121 @@ export type PermanentActionDefinition = {
   attackAmount?: number;
   attackTimes?: number;
   blockAmount?: number;
+};
+
+export type Selector = {
+  zone?: ZoneName;
+  controller?: SelectorController;
+  cardType?: CardType | "equipment";
+  subtype?: string;
+  relation?: SelectorRelation;
+  source?: SelectorSource;
+};
+
+export type ValueExpression =
+  | {
+      type: "constant";
+      value: number;
+    }
+  | {
+      type: "count";
+      selector: Selector;
+    }
+  | {
+      type: "counter_count";
+      target: "self";
+      counter: CounterName;
+    }
+  | {
+      type: "property";
+      target: "self" | "trigger_subject";
+      property: DerivedStatName;
+    };
+
+export type Condition =
+  | {
+      type: "exists";
+      selector: Selector;
+    }
+  | {
+      type: "compare";
+      left: ValueExpression;
+      op: ConditionOperator;
+      right: ValueExpression;
+    };
+
+export type Trigger =
+  | {
+      event: "self_enters_battlefield";
+    }
+  | {
+      event: "permanent_enters_battlefield";
+      selector?: Selector;
+    }
+  | {
+      event: "permanent_died";
+      selector?: Selector;
+    }
+  | {
+      event: "counter_added";
+      selector?: Selector;
+      counter?: CounterName;
+    }
+  | {
+      event: "turn_started";
+      player: "self" | "controller" | "opponent";
+    };
+
+export type Effect =
+  | {
+      type: "sacrifice";
+      selector: Selector;
+      amount: number;
+      choice: "controller";
+    }
+  | {
+      type: "add_counter";
+      target: "self" | Selector;
+      counter: CounterName;
+      amount: ValueExpression;
+    }
+  | {
+      type: "deal_damage";
+      target: "enemy" | "player" | Selector;
+      amount: ValueExpression;
+    }
+  | {
+      type: "gain_block";
+      target: "self" | "player" | Selector;
+      amount: ValueExpression;
+    }
+  | {
+      type: "summon_permanent";
+      cardId: CardDefinitionId;
+      amount?: ValueExpression;
+    }
+  | {
+      type: "attach_from_hand";
+      selector: Selector;
+      target: "self" | Selector;
+      optional: boolean;
+      cost: "free";
+    };
+
+export type StatModifier = {
+  target: "self";
+  stat: DerivedStatName;
+  operation: "add" | "set";
+  value: ValueExpression;
+};
+
+export type Ability = {
+  id?: string;
+  kind: AbilityKind;
+  trigger?: Trigger;
+  conditions?: Condition[];
+  effects?: Effect[];
+  modifier?: StatModifier;
 };
 
 export type BattleEvent =
@@ -103,11 +227,70 @@ export type BattleEvent =
       }>;
     };
 
+export type RulesEvent =
+  | {
+      type: "card_played";
+      turnNumber: number;
+      cardInstanceId: string;
+      definitionId: CardDefinitionId;
+      controllerId: string;
+    }
+  | {
+      type: "permanent_entered";
+      turnNumber: number;
+      permanentId: string;
+      sourceCardInstanceId: string;
+      definitionId: CardDefinitionId;
+      controllerId: string;
+      slotIndex: number;
+    }
+  | {
+      type: "permanent_died";
+      turnNumber: number;
+      permanentId: string;
+      sourceCardInstanceId: string;
+      definitionId: CardDefinitionId;
+      controllerId?: string;
+      slotIndex: number;
+    }
+  | {
+      type: "counter_added";
+      turnNumber: number;
+      permanentId: string;
+      counter: CounterName;
+      amount: number;
+    }
+  | {
+      type: "attachment_attached";
+      turnNumber: number;
+      attachmentId: string;
+      targetPermanentId: string;
+    };
+
+export type ChoiceOption = {
+  id: string;
+  label: string;
+};
+
+export type ChoiceRecord = {
+  id: string;
+  turnNumber: number;
+  controllerId: string;
+  kind: "select_permanents" | "select_hand_card" | "optional_effect";
+  reason: string;
+  optional: boolean;
+  options: ChoiceOption[];
+  selectedIds: string[];
+  strategy: ChoiceStrategy;
+};
+
 export type BaseCardDefinition = {
   id: CardDefinitionId;
   name: string;
   cost: number;
+  subtypes?: string[];
   onPlay: CardEffect[];
+  abilities?: Ability[];
 };
 
 export type InstantCardDefinition = BaseCardDefinition & {
@@ -177,10 +360,15 @@ export type PermanentState = {
   sourceCardInstanceId: string;
   name: string;
   definitionId: CardDefinitionId;
+  controllerId?: string;
   health: number;
   maxHealth: number;
   block: number;
+  counters?: Record<CounterName, number>;
+  attachments?: string[];
+  attachedTo?: string | null;
   actions: PermanentActionDefinition[];
+  abilities?: Ability[];
   hasActedThisTurn: boolean;
   isDefending: boolean;
   slotIndex: number;
@@ -196,6 +384,9 @@ export type BattleState = {
   battlefield: Array<PermanentState | null>;
   blockingQueue: string[];
   log: BattleEvent[];
+  rules: RulesEvent[];
+  rulesCursor: number;
+  choices: ChoiceRecord[];
 };
 
 export type PlayCardAction = {

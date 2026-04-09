@@ -1,7 +1,12 @@
 import { attackCardDefinition } from "./definitions/attack.js";
+import { armoryDiscipleCardDefinition } from "./definitions/armory-disciple.js";
+import { anointedBannerCardDefinition } from "./definitions/anointed-banner.js";
+import { choirCaptainCardDefinition } from "./definitions/choir-captain.js";
 import { defendCardDefinition } from "./definitions/defend.js";
 import { defendingStrikeCardDefinition } from "./definitions/defending-strike.js";
 import { guardianCardDefinition } from "./definitions/guardian.js";
+import { holyBladeCardDefinition } from "./definitions/holy-blade.js";
+import { sacrificialSeraphCardDefinition } from "./definitions/sacrificial-seraph.js";
 import type {
   CardDefinition,
   CardDefinitionLibrary,
@@ -11,9 +16,14 @@ import type {
 
 export const cardDefinitions: CardDefinitionLibrary = {
   attack: attackCardDefinition,
+  armory_disciple: armoryDiscipleCardDefinition,
+  anointed_banner: anointedBannerCardDefinition,
+  choir_captain: choirCaptainCardDefinition,
   defend: defendCardDefinition,
   defending_strike: defendingStrikeCardDefinition,
   guardian: guardianCardDefinition,
+  holy_blade: holyBladeCardDefinition,
+  sacrificial_seraph: sacrificialSeraphCardDefinition,
 };
 
 export function getCardDefinitionFromLibrary(

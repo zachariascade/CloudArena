@@ -435,6 +435,102 @@ describe("cloud arena combat engine edge cases", () => {
     ]);
   });
 
+  it("records internal rules events separately from the battle log", () => {
+    const battle = createTestBattle({
+      playerDeck: ["guardian", "defend", "attack", "attack", "defend"],
+      enemy: {
+        name: "Ravaging Demon",
+        health: 30,
+        basePower: 25,
+        behavior: [
+          { attackAmount: 10 },
+          { attackAmount: 25 },
+        ],
+      },
+    });
+
+    const guardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
+    const defendCard = battle.player.hand.find((card) => card.definitionId === "defend");
+
+    if (!guardianCard || !defendCard) {
+      throw new Error("Expected opening hand cards were missing.");
+    }
+
+    expect(battle.rules).toEqual([]);
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: guardianCard.instanceId,
+    });
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: defendCard.instanceId,
+    });
+    applyBattleAction(battle, { type: "end_turn" });
+
+    const guardianPermanent = battle.battlefield[0];
+    const roundTwoDefend = battle.player.hand.find((card) => card.definitionId === "defend");
+
+    if (!guardianPermanent || !roundTwoDefend) {
+      throw new Error("Expected round two state was missing.");
+    }
+
+    applyBattleAction(battle, {
+      type: "use_permanent_action",
+      permanentId: guardianPermanent.instanceId,
+      action: "defend",
+    });
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: roundTwoDefend.instanceId,
+    });
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(battle.rules).toEqual([
+      {
+        type: "card_played",
+        turnNumber: 1,
+        cardInstanceId: guardianCard.instanceId,
+        definitionId: "guardian",
+        controllerId: "player",
+      },
+      {
+        type: "permanent_entered",
+        turnNumber: 1,
+        permanentId: "guardian_1",
+        sourceCardInstanceId: guardianCard.instanceId,
+        definitionId: "guardian",
+        controllerId: "player",
+        slotIndex: 0,
+      },
+      {
+        type: "card_played",
+        turnNumber: 1,
+        cardInstanceId: defendCard.instanceId,
+        definitionId: "defend",
+        controllerId: "player",
+      },
+      {
+        type: "card_played",
+        turnNumber: 2,
+        cardInstanceId: roundTwoDefend.instanceId,
+        definitionId: "defend",
+        controllerId: "player",
+      },
+      {
+        type: "permanent_died",
+        turnNumber: 2,
+        permanentId: "guardian_1",
+        sourceCardInstanceId: guardianCard.instanceId,
+        definitionId: "guardian",
+        controllerId: "player",
+        slotIndex: 0,
+      },
+    ]);
+
+    expect(battle.log.map((event) => event.type)).toContain("permanent_destroyed");
+  });
+
   it("keeps a stable readable battle log for a representative permanent exchange", () => {
     const battle = createTestBattle({
       playerDeck: ["guardian", "defend", "attack", "attack", "defend"],

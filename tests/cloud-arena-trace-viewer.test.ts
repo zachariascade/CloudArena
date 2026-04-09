@@ -3,9 +3,14 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 
-import { AppShell, CloudArenaTraceViewer } from "../apps/cloud-arcanum-web/src/components/index.js";
+import {
+  AppShell,
+  CloudArenaBattleState,
+  CloudArenaTraceViewer,
+} from "../apps/cloud-arcanum-web/src/components/index.js";
 import { cloudArenaSampleTrace } from "../apps/cloud-arcanum-web/src/lib/index.js";
 import {
+  buildBattleViewModelFromSessionSnapshot,
   buildBattleViewModelFromTraceStep,
   buildTraceStepViewModels,
   groupTraceEventsByTurn,
@@ -77,7 +82,7 @@ describe("cloud arena trace viewer scaffold", () => {
     ]);
     expect(stepViewModels[1]?.battlefield[0]?.instanceId).toBe("guardian_1");
     expect(stepViewModels[4]?.turnNumber).toBe(2);
-    expect(stepViewModels[4]?.player.hand).toHaveLength(5);
+    expect(stepViewModels[4]?.player.hand).toHaveLength(4);
     expect(stepViewModels[4]?.visibleLog.at(-1)?.type).toBe("block_gained");
   });
 
@@ -103,6 +108,68 @@ describe("cloud arena trace viewer scaffold", () => {
     expect(battleViewModel.legalActions).toEqual([]);
   });
 
+  it("renders permanent counters in the battlefield view", () => {
+    const battleViewModel = buildBattleViewModelFromSessionSnapshot({
+      sessionId: "test-session",
+      scenarioId: "mixed_guardian",
+      status: "active",
+      turnNumber: 2,
+      phase: "player_action",
+      seed: 1,
+      player: {
+        health: 100,
+        maxHealth: 100,
+        block: 0,
+        energy: 2,
+        hand: [],
+        drawPileCount: 5,
+        discardPile: [],
+        graveyard: [],
+      },
+      enemy: {
+        name: "Long Battle Demon",
+        health: 28,
+        maxHealth: 40,
+        block: 0,
+        intent: { attackAmount: 12 },
+        intentLabel: "attack 12",
+      },
+      battlefield: [
+        {
+          instanceId: "sacrificial_seraph_1",
+          sourceCardInstanceId: "card_1",
+          definitionId: "sacrificial_seraph",
+          name: "Sacrificial Seraph",
+          controllerId: "player",
+          health: 8,
+          maxHealth: 8,
+          block: 2,
+          counters: { "+1/+1": 2 },
+          attachments: [],
+          attachedTo: null,
+          hasActedThisTurn: false,
+          isDefending: false,
+          slotIndex: 0,
+          actions: [{ attackAmount: 3 }],
+        },
+        null,
+        null,
+      ],
+      blockingQueue: [],
+      legalActions: [],
+      log: [],
+    });
+
+    const html = renderToStaticMarkup(
+      createElement(CloudArenaBattleState, {
+        battle: battleViewModel,
+      }),
+    );
+
+    expect(html).toContain("Sacrificial Seraph counters");
+    expect(html).toContain("+1/+1 x2");
+  });
+
   it("updates current action and reason when initial step changes", () => {
     const firstStepHtml = renderToStaticMarkup(
       createElement(CloudArenaTraceViewer, {
@@ -120,13 +187,19 @@ describe("cloud arena trace viewer scaffold", () => {
     expect(firstStepHtml).toContain("Opening state");
     expect(firstStepHtml).toContain("Opening hand and board state before the first action.");
     expect(firstStepHtml).toContain("Keyboard:");
-    expect(firstStepHtml).toContain("Guardian</strong><div class=\"trace-viewer-card-cost\">3</div>");
-    expect(firstStepHtml).toContain("card_1");
-    expect(firstStepHtml).toContain("Attack</strong><div class=\"trace-viewer-card-cost\">1</div>");
-    expect(firstStepHtml).toContain("card_3");
+    expect(firstStepHtml).toContain("aria-label=\"Pilgrim Duelist health\"");
+    expect(firstStepHtml).toContain("aria-label=\"Long Battle Demon health\"");
+    expect(firstStepHtml).toContain("data-variant=\"mtg\"");
+    expect(firstStepHtml).toContain("aria-label=\"{3}\"");
+    expect(firstStepHtml).toContain("Attack 10 • Defend 5");
+    expect(firstStepHtml).toContain("Attack");
+    expect(firstStepHtml).toContain("aria-label=\"{1}\"");
+    expect(firstStepHtml).toContain("Attack 6");
     expect(secondStepHtml).toContain("Play card_1");
     expect(secondStepHtml).toContain("establish guardian on empty board");
     expect(secondStepHtml).toContain("guardian_1");
+    expect(secondStepHtml).toContain("data-variant=\"permanent\"");
+    expect(secondStepHtml).toContain("aria-label=\"Guardian health\"");
     expect(secondStepHtml).toContain("Turn 1");
   });
 

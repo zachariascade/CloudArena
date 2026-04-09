@@ -24,6 +24,46 @@ export {
 } from "./cards/definitions.js";
 export { discardHand, drawUpToHandSize } from "./core/draw.js";
 export {
+  chooseOptionalEffect,
+  choosePermanents,
+  chooseSingleObject,
+} from "./core/choices.js";
+export {
+  getDerivedPermanentActionAmount,
+  getDerivedPermanentStat,
+} from "./core/derived-stats.js";
+export {
+  dealDamageToEnemy,
+  dealDamageToPermanent,
+  gainBlockToPermanent,
+  gainBlockToPlayer,
+  resolveEffect,
+  resolveEffects,
+  resolveLegacyCardEffects,
+} from "./core/effects.js";
+export type { EffectResolutionContext } from "./core/effects.js";
+export { emitRulesEvent } from "./core/rules-events.js";
+export {
+  findPermanentById,
+  hasOpenBattlefieldSlot,
+  selectObjects,
+  selectPermanents,
+} from "./core/selectors.js";
+export type { SelectedObject, SelectorContext } from "./core/selectors.js";
+export {
+  attachPermanentToTarget,
+  canAttachPermanentToTarget,
+  detachPermanent,
+  destroyPermanent,
+  cleanupDefeatedPermanents,
+  isEquipmentPermanent,
+  summonPermanentFromCard,
+  toPermanentInstanceId,
+} from "./core/permanents.js";
+export { processTriggeredAbilities } from "./core/triggers.js";
+export { evaluateValueExpression } from "./core/value-expressions.js";
+export type { ValueExpressionContext } from "./core/value-expressions.js";
+export {
   formatEnemyIntent,
   getEnemyIntentAttackAmount,
   getEnemyIntentAttackHitAmount,
@@ -80,6 +120,8 @@ export type {
 } from "./simulation/run-simulation.js";
 
 export type {
+  Ability,
+  AbilityKind,
   BattleAction,
   BattleEvent,
   BattlePhase,
@@ -89,12 +131,17 @@ export type {
   CardDefinitionLibrary,
   CardDefinitionId,
   CardEnemyConfig,
+  Condition,
+  ConditionOperator,
+  CounterName,
   CardType,
   CardEffect,
   CardInstance,
   CreateBattleEnemyConfig,
   CreateBattleInput,
+  DerivedStatName,
   EnemyCardDefinition,
+  Effect,
   EffectTarget,
   EnemyBehaviorStep,
   EnemyIntent,
@@ -104,5 +151,14 @@ export type {
   PermanentActionMode,
   PermanentState,
   PlayerState,
+  RulesEvent,
+  Selector,
+  SelectorController,
+  SelectorRelation,
+  SelectorSource,
+  StatModifier,
+  Trigger,
   UsePermanentAction,
+  ValueExpression,
+  ZoneName,
 } from "./core/types.js";

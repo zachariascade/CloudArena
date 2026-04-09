@@ -5,10 +5,11 @@ export const guardianCardDefinition: CardDefinition = {
   name: "Guardian",
   type: "permanent",
   cost: 3,
+  subtypes: ["Angel"],
   onPlay: [],
   health: 20,
   actions: [
-    { attackAmount: 4 },
-    { blockAmount: 6 },
+    { attackAmount: 10 },
+    { blockAmount: 5 },
   ],
 };

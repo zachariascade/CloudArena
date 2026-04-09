@@ -2,7 +2,9 @@ import { endTurn } from "./end-turn.js";
 import { playCard } from "../actions/play-card.js";
 import { usePermanentAction } from "../actions/use-permanent-action.js";
 import { resolveEnemyTurn } from "../combat/enemy-turn.js";
+import { cleanupDefeatedPermanents } from "./permanents.js";
 import { resetRound } from "./reset-round.js";
+import { processTriggeredAbilities } from "./triggers.js";
 import type { BattleAction, BattleState } from "./types.js";
 
 function createBattleFinishedEvent(
@@ -45,31 +47,7 @@ function checkBattleFinished(state: BattleState): BattleState {
 }
 
 function cleanupDeadPermanents(state: BattleState): BattleState {
-  state.battlefield = state.battlefield.map((permanent) => {
-    if (!permanent || permanent.health > 0) {
-      return permanent;
-    }
-
-    state.log.push({
-      type: "permanent_destroyed",
-      turnNumber: state.turnNumber,
-      permanentId: permanent.instanceId,
-      definitionId: permanent.definitionId,
-    });
-
-    state.player.graveyard.push({
-      instanceId: permanent.sourceCardInstanceId,
-      definitionId: permanent.definitionId,
-    });
-
-    return null;
-  });
-
-  state.blockingQueue = state.blockingQueue.filter((permanentId) =>
-    state.battlefield.some((permanent) => permanent?.instanceId === permanentId),
-  );
-
-  return state;
+  return cleanupDefeatedPermanents(state);
 }
 
 export function applyBattleAction(state: BattleState, action: BattleAction): BattleState {
@@ -81,14 +59,20 @@ export function applyBattleAction(state: BattleState, action: BattleAction): Bat
     case "play_card":
       playCard(state, action.cardInstanceId);
       cleanupDeadPermanents(state);
+      processTriggeredAbilities(state);
+      cleanupDeadPermanents(state);
       return checkBattleFinished(state);
     case "use_permanent_action":
       usePermanentAction(state, action.permanentId, action.action);
+      cleanupDeadPermanents(state);
+      processTriggeredAbilities(state);
       cleanupDeadPermanents(state);
       return checkBattleFinished(state);
     case "end_turn":
       endTurn(state);
       resolveEnemyTurn(state);
+      cleanupDeadPermanents(state);
+      processTriggeredAbilities(state);
       cleanupDeadPermanents(state);
       checkBattleFinished(state);
       if (state.player.health > 0 && state.enemy.health > 0) {

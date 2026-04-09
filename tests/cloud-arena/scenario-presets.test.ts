@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  cardDefinitions,
   cloudArenaDeckPresets,
   cloudArenaEnemyPresets,
   cloudArenaScenarioPresets,
@@ -10,7 +11,6 @@ import {
   runSimulation,
   chooseHeuristicAction,
 } from "../../src/cloud-arena/index.js";
-import { TEST_CARD_DEFINITIONS } from "./helpers.js";
 
 describe("cloud arena scenario presets", () => {
   it("defines the expected scenario coverage presets", () => {
@@ -35,6 +35,7 @@ describe("cloud arena scenario presets", () => {
     const mixedGuardian = getScenarioPreset("mixed_guardian");
 
     expect(mixedGuardian.deck).toContain("guardian");
+    expect(mixedGuardian.deck).toContain("anointed_banner");
     expect(mixedGuardian.deck.length).toBeGreaterThanOrEqual(10);
     expect(mixedGuardian.enemy.cards.length).toBeGreaterThanOrEqual(3);
   });
@@ -44,7 +45,7 @@ describe("cloud arena scenario presets", () => {
     const result = runSimulation({
       seed: 3,
       playerHealth: scenario.playerHealth,
-      cardDefinitions: TEST_CARD_DEFINITIONS,
+      cardDefinitions,
       playerDeck: scenario.deck,
       enemy: scenario.enemy,
       maxSteps: scenario.recommendedMaxSteps,

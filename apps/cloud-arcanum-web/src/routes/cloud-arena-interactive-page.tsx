@@ -48,6 +48,21 @@ function formatApiErrorDetails(error: Error | CloudArcanumApiClientError): React
   return <p>{error.message}</p>;
 }
 
+function isMissingCloudArenaSessionError(
+  error: Error | CloudArcanumApiClientError,
+): error is CloudArcanumApiClientError {
+  return (
+    error instanceof CloudArcanumApiClientError &&
+    error.status === 404 &&
+    error.code === "not_found" &&
+    (
+      error.route === "cloudArenaSessionActions" ||
+      error.route === "cloudArenaSessionDetail" ||
+      error.route === "cloudArenaSessionReset"
+    )
+  );
+}
+
 function findBattleFinishedEvent(log: BattleEvent[]): Extract<BattleEvent, { type: "battle_finished" }> | null {
   for (let index = log.length - 1; index >= 0; index -= 1) {
     const event = log[index];
@@ -150,7 +165,16 @@ export function CloudArenaInteractivePage({
       setSnapshot(response.data);
       setStatus("ready");
     } catch (nextError: unknown) {
-      setError(nextError instanceof Error ? nextError : new Error(String(nextError)));
+      const resolvedError = nextError instanceof Error ? nextError : new Error(String(nextError));
+
+      if (isMissingCloudArenaSessionError(resolvedError)) {
+        setLastSubmittedActionLabel(null);
+        setError(new Error("The live battle session expired after the API restarted. A fresh battle has been created."));
+        await createSession(snapshot.seed);
+        return;
+      }
+
+      setError(resolvedError);
       setStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -171,7 +195,16 @@ export function CloudArenaInteractivePage({
       setLastSubmittedActionLabel(null);
       setStatus("ready");
     } catch (nextError: unknown) {
-      setError(nextError instanceof Error ? nextError : new Error(String(nextError)));
+      const resolvedError = nextError instanceof Error ? nextError : new Error(String(nextError));
+
+      if (isMissingCloudArenaSessionError(resolvedError)) {
+        setLastSubmittedActionLabel(null);
+        setError(new Error("The live battle session expired after the API restarted. A fresh battle has been created."));
+        await createSession(snapshot.seed);
+        return;
+      }
+
+      setError(resolvedError);
       setStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -202,6 +235,80 @@ export function CloudArenaInteractivePage({
   }
 
   const recentEvents = snapshot?.log.slice(-8) ?? [];
+
+  const turnActions = snapshot?.legalActions
+    .filter((option) => option.source === "turn")
+    .map((option) => ({
+      action: option.action,
+      label: option.label,
+    })) ?? [];
+  const endTurnAction = turnActions.find(
+    (entry): entry is (typeof turnActions)[number] & {
+      action: Extract<BattleAction, { type: "end_turn" }>;
+    } => entry.action.type === "end_turn",
+  ) ?? null;
+
+  useEffect(() => {
+    if (!snapshot || !endTurnAction || isSubmitting || isCreatingSession || snapshot.status === "finished") {
+      return;
+    }
+
+    const endTurnToApply = endTurnAction.action;
+
+    function onWindowKeyDown(event: KeyboardEvent): void {
+      if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) {
+        return;
+      }
+
+      const target = event.target;
+      if (
+        target instanceof HTMLElement &&
+        (target.closest("input, textarea, select, button, [contenteditable='true']") !== null)
+      ) {
+        return;
+      }
+
+      if (event.key.toLowerCase() !== "e") {
+        return;
+      }
+
+      event.preventDefault();
+      void handleApplyAction(endTurnToApply);
+    }
+
+    window.addEventListener("keydown", onWindowKeyDown);
+    return () => window.removeEventListener("keydown", onWindowKeyDown);
+  }, [endTurnAction, isCreatingSession, isSubmitting, snapshot]);
+
+  useEffect(() => {
+    if (!snapshot || isSubmitting || isCreatingSession) {
+      return;
+    }
+
+    function onWindowKeyDown(event: KeyboardEvent): void {
+      if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) {
+        return;
+      }
+
+      const target = event.target;
+      if (
+        target instanceof HTMLElement &&
+        (target.closest("input, textarea, select, button, [contenteditable='true']") !== null)
+      ) {
+        return;
+      }
+
+      if (event.key.toLowerCase() !== "r") {
+        return;
+      }
+
+      event.preventDefault();
+      void handleReset();
+    }
+
+    window.addEventListener("keydown", onWindowKeyDown);
+    return () => window.removeEventListener("keydown", onWindowKeyDown);
+  }, [isCreatingSession, isSubmitting, snapshot]);
 
   if ((status === "loading" || isCreatingSession) && !snapshot) {
     return (
@@ -265,12 +372,6 @@ export function CloudArenaInteractivePage({
     .map((option) => ({
       permanentId: option.action.permanentId,
       action: option.action.action,
-    }));
-  const turnActions = snapshot.legalActions
-    .filter((option) => option.source === "turn")
-    .map((option) => ({
-      action: option.action,
-      label: option.label,
     }));
 
   function handlePlayHandCard(cardInstanceId: string): void {

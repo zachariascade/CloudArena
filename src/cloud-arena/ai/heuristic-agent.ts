@@ -1,5 +1,7 @@
 import { getCardDefinitionFromLibrary } from "../cards/definitions.js";
+import { getDerivedPermanentActionAmount } from "../core/derived-stats.js";
 import { getEnemyIntentAttackAmount } from "../core/enemy-intent.js";
+import { findPermanentById, hasOpenBattlefieldSlot } from "../core/selectors.js";
 import type {
   BattleAction,
   BattleState,
@@ -24,7 +26,7 @@ function getRemainingIncomingDamageAfterCurrentDefense(state: BattleState): numb
   remainingDamage = Math.max(0, remainingDamage - state.player.block);
 
   for (const permanentId of state.blockingQueue) {
-    const permanent = state.battlefield.find((entry) => entry?.instanceId === permanentId);
+    const permanent = findPermanentById(state, permanentId);
 
     if (!permanent) {
       continue;
@@ -68,7 +70,7 @@ function getPermanentActionAmount(
   permanentId: string,
   actionType: "attack" | "defend",
 ): number {
-  const permanent = state.battlefield.find((entry) => entry?.instanceId === permanentId);
+  const permanent = findPermanentById(state, permanentId);
   const actionDefinition = permanent?.actions.find((entry) =>
     actionType === "attack"
       ? typeof entry.attackAmount === "number" && entry.attackAmount > 0
@@ -79,8 +81,8 @@ function getPermanentActionAmount(
     return 0;
   }
 
-  if (typeof actionDefinition.attackAmount === "number") {
-    return actionDefinition.attackAmount * Math.max(1, actionDefinition.attackTimes ?? 1);
+  if (permanent && typeof actionDefinition.attackAmount === "number") {
+    return getDerivedPermanentActionAmount(state, permanent, actionDefinition);
   }
 
   return actionDefinition.blockAmount ?? 0;
@@ -185,7 +187,7 @@ function scoreAction(state: BattleState, action: BattleAction): number {
   }
 
   const incomingAttackIsDangerous = isIncomingAttackDangerous(state);
-  const openBoardSlotExists = state.battlefield.some((slot) => slot === null);
+  const openBoardSlotExists = hasOpenBattlefieldSlot(state);
   const remainingIncomingDamage = getRemainingIncomingDamageAfterCurrentDefense(state);
 
   if (action.type === "end_turn") {
