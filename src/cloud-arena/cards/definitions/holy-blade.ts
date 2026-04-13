@@ -3,10 +3,10 @@ import type { CardDefinition } from "../../core/types.js";
 export const holyBladeCardDefinition: CardDefinition = {
   id: "holy_blade",
   name: "Holy Blade",
-  type: "permanent",
+  cardTypes: ["artifact"],
   cost: 1,
   subtypes: ["Equipment"],
   onPlay: [],
+  power: 0,
   health: 1,
-  actions: [],
 };

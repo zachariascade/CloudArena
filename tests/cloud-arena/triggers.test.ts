@@ -10,21 +10,22 @@ const TRIGGER_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
   offering_thrall: {
     id: "offering_thrall",
     name: "Offering Thrall",
-    type: "permanent",
+    cardTypes: ["creature"],
     cost: 1,
     onPlay: [],
+    power: 0,
     health: 4,
-    actions: [],
+    abilities: [],
   },
   carrion_angel: {
     id: "carrion_angel",
     name: "Carrion Angel",
-    type: "permanent",
+    cardTypes: ["creature"],
     cost: 2,
     subtypes: ["Angel"],
     onPlay: [],
+    power: 3,
     health: 8,
-    actions: [{ attackAmount: 3 }],
     abilities: [
       {
         kind: "triggered",
@@ -67,14 +68,14 @@ const TRIGGER_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
   attack: {
     id: "attack",
     name: "Attack",
-    type: "instant",
+    cardTypes: ["instant"],
     cost: 1,
     onPlay: [{ attackAmount: 6, target: "enemy" }],
   },
   defend: {
     id: "defend",
     name: "Defend",
-    type: "instant",
+    cardTypes: ["instant"],
     cost: 1,
     onPlay: [{ blockAmount: 7, target: "player" }],
   },

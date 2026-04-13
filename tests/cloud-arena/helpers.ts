@@ -13,21 +13,21 @@ export const TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
   attack: {
     id: "attack",
     name: "Attack",
-    type: "instant",
+    cardTypes: ["instant"],
     cost: 1,
     onPlay: [{ attackAmount: 6, target: "enemy" }],
   },
   defend: {
     id: "defend",
     name: "Defend",
-    type: "instant",
+    cardTypes: ["instant"],
     cost: 1,
     onPlay: [{ blockAmount: 7, target: "player" }],
   },
   defending_strike: {
     id: "defending_strike",
     name: "Defending Strike",
-    type: "instant",
+    cardTypes: ["instant"],
     cost: 2,
     onPlay: [
       { attackAmount: 4, target: "enemy" },
@@ -37,32 +37,42 @@ export const TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
   twin_strike: {
     id: "twin_strike",
     name: "Twin Strike",
-    type: "instant",
+    cardTypes: ["instant"],
     cost: 1,
     onPlay: [{ attackAmount: 3, attackTimes: 2, target: "enemy" }],
   },
   guardian: {
     id: "guardian",
     name: "Guardian",
-    type: "permanent",
+    cardTypes: ["creature"],
     cost: 2,
     onPlay: [],
+    power: 4,
     health: 10,
-    actions: [
-      { attackAmount: 4 },
-      { blockAmount: 3 },
+    abilities: [
+      {
+        id: "guardian_apply_block",
+        kind: "activated",
+        activation: { type: "action", actionId: "apply_block" },
+        effects: [{ type: "gain_block", target: "player", amount: { type: "constant", value: 3 } }],
+      },
     ],
   },
   blade_dancer: {
     id: "blade_dancer",
     name: "Blade Dancer",
-    type: "permanent",
+    cardTypes: ["creature"],
     cost: 2,
     onPlay: [],
+    power: 6,
     health: 9,
-    actions: [
-      { attackAmount: 2, attackTimes: 3 },
-      { blockAmount: 2 },
+    abilities: [
+      {
+        id: "blade_dancer_apply_block",
+        kind: "activated",
+        activation: { type: "action", actionId: "apply_block" },
+        effects: [{ type: "gain_block", target: "player", amount: { type: "constant", value: 2 } }],
+      },
     ],
   },
 };

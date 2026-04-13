@@ -1,18 +1,30 @@
 export type BattlePhase = "player_action" | "enemy_resolution" | "finished";
 
 export type CardDefinitionId = string;
-export type PermanentActionMode = "attack" | "defend";
 export type EffectTarget = "player" | "enemy";
-export type CardType = "instant" | "permanent";
+export type PermanentCardType =
+  | "artifact"
+  | "battle"
+  | "creature"
+  | "enchantment"
+  | "land"
+  | "planeswalker";
+export type NonPermanentCardType = "instant" | "sorcery";
+export type CardType = PermanentCardType | NonPermanentCardType;
+export type SelectorCardType = CardType | "permanent" | "equipment";
 export type AbilityKind = "triggered" | "activated" | "static" | "replacement";
+export type ActivatedAbilityActionId = string;
+export type RulesActionId = "attack" | "defend";
 export type ZoneName = "battlefield" | "hand" | "graveyard" | "discard";
 export type SelectorController = "you" | "opponent" | "any";
 export type SelectorRelation = "self" | "another";
 export type SelectorSource = "trigger_subject" | "ability_source";
 export type ConditionOperator = "==" | "!=" | ">" | ">=" | "<" | "<=";
 export type CounterName = string;
-export type DerivedStatName = "damage" | "health" | "block";
+export type DerivedStatName = "power" | "health" | "block";
 export type ChoiceStrategy = "first_available" | "auto_yes" | "auto_no";
+export type DamageOverflowPolicy = "stop_at_blocker" | "trample";
+export type DefenderRecoveryPolicy = "none" | "full_heal";
 
 export type CardEffect = {
   attackAmount?: number;
@@ -22,16 +34,15 @@ export type CardEffect = {
   target: EffectTarget;
 };
 
-export type PermanentActionDefinition = {
-  attackAmount?: number;
-  attackTimes?: number;
-  blockAmount?: number;
+export type ActionAbilityActivation = {
+  type: "action";
+  actionId: ActivatedAbilityActionId;
 };
 
 export type Selector = {
   zone?: ZoneName;
   controller?: SelectorController;
-  cardType?: CardType | "equipment";
+  cardType?: SelectorCardType;
   subtype?: string;
   relation?: SelectorRelation;
   source?: SelectorSource;
@@ -134,14 +145,40 @@ export type StatModifier = {
   value: ValueExpression;
 };
 
-export type Ability = {
+export type TriggeredAbility = {
   id?: string;
-  kind: AbilityKind;
-  trigger?: Trigger;
+  kind: "triggered";
+  trigger: Trigger;
   conditions?: Condition[];
   effects?: Effect[];
-  modifier?: StatModifier;
 };
+
+export type ActivatedAbility = {
+  id: string;
+  kind: "activated";
+  activation: ActionAbilityActivation;
+  conditions?: Condition[];
+  effects: Effect[];
+};
+
+export type StaticAbility = {
+  id?: string;
+  kind: "static";
+  modifier: StatModifier;
+};
+
+export type ReplacementAbility = {
+  id?: string;
+  kind: "replacement";
+  conditions?: Condition[];
+  effects?: Effect[];
+};
+
+export type Ability =
+  | TriggeredAbility
+  | ActivatedAbility
+  | StaticAbility
+  | ReplacementAbility;
 
 export type BattleEvent =
   | {
@@ -197,7 +234,9 @@ export type BattleEvent =
       type: "permanent_acted";
       turnNumber: number;
       permanentId: string;
-      action: PermanentActionMode;
+      source: "ability" | "rules";
+      action: ActivatedAbilityActionId | RulesActionId;
+      abilityId?: string;
     }
   | {
       type: "enemy_intent_resolved";
@@ -288,22 +327,24 @@ export type BaseCardDefinition = {
   id: CardDefinitionId;
   name: string;
   cost: number;
+  cardTypes: CardType[];
   subtypes?: string[];
   onPlay: CardEffect[];
   abilities?: Ability[];
 };
 
-export type InstantCardDefinition = BaseCardDefinition & {
-  type: "instant";
+export type SpellCardDefinition = BaseCardDefinition & {
+  cardTypes: NonPermanentCardType[];
 };
 
 export type PermanentCardDefinition = BaseCardDefinition & {
-  type: "permanent";
+  cardTypes: PermanentCardType[];
+  power: number;
   health: number;
-  actions: PermanentActionDefinition[];
+  recoveryPolicy?: DefenderRecoveryPolicy;
 };
 
-export type CardDefinition = InstantCardDefinition | PermanentCardDefinition;
+export type CardDefinition = SpellCardDefinition | PermanentCardDefinition;
 
 export type CardDefinitionLibrary = Record<CardDefinitionId, CardDefinition>;
 
@@ -314,6 +355,7 @@ export type EnemyCardDefinition = {
     attackAmount?: number;
     attackTimes?: number;
     blockAmount?: number;
+    overflowPolicy?: DamageOverflowPolicy;
     target: EffectTarget;
   }>;
 };
@@ -327,6 +369,7 @@ export type EnemyIntent = {
   attackAmount?: number;
   attackTimes?: number;
   blockAmount?: number;
+  overflowPolicy?: DamageOverflowPolicy;
 };
 
 export type EnemyBehaviorStep = EnemyIntent;
@@ -361,14 +404,17 @@ export type PermanentState = {
   name: string;
   definitionId: CardDefinitionId;
   controllerId?: string;
+  power: number;
   health: number;
   maxHealth: number;
   block: number;
+  recoveryPolicy: DefenderRecoveryPolicy;
   counters?: Record<CounterName, number>;
   attachments?: string[];
   attachedTo?: string | null;
-  actions: PermanentActionDefinition[];
   abilities?: Ability[];
+  disabledAbilityIds?: string[];
+  disabledRulesActions?: RulesActionId[];
   hasActedThisTurn: boolean;
   isDefending: boolean;
   slotIndex: number;
@@ -397,7 +443,9 @@ export type PlayCardAction = {
 export type UsePermanentAction = {
   type: "use_permanent_action";
   permanentId: string;
-  action: PermanentActionMode;
+  source?: "ability" | "rules";
+  action: ActivatedAbilityActionId | RulesActionId;
+  abilityId?: string;
 };
 
 export type EndTurnAction = {

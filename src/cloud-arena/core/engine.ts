@@ -63,7 +63,7 @@ export function applyBattleAction(state: BattleState, action: BattleAction): Bat
       cleanupDeadPermanents(state);
       return checkBattleFinished(state);
     case "use_permanent_action":
-      usePermanentAction(state, action.permanentId, action.action);
+      usePermanentAction(state, action);
       cleanupDeadPermanents(state);
       processTriggeredAbilities(state);
       cleanupDeadPermanents(state);

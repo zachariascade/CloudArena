@@ -3,18 +3,18 @@ import type { CardDefinition } from "../../core/types.js";
 export const choirCaptainCardDefinition: CardDefinition = {
   id: "choir_captain",
   name: "Choir Captain",
-  type: "permanent",
+  cardTypes: ["creature"],
   cost: 3,
   subtypes: ["Angel"],
   onPlay: [],
+  power: 2,
   health: 9,
-  actions: [{ attackAmount: 2 }],
   abilities: [
     {
       kind: "static",
       modifier: {
         target: "self",
-        stat: "damage",
+        stat: "power",
         operation: "add",
         value: {
           type: "count",

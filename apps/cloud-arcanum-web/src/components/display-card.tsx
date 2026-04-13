@@ -326,34 +326,40 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
   ) : null;
   const lowerContent = (
     <>
-      <div className="card-face-meta-row">
-        <span className={`card-face-status ${model.statusTone ?? ""}`.trim()}>
-          {model.statusLabel ?? model.variant}
-        </span>
-        {model.actions.length > 0 && !isCardButton ? (
-          <div className="display-card-actions-inline">
-            {model.actions.map((action) => (
-              <button
-                key={action.id}
-                type="button"
-                className="card-face-preview-button"
-                disabled={action.disabled}
-                onClick={() => action.onSelect?.()}
-              >
-                {action.label}
-              </button>
-            ))}
-          </div>
-        ) : (
-          <div className="display-card-badges-inline">
-            {model.badges.map((badge) => (
-              <span key={badge} className="card-face-status">
-                {badge}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
+      {model.statusLabel || model.actions.length > 0 || model.badges.length > 0 ? (
+        <div className="card-face-meta-row">
+          {model.statusLabel ? (
+            <span className={`card-face-status ${model.statusTone ?? ""}`.trim()}>
+              {model.statusLabel}
+            </span>
+          ) : (
+            <span />
+          )}
+          {model.actions.length > 0 && !isCardButton ? (
+            <div className="display-card-actions-inline">
+              {model.actions.map((action) => (
+                <button
+                  key={action.id}
+                  type="button"
+                  className="card-face-preview-button"
+                  disabled={action.disabled}
+                  onClick={() => action.onSelect?.()}
+                >
+                  {action.label}
+                </button>
+              ))}
+            </div>
+          ) : model.badges.length > 0 ? (
+            <div className="display-card-badges-inline">
+              {model.badges.map((badge) => (
+                <span key={badge} className="card-face-status">
+                  {badge}
+                </span>
+              ))}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
 
       {visibleStats.length > 0 ? (
         <div className="trace-viewer-stat-row display-card-stat-row">

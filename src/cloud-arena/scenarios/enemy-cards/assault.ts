@@ -1,4 +1,4 @@
-import type { EnemyCardDefinition } from "../../core/types.js";
+import type { DamageOverflowPolicy, EnemyCardDefinition } from "../../core/types.js";
 
 function getAssaultId(
   attackAmount: number,
@@ -24,6 +24,7 @@ export function assault(
   attackAmount: number,
   attackTimes: number,
   blockAmount: number,
+  overflowPolicy?: DamageOverflowPolicy,
 ): EnemyCardDefinition {
   return {
     id: getAssaultId(attackAmount, attackTimes, blockAmount),
@@ -32,6 +33,7 @@ export function assault(
       {
         attackAmount,
         attackTimes: attackTimes > 1 ? attackTimes : undefined,
+        overflowPolicy,
         target: "player",
       },
       {

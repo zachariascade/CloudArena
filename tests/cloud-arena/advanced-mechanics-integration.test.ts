@@ -69,7 +69,7 @@ describe("cloud arena advanced mechanics integration", () => {
       throw new Error("Expected choir_captain on battlefield.");
     }
 
-    expect(getDerivedPermanentStat(battle, captain, "damage")).toBe(4);
+    expect(getDerivedPermanentStat(battle, captain, "power")).toBe(4);
 
     destroyPermanent(battle, seraph.instanceId);
 

@@ -3,13 +3,24 @@ import type { CardDefinition } from "../../core/types.js";
 export const guardianCardDefinition: CardDefinition = {
   id: "guardian",
   name: "Guardian",
-  type: "permanent",
+  cardTypes: ["creature"],
   cost: 3,
   subtypes: ["Angel"],
   onPlay: [],
+  power: 10,
   health: 20,
-  actions: [
-    { attackAmount: 10 },
-    { blockAmount: 5 },
+  abilities: [
+    {
+      id: "guardian_apply_block",
+      kind: "activated",
+      activation: { type: "action", actionId: "apply_block" },
+      effects: [
+        {
+          type: "gain_block",
+          target: "player",
+          amount: { type: "constant", value: 5 },
+        },
+      ],
+    },
   ],
 };

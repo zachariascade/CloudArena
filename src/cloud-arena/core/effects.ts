@@ -1,4 +1,8 @@
-import { getCardDefinitionFromLibrary } from "../cards/definitions.js";
+import {
+  getCardDefinitionFromLibrary,
+  isEquipmentCardDefinition,
+  isPermanentCardDefinition,
+} from "../cards/definitions.js";
 import { chooseOptionalEffect, choosePermanents, chooseSingleObject } from "./choices.js";
 import { getTotalAttackAmount, hasBlockAmount } from "./combat-values.js";
 import {
@@ -254,7 +258,7 @@ function resolveSummonPermanentEffect(
 
   for (let index = 0; index < amount; index += 1) {
     const definition = getCardDefinitionFromLibrary(state.cardDefinitions, effect.cardId);
-    if (definition.type !== "permanent") {
+    if (!isPermanentCardDefinition(definition)) {
       throw new Error(`Effect cannot summon non-permanent card ${effect.cardId}.`);
     }
 
@@ -305,7 +309,7 @@ function resolveAttachFromHandEffect(
   }
 
   const definition = getCardDefinitionFromLibrary(state.cardDefinitions, attachmentCard.card.definitionId);
-  const isEquipment = definition.subtypes?.includes("Equipment") ?? false;
+  const isEquipment = isEquipmentCardDefinition(definition);
 
   if (!isEquipment) {
     if (effect.optional) {
@@ -315,7 +319,7 @@ function resolveAttachFromHandEffect(
     throw new Error(`Card ${definition.id} cannot be attached because it is not Equipment.`);
   }
 
-  if (definition.type !== "permanent") {
+  if (!isPermanentCardDefinition(definition)) {
     throw new Error(`Card ${definition.id} cannot be attached because it is not a permanent.`);
   }
 

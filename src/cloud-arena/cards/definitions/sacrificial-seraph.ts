@@ -3,12 +3,12 @@ import type { CardDefinition } from "../../core/types.js";
 export const sacrificialSeraphCardDefinition: CardDefinition = {
   id: "sacrificial_seraph",
   name: "Sacrificial Seraph",
-  type: "permanent",
+  cardTypes: ["creature"],
   cost: 2,
   subtypes: ["Angel"],
   onPlay: [],
+  power: 3,
   health: 8,
-  actions: [{ attackAmount: 3 }],
   abilities: [
     {
       kind: "triggered",

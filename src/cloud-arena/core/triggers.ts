@@ -1,4 +1,9 @@
-import { getCardDefinitionFromLibrary } from "../cards/definitions.js";
+import {
+  getCardDefinitionFromLibrary,
+  hasCardType,
+  isEquipmentCardDefinition,
+  isPermanentCardDefinition,
+} from "../cards/definitions.js";
 import { resolveEffects } from "./effects.js";
 import { cleanupDefeatedPermanents } from "./permanents.js";
 import { selectObjects } from "./selectors.js";
@@ -63,11 +68,20 @@ function matchesEventSelector(
     return false;
   }
 
-  if (selector.cardType === "equipment" && !(definition.subtypes?.includes("Equipment") ?? false)) {
+  if (selector.cardType === "equipment" && !isEquipmentCardDefinition(definition)) {
     return false;
   }
 
-  if (selector.cardType && selector.cardType !== "equipment" && definition.type !== selector.cardType) {
+  if (selector.cardType === "permanent" && !isPermanentCardDefinition(definition)) {
+    return false;
+  }
+
+  if (
+    selector.cardType &&
+    selector.cardType !== "equipment" &&
+    selector.cardType !== "permanent" &&
+    !hasCardType(definition, selector.cardType)
+  ) {
     return false;
   }
 
@@ -187,14 +201,15 @@ export function processTriggeredAbilities(state: BattleState): BattleState {
     const triggeredAbilities = collectTriggeredAbilities(state, event);
 
     for (const resolution of triggeredAbilities) {
-      const conditionsMet = (resolution.ability.conditions ?? []).every((condition) =>
+      const conditions = "conditions" in resolution.ability ? resolution.ability.conditions ?? [] : [];
+      const conditionsMet = conditions.every((condition: Condition) =>
         evaluateCondition(state, condition, resolution));
 
       if (!conditionsMet) {
         continue;
       }
 
-      resolveEffects(state, resolution.ability.effects ?? [], resolution);
+      resolveEffects(state, "effects" in resolution.ability ? resolution.ability.effects ?? [] : [], resolution);
       cleanupDefeatedPermanents(state);
     }
   }

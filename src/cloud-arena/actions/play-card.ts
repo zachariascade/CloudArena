@@ -1,4 +1,4 @@
-import { getCardDefinitionFromLibrary } from "../cards/definitions.js";
+import { getCardDefinitionFromLibrary, isPermanentCardDefinition } from "../cards/definitions.js";
 import { resolveLegacyCardEffects } from "../core/effects.js";
 import { summonPermanentFromCard } from "../core/permanents.js";
 import { emitRulesEvent } from "../core/rules-events.js";
@@ -50,13 +50,13 @@ export function playCard(state: BattleState, cardInstanceId: string): BattleStat
     controllerId: "player",
   });
 
-  if (definition.type === "permanent") {
+  if (isPermanentCardDefinition(definition)) {
     summonPermanentFromCard(state, card);
   }
 
   resolveLegacyCardEffects(state, definition.onPlay);
 
-  if (definition.type !== "permanent") {
+  if (!isPermanentCardDefinition(definition)) {
     state.player.discardPile.push(card);
   }
 

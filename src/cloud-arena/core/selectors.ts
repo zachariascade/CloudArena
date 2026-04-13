@@ -1,4 +1,9 @@
-import { getCardDefinitionFromLibrary } from "../cards/definitions.js";
+import {
+  getCardDefinitionFromLibrary,
+  hasCardType,
+  isEquipmentCardDefinition,
+  isPermanentCardDefinition,
+} from "../cards/definitions.js";
 import type {
   BattleState,
   CardDefinition,
@@ -98,10 +103,14 @@ function matchesCardType(
   }
 
   if (selector.cardType === "equipment") {
-    return object.definition.subtypes?.includes("Equipment") ?? false;
+    return isEquipmentCardDefinition(object.definition);
   }
 
-  return object.definition.type === selector.cardType;
+  if (selector.cardType === "permanent") {
+    return isPermanentCardDefinition(object.definition);
+  }
+
+  return hasCardType(object.definition, selector.cardType);
 }
 
 function matchesSubtype(

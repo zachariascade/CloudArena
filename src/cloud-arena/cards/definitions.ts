@@ -11,8 +11,19 @@ import type {
   CardDefinition,
   CardDefinitionLibrary,
   CardDefinitionId,
+  CardType,
   PermanentCardDefinition,
+  PermanentCardType,
 } from "../core/types.js";
+
+const permanentCardTypes = new Set<PermanentCardType>([
+  "artifact",
+  "battle",
+  "creature",
+  "enchantment",
+  "land",
+  "planeswalker",
+]);
 
 export const cardDefinitions: CardDefinitionLibrary = {
   attack: attackCardDefinition,
@@ -43,10 +54,27 @@ export function getCardDefinition(cardId: CardDefinitionId): CardDefinition {
   return getCardDefinitionFromLibrary(cardDefinitions, cardId);
 }
 
+export function hasCardType(
+  definition: CardDefinition,
+  cardType: CardType,
+): boolean {
+  return definition.cardTypes.includes(cardType);
+}
+
+export function isEquipmentCardDefinition(definition: CardDefinition): boolean {
+  return definition.subtypes?.includes("Equipment") ?? false;
+}
+
+export function isPermanentCardDefinition(
+  definition: CardDefinition,
+): definition is PermanentCardDefinition {
+  return definition.cardTypes.some((cardType) => permanentCardTypes.has(cardType as PermanentCardType));
+}
+
 export function asPermanentCardDefinition(
   definition: CardDefinition,
 ): PermanentCardDefinition {
-  if (definition.type !== "permanent") {
+  if (!isPermanentCardDefinition(definition)) {
     throw new Error(`Card ${definition.id} is not a permanent card.`);
   }
 

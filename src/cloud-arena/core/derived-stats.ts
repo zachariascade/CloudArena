@@ -1,18 +1,25 @@
-import { getTotalAttackAmount } from "./combat-values.js";
 import { evaluateValueExpression } from "./value-expressions.js";
 import type {
   BattleState,
   DerivedStatName,
-  PermanentActionDefinition,
   PermanentState,
   StatModifier,
 } from "./types.js";
 
-function getBasePermanentDamage(permanent: PermanentState): number {
-  return Math.max(
-    0,
-    ...permanent.actions.map((action) => getTotalAttackAmount(action)),
-  );
+function getCounterModifierForStat(
+  permanent: PermanentState,
+  stat: DerivedStatName,
+): number {
+  const counters = permanent.counters ?? {};
+
+  switch (stat) {
+    case "power":
+      // In Cloud Arena, +1/+1 counters currently map to increased attack power.
+      return counters["+1/+1"] ?? 0;
+    case "health":
+    case "block":
+      return 0;
+  }
 }
 
 function getBasePermanentStat(
@@ -20,8 +27,8 @@ function getBasePermanentStat(
   stat: DerivedStatName,
 ): number {
   switch (stat) {
-    case "damage":
-      return getBasePermanentDamage(permanent);
+    case "power":
+      return permanent.power;
     case "health":
       return permanent.health;
     case "block":
@@ -33,8 +40,8 @@ function getStaticModifiersForPermanent(
   permanent: PermanentState,
 ): StatModifier[] {
   return (permanent.abilities ?? [])
-    .filter((ability) => ability.kind === "static" && ability.modifier)
-    .map((ability) => ability.modifier as StatModifier)
+    .filter((ability): ability is Extract<typeof ability, { kind: "static" }> => ability.kind === "static")
+    .map((ability) => ability.modifier)
     .filter((modifier) => modifier.target === "self");
 }
 
@@ -43,7 +50,7 @@ export function getDerivedPermanentStat(
   permanent: PermanentState,
   stat: DerivedStatName,
 ): number {
-  let value = getBasePermanentStat(permanent, stat);
+  let value = getBasePermanentStat(permanent, stat) + getCounterModifierForStat(permanent, stat);
 
   for (const modifier of getStaticModifiersForPermanent(permanent)) {
     if (modifier.stat !== stat) {
@@ -68,16 +75,11 @@ export function getDerivedPermanentStat(
 export function getDerivedPermanentActionAmount(
   state: BattleState,
   permanent: PermanentState,
-  action: PermanentActionDefinition,
+  action: "attack" | "apply_block",
 ): number {
-  if (typeof action.attackAmount === "number" && action.attackAmount > 0) {
-    const baseDamage = getTotalAttackAmount(action);
-    const basePermanentDamage = getBasePermanentDamage(permanent);
-    const derivedPermanentDamage = getDerivedPermanentStat(state, permanent, "damage");
-    const damageDelta = derivedPermanentDamage - basePermanentDamage;
-
-    return Math.max(0, baseDamage + damageDelta);
+  if (action === "attack") {
+    return getDerivedPermanentStat(state, permanent, "power");
   }
 
-  return action.blockAmount ?? 0;
+  return 0;
 }

@@ -19,8 +19,8 @@ function getPermanentPropertyValue(
       return permanent.health;
     case "block":
       return permanent.block;
-    case "damage":
-      return getDerivedPermanentStat(state, permanent, "damage");
+    case "power":
+      return getDerivedPermanentStat(state, permanent, "power");
   }
 }
 

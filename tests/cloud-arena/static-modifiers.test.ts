@@ -12,38 +12,40 @@ const STATIC_MODIFIER_CARD_DEFINITIONS: CardDefinitionLibrary = {
   angel_host: {
     id: "angel_host",
     name: "Angel Host",
-    type: "permanent",
+    cardTypes: ["creature"],
     cost: 2,
     subtypes: ["Angel"],
     onPlay: [],
+    power: 4,
     health: 10,
-    actions: [{ attackAmount: 4 }],
+    abilities: [],
   },
   angel_champion: {
     id: "angel_champion",
     name: "Angel Champion",
-    type: "permanent",
+    cardTypes: ["creature"],
     cost: 2,
     subtypes: ["Angel"],
     onPlay: [],
+    power: 5,
     health: 11,
-    actions: [{ attackAmount: 5 }],
+    abilities: [],
   },
   choir_captain: {
     id: "choir_captain",
     name: "Choir Captain",
-    type: "permanent",
+    cardTypes: ["creature"],
     cost: 3,
     subtypes: ["Angel"],
     onPlay: [],
+    power: 2,
     health: 9,
-    actions: [{ attackAmount: 2 }],
     abilities: [
       {
         kind: "static",
         modifier: {
           target: "self",
-          stat: "damage",
+          stat: "power",
           operation: "add",
           value: {
             type: "count",
@@ -59,14 +61,14 @@ const STATIC_MODIFIER_CARD_DEFINITIONS: CardDefinitionLibrary = {
   attack: {
     id: "attack",
     name: "Attack",
-    type: "instant",
+    cardTypes: ["instant"],
     cost: 1,
     onPlay: [{ attackAmount: 6, target: "enemy" }],
   },
   defend: {
     id: "defend",
     name: "Defend",
-    type: "instant",
+    cardTypes: ["instant"],
     cost: 1,
     onPlay: [{ blockAmount: 7, target: "player" }],
   },
@@ -112,8 +114,8 @@ describe("cloud arena static modifiers", () => {
       throw new Error("Expected choir_captain on battlefield.");
     }
 
-    expect(getDerivedPermanentStat(battle, captain, "damage")).toBe(3);
-    expect(getDerivedPermanentActionAmount(battle, captain, captain.actions[0]!)).toBe(3);
+    expect(getDerivedPermanentStat(battle, captain, "power")).toBe(3);
+    expect(getDerivedPermanentActionAmount(battle, captain, "attack")).toBe(3);
 
     applyBattleAction(battle, {
       type: "play_card",
@@ -124,8 +126,8 @@ describe("cloud arena static modifiers", () => {
       cardInstanceId: championCard.instanceId,
     });
 
-    expect(getDerivedPermanentStat(battle, captain, "damage")).toBe(5);
-    expect(getDerivedPermanentActionAmount(battle, captain, captain.actions[0]!)).toBe(5);
+    expect(getDerivedPermanentStat(battle, captain, "power")).toBe(5);
+    expect(getDerivedPermanentActionAmount(battle, captain, "attack")).toBe(5);
 
     applyBattleAction(battle, {
       type: "use_permanent_action",

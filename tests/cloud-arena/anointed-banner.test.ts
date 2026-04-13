@@ -4,6 +4,8 @@ import {
   applyBattleAction,
   cardDefinitions,
   createBattle,
+  getDerivedPermanentActionAmount,
+  getDerivedPermanentStat,
 } from "../../src/cloud-arena/index.js";
 
 describe("cloud arena anointed banner", () => {
@@ -53,6 +55,8 @@ describe("cloud arena anointed banner", () => {
 
     expect(guardian.counters?.["+1/+1"]).toBe(1);
     expect(banner.counters?.["+1/+1"]).toBe(1);
+    expect(getDerivedPermanentStat(battle, guardian, "power")).toBe(11);
+    expect(getDerivedPermanentActionAmount(battle, guardian, "attack")).toBe(11);
     expect(
       battle.rules.filter((event) => event.type === "counter_added").length,
     ).toBe(2);

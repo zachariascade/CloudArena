@@ -1,13 +1,16 @@
 import {
   formatEnemyIntent,
   getCardDefinitionFromLibrary,
+  getActivatedAbilities,
   getEnemyPlanStepAtIndexFromInput,
+  hasCardType,
+  isPermanentCardDefinition,
+  type ActivatedAbility,
   type BattleEvent,
   type CardDefinitionLibrary,
   type CardDefinitionId,
   type CardInstance,
   type EnemyIntent,
-  type PermanentActionDefinition,
   type SimulationActionRecord,
   type SimulationTrace,
 } from "../../../../src/cloud-arena/index.js";
@@ -27,13 +30,15 @@ export type TraceViewerPermanentSnapshot = {
   sourceCardInstanceId: string;
   definitionId: CardDefinitionId;
   name: string;
+  isCreature: boolean;
+  power: number;
   health: number;
   maxHealth: number;
   block: number;
   hasActedThisTurn: boolean;
   isDefending: boolean;
   slotIndex: number;
-  actions: PermanentActionDefinition[];
+  actions: ActivatedAbility[];
 };
 
 export type TraceViewerStepViewModel = {
@@ -107,7 +112,7 @@ function cloneBattlefield(
     permanent
       ? {
           ...permanent,
-          actions: permanent.actions.map((action) => ({ ...action })),
+          actions: permanent.actions.map((ability) => ({ ...ability })),
         }
       : null,
   );
@@ -157,15 +162,12 @@ function toCardSnapshot(
     name: definition.name,
     cost: definition.cost,
     effectSummary:
-      definition.type === "permanent"
-        ? definition.actions
-            .map((action) =>
-              typeof action.attackAmount === "number" && action.attackAmount > 0
-                ? `Attack ${action.attackAmount}`
-                : typeof action.blockAmount === "number" && action.blockAmount > 0
-                  ? `Defend ${action.blockAmount}`
-                  : "Utility",
-            )
+      isPermanentCardDefinition(definition)
+        ? [
+            ...(hasCardType(definition, "creature") ? [`Attack ${definition.power}`, "Defend"] : []),
+            ...getActivatedAbilities(definition.abilities)
+              .map((ability) => ability.activation.actionId.replace(/_/g, " ")),
+          ]
             .join(" • ")
         : definition.onPlay
             .map((effect) => {
@@ -313,7 +315,7 @@ function createPermanentFromCard(
 ): TraceViewerPermanentSnapshot {
   const definition = getCardDefinitionFromLibrary(cardDefinitions, card.definitionId);
 
-  if (definition.type !== "permanent") {
+  if (!isPermanentCardDefinition(definition)) {
     throw new Error(`Card ${card.definitionId} is not a permanent card.`);
   }
 
@@ -324,13 +326,15 @@ function createPermanentFromCard(
     sourceCardInstanceId: card.instanceId,
     definitionId: definition.id,
     name: definition.name,
+    isCreature: hasCardType(definition, "creature"),
+    power: definition.power,
     health: definition.health,
     maxHealth: definition.health,
     block: 0,
     hasActedThisTurn: false,
     isDefending: false,
     slotIndex,
-    actions: definition.actions.map((action) => ({ ...action })),
+    actions: getActivatedAbilities(definition.abilities).map((ability) => ({ ...ability })),
   };
 }
 
@@ -362,6 +366,7 @@ function matchesActionStart(
     return (
       event.type === "permanent_acted" &&
       event.permanentId === actionRecord.action.permanentId &&
+      event.source === actionRecord.action.source &&
       event.action === actionRecord.action.action
     );
   }
@@ -450,7 +455,7 @@ function applyEvent(
       const definition = getCardDefinitionFromLibrary(state.cardDefinitions, card.definitionId);
       state.player.energy = Math.max(0, state.player.energy - definition.cost);
 
-      if (definition.type !== "permanent") {
+      if (!isPermanentCardDefinition(definition)) {
         state.player.discardPile.push(card);
       }
       return;
@@ -511,7 +516,7 @@ function applyEvent(
       if (event.action === "attack") {
         permanent.isDefending = false;
         state.blockingQueue = state.blockingQueue.filter((id) => id !== permanent.instanceId);
-      } else {
+      } else if (event.source === "rules" && event.action === "defend") {
         permanent.isDefending = true;
         if (!state.blockingQueue.includes(permanent.instanceId)) {
           state.blockingQueue.push(permanent.instanceId);

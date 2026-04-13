@@ -3,11 +3,11 @@ import type { CardDefinition } from "../../core/types.js";
 export const armoryDiscipleCardDefinition: CardDefinition = {
   id: "armory_disciple",
   name: "Armory Disciple",
-  type: "permanent",
+  cardTypes: ["creature"],
   cost: 2,
   onPlay: [],
+  power: 2,
   health: 7,
-  actions: [{ attackAmount: 2 }],
   abilities: [
     {
       kind: "triggered",

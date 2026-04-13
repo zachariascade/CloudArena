@@ -1,5 +1,5 @@
 import { findPermanentById } from "../core/selectors.js";
-import type { BattleState } from "../core/types.js";
+import type { BattleState, DamageOverflowPolicy } from "../core/types.js";
 
 function applyDamageToBlockAndHealth(
   damage: number,
@@ -65,8 +65,9 @@ function applyEnemyDamageToPlayerBlock(
 function applyEnemyDamageToDefenders(
   state: BattleState,
   damage: number,
-): number {
+): { remainingDamage: number; defended: boolean } {
   let remainingDamage = damage;
+  let defended = false;
 
   for (const permanentId of state.blockingQueue) {
     if (remainingDamage <= 0) {
@@ -79,13 +80,14 @@ function applyEnemyDamageToDefenders(
       continue;
     }
 
+    defended = true;
     const beforeCombined = permanent.block + permanent.health;
     remainingDamage = applyDamageToBlockAndHealth(remainingDamage, permanent);
     const absorbedByPermanent = beforeCombined - (permanent.block + permanent.health);
     logEnemyDamage(state, absorbedByPermanent, "permanent", permanent.instanceId);
   }
 
-  return remainingDamage;
+  return { remainingDamage, defended };
 }
 
 function applyEnemyDamageToPlayerHealth(
@@ -100,11 +102,19 @@ function applyEnemyDamageToPlayerHealth(
   logEnemyDamage(state, damage, "player");
 }
 
-export function settleEnemyAttackDamage(state: BattleState, damage: number): BattleState {
+export function settleEnemyAttackDamage(
+  state: BattleState,
+  damage: number,
+  overflowPolicy: DamageOverflowPolicy = "stop_at_blocker",
+): BattleState {
   let remainingDamage = damage;
 
   remainingDamage = applyEnemyDamageToPlayerBlock(state, remainingDamage);
-  remainingDamage = applyEnemyDamageToDefenders(state, remainingDamage);
+  const defenderResult = applyEnemyDamageToDefenders(state, remainingDamage);
+  remainingDamage = defenderResult.remainingDamage;
+  if (defenderResult.defended && overflowPolicy === "stop_at_blocker") {
+    remainingDamage = 0;
+  }
   applyEnemyDamageToPlayerHealth(state, remainingDamage);
 
   return state;

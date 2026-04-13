@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { applyBattleAction } from "../../src/cloud-arena/index.js";
-import { createTestBattle, formatBattleLog } from "./helpers.js";
+import { applyBattleAction, createBattle, type CardDefinitionLibrary } from "../../src/cloud-arena/index.js";
+import { createTestBattle, formatBattleLog, TEST_CARD_DEFINITIONS } from "./helpers.js";
 
 describe("cloud arena combat engine permanent flow", () => {
   it("handles playing Guardian and defending with it across rounds", () => {
@@ -56,7 +56,7 @@ describe("cloud arena combat engine permanent flow", () => {
     expect(battle.battlefield[0]?.block).toBe(0);
     expect(battle.battlefield[0]?.counters).toEqual({});
     expect(battle.battlefield[0]?.attachments).toEqual([]);
-    expect(battle.battlefield[0]?.abilities).toEqual([]);
+    expect(battle.battlefield[0]?.abilities).toHaveLength(1);
     expect(battle.player.discardPile).toHaveLength(0);
 
     applyBattleAction(battle, { type: "end_turn" });
@@ -92,7 +92,7 @@ describe("cloud arena combat engine permanent flow", () => {
     expect(battle.blockingQueue).toEqual([guardianPermanent.instanceId]);
     expect(battle.battlefield[0]?.isDefending).toBe(true);
     expect(battle.battlefield[0]?.hasActedThisTurn).toBe(true);
-    expect(battle.battlefield[0]?.block).toBe(3);
+    expect(battle.battlefield[0]?.block).toBe(0);
 
     applyBattleAction(battle, {
       type: "play_card",
@@ -117,7 +117,7 @@ describe("cloud arena combat engine permanent flow", () => {
     expect(battle.player.block).toBe(0);
     expect(battle.enemy.health).toBe(18);
     expect(battle.enemy.intent).toEqual({ attackAmount: 12 });
-    expect(battle.battlefield[0]?.health).toBe(5);
+    expect(battle.battlefield[0]?.health).toBe(2);
     expect(battle.battlefield[0]?.block).toBe(0);
     expect(battle.blockingQueue).toEqual([]);
     expect(battle.player.graveyard).toHaveLength(0);
@@ -172,6 +172,70 @@ describe("cloud arena combat engine permanent flow", () => {
     expect(battle.enemy.health).toBe(18);
     expect(formatBattleLog(battle)).toContain(
       `turn 2: permanent_action ${bladeDancerPermanent.instanceId} dealt 6 damage to enemy`,
+    );
+  });
+
+  it("full-heal defenders restore their health at the start of the next round", () => {
+    const cardDefinitions: CardDefinitionLibrary = {
+      ...TEST_CARD_DEFINITIONS,
+      renewing_guardian: {
+        id: "renewing_guardian",
+        name: "Renewing Guardian",
+        cardTypes: ["creature"],
+        cost: 2,
+        onPlay: [],
+        power: 2,
+        health: 8,
+        recoveryPolicy: "full_heal",
+      },
+    };
+    const battle = createBattle({
+      seed: 1,
+      playerHealth: 100,
+      cardDefinitions,
+      playerDeck: ["renewing_guardian", "defend", "attack", "attack", "defend"],
+      enemy: {
+        name: "Bruiser",
+        health: 30,
+        basePower: 8,
+        behavior: [
+          { attackAmount: 4 },
+          { attackAmount: 6 },
+          { attackAmount: 4 },
+        ],
+      },
+    });
+
+    const renewingGuardianCard = battle.player.hand.find(
+      (card) => card.definitionId === "renewing_guardian",
+    );
+
+    if (!renewingGuardianCard) {
+      throw new Error("Expected renewing_guardian in opening hand.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: renewingGuardianCard.instanceId,
+    });
+    applyBattleAction(battle, { type: "end_turn" });
+
+    const renewingGuardian = battle.battlefield[0];
+
+    if (!renewingGuardian) {
+      throw new Error("Expected renewing_guardian on battlefield.");
+    }
+
+    applyBattleAction(battle, {
+      type: "use_permanent_action",
+      permanentId: renewingGuardian.instanceId,
+      action: "defend",
+    });
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(battle.battlefield[0]?.health).toBe(8);
+    expect(formatBattleLog(battle)).toContain(
+      `turn 2: enemy_intent dealt 6 damage to permanent ${renewingGuardian.instanceId}`,
     );
   });
 });

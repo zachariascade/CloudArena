@@ -1,17 +1,6 @@
-import { getCardDefinitionFromLibrary } from "../cards/definitions.js";
+import { hasCardType, getCardDefinitionFromLibrary } from "../cards/definitions.js";
+import { getActivatedAbilities } from "../core/activated-abilities.js";
 import type { BattleAction, BattleState } from "../core/types.js";
-
-function getPermanentActionMode(action: NonNullable<BattleState["battlefield"][number]>["actions"][number]) {
-  if (typeof action.attackAmount === "number" && action.attackAmount > 0) {
-    return "attack" as const;
-  }
-
-  if (typeof action.blockAmount === "number" && action.blockAmount > 0) {
-    return "defend" as const;
-  }
-
-  throw new Error("Permanent action must define attackAmount or blockAmount.");
-}
 
 export function getLegalActions(state: BattleState): BattleAction[] {
   if (state.phase !== "player_action") {
@@ -32,13 +21,43 @@ export function getLegalActions(state: BattleState): BattleAction[] {
   const permanentActions: BattleAction[] = state.battlefield
     .filter((permanent): permanent is NonNullable<typeof permanent> => permanent !== null)
     .filter((permanent) => !permanent.hasActedThisTurn)
-    .flatMap((permanent) =>
-      permanent.actions.map((action) => ({
-        type: "use_permanent_action" as const,
-        permanentId: permanent.instanceId,
-        action: getPermanentActionMode(action),
-      })),
-    );
+    .flatMap((permanent) => {
+      const definition = getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId);
+      const activatedAbilityActions = getActivatedAbilities(permanent.abilities)
+        .filter((ability) => ability.activation.actionId !== "attack")
+        .filter((ability) => !(permanent.disabledAbilityIds ?? []).includes(ability.id))
+        .map((ability) => ({
+          type: "use_permanent_action" as const,
+          permanentId: permanent.instanceId,
+          source: "ability" as const,
+          action: ability.activation.actionId,
+          abilityId: ability.id,
+        }));
+      const creatureRulesActions =
+        hasCardType(definition, "creature") &&
+        (permanent.disabledRulesActions ?? []).length < 2
+          ? ([
+              ...( !(permanent.disabledRulesActions ?? []).includes("attack")
+                ? [{
+                    type: "use_permanent_action" as const,
+                    permanentId: permanent.instanceId,
+                    source: "rules" as const,
+                    action: "attack" as const,
+                  }]
+                : []),
+              ...( !(permanent.disabledRulesActions ?? []).includes("defend")
+                ? [{
+                    type: "use_permanent_action" as const,
+                    permanentId: permanent.instanceId,
+                    source: "rules" as const,
+                    action: "defend" as const,
+                  }]
+                : []),
+            ])
+          : [];
+
+      return [...creatureRulesActions, ...activatedAbilityActions];
+    });
 
   return [...playCardActions, ...permanentActions, { type: "end_turn" }];
 }

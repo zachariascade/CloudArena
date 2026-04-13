@@ -37,6 +37,8 @@ function getEnemyIntentFromCard(card: EnemyCardDefinition): EnemyIntent {
     attackAmount: attackAmount > 0 ? attackAmount : undefined,
     attackTimes: attackAmount > 0 ? attackTimes : undefined,
     blockAmount: blockAmount > 0 ? blockAmount : undefined,
+    overflowPolicy:
+      attackEffects.length === 1 ? attackEffects[0]?.overflowPolicy : undefined,
   };
 }
 

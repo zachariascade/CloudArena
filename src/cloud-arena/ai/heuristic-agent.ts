@@ -1,4 +1,5 @@
-import { getCardDefinitionFromLibrary } from "../cards/definitions.js";
+import { getCardDefinitionFromLibrary, isPermanentCardDefinition } from "../cards/definitions.js";
+import { getAbilityActionAmount, getActivatedAbilities } from "../core/activated-abilities.js";
 import { getDerivedPermanentActionAmount } from "../core/derived-stats.js";
 import { getEnemyIntentAttackAmount } from "../core/enemy-intent.js";
 import { findPermanentById, hasOpenBattlefieldSlot } from "../core/selectors.js";
@@ -24,6 +25,7 @@ function getRemainingIncomingDamageAfterCurrentDefense(state: BattleState): numb
   let remainingDamage = getIncomingAttack(state);
 
   remainingDamage = Math.max(0, remainingDamage - state.player.block);
+  let defended = false;
 
   for (const permanentId of state.blockingQueue) {
     const permanent = findPermanentById(state, permanentId);
@@ -32,7 +34,12 @@ function getRemainingIncomingDamageAfterCurrentDefense(state: BattleState): numb
       continue;
     }
 
+    defended = true;
     remainingDamage = Math.max(0, remainingDamage - (permanent.block + permanent.health));
+  }
+
+  if (defended && state.enemy.intent.overflowPolicy !== "trample") {
+    return 0;
   }
 
   return remainingDamage;
@@ -68,24 +75,22 @@ function getEnemyHealthDamage(state: BattleState, damage: number): number {
 function getPermanentActionAmount(
   state: BattleState,
   permanentId: string,
-  actionType: "attack" | "defend",
+  actionType: "attack" | "apply_block",
 ): number {
   const permanent = findPermanentById(state, permanentId);
-  const actionDefinition = permanent?.actions.find((entry) =>
-    actionType === "attack"
-      ? typeof entry.attackAmount === "number" && entry.attackAmount > 0
-      : typeof entry.blockAmount === "number" && entry.blockAmount > 0,
+  if (permanent && actionType === "attack") {
+    return getDerivedPermanentActionAmount(state, permanent, "attack");
+  }
+
+  const actionDefinition = getActivatedAbilities(permanent?.abilities).find(
+    (entry) => entry.activation.actionId === actionType,
   );
 
   if (!actionDefinition) {
     return 0;
   }
 
-  if (permanent && typeof actionDefinition.attackAmount === "number") {
-    return getDerivedPermanentActionAmount(state, permanent, actionDefinition);
-  }
-
-  return actionDefinition.blockAmount ?? 0;
+  return permanent ? (getAbilityActionAmount(state, permanent, actionDefinition) ?? 0) : 0;
 }
 
 function getCardDefinition(state: BattleState, cardId: CardDefinitionId) {
@@ -113,7 +118,7 @@ function getCardBlockAmount(state: BattleState, cardId: CardDefinitionId): numbe
 }
 
 function isPermanentCard(state: BattleState, cardId: CardDefinitionId): boolean {
-  return getCardDefinition(state, cardId).type === "permanent";
+  return isPermanentCardDefinition(getCardDefinition(state, cardId));
 }
 
 function getAdditionalPreventedDamage(
@@ -142,10 +147,17 @@ function getAdditionalPreventedDamage(
     return 0;
   }
 
-  if (action.type === "use_permanent_action" && action.action === "defend") {
+  if (action.type === "use_permanent_action" && action.source === "rules" && action.action === "defend") {
     return Math.min(
       remainingDamage,
-      getPermanentActionAmount(state, action.permanentId, "defend"),
+      findPermanentById(state, action.permanentId)?.health ?? 0,
+    );
+  }
+
+  if (action.type === "use_permanent_action" && action.source === "ability" && action.action === "apply_block") {
+    return Math.min(
+      remainingDamage,
+      getPermanentActionAmount(state, action.permanentId, "apply_block"),
     );
   }
 
@@ -169,7 +181,11 @@ function isLethalAction(state: BattleState, action: BattleAction): boolean {
     return false;
   }
 
-  if (action.type === "use_permanent_action" && action.action === "attack") {
+  if (
+    action.type === "use_permanent_action" &&
+    ((action.source === "ability" && action.action === "attack") ||
+      (action.source === "rules" && action.action === "attack"))
+  ) {
     return (
       getEnemyHealthDamage(
         state,
@@ -195,7 +211,7 @@ function scoreAction(state: BattleState, action: BattleAction): number {
   }
 
   if (action.type === "use_permanent_action") {
-    if (action.action === "defend") {
+    if (action.source === "rules" && action.action === "defend") {
       const preventedDamage = getAdditionalPreventedDamage(state, action);
       return preventedDamage * 25 + (incomingAttackIsDangerous ? 80 : 10);
     }
@@ -207,6 +223,14 @@ function scoreAction(state: BattleState, action: BattleAction): number {
       );
 
       return damage * 18 + (incomingAttackIsDangerous ? -20 : 20);
+    }
+
+    if (action.source === "ability" && action.action === "apply_block") {
+      const preventedDamage = getAdditionalPreventedDamage(state, {
+        ...action,
+        action: "apply_block",
+      });
+      return preventedDamage * 25 + (incomingAttackIsDangerous ? 60 : 5);
     }
   }
 
@@ -262,7 +286,7 @@ function getReasonForAction(state: BattleState, action: BattleAction): string {
   }
 
   if (action.type === "use_permanent_action") {
-    if (action.action === "defend") {
+    if (action.source === "rules" && action.action === "defend") {
       return preventedDamage > 0
         ? `permanent defend prevents ${preventedDamage} incoming damage`
         : incomingAttackIsDangerous
@@ -270,13 +294,19 @@ function getReasonForAction(state: BattleState, action: BattleAction): string {
           : "permanent defend is lower value this turn";
     }
 
-    const damage = getEffectiveEnemyDamage(
-      state,
-      getPermanentActionAmount(state, action.permanentId, "attack"),
-    );
-    return damage > 0
-      ? `permanent attack deals ${damage} effective damage`
-      : "permanent attack is mostly absorbed by enemy block";
+    if (action.action === "attack") {
+      const damage = getEffectiveEnemyDamage(
+        state,
+        getPermanentActionAmount(state, action.permanentId, "attack"),
+      );
+      return damage > 0
+        ? `permanent attack deals ${damage} effective damage`
+        : "permanent attack is mostly absorbed by enemy block";
+    }
+
+    return preventedDamage > 0
+      ? `apply block prevents ${preventedDamage} incoming damage`
+      : "apply block adds player protection";
   }
 
   const cardId = findCardIdForAction(state, action);

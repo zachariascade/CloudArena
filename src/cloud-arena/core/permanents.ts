@@ -1,4 +1,8 @@
-import { asPermanentCardDefinition, getCardDefinitionFromLibrary } from "../cards/definitions.js";
+import {
+  asPermanentCardDefinition,
+  getCardDefinitionFromLibrary,
+  isEquipmentCardDefinition,
+} from "../cards/definitions.js";
 import { emitRulesEvent } from "./rules-events.js";
 import type {
   BattleState,
@@ -33,14 +37,17 @@ export function summonPermanentFromCard(
     name: definition.name,
     definitionId: definition.id,
     controllerId,
+    power: definition.power,
     health: definition.health,
     maxHealth: definition.health,
     block: 0,
+    recoveryPolicy: definition.recoveryPolicy ?? "none",
     counters: {},
     attachments: [],
     attachedTo: null,
-    actions: definition.actions,
     abilities: definition.abilities ? definition.abilities.map((ability) => ({ ...ability })) : [],
+    disabledAbilityIds: [],
+    disabledRulesActions: [],
     hasActedThisTurn: false,
     isDefending: false,
     slotIndex: openSlot,
@@ -71,7 +78,7 @@ export function summonPermanentFromCard(
 
 export function isEquipmentPermanent(state: BattleState, permanent: PermanentState): boolean {
   const definition = getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId);
-  return definition.subtypes?.includes("Equipment") ?? false;
+  return isEquipmentCardDefinition(definition);
 }
 
 export function canAttachPermanentToTarget(

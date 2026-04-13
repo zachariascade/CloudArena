@@ -66,6 +66,12 @@ Why this is the preferred direction:
 
 ## 1. Shared Domain and View Model
 
+Status:
+
+- completed for the current replay and interactive UI foundation
+- replay and interactive mode now share a common top-level Cloud Arena UI view model plus a shared battle board snapshot
+- future work can extend the shared model further without needing to split the renderer again
+
 - Define a shared `BattleViewModel` or similarly named UI snapshot shape.
 - Include:
   - turn number
@@ -85,6 +91,13 @@ Why this is the preferred direction:
 
 ## 2. Replay Mode Refactor
 
+Status:
+
+- completed for the current replay baseline
+- replay mode remains trace-driven and read-only
+- replay navigation controls, replay controller logic, shared screen view model, and board rendering are now separated more cleanly
+- battle log rendering is now reusable instead of being embedded directly in the replay screen
+
 - Keep replay mode trace-based and read-only.
 - Refactor the existing trace viewer into:
   - board/state presentation components
@@ -99,6 +112,13 @@ Why this is the preferred direction:
 - Make replay mode a stable baseline before adding live session complexity.
 
 ## 3. Interactive Session Model
+
+Status:
+
+- completed for the current in-memory implementation
+- Cloud Arena now has an API-owned session model with session id, scenario id, seed, creation timestamp, reset source config, current battle state, visible log, and action history
+- reset currently returns the session to its original scenario and seed
+- the model is structured so it can later move from in-memory storage to filesystem or database-backed persistence without changing the web contract
 
 - Introduce a battle session concept for live play.
 - Define a session record with:
@@ -118,6 +138,13 @@ Why this is the preferred direction:
 
 ## 4. Engine Service Layer
 
+Status:
+
+- completed for the current architecture
+- the API app now has a dedicated Cloud Arena session service between routes and engine functions
+- the service owns session creation, latest snapshot retrieval, legal-action packaging, action validation, action application, snapshot packaging, and reset behavior
+- the service is now directly covered by tests in addition to route-level integration coverage
+
 - Add a small service layer between API handlers and `src/cloud-arena/` engine functions.
 - Service responsibilities:
   - create a new battle session from preset input
@@ -131,6 +158,14 @@ Why this is the preferred direction:
 - Confirm illegal actions produce a clean, structured API error.
 
 ## 5. API Contract and Routes
+
+Status:
+
+- completed for the current MVP contract
+- Cloud Arena session routes, params, request payloads, response payloads, and client path helpers are defined in the shared API contract
+- the API app exposes create session, get session, apply action, and reset session routes
+- action responses currently return the full latest session snapshot, which is the locked-in MVP direction
+- route behavior is covered by API integration tests
 
 - Extend `src/cloud-arcanum/api-contract.ts` with Cloud Arena session routes.
 - Add routes for:
@@ -153,6 +188,15 @@ Why this is the preferred direction:
   - return the full latest snapshot for MVP simplicity
 
 ## 6. Interactive UI Flow
+
+Status:
+
+- completed for the current narrow MVP flow
+- the app has a dedicated interactive Cloud Arena route with automatic session creation into the fixed Mixed Guardian scenario
+- the UI includes a lightweight setup flow around seed override, start new battle, and restart from seed
+- live battle state, legal actions, recent events, current turn, and current phase are rendered from the latest session snapshot
+- controls are disabled while requests are in flight and the current view remains visible while actions resolve
+- setup, loading, success, and error states now surface more clearly in the current interactive screen
 
 - Add a dedicated interactive Cloud Arena route.
 - Build a setup entry flow for:
@@ -177,6 +221,14 @@ Why this is the preferred direction:
 
 ## 7. Action Presentation
 
+Status:
+
+- completed for the current MVP action model
+- engine legal actions are now exposed through shared grouped action data for hand, battlefield, and turn controls
+- the interactive battle UI renders those action groups with clearer summaries and turn-control affordances
+- loading and disabled states remain visible while requests are in flight
+- the UI still leaves room for a richer future targeting flow without overengineering the current action model
+
 - Convert engine legal actions into UI-friendly action items.
 - For each legal action, include enough metadata to render readable buttons or controls.
 - Examples:
@@ -193,6 +245,13 @@ Why this is the preferred direction:
 
 ## 8. Enemy Resolution UX
 
+Status:
+
+- completed for the current MVP direction
+- interactive mode uses the recommended server-side full enemy-turn resolution when the player ends their turn
+- the UI now explicitly communicates that enemy turns auto-resolve and directs the player to the recent-events feed to review the full exchange
+- the current implementation keeps the screen in a single live-state mode instead of stepping through enemy sub-actions individually
+
 - Decide how enemy turns should appear in interactive mode.
 - Candidate A:
   - player presses `End Turn`
@@ -208,6 +267,14 @@ Why this is the preferred direction:
 
 ## 9. Shared Board Components
 
+Status:
+
+- completed for the current board renderer baseline
+- the shared battle renderer is now split into reusable Cloud Arena board components instead of keeping all panel markup inside one large component
+- replay and interactive mode both continue to use the same shared board rendering path
+- the board renderer continues to support empty battlefield slots, changing hand contents, changing enemy intent, no legal actions, and finished-battle states through the shared view model
+- rendering components are more cleanly separated from replay-specific controller logic than they were at the start of this workstream
+
 - Extract the current trace viewer board panels into reusable components.
 - Reuse them in both:
   - replay mode
@@ -221,6 +288,13 @@ Why this is the preferred direction:
   - changing enemy intent
 
 ## 10. Session History and Replay Export
+
+Status:
+
+- completed for the current service-level export path
+- interactive sessions now accumulate action history and full event log data
+- the Cloud Arena session service can export a `SimulationTrace`-compatible replay artifact from a live session
+- the export path is implemented at the service layer; a dedicated API route or UI affordance can be added later without changing the underlying session model
 
 - Make interactive sessions record enough history to support replay later.
 - Decide whether an interactive session should accumulate:
@@ -245,6 +319,16 @@ Why this is the preferred direction:
 - Decide how to handle stale client state if two requests race.
 - For MVP, one request at a time per session is acceptable.
 - Consider whether snapshots should include a version number for future optimistic concurrency handling.
+- Status:
+  - completed for MVP
+- Done:
+  - malformed setup input returns explicit route-level `invalid_request` errors
+  - unknown sessions return `not_found`
+  - illegal actions return `invalid_request`
+  - finished session mutation attempts now fail explicitly instead of falling through as generic illegal actions
+- Deferred:
+  - snapshot version numbers / optimistic concurrency
+  - stronger multi-request race handling beyond the current in-memory one-request-at-a-time expectation
 
 ## 12. Testing
 
@@ -280,6 +364,16 @@ Why this is the preferred direction:
 
 - test that a deterministic interactive run can be represented in replay mode
 - test that legal actions shown in the UI correspond to engine output
+- Status:
+  - completed for current baseline
+- Done:
+  - service coverage for session creation, legal action packaging, valid action application, reset behavior, finished battle handling, replay export, and end-turn enemy resolution
+  - API coverage for create/get/apply/reset plus invalid session ids, malformed action payloads, invalid setup input, illegal actions, and finished-session mutation attempts
+  - renderer-level UI coverage for replay rendering, interactive shell rendering, shared view-model normalization, grouped action presentation, and disabled battle controls
+  - parity checks for replay export compatibility and interactive action-group alignment with engine legal actions
+- Deferred:
+  - browser-level interaction tests for click flows and in-flight disabled states once a DOM test harness is added
+  - a full deterministic interactive-run-to-replay UI flow test
 
 ## 13. Suggested Delivery Phases
 
@@ -288,12 +382,24 @@ Why this is the preferred direction:
 - define shared battle snapshot/view model
 - extract reusable board panels from the trace viewer
 - refactor replay mode onto the shared renderer
+- Status:
+  - completed
+- Delivered:
+  - shared battle and screen-level view models now back both replay and interactive modes
+  - replay UI now composes shared board components instead of owning a one-off layout
+  - the board shell supports the fixed-window battlefield-first layout direction
 
 ### Phase 2: Live Session Backend
 
 - add in-memory battle session service
 - add API contracts and endpoints
 - return full session snapshots
+- Status:
+  - completed
+- Delivered:
+  - API-owned in-memory sessions with create/get/apply/reset flows
+  - richer session metadata including created time, reset source, and action history
+  - replay export path from a live session into a `SimulationTrace`-compatible artifact
 
 ### Phase 3: Minimal Interactive Battle Screen
 
@@ -302,6 +408,12 @@ Why this is the preferred direction:
 - show legal actions
 - execute actions
 - update board state
+- Status:
+  - completed
+- Delivered:
+  - interactive Cloud Arena route for the fixed `mixed_guardian` scenario
+  - live legal-action presentation for hand, battlefield, and turn controls
+  - API-backed action submission with refreshed board snapshots
 
 ### Phase 4: Restart, Setup, and Polish
 
@@ -309,12 +421,27 @@ Why this is the preferred direction:
 - add setup form inputs
 - improve action labeling and error handling
 - improve recent event visibility
+- Status:
+  - completed for MVP
+- Delivered:
+  - restart-from-seed and start-new-battle controls
+  - seed input for deterministic setup
+  - clearer route/service error handling, including finished-session mutation attempts
+  - recent-events and full-log presentation in the interactive screen
 
 ### Phase 5: Replay/Interactive Unification
 
 - export live sessions into replay artifacts
 - enable replaying a completed interactive run
 - tighten parity tests
+- Status:
+  - partially completed
+- Delivered:
+  - live sessions can already export replay-compatible trace artifacts
+  - parity coverage exists for replay export compatibility and interactive legal-action grouping
+- Remaining:
+  - add an API route or UI affordance to open/export a completed live session directly in replay mode
+  - add a fuller end-to-end interactive-run-to-replay flow
 
 ## 14. Decisions Locked In
 

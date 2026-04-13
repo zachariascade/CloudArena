@@ -100,7 +100,7 @@ function normalizeAgentSelection(
     selection.action !== null &&
     "type" in selection.action
   ) {
-    return selection;
+    return selection as SimulationDecision;
   }
 
   return { action: selection as BattleAction };

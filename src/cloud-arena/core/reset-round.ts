@@ -19,6 +19,9 @@ export function resetRound(state: BattleState): BattleState {
     }
 
     permanent.block = 0;
+    if (permanent.recoveryPolicy === "full_heal") {
+      permanent.health = permanent.maxHealth;
+    }
     permanent.hasActedThisTurn = false;
     permanent.isDefending = false;
   });

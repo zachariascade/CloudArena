@@ -258,6 +258,12 @@ describe("cloud arcanum api routes", () => {
     expect(createResponse.json().data.sessionId).toBeTypeOf("string");
     expect(createResponse.json().data.scenarioId).toBe("mixed_guardian");
     expect(createResponse.json().data.seed).toBe(7);
+    expect(createResponse.json().data.createdAt).toBeTypeOf("string");
+    expect(createResponse.json().data.resetSource).toEqual({
+      scenarioId: "mixed_guardian",
+      seed: 7,
+    });
+    expect(createResponse.json().data.actionHistory).toEqual([]);
     expect(createResponse.json().data.legalActions.length).toBeGreaterThan(0);
 
     const initialSnapshot = createResponse.json().data;
@@ -287,6 +293,7 @@ describe("cloud arcanum api routes", () => {
     expect(actionResponse.statusCode).toBe(200);
     expect(actionResponse.json().data.sessionId).toBe(sessionId);
     expect(actionResponse.json().data.log.length).toBeGreaterThan(initialSnapshot.log.length);
+    expect(actionResponse.json().data.actionHistory).toHaveLength(1);
 
     const resetResponse = await app.inject({
       method: "POST",
@@ -295,6 +302,8 @@ describe("cloud arcanum api routes", () => {
 
     expect(resetResponse.statusCode).toBe(200);
     expect(resetResponse.json().data.seed).toBe(7);
+    expect(resetResponse.json().data.resetSource).toEqual(initialSnapshot.resetSource);
+    expect(resetResponse.json().data.actionHistory).toEqual([]);
     expect(resetResponse.json().data.player.hand).toEqual(initialSnapshot.player.hand);
     expect(resetResponse.json().data.log).toEqual(initialSnapshot.log);
 
@@ -332,6 +341,94 @@ describe("cloud arcanum api routes", () => {
 
     expect(invalidActionResponse.statusCode).toBe(400);
     expect(invalidActionResponse.json().error.code).toBe("invalid_request");
+
+    await app.close();
+  });
+
+  it("rejects malformed Cloud Arena action payloads", async () => {
+    const app = await createTestApp();
+
+    const createResponse = await app.inject({
+      method: "POST",
+      url: "/api/cloud-arena/sessions",
+      payload: {},
+    });
+
+    const malformedActionResponse = await app.inject({
+      method: "POST",
+      url: `/api/cloud-arena/sessions/${createResponse.json().data.sessionId}/actions`,
+      payload: {
+        nope: true,
+      },
+    });
+
+    expect(malformedActionResponse.statusCode).toBe(400);
+    expect(malformedActionResponse.json().error.code).toBe("invalid_request");
+    expect(malformedActionResponse.json().error.message).toContain("action object");
+
+    await app.close();
+  });
+
+  it("returns clear Cloud Arena errors for invalid setup input and finished sessions", async () => {
+    const app = await createTestApp();
+
+    const invalidSetupResponse = await app.inject({
+      method: "POST",
+      url: "/api/cloud-arena/sessions",
+      payload: {
+        scenarioId: "unknown_scenario",
+      },
+    });
+
+    expect(invalidSetupResponse.statusCode).toBe(400);
+    expect(invalidSetupResponse.json().error.code).toBe("invalid_request");
+    expect(invalidSetupResponse.json().error.message).toContain("scenarioId");
+
+    const createResponse = await app.inject({
+      method: "POST",
+      url: "/api/cloud-arena/sessions",
+      payload: {
+        scenarioId: "mixed_guardian",
+        seed: 1,
+      },
+    });
+
+    let snapshot = createResponse.json().data;
+
+    for (let guard = 0; guard < 100 && snapshot.status !== "finished"; guard += 1) {
+      const nextAction =
+        snapshot.legalActions.find((entry: { action: { type: string } }) => entry.action.type === "end_turn")
+        ?? snapshot.legalActions[0];
+
+      expect(nextAction).toBeDefined();
+
+      const actionResponse = await app.inject({
+        method: "POST",
+        url: `/api/cloud-arena/sessions/${snapshot.sessionId}/actions`,
+        payload: {
+          action: nextAction.action,
+        },
+      });
+
+      expect(actionResponse.statusCode).toBe(200);
+      snapshot = actionResponse.json().data;
+    }
+
+    expect(snapshot.status).toBe("finished");
+
+    const finishedActionResponse = await app.inject({
+      method: "POST",
+      url: `/api/cloud-arena/sessions/${snapshot.sessionId}/actions`,
+      payload: {
+        action: {
+          type: "end_turn",
+        },
+      },
+    });
+
+    expect(finishedActionResponse.statusCode).toBe(409);
+    expect(finishedActionResponse.json().error.code).toBe("invalid_request");
+    expect(finishedActionResponse.json().error.message).toContain("already finished");
 
     await app.close();
   });

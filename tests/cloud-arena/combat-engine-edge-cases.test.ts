@@ -137,7 +137,13 @@ describe("cloud arena combat engine edge cases", () => {
     expect(() => playCard(battle, attackCard.instanceId)).toThrow("player_action phase");
 
     expect(() =>
-      usePermanentAction(battle, "missing_permanent", "attack"),
+      usePermanentAction(battle, {
+        type: "use_permanent_action",
+        permanentId: "missing_permanent",
+        source: "ability",
+        action: "attack",
+        abilityId: "missing_attack",
+      }),
     ).toThrow("player_action phase");
   });
 
@@ -190,11 +196,11 @@ describe("cloud arena combat engine edge cases", () => {
     applyBattleAction(battle, { type: "end_turn" });
 
     expect(battle.player.health).toBe(startingHealth - 8);
-    expect(battle.battlefield[0]?.health).toBe(5);
+    expect(battle.battlefield[0]?.health).toBe(2);
     expect(battle.battlefield[0]?.block).toBe(0);
   });
 
-  it("enemy damage spills from a defending permanent into player health when needed", () => {
+  it("enemy damage stops at a defending permanent by default", () => {
     const battle = createTestBattle({
       playerDeck: ["guardian", "defend", "attack", "attack", "defend"],
       enemy: {
@@ -237,7 +243,53 @@ describe("cloud arena combat engine edge cases", () => {
 
     expect(battle.battlefield[0]).toBeNull();
     expect(battle.player.graveyard.map((card) => card.definitionId)).toEqual(["guardian"]);
-    expect(battle.player.health).toBe(startingHealth - 8);
+    expect(battle.player.health).toBe(startingHealth - 3);
+  });
+
+  it("enemy damage with trample spills through a defending permanent into player health", () => {
+    const battle = createTestBattle({
+      playerDeck: ["guardian", "defend", "attack", "attack", "defend"],
+      enemy: {
+        name: "Ravaging Demon",
+        health: 30,
+        basePower: 25,
+        behavior: [
+          { attackAmount: 10 },
+          { attackAmount: 25, overflowPolicy: "trample" },
+        ],
+      }
+    });
+    const startingHealth = battle.player.health;
+
+    const guardianCard = battle.player.hand[0];
+    const defendCard = battle.player.hand[1];
+
+    if (!guardianCard || !defendCard) {
+      throw new Error("Expected round one cards were missing.");
+    }
+
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: guardianCard.instanceId });
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: defendCard.instanceId });
+    applyBattleAction(battle, { type: "end_turn" });
+
+    const guardianPermanent = battle.battlefield[0];
+    const roundTwoDefend = battle.player.hand.find((card) => card.definitionId === "defend");
+
+    if (!guardianPermanent || !roundTwoDefend) {
+      throw new Error("Expected round two state was missing.");
+    }
+
+    applyBattleAction(battle, {
+      type: "use_permanent_action",
+      permanentId: guardianPermanent.instanceId,
+      action: "defend",
+    });
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: roundTwoDefend.instanceId });
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(battle.battlefield[0]).toBeNull();
+    expect(battle.player.graveyard.map((card) => card.definitionId)).toEqual(["guardian"]);
+    expect(battle.player.health).toBe(startingHealth - 11);
   });
 
   it("battle ends when enemy health reaches zero", () => {
@@ -596,7 +648,6 @@ describe("cloud arena combat engine edge cases", () => {
         "turn 2: player drew attack",
         "turn 2: player drew defend",
         "turn 2: permanent guardian_1 used defend",
-        "turn 2: permanent guardian_1 gained 3 block",
         "turn 2: played attack",
         "turn 2: card dealt 6 damage to enemy",
         "turn 2: played defend",

@@ -1,4 +1,4 @@
-import type { EnemyCardDefinition } from "../../core/types.js";
+import type { DamageOverflowPolicy, EnemyCardDefinition } from "../../core/types.js";
 
 function getStrikeId(attackAmount: number, attackTimes: number): string {
   return attackTimes > 1
@@ -15,6 +15,7 @@ function getStrikeName(attackAmount: number, attackTimes: number): string {
 export function strike(
   attackAmount: number,
   attackTimes = 1,
+  overflowPolicy?: DamageOverflowPolicy,
 ): EnemyCardDefinition {
   return {
     id: getStrikeId(attackAmount, attackTimes),
@@ -23,6 +24,7 @@ export function strike(
       {
         attackAmount,
         attackTimes: attackTimes > 1 ? attackTimes : undefined,
+        overflowPolicy,
         target: "player",
       },
     ],

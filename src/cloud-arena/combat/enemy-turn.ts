@@ -18,7 +18,7 @@ function resolveEnemyCard(state: BattleState, card: EnemyCardDefinition): void {
       const attackAmount = getTotalAttackAmount(effect);
 
       if (attackAmount > 0) {
-        settleEnemyAttackDamage(state, attackAmount);
+        settleEnemyAttackDamage(state, attackAmount, effect.overflowPolicy);
       }
     }
 
@@ -57,7 +57,7 @@ export function resolveEnemyTurn(state: BattleState): BattleState {
   const attackAmount = getEnemyIntentAttackAmount(state.enemy.intent);
 
   if (attackAmount > 0) {
-    settleEnemyAttackDamage(state, attackAmount);
+    settleEnemyAttackDamage(state, attackAmount, state.enemy.intent.overflowPolicy);
   }
 
   const blockAmount = getEnemyIntentBlockAmount(state.enemy.intent);

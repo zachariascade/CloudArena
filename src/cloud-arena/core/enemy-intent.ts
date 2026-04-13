@@ -27,18 +27,18 @@ export function formatEnemyIntent(intent: EnemyIntent): string {
 
   if (attackAmount > 0 && blockAmount > 0) {
     if (attackTimes > 1) {
-      return `attack ${attackAmount} x${attackTimes} + block ${blockAmount}`;
+      return `attack ${attackAmount} x${attackTimes}${intent.overflowPolicy === "trample" ? " trample" : ""} + block ${blockAmount}`;
     }
 
-    return `attack ${attackAmount} + block ${blockAmount}`;
+    return `attack ${attackAmount}${intent.overflowPolicy === "trample" ? " trample" : ""} + block ${blockAmount}`;
   }
 
   if (attackAmount > 0) {
     if (attackTimes > 1) {
-      return `attack ${attackAmount} x${attackTimes}`;
+      return `attack ${attackAmount} x${attackTimes}${intent.overflowPolicy === "trample" ? " trample" : ""}`;
     }
 
-    return `attack ${attackAmount}`;
+    return `attack ${attackAmount}${intent.overflowPolicy === "trample" ? " trample" : ""}`;
   }
 
   if (blockAmount > 0) {
