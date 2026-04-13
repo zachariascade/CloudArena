@@ -1,19 +1,13 @@
 import {
-  buildCloudArenaSessionActionsPath,
-  buildCloudArenaSessionPath,
-  buildCloudArenaSessionResetPath,
   buildCloudArcanumCardDetailPath,
   buildCloudArcanumDeckDetailPath,
   buildCloudArcanumEntityValidationPath,
   buildCloudArcanumSetDetailPath,
   buildCloudArcanumUniverseDetailPath,
-  type CloudArenaActionRequest,
-  type CloudArenaCreateSessionRequest,
   cloudArcanumApiRoutes,
   type ApiErrorResponse,
   type CardDetailQuery,
-  type CloudArcanumApiResponse,
-  type CloudArcanumApiRouteName,
+  type CloudArcanumApiContracts,
   type CloudArcanumApiQuery,
   type EntityValidationRouteParams,
   type CardRouteParams,
@@ -22,6 +16,16 @@ import {
   type SetDetailQuery,
   type UniverseRouteParams,
 } from "../../../../src/cloud-arcanum/api-contract.js";
+import {
+  buildCloudArenaSessionsPath,
+  buildCloudArenaSessionActionsPath,
+  buildCloudArenaSessionPath,
+  buildCloudArenaSessionResetPath,
+  type CloudArenaActionRequest,
+  type CloudArenaApiContracts,
+  type CloudArenaApiContractName,
+  type CloudArenaCreateSessionRequest,
+} from "../../../../src/cloud-arena/api-contract.js";
 
 import {
   buildCardListQueryString,
@@ -61,14 +65,14 @@ function resolveApiAssetUrls<TValue>(value: TValue, baseUrl: string): TValue {
 }
 
 export class CloudArcanumApiClientError extends Error {
-  readonly route: CloudArcanumApiRouteName;
+  readonly route: CloudApiRouteName;
   readonly status: number;
   readonly code: string | null;
 
   constructor(options: {
     code: string | null;
     message: string;
-    route: CloudArcanumApiRouteName;
+    route: CloudApiRouteName;
     status: number;
   }) {
     super(options.message);
@@ -79,6 +83,16 @@ export class CloudArcanumApiClientError extends Error {
   }
 }
 
+type CloudApiContracts = CloudArcanumApiContracts & CloudArenaApiContracts;
+type CloudApiRouteName = keyof CloudApiContracts;
+type CloudApiResponse<TName extends CloudApiRouteName> =
+  CloudApiContracts[TName]["response"];
+type CloudArcanumRouteName = keyof CloudArcanumApiContracts;
+type CloudArcanumApiResponse<TName extends CloudArcanumRouteName> =
+  CloudArcanumApiContracts[TName]["response"];
+type CloudArenaApiResponse<TName extends CloudArenaApiContractName> =
+  CloudArenaApiContracts[TName]["response"];
+
 async function parseApiError(response: Response): Promise<ApiErrorResponse | null> {
   try {
     const payload = (await response.json()) as ApiErrorResponse;
@@ -88,7 +102,7 @@ async function parseApiError(response: Response): Promise<ApiErrorResponse | nul
   }
 }
 
-export class CloudArcanumApiClient {
+class BaseCloudApiClient {
   readonly #baseUrl: string;
   readonly #fetchFn: typeof fetch;
 
@@ -98,7 +112,7 @@ export class CloudArcanumApiClient {
       options.fetchFn?.bind(globalThis) ?? globalThis.fetch.bind(globalThis);
   }
 
-  async request<TName extends CloudArcanumApiRouteName>(
+  protected async request<TName extends CloudApiRouteName>(
     route: TName,
     path: string,
     options: {
@@ -106,7 +120,7 @@ export class CloudArcanumApiClient {
       method?: "GET" | "POST";
       signal?: AbortSignal;
     } = {},
-  ): Promise<CloudArcanumApiResponse<TName>> {
+  ): Promise<CloudApiResponse<TName>> {
     const headers: Record<string, string> = {
       accept: "application/json",
     };
@@ -133,27 +147,197 @@ export class CloudArcanumApiClient {
       });
     }
 
-    const payload = (await response.json()) as CloudArcanumApiResponse<TName>;
+    const payload = (await response.json()) as CloudApiResponse<TName>;
     return resolveApiAssetUrls(payload, this.#baseUrl);
   }
+}
 
+export class CloudArcanumApiClient extends BaseCloudApiClient {
   getHealth(options?: { signal?: AbortSignal }) {
-    return this.request("health", cloudArcanumApiRoutes.health, options);
+    return this.request("health", cloudArcanumApiRoutes.health, options) as Promise<
+      CloudArcanumApiResponse<"health">
+    >;
   }
 
+  getMetaFilters(options?: { signal?: AbortSignal }) {
+    return this.request("metaFilters", cloudArcanumApiRoutes.metaFilters, options) as Promise<
+      CloudArcanumApiResponse<"metaFilters">
+    >;
+  }
+
+  countCards(
+    query: CloudArcanumApiQuery<"cardsCount"> = {},
+    options?: { signal?: AbortSignal },
+  ) {
+    const search = buildCardListQueryString(query);
+    const path = search
+      ? `${cloudArcanumApiRoutes.cardsCount}?${search}`
+      : cloudArcanumApiRoutes.cardsCount;
+    return this.request("cardsCount", path, options) as Promise<
+      CloudArcanumApiResponse<"cardsCount">
+    >;
+  }
+
+  listCardIds(
+    query: CloudArcanumApiQuery<"cardsIds"> = {},
+    options?: { signal?: AbortSignal },
+  ) {
+    const search = buildCardListQueryString(query);
+    const path = search
+      ? `${cloudArcanumApiRoutes.cardsIds}?${search}`
+      : cloudArcanumApiRoutes.cardsIds;
+    return this.request("cardsIds", path, options) as Promise<
+      CloudArcanumApiResponse<"cardsIds">
+    >;
+  }
+
+  listCardSummaries(
+    query: CloudArcanumApiQuery<"cardsSummary"> = {},
+    options?: { signal?: AbortSignal },
+  ) {
+    const search = buildCardListQueryString(query);
+    const path = search
+      ? `${cloudArcanumApiRoutes.cardsSummary}?${search}`
+      : cloudArcanumApiRoutes.cardsSummary;
+    return this.request("cardsSummary", path, options) as Promise<
+      CloudArcanumApiResponse<"cardsSummary">
+    >;
+  }
+
+  listCards(
+    query: CloudArcanumApiQuery<"cards"> = {},
+    options?: { signal?: AbortSignal },
+  ) {
+    const search = buildCardListQueryString(query);
+    const path = search ? `${cloudArcanumApiRoutes.cards}?${search}` : cloudArcanumApiRoutes.cards;
+    return this.request("cards", path, options) as Promise<
+      CloudArcanumApiResponse<"cards">
+    >;
+  }
+
+  getCardDetail(params: CardRouteParams, options?: { signal?: AbortSignal }) {
+    return this.request("cardDetail", buildCloudArcanumCardDetailPath(params.cardId), options) as Promise<
+      CloudArcanumApiResponse<"cardDetail">
+    >;
+  }
+
+  getCardDetailWithQuery(
+    params: CardRouteParams,
+    query: CardDetailQuery = {},
+    options?: { signal?: AbortSignal },
+  ) {
+    const search = buildCardListQueryString(query);
+    const path = search
+      ? `${buildCloudArcanumCardDetailPath(params.cardId)}?${search}`
+      : buildCloudArcanumCardDetailPath(params.cardId);
+    return this.request("cardDetail", path, options) as Promise<
+      CloudArcanumApiResponse<"cardDetail">
+    >;
+  }
+
+  listDecks(
+    query: CloudArcanumApiQuery<"decks"> = {},
+    options?: { signal?: AbortSignal },
+  ) {
+    const search = buildDeckListQueryString(query);
+    const path = search ? `${cloudArcanumApiRoutes.decks}?${search}` : cloudArcanumApiRoutes.decks;
+    return this.request("decks", path, options) as Promise<
+      CloudArcanumApiResponse<"decks">
+    >;
+  }
+
+  getDeckDetail(params: DeckRouteParams, options?: { signal?: AbortSignal }) {
+    return this.request("deckDetail", buildCloudArcanumDeckDetailPath(params.deckId), options) as Promise<
+      CloudArcanumApiResponse<"deckDetail">
+    >;
+  }
+
+  listSets(
+    query: CloudArcanumApiQuery<"sets"> = {},
+    options?: { signal?: AbortSignal },
+  ) {
+    const search = buildSetListQueryString(query);
+    const path = search ? `${cloudArcanumApiRoutes.sets}?${search}` : cloudArcanumApiRoutes.sets;
+    return this.request("sets", path, options) as Promise<
+      CloudArcanumApiResponse<"sets">
+    >;
+  }
+
+  getSetDetail(params: SetRouteParams, options?: { signal?: AbortSignal }) {
+    return this.request("setDetail", buildCloudArcanumSetDetailPath(params.setId), options) as Promise<
+      CloudArcanumApiResponse<"setDetail">
+    >;
+  }
+
+  getSetDetailWithQuery(
+    params: SetRouteParams,
+    query: SetDetailQuery = {},
+    options?: { signal?: AbortSignal },
+  ) {
+    const search = buildSetDetailQueryString(query);
+    const path = search
+      ? `${buildCloudArcanumSetDetailPath(params.setId)}?${search}`
+      : buildCloudArcanumSetDetailPath(params.setId);
+    return this.request("setDetail", path, options) as Promise<
+      CloudArcanumApiResponse<"setDetail">
+    >;
+  }
+
+  listUniverses(
+    query: CloudArcanumApiQuery<"universes"> = {},
+    options?: { signal?: AbortSignal },
+  ) {
+    const search = buildUniverseListQueryString(query);
+    const path = search
+      ? `${cloudArcanumApiRoutes.universes}?${search}`
+      : cloudArcanumApiRoutes.universes;
+    return this.request("universes", path, options) as Promise<
+      CloudArcanumApiResponse<"universes">
+    >;
+  }
+
+  getUniverseDetail(params: UniverseRouteParams, options?: { signal?: AbortSignal }) {
+    return this.request(
+      "universeDetail",
+      buildCloudArcanumUniverseDetailPath(params.universeId),
+      options,
+    ) as Promise<CloudArcanumApiResponse<"universeDetail">>;
+  }
+
+  getValidationSummary(options?: { signal?: AbortSignal }) {
+    return this.request("validationSummary", cloudArcanumApiRoutes.validationSummary, options) as Promise<
+      CloudArcanumApiResponse<"validationSummary">
+    >;
+  }
+
+  getEntityValidation(
+    params: EntityValidationRouteParams,
+    options?: { signal?: AbortSignal },
+  ) {
+    return this.request(
+      "entityValidation",
+      buildCloudArcanumEntityValidationPath(params.entityId),
+      options,
+    ) as Promise<CloudArcanumApiResponse<"entityValidation">>;
+  }
+}
+
+export class CloudArenaApiClient extends BaseCloudApiClient {
   createCloudArenaSession(
     body: CloudArenaCreateSessionRequest = {},
     options?: { signal?: AbortSignal },
   ) {
-    return this.request("cloudArenaSessions", cloudArcanumApiRoutes.cloudArenaSessions, {
+    return this.request("cloudArenaSessions", buildCloudArenaSessionsPath(), {
       ...options,
       body,
       method: "POST",
-    });
+    }) as Promise<CloudArenaApiResponse<"cloudArenaSessions">>;
   }
 
   getCloudArenaSession(sessionId: string, options?: { signal?: AbortSignal }) {
-    return this.request("cloudArenaSessionDetail", buildCloudArenaSessionPath(sessionId), options);
+    return this.request("cloudArenaSessionDetail", buildCloudArenaSessionPath(sessionId), options) as Promise<
+      CloudArenaApiResponse<"cloudArenaSessionDetail">
+    >;
   }
 
   applyCloudArenaAction(
@@ -169,7 +353,7 @@ export class CloudArcanumApiClient {
         body,
         method: "POST",
       },
-    );
+    ) as Promise<CloudArenaApiResponse<"cloudArenaSessionActions">>;
   }
 
   resetCloudArenaSession(sessionId: string, options?: { signal?: AbortSignal }) {
@@ -180,141 +364,7 @@ export class CloudArcanumApiClient {
         ...options,
         method: "POST",
       },
-    );
-  }
-
-  getMetaFilters(options?: { signal?: AbortSignal }) {
-    return this.request("metaFilters", cloudArcanumApiRoutes.metaFilters, options);
-  }
-
-  countCards(
-    query: CloudArcanumApiQuery<"cardsCount"> = {},
-    options?: { signal?: AbortSignal },
-  ) {
-    const search = buildCardListQueryString(query);
-    const path = search
-      ? `${cloudArcanumApiRoutes.cardsCount}?${search}`
-      : cloudArcanumApiRoutes.cardsCount;
-    return this.request("cardsCount", path, options);
-  }
-
-  listCardIds(
-    query: CloudArcanumApiQuery<"cardsIds"> = {},
-    options?: { signal?: AbortSignal },
-  ) {
-    const search = buildCardListQueryString(query);
-    const path = search
-      ? `${cloudArcanumApiRoutes.cardsIds}?${search}`
-      : cloudArcanumApiRoutes.cardsIds;
-    return this.request("cardsIds", path, options);
-  }
-
-  listCardSummaries(
-    query: CloudArcanumApiQuery<"cardsSummary"> = {},
-    options?: { signal?: AbortSignal },
-  ) {
-    const search = buildCardListQueryString(query);
-    const path = search
-      ? `${cloudArcanumApiRoutes.cardsSummary}?${search}`
-      : cloudArcanumApiRoutes.cardsSummary;
-    return this.request("cardsSummary", path, options);
-  }
-
-  listCards(
-    query: CloudArcanumApiQuery<"cards"> = {},
-    options?: { signal?: AbortSignal },
-  ) {
-    const search = buildCardListQueryString(query);
-    const path = search ? `${cloudArcanumApiRoutes.cards}?${search}` : cloudArcanumApiRoutes.cards;
-    return this.request("cards", path, options);
-  }
-
-  getCardDetail(params: CardRouteParams, options?: { signal?: AbortSignal }) {
-    return this.request("cardDetail", buildCloudArcanumCardDetailPath(params.cardId), options);
-  }
-
-  getCardDetailWithQuery(
-    params: CardRouteParams,
-    query: CardDetailQuery = {},
-    options?: { signal?: AbortSignal },
-  ) {
-    const search = buildCardListQueryString(query);
-    const path = search
-      ? `${buildCloudArcanumCardDetailPath(params.cardId)}?${search}`
-      : buildCloudArcanumCardDetailPath(params.cardId);
-    return this.request("cardDetail", path, options);
-  }
-
-  listDecks(
-    query: CloudArcanumApiQuery<"decks"> = {},
-    options?: { signal?: AbortSignal },
-  ) {
-    const search = buildDeckListQueryString(query);
-    const path = search ? `${cloudArcanumApiRoutes.decks}?${search}` : cloudArcanumApiRoutes.decks;
-    return this.request("decks", path, options);
-  }
-
-  getDeckDetail(params: DeckRouteParams, options?: { signal?: AbortSignal }) {
-    return this.request("deckDetail", buildCloudArcanumDeckDetailPath(params.deckId), options);
-  }
-
-  listSets(
-    query: CloudArcanumApiQuery<"sets"> = {},
-    options?: { signal?: AbortSignal },
-  ) {
-    const search = buildSetListQueryString(query);
-    const path = search ? `${cloudArcanumApiRoutes.sets}?${search}` : cloudArcanumApiRoutes.sets;
-    return this.request("sets", path, options);
-  }
-
-  getSetDetail(params: SetRouteParams, options?: { signal?: AbortSignal }) {
-    return this.request("setDetail", buildCloudArcanumSetDetailPath(params.setId), options);
-  }
-
-  getSetDetailWithQuery(
-    params: SetRouteParams,
-    query: SetDetailQuery = {},
-    options?: { signal?: AbortSignal },
-  ) {
-    const search = buildSetDetailQueryString(query);
-    const path = search
-      ? `${buildCloudArcanumSetDetailPath(params.setId)}?${search}`
-      : buildCloudArcanumSetDetailPath(params.setId);
-    return this.request("setDetail", path, options);
-  }
-
-  listUniverses(
-    query: CloudArcanumApiQuery<"universes"> = {},
-    options?: { signal?: AbortSignal },
-  ) {
-    const search = buildUniverseListQueryString(query);
-    const path = search
-      ? `${cloudArcanumApiRoutes.universes}?${search}`
-      : cloudArcanumApiRoutes.universes;
-    return this.request("universes", path, options);
-  }
-
-  getUniverseDetail(params: UniverseRouteParams, options?: { signal?: AbortSignal }) {
-    return this.request(
-      "universeDetail",
-      buildCloudArcanumUniverseDetailPath(params.universeId),
-      options,
-    );
-  }
-
-  getValidationSummary(options?: { signal?: AbortSignal }) {
-    return this.request("validationSummary", cloudArcanumApiRoutes.validationSummary, options);
-  }
-
-  getEntityValidation(
-    params: EntityValidationRouteParams,
-    options?: { signal?: AbortSignal },
-  ) {
-    return this.request(
-      "entityValidation",
-      buildCloudArcanumEntityValidationPath(params.entityId),
-      options,
-    );
+    ) as Promise<CloudArenaApiResponse<"cloudArenaSessionReset">>;
   }
 }
 
@@ -322,4 +372,10 @@ export function createCloudArcanumApiClient(
   options: CloudArcanumApiClientOptions,
 ): CloudArcanumApiClient {
   return new CloudArcanumApiClient(options);
+}
+
+export function createCloudArenaApiClient(
+  options: CloudArcanumApiClientOptions,
+): CloudArenaApiClient {
+  return new CloudArenaApiClient(options);
 }

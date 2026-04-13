@@ -3,7 +3,7 @@ import type {
   CloudArenaCardSnapshot,
   CloudArenaPermanentSnapshot,
   CloudArenaSessionSnapshot,
-} from "../../../../src/cloud-arcanum/api-contract.js";
+} from "../../../../src/cloud-arena/api-contract.js";
 import type {
   BattlePhase,
   EnemyIntent,
@@ -15,6 +15,11 @@ import type { TraceViewerStepViewModel } from "./cloud-arena-trace-view-model.js
 export type CloudArenaBattleViewModel = {
   turnNumber: number;
   phase: BattlePhase;
+  actionGroups: {
+    hand: CloudArenaActionOption[];
+    battlefield: CloudArenaActionOption[];
+    turn: CloudArenaActionOption[];
+  };
   player: {
     health: number;
     maxHealth: number;
@@ -44,6 +49,11 @@ export function buildBattleViewModelFromTraceStep(
   return {
     turnNumber: step.turnNumber,
     phase: step.actionRecord?.phase ?? "player_action",
+    actionGroups: {
+      hand: [],
+      battlefield: [],
+      turn: [],
+    },
     player: {
       health: step.player.health,
       maxHealth: step.player.maxHealth,
@@ -78,9 +88,19 @@ export function buildBattleViewModelFromTraceStep(
 export function buildBattleViewModelFromSessionSnapshot(
   snapshot: CloudArenaSessionSnapshot,
 ): CloudArenaBattleViewModel {
+  const legalActions = snapshot.legalActions.map((option) => ({
+    ...option,
+    action: { ...option.action },
+  }));
+
   return {
     turnNumber: snapshot.turnNumber,
     phase: snapshot.phase,
+    actionGroups: {
+      hand: legalActions.filter((option) => option.source === "hand"),
+      battlefield: legalActions.filter((option) => option.source === "battlefield"),
+      turn: legalActions.filter((option) => option.source === "turn"),
+    },
     player: {
       health: snapshot.player.health,
       maxHealth: snapshot.player.maxHealth,
@@ -108,9 +128,6 @@ export function buildBattleViewModelFromSessionSnapshot(
         : null,
     ),
     blockingQueue: [...snapshot.blockingQueue],
-    legalActions: snapshot.legalActions.map((option) => ({
-      ...option,
-      action: { ...option.action },
-    })),
+    legalActions,
   };
 }

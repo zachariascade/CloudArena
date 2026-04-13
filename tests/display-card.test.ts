@@ -4,12 +4,14 @@ import { describe, expect, it, vi } from "vitest";
 
 import { DisplayCard } from "../apps/cloud-arcanum-web/src/components/display-card.js";
 import {
+  mapCloudArcanumCardToDisplayCard,
+} from "../apps/cloud-arcanum-web/src/lib/display-card.js";
+import {
   mapArenaEnemyToDisplayCard,
   mapArenaHandCardToDisplayCard,
   mapArenaPermanentToDisplayCard,
   mapArenaPlayerToDisplayCard,
-  mapCloudArcanumCardToDisplayCard,
-} from "../apps/cloud-arcanum-web/src/lib/display-card.js";
+} from "../apps/cloud-arcanum-web/src/lib/cloud-arena-display-card.js";
 
 describe("shared display card mappers", () => {
   it("maps a Cloud Arcanum card into the mtg display model", () => {
@@ -123,13 +125,22 @@ describe("shared display card mappers", () => {
         sourceCardInstanceId: "card_1",
         definitionId: "guardian",
         name: "Guardian",
+        isCreature: true,
+        power: 4,
         health: 10,
         maxHealth: 10,
         block: 2,
         hasActedThisTurn: false,
         isDefending: true,
         slotIndex: 0,
-        actions: [{ attackAmount: 4 }, { blockAmount: 5 }],
+        actions: [
+          {
+            id: "guardian_apply_block",
+            kind: "activated",
+            activation: { type: "action", actionId: "apply_block" },
+            effects: [{ type: "gain_block", target: "player", amount: { type: "constant", value: 5 } }],
+          },
+        ],
       },
       {
         playableActions: [
@@ -150,7 +161,7 @@ describe("shared display card mappers", () => {
 
     expect(permanentCard.variant).toBe("permanent");
     expect(permanentCard.textBlocks.map((entry) => entry.text)).toContain(
-      "This permanent is set to intercept the next enemy assault.",
+      "This card is set to intercept the next enemy assault.",
     );
     expect(permanentCard.image?.url).toContain("/images/cards/card_0036_watcher_at_edens_gate.jpg");
     expect(permanentCard.badges).toContain("defending");
@@ -165,6 +176,8 @@ describe("shared display card mappers", () => {
       sourceCardInstanceId: "card_2",
       definitionId: "anointed_banner",
       name: "Anointed Banner",
+      isCreature: false,
+      power: 0,
       health: 6,
       maxHealth: 6,
       block: 0,
@@ -174,12 +187,19 @@ describe("shared display card mappers", () => {
       hasActedThisTurn: false,
       isDefending: false,
       slotIndex: 1,
-      actions: [{ blockAmount: 2 }],
+      actions: [
+        {
+          id: "anointed_banner_apply_block",
+          kind: "activated",
+          activation: { type: "action", actionId: "apply_block" },
+          effects: [{ type: "gain_block", target: "player", amount: { type: "constant", value: 2 } }],
+        },
+      ],
     });
 
     expect(bannerCard.name).toBe("Anointed Banner");
     expect(bannerCard.title).toBe("Consecrated Standard");
-    expect(bannerCard.subtitle).toBe("Permanent - Relic Banner");
+    expect(bannerCard.subtitle).toBe("Artifact");
     expect(bannerCard.textBlocks.map((entry) => entry.text)).not.toContain(
       "This guardian is ready to press the attack or hold the line.",
     );

@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import type {
   CloudArenaSessionSnapshot,
-} from "../../../../src/cloud-arcanum/api-contract.js";
+} from "../../../../src/cloud-arena/api-contract.js";
 import type {
   BattleAction,
   BattleEvent,
@@ -11,16 +11,16 @@ import type {
 import { LEAN_V1_DEFAULT_TURN_ENERGY } from "../../../../src/cloud-arena/index.js";
 import {
   CloudArenaBattleState,
+  CloudArenaLogPanel,
   ErrorState,
   LoadingState,
   PageLayout,
 } from "../components/index.js";
 import {
-  buildBattleViewModelFromSessionSnapshot,
+  buildCloudArenaViewModelFromSessionSnapshot,
   CloudArcanumApiClientError,
-  createCloudArcanumApiClient,
+  createCloudArenaApiClient,
   formatTraceEvent,
-  groupTraceEventsByTurn,
 } from "../lib/index.js";
 
 type CloudArenaInteractivePageProps = {
@@ -78,7 +78,7 @@ function findBattleFinishedEvent(log: BattleEvent[]): Extract<BattleEvent, { typ
 export function CloudArenaInteractivePage({
   apiBaseUrl,
 }: CloudArenaInteractivePageProps): ReactElement {
-  const api = useMemo(() => createCloudArcanumApiClient({ baseUrl: apiBaseUrl }), [apiBaseUrl]);
+  const api = useMemo(() => createCloudArenaApiClient({ baseUrl: apiBaseUrl }), [apiBaseUrl]);
   const [snapshot, setSnapshot] = useState<CloudArenaSessionSnapshot | null>(null);
   const [status, setStatus] = useState<InteractiveStatus>("loading");
   const [error, setError] = useState<Error | CloudArcanumApiClientError | null>(null);
@@ -234,8 +234,6 @@ export function CloudArenaInteractivePage({
     await createSession(seed);
   }
 
-  const recentEvents = snapshot?.log.slice(-8) ?? [];
-
   const turnActions = snapshot?.legalActions
     .filter((option) => option.source === "turn")
     .map((option) => ({
@@ -353,8 +351,8 @@ export function CloudArenaInteractivePage({
     );
   }
 
-  const battle = buildBattleViewModelFromSessionSnapshot(snapshot);
-  const eventGroups = groupTraceEventsByTurn(snapshot.log, []);
+  const viewModel = buildCloudArenaViewModelFromSessionSnapshot(snapshot);
+  const battle = viewModel.battle;
   const battleFinishedEvent = findBattleFinishedEvent(snapshot.log);
   const playableHandCardInstanceIds = snapshot.legalActions
     .filter(
@@ -383,105 +381,48 @@ export function CloudArenaInteractivePage({
 
   function handleUsePermanentAction(
     permanentId: string,
-    action: "attack" | "defend",
+    action: string,
   ): void {
-    void handleApplyAction({
-      type: "use_permanent_action",
-      permanentId,
-      action,
-    });
+    if (!snapshot) {
+      return;
+    }
+
+    const matchingAction = snapshot.legalActions.find(
+      (option) =>
+        option.source === "battlefield" &&
+        option.action.type === "use_permanent_action" &&
+        option.action.permanentId === permanentId &&
+        option.action.action === action,
+    )?.action;
+
+    if (!matchingAction || matchingAction.type !== "use_permanent_action") {
+      return;
+    }
+
+    void handleApplyAction(matchingAction);
   }
+
+  const currentStatusLabel = isCreatingSession
+    ? "Starting a new battle session..."
+    : isSubmitting
+      ? `Resolving ${lastSubmittedActionLabel ?? "action"}...`
+      : snapshot.status === "finished"
+        ? "Battle finished."
+        : "Live session ready.";
+  const lastActionWasEndTurn = lastSubmittedActionLabel?.toLowerCase() === "end turn";
+  const enemyResolutionMessage = isSubmitting && lastActionWasEndTurn
+    ? "Resolving the full enemy turn server-side. The board will refresh once the entire exchange is complete."
+    : !isSubmitting && lastActionWasEndTurn
+      ? "Enemy turn resolved in one server-side step. Review Recent events for the full exchange before making your next move."
+      : "Ending your turn resolves the full enemy turn immediately. Use Recent events to understand what happened.";
 
   return (
     <PageLayout
-      kicker="Cloud Arena"
-      title="Interactive Battle"
-      description="A minimal interactive battle screen for one fixed scenario, driven by API-backed live sessions."
+      kicker=""
+      title=""
+      description=""
     >
-      <div className="trace-viewer-layout">
-        <section className="panel trace-viewer-hero">
-          <div className="summary-row trace-viewer-metadata">
-            <div className="summary-pill">
-              Scenario <strong>Mixed Guardian</strong>
-            </div>
-            <div className="summary-pill">
-              Seed <strong>{snapshot.seed}</strong>
-            </div>
-            <div className="summary-pill">
-              Turn <strong>{snapshot.turnNumber}</strong>
-            </div>
-            <div className="summary-pill">
-              Phase <strong>{snapshot.phase}</strong>
-            </div>
-            <div className="summary-pill">
-              Status <strong>{snapshot.status}</strong>
-            </div>
-          </div>
-          <div className="trace-viewer-hero-grid">
-            <section className="panel trace-viewer-controls">
-              <div className="trace-viewer-summary-row">
-                <div className="summary-pill">
-                  Legal actions <strong>{snapshot.legalActions.length}</strong>
-                </div>
-                <div className="summary-pill">
-                  Session <strong>{snapshot.sessionId.slice(0, 8)}</strong>
-                </div>
-              </div>
-              <div className="filters-grid">
-                <label className="field">
-                  <span>Seed</span>
-                  <input
-                    inputMode="numeric"
-                    value={seedDraft}
-                    onChange={(event) => setSeedDraft(event.currentTarget.value)}
-                    placeholder="1"
-                  />
-                </label>
-              </div>
-              <div className="trace-viewer-button-row">
-                <button
-                  type="button"
-                  className="primary-button"
-                  disabled={isCreatingSession || isSubmitting}
-                  onClick={() => void handleCreateNewBattle()}
-                >
-                  {isCreatingSession ? "Starting..." : "Start new battle"}
-                </button>
-                <button
-                  type="button"
-                  className="ghost-button"
-                  disabled={isSubmitting || isCreatingSession}
-                  onClick={() => void handleReset()}
-                >
-                  Restart from seed
-                </button>
-              </div>
-            </section>
-
-            <section className="trace-viewer-current-action">
-              <strong>Current state</strong>
-              <p>
-                {snapshot.status === "finished"
-                  ? `Battle complete${battleFinishedEvent ? `, winner ${battleFinishedEvent.winner}` : ""}.`
-                  : "Choose one of the legal actions to advance the live board state."}
-              </p>
-              <p>
-                Enemy turns resolve immediately when you end the turn, and the API returns the next updated snapshot.
-              </p>
-              {lastSubmittedActionLabel && !isSubmitting ? (
-                <p>
-                  Last action: <strong>{lastSubmittedActionLabel}</strong>
-                </p>
-              ) : null}
-              {error ? (
-                <div className="error-details">
-                  {formatApiErrorDetails(error)}
-                </div>
-              ) : null}
-            </section>
-          </div>
-        </section>
-
+      <div className="trace-viewer-layout cloud-arena-live-layout">
         <CloudArenaBattleState
           battle={battle}
           disableHandCardActions={isSubmitting || snapshot.status === "finished" || isCreatingSession}
@@ -496,38 +437,110 @@ export function CloudArenaInteractivePage({
           turnActions={turnActions}
         />
 
-        <section className="trace-viewer-content-grid">
-          <div className="trace-viewer-main-column">
-            <section className="panel trace-viewer-log-panel">
-              <strong>Recent events</strong>
-              <ol className="trace-viewer-log">
-                {recentEvents.map((event, index) => (
-                  <li key={`recent-${event.type}-${event.turnNumber}-${index}`}>
-                    {formatTraceEvent(event)}
-                  </li>
-                ))}
-              </ol>
-            </section>
+        <details className="panel trace-viewer-log-panel" open>
+          <summary><strong>Recent events</strong></summary>
+          <ol className="trace-viewer-log">
+            {viewModel.recentEvents.map((event, index) => (
+              <li key={`recent-${event.type}-${event.turnNumber}-${index}`}>
+                {formatTraceEvent(event)}
+              </li>
+            ))}
+          </ol>
+        </details>
 
-            <section className="panel trace-viewer-log-panel">
-              <strong>Battle log</strong>
-              <div className="trace-viewer-log-groups">
-                {eventGroups.map((group) => (
-                  <section key={`turn-${group.turnNumber}`} className="trace-viewer-log-group">
-                    <div className="trace-viewer-log-turn">Turn {group.turnNumber}</div>
-                    <ol className="trace-viewer-log">
-                      {group.events.map(({ event }, index) => (
-                        <li key={`${event.type}-${event.turnNumber}-${index}`}>
-                          {formatTraceEvent(event)}
-                        </li>
-                      ))}
-                    </ol>
-                  </section>
-                ))}
+        <details className="panel trace-viewer-log-panel">
+          <summary><strong>Battle controls</strong></summary>
+          <section className="trace-viewer-current-action">
+            <strong>Current state</strong>
+            <p><strong>{currentStatusLabel}</strong></p>
+            <p>{viewModel.currentAction?.title}</p>
+            <p>
+              {snapshot.status === "finished" && battleFinishedEvent
+                ? `Battle complete, winner ${battleFinishedEvent.winner}.`
+                : viewModel.currentAction?.detail}
+            </p>
+            <div className="summary-row trace-viewer-inline-meta">
+              {viewModel.currentAction?.meta.map((entry) => (
+                <div key={`${entry.label}-${entry.value}`} className="summary-pill">
+                  {entry.label} <strong>{entry.value}</strong>
+                </div>
+              ))}
+            </div>
+            <p className="trace-viewer-inline-meta">
+              {enemyResolutionMessage}
+            </p>
+            {lastSubmittedActionLabel && !isSubmitting ? (
+              <p>
+                Last action: <strong>{lastSubmittedActionLabel}</strong>
+              </p>
+            ) : null}
+            {error ? (
+              <div className="error-details">
+                {formatApiErrorDetails(error)}
               </div>
-            </section>
+            ) : null}
+          </section>
+          <div style={{ height: "0.9rem" }} />
+          <div className="summary-row trace-viewer-metadata">
+            {viewModel.summary.map((entry) => (
+              <div key={`${entry.label}-${entry.value}`} className="summary-pill">
+                {entry.label} <strong>{entry.value}</strong>
+              </div>
+            ))}
+            <div className="summary-pill">
+              Legal actions <strong>{snapshot.legalActions.length}</strong>
+            </div>
+            <div className="summary-pill">
+              Session <strong>{snapshot.sessionId.slice(0, 8)}</strong>
+            </div>
+            <div className="summary-pill">
+              Mode <strong>Interactive</strong>
+            </div>
+            <div className="summary-pill">
+              Enemy turn <strong>Auto-resolves</strong>
+            </div>
           </div>
-        </section>
+          <p className="trace-viewer-inline-meta">
+            Start a new run from the fixed <strong>Mixed Guardian</strong> scenario or restart the current session from its original seed.
+          </p>
+          <div className="filters-grid">
+            <label className="field">
+              <span>Seed</span>
+              <input
+                inputMode="numeric"
+                value={seedDraft}
+                onChange={(event) => setSeedDraft(event.currentTarget.value)}
+                placeholder="1"
+              />
+            </label>
+          </div>
+          <div className="trace-viewer-button-row">
+            <button
+              type="button"
+              className="primary-button"
+              disabled={isCreatingSession || isSubmitting}
+              onClick={() => void handleCreateNewBattle()}
+            >
+              {isCreatingSession ? "Starting..." : "Start new battle"}
+            </button>
+            <button
+              type="button"
+              className="ghost-button"
+              disabled={isSubmitting || isCreatingSession}
+              onClick={() => void handleReset()}
+            >
+              Restart from seed
+            </button>
+          </div>
+          <p className="trace-viewer-keyboard-hint">
+            Keyboard: <code>E</code> end turn, <code>R</code> restart from seed
+          </p>
+        </details>
+
+        <details className="panel trace-viewer-log-panel">
+          <summary><strong>Battle log</strong></summary>
+          <CloudArenaLogPanel framed={false} groups={viewModel.logGroups} title="Battle log" />
+        </details>
       </div>
     </PageLayout>
   );

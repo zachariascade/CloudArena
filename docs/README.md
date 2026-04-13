@@ -8,6 +8,8 @@ This folder is organized by purpose so active work, reference material, and arch
 
 Core project direction and longer-range roadmap docs.
 
+- `CLOUD_ARCANUM_ARENA_SEPARATION_BOUNDARY.md`
+- `CLOUD_ARCANUM_ARENA_SEPARATION_TODO.md`
 - `COMBAT_ENGINE_IMPLEMENTATION_BRIEF.md`
 - `CLOUD_ARENA_RULES_REFERENCE.md`
 - `LEAN_V1_COMBAT_ENGINE_CHECKLIST.md`

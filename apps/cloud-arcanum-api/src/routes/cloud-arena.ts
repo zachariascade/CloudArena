@@ -1,15 +1,24 @@
 import type {
   CloudArenaActionRequest,
   CloudArenaCreateSessionRequest,
-} from "../../../../src/cloud-arcanum/api-contract.js";
-import { cloudArcanumApiRoutes } from "../../../../src/cloud-arcanum/api-contract.js";
+  CloudArenaSessionRouteParams,
+} from "../../../../src/cloud-arena/api-contract.js";
+import { cloudArenaApiRoutes } from "../../../../src/cloud-arena/api-contract.js";
 import type { BattleAction } from "../../../../src/cloud-arena/index.js";
 
 import {
+  CloudArenaFinishedBattleError,
   CloudArenaInvalidActionError,
   CloudArenaSessionNotFoundError,
 } from "../services/cloud-arena-sessions.js";
 import type { CloudArcanumApiRouteModule } from "./index.js";
+
+class CloudArenaInvalidSetupError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "CloudArenaInvalidSetupError";
+  }
+}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -21,20 +30,20 @@ function parseCreateSessionBody(body: unknown): CloudArenaCreateSessionRequest {
   }
 
   if (!isRecord(body)) {
-    throw new Error("Session request body must be an object.");
+    throw new CloudArenaInvalidSetupError("Session request body must be an object.");
   }
 
   const { scenarioId, seed } = body;
 
   if (scenarioId !== undefined && scenarioId !== "mixed_guardian") {
-    throw new Error('scenarioId must be "mixed_guardian".');
+    throw new CloudArenaInvalidSetupError('scenarioId must be "mixed_guardian".');
   }
 
   if (
     seed !== undefined &&
     (!Number.isInteger(seed) || typeof seed !== "number" || seed <= 0)
   ) {
-    throw new Error("seed must be a positive integer.");
+    throw new CloudArenaInvalidSetupError("seed must be a positive integer.");
   }
 
   return {
@@ -73,6 +82,24 @@ function sendCloudArenaRouteError(
     });
   }
 
+  if (error instanceof CloudArenaFinishedBattleError) {
+    return reply.status(409).send({
+      error: {
+        code: "invalid_request",
+        message: error.message,
+      },
+    });
+  }
+
+  if (error instanceof CloudArenaInvalidSetupError) {
+    return reply.status(400).send({
+      error: {
+        code: "invalid_request",
+        message: error.message,
+      },
+    });
+  }
+
   if (error instanceof Error) {
     return reply.status(400).send({
       error: {
@@ -89,7 +116,7 @@ export const registerCloudArcanumCloudArenaRoutes: CloudArcanumApiRouteModule = 
   app,
   context,
 ): Promise<void> => {
-  app.post(cloudArcanumApiRoutes.cloudArenaSessions, async (request, reply) => {
+  app.post(cloudArenaApiRoutes.cloudArenaSessions, async (request, reply) => {
     try {
       const body = parseCreateSessionBody(request.body);
 
@@ -101,9 +128,9 @@ export const registerCloudArcanumCloudArenaRoutes: CloudArcanumApiRouteModule = 
     }
   });
 
-  app.get(cloudArcanumApiRoutes.cloudArenaSessionDetail, async (request, reply) => {
+  app.get(cloudArenaApiRoutes.cloudArenaSessionDetail, async (request, reply) => {
     try {
-      const { sessionId } = request.params as { sessionId: string };
+      const { sessionId } = request.params as CloudArenaSessionRouteParams;
 
       return {
         data: context.services.cloudArenaSessions.getSession(sessionId),
@@ -113,9 +140,9 @@ export const registerCloudArcanumCloudArenaRoutes: CloudArcanumApiRouteModule = 
     }
   });
 
-  app.post(cloudArcanumApiRoutes.cloudArenaSessionActions, async (request, reply) => {
+  app.post(cloudArenaApiRoutes.cloudArenaSessionActions, async (request, reply) => {
     try {
-      const { sessionId } = request.params as { sessionId: string };
+      const { sessionId } = request.params as CloudArenaSessionRouteParams;
       const action = parseActionBody(request.body);
 
       return {
@@ -126,9 +153,9 @@ export const registerCloudArcanumCloudArenaRoutes: CloudArcanumApiRouteModule = 
     }
   });
 
-  app.post(cloudArcanumApiRoutes.cloudArenaSessionReset, async (request, reply) => {
+  app.post(cloudArenaApiRoutes.cloudArenaSessionReset, async (request, reply) => {
     try {
-      const { sessionId } = request.params as { sessionId: string };
+      const { sessionId } = request.params as CloudArenaSessionRouteParams;
 
       return {
         data: context.services.cloudArenaSessions.resetSession(sessionId),
