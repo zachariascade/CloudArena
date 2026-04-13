@@ -19,7 +19,7 @@ import {
   createCloudArcanumApiClient,
   parseSetListQuery,
   useApiRequest,
-} from "../lib/index.js";
+} from "../lib/cloud-arcanum-lib.js";
 
 type SetsPageProps = {
   apiBaseUrl: string;

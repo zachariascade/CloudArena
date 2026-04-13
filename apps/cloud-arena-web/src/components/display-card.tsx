@@ -1,7 +1,6 @@
 import type { ReactElement } from "react";
 import { Fragment } from "react";
 
-import { formatCardDisplayName } from "../../../../src/cloud-arcanum/shared-utils.js";
 import mana1Symbol from "../assets/mtg-symbols/mana/1.svg";
 import mana2Symbol from "../assets/mtg-symbols/mana/2.svg";
 import mana3Symbol from "../assets/mtg-symbols/mana/3.svg";
@@ -12,7 +11,7 @@ import manaRSymbol from "../assets/mtg-symbols/mana/R.svg";
 import manaTSymbol from "../assets/mtg-symbols/mana/T.svg";
 import manaUSymbol from "../assets/mtg-symbols/mana/U.svg";
 import manaWSymbol from "../assets/mtg-symbols/mana/W.svg";
-import { getCloudArcanumRuntimeConfig } from "../lib/runtime-config.js";
+import { getCloudArenaRuntimeConfig } from "../lib/runtime-config.js";
 
 import type { DisplayCardModel } from "../lib/display-card.js";
 
@@ -20,6 +19,10 @@ type DisplayCardProps = {
   model: DisplayCardModel;
   className?: string;
 };
+
+function formatCardDisplayName(name: string, title: string | null | undefined): string {
+  return title ? `${name}, ${title}` : name;
+}
 
 function clampHealthPercent(current: number, max: number): number {
   if (max <= 0) {
@@ -135,8 +138,8 @@ function resolveDisplayImageUrl(url: string | null | undefined): string | null {
     return url;
   }
 
-  const { apiBaseUrl } = getCloudArcanumRuntimeConfig();
-  return `${apiBaseUrl.replace(/\/$/, "")}${url}`;
+  const { cloudArcanumApiBaseUrl } = getCloudArenaRuntimeConfig();
+  return `${cloudArcanumApiBaseUrl.replace(/\/$/, "")}${url}`;
 }
 
 function renderDisplayImage(model: DisplayCardModel): ReactElement {
@@ -274,7 +277,7 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
             <strong>{model.healthBar.label ?? `${model.healthBar.current}/${model.healthBar.max}`}</strong>
           </div>
           <div
-            className="display-card-health-bar"
+            className="trace-viewer-health-bar"
             role="progressbar"
             aria-label={`${model.name} health`}
             aria-valuemin={0}
@@ -282,7 +285,7 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
             aria-valuenow={model.healthBar.current}
           >
             <div
-              className="display-card-health-bar-fill"
+              className="trace-viewer-health-bar-fill"
               style={{ width: `${healthPercent}%` }}
             />
           </div>
@@ -362,9 +365,9 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
       ) : null}
 
       {visibleStats.length > 0 ? (
-        <div className="display-card-stat-row">
+        <div className="trace-viewer-stat-row display-card-stat-row">
           {visibleStats.map((stat) => (
-            <div key={`${stat.label}-${stat.value}`} className="display-card-stat-chip">
+            <div key={`${stat.label}-${stat.value}`} className="trace-viewer-stat-chip">
               <span>{stat.label}</span>
               <strong>{stat.value}</strong>
             </div>

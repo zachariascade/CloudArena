@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 
 import { CloudArenaTraceViewer, PageLayout } from "../components/index.js";
-import { cloudArenaSampleTrace } from "../lib/index.js";
+import { cloudArenaSampleTrace } from "../lib/cloud-arena-web-lib.js";
 
 export function CloudArenaTraceViewerPage(): ReactElement {
   return (

@@ -11,7 +11,7 @@ import {
   CloudArenaInvalidActionError,
   CloudArenaSessionNotFoundError,
 } from "../services/cloud-arena-sessions.js";
-import type { CloudArcanumApiRouteModule } from "./index.js";
+import type { CloudArenaApiRouteModule } from "./index.js";
 
 class CloudArenaInvalidSetupError extends Error {
   constructor(message: string) {
@@ -112,7 +112,7 @@ function sendCloudArenaRouteError(
   throw error;
 }
 
-export const registerCloudArcanumCloudArenaRoutes: CloudArcanumApiRouteModule = async (
+export const registerCloudArenaRoutes: CloudArenaApiRouteModule = async (
   app,
   context,
 ): Promise<void> => {

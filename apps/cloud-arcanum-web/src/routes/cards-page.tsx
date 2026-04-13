@@ -27,7 +27,7 @@ import {
   mapCloudArcanumCardToDisplayCard,
   parseCardListQuery,
   useApiRequest,
-} from "../lib/index.js";
+} from "../lib/cloud-arcanum-lib.js";
 
 type CardsPageProps = {
   apiBaseUrl: string;

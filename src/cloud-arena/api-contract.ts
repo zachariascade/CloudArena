@@ -7,8 +7,6 @@ import type {
   EnemyIntent,
 } from "./index.js";
 
-import type { ApiSuccessResponse } from "../cloud-arcanum/api-contract.js";
-
 export const cloudArenaApiRoutes = {
   cloudArenaSessions: "/api/cloud-arena/sessions",
   cloudArenaSessionDetail: "/api/cloud-arena/sessions/:sessionId",
@@ -112,30 +110,34 @@ export type CloudArenaSessionSnapshot = {
   log: BattleEvent[];
 };
 
+export type CloudArenaApiSuccessResponse<T> = {
+  data: T;
+};
+
 export type CloudArenaApiContracts = {
   cloudArenaSessions: {
     route: typeof cloudArenaApiRoutes.cloudArenaSessions;
     query: undefined;
     params: undefined;
-    response: ApiSuccessResponse<CloudArenaSessionSnapshot>;
+    response: CloudArenaApiSuccessResponse<CloudArenaSessionSnapshot>;
   };
   cloudArenaSessionDetail: {
     route: typeof cloudArenaApiRoutes.cloudArenaSessionDetail;
     query: undefined;
     params: CloudArenaSessionRouteParams;
-    response: ApiSuccessResponse<CloudArenaSessionSnapshot>;
+    response: CloudArenaApiSuccessResponse<CloudArenaSessionSnapshot>;
   };
   cloudArenaSessionActions: {
     route: typeof cloudArenaApiRoutes.cloudArenaSessionActions;
     query: undefined;
     params: CloudArenaSessionRouteParams;
-    response: ApiSuccessResponse<CloudArenaSessionSnapshot>;
+    response: CloudArenaApiSuccessResponse<CloudArenaSessionSnapshot>;
   };
   cloudArenaSessionReset: {
     route: typeof cloudArenaApiRoutes.cloudArenaSessionReset;
     query: undefined;
     params: CloudArenaSessionRouteParams;
-    response: ApiSuccessResponse<CloudArenaSessionSnapshot>;
+    response: CloudArenaApiSuccessResponse<CloudArenaSessionSnapshot>;
   };
 };
 

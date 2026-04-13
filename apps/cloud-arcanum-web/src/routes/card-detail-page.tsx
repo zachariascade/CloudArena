@@ -15,7 +15,7 @@ import {
   CloudArcanumApiClientError,
   createCloudArcanumApiClient,
   useApiRequest,
-} from "../lib/index.js";
+} from "../lib/cloud-arcanum-lib.js";
 
 type CardDetailPageProps = {
   apiBaseUrl: string;

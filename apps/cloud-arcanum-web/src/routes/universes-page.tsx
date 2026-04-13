@@ -15,7 +15,7 @@ import {
   createCloudArcanumApiClient,
   parseUniverseListQuery,
   useApiRequest,
-} from "../lib/index.js";
+} from "../lib/cloud-arcanum-lib.js";
 
 type UniversesPageProps = {
   apiBaseUrl: string;

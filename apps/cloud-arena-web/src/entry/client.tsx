@@ -2,17 +2,17 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 
-import { createCloudArcanumRouter } from "../routes/index.js";
-import { getCloudArcanumRuntimeConfig } from "../lib/cloud-arcanum-lib.js";
+import { createCloudArenaRouter } from "../routes/index.js";
+import { getCloudArenaRuntimeConfig } from "../lib/cloud-arena-web-lib.js";
 
 const container = document.getElementById("root");
 
 if (!container) {
-  throw new Error("Cloud Arcanum root container was not found.");
+  throw new Error("Cloud Arena root container was not found.");
 }
 
-const runtimeConfig = getCloudArcanumRuntimeConfig();
-const router = createCloudArcanumRouter(runtimeConfig);
+const runtimeConfig = getCloudArenaRuntimeConfig();
+const router = createCloudArenaRouter(runtimeConfig);
 const root = createRoot(container);
 
 root.render(

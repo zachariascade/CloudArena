@@ -20,7 +20,7 @@ import {
   createCloudArcanumApiClient,
   parseDeckListQuery,
   useApiRequest,
-} from "../lib/index.js";
+} from "../lib/cloud-arcanum-lib.js";
 
 type DecksPageProps = {
   apiBaseUrl: string;

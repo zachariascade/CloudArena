@@ -1,29 +1,27 @@
 import type { ReactElement, ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 
-type NavigationItem = {
-  to: string;
-  label: string;
-  end?: boolean;
-};
-
-type AppShellProps = {
+type CloudArenaAppShellProps = {
   children: ReactNode;
+  cloudArcanumWebBaseUrl: string;
 };
 
-const navigationItems: NavigationItem[] = [
-  { to: "/cards", label: "Cards" },
-  { to: "/decks", label: "Decks" },
-  { to: "/sets", label: "Sets" },
-  { to: "/universes", label: "Universes" },
+const navigationItems = [
+  { to: "/", label: "Battle", end: true },
+  { to: "/trace-viewer", label: "Replay" },
 ];
 
-export function AppShell({ children }: AppShellProps): ReactElement {
+export function CloudArenaAppShell({
+  children,
+  cloudArcanumWebBaseUrl,
+}: CloudArenaAppShellProps): ReactElement {
+  const cloudArcanumCardsUrl = `${cloudArcanumWebBaseUrl.replace(/\/$/, "")}/cards`;
+
   return (
     <main className="app-shell">
       <header className="app-header">
         <section className="panel brand-block">
-          <h1>Cloud Arcanum</h1>
+          <h1>Cloud Arena</h1>
         </section>
         <nav className="panel nav" aria-label="Primary">
           {navigationItems.map((item) => (
@@ -36,6 +34,7 @@ export function AppShell({ children }: AppShellProps): ReactElement {
               {item.label}
             </NavLink>
           ))}
+          <a href={cloudArcanumCardsUrl}>Card Catalog</a>
         </nav>
       </header>
       <div style={{ height: "1.5rem" }} />

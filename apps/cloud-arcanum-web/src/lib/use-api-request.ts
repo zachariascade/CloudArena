@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { CloudArcanumApiClientError } from "./api-client.js";
+import { CloudArcanumApiClientError } from "./base-api-client.js";
 
 type AsyncStatus = "idle" | "loading" | "success" | "error";
 

@@ -1,10 +1,8 @@
 export {
   CloudArenaApiClient,
-  CloudArcanumApiClient,
-  CloudArcanumApiClientError,
   createCloudArenaApiClient,
-  createCloudArcanumApiClient,
-} from "./api-client.js";
+} from "./cloud-arena-api-client.js";
+export { CloudArcanumApiClientError } from "./base-api-client.js";
 export { cloudArenaSampleTrace, mixedGuardianSampleTrace } from "./cloud-arena-sample-trace.js";
 export {
   buildBattleViewModelFromSessionSnapshot,
@@ -21,9 +19,6 @@ export type {
   CloudArenaSummaryPill,
   CloudArenaViewModel,
 } from "./cloud-arena-view-model.js";
-export {
-  mapCloudArcanumCardToDisplayCard,
-} from "./display-card.js";
 export {
   mapArenaEnemyToDisplayCard,
   mapArenaHandCardToDisplayCard,
@@ -43,22 +38,10 @@ export {
   clampTraceViewerStepIndex,
   formatTraceActionRecord,
   formatTraceEvent,
-  groupTraceEventsByTurn,
   getTraceViewerCurrentActionRecord,
   getTraceViewerStepCount,
   getTraceViewerStepIndexAfterCommand,
+  groupTraceEventsByTurn,
 } from "./cloud-arena-trace-view-model.js";
 export { useCloudArenaReplayController } from "./use-cloud-arena-replay-controller.js";
-export { getCloudArcanumRuntimeConfig } from "./runtime-config.js";
-export {
-  buildCardsPagePath,
-  buildCardListQueryString,
-  buildDeckListQueryString,
-  buildSetListQueryString,
-  buildUniverseListQueryString,
-  parseCardListQuery,
-  parseDeckListQuery,
-  parseSetListQuery,
-  parseUniverseListQuery,
-} from "./query-string.js";
-export { useApiRequest } from "./use-api-request.js";
+export { getCloudArenaRuntimeConfig } from "./runtime-config.js";

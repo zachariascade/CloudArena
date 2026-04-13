@@ -23,11 +23,9 @@ import {
   CloudArcanumApiClientError,
   createCloudArcanumApiClient,
   useApiRequest,
-} from "../lib/index.js";
+} from "../lib/cloud-arcanum-lib.js";
 import { CardDetailPage } from "./card-detail-page.js";
 import { CardsPage } from "./cards-page.js";
-import { CloudArenaInteractivePage } from "./cloud-arena-interactive-page.js";
-import { CloudArenaTraceViewerPage } from "./cloud-arena-trace-viewer-page.js";
 import { DecksPage } from "./decks-page.js";
 import { SetsPage } from "./sets-page.js";
 import { UniversesPage } from "./universes-page.js";
@@ -36,7 +34,7 @@ type AppRouteContext = {
   apiBaseUrl: string;
 };
 
-function AppFrame({ apiBaseUrl }: AppRouteContext): ReactElement {
+function AppFrame({ apiBaseUrl }: { apiBaseUrl: string }): ReactElement {
   void apiBaseUrl;
   return (
     <AppShell>
@@ -289,14 +287,6 @@ export function createCloudArcanumRouter(context: AppRouteContext) {
         {
           path: "universes",
           element: <UniversesPage apiBaseUrl={context.apiBaseUrl} />,
-        },
-        {
-          path: "cloud-arena",
-          element: <CloudArenaInteractivePage apiBaseUrl={context.apiBaseUrl} />,
-        },
-        {
-          path: "cloud-arena/trace-viewer",
-          element: <CloudArenaTraceViewerPage />,
         },
         {
           path: "*",

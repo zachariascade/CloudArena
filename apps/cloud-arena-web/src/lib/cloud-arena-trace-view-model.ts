@@ -262,16 +262,41 @@ function drawMatchingCard(
     state.player.discardPile = [];
   }
 
-  const nextCard = state.player.drawPile.shift();
+  const exactTopCard = state.player.drawPile[0];
+
+  if (!exactTopCard) {
+    throw new Error(`Trace could not draw expected card ${expectedDefinitionId}.`);
+  }
+
+  let nextCard = state.player.drawPile.shift();
 
   if (!nextCard) {
     throw new Error(`Trace could not draw expected card ${expectedDefinitionId}.`);
   }
 
   if (nextCard.definitionId !== expectedDefinitionId) {
-    throw new Error(
-      `Trace replay diverged while drawing cards. Expected ${expectedDefinitionId}, received ${nextCard.definitionId}.`,
+    const matchingIndex = state.player.drawPile.findIndex(
+      (card) => card.definitionId === expectedDefinitionId,
     );
+
+    if (matchingIndex === -1) {
+      throw new Error(
+        `Trace replay diverged while drawing cards. Expected ${expectedDefinitionId}, received ${exactTopCard.definitionId}.`,
+      );
+    }
+
+    const [matchingCard] = state.player.drawPile.splice(matchingIndex, 1);
+
+    if (!matchingCard) {
+      throw new Error(`Trace could not recover expected card ${expectedDefinitionId}.`);
+    }
+
+    // The replay trace only records the drawn definition id, not the exact duplicate
+    // instance that was drawn. When duplicate cards exist after a reshuffle, prefer
+    // consuming a matching hidden card so the visible hand/log reconstruction can
+    // continue instead of depending on inaccessible hidden-order details.
+    state.player.drawPile.unshift(nextCard);
+    nextCard = matchingCard;
   }
 
   state.player.hand.push(nextCard);
@@ -284,6 +309,20 @@ function findCardInstance(
   cardInstanceId: string,
 ): CardInstance | undefined {
   return cards.find((card) => card.instanceId === cardInstanceId);
+}
+
+function removeFirstCardByDefinition(
+  cards: CardInstance[],
+  definitionId: CardDefinitionId,
+): CardInstance | null {
+  const cardIndex = cards.findIndex((card) => card.definitionId === definitionId);
+
+  if (cardIndex === -1) {
+    return null;
+  }
+
+  const [card] = cards.splice(cardIndex, 1);
+  return card ?? null;
 }
 
 function removeCardFromHand(
@@ -487,8 +526,11 @@ function applyEvent(
       }
       return;
     case "permanent_summoned": {
+      const playedDefinitionId = getActionDefinitionId(trace, actionRecord);
       const sourceCardInstanceId =
-        actionRecord?.action.type === "play_card" ? actionRecord.action.cardInstanceId : undefined;
+        actionRecord?.action.type === "play_card" && playedDefinitionId === event.definitionId
+          ? actionRecord.action.cardInstanceId
+          : undefined;
       const sourceCard =
         sourceCardInstanceId
           ? findCardInstance(state.player.discardPile, sourceCardInstanceId) ??
@@ -497,7 +539,9 @@ function applyEvent(
               instanceId: sourceCardInstanceId,
               definitionId: event.definitionId,
             }
-          : {
+          : removeFirstCardByDefinition(state.player.hand, event.definitionId) ??
+            removeFirstCardByDefinition(state.player.discardPile, event.definitionId) ??
+            {
               instanceId: `card_${event.slotIndex + 1}`,
               definitionId: event.definitionId,
             };
