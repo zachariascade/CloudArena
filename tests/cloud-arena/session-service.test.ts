@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import type { CloudArenaActionOption } from "../src/cloud-arena/api-contract.js";
+import type { CloudArenaActionOption } from "../../src/cloud-arena/api-contract.js";
 import {
   CloudArenaFinishedBattleError,
   CloudArenaInvalidActionError,
   CloudArenaSessionNotFoundError,
   createCloudArenaSessionService,
-} from "../apps/cloud-arcanum-api/src/services/cloud-arena-sessions.js";
+} from "../../apps/cloud-arena-api/src/services/cloud-arena-sessions.js";
 
 function findPlayableCardAction(
   hand: { instanceId: string; definitionId: string }[],

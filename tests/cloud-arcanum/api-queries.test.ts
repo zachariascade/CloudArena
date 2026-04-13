@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 
-import { createCloudArcanumApiLoaders } from "../apps/cloud-arcanum-api/src/loaders/index.js";
-import { normalizeCloudArcanumData } from "../apps/cloud-arcanum-api/src/services/index.js";
+import { createCloudArcanumApiLoaders } from "../../apps/cloud-arcanum-api/src/loaders/index.js";
+import { normalizeCloudArcanumData } from "../../apps/cloud-arcanum-api/src/services/index.js";
 import {
   countCards,
   queryCardIds,
@@ -10,8 +10,8 @@ import {
   queryDecks,
   querySets,
   queryUniverses,
-} from "../apps/cloud-arcanum-api/src/services/queries.js";
-import type { CardColor } from "../src/domain/index.js";
+} from "../../apps/cloud-arcanum-api/src/services/queries.js";
+import type { CardColor } from "../../src/domain/index.js";
 import { cleanupTempProject, createTempProject } from "./helpers.js";
 
 const tempProjects: string[] = [];

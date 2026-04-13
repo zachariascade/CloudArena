@@ -2,7 +2,7 @@ import path from "node:path";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { validateProject } from "../scripts/validate.js";
+import { validateProject } from "../../scripts/validate.js";
 import {
   cleanupTempProject,
   createTempProject,

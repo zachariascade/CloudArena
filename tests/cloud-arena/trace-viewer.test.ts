@@ -3,14 +3,9 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 
-import type { CloudArenaSessionSnapshot } from "../src/cloud-arena/api-contract.js";
+import type { CloudArenaSessionSnapshot } from "../../src/cloud-arena/api-contract.js";
 import {
-  AppShell,
-  CloudArenaBattleState,
-  CloudArenaTraceViewer,
-} from "../apps/cloud-arcanum-web/src/components/index.js";
-import { cloudArenaSampleTrace } from "../apps/cloud-arcanum-web/src/lib/index.js";
-import {
+  cloudArenaSampleTrace,
   buildBattleViewModelFromSessionSnapshot,
   buildBattleViewModelFromTraceStep,
   buildCloudArenaViewModelFromSessionSnapshot,
@@ -18,9 +13,14 @@ import {
   buildTraceStepViewModels,
   groupTraceEventsByTurn,
   getTraceViewerStepIndexAfterCommand,
-} from "../apps/cloud-arcanum-web/src/lib/index.js";
-import { CloudArenaInteractivePage } from "../apps/cloud-arcanum-web/src/routes/cloud-arena-interactive-page.js";
-import { CloudArenaTraceViewerPage } from "../apps/cloud-arcanum-web/src/routes/cloud-arena-trace-viewer-page.js";
+} from "../../apps/cloud-arena-web/src/lib/cloud-arena-web-lib.js";
+import {
+  CloudArenaAppShell,
+  CloudArenaBattleState,
+  CloudArenaTraceViewer,
+} from "../../apps/cloud-arena-web/src/components/index.js";
+import { CloudArenaInteractivePage } from "../../apps/cloud-arena-web/src/routes/interactive-page.js";
+import { CloudArenaTraceViewerPage } from "../../apps/cloud-arena-web/src/routes/trace-viewer-page.js";
 
 describe("cloud arena trace viewer scaffold", () => {
   it("renders the trace viewer page without crashing", () => {
@@ -33,7 +33,7 @@ describe("cloud arena trace viewer scaffold", () => {
   it("renders the interactive battle page shell without crashing", () => {
     const html = renderToStaticMarkup(
       createElement(CloudArenaInteractivePage, {
-        apiBaseUrl: "http://127.0.0.1:4310",
+        apiBaseUrl: "http://127.0.0.1:4311",
       }),
     );
 
@@ -41,21 +41,23 @@ describe("cloud arena trace viewer scaffold", () => {
     expect(html).toContain("Creating battle session");
   });
 
-  it("includes the Cloud Arena link in app shell navigation", () => {
+  it("renders a separate Cloud Arena shell navigation", () => {
     const html = renderToStaticMarkup(
       createElement(
         MemoryRouter,
         null,
-        createElement(AppShell, {
+        createElement(CloudArenaAppShell, {
+          cloudArcanumWebBaseUrl: "http://127.0.0.1:4320",
           children: createElement("div", null, "content"),
         }),
       ),
     );
 
-    expect(html).toContain("/cloud-arena");
-    expect(html).toContain("/cloud-arena/trace-viewer");
+    expect(html).toContain('href="/"');
+    expect(html).toContain("/trace-viewer");
     expect(html).toContain("Cloud Arena");
     expect(html).toContain("Replay");
+    expect(html).toContain("http://127.0.0.1:4320/cards");
   });
 
   it("renders sample trace metadata and battle log content", () => {
@@ -81,7 +83,7 @@ describe("cloud arena trace viewer scaffold", () => {
       "Attack",
       "Defend",
       "Attack",
-      "Defend",
+      "Choir Captain",
     ]);
     expect(stepViewModels[1]?.battlefield[0]?.instanceId).toBe("guardian_1");
     expect(stepViewModels[4]?.turnNumber).toBe(2);

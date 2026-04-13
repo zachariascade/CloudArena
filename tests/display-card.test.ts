@@ -11,7 +11,7 @@ import {
   mapArenaHandCardToDisplayCard,
   mapArenaPermanentToDisplayCard,
   mapArenaPlayerToDisplayCard,
-} from "../apps/cloud-arcanum-web/src/lib/cloud-arena-display-card.js";
+} from "../apps/cloud-arena-web/src/lib/cloud-arena-display-card.js";
 
 describe("shared display card mappers", () => {
   it("maps a Cloud Arcanum card into the mtg display model", () => {

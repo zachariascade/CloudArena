@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const currentFile = fileURLToPath(import.meta.url);
 
-export const repoRoot = path.resolve(path.dirname(currentFile), "..");
+export const repoRoot = path.resolve(path.dirname(currentFile), "..", "..");
 
 export async function createTempProject(): Promise<string> {
   const tempRoot = await mkdtemp(path.join(os.tmpdir(), "cloud-arcanum-test-"));

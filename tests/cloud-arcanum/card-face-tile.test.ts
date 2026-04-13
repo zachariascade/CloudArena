@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { buildRulesPreview } from "../apps/cloud-arcanum-web/src/components/card-face-tile.js";
+import { buildRulesPreview } from "../../apps/cloud-arcanum-web/src/components/card-face-tile.js";
 
 describe("card face tile rules preview", () => {
   it("keeps a flavor line visible when oracle and flavor text are both present", () => {

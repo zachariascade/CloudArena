@@ -12,7 +12,7 @@ import {
   validateChapterBands,
   validateConceptRecords,
   validateExodusChapters,
-} from "../src/biblical/exodus-pilot.js";
+} from "../../src/biblical/exodus-pilot.js";
 import { repoRoot } from "./helpers.js";
 
 describe("exodus pilot", () => {

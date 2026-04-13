@@ -8,9 +8,7 @@ const watchMode = !process.argv.includes("--no-watch");
 
 const watcherChildren: ChildProcess[] = [];
 let apiChild: ChildProcess | null = null;
-let arenaApiChild: ChildProcess | null = null;
 let webChild: ChildProcess | null = null;
-let arenaWebChild: ChildProcess | null = null;
 let restartTimer: NodeJS.Timeout | null = null;
 let isRestarting = false;
 
@@ -44,7 +42,7 @@ function terminateChild(child: ChildProcess | null): Promise<void> {
 }
 
 function startManagedProcess(
-  processName: "api" | "arena-api" | "web" | "arena-web",
+  processName: "api" | "web",
   scriptPath: string,
 ): ChildProcess {
   const child = spawn(node18ScriptPath, [scriptPath], {
@@ -63,16 +61,8 @@ function startManagedProcess(
       apiChild = null;
     }
 
-    if (processName === "arena-api" && arenaApiChild === child) {
-      arenaApiChild = null;
-    }
-
     if (processName === "web" && webChild === child) {
       webChild = null;
-    }
-
-    if (processName === "arena-web" && arenaWebChild === child) {
-      arenaWebChild = null;
     }
   });
 
@@ -139,15 +129,11 @@ async function restartServers(): Promise<void> {
 
   await Promise.all([
     terminateChild(apiChild),
-    terminateChild(arenaApiChild),
     terminateChild(webChild),
-    terminateChild(arenaWebChild),
   ]);
 
   apiChild = startManagedProcess("api", path.join(distDirectory, "dev-api.js"));
-  arenaApiChild = startManagedProcess("arena-api", path.join(distDirectory, "dev-arena-api.js"));
   webChild = startManagedProcess("web", path.join(distDirectory, "dev-web.js"));
-  arenaWebChild = startManagedProcess("arena-web", path.join(distDirectory, "dev-arena-web.js"));
 
   isRestarting = false;
 }
@@ -177,9 +163,7 @@ function shutdown(exitCode = 0): void {
 
   void Promise.all([
     terminateChild(apiChild),
-    terminateChild(arenaApiChild),
     terminateChild(webChild),
-    terminateChild(arenaWebChild),
   ]).finally(() => {
     setTimeout(() => {
       process.exit(exitCode);
@@ -191,9 +175,7 @@ process.on("SIGINT", () => shutdown(0));
 process.on("SIGTERM", () => shutdown(0));
 
 apiChild = startManagedProcess("api", path.join(distDirectory, "dev-api.js"));
-arenaApiChild = startManagedProcess("arena-api", path.join(distDirectory, "dev-arena-api.js"));
 webChild = startManagedProcess("web", path.join(distDirectory, "dev-web.js"));
-arenaWebChild = startManagedProcess("arena-web", path.join(distDirectory, "dev-arena-web.js"));
 
 if (watchMode) {
   startWatcher(
@@ -213,11 +195,8 @@ if (watchMode) {
   );
 
   startWatcher("web-build", [path.join(distDirectory, "build-web-client.js"), "--watch"]);
-  startWatcher("arena-web-build", [path.join(distDirectory, "build-arena-web-client.js"), "--watch"]);
 
-  console.log(
-    "Cloud Arcanum and Cloud Arena local dev are running with TypeScript and frontend bundle watchers. Press Ctrl+C to stop.",
-  );
+  console.log("Cloud Arcanum local dev is running with TypeScript and frontend bundle watchers. Press Ctrl+C to stop.");
 } else {
-  console.log("Cloud Arcanum and Cloud Arena local dev are running without watchers. Press Ctrl+C to stop.");
+  console.log("Cloud Arcanum local dev is running without watchers. Press Ctrl+C to stop.");
 }

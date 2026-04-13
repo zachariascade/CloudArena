@@ -2,8 +2,8 @@ import path from "node:path";
 
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { createCloudArcanumApiLoaders } from "../apps/cloud-arcanum-api/src/loaders/index.js";
-import { createCloudArcanumApiServices } from "../apps/cloud-arcanum-api/src/services/index.js";
+import { createCloudArcanumApiLoaders } from "../../apps/cloud-arcanum-api/src/loaders/index.js";
+import { createCloudArcanumApiServices } from "../../apps/cloud-arcanum-api/src/services/index.js";
 import {
   cleanupTempProject,
   createTempProject,

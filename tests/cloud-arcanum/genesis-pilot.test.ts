@@ -12,7 +12,7 @@ import {
   validateGenesisChapterBands,
   validateGenesisChapters,
   validateGenesisConceptRecords,
-} from "../src/biblical/genesis-pilot.js";
+} from "../../src/biblical/genesis-pilot.js";
 import { repoRoot } from "./helpers.js";
 
 describe("genesis pilot", () => {
@@ -68,4 +68,3 @@ describe("genesis pilot", () => {
     ).toBe(true);
   });
 });
-

@@ -8,7 +8,7 @@ import {
   deckSchema,
   setSchema,
   universeSchema,
-} from "../src/domain/index.js";
+} from "../../src/domain/index.js";
 import { repoRoot } from "./helpers.js";
 
 async function loadJson<T>(relativeFile: string): Promise<T> {

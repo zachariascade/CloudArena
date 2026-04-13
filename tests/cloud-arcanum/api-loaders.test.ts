@@ -3,7 +3,7 @@ import { mkdir, rm, writeFile } from "node:fs/promises";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { createCloudArcanumApiLoaders } from "../apps/cloud-arcanum-api/src/loaders/index.js";
+import { createCloudArcanumApiLoaders } from "../../apps/cloud-arcanum-api/src/loaders/index.js";
 import { cleanupTempProject, createTempProject } from "./helpers.js";
 
 const tempProjects: string[] = [];

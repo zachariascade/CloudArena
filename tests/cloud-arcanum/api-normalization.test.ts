@@ -2,11 +2,11 @@ import path from "node:path";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { createCloudArcanumApiLoaders } from "../apps/cloud-arcanum-api/src/loaders/index.js";
+import { createCloudArcanumApiLoaders } from "../../apps/cloud-arcanum-api/src/loaders/index.js";
 import {
   createCloudArcanumApiServices,
   normalizeCloudArcanumData,
-} from "../apps/cloud-arcanum-api/src/services/index.js";
+} from "../../apps/cloud-arcanum-api/src/services/index.js";
 import {
   cleanupTempProject,
   createTempProject,

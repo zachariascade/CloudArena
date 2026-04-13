@@ -13,7 +13,7 @@ import {
   validateGospelChapters,
   validateGospelsChapterBands,
   validateGospelsConceptRecords,
-} from "../src/biblical/gospels-pilot.js";
+} from "../../src/biblical/gospels-pilot.js";
 import { repoRoot } from "./helpers.js";
 
 describe("gospels pilot", () => {
