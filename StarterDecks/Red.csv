@@ -1,0 +1,23 @@
+"sep=,"
+Card Type,Quantity,Card Name,Mana Cost,Min Price (LOW)
+creature,1,Goblin Arsonist,{R},0.01
+creature,1,Goblin Fireslinger,{R},0.05
+creature,2,Raging Goblin,{R},0.01
+creature,1,Fissure Wizard,{1}{R},0.01
+creature,3,Mudbrawler Cohort,{1}{R},0.01
+creature,1,Pyre Charger,{R}{R},0.04
+creature,4,Sanguinary Mage,{1}{R},0.01
+creature,1,Guttersnipe,{2}{R},0.01
+creature,2,Rummaging Goblin,{2}{R},0.01
+creature,1,Beetleback Chief,{2}{R}{R},0.02
+creature,1,Goblin Assault Team,{3}{R},0.01
+creature,1,Havoc Devils,{2}{R}{R},0.01
+creature,1,Hound of Griselbrand,{2}{R}{R},0.05
+creature,2,Paragon of Fierce Defiance,{3}{R},0.05
+instant,4,Fiery Impulse,{R},0.01
+instant,1,Lightning Bolt,{R},0.24
+instant,4,"Titan's Strength",{R},0.01
+instant,3,Abrade,{1}{R},0.01
+sorcery,1,Flame Slash,{R},0.01
+sorcery,3,"Krenko's Command",{1}{R},0.01
+land,22,Mountain,,0.01

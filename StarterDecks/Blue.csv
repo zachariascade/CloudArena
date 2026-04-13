@@ -1,0 +1,29 @@
+"sep=,"
+Card Type,Quantity,Card Name,Mana Cost,Min Price (LOW)
+creature,1,Spectral Sailor,{U},0.01
+creature,1,Brineborn Cutthroat,{1}{U},0.01
+creature,3,Omenspeaker,{1}{U},0.01
+creature,2,Riptide Turtle,{1}{U},0.01
+creature,2,Umara Entangler,{1}{U},0.01
+creature,1,Haughty Djinn,{1}{U}{U},0.02
+creature,1,Windrider Wizard,{2}{U},0.01
+creature,1,Archmage Emeritus,{2}{U}{U},1.00
+creature,2,Cloaked Siren,{3}{U},0.01
+creature,2,Mist Raven,{2}{U}{U},0.01
+creature,1,Paragon of Gathering Mists,{3}{U},0.02
+creature,1,"Talrand, Sky Summoner",{2}{U}{U},0.15
+instant,1,Consider,{U},0.02
+instant,2,Fleeting Distraction,{U},0.01
+instant,2,Lost in a Labyrinth,{U},0.01
+instant,2,Unsummon,{U},0.01
+instant,1,Essence Scatter,{1}{U},0.01
+instant,1,Mana Leak,{1}{U},0.01
+instant,1,Negate,{1}{U},0.01
+instant,2,Run Away Together,{1}{U},0.01
+instant,2,Think Twice,{1}{U},0.01
+instant,1,Turn to Frog,{1}{U},0.01
+instant,1,Cancel,{1}{U}{U},0.01
+instant,2,Thirst for Discovery,{2}{U},0.01
+instant,1,Aetherize,{3}{U},0.01
+enchantment,1,Witness Protection,{U},0.01
+land,22,Island,,0.01

@@ -1,0 +1,29 @@
+"sep=,"
+Card Type,Quantity,Card Name,Mana Cost,Min Price (LOW)
+creature,1,Elvish Mystic,{G},0.14
+creature,1,Llanowar Elves,{G},0.01
+creature,2,"Dwynen's Elite",{1}{G},0.01
+creature,1,Gnarlid Colony,{1}{G},0.01
+creature,2,Gnarlid Pack,{1}{G},0.01
+creature,1,Sakura-Tribe Elder,{1}{G},0.08
+creature,4,Three Tree Rootweaver,{1}{G},0.01
+creature,2,Beast-Kin Ranger,{2}{G},0.01
+creature,1,Fierce Empath,{2}{G},0.02
+creature,1,Fyndhorn Elder,{2}{G},0.01
+creature,1,"Dwynen, Gilt-Leaf Daen",{2}{G}{G},0.07
+creature,1,Fierce Witchstalker,{2}{G}{G},0.01
+creature,1,"Renata, Called to the Hunt",{2}{G}{G},0.01
+creature,1,Elfsworn Giant,{3}{G}{G},0.01
+creature,1,Quakestrider Ceratops,{3}{G}{G}{G},0.01
+creature,1,Terra Stomper,{3}{G}{G}{G},0.01
+creature,1,Nurturing Bristleback,{5}{G}{G},0.01
+creature,1,Thundering Spineback,{5}{G}{G},0.01
+creature,1,Titanoth Rex,{7}{G}{G},0.13
+instant,3,Giant Growth,{G},0.01
+instant,1,Snakeskin Veil,{G},0.01
+instant,1,Gift of Strength,{1}{G},0.01
+instant,1,Pounce,{1}{G},0.01
+sorcery,2,Bushwhack,{G},0.01
+sorcery,2,Rabid Bite,{1}{G},0.01
+sorcery,3,Throw from the Saddle,{1}{G},0.01
+land,22,Forest,,0.01
