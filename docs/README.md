@@ -1,12 +1,38 @@
 # Cloud Arcanum Docs
 
-This folder is organized by purpose so active work, reference material, and archived history are easier to scan.
+This folder is organized both by purpose and by product so active work, reference material, and AI navigation are easier to scan.
+
+## Product Entry Points
+
+- [Cloud Arcanum Docs Index](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/arcanum/DOCS_INDEX.md)
+- [Cloud Arena Docs Index](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/arena/DOCS_INDEX.md)
+
+If you are starting fresh:
+
+- use `docs/arcanum/` for MTG-style catalog, deckbuilding, and content work
+- use `docs/arena/` for combat, simulation, replay, and session work
 
 ## Folders
 
+### `arcanum/`
+
+Product-specific architecture and navigation docs for Cloud Arcanum.
+
+- `ARCHITECTURE.md`
+- `AI_NAVIGATION.md`
+- `DOCS_INDEX.md`
+
+### `arena/`
+
+Product-specific architecture and navigation docs for Cloud Arena.
+
+- `ARCHITECTURE.md`
+- `AI_NAVIGATION.md`
+- `DOCS_INDEX.md`
+
 ### `planning/`
 
-Core project direction and longer-range roadmap docs.
+Core project direction and longer-range roadmap docs. This folder still contains both Arcanum and Arena planning docs, but the product indexes above now point to the right subset.
 
 - `CLOUD_ARCANUM_ARENA_SEPARATION_BOUNDARY.md`
 - `CLOUD_ARCANUM_ARENA_SEPARATION_TODO.md`
@@ -62,6 +88,7 @@ Compressed history and retired planning context.
 ## Suggested Conventions
 
 - Put active project-wide plans in `planning/`.
+- Put product-specific "start here" docs in `arcanum/` or `arena/`.
 - Put feature or UI execution docs in `product/`.
 - Put API, performance, and systems design in `engineering/`.
 - Put editorial or worldbuilding references in `content/`.

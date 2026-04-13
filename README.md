@@ -1,8 +1,43 @@
-# Cloud Arcanum
+# Cloud Arcanum Monorepo
+
+This repo now contains two separate games with a shared monorepo boundary:
+
+- `Cloud Arcanum`: the MTG-focused card catalog, browsing, printing, and deckbuilding product
+- `Cloud Arena`: the combat, session, replay, and simulation product
+
+The repo is intentionally split so humans and AI tools can work from a smaller local slice of files.
+
+## Product Entry Points
+
+Docs:
+
+- [Cloud Arcanum Docs Index](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/arcanum/DOCS_INDEX.md)
+- [Cloud Arena Docs Index](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/arena/DOCS_INDEX.md)
+
+Core dev commands:
+
+- `npm run dev:arcanum`
+- `npm run dev:arena`
+- `npm run dev`
+
+Cloud Arcanum-specific commands:
+
+- `npm run dev:arcanum:api`
+- `npm run dev:arcanum:web`
+- `npm run arcanum:validate`
+
+Cloud Arena-specific commands:
+
+- `npm run dev:arena:api`
+- `npm run dev:arena:web`
+- `npm run arena:demo`
+- `npm run arena:simulate`
+
+## Cloud Arcanum
 
 Cloud Arcanum is a structured content system for custom MTG-style cards, decks, universes, and sets.
 
-The MVP is optimized for:
+Its MVP is optimized for:
 
 - file-based JSON content
 - stable ID relationships
@@ -13,9 +48,11 @@ The MVP is optimized for:
 
 Active planning and archived project history are tracked separately so the working TODOs stay focused.
 
-- Active TODOs stay in the repo root for quick access.
 - Long-lived reference and archive docs live in [`docs/`](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs).
 - The docs index lives in [docs/README.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/README.md).
+- Product-specific doc entry points live in:
+  - [docs/arcanum/DOCS_INDEX.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/arcanum/DOCS_INDEX.md)
+  - [docs/arena/DOCS_INDEX.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/arena/DOCS_INDEX.md)
 - Completed setup and planning work can be compressed into [PROJECT_HISTORY.md](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/archive/PROJECT_HISTORY.md).
 
 ## Setup
@@ -57,19 +94,31 @@ Validate all canonical content files:
 npm run validate
 ```
 
-Run the local API app:
+Run the Arcanum API app:
 
 ```bash
-npm run dev:api
+npm run dev:arcanum:api
 ```
 
-Run the local web app:
+Run the Arcanum web app:
 
 ```bash
-npm run dev:web
+npm run dev:arcanum:web
 ```
 
-Run both apps together:
+Run the Arcanum stack together:
+
+```bash
+npm run dev:arcanum
+```
+
+Run the Arena stack together:
+
+```bash
+npm run dev:arena
+```
+
+Run all local apps together:
 
 ```bash
 npm run dev
@@ -98,6 +147,8 @@ This means folder paths are for organization only, not ownership.
 apps/
   cloud-arcanum-api/
   cloud-arcanum-web/
+  cloud-arena-api/
+  cloud-arena-web/
 data/
   universes/
   sets/
@@ -106,19 +157,27 @@ data/
 images/
   cards/
 scripts/
+  dev-arcanum.ts
+  dev-arena.ts
 src/domain/
+src/cloud-arcanum/
+src/cloud-arena/
 tests/
+  cloud-arcanum/
+  cloud-arena/
 ```
 
 ## App Structure
 
-Cloud Arcanum is split into two apps so the filesystem-backed content logic stays separate from the browsing UI.
+The repo is split into two product app pairs so browsing/content work stays separate from combat/simulation work.
 
 - `apps/cloud-arcanum-api/` is the backend boundary. It owns data loading, normalization, validation integration, and HTTP responses.
 - `apps/cloud-arcanum-web/` is the frontend boundary. It owns routes, layout, filters, and presentation for the browsing experience.
-- `src/cloud-arcanum/` holds the shared API contract and route helpers that both apps use during the initial scaffolding phase.
-
-The local dev scripts above currently run lightweight placeholder servers so we can exercise the app split before the fuller API and React implementations land.
+- `apps/cloud-arena-api/` is the backend boundary for sessions, actions, and Arena gameplay APIs.
+- `apps/cloud-arena-web/` is the frontend boundary for battle and replay UI.
+- `src/cloud-arcanum/` holds Arcanum-owned product logic.
+- `src/cloud-arena/` holds Arena-owned product logic.
+- `src/domain/` is the intentionally small shared schema layer.
 
 ## Examples
 

@@ -70,10 +70,18 @@ Cloud Arcanum may later gain the ability to view Cloud Arena data, but that shou
 
 Shared code should stay intentionally small.
 
-The default rule is:
+The default rule for this repo is:
 
 - if code expresses canonical content structure, it can be shared
 - if code is product behavior, it should belong to one game
+
+Current default shared surface:
+
+- `src/domain/**`
+
+Notably, we are not creating `src/shared/**` yet.
+
+If a helper feels shared but is not obviously canonical-schema-level, prefer duplicating it or leaving it product-owned until there is a strong concrete need.
 
 ### Allowed Shared Modules
 
@@ -82,6 +90,8 @@ The following are acceptable shared candidates:
 - `src/domain/**` for canonical schemas and IDs
 - tiny general-purpose utilities with no product knowledge
 - presentation primitives that are fully domain-neutral
+
+Until we explicitly approve a broader shared layer, only `src/domain/**` should be treated as shared-by-default.
 
 ### Not Shared By Default
 
@@ -102,13 +112,11 @@ These rules should guide refactors and future code review.
 ### Cloud Arcanum May Import
 
 - `src/domain/**`
-- approved shared utilities
 - Arcanum-owned modules
 
 ### Cloud Arena May Import
 
 - `src/domain/**`
-- approved shared utilities
 - Arena-owned modules
 
 ### Cloud Arcanum Must Not Import
@@ -125,6 +133,14 @@ These rules should guide refactors and future code review.
 - Arcanum API composition layers
 
 If Arena needs canonical content, that dependency should be explicit and narrow.
+
+### Enforcement Intent
+
+These rules should be enforced in code where practical:
+
+- boundary tests should fail on direct `src/cloud-arcanum/** -> src/cloud-arena/**` imports
+- boundary tests should fail on direct `src/cloud-arena/** -> src/cloud-arcanum/**` imports
+- new shared utilities should require an explicit decision instead of silently appearing
 
 ## Data Ownership
 
