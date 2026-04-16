@@ -1,0 +1,31 @@
+{
+  "id": "card_0235",
+  "name": "Bushwhack",
+  "slug": "bushwhack",
+  "setId": "set_green",
+  "typeLine": "Sorcery",
+  "manaCost": "{G}",
+  "manaValue": 1,
+  "colors": ["G"],
+  "colorIdentity": ["G"],
+  "rarity": "common",
+  "oracleText": "Choose one -\nSearch your library for a basic land card, reveal it, put it into your hand, then shuffle.\nTarget creature you control fights target creature you don't control.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["land-ramp", "fight"],
+  "tags": ["starter-deck", "green", "sorcery"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Bushwhack for the Basics green deck.",
+  "createdAt": "2026-04-13T10:40:00-05:00",
+  "updatedAt": "2026-04-13T10:40:00-05:00",
+  "title": null
+}

@@ -1,0 +1,7 @@
+{
+  "id": "set_basics",
+  "universeId": "universe_basics",
+  "name": "Black Deck",
+  "code": "BLACK",
+  "description": "The black StarterDecks list, captured as the first set in the Basics universe."
+}

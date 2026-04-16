@@ -1,0 +1,31 @@
+{
+  "id": "card_0237",
+  "name": "Throw from the Saddle",
+  "slug": "throw_from_the_saddle",
+  "setId": "set_green",
+  "typeLine": "Sorcery",
+  "manaCost": "{1}{G}",
+  "manaValue": 2,
+  "colors": ["G"],
+  "colorIdentity": ["G"],
+  "rarity": "common",
+  "oracleText": "Target creature you control gets +1/+1 until end of turn. Put a +1/+1 counter on it instead if it's a Mount. Then it deals damage equal to its power to target creature you don't control.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["pump", "fight-adjacent", "counters"],
+  "tags": ["starter-deck", "green", "sorcery"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Throw from the Saddle for the Basics green deck.",
+  "createdAt": "2026-04-13T10:40:00-05:00",
+  "updatedAt": "2026-04-13T10:40:00-05:00",
+  "title": null
+}

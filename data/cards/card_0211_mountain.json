@@ -1,0 +1,39 @@
+{
+  "id": "card_0211",
+  "name": "Mountain",
+  "slug": "mountain",
+  "setId": "set_red",
+  "typeLine": "Basic Land - Mountain",
+  "manaCost": null,
+  "manaValue": 0,
+  "colors": [],
+  "colorIdentity": [
+    "R"
+  ],
+  "rarity": "common",
+  "oracleText": "{T}: Add {R}.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "mana-production"
+  ],
+  "tags": [
+    "starter-deck",
+    "red",
+    "land"
+  ],
+  "status": "draft",
+  "notes": "Imported from the real MTG basic land Mountain for the Basics red deck.",
+  "createdAt": "2026-04-13T10:20:00-05:00",
+  "updatedAt": "2026-04-13T10:20:00-05:00",
+  "title": null
+}

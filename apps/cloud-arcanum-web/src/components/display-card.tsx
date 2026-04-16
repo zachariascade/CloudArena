@@ -2,6 +2,7 @@ import type { ReactElement } from "react";
 import { Fragment } from "react";
 
 import { formatCardDisplayName } from "../../../../src/cloud-arcanum/shared-utils.js";
+import { PrintableCardFace } from "./printable-card-face.js";
 import mana1Symbol from "../assets/mtg-symbols/mana/1.svg";
 import mana2Symbol from "../assets/mtg-symbols/mana/2.svg";
 import mana3Symbol from "../assets/mtg-symbols/mana/3.svg";
@@ -190,7 +191,8 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
     ? model.stats.filter((stat) => stat !== blockStat)
     : model.stats;
   const usesSideCombatPanel = model.variant === "player" || model.variant === "enemy";
-  const cardFace = (
+  const mtgCardFace = <PrintableCardFace model={model} />;
+  const arenaCardFace = (
     <article className="card-face">
       <header className="card-face-header">
         <div className="card-face-title-wrap">
@@ -242,6 +244,7 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
       </footer>
     </article>
   );
+  const cardFace = model.variant === "mtg" ? mtgCardFace : arenaCardFace;
 
   const isCardButton = model.actions.length === 1 && model.variant === "mtg";
   const singleAction = isCardButton ? model.actions[0] : null;

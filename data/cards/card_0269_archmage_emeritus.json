@@ -1,0 +1,31 @@
+{
+  "id": "card_0269",
+  "name": "Archmage Emeritus",
+  "slug": "archmage_emeritus",
+  "setId": "set_blue",
+  "typeLine": "Creature - Human Wizard",
+  "manaCost": "{2}{U}{U}",
+  "manaValue": 4,
+  "colors": ["U"],
+  "colorIdentity": ["U"],
+  "rarity": "rare",
+  "oracleText": "Magecraft - Whenever you cast or copy an instant or sorcery spell, draw a card.",
+  "flavorText": null,
+  "power": "2",
+  "toughness": "2",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["magecraft", "card-draw"],
+  "tags": ["starter-deck", "blue", "wizard"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Archmage Emeritus for the Basics blue deck.",
+  "createdAt": "2026-04-13T11:25:00-05:00",
+  "updatedAt": "2026-04-13T11:25:00-05:00",
+  "title": null
+}

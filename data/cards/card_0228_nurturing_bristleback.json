@@ -1,0 +1,31 @@
+{
+  "id": "card_0228",
+  "name": "Nurturing Bristleback",
+  "slug": "nurturing_bristleback",
+  "setId": "set_green",
+  "typeLine": "Creature - Beast",
+  "manaCost": "{5}{G}{G}",
+  "manaValue": 7,
+  "colors": ["G"],
+  "colorIdentity": ["G"],
+  "rarity": "common",
+  "oracleText": null,
+  "flavorText": null,
+  "power": "4",
+  "toughness": "4",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["big-creature"],
+  "tags": ["starter-deck", "green", "beast"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Nurturing Bristleback for the Basics green deck.",
+  "createdAt": "2026-04-13T10:40:00-05:00",
+  "updatedAt": "2026-04-13T10:40:00-05:00",
+  "title": null
+}

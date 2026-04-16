@@ -890,32 +890,43 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cards-gallery {
+        --display-card-width: clamp(14.25rem, 16vw, 17rem);
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(var(--display-card-width), var(--display-card-width)));
-        gap: 1rem;
+        gap: 0.9rem;
         align-items: start;
         justify-content: center;
         justify-items: center;
+        padding: clamp(0.6rem, 1vw, 0.95rem);
+        border: 1px solid rgba(95, 84, 76, 0.11);
+        border-radius: 1.35rem;
+        background:
+          radial-gradient(circle at top, rgba(251, 191, 36, 0.12), transparent 34%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.56), rgba(244, 232, 216, 0.72));
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.7),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.32),
+          0 0.9rem 1.8rem rgba(85, 61, 25, 0.08);
       }
 
       @media (min-width: 640px) {
         .cards-gallery {
           grid-template-columns: repeat(auto-fit, minmax(var(--display-card-width), var(--display-card-width)));
-          gap: 1.1rem;
+          gap: 0.95rem;
         }
       }
 
       @media (min-width: 900px) {
         .cards-gallery {
           grid-template-columns: repeat(auto-fit, minmax(var(--display-card-width), var(--display-card-width)));
-          gap: 1.25rem;
+          gap: 1rem;
         }
       }
 
       @media (min-width: 1240px) {
         .cards-gallery {
           grid-template-columns: repeat(auto-fit, minmax(var(--display-card-width), var(--display-card-width)));
-          gap: 1.35rem;
+          gap: 1.05rem;
         }
       }
 
@@ -923,6 +934,23 @@ export function renderCloudArcanumWebHtml(
         .cards-gallery {
           grid-template-columns: repeat(auto-fit, minmax(var(--display-card-width), var(--display-card-width)));
         }
+      }
+
+      .cards-gallery-printlike .card-face-link:hover .card-face {
+        transform: translateY(-1px);
+        box-shadow:
+          0 12px 22px color-mix(in srgb, var(--card-frame-shadow) 78%, black),
+          inset 0 0 0 3px rgba(14, 11, 9, 0.93),
+          inset 0 0 0 2px var(--card-highlight),
+          inset 0 0 0 4px rgba(255, 255, 255, 0.17);
+      }
+
+      .cards-gallery-printlike .card-face-tile {
+        --card-face-padding: clamp(0.28rem, 1.5cqw, 0.45rem);
+        --card-title-size: clamp(0.62rem, 4.4cqw, 1.08rem);
+        --card-typeline-size: clamp(0.55rem, 3cqw, 0.72rem);
+        --card-rules-size: clamp(0.56rem, 3.1cqw, 0.74rem);
+        --card-footer-size: clamp(0.42rem, 2.1cqw, 0.52rem);
       }
 
       .card-face-tile {
@@ -967,6 +995,84 @@ export function renderCloudArcanumWebHtml(
         outline: 3px solid rgba(154, 52, 18, 0.35);
         outline-offset: 6px;
         border-radius: 26px;
+      }
+
+      .print-sheet-card {
+        display: block;
+        position: relative;
+        width: var(--print-card-box-width);
+        height: var(--print-card-box-height);
+        container-type: inline-size;
+        overflow: hidden;
+      }
+
+      .print-sheet-page-number {
+        position: absolute;
+        top: 0.08in;
+        right: 0.08in;
+        z-index: 3;
+        padding: 0.05in 0.08in;
+        border-radius: 999px;
+        border: 1px solid rgba(30, 41, 59, 0.18);
+        background: rgba(255, 255, 255, 0.78);
+        color: rgba(30, 41, 59, 0.8);
+        font-size: 0.075in;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      .printable-card-face {
+        width: 100%;
+        height: 100%;
+      }
+
+      .printable-card-face .card-face {
+        width: 100%;
+        height: 100%;
+        container-type: inline-size;
+      }
+
+      .print-sheet-crop-marks {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 2;
+      }
+
+      .print-sheet-crop-mark {
+        position: absolute;
+        display: block;
+        width: 0.1in;
+        height: 0.1in;
+        border-color: rgba(30, 41, 59, 0.7);
+      }
+
+      .print-sheet-crop-mark-top-left {
+        top: var(--print-card-bleed);
+        left: var(--print-card-bleed);
+        border-top: 1px solid;
+        border-left: 1px solid;
+      }
+
+      .print-sheet-crop-mark-top-right {
+        top: var(--print-card-bleed);
+        right: var(--print-card-bleed);
+        border-top: 1px solid;
+        border-right: 1px solid;
+      }
+
+      .print-sheet-crop-mark-bottom-left {
+        bottom: var(--print-card-bleed);
+        left: var(--print-card-bleed);
+        border-bottom: 1px solid;
+        border-left: 1px solid;
+      }
+
+      .print-sheet-crop-mark-bottom-right {
+        right: var(--print-card-bleed);
+        bottom: var(--print-card-bleed);
+        border-right: 1px solid;
+        border-bottom: 1px solid;
       }
 
       .card-face {
@@ -2217,6 +2323,140 @@ export function renderCloudArcanumWebHtml(
         50% {
           transform: scale(1);
           opacity: 1;
+        }
+      }
+
+      @media print {
+        :root {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        html,
+        body {
+          background: #fff;
+          color: #000;
+        }
+
+        body {
+          margin: 0;
+        }
+
+        .app-shell {
+          width: auto;
+          margin: 0;
+          padding: 0;
+        }
+
+        .app-header,
+        .print-controls,
+        .print-sheet-summary {
+          display: none !important;
+        }
+
+        .panel {
+          border: 0;
+          border-radius: 0;
+          background: transparent;
+          box-shadow: none;
+          backdrop-filter: none;
+        }
+
+        .print-sheet-route {
+          margin: 0;
+          padding: 0;
+        }
+
+        .print-sheet-preview {
+          display: grid;
+          gap: 0;
+        }
+
+        .print-sheet-pages {
+          display: grid;
+          gap: 0;
+        }
+
+        .print-sheet-page {
+          position: relative;
+          break-after: page;
+          break-inside: avoid;
+          page-break-after: always;
+          page-break-inside: avoid;
+          margin: 0;
+          padding: 0;
+          background: transparent;
+          box-shadow: none;
+        }
+
+        .print-sheet-page:last-child {
+          break-after: auto;
+          page-break-after: auto;
+        }
+
+        .print-sheet-page-number {
+          top: 0.06in;
+          right: 0.06in;
+        }
+
+        .print-sheet-card {
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+
+        .printable-card-face .card-face {
+          aspect-ratio: auto;
+          box-shadow: none;
+          --card-face-padding: 0.1in;
+          --card-title-size: 0.105in;
+          --card-typeline-size: 0.075in;
+          --card-rules-size: 0.07in;
+          --card-footer-size: 0.05in;
+        }
+
+        .printable-card-face .card-face-art {
+          margin-top: 0.075in;
+          margin-bottom: 0.075in;
+        }
+
+        .printable-card-face .card-face-art-image,
+        .printable-card-face .card-face-art-fallback {
+          min-height: 1.78in;
+        }
+
+        .print-sheet-preview.show-crop-marks .printable-card-face {
+          position: relative;
+        }
+
+        .print-sheet-preview.show-crop-marks .printable-card-face::before {
+          content: "";
+          position: absolute;
+          inset: -0.08in;
+          border: 1px dashed rgba(30, 41, 59, 0.5);
+          pointer-events: none;
+        }
+
+        .print-sheet-preview.show-crop-marks .printable-card-face::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          border: 1px solid rgba(30, 41, 59, 0.16);
+          pointer-events: none;
+        }
+
+        .print-sheet-preview.show-crop-marks .print-sheet-crop-marks {
+          display: block;
+        }
+
+        .print-sheet-preview:not(.show-crop-marks) .print-sheet-crop-marks {
+          display: none;
+        }
+
+        .print-sheet-preview .card-face-link,
+        .print-sheet-preview .card-face-preview-button,
+        .print-sheet-preview button,
+        .print-sheet-preview select {
+          display: none !important;
         }
       }
     </style>

@@ -1,0 +1,31 @@
+{
+  "id": "card_0281",
+  "name": "Run Away Together",
+  "slug": "run_away_together",
+  "setId": "set_blue",
+  "typeLine": "Instant",
+  "manaCost": "{1}{U}",
+  "manaValue": 2,
+  "colors": ["U"],
+  "colorIdentity": ["U"],
+  "rarity": "common",
+  "oracleText": "Choose two target creatures controlled by different players. Return those creatures to their owners' hands.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["bounce"],
+  "tags": ["starter-deck", "blue", "instant"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Run Away Together for the Basics blue deck.",
+  "createdAt": "2026-04-13T11:25:00-05:00",
+  "updatedAt": "2026-04-13T11:25:00-05:00",
+  "title": null
+}

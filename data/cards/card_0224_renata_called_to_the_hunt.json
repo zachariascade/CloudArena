@@ -1,0 +1,31 @@
+{
+  "id": "card_0224",
+  "name": "Renata, Called to the Hunt",
+  "slug": "renata_called_to_the_hunt",
+  "setId": "set_green",
+  "typeLine": "Legendary Enchantment Creature - Demigod",
+  "manaCost": "{2}{G}{G}",
+  "manaValue": 4,
+  "colors": ["G"],
+  "colorIdentity": ["G"],
+  "rarity": "uncommon",
+  "oracleText": "Renata's power is equal to your devotion to green.\nEach other creature you control enters with an additional +1/+1 counter on it.",
+  "flavorText": null,
+  "power": "*",
+  "toughness": "3",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["devotion", "counters"],
+  "tags": ["starter-deck", "green", "legendary"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Renata, Called to the Hunt for the Basics green deck.",
+  "createdAt": "2026-04-13T10:40:00-05:00",
+  "updatedAt": "2026-04-13T10:40:00-05:00",
+  "title": null
+}

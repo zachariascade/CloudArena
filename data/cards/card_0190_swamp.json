@@ -1,0 +1,39 @@
+{
+  "id": "card_0190",
+  "name": "Swamp",
+  "slug": "swamp",
+  "setId": "set_basics",
+  "typeLine": "Basic Land - Swamp",
+  "manaCost": null,
+  "manaValue": 0,
+  "colors": [],
+  "colorIdentity": [
+    "B"
+  ],
+  "rarity": "common",
+  "oracleText": "{T}: Add {B}.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "mana-production"
+  ],
+  "tags": [
+    "starter-deck",
+    "black",
+    "land"
+  ],
+  "status": "draft",
+  "notes": "Imported from the real MTG basic land Swamp for the Basics black deck.",
+  "createdAt": "2026-04-13T09:40:00-05:00",
+  "updatedAt": "2026-04-13T09:40:00-05:00",
+  "title": null
+}

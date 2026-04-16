@@ -1,0 +1,4 @@
+id,name,name,type_line,mana_cost,mana_value,colors,color_identity,rarity,status,oracle_text,flavor_text,power,toughness,artist,image_path
+card_0105,Baptized in the Jordan,baptized_in_the_jordan,Sorcery,{W},1,W,W,uncommon,draft,Put a +1/+1 counter on target creature you control. It gains hexproof until end of turn. You gain 1 life.,"""And Jesus was baptized of John in Jordan."" — Mark 1:9",,,James Tissot,baptized_in_the_jordan.jpg
+card_0100,"Centurion of Capernaum, Man Under Authority",centurion_of_capernaum_man_under_authority,Legendary Creature - Human Soldier,{1}{W}{W},3,W,W,rare,draft,"Vigilance
+When Centurion of Capernaum enters the battlefield, tap target creature an opponent controls. It doesn't untap during its controller's next untap step.","""For I also am a man set under authority."" — Luke 7:8",2,3,Jacopo Tintoretto,jesus-et-le-centurion.jpg

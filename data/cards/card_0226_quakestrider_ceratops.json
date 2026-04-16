@@ -1,0 +1,31 @@
+{
+  "id": "card_0226",
+  "name": "Quakestrider Ceratops",
+  "slug": "quakestrider_ceratops",
+  "setId": "set_green",
+  "typeLine": "Creature - Dinosaur",
+  "manaCost": "{3}{G}{G}{G}",
+  "manaValue": 6,
+  "colors": ["G"],
+  "colorIdentity": ["G"],
+  "rarity": "uncommon",
+  "oracleText": null,
+  "flavorText": null,
+  "power": "12",
+  "toughness": "8",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["big-creature", "trample"],
+  "tags": ["starter-deck", "green", "dinosaur"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Quakestrider Ceratops for the Basics green deck.",
+  "createdAt": "2026-04-13T10:40:00-05:00",
+  "updatedAt": "2026-04-13T10:40:00-05:00",
+  "title": null
+}

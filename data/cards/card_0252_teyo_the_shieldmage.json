@@ -1,0 +1,32 @@
+{
+  "id": "card_0252",
+  "name": "Teyo, the Shieldmage",
+  "slug": "teyo_the_shieldmage",
+  "setId": "set_white",
+  "typeLine": "Legendary Planeswalker - Teyo",
+  "manaCost": "{2}{W}",
+  "manaValue": 3,
+  "colors": ["W"],
+  "colorIdentity": ["W"],
+  "rarity": "uncommon",
+  "oracleText": "You have hexproof.\n[-2]: Create a 0/3 white Wall creature token with defender.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": "5",
+  "defense": null,
+  "artist": "Magali Villeneuve",
+  "image": {
+    "type": "placeholder",
+    "path": null,
+    "artist": "Magali Villeneuve"
+  },
+  "imagePrompt": null,
+  "mechanics": ["hexproof", "tokens"],
+  "tags": ["starter-deck", "white", "planeswalker"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Teyo, the Shieldmage for the Basics white deck.",
+  "createdAt": "2026-04-13T11:00:00-05:00",
+  "updatedAt": "2026-04-13T11:00:00-05:00",
+  "title": null
+}

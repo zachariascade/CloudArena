@@ -1,0 +1,41 @@
+{
+  "id": "card_0199",
+  "name": "Rummaging Goblin",
+  "slug": "rummaging_goblin",
+  "setId": "set_red",
+  "typeLine": "Creature - Goblin Rogue",
+  "manaCost": "{2}{R}",
+  "manaValue": 3,
+  "colors": [
+    "R"
+  ],
+  "colorIdentity": [
+    "R"
+  ],
+  "rarity": "common",
+  "oracleText": "{T}, Discard a card: Draw a card.",
+  "flavorText": null,
+  "power": "1",
+  "toughness": "1",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "loot"
+  ],
+  "tags": [
+    "starter-deck",
+    "red",
+    "goblin"
+  ],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Rummaging Goblin for the Basics red deck.",
+  "createdAt": "2026-04-13T10:20:00-05:00",
+  "updatedAt": "2026-04-13T10:20:00-05:00",
+  "title": null
+}

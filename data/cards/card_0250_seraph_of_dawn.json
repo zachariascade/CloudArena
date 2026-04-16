@@ -1,0 +1,32 @@
+{
+  "id": "card_0250",
+  "name": "Seraph of Dawn",
+  "slug": "seraph_of_dawn",
+  "setId": "set_white",
+  "typeLine": "Creature - Angel",
+  "manaCost": "{2}{W}{W}",
+  "manaValue": 4,
+  "colors": ["W"],
+  "colorIdentity": ["W"],
+  "rarity": "common",
+  "oracleText": "Flying, lifelink",
+  "flavorText": "She parts the clouds so sunlight can reach even the darkest lairs and duskiest tombs.",
+  "power": "2",
+  "toughness": "4",
+  "loyalty": null,
+  "defense": null,
+  "artist": "Todd Lockwood",
+  "image": {
+    "type": "placeholder",
+    "path": null,
+    "artist": "Todd Lockwood"
+  },
+  "imagePrompt": null,
+  "mechanics": ["flying", "lifelink"],
+  "tags": ["starter-deck", "white", "angel"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Seraph of Dawn for the Basics white deck.",
+  "createdAt": "2026-04-13T11:00:00-05:00",
+  "updatedAt": "2026-04-13T11:00:00-05:00",
+  "title": null
+}

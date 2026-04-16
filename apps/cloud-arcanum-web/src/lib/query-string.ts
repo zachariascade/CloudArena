@@ -20,6 +20,18 @@ type PrimitiveQueryValue = boolean | number | string;
 type QueryValue = PrimitiveQueryValue | PrimitiveQueryValue[] | undefined;
 type QueryShape = Record<string, QueryValue>;
 
+export type PrintablePaperSize = "letter" | "a4";
+export type PrintableOrientation = "auto" | "portrait" | "landscape";
+export type PrintableFitMode = "tight" | "safe" | "calibration";
+
+export type PrintableCardsPageQuery = CardListQuery & {
+  cardsPerPage?: number;
+  fit?: PrintableFitMode;
+  orientation?: PrintableOrientation;
+  paperSize?: PrintablePaperSize;
+  showCropMarks?: boolean;
+};
+
 function appendQueryValue(searchParams: URLSearchParams, key: string, value: QueryValue): void {
   if (value === undefined) {
     return;
@@ -58,6 +70,11 @@ function parseNumber(searchParams: URLSearchParams, key: string): number | undef
 
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : undefined;
+}
+
+function parsePositiveInteger(searchParams: URLSearchParams, key: string): number | undefined {
+  const parsed = parseNumber(searchParams, key);
+  return parsed && Number.isInteger(parsed) && parsed > 0 ? parsed : undefined;
 }
 
 function parseBoolean(searchParams: URLSearchParams, key: string): boolean | undefined {
@@ -162,5 +179,25 @@ export function parseUniverseListQuery(searchParams: URLSearchParams): UniverseL
     pageSize: parseNumber(searchParams, "pageSize"),
     q: parseString(searchParams, "q"),
     sort: parseString(searchParams, "sort") as UniverseSortKey | undefined,
+  };
+}
+
+export function buildPrintableCardsPageQueryString(query: PrintableCardsPageQuery): string {
+  return buildQueryString(query);
+}
+
+export function buildPrintableCardsPagePath(query: PrintableCardsPageQuery): string {
+  const queryString = buildPrintableCardsPageQueryString(query);
+  return queryString.length > 0 ? `/cards/print?${queryString}` : "/cards/print";
+}
+
+export function parsePrintableCardsPageQuery(searchParams: URLSearchParams): PrintableCardsPageQuery {
+  return {
+    ...parseCardListQuery(searchParams),
+    cardsPerPage: parsePositiveInteger(searchParams, "cardsPerPage"),
+    fit: parseString(searchParams, "fit") as PrintableFitMode | undefined,
+    orientation: parseString(searchParams, "orientation") as PrintableOrientation | undefined,
+    paperSize: parseString(searchParams, "paperSize") as PrintablePaperSize | undefined,
+    showCropMarks: parseBoolean(searchParams, "showCropMarks"),
   };
 }

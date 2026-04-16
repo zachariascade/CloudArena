@@ -1,0 +1,31 @@
+{
+  "id": "card_0277",
+  "name": "Unsummon",
+  "slug": "unsummon",
+  "setId": "set_blue",
+  "typeLine": "Instant",
+  "manaCost": "{U}",
+  "manaValue": 1,
+  "colors": ["U"],
+  "colorIdentity": ["U"],
+  "rarity": "common",
+  "oracleText": "Return target creature to its owner's hand.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["bounce"],
+  "tags": ["starter-deck", "blue", "instant"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Unsummon for the Basics blue deck.",
+  "createdAt": "2026-04-13T11:25:00-05:00",
+  "updatedAt": "2026-04-13T11:25:00-05:00",
+  "title": null
+}

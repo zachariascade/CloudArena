@@ -1,0 +1,41 @@
+{
+  "id": "card_0177",
+  "name": "Dread Warlock",
+  "slug": "dread_warlock",
+  "setId": "set_basics",
+  "typeLine": "Creature - Human Wizard Warlock",
+  "manaCost": "{1}{B}{B}",
+  "manaValue": 3,
+  "colors": [
+    "B"
+  ],
+  "colorIdentity": [
+    "B"
+  ],
+  "rarity": "common",
+  "oracleText": "This creature can't be blocked except by black creatures.",
+  "flavorText": "\"I don't know who to pity more: those who flee from my presence or the damned who can withstand it.\"",
+  "power": "2",
+  "toughness": "2",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "evasion"
+  ],
+  "tags": [
+    "starter-deck",
+    "black",
+    "warlock"
+  ],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Dread Warlock for the Basics black deck.",
+  "createdAt": "2026-04-13T09:40:00-05:00",
+  "updatedAt": "2026-04-13T09:40:00-05:00",
+  "title": null
+}

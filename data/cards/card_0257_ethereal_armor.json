@@ -1,0 +1,32 @@
+{
+  "id": "card_0257",
+  "name": "Ethereal Armor",
+  "slug": "ethereal_armor",
+  "setId": "set_white",
+  "typeLine": "Enchantment - Aura",
+  "manaCost": "{W}",
+  "manaValue": 1,
+  "colors": ["W"],
+  "colorIdentity": ["W"],
+  "rarity": "common",
+  "oracleText": "Enchant creature\nEnchanted creature gets +1/+1 for each enchantment you control and has first strike.",
+  "flavorText": "Metal is scarce, smiths are pricey, and plate mail is heavy.",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": "Daarken",
+  "image": {
+    "type": "placeholder",
+    "path": null,
+    "artist": "Daarken"
+  },
+  "imagePrompt": null,
+  "mechanics": ["auras", "anthem", "first-strike"],
+  "tags": ["starter-deck", "white", "aura"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Ethereal Armor for the Basics white deck.",
+  "createdAt": "2026-04-13T11:00:00-05:00",
+  "updatedAt": "2026-04-13T11:00:00-05:00",
+  "title": null
+}

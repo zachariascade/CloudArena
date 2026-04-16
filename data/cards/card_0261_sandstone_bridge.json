@@ -1,0 +1,32 @@
+{
+  "id": "card_0261",
+  "name": "Sandstone Bridge",
+  "slug": "sandstone_bridge",
+  "setId": "set_white",
+  "typeLine": "Land",
+  "manaCost": null,
+  "manaValue": 0,
+  "colors": [],
+  "colorIdentity": ["W"],
+  "rarity": "common",
+  "oracleText": "This land enters tapped.\nWhen this land enters, target creature gets +1/+1 and gains vigilance until end of turn.\n{T}: Add {W}.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": "Cliff Childs",
+  "image": {
+    "type": "placeholder",
+    "path": null,
+    "artist": "Cliff Childs"
+  },
+  "imagePrompt": null,
+  "mechanics": ["mana-fixing", "combat-pump", "vigilance"],
+  "tags": ["starter-deck", "white", "land"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Sandstone Bridge for the Basics white deck.",
+  "createdAt": "2026-04-13T11:00:00-05:00",
+  "updatedAt": "2026-04-13T11:00:00-05:00",
+  "title": null
+}

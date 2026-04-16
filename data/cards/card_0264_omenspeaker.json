@@ -1,0 +1,31 @@
+{
+  "id": "card_0264",
+  "name": "Omenspeaker",
+  "slug": "omenspeaker",
+  "setId": "set_blue",
+  "typeLine": "Creature - Human Wizard",
+  "manaCost": "{1}{U}",
+  "manaValue": 2,
+  "colors": ["U"],
+  "colorIdentity": ["U"],
+  "rarity": "common",
+  "oracleText": "When this creature enters, scry 2.",
+  "flavorText": null,
+  "power": "1",
+  "toughness": "3",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["scry"],
+  "tags": ["starter-deck", "blue", "wizard"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Omenspeaker for the Basics blue deck.",
+  "createdAt": "2026-04-13T11:25:00-05:00",
+  "updatedAt": "2026-04-13T11:25:00-05:00",
+  "title": null
+}

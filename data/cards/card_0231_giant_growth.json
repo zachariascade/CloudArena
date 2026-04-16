@@ -1,0 +1,31 @@
+{
+  "id": "card_0231",
+  "name": "Giant Growth",
+  "slug": "giant_growth",
+  "setId": "set_green",
+  "typeLine": "Instant",
+  "manaCost": "{G}",
+  "manaValue": 1,
+  "colors": ["G"],
+  "colorIdentity": ["G"],
+  "rarity": "common",
+  "oracleText": "Target creature gets +3/+3 until end of turn.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["pump"],
+  "tags": ["starter-deck", "green", "instant"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Giant Growth for the Basics green deck.",
+  "createdAt": "2026-04-13T10:40:00-05:00",
+  "updatedAt": "2026-04-13T10:40:00-05:00",
+  "title": null
+}

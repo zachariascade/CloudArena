@@ -1,0 +1,42 @@
+# Firebend STD Starter Deck Reference
+
+Total cards: 60
+
+- 1x Mountain | Basic Land — Mountain |  | ({T}: Add {R}.)
+- 1x Swamp | Basic Land — Swamp |  | ({T}: Add {B}.)
+- 1x Swamp | Basic Land — Swamp |  | ({T}: Add {B}.)
+- 2x Mountain | Basic Land — Mountain |  | ({T}: Add {R}.)
+- 1x Mountain | Basic Land — Mountain |  | ({T}: Add {R}.)
+- 2x Swamp | Basic Land — Swamp |  | ({T}: Add {B}.)
+- 3x Swamp | Basic Land — Swamp |  | ({T}: Add {B}.)
+- 3x Mountain | Basic Land — Mountain |  | ({T}: Add {R}.)
+- 4x Mountain | Basic Land — Mountain |  | ({T}: Add {R}.)
+- 2x Azula, On the Hunt | Legendary Creature — Human Noble | {3}{B} | Firebending 2 (Whenever this creature attacks, add {R}{R}. This mana lasts until end of combat.) / Whenever Azula attacks, you lose 1 life and create a Clue token. (It's an artifact with "{2}, Sacrifice this token: Draw a card.")
+- 1x Fire Nation Engineer | Creature — Human Artificer | {2}{B} | Raid — At the beginning of your end step, if you attacked this turn, put a +1/+1 counter on another target creature or Vehicle you control.
+- 2x Lo and Li, Twin Tutors | Legendary Creature — Human Advisor | {4}{B} | When Lo and Li enter, search your library for a Lesson or Noble card, reveal it, put it into your hand, then shuffle. / Noble creatures you control and Lesson spells you control have lifelink.
+- 2x Cunning Maneuver | Instant | {1}{R} | Target creature gets +3/+1 until end of turn. / Create a Clue token. (It's an artifact with "{2}, Sacrifice this token: Draw a card.")
+- 1x Fated Firepower | Enchantment | {X}{R}{R}{R} | Flash / This enchantment enters with X fire counters on it. / If a source you control would deal damage to an opponent or a permanent an opponent controls, it deals that much damage plus an amount of damage equal to the number of fire counters on this enchantment instead.
+- 1x Fire Nation Attacks | Instant | {4}{R} | Create two 2/2 red Soldier creature tokens with firebending 1. (Whenever a creature with firebending 1 attacks, add {R}. This mana lasts until end of combat.) / Flashback {8}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)
+- 2x Fire Nation Cadets | Creature — Human Soldier | {R} | This creature has firebending 2 as long as there's a Lesson card in your graveyard. (Whenever this creature attacks, add {R}{R}. This mana lasts until end of combat.) / {2}: This creature gets +1/+0 until end of turn.
+- 3x Fire Sages | Creature — Human Cleric | {1}{R} | Firebending 1 (Whenever this creature attacks, add {R}. This mana lasts until end of combat.) / {1}{R}{R}: Put a +1/+1 counter on this creature.
+- 2x Firebender Ascension | Enchantment | {1}{R} | When this enchantment enters, create a 2/2 red Soldier creature token with firebending 1. / Whenever a creature you control attacking causes a triggered ability of that creature to trigger, put a quest counter on this enchantment. Then if it has four or more quest counters on it, you may copy that ability. You may choose new targets for the copy.
+- 2x Firebending Lesson | Instant — Lesson | {R} | Kicker {4} (You may pay an additional {4} as you cast this spell.) / Firebending Lesson deals 2 damage to target creature. If this spell was kicked, it deals 5 damage to that creature instead.
+- 1x The Last Agni Kai | Instant | {1}{R} | Target creature you control fights target creature an opponent controls. If the creature the opponent controls is dealt excess damage this way, add that much {R}. / Until end of turn, you don't lose unspent red mana as steps and phases end.
+- 1x The Legend of Roku // Avatar Roku | Enchantment — Saga // Legendary Creature — Avatar | {2}{R}{R} | (As this Saga enters and after your draw step, add a lore counter.) / I — Exile the top three cards of your library. Until the end of your next turn, you may play those cards. / II — Add one mana of any color. / III — Exile this Saga, then return it to the battlefield transformed under your control. // Firebending 4 (Whenever this creature attacks, add {R}{R}{R}{R}. This mana lasts until end of combat.) / {8}: Create a 4/4 red Dragon creature token with flying and firebending 4.
+- 3x Lightning Strike | Instant | {1}{R} | Lightning Strike deals 3 damage to any target.
+- 2x Mai, Jaded Edge | Legendary Creature — Human Noble | {1}{R} | Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.) / Exhaust — {3}: Put a double strike counter on Mai. (Activate each exhaust ability only once.)
+- 1x Ran and Shaw | Legendary Creature — Dragon | {3}{R}{R} | Flying, firebending 2 / When Ran and Shaw enter, if you cast them and there are three or more Dragon and/or Lesson cards in your graveyard, create a token that's a copy of Ran and Shaw, except it's not legendary. / {3}{R}: Dragons you control get +2/+0 until end of turn.
+- 1x Redirect Lightning | Instant — Lesson | {R} | As an additional cost to cast this spell, pay 5 life or pay {2}. / Change the target of target spell or ability with a single target.
+- 1x Sozin's Comet | Sorcery | {3}{R}{R} | Each creature you control gains firebending 5 until end of turn. (Whenever it attacks, add {R}{R}{R}{R}{R}. This mana lasts until end of combat.) / Foretell {2}{R} (During your turn, you may pay {2} and exile this card from your hand face down. Cast it on a later turn for its foretell cost.)
+- 1x Twin Blades | Artifact — Equipment | {2}{R} | Flash / When this Equipment enters, attach it to target creature you control. That creature gains double strike until end of turn. / Equipped creature gets +1/+1. / Equip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)
+- 1x Yuyan Archers | Creature — Human Archer | {1}{R} | Reach / When this creature enters, you may discard a card. If you do, draw a card.
+- 2x Zuko, Exiled Prince | Legendary Creature — Human Noble | {3}{R} | Firebending 3 (Whenever this creature attacks, add {R}{R}{R}. This mana lasts until end of combat.) / {3}: Exile the top card of your library. You may play that card this turn.
+- 2x Cruel Administrator | Creature — Human Soldier | {3}{B}{R} | Raid — This creature enters with a +1/+1 counter on it if you attacked this turn. / Whenever this creature attacks, create a 2/2 red Soldier creature token with firebending 1. (Whenever it attacks, add {R}. This mana lasts until end of combat.)
+- 1x Fire Lord Azula | Legendary Creature — Human Noble | {1}{U}{B}{R} | Firebending 2 (Whenever this creature attacks, add {R}{R}. This mana lasts until end of combat.) / Whenever you cast a spell while Fire Lord Azula is attacking, copy that spell. You may choose new targets for the copy. (A copy of a permanent spell becomes a token.)
+- 1x Ozai, the Phoenix King | Legendary Creature — Human Noble | {2}{B}{B}{R}{R} | Trample, firebending 4, haste / If you would lose unspent mana, that mana becomes red instead. / Ozai has flying and indestructible as long as you have six or more unspent mana.
+- 1x Barrels of Blasting Jelly | Artifact | {1} | {1}: Add one mana of any color. Activate only once each turn. / {5}, {T}, Sacrifice this artifact: It deals 5 damage to target creature.
+- 1x Airship Engine Room | Land |  | This land enters tapped. / {T}: Add {U} or {R}. / {4}, {T}, Sacrifice this land: Draw a card.
+- 1x Boiling Rock Prison | Land |  | This land enters tapped. / {T}: Add {B} or {R}. / {4}, {T}, Sacrifice this land: Draw a card.
+- 1x Fire Nation Palace | Land |  | This land enters tapped unless you control a basic land. / {T}: Add {R}. / {1}{R}, {T}: Target creature you control gains firebending 4 until end of turn. (Whenever it attacks, add {R}{R}{R}{R}. This mana lasts until end of combat.)
+- 1x Serpent's Pass | Land |  | This land enters tapped. / {T}: Add {U} or {B}. / {4}, {T}, Sacrifice this land: Draw a card.
+- 1x The Fire Nation Drill | Legendary Artifact — Vehicle | {2}{B}{B} | Trample / When The Fire Nation Drill enters, you may tap it. When you do, destroy target creature with power 4 or less. / {1}: Permanents your opponents control lose hexproof and indestructible until end of turn. / Crew 2

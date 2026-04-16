@@ -1,0 +1,42 @@
+{
+  "id": "card_0203",
+  "name": "Hound of Griselbrand",
+  "slug": "hound_of_griselbrand",
+  "setId": "set_red",
+  "typeLine": "Creature - Elemental Dog",
+  "manaCost": "{2}{R}{R}",
+  "manaValue": 4,
+  "colors": [
+    "R"
+  ],
+  "colorIdentity": [
+    "R"
+  ],
+  "rarity": "rare",
+  "oracleText": "Double strike\nUndying",
+  "flavorText": null,
+  "power": "2",
+  "toughness": "2",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "double-strike",
+    "undying"
+  ],
+  "tags": [
+    "starter-deck",
+    "red",
+    "hound"
+  ],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Hound of Griselbrand for the Basics red deck.",
+  "createdAt": "2026-04-13T10:20:00-05:00",
+  "updatedAt": "2026-04-13T10:20:00-05:00",
+  "title": null
+}

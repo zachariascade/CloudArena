@@ -1,0 +1,42 @@
+{
+  "id": "card_0208",
+  "name": "Abrade",
+  "slug": "abrade",
+  "setId": "set_red",
+  "typeLine": "Instant",
+  "manaCost": "{1}{R}",
+  "manaValue": 2,
+  "colors": [
+    "R"
+  ],
+  "colorIdentity": [
+    "R"
+  ],
+  "rarity": "uncommon",
+  "oracleText": "Choose one -\nAbrade deals 3 damage to target creature.\nDestroy target artifact.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "burn",
+    "artifact-removal"
+  ],
+  "tags": [
+    "starter-deck",
+    "red",
+    "instant"
+  ],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Abrade for the Basics red deck.",
+  "createdAt": "2026-04-13T10:20:00-05:00",
+  "updatedAt": "2026-04-13T10:20:00-05:00",
+  "title": null
+}

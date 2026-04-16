@@ -1,0 +1,31 @@
+{
+  "id": "card_0238",
+  "name": "Forest",
+  "slug": "forest",
+  "setId": "set_green",
+  "typeLine": "Basic Land - Forest",
+  "manaCost": null,
+  "manaValue": 0,
+  "colors": [],
+  "colorIdentity": ["G"],
+  "rarity": "common",
+  "oracleText": "{T}: Add {G}.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["mana-production"],
+  "tags": ["starter-deck", "green", "land"],
+  "status": "draft",
+  "notes": "Imported from the real MTG basic land Forest for the Basics green deck.",
+  "createdAt": "2026-04-13T10:40:00-05:00",
+  "updatedAt": "2026-04-13T10:40:00-05:00",
+  "title": null
+}

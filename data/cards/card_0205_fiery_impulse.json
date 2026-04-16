@@ -1,0 +1,41 @@
+{
+  "id": "card_0205",
+  "name": "Fiery Impulse",
+  "slug": "fiery_impulse",
+  "setId": "set_red",
+  "typeLine": "Instant",
+  "manaCost": "{R}",
+  "manaValue": 1,
+  "colors": [
+    "R"
+  ],
+  "colorIdentity": [
+    "R"
+  ],
+  "rarity": "common",
+  "oracleText": "Fiery Impulse deals 2 damage to target creature.\nSpell mastery — If there are two or more instant and/or sorcery cards in your graveyard, Fiery Impulse deals 3 damage instead.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "burn"
+  ],
+  "tags": [
+    "starter-deck",
+    "red",
+    "instant"
+  ],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Fiery Impulse for the Basics red deck.",
+  "createdAt": "2026-04-13T10:20:00-05:00",
+  "updatedAt": "2026-04-13T10:20:00-05:00",
+  "title": null
+}

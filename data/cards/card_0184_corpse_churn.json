@@ -1,0 +1,42 @@
+{
+  "id": "card_0184",
+  "name": "Corpse Churn",
+  "slug": "corpse_churn",
+  "setId": "set_basics",
+  "typeLine": "Instant",
+  "manaCost": "{1}{B}",
+  "manaValue": 2,
+  "colors": [
+    "B"
+  ],
+  "colorIdentity": [
+    "B"
+  ],
+  "rarity": "common",
+  "oracleText": "Mill three cards, then you may return a creature card from your graveyard to your hand.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "mill",
+    "recursion"
+  ],
+  "tags": [
+    "starter-deck",
+    "black",
+    "instant"
+  ],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Corpse Churn for the Basics black deck.",
+  "createdAt": "2026-04-13T09:40:00-05:00",
+  "updatedAt": "2026-04-13T09:40:00-05:00",
+  "title": null
+}

@@ -1,0 +1,32 @@
+{
+  "id": "card_0246",
+  "name": "Archetype of Courage",
+  "slug": "archetype_of_courage",
+  "setId": "set_white",
+  "typeLine": "Enchantment Creature - Human Soldier",
+  "manaCost": "{1}{W}{W}",
+  "manaValue": 3,
+  "colors": ["W"],
+  "colorIdentity": ["W"],
+  "rarity": "uncommon",
+  "oracleText": "Creatures you control have first strike.\nCreatures your opponents control lose first strike and can't have or gain first strike.",
+  "flavorText": "\"It has been my experience that soldiers most fervently follow generals who lead by example.\" —Elspeth",
+  "power": "2",
+  "toughness": "2",
+  "loyalty": null,
+  "defense": null,
+  "artist": "Willian Murai",
+  "image": {
+    "type": "placeholder",
+    "path": null,
+    "artist": "Willian Murai"
+  },
+  "imagePrompt": null,
+  "mechanics": ["anthem", "first-strike"],
+  "tags": ["starter-deck", "white", "enchantment-creature"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Archetype of Courage for the Basics white deck.",
+  "createdAt": "2026-04-13T11:00:00-05:00",
+  "updatedAt": "2026-04-13T11:00:00-05:00",
+  "title": null
+}

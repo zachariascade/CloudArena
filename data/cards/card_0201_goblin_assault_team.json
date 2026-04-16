@@ -1,0 +1,43 @@
+{
+  "id": "card_0201",
+  "name": "Goblin Assault Team",
+  "slug": "goblin_assault_team",
+  "setId": "set_red",
+  "typeLine": "Creature - Goblin Warrior",
+  "manaCost": "{3}{R}",
+  "manaValue": 4,
+  "colors": [
+    "R"
+  ],
+  "colorIdentity": [
+    "R"
+  ],
+  "rarity": "common",
+  "oracleText": "Haste\nWhen this creature dies, put a +1/+1 counter on target creature you control.",
+  "flavorText": null,
+  "power": "4",
+  "toughness": "1",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "haste",
+    "death-trigger",
+    "counters"
+  ],
+  "tags": [
+    "starter-deck",
+    "red",
+    "goblin"
+  ],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Goblin Assault Team for the Basics red deck.",
+  "createdAt": "2026-04-13T10:20:00-05:00",
+  "updatedAt": "2026-04-13T10:20:00-05:00",
+  "title": null
+}

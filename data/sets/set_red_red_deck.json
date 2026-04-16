@@ -1,0 +1,7 @@
+{
+  "id": "set_red",
+  "universeId": "universe_basics",
+  "name": "Red Deck",
+  "code": "RED",
+  "description": "The red StarterDecks list, captured as a second set in the Basics universe."
+}

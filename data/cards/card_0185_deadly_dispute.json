@@ -1,0 +1,43 @@
+{
+  "id": "card_0185",
+  "name": "Deadly Dispute",
+  "slug": "deadly_dispute",
+  "setId": "set_basics",
+  "typeLine": "Instant",
+  "manaCost": "{1}{B}",
+  "manaValue": 2,
+  "colors": [
+    "B"
+  ],
+  "colorIdentity": [
+    "B"
+  ],
+  "rarity": "common",
+  "oracleText": "As an additional cost to cast this spell, sacrifice an artifact or creature.\nDraw two cards and create a Treasure token.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "sacrifice",
+    "card-draw",
+    "treasure"
+  ],
+  "tags": [
+    "starter-deck",
+    "black",
+    "instant"
+  ],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Deadly Dispute for the Basics black deck.",
+  "createdAt": "2026-04-13T09:40:00-05:00",
+  "updatedAt": "2026-04-13T09:40:00-05:00",
+  "title": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "card_0215",
+  "name": "Gnarlid Colony",
+  "slug": "gnarlid_colony",
+  "setId": "set_green",
+  "typeLine": "Creature - Beast",
+  "manaCost": "{1}{G}",
+  "manaValue": 2,
+  "colors": ["G"],
+  "colorIdentity": ["G"],
+  "rarity": "common",
+  "oracleText": "Kicker {2}{G}\nIf this creature was kicked, it enters with two +1/+1 counters on it.\nEach creature you control with a +1/+1 counter on it has trample.",
+  "flavorText": null,
+  "power": "2",
+  "toughness": "2",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["kicker", "counters", "trample"],
+  "tags": ["starter-deck", "green", "beast"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Gnarlid Colony for the Basics green deck.",
+  "createdAt": "2026-04-13T10:40:00-05:00",
+  "updatedAt": "2026-04-13T10:40:00-05:00",
+  "title": null
+}

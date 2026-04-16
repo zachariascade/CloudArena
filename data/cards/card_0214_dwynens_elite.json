@@ -1,0 +1,31 @@
+{
+  "id": "card_0214",
+  "name": "Dwynen's Elite",
+  "slug": "dwynens_elite",
+  "setId": "set_green",
+  "typeLine": "Creature - Elf Warrior",
+  "manaCost": "{1}{G}",
+  "manaValue": 2,
+  "colors": ["G"],
+  "colorIdentity": ["G"],
+  "rarity": "uncommon",
+  "oracleText": "When this creature enters, if you control another Elf, create a 1/1 green Elf Warrior creature token.",
+  "flavorText": null,
+  "power": "2",
+  "toughness": "2",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["tokens", "elves"],
+  "tags": ["starter-deck", "green", "elf"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Dwynen's Elite for the Basics green deck.",
+  "createdAt": "2026-04-13T10:40:00-05:00",
+  "updatedAt": "2026-04-13T10:40:00-05:00",
+  "title": null
+}

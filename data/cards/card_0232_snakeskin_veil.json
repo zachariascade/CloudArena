@@ -1,0 +1,31 @@
+{
+  "id": "card_0232",
+  "name": "Snakeskin Veil",
+  "slug": "snakeskin_veil",
+  "setId": "set_green",
+  "typeLine": "Instant",
+  "manaCost": "{G}",
+  "manaValue": 1,
+  "colors": ["G"],
+  "colorIdentity": ["G"],
+  "rarity": "common",
+  "oracleText": "Put a +1/+1 counter on target creature you control. It gains hexproof until end of turn.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["counters", "hexproof"],
+  "tags": ["starter-deck", "green", "instant"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Snakeskin Veil for the Basics green deck.",
+  "createdAt": "2026-04-13T10:40:00-05:00",
+  "updatedAt": "2026-04-13T10:40:00-05:00",
+  "title": null
+}

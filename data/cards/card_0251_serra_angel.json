@@ -1,0 +1,31 @@
+{
+  "id": "card_0251",
+  "name": "Serra Angel",
+  "slug": "serra_angel",
+  "setId": "set_white",
+  "typeLine": "Creature - Angel",
+  "manaCost": "{3}{W}{W}",
+  "manaValue": 5,
+  "colors": ["W"],
+  "colorIdentity": ["W"],
+  "rarity": "uncommon",
+  "oracleText": "Flying\nVigilance",
+  "flavorText": "When she flies above the good, they consider themselves blessed. When she flies above the wicked, they consider themselves dead.",
+  "power": "4",
+  "toughness": "4",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["flying", "vigilance"],
+  "tags": ["starter-deck", "white", "angel"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Serra Angel for the Basics white deck.",
+  "createdAt": "2026-04-13T11:00:00-05:00",
+  "updatedAt": "2026-04-13T11:00:00-05:00",
+  "title": null
+}

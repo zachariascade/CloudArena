@@ -1,0 +1,42 @@
+{
+  "id": "card_0195",
+  "name": "Mudbrawler Cohort",
+  "slug": "mudbrawler_cohort",
+  "setId": "set_red",
+  "typeLine": "Creature - Goblin Warrior",
+  "manaCost": "{1}{R}",
+  "manaValue": 2,
+  "colors": [
+    "R"
+  ],
+  "colorIdentity": [
+    "R"
+  ],
+  "rarity": "common",
+  "oracleText": "Haste\nThis creature gets +1/+1 as long as you control another red creature.",
+  "flavorText": null,
+  "power": "1",
+  "toughness": "1",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "haste",
+    "conditional-pump"
+  ],
+  "tags": [
+    "starter-deck",
+    "red",
+    "goblin"
+  ],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Mudbrawler Cohort for the Basics red deck.",
+  "createdAt": "2026-04-13T10:20:00-05:00",
+  "updatedAt": "2026-04-13T10:20:00-05:00",
+  "title": null
+}

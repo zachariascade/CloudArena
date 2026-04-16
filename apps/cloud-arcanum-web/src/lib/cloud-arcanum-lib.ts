@@ -19,11 +19,18 @@ export {
   buildCardsPagePath,
   buildCardListQueryString,
   buildDeckListQueryString,
+  buildPrintableCardsPagePath,
+  buildPrintableCardsPageQueryString,
   buildSetListQueryString,
   buildUniverseListQueryString,
   parseCardListQuery,
   parseDeckListQuery,
+  parsePrintableCardsPageQuery,
   parseSetListQuery,
   parseUniverseListQuery,
+  type PrintableCardsPageQuery,
+  type PrintableFitMode,
+  type PrintableOrientation,
+  type PrintablePaperSize,
 } from "./query-string.js";
 export { useApiRequest } from "./use-api-request.js";

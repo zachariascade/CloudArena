@@ -1,0 +1,42 @@
+{
+  "id": "card_0192",
+  "name": "Goblin Fireslinger",
+  "slug": "goblin_fireslinger",
+  "setId": "set_red",
+  "typeLine": "Creature - Goblin Warrior",
+  "manaCost": "{R}",
+  "manaValue": 1,
+  "colors": [
+    "R"
+  ],
+  "colorIdentity": [
+    "R"
+  ],
+  "rarity": "common",
+  "oracleText": "{T}: This creature deals 1 damage to target player.",
+  "flavorText": null,
+  "power": "1",
+  "toughness": "1",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "ping",
+    "burn"
+  ],
+  "tags": [
+    "starter-deck",
+    "red",
+    "goblin"
+  ],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Goblin Fireslinger for the Basics red deck.",
+  "createdAt": "2026-04-13T10:20:00-05:00",
+  "updatedAt": "2026-04-13T10:20:00-05:00",
+  "title": null
+}

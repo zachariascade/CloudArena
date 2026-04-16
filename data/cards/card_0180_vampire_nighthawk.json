@@ -1,0 +1,43 @@
+{
+  "id": "card_0180",
+  "name": "Vampire Nighthawk",
+  "slug": "vampire_nighthawk",
+  "setId": "set_basics",
+  "typeLine": "Creature - Vampire Shaman",
+  "manaCost": "{1}{B}{B}",
+  "manaValue": 3,
+  "colors": [
+    "B"
+  ],
+  "colorIdentity": [
+    "B"
+  ],
+  "rarity": "uncommon",
+  "oracleText": "Flying\nDeathtouch\nLifelink",
+  "flavorText": null,
+  "power": "2",
+  "toughness": "3",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "flying",
+    "deathtouch",
+    "lifelink"
+  ],
+  "tags": [
+    "starter-deck",
+    "black",
+    "vampire"
+  ],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Vampire Nighthawk for the Basics black deck.",
+  "createdAt": "2026-04-13T09:40:00-05:00",
+  "updatedAt": "2026-04-13T09:40:00-05:00",
+  "title": null
+}

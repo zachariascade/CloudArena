@@ -1,0 +1,41 @@
+{
+  "id": "card_0210",
+  "name": "Krenko's Command",
+  "slug": "krenkos_command",
+  "setId": "set_red",
+  "typeLine": "Sorcery",
+  "manaCost": "{1}{R}",
+  "manaValue": 2,
+  "colors": [
+    "R"
+  ],
+  "colorIdentity": [
+    "R"
+  ],
+  "rarity": "common",
+  "oracleText": "Create two 1/1 red Goblin creature tokens.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "tokens"
+  ],
+  "tags": [
+    "starter-deck",
+    "red",
+    "sorcery"
+  ],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Krenko's Command for the Basics red deck.",
+  "createdAt": "2026-04-13T10:20:00-05:00",
+  "updatedAt": "2026-04-13T10:20:00-05:00",
+  "title": null
+}

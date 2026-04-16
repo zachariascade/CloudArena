@@ -1,0 +1,32 @@
+{
+  "id": "card_0256",
+  "name": "Safe Passage",
+  "slug": "safe_passage",
+  "setId": "set_white",
+  "typeLine": "Instant",
+  "manaCost": "{2}{W}",
+  "manaValue": 3,
+  "colors": ["W"],
+  "colorIdentity": ["W"],
+  "rarity": "common",
+  "oracleText": "Prevent all damage that would be dealt to you and creatures you control this turn.",
+  "flavorText": "With one flap of her wings, the angel beat back the fires of war.",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": "Christopher Moeller",
+  "image": {
+    "type": "placeholder",
+    "path": null,
+    "artist": "Christopher Moeller"
+  },
+  "imagePrompt": null,
+  "mechanics": ["damage-prevention"],
+  "tags": ["starter-deck", "white", "instant"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Safe Passage for the Basics white deck.",
+  "createdAt": "2026-04-13T11:00:00-05:00",
+  "updatedAt": "2026-04-13T11:00:00-05:00",
+  "title": null
+}

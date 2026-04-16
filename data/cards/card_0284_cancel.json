@@ -1,0 +1,31 @@
+{
+  "id": "card_0284",
+  "name": "Cancel",
+  "slug": "cancel",
+  "setId": "set_blue",
+  "typeLine": "Instant",
+  "manaCost": "{1}{U}{U}",
+  "manaValue": 3,
+  "colors": ["U"],
+  "colorIdentity": ["U"],
+  "rarity": "common",
+  "oracleText": "Counter target spell.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["counterspell"],
+  "tags": ["starter-deck", "blue", "instant"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Cancel for the Basics blue deck.",
+  "createdAt": "2026-04-13T11:25:00-05:00",
+  "updatedAt": "2026-04-13T11:25:00-05:00",
+  "title": null
+}

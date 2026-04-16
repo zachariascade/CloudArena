@@ -1,0 +1,42 @@
+{
+  "id": "card_0169",
+  "name": "Typhoid Rats",
+  "slug": "typhoid_rats",
+  "setId": "set_basics",
+  "typeLine": "Creature - Rat",
+  "manaCost": "{B}",
+  "manaValue": 1,
+  "colors": [
+    "B"
+  ],
+  "colorIdentity": [
+    "B"
+  ],
+  "rarity": "common",
+  "oracleText": "Deathtouch",
+  "flavorText": "Kidnappers caught in Havengul are given two choices: languish in prison or become rat catchers. The smart ones go to prison.",
+  "power": "1",
+  "toughness": "1",
+  "loyalty": null,
+  "defense": null,
+  "artist": "Kev Walker",
+  "image": {
+    "type": "placeholder",
+    "path": null,
+    "artist": "Kev Walker"
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "deathtouch"
+  ],
+  "tags": [
+    "starter-deck",
+    "black",
+    "rat"
+  ],
+  "status": "draft",
+  "notes": "Imported from the Magic 2015 printing of Typhoid Rats as the first black StarterDecks example for the Basics universe.",
+  "createdAt": "2026-04-13T09:30:00-05:00",
+  "updatedAt": "2026-04-13T09:30:00-05:00",
+  "title": null
+}

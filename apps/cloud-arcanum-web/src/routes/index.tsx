@@ -27,6 +27,7 @@ import {
 import { CardDetailPage } from "./card-detail-page.js";
 import { CardsPage } from "./cards-page.js";
 import { DecksPage } from "./decks-page.js";
+import { PrintCardsPage } from "./print-cards-page.js";
 import { SetsPage } from "./sets-page.js";
 import { UniversesPage } from "./universes-page.js";
 
@@ -271,6 +272,10 @@ export function createCloudArcanumRouter(context: AppRouteContext) {
         {
           path: "cards",
           element: <CardsPage apiBaseUrl={context.apiBaseUrl} />,
+        },
+        {
+          path: "cards/print",
+          element: <PrintCardsPage apiBaseUrl={context.apiBaseUrl} />,
         },
         {
           path: "cards/:cardId",

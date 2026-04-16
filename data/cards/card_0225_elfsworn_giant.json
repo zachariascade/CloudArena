@@ -1,0 +1,31 @@
+{
+  "id": "card_0225",
+  "name": "Elfsworn Giant",
+  "slug": "elfsworn_giant",
+  "setId": "set_green",
+  "typeLine": "Creature - Giant",
+  "manaCost": "{3}{G}{G}",
+  "manaValue": 5,
+  "colors": ["G"],
+  "colorIdentity": ["G"],
+  "rarity": "common",
+  "oracleText": "Reach\nLandfall — Whenever a land you control enters, create a 1/1 green Elf Warrior creature token.",
+  "flavorText": null,
+  "power": "5",
+  "toughness": "3",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["reach", "landfall", "tokens"],
+  "tags": ["starter-deck", "green", "giant"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Elfsworn Giant for the Basics green deck.",
+  "createdAt": "2026-04-13T10:40:00-05:00",
+  "updatedAt": "2026-04-13T10:40:00-05:00",
+  "title": null
+}

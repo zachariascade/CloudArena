@@ -23,6 +23,7 @@ import {
 import {
   CloudArcanumApiClientError,
   buildCardListQueryString,
+  buildPrintableCardsPagePath,
   createCloudArcanumApiClient,
   mapCloudArcanumCardToDisplayCard,
   parseCardListQuery,
@@ -179,6 +180,12 @@ function CardsFilters({
     setSearchParams(new URLSearchParams(), { preventScrollReset: true });
   }
 
+  const printableCardsPath = buildPrintableCardsPagePath({
+    ...query,
+    page: undefined,
+    pageSize: undefined,
+  });
+
   return (
     <section className="panel filters-panel">
       <div className="filters-header">
@@ -186,9 +193,14 @@ function CardsFilters({
           <strong>Search and filters</strong>
           <p>Filter the card catalog and keep the current view easy to return to.</p>
         </div>
-        <button className="ghost-button" onClick={clearFilters} type="button">
-          Clear all
-        </button>
+        <div className="summary-row">
+          <Link className="ghost-button" to={printableCardsPath}>
+            Print sheet
+          </Link>
+          <button className="ghost-button" onClick={clearFilters} type="button">
+            Clear all
+          </button>
+        </div>
       </div>
 
       <form className="search-form" onSubmit={handleSearchSubmit}>
@@ -510,7 +522,7 @@ export function CardsPage({ apiBaseUrl }: CardsPageProps): ReactElement {
                   <strong>{cardsState.data.meta.total}</strong>
                 </div>
               </div>
-              <section className="cards-gallery">
+              <section className="cards-gallery cards-gallery-printlike">
                 {items.map((card) => {
                   const detailPath = query.themeId
                     ? `/cards/${card.id}?themeId=${encodeURIComponent(query.themeId)}`

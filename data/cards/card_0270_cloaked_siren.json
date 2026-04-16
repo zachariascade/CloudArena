@@ -1,0 +1,31 @@
+{
+  "id": "card_0270",
+  "name": "Cloaked Siren",
+  "slug": "cloaked_siren",
+  "setId": "set_blue",
+  "typeLine": "Creature - Siren",
+  "manaCost": "{3}{U}",
+  "manaValue": 4,
+  "colors": ["U"],
+  "colorIdentity": ["U"],
+  "rarity": "common",
+  "oracleText": "Flash\nFlying",
+  "flavorText": null,
+  "power": "3",
+  "toughness": "2",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["flash", "flying"],
+  "tags": ["starter-deck", "blue", "siren"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Cloaked Siren for the Basics blue deck.",
+  "createdAt": "2026-04-13T11:25:00-05:00",
+  "updatedAt": "2026-04-13T11:25:00-05:00",
+  "title": null
+}

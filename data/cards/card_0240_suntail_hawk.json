@@ -1,0 +1,32 @@
+{
+  "id": "card_0240",
+  "name": "Suntail Hawk",
+  "slug": "suntail_hawk",
+  "setId": "set_white",
+  "typeLine": "Creature - Bird",
+  "manaCost": "{W}",
+  "manaValue": 1,
+  "colors": ["W"],
+  "colorIdentity": ["W"],
+  "rarity": "common",
+  "oracleText": "Flying",
+  "flavorText": null,
+  "power": "1",
+  "toughness": "1",
+  "loyalty": null,
+  "defense": null,
+  "artist": "Heather Hudson",
+  "image": {
+    "type": "placeholder",
+    "path": null,
+    "artist": "Heather Hudson"
+  },
+  "imagePrompt": null,
+  "mechanics": ["flying"],
+  "tags": ["starter-deck", "white", "bird"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Suntail Hawk for the Basics white deck.",
+  "createdAt": "2026-04-13T11:00:00-05:00",
+  "updatedAt": "2026-04-13T11:00:00-05:00",
+  "title": null
+}

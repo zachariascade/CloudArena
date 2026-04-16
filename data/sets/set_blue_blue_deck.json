@@ -1,0 +1,7 @@
+{
+  "id": "set_blue",
+  "universeId": "universe_basics",
+  "name": "Blue Deck",
+  "code": "BLUE",
+  "description": "The blue StarterDecks list, captured as a new set in the Basics universe."
+}

@@ -1,0 +1,7 @@
+{
+  "id": "set_white",
+  "universeId": "universe_basics",
+  "name": "White Deck",
+  "code": "WHITE",
+  "description": "The white StarterDecks list, captured as a new set in the Basics universe."
+}

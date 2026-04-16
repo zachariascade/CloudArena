@@ -1,0 +1,41 @@
+{
+  "id": "card_0170",
+  "name": "Pharika's Chosen",
+  "slug": "pharikas_chosen",
+  "setId": "set_basics",
+  "typeLine": "Creature - Snake",
+  "manaCost": "{B}",
+  "manaValue": 1,
+  "colors": [
+    "B"
+  ],
+  "colorIdentity": [
+    "B"
+  ],
+  "rarity": "common",
+  "oracleText": "Deathtouch",
+  "flavorText": "The serpents' dens built into statues of Pharika serve not only to consecrate her temples, but as a hidden line of defense.",
+  "power": "1",
+  "toughness": "1",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "deathtouch"
+  ],
+  "tags": [
+    "starter-deck",
+    "black",
+    "snake"
+  ],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Pharika's Chosen for the Basics black deck.",
+  "createdAt": "2026-04-13T09:40:00-05:00",
+  "updatedAt": "2026-04-13T09:40:00-05:00",
+  "title": null
+}

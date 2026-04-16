@@ -1,0 +1,31 @@
+{
+  "id": "card_0220",
+  "name": "Fierce Empath",
+  "slug": "fierce_empath",
+  "setId": "set_green",
+  "typeLine": "Creature - Elf",
+  "manaCost": "{2}{G}",
+  "manaValue": 3,
+  "colors": ["G"],
+  "colorIdentity": ["G"],
+  "rarity": "common",
+  "oracleText": "When this creature enters, you may search your library for a creature card with mana value 6 or greater, reveal it, put it into your hand, then shuffle.",
+  "flavorText": null,
+  "power": "1",
+  "toughness": "1",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["tutor"],
+  "tags": ["starter-deck", "green", "elf"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Fierce Empath for the Basics green deck.",
+  "createdAt": "2026-04-13T10:40:00-05:00",
+  "updatedAt": "2026-04-13T10:40:00-05:00",
+  "title": null
+}

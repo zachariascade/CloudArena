@@ -1,0 +1,31 @@
+{
+  "id": "card_0218",
+  "name": "Three Tree Rootweaver",
+  "slug": "three_tree_rootweaver",
+  "setId": "set_green",
+  "typeLine": "Creature - Mole Druid",
+  "manaCost": "{1}{G}",
+  "manaValue": 2,
+  "colors": ["G"],
+  "colorIdentity": ["G"],
+  "rarity": "common",
+  "oracleText": "{T}: Add one mana of any color.",
+  "flavorText": null,
+  "power": "1",
+  "toughness": "3",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["mana-fixing"],
+  "tags": ["starter-deck", "green", "mole"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Three Tree Rootweaver for the Basics green deck.",
+  "createdAt": "2026-04-13T10:40:00-05:00",
+  "updatedAt": "2026-04-13T10:40:00-05:00",
+  "title": null
+}

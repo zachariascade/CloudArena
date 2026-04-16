@@ -1,0 +1,32 @@
+{
+  "id": "card_0253",
+  "name": "Glimpse the Sun God",
+  "slug": "glimpse_the_sun_god",
+  "setId": "set_white",
+  "typeLine": "Instant",
+  "manaCost": "{X}{W}",
+  "manaValue": 1,
+  "colors": ["W"],
+  "colorIdentity": ["W"],
+  "rarity": "uncommon",
+  "oracleText": "Tap X target creatures. Scry 1.",
+  "flavorText": "Better to be beneath Heliod's notice than beneath his heel.",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": "Aleksi Briclot",
+  "image": {
+    "type": "placeholder",
+    "path": null,
+    "artist": "Aleksi Briclot"
+  },
+  "imagePrompt": null,
+  "mechanics": ["tap", "scry"],
+  "tags": ["starter-deck", "white", "instant"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Glimpse the Sun God for the Basics white deck.",
+  "createdAt": "2026-04-13T11:00:00-05:00",
+  "updatedAt": "2026-04-13T11:00:00-05:00",
+  "title": null
+}

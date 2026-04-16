@@ -1,0 +1,41 @@
+{
+  "id": "card_0172",
+  "name": "Elephant-Rat",
+  "slug": "elephant_rat",
+  "setId": "set_basics",
+  "typeLine": "Creature - Elephant Rat",
+  "manaCost": "{1}{B}",
+  "manaValue": 2,
+  "colors": [
+    "B"
+  ],
+  "colorIdentity": [
+    "B"
+  ],
+  "rarity": "common",
+  "oracleText": "Menace",
+  "flavorText": "The rats that scurried across the floor of my cage were nothing more than skins filled with liquid.",
+  "power": "1",
+  "toughness": "3",
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "menace"
+  ],
+  "tags": [
+    "starter-deck",
+    "black",
+    "beast"
+  ],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Elephant-Rat for the Basics black deck.",
+  "createdAt": "2026-04-13T09:40:00-05:00",
+  "updatedAt": "2026-04-13T09:40:00-05:00",
+  "title": null
+}

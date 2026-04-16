@@ -1,0 +1,41 @@
+{
+  "id": "card_0189",
+  "name": "Duress",
+  "slug": "duress",
+  "setId": "set_basics",
+  "typeLine": "Sorcery",
+  "manaCost": "{B}",
+  "manaValue": 1,
+  "colors": [
+    "B"
+  ],
+  "colorIdentity": [
+    "B"
+  ],
+  "rarity": "common",
+  "oracleText": "Target opponent reveals their hand. You choose a noncreature, nonland card from it. That player discards that card.",
+  "flavorText": "We decide who is worthy of our works.",
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": [
+    "discard"
+  ],
+  "tags": [
+    "starter-deck",
+    "black",
+    "sorcery"
+  ],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Duress for the Basics black deck.",
+  "createdAt": "2026-04-13T09:40:00-05:00",
+  "updatedAt": "2026-04-13T09:40:00-05:00",
+  "title": null
+}

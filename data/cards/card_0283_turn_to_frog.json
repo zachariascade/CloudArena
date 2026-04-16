@@ -1,0 +1,31 @@
+{
+  "id": "card_0283",
+  "name": "Turn to Frog",
+  "slug": "turn_to_frog",
+  "setId": "set_blue",
+  "typeLine": "Instant",
+  "manaCost": "{1}{U}",
+  "manaValue": 2,
+  "colors": ["U"],
+  "colorIdentity": ["U"],
+  "rarity": "uncommon",
+  "oracleText": "Until end of turn, target creature loses all abilities and becomes a blue Frog with base power and toughness 1/1.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["polymorph", "removal"],
+  "tags": ["starter-deck", "blue", "instant"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Turn to Frog for the Basics blue deck.",
+  "createdAt": "2026-04-13T11:25:00-05:00",
+  "updatedAt": "2026-04-13T11:25:00-05:00",
+  "title": null
+}

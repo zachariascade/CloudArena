@@ -1,0 +1,31 @@
+{
+  "id": "card_0233",
+  "name": "Gift of Strength",
+  "slug": "gift_of_strength",
+  "setId": "set_green",
+  "typeLine": "Instant",
+  "manaCost": "{1}{G}",
+  "manaValue": 2,
+  "colors": ["G"],
+  "colorIdentity": ["G"],
+  "rarity": "common",
+  "oracleText": "Target creature gets +3/+3 until end of turn.",
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "placeholder",
+    "path": null
+  },
+  "imagePrompt": null,
+  "mechanics": ["pump"],
+  "tags": ["starter-deck", "green", "instant"],
+  "status": "draft",
+  "notes": "Imported from the real MTG card Gift of Strength for the Basics green deck.",
+  "createdAt": "2026-04-13T10:40:00-05:00",
+  "updatedAt": "2026-04-13T10:40:00-05:00",
+  "title": null
+}
