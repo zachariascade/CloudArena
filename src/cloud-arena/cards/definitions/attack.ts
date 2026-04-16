@@ -5,5 +5,5 @@ export const attackCardDefinition: CardDefinition = {
   name: "Attack",
   cardTypes: ["instant"],
   cost: 1,
-  onPlay: [{ attackAmount: 6, target: "enemy" }],
+  onPlay: [{ attackAmount: 3, target: "enemy" }],
 };

@@ -15,7 +15,11 @@ import type {
 
 export type SelectorContext = {
   abilitySourcePermanentId?: string;
+  abilitySourceCardInstanceId?: string;
   triggerSubjectPermanentId?: string;
+  triggerSubjectCardInstanceId?: string;
+  sourceCardInstanceId?: string;
+  chosenTargetPermanentId?: string;
 };
 
 export type SelectedObject =
@@ -124,19 +128,25 @@ function matchesSubtype(
   return object.definition.subtypes?.includes(selector.subtype) ?? false;
 }
 
-function getReferencePermanentId(
+function getReferenceObjectId(
   selector: Selector,
   context: SelectorContext,
+  object: SelectedObject,
 ): string | undefined {
   if (selector.relation !== "self" && selector.relation !== "another") {
     return undefined;
   }
 
-  if (selector.source === "trigger_subject") {
-    return context.triggerSubjectPermanentId;
-  }
+  const sourceId =
+    selector.source === "trigger_subject"
+      ? object.kind === "card"
+        ? context.triggerSubjectCardInstanceId
+        : context.triggerSubjectPermanentId
+      : object.kind === "card"
+        ? context.abilitySourceCardInstanceId ?? context.abilitySourcePermanentId
+        : context.abilitySourcePermanentId;
 
-  return context.abilitySourcePermanentId;
+  return sourceId;
 }
 
 function matchesRelation(
@@ -148,21 +158,36 @@ function matchesRelation(
     return true;
   }
 
-  const referencePermanentId = getReferencePermanentId(selector, context);
+  const referenceObjectId = getReferenceObjectId(selector, context, object);
 
-  if (!referencePermanentId) {
+  if (!referenceObjectId) {
     return selector.relation !== "self";
   }
 
-  if (object.kind !== "permanent") {
-    return selector.relation !== "self";
-  }
+  const objectId = object.kind === "card" ? object.card.instanceId : object.permanent.instanceId;
 
   if (selector.relation === "self") {
-    return object.permanent.instanceId === referencePermanentId;
+    return objectId === referenceObjectId;
   }
 
-  return object.permanent.instanceId !== referencePermanentId;
+  return objectId !== referenceObjectId;
+}
+
+export function matchesSelectorObject(
+  object: SelectedObject,
+  selector: Selector,
+  context: SelectorContext = {},
+): boolean {
+  if (selector.zone && selector.zone !== object.zone) {
+    return false;
+  }
+
+  return (
+    matchesController(object.controllerId, selector) &&
+    matchesCardType(object, selector) &&
+    matchesSubtype(object, selector) &&
+    matchesRelation(object, selector, context)
+  );
 }
 
 export function selectObjects(
@@ -175,13 +200,7 @@ export function selectObjects(
     : ["battlefield", "hand", "graveyard", "discard"];
 
   return zones.flatMap((zone) =>
-    getSelectedObjectsInZone(state, zone).filter(
-      (object) =>
-        matchesController(object.controllerId, selector) &&
-        matchesCardType(object, selector) &&
-        matchesSubtype(object, selector) &&
-        matchesRelation(object, selector, context),
-    ),
+    getSelectedObjectsInZone(state, zone).filter((object) => matchesSelectorObject(object, selector, context)),
   );
 }
 

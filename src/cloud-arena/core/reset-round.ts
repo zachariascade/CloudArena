@@ -4,6 +4,8 @@ import {
 } from "./constants.js";
 import { discardHand, drawUpToHandSize } from "./draw.js";
 import { getEnemyPlanLength, getEnemyPlanStepAtIndexFromState } from "./enemy-plan.js";
+import { cleanupDefeatedPermanents } from "./permanents.js";
+import { processTriggeredAbilities } from "./triggers.js";
 import type { BattleState } from "./types.js";
 
 export function resetRound(state: BattleState): BattleState {
@@ -44,6 +46,9 @@ export function resetRound(state: BattleState): BattleState {
 
   discardHand(state);
   const drawResult = drawUpToHandSize(state, LEAN_V1_HAND_SIZE);
+  cleanupDefeatedPermanents(state);
+  processTriggeredAbilities(state);
+  cleanupDefeatedPermanents(state);
 
   state.log.push({
     type: "turn_started",

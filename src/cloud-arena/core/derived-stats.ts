@@ -1,4 +1,5 @@
 import { evaluateValueExpression } from "./value-expressions.js";
+import { getPermanentCounterAmount } from "./counters.js";
 import type {
   BattleState,
   DerivedStatName,
@@ -10,12 +11,9 @@ function getCounterModifierForStat(
   permanent: PermanentState,
   stat: DerivedStatName,
 ): number {
-  const counters = permanent.counters ?? {};
-
   switch (stat) {
     case "power":
-      // In Cloud Arena, +1/+1 counters currently map to increased attack power.
-      return counters["+1/+1"] ?? 0;
+      return getPermanentCounterAmount(permanent, "power");
     case "health":
     case "block":
       return 0;

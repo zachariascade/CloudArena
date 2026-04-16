@@ -66,5 +66,9 @@ export function formatActivatedAbilityLabel(
     return typeof amount === "number" ? `Apply Block ${amount}` : "Apply Block";
   }
 
+  if (ability.activation.actionId === "equip") {
+    return "Equip";
+  }
+
   return ability.activation.actionId.replace(/_/g, " ");
 }

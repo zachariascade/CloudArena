@@ -25,6 +25,13 @@ export type DerivedStatName = "power" | "health" | "block";
 export type ChoiceStrategy = "first_available" | "auto_yes" | "auto_no";
 export type DamageOverflowPolicy = "stop_at_blocker" | "trample";
 export type DefenderRecoveryPolicy = "none" | "full_heal";
+export type CounterStat = "power" | "health";
+export type CounterSourceKind = "card" | "permanent";
+export type Targeting = {
+  prompt?: string;
+  optional?: boolean;
+  allowSelfTarget?: boolean;
+};
 
 export type CardEffect = {
   attackAmount?: number;
@@ -48,6 +55,20 @@ export type Selector = {
   source?: SelectorSource;
 };
 
+export type PendingTargetRequest = {
+  id: string;
+  prompt: string;
+  optional: boolean;
+  selector: Selector;
+  effects: Effect[];
+  nextEffectIndex: number;
+  context: {
+    abilitySourcePermanentId?: string;
+    triggerSubjectPermanentId?: string;
+    sourceCardInstanceId?: string;
+  };
+};
+
 export type ValueExpression =
   | {
       type: "constant";
@@ -61,6 +82,7 @@ export type ValueExpression =
       type: "counter_count";
       target: "self";
       counter: CounterName;
+      stat?: CounterStat;
     }
   | {
       type: "property";
@@ -93,9 +115,34 @@ export type Trigger =
       selector?: Selector;
     }
   | {
+      event: "permanent_left_battlefield";
+      selector?: Selector;
+    }
+  | {
+      event: "permanent_attacked";
+      selector?: Selector;
+    }
+  | {
+      event: "permanent_blocked";
+      selector?: Selector;
+    }
+  | {
+      event: "permanent_becomes_blocked";
+      selector?: Selector;
+    }
+  | {
       event: "counter_added";
       selector?: Selector;
       counter?: CounterName;
+      stat?: CounterStat;
+    }
+  | {
+      event: "card_drawn";
+      selector?: Selector;
+    }
+  | {
+      event: "card_discarded";
+      selector?: Selector;
     }
   | {
       event: "turn_started";
@@ -108,22 +155,46 @@ export type Effect =
       selector: Selector;
       amount: number;
       choice: "controller";
+      targeting?: Targeting;
     }
   | {
       type: "add_counter";
       target: "self" | Selector;
+      powerDelta?: number;
+      healthDelta?: number;
+      counter?: CounterName;
+      stat?: CounterStat;
+      amount?: ValueExpression;
+      targeting?: Targeting;
+    }
+  | {
+      type: "remove_counter";
+      target: "self" | Selector;
+      counterId?: string;
       counter: CounterName;
+      stat?: CounterStat;
+      sourceKind?: CounterSourceKind;
+      sourceId?: string;
       amount: ValueExpression;
+      targeting?: Targeting;
     }
   | {
       type: "deal_damage";
       target: "enemy" | "player" | Selector;
       amount: ValueExpression;
+      targeting?: Targeting;
     }
   | {
       type: "gain_block";
       target: "self" | "player" | Selector;
       amount: ValueExpression;
+      targeting?: Targeting;
+    }
+  | {
+      type: "draw_card";
+      target: "self" | "player";
+      amount: ValueExpression;
+      targeting?: Targeting;
     }
   | {
       type: "summon_permanent";
@@ -136,6 +207,11 @@ export type Effect =
       target: "self" | Selector;
       optional: boolean;
       cost: "free";
+    }
+  | {
+      type: "attach_from_battlefield";
+      target: "self" | Selector;
+      targeting?: Targeting;
     };
 
 export type StatModifier = {
@@ -159,6 +235,7 @@ export type ActivatedAbility = {
   activation: ActionAbilityActivation;
   conditions?: Condition[];
   effects: Effect[];
+  targeting?: Targeting;
 };
 
 export type StaticAbility = {
@@ -250,6 +327,28 @@ export type BattleEvent =
       definitionId: CardDefinitionId;
     }
   | {
+      type: "counter_added";
+      turnNumber: number;
+      permanentId: string;
+      counterId: string;
+      counter: CounterName;
+      stat: CounterStat;
+      amount: number;
+      sourceKind: CounterSourceKind;
+      sourceId: string;
+    }
+  | {
+      type: "counter_removed";
+      turnNumber: number;
+      permanentId: string;
+      counterId: string;
+      counter: CounterName;
+      stat: CounterStat;
+      amount: number;
+      sourceKind: CounterSourceKind;
+      sourceId: string;
+    }
+  | {
       type: "turn_ended";
       turnNumber: number;
     }
@@ -275,6 +374,20 @@ export type RulesEvent =
       controllerId: string;
     }
   | {
+      type: "card_drawn";
+      turnNumber: number;
+      cardInstanceId: string;
+      definitionId: CardDefinitionId;
+      controllerId: string;
+    }
+  | {
+      type: "card_discarded";
+      turnNumber: number;
+      cardInstanceId: string;
+      definitionId: CardDefinitionId;
+      controllerId: string;
+    }
+  | {
       type: "permanent_entered";
       turnNumber: number;
       permanentId: string;
@@ -289,15 +402,66 @@ export type RulesEvent =
       permanentId: string;
       sourceCardInstanceId: string;
       definitionId: CardDefinitionId;
-      controllerId?: string;
+      controllerId: string;
+      slotIndex: number;
+    }
+  | {
+      type: "permanent_left_battlefield";
+      turnNumber: number;
+      permanentId: string;
+      sourceCardInstanceId: string;
+      definitionId: CardDefinitionId;
+      controllerId: string;
+      slotIndex: number;
+    }
+  | {
+      type: "permanent_attacked";
+      turnNumber: number;
+      permanentId: string;
+      sourceCardInstanceId: string;
+      definitionId: CardDefinitionId;
+      controllerId: string;
+      slotIndex: number;
+    }
+  | {
+      type: "permanent_blocked";
+      turnNumber: number;
+      permanentId: string;
+      sourceCardInstanceId: string;
+      definitionId: CardDefinitionId;
+      controllerId: string;
+      slotIndex: number;
+    }
+  | {
+      type: "permanent_becomes_blocked";
+      turnNumber: number;
+      permanentId: string;
+      sourceCardInstanceId: string;
+      definitionId: CardDefinitionId;
+      controllerId: string;
       slotIndex: number;
     }
   | {
       type: "counter_added";
       turnNumber: number;
       permanentId: string;
+      counterId: string;
       counter: CounterName;
+      stat: CounterStat;
       amount: number;
+      sourceKind: CounterSourceKind;
+      sourceId: string;
+    }
+  | {
+      type: "counter_removed";
+      turnNumber: number;
+      permanentId: string;
+      counterId: string;
+      counter: CounterName;
+      stat: CounterStat;
+      amount: number;
+      sourceKind: CounterSourceKind;
+      sourceId: string;
     }
   | {
       type: "attachment_attached";
@@ -330,6 +494,7 @@ export type BaseCardDefinition = {
   cardTypes: CardType[];
   subtypes?: string[];
   onPlay: CardEffect[];
+  spellEffects?: Effect[];
   abilities?: Ability[];
 };
 
@@ -409,7 +574,7 @@ export type PermanentState = {
   maxHealth: number;
   block: number;
   recoveryPolicy: DefenderRecoveryPolicy;
-  counters?: Record<CounterName, number>;
+  counters?: PermanentCounter[];
   attachments?: string[];
   attachedTo?: string | null;
   abilities?: Ability[];
@@ -420,14 +585,26 @@ export type PermanentState = {
   slotIndex: number;
 };
 
+export type PermanentCounter = {
+  id: string;
+  counter: CounterName;
+  stat: CounterStat;
+  amount: number;
+  sourceKind: CounterSourceKind;
+  sourceId: string;
+};
+
 export type BattleState = {
   turnNumber: number;
   phase: BattlePhase;
   seed: number;
+  nextCounterIndex: number;
+  nextTargetRequestIndex: number;
   cardDefinitions: CardDefinitionLibrary;
   player: PlayerState;
   enemy: EnemyState;
   battlefield: Array<PermanentState | null>;
+  pendingTargetRequest?: PendingTargetRequest | null;
   blockingQueue: string[];
   log: BattleEvent[];
   rules: RulesEvent[];
@@ -454,6 +631,10 @@ export type EndTurnAction = {
 
 export type BattleAction =
   | PlayCardAction
+  | {
+      type: "choose_target";
+      targetPermanentId: string;
+    }
   | UsePermanentAction
   | EndTurnAction;
 
@@ -480,5 +661,6 @@ export type CreateBattleInput = {
   playerHealth?: number;
   cardDefinitions?: CardDefinitionLibrary;
   playerDeck: CardDefinitionId[];
+  shuffleDeck?: boolean;
   enemy: CreateBattleEnemyConfig;
 };

@@ -3,12 +3,54 @@ import {
   getCardDefinitionFromLibrary,
   isEquipmentCardDefinition,
 } from "../cards/definitions.js";
+import { LEAN_V1_DEFAULT_RECOVERY_POLICY } from "./constants.js";
 import { emitRulesEvent } from "./rules-events.js";
 import type {
+  Ability,
+  ActivatedAbility,
   BattleState,
   CardInstance,
   PermanentState,
 } from "./types.js";
+
+function createDefaultEquipmentAbility(): ActivatedAbility {
+  return {
+    id: "equip",
+    kind: "activated",
+    activation: { type: "action", actionId: "equip" },
+    targeting: {
+      prompt: "Choose a permanent to equip",
+      allowSelfTarget: false,
+    },
+    effects: [
+      {
+        type: "attach_from_battlefield",
+        target: {
+          zone: "battlefield",
+          controller: "you",
+          cardType: "permanent",
+        },
+      },
+    ],
+  };
+}
+
+function getInitialAbilitiesForDefinition(
+  definition: ReturnType<typeof asPermanentCardDefinition>,
+): Ability[] {
+  const abilities = definition.abilities ? definition.abilities.map((ability) => ({ ...ability })) : [];
+
+  if (
+    isEquipmentCardDefinition(definition) &&
+    !abilities.some(
+      (ability) => ability.kind === "activated" && ability.activation.actionId === "equip",
+    )
+  ) {
+    abilities.push(createDefaultEquipmentAbility());
+  }
+
+  return abilities;
+}
 
 export function toPermanentInstanceId(card: CardInstance): string {
   const cardNumber = card.instanceId.replace(/^card_/, "");
@@ -41,11 +83,11 @@ export function summonPermanentFromCard(
     health: definition.health,
     maxHealth: definition.health,
     block: 0,
-    recoveryPolicy: definition.recoveryPolicy ?? "none",
-    counters: {},
+    recoveryPolicy: definition.recoveryPolicy ?? LEAN_V1_DEFAULT_RECOVERY_POLICY,
+    counters: [],
     attachments: [],
     attachedTo: null,
-    abilities: definition.abilities ? definition.abilities.map((ability) => ({ ...ability })) : [],
+    abilities: getInitialAbilitiesForDefinition(definition),
     disabledAbilityIds: [],
     disabledRulesActions: [],
     hasActedThisTurn: false,
@@ -186,6 +228,16 @@ export function destroyPermanent(
   detachPermanent(state, permanent.instanceId);
   detachAttachmentsFromTarget(state, permanent);
 
+  emitRulesEvent(state, {
+    type: "permanent_left_battlefield",
+    turnNumber: state.turnNumber,
+    permanentId: permanent.instanceId,
+    sourceCardInstanceId: permanent.sourceCardInstanceId,
+    definitionId: permanent.definitionId,
+    controllerId: permanent.controllerId ?? "player",
+    slotIndex: permanent.slotIndex,
+  });
+
   state.log.push({
     type: "permanent_destroyed",
     turnNumber: state.turnNumber,
@@ -204,7 +256,7 @@ export function destroyPermanent(
     permanentId: permanent.instanceId,
     sourceCardInstanceId: permanent.sourceCardInstanceId,
     definitionId: permanent.definitionId,
-    controllerId: permanent.controllerId,
+    controllerId: permanent.controllerId ?? "player",
     slotIndex: permanent.slotIndex,
   });
 

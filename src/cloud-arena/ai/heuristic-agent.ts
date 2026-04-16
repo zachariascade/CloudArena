@@ -117,6 +117,47 @@ function getCardBlockAmount(state: BattleState, cardId: CardDefinitionId): numbe
   return blockEffect?.blockAmount ?? 0;
 }
 
+function getCardCounterSupportAmount(state: BattleState, cardId: CardDefinitionId): number {
+  const definition = getCardDefinition(state, cardId);
+  const spellEffects = definition.spellEffects ?? [];
+
+  let supportAmount = 0;
+
+  function getEffectSupportValue(effect: (typeof spellEffects)[number]): number {
+    if (typeof effect !== "object" || effect === null || !("type" in effect) || effect.type !== "add_counter") {
+      return 0;
+    }
+
+    if (typeof effect.powerDelta === "number" || typeof effect.healthDelta === "number") {
+      return Math.abs(effect.powerDelta ?? 0) + Math.abs(effect.healthDelta ?? 0);
+    }
+
+    if ("amount" in effect && effect.counter === "+1/+1" && effect.amount?.type === "constant") {
+      return effect.amount.value * 2;
+    }
+
+    return 0;
+  }
+
+  for (const effect of spellEffects) {
+    const supportValue = getEffectSupportValue(effect);
+
+    if (supportValue <= 0) {
+      continue;
+    }
+
+    if (!("target" in effect) || effect.target === "self" || typeof effect.target === "string") {
+      continue;
+    }
+
+    if (effect.target.zone === "battlefield" && effect.target.cardType === "permanent") {
+      supportAmount += supportValue * state.battlefield.filter((slot) => slot !== null).length;
+    }
+  }
+
+  return supportAmount;
+}
+
 function isPermanentCard(state: BattleState, cardId: CardDefinitionId): boolean {
   return isPermanentCardDefinition(getCardDefinition(state, cardId));
 }
@@ -254,6 +295,7 @@ function scoreAction(state: BattleState, action: BattleAction): number {
 
   const cardDamageAmount = getCardDamageAmount(state, cardId);
   const cardBlockAmount = getCardBlockAmount(state, cardId);
+  const cardCounterSupportAmount = getCardCounterSupportAmount(state, cardId);
 
   if (cardDamageAmount > 0) {
     const damage = getEffectiveEnemyDamage(state, cardDamageAmount);
@@ -265,6 +307,10 @@ function scoreAction(state: BattleState, action: BattleAction): number {
     const preventedDamage = getAdditionalPreventedDamage(state, action);
     score += preventedDamage * 25;
     score += incomingAttackIsDangerous ? 70 : 5;
+  }
+
+  if (cardCounterSupportAmount > 0) {
+    score += cardCounterSupportAmount * 8;
   }
 
   return score;
@@ -325,6 +371,7 @@ function getReasonForAction(state: BattleState, action: BattleAction): string {
 
   const cardDamageAmount = getCardDamageAmount(state, cardId);
   const cardBlockAmount = getCardBlockAmount(state, cardId);
+  const cardCounterSupportAmount = getCardCounterSupportAmount(state, cardId);
 
   if (cardDamageAmount > 0 && cardBlockAmount > 0) {
     const damage = getEffectiveEnemyDamage(state, cardDamageAmount);
@@ -346,6 +393,10 @@ function getReasonForAction(state: BattleState, action: BattleAction): string {
       : incomingAttackIsDangerous
         ? `${getCardDefinition(state, cardId).name} supports survival under pressure`
         : `${getCardDefinition(state, cardId).name} is low urgency this turn`;
+  }
+
+  if (cardCounterSupportAmount > 0) {
+    return `${getCardDefinition(state, cardId).name} strengthens ${cardCounterSupportAmount} points of board presence`;
   }
 
   return "highest scoring legal action";

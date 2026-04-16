@@ -1,6 +1,7 @@
 export {
   LEAN_V1_BOARD_SLOT_COUNT,
   LEAN_V1_DEFAULT_TURN_ENERGY,
+  LEAN_V1_DEFAULT_RECOVERY_POLICY,
   LEAN_V1_HAND_SIZE,
   LEAN_V1_STARTING_PLAYER_HEALTH,
 } from "./core/constants.js";
@@ -25,7 +26,7 @@ export {
   isEquipmentCardDefinition,
   isPermanentCardDefinition,
 } from "./cards/definitions.js";
-export { discardHand, drawUpToHandSize } from "./core/draw.js";
+export { discardHand, drawCards, drawUpToHandSize } from "./core/draw.js";
 export {
   chooseOptionalEffect,
   choosePermanents,
@@ -43,6 +44,12 @@ export {
   getDerivedPermanentStat,
 } from "./core/derived-stats.js";
 export {
+  getCounterDisplaySummary,
+  getPermanentCounterAmount,
+  getPermanentCounterCount,
+  summarizePermanentCounters,
+} from "./core/counters.js";
+export {
   dealDamageToEnemy,
   dealDamageToPermanent,
   gainBlockToPermanent,
@@ -50,6 +57,7 @@ export {
   resolveEffect,
   resolveEffects,
   resolveLegacyCardEffects,
+  resolvePendingTargetRequest,
 } from "./core/effects.js";
 export type { EffectResolutionContext } from "./core/effects.js";
 export { emitRulesEvent } from "./core/rules-events.js";

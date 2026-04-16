@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { CloudArenaActionOption } from "../../src/cloud-arena/api-contract.js";
+import type { BattleAction } from "../../src/cloud-arena/index.js";
 import {
   CloudArenaFinishedBattleError,
   CloudArenaInvalidActionError,
@@ -73,6 +74,57 @@ describe("cloud arena session service", () => {
     expect(updated.log.length).toBeGreaterThan(session.log.length);
   });
 
+  it("accepts permanent actions that omit the source field", () => {
+    const service = createCloudArenaSessionService();
+    const session = service.createSession({
+      scenarioId: "mixed_guardian",
+      seed: 5,
+    });
+    const guardianAction = findPlayableCardAction(
+      session.player.hand,
+      session.legalActions,
+      "guardian",
+    );
+
+    if (!guardianAction) {
+      throw new Error("Expected to find a playable guardian card.");
+    }
+
+    const afterGuardian = service.applyAction(session.sessionId, guardianAction);
+    const permanentAction = afterGuardian.legalActions.find(
+      (
+        entry,
+      ): entry is (typeof entry & {
+        action: Extract<BattleAction, { type: "use_permanent_action" }>;
+      }) => entry.action.type === "use_permanent_action",
+    )?.action as Extract<BattleAction, { type: "use_permanent_action" }> | undefined;
+
+    if (!permanentAction) {
+      throw new Error("Expected to find a playable permanent action.");
+    }
+
+    const { source: _source, ...actionWithoutSource } = permanentAction as Extract<BattleAction, {
+      type: "use_permanent_action";
+    }> & {
+      source?: unknown;
+    };
+    const updated = service.applyAction(
+      afterGuardian.sessionId,
+      actionWithoutSource as BattleAction,
+    );
+
+    const latestAction = updated.actionHistory.at(-1)?.action as
+      | Extract<BattleAction, { type: "use_permanent_action" }>
+      | undefined;
+
+    expect(latestAction?.source).toBeDefined();
+    expect(latestAction).toMatchObject({
+      type: "use_permanent_action",
+      permanentId: permanentAction.permanentId,
+      action: permanentAction.action,
+    });
+  });
+
   it("surfaces counter-based power buffs in the session snapshot", () => {
     const service = createCloudArenaSessionService();
     let snapshot = service.createSession({
@@ -94,7 +146,7 @@ describe("cloud arena session service", () => {
       }
 
       const bannerAction = playedGuardian
-        ? findPlayableCardAction(updated.player.hand, updated.legalActions, "anointed_banner")
+        ? findPlayableCardAction(updated.player.hand, updated.legalActions, "mass_benediction")
         : undefined;
 
       if (bannerAction) {
@@ -107,7 +159,7 @@ describe("cloud arena session service", () => {
       )?.action;
 
       if (!endTurnAction) {
-        throw new Error("Expected an end turn action while searching for the banner combo.");
+        throw new Error("Expected an end turn action while searching for the mass benediction combo.");
       }
 
       updated = service.applyAction(updated.sessionId, endTurnAction);
@@ -116,14 +168,14 @@ describe("cloud arena session service", () => {
     const guardian = updated.battlefield.find(
       (permanent) => permanent?.definitionId === "guardian",
     );
-    const banner = updated.battlefield.find(
-      (permanent) => permanent?.definitionId === "anointed_banner",
+    const benediction = updated.player.discardPile.find(
+      (card) => card.definitionId === "mass_benediction",
     );
 
     expect(playedGuardian).toBe(true);
-    expect(banner).toBeTruthy();
-    expect(guardian?.counters?.["+1/+1"]).toBe(1);
-    expect(guardian?.power).toBe(11);
+    expect(benediction).toBeTruthy();
+    expect(guardian?.counters?.["+1/+1"]).toBe(2);
+    expect(guardian?.power).toBe(5);
   });
 
   it("resolves the full enemy turn when end turn is applied", () => {

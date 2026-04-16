@@ -2,6 +2,7 @@ import { endTurn } from "./end-turn.js";
 import { playCard } from "../actions/play-card.js";
 import { usePermanentAction } from "../actions/use-permanent-action.js";
 import { resolveEnemyTurn } from "../combat/enemy-turn.js";
+import { resolvePendingTargetRequest } from "./effects.js";
 import { cleanupDefeatedPermanents } from "./permanents.js";
 import { resetRound } from "./reset-round.js";
 import { processTriggeredAbilities } from "./triggers.js";
@@ -55,9 +56,19 @@ export function applyBattleAction(state: BattleState, action: BattleAction): Bat
     throw new Error("Cannot apply actions to a finished battle.");
   }
 
+  if (state.pendingTargetRequest && action.type !== "choose_target") {
+    throw new Error("A target must be chosen before taking another action.");
+  }
+
   switch (action.type) {
     case "play_card":
       playCard(state, action.cardInstanceId);
+      cleanupDeadPermanents(state);
+      processTriggeredAbilities(state);
+      cleanupDeadPermanents(state);
+      return checkBattleFinished(state);
+    case "choose_target":
+      resolvePendingTargetRequest(state, action.targetPermanentId);
       cleanupDeadPermanents(state);
       processTriggeredAbilities(state);
       cleanupDeadPermanents(state);

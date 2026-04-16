@@ -5,7 +5,9 @@ import {
   attachPermanentToTarget,
   canAttachPermanentToTarget,
   destroyPermanent,
+  getLegalActions,
   isEquipmentPermanent,
+  type BattleAction,
   type CardDefinitionLibrary,
 } from "../../src/cloud-arena/index.js";
 import { createTestBattle } from "./helpers.js";
@@ -145,5 +147,97 @@ describe("cloud arena attachments", () => {
 
     expect(survivingBlade.attachedTo).toBeNull();
     expect(battle.player.graveyard.map((card) => card.definitionId)).toContain("angel_bearer");
+  });
+
+  it("exposes a targeted equip ability for battlefield equipment", () => {
+    const battle = createAttachmentBattle();
+    battle.player.energy = 10;
+
+    for (const card of battle.player.hand.filter((entry) =>
+      entry.definitionId === "angel_bearer" || entry.definitionId === "holy_blade"
+    )) {
+      applyBattleAction(battle, {
+        type: "play_card",
+        cardInstanceId: card.instanceId,
+      });
+    }
+
+    const angel = battle.battlefield.find((permanent) => permanent?.definitionId === "angel_bearer");
+    const blade = battle.battlefield.find((permanent) => permanent?.definitionId === "holy_blade");
+
+    if (!angel || !blade) {
+      throw new Error("Expected angel and equipment on battlefield.");
+    }
+
+    const equipAction = getLegalActions(battle).find(
+      (action) =>
+        action.type === "use_permanent_action" &&
+        action.permanentId === blade.instanceId &&
+        action.action === "equip",
+    ) as Extract<BattleAction, { type: "use_permanent_action" }> | undefined;
+
+    if (!equipAction) {
+      throw new Error("Expected an equip action for the equipment permanent.");
+    }
+
+    applyBattleAction(battle, equipAction);
+
+    expect(battle.pendingTargetRequest).toBeTruthy();
+
+    const targetAction = getLegalActions(battle)[0];
+
+    if (!targetAction || targetAction.type !== "choose_target") {
+      throw new Error("Expected a legal equip target to be available.");
+    }
+
+    applyBattleAction(battle, targetAction);
+
+    expect(blade.attachedTo).toBe(angel.instanceId);
+    expect(angel.attachments).toEqual([blade.instanceId]);
+  });
+
+  it("hides equip when there is no other permanent to attach to", () => {
+    const battle = createTestBattle({
+      cardDefinitions: ATTACHMENT_TEST_CARD_DEFINITIONS,
+      playerDeck: [
+        "holy_blade",
+        "attack",
+        "defend",
+      ],
+      enemy: {
+        name: "Attachment Dummy",
+        health: 30,
+        basePower: 12,
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+
+    battle.player.energy = 10;
+
+    const bladeCard = battle.player.hand.find((card) => card.definitionId === "holy_blade");
+
+    if (!bladeCard) {
+      throw new Error("Expected holy_blade in opening hand.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: bladeCard.instanceId,
+    });
+
+    const blade = battle.battlefield.find((permanent) => permanent?.definitionId === "holy_blade");
+
+    if (!blade) {
+      throw new Error("Expected holy_blade on battlefield.");
+    }
+
+    expect(
+      getLegalActions(battle).some(
+        (action) =>
+          action.type === "use_permanent_action" &&
+          action.permanentId === blade.instanceId &&
+          action.action === "equip",
+      ),
+    ).toBe(false);
   });
 });

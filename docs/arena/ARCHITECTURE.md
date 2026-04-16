@@ -60,6 +60,8 @@ Typical local flow:
 
 ## Key Docs
 
+- [Cloud Arena Engine Knobs Reference](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/arena/ENGINE_KNOBS_REFERENCE.md)
+- [Cloud Arena Engine Glossary](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/arena/ENGINE_GLOSSARY.md)
 - [Cloud Arena Rules Reference](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/CLOUD_ARENA_RULES_REFERENCE.md)
 - [Core Combat Spec](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/CORE_COMBAT_SPEC.md)
 - [Trace Based Simulator Design](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/TRACE_BASED_SIMULATOR_DESIGN.md)

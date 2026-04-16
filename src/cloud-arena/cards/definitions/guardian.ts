@@ -7,8 +7,8 @@ export const guardianCardDefinition: CardDefinition = {
   cost: 3,
   subtypes: ["Angel"],
   onPlay: [],
-  power: 10,
-  health: 20,
+  power: 4,
+  health: 4,
   abilities: [
     {
       id: "guardian_apply_block",

@@ -21,6 +21,7 @@ export type CloudArenaSessionScenarioId = "mixed_guardian";
 export type CloudArenaCreateSessionRequest = {
   scenarioId?: CloudArenaSessionScenarioId;
   seed?: number;
+  shuffleDeck?: boolean;
 };
 
 export type CloudArenaActionRequest = {
@@ -91,6 +92,7 @@ export type CloudArenaSessionSnapshot = {
     block: number;
     energy: number;
     hand: CloudArenaCardSnapshot[];
+    drawPile: CloudArenaCardSnapshot[];
     drawPileCount: number;
     discardPile: CloudArenaCardSnapshot[];
     graveyard: CloudArenaCardSnapshot[];

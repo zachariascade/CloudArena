@@ -6,7 +6,7 @@ export const defendingStrikeCardDefinition: CardDefinition = {
   cardTypes: ["instant"],
   cost: 2,
   onPlay: [
-    { attackAmount: 10, target: "enemy" },
+    { attackAmount: 5, target: "enemy" },
     { blockAmount: 5, target: "player" },
   ],
 };

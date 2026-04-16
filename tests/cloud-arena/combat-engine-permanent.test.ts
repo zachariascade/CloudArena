@@ -54,7 +54,7 @@ describe("cloud arena combat engine permanent flow", () => {
     expect(battle.battlefield[0]?.controllerId).toBe("player");
     expect(battle.battlefield[0]?.health).toBe(10);
     expect(battle.battlefield[0]?.block).toBe(0);
-    expect(battle.battlefield[0]?.counters).toEqual({});
+    expect(battle.battlefield[0]?.counters).toHaveLength(0);
     expect(battle.battlefield[0]?.attachments).toEqual([]);
     expect(battle.battlefield[0]?.abilities).toHaveLength(1);
     expect(battle.player.discardPile).toHaveLength(0);
@@ -117,7 +117,7 @@ describe("cloud arena combat engine permanent flow", () => {
     expect(battle.player.block).toBe(0);
     expect(battle.enemy.health).toBe(18);
     expect(battle.enemy.intent).toEqual({ attackAmount: 12 });
-    expect(battle.battlefield[0]?.health).toBe(2);
+    expect(battle.battlefield[0]?.health).toBe(10);
     expect(battle.battlefield[0]?.block).toBe(0);
     expect(battle.blockingQueue).toEqual([]);
     expect(battle.player.graveyard).toHaveLength(0);
@@ -186,7 +186,6 @@ describe("cloud arena combat engine permanent flow", () => {
         onPlay: [],
         power: 2,
         health: 8,
-        recoveryPolicy: "full_heal",
       },
     };
     const battle = createBattle({

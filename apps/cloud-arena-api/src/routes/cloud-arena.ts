@@ -34,6 +34,7 @@ function parseCreateSessionBody(body: unknown): CloudArenaCreateSessionRequest {
   }
 
   const { scenarioId, seed } = body;
+  const { shuffleDeck } = body;
 
   if (scenarioId !== undefined && scenarioId !== "mixed_guardian") {
     throw new CloudArenaInvalidSetupError('scenarioId must be "mixed_guardian".');
@@ -46,9 +47,14 @@ function parseCreateSessionBody(body: unknown): CloudArenaCreateSessionRequest {
     throw new CloudArenaInvalidSetupError("seed must be a positive integer.");
   }
 
+  if (shuffleDeck !== undefined && typeof shuffleDeck !== "boolean") {
+    throw new CloudArenaInvalidSetupError("shuffleDeck must be a boolean.");
+  }
+
   return {
     scenarioId: scenarioId as CloudArenaCreateSessionRequest["scenarioId"],
     seed: seed as number | undefined,
+    shuffleDeck: shuffleDeck as boolean | undefined,
   };
 }
 

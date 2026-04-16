@@ -4,6 +4,7 @@ import {
   applyBattleAction,
   findPermanentById,
   hasOpenBattlefieldSlot,
+  getLegalActions,
   selectObjects,
   selectPermanents,
   type CardDefinitionLibrary,
@@ -200,6 +201,34 @@ describe("cloud arena selector helpers", () => {
     }
 
     expect(findPermanentById(battle, firstPermanent.instanceId)?.instanceId).toBe(firstPermanent.instanceId);
+    expect(hasOpenBattlefieldSlot(battle)).toBe(true);
+  });
+
+  it("does not expose permanent play actions when the battlefield is full", () => {
+    const battle = createTestBattle({
+      cardDefinitions: SELECTOR_TEST_CARD_DEFINITIONS,
+      playerDeck: [
+        "angel_guardian",
+        "human_soldier",
+        "angel_guardian",
+        "human_soldier",
+        "holy_blade",
+      ],
+      enemy: {
+        name: "Selector Dummy",
+        health: 30,
+        basePower: 12,
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+
+    battle.player.energy = 10;
+
+    for (const card of [...battle.player.hand]) {
+      applyBattleAction(battle, { type: "play_card", cardInstanceId: card.instanceId });
+    }
+
     expect(hasOpenBattlefieldSlot(battle)).toBe(false);
+    expect(getLegalActions(battle).some((action) => action.type === "play_card")).toBe(false);
   });
 });

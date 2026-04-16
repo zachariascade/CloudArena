@@ -20,6 +20,7 @@ import {
   getScenarioPreset,
   hasCardType,
   isPermanentCardDefinition,
+  summarizePermanentCounters,
   type BattleAction,
   type BattleEvent,
   type BattleState,
@@ -32,6 +33,7 @@ type CloudArenaSessionRecord = {
   id: string;
   scenarioId: CloudArenaSessionScenarioId;
   seed: number;
+  shuffleDeck: boolean;
   createdAt: string;
   resetSource: {
     scenarioId: CloudArenaSessionScenarioId;
@@ -66,6 +68,33 @@ function toActionKey(action: BattleAction): string {
   return JSON.stringify(action);
 }
 
+function normalizeBattleAction(action: BattleAction): BattleAction {
+  if (action.type !== "use_permanent_action") {
+    return action;
+  }
+
+  if (action.source) {
+    return action;
+  }
+
+  if (action.action === "attack" || action.action === "defend") {
+    return {
+      type: "use_permanent_action",
+      permanentId: action.permanentId,
+      source: "rules",
+      action: action.action,
+    };
+  }
+
+  return {
+    type: "use_permanent_action",
+    permanentId: action.permanentId,
+    source: "ability",
+    action: action.action,
+    abilityId: action.abilityId,
+  };
+}
+
 function resolveScenario(
   request: CloudArenaCreateSessionRequest = {},
 ): CloudArenaScenarioPreset {
@@ -75,11 +104,13 @@ function resolveScenario(
 function createScenarioBattle(
   scenario: CloudArenaScenarioPreset,
   seed: number,
+  shuffleDeck: boolean,
 ): BattleState {
   return createBattle({
     seed,
     playerHealth: scenario.playerHealth,
     playerDeck: scenario.deck,
+    shuffleDeck,
     enemy: scenario.enemy,
   });
 }
@@ -113,7 +144,7 @@ function toCardSnapshot(
                     maxHealth: definition.health,
                     block: 0,
                     recoveryPolicy: definition.recoveryPolicy ?? "none",
-                    counters: {},
+                    counters: [],
                     attachments: [],
                     attachedTo: null,
                     abilities: definition.abilities ? definition.abilities.map((abilityEntry) => ({ ...abilityEntry })) : [],
@@ -168,6 +199,18 @@ function createActionOption(
         action,
         label: `Play ${name}`,
         source: "hand",
+      };
+    }
+    case "choose_target": {
+      const permanent = state.battlefield.find(
+        (entry) => entry?.instanceId === action.targetPermanentId,
+      );
+      const name = permanent?.name ?? action.targetPermanentId;
+
+      return {
+        action,
+        label: `Target ${name}`,
+        source: "battlefield",
       };
     }
     case "use_permanent_action": {
@@ -305,9 +348,10 @@ function getLegalActionOptions(state: BattleState): CloudArenaActionOption[] {
 
 function validateAction(state: BattleState, action: BattleAction): void {
   const legalActionKeys = new Set(getLegalActions(state).map(toActionKey));
+  const normalizedAction = normalizeBattleAction(action);
 
-  if (!legalActionKeys.has(toActionKey(action))) {
-    throw new CloudArenaInvalidActionError(action);
+  if (!legalActionKeys.has(toActionKey(normalizedAction))) {
+    throw new CloudArenaInvalidActionError(normalizedAction);
   }
 }
 
@@ -334,6 +378,7 @@ function buildSessionSnapshot(
       block: state.player.block,
       energy: state.player.energy,
       hand: state.player.hand.map((card) => toCardSnapshot(state, card)),
+      drawPile: state.player.drawPile.map((card) => toCardSnapshot(state, card)),
       drawPileCount: state.player.drawPile.length,
       discardPile: state.player.discardPile.map((card) => toCardSnapshot(state, card)),
       graveyard: state.player.graveyard.map((card) => toCardSnapshot(state, card)),
@@ -362,7 +407,7 @@ function buildSessionSnapshot(
             health: permanent.health,
             maxHealth: permanent.maxHealth,
             block: permanent.block,
-            counters: { ...(permanent.counters ?? {}) },
+            counters: summarizePermanentCounters(permanent.counters),
             attachments: [...(permanent.attachments ?? [])],
             attachedTo: permanent.attachedTo ?? null,
             hasActedThisTurn: permanent.hasActedThisTurn,
@@ -399,18 +444,20 @@ export function createCloudArenaSessionService(): CloudArenaSessionService {
   ): CloudArenaSessionRecord {
     const scenario = resolveScenario(request);
     const seed = request.seed ?? 1;
+    const shuffleDeck = request.shuffleDeck ?? false;
 
     return {
       id: randomUUID(),
       scenarioId: scenario.id,
       seed,
+      shuffleDeck,
       createdAt: new Date().toISOString(),
       resetSource: {
         scenarioId: scenario.id,
         seed,
       },
       actionHistory: [],
-      state: createScenarioBattle(scenario, seed),
+      state: createScenarioBattle(scenario, seed, shuffleDeck),
     };
   }
 
@@ -428,7 +475,7 @@ export function createCloudArenaSessionService(): CloudArenaSessionService {
     const scenario = getScenarioPreset(record.scenarioId);
 
     record.actionHistory = [];
-    record.state = createScenarioBattle(scenario, record.seed);
+    record.state = createScenarioBattle(scenario, record.seed, record.shuffleDeck);
   }
 
   return {
@@ -454,14 +501,15 @@ export function createCloudArenaSessionService(): CloudArenaSessionService {
         throw new CloudArenaFinishedBattleError(sessionId);
       }
 
-      validateAction(record.state, action);
+      const normalizedAction = normalizeBattleAction(action);
+      validateAction(record.state, normalizedAction);
 
       record.actionHistory.push({
-        action: { ...action },
+        action: { ...normalizedAction },
         turnNumber: record.state.turnNumber,
         phase: record.state.phase,
       });
-      applyBattleAction(record.state, action);
+      applyBattleAction(record.state, normalizedAction);
       return buildSessionSnapshot(record);
     },
 

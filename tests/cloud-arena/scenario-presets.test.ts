@@ -35,7 +35,8 @@ describe("cloud arena scenario presets", () => {
     const mixedGuardian = getScenarioPreset("mixed_guardian");
 
     expect(mixedGuardian.deck).toContain("guardian");
-    expect(mixedGuardian.deck).toContain("anointed_banner");
+    expect(mixedGuardian.deck).toContain("graveyard_hymn");
+    expect(mixedGuardian.deck.filter((card) => card === "token_angel")).toHaveLength(3);
     expect(mixedGuardian.deck.length).toBeGreaterThanOrEqual(10);
     expect(mixedGuardian.enemy.cards.length).toBeGreaterThanOrEqual(3);
   });

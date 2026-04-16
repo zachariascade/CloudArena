@@ -16,6 +16,7 @@ describe("cloud arena api routes", () => {
       payload: {
         scenarioId: "mixed_guardian",
         seed: 7,
+        shuffleDeck: true,
       },
     });
 

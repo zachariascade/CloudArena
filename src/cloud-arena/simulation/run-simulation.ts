@@ -108,6 +108,10 @@ function normalizeAgentSelection(
 
 export function runSimulation(input: SimulationInput): SimulationResult {
   const state = createBattle(input);
+  const startingDeck = [
+    ...state.player.hand,
+    ...state.player.drawPile,
+  ].map((card) => card.definitionId);
   const actionHistory: SimulationActionRecord[] = [];
   const maxSteps = input.maxSteps ?? 1000;
 
@@ -120,7 +124,7 @@ export function runSimulation(input: SimulationInput): SimulationResult {
           seed: state.seed,
           playerHealth: state.player.maxHealth,
           cardDefinitions: state.cardDefinitions,
-          playerDeck: [...input.playerDeck],
+          playerDeck: startingDeck,
           enemy: cloneEnemyConfig(input.enemy),
           maxSteps,
           agent: input.agentName ?? "anonymous_agent",

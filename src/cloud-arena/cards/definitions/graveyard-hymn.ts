@@ -1,17 +1,23 @@
 import type { CardDefinition } from "../../core/types.js";
 
-export const anointedBannerCardDefinition: CardDefinition = {
-  id: "anointed_banner",
-  name: "Anointed Banner",
-  cardTypes: ["artifact"],
+export const graveyardHymnCardDefinition: CardDefinition = {
+  id: "graveyard_hymn",
+  name: "Graveyard Hymn",
+  cardTypes: ["creature"],
   cost: 2,
+  subtypes: ["Angel"],
   onPlay: [],
-  power: 0,
-  health: 6,
+  power: 2,
+  health: 2,
   abilities: [
     {
       kind: "triggered",
-      trigger: { event: "self_enters_battlefield" },
+      trigger: {
+        event: "permanent_died",
+        selector: {
+          relation: "self",
+        },
+      },
       effects: [
         {
           type: "add_counter",

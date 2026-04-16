@@ -9,6 +9,8 @@ This is the product-specific entry point for Cloud Arena docs.
 
 ## Combat And Simulation Planning
 
+- [Cloud Arena Engine Knobs Reference](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/arena/ENGINE_KNOBS_REFERENCE.md)
+- [Cloud Arena Engine Glossary](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/arena/ENGINE_GLOSSARY.md)
 - [Cloud Arena Rules Reference](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/CLOUD_ARENA_RULES_REFERENCE.md)
 - [Core Combat Spec](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/CORE_COMBAT_SPEC.md)
 - [Combat Example](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/COMBAT_EXAMPLE.md)

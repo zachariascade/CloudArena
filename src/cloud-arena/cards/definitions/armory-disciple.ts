@@ -7,24 +7,24 @@ export const armoryDiscipleCardDefinition: CardDefinition = {
   cost: 2,
   onPlay: [],
   power: 2,
-  health: 7,
+  health: 4,
   abilities: [
-    {
-      kind: "triggered",
-      trigger: { event: "self_enters_battlefield" },
-      effects: [
-        {
-          type: "attach_from_hand",
-          selector: {
-            zone: "hand",
-            controller: "you",
-            cardType: "equipment",
-          },
-          target: "self",
-          optional: true,
-          cost: "free",
-        },
-      ],
-    },
+    // {
+    //   kind: "triggered",
+    //   trigger: { event: "self_enters_battlefield" },
+    //   effects: [
+    //     {
+    //       type: "attach_from_hand",
+    //       selector: {
+    //         zone: "hand",
+    //         controller: "you",
+    //         cardType: "equipment",
+    //       },
+    //       target: "self",
+    //       optional: true,
+    //       cost: "free",
+    //     },
+    //   ],
+    // },
   ],
 };

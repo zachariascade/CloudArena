@@ -1,3 +1,4 @@
+import { emitRulesEvent } from "../core/rules-events.js";
 import { findPermanentById } from "../core/selectors.js";
 import type { BattleState, DamageOverflowPolicy } from "../core/types.js";
 
@@ -85,6 +86,17 @@ function applyEnemyDamageToDefenders(
     remainingDamage = applyDamageToBlockAndHealth(remainingDamage, permanent);
     const absorbedByPermanent = beforeCombined - (permanent.block + permanent.health);
     logEnemyDamage(state, absorbedByPermanent, "permanent", permanent.instanceId);
+    if (absorbedByPermanent > 0) {
+      emitRulesEvent(state, {
+        type: "permanent_becomes_blocked",
+        turnNumber: state.turnNumber,
+        permanentId: permanent.instanceId,
+        sourceCardInstanceId: permanent.sourceCardInstanceId,
+        definitionId: permanent.definitionId,
+        controllerId: permanent.controllerId ?? "player",
+        slotIndex: permanent.slotIndex,
+      });
+    }
   }
 
   return { remainingDamage, defended };

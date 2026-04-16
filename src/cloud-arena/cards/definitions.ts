@@ -4,9 +4,17 @@ import { anointedBannerCardDefinition } from "./definitions/anointed-banner.js";
 import { choirCaptainCardDefinition } from "./definitions/choir-captain.js";
 import { defendCardDefinition } from "./definitions/defend.js";
 import { defendingStrikeCardDefinition } from "./definitions/defending-strike.js";
+import { focusedBlessingCardDefinition } from "./definitions/focused-blessing.js";
+import { forcedSacrificeCardDefinition } from "./definitions/forced-sacrifice.js";
+import { forbiddenInsightCardDefinition } from "./definitions/forbidden-insight.js";
+import { graveyardHymnCardDefinition } from "./definitions/graveyard-hymn.js";
 import { guardianCardDefinition } from "./definitions/guardian.js";
 import { holyBladeCardDefinition } from "./definitions/holy-blade.js";
+import { massBenedictionCardDefinition } from "./definitions/mass-benediction.js";
 import { sacrificialSeraphCardDefinition } from "./definitions/sacrificial-seraph.js";
+import { sanctifiedGuideCardDefinition } from "./definitions/sanctified-guide.js";
+import { targetedSmiteCardDefinition } from "./definitions/targeted-smite.js";
+import { tokenAngelCardDefinition } from "./definitions/token-angel.js";
 import type {
   CardDefinition,
   CardDefinitionLibrary,
@@ -32,9 +40,17 @@ export const cardDefinitions: CardDefinitionLibrary = {
   choir_captain: choirCaptainCardDefinition,
   defend: defendCardDefinition,
   defending_strike: defendingStrikeCardDefinition,
+  focused_blessing: focusedBlessingCardDefinition,
+  forced_sacrifice: forcedSacrificeCardDefinition,
+  forbidden_insight: forbiddenInsightCardDefinition,
+  graveyard_hymn: graveyardHymnCardDefinition,
   guardian: guardianCardDefinition,
   holy_blade: holyBladeCardDefinition,
+  mass_benediction: massBenedictionCardDefinition,
   sacrificial_seraph: sacrificialSeraphCardDefinition,
+  sanctified_guide: sanctifiedGuideCardDefinition,
+  targeted_smite: targetedSmiteCardDefinition,
+  token_angel: tokenAngelCardDefinition,
 };
 
 export function getCardDefinitionFromLibrary(

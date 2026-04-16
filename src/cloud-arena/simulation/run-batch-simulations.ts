@@ -135,6 +135,7 @@ export function runBatchSimulations(
       seed,
       playerHealth: input.playerHealth,
       playerDeck: input.playerDeck,
+      shuffleDeck: input.shuffleDeck,
       enemy: input.enemy,
       agent: input.agent,
       agentName: input.agentName,

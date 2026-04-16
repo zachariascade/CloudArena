@@ -6,6 +6,7 @@ import {
   createBattle,
   getDerivedPermanentActionAmount,
   getDerivedPermanentStat,
+  getPermanentCounterCount,
 } from "../../src/cloud-arena/index.js";
 
 describe("cloud arena anointed banner", () => {
@@ -53,12 +54,14 @@ describe("cloud arena anointed banner", () => {
       throw new Error("Expected guardian and anointed_banner on battlefield.");
     }
 
-    expect(guardian.counters?.["+1/+1"]).toBe(1);
-    expect(banner.counters?.["+1/+1"]).toBe(1);
-    expect(getDerivedPermanentStat(battle, guardian, "power")).toBe(11);
-    expect(getDerivedPermanentActionAmount(battle, guardian, "attack")).toBe(11);
+    expect(getPermanentCounterCount(guardian, "+1/+1")).toBe(2);
+    expect(getPermanentCounterCount(banner, "+1/+1")).toBe(2);
+    expect(getDerivedPermanentStat(battle, guardian, "power")).toBe(5);
+    expect(getDerivedPermanentActionAmount(battle, guardian, "attack")).toBe(5);
     expect(
       battle.rules.filter((event) => event.type === "counter_added").length,
-    ).toBe(2);
+    ).toBe(4);
+    expect(guardian.health).toBe(5);
+    expect(banner.health).toBe(7);
   });
 });

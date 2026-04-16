@@ -6,7 +6,7 @@ export const mixedGuardianScenarioPreset: CloudArenaScenarioPreset = {
   id: "mixed_guardian",
   label: "Mixed Guardian",
   notes: "Balanced deck intended to exercise both permanent attack and defend choices.",
-  playerHealth: 100,
+  playerHealth: 20,
   deck: mixedGuardianDeckPreset.cards,
   enemy: longBattleDemonEnemyPreset,
   recommendedMaxSteps: 250,

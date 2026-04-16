@@ -80,12 +80,12 @@ describe("cloud arena combat engine edge cases", () => {
 
   it("cannot play a permanent when no board slot is open", () => {
     const battle = createTestBattle({
-      playerDeck: ["guardian", "guardian", "guardian", "guardian", "attack"],
+      playerDeck: ["guardian", "guardian", "guardian", "guardian", "guardian", "guardian"],
       enemy: {
         name: "Ravaging Demon",
         health: 30,
-        basePower: 12,
-        behavior: [{ attackAmount: 12 }],
+        basePower: 0,
+        behavior: [{ attackAmount: 0 }],
       }
     });
 
@@ -96,21 +96,33 @@ describe("cloud arena combat engine edge cases", () => {
     const secondGuardian = guardianCards[1];
     const thirdGuardian = guardianCards[2];
     const fourthGuardian = guardianCards[3];
+    const fifthGuardian = guardianCards[4];
+    const sixthGuardian = battle.player.drawPile[0];
 
-    if (!firstGuardian || !secondGuardian || !thirdGuardian || !fourthGuardian) {
-      throw new Error("Expected four Guardians in hand.");
+    if (!firstGuardian || !secondGuardian || !thirdGuardian || !fourthGuardian || !fifthGuardian || !sixthGuardian) {
+      throw new Error("Expected six Guardians available.");
     }
 
     applyBattleAction(battle, { type: "play_card", cardInstanceId: firstGuardian.instanceId });
     applyBattleAction(battle, { type: "play_card", cardInstanceId: secondGuardian.instanceId });
     applyBattleAction(battle, { type: "play_card", cardInstanceId: thirdGuardian.instanceId });
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: fourthGuardian.instanceId });
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: fifthGuardian.instanceId });
 
-    expect(battle.battlefield.filter(Boolean)).toHaveLength(3);
+    expect(battle.battlefield.filter(Boolean)).toHaveLength(5);
+
+    applyBattleAction(battle, { type: "end_turn" });
+
+    const sixthGuardianInHand = battle.player.hand.find((card) => card.instanceId === sixthGuardian.instanceId);
+
+    if (!sixthGuardianInHand) {
+      throw new Error("Expected the sixth Guardian to be drawn on the next turn.");
+    }
 
     expect(() =>
       applyBattleAction(battle, {
         type: "play_card",
-        cardInstanceId: fourthGuardian.instanceId,
+        cardInstanceId: sixthGuardianInHand.instanceId,
       }),
     ).toThrow("open battlefield slot");
   });
@@ -508,7 +520,13 @@ describe("cloud arena combat engine edge cases", () => {
       throw new Error("Expected opening hand cards were missing.");
     }
 
-    expect(battle.rules).toEqual([]);
+    expect(battle.rules.map((event) => event.type)).toEqual([
+      "card_drawn",
+      "card_drawn",
+      "card_drawn",
+      "card_drawn",
+      "card_drawn",
+    ]);
 
     applyBattleAction(battle, {
       type: "play_card",
@@ -538,7 +556,14 @@ describe("cloud arena combat engine edge cases", () => {
     });
     applyBattleAction(battle, { type: "end_turn" });
 
-    expect(battle.rules).toEqual([
+    expect(
+      battle.rules.filter((event) =>
+        event.type === "card_played" ||
+        event.type === "permanent_entered" ||
+        event.type === "permanent_left_battlefield" ||
+        event.type === "permanent_died",
+      ),
+    ).toEqual([
       {
         type: "card_played",
         turnNumber: 1,
@@ -568,6 +593,15 @@ describe("cloud arena combat engine edge cases", () => {
         cardInstanceId: roundTwoDefend.instanceId,
         definitionId: "defend",
         controllerId: "player",
+      },
+      {
+        type: "permanent_left_battlefield",
+        turnNumber: 2,
+        permanentId: "guardian_1",
+        sourceCardInstanceId: guardianCard.instanceId,
+        definitionId: "guardian",
+        controllerId: "player",
+        slotIndex: 0,
       },
       {
         type: "permanent_died",
@@ -710,6 +744,8 @@ describe("cloud arena combat engine edge cases", () => {
         "slot 1: Guardian, hp=10/10, block=0, acted=no, defending=no",
         "slot 2: empty",
         "slot 3: empty",
+        "slot 4: empty",
+        "slot 5: empty",
       ],
       blockingQueue: [],
     });

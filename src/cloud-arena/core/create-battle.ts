@@ -5,8 +5,10 @@ import {
   LEAN_V1_STARTING_PLAYER_HEALTH,
 } from "./constants.js";
 import { cardDefinitions } from "../cards/definitions.js";
-import { drawUpToHandSize } from "./draw.js";
+import { drawUpToHandSize, shuffleCards } from "./draw.js";
 import { getEnemyPlanStepAtIndexFromInput } from "./enemy-plan.js";
+import { cleanupDefeatedPermanents } from "./permanents.js";
+import { processTriggeredAbilities } from "./triggers.js";
 import type {
   BattleState,
   CardDefinitionId,
@@ -25,7 +27,12 @@ export function createBattle(input: CreateBattleInput): BattleState {
   const seed = input.seed ?? 1;
   const playerHealth = input.playerHealth ?? LEAN_V1_STARTING_PLAYER_HEALTH;
   const resolvedCardDefinitions = input.cardDefinitions ?? cardDefinitions;
-  const initialDrawPile = toCardInstances(input.playerDeck);
+  const initialDrawPile = input.shuffleDeck
+    ? shuffleCards(toCardInstances(input.playerDeck), seed).map((card, index) => ({
+        ...card,
+        instanceId: `card_${index + 1}`,
+      }))
+    : toCardInstances(input.playerDeck);
   const initialEnemyPlan = getEnemyPlanStepAtIndexFromInput(input.enemy, 0);
   const enemyBehavior = "behavior" in input.enemy && input.enemy.behavior ? input.enemy.behavior : [];
   const enemyCards = "cards" in input.enemy && input.enemy.cards ? input.enemy.cards : [];
@@ -38,6 +45,8 @@ export function createBattle(input: CreateBattleInput): BattleState {
     turnNumber: 1,
     phase: "player_action",
     seed,
+    nextCounterIndex: 1,
+    nextTargetRequestIndex: 1,
     cardDefinitions: resolvedCardDefinitions,
     player: {
       health: playerHealth,
@@ -62,6 +71,7 @@ export function createBattle(input: CreateBattleInput): BattleState {
       currentCard: initialEnemyPlan.card,
     },
     battlefield: Array.from({ length: LEAN_V1_BOARD_SLOT_COUNT }, () => null),
+    pendingTargetRequest: null,
     blockingQueue: [],
     log: [
       {
@@ -75,6 +85,9 @@ export function createBattle(input: CreateBattleInput): BattleState {
   };
 
   const openingDraw = drawUpToHandSize(state, LEAN_V1_HAND_SIZE);
+  cleanupDefeatedPermanents(state);
+  processTriggeredAbilities(state);
+  cleanupDefeatedPermanents(state);
   state.log.push({
     type: "turn_started",
     turnNumber: 1,

@@ -128,9 +128,24 @@ describe("cloud arena value expressions", () => {
       throw new Error("Expected angel_guardian on battlefield.");
     }
 
-    guardianPermanent.counters = {
-      "+1/+1": 2,
-    };
+    guardianPermanent.counters = [
+      {
+        id: "counter_1",
+        counter: "+1/+1",
+        stat: "power",
+        amount: 1,
+        sourceKind: "permanent",
+        sourceId: guardianPermanent.instanceId,
+      },
+      {
+        id: "counter_2",
+        counter: "+1/+1",
+        stat: "health",
+        amount: 1,
+        sourceKind: "permanent",
+        sourceId: guardianPermanent.instanceId,
+      },
+    ];
     guardianPermanent.block = 5;
 
     expect(
@@ -179,7 +194,7 @@ describe("cloud arena value expressions", () => {
         },
         { abilitySourcePermanentId: guardianPermanent.instanceId },
       ),
-    ).toBe(4);
+    ).toBe(5);
   });
 
   it("evaluates trigger_subject properties from context", () => {

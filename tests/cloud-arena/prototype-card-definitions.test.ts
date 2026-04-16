@@ -5,6 +5,7 @@ import {
   cardDefinitions,
   createBattle,
   getDerivedPermanentStat,
+  getPermanentCounterCount,
 } from "../../src/cloud-arena/index.js";
 
 describe("cloud arena prototype card definitions", () => {
@@ -52,7 +53,8 @@ describe("cloud arena prototype card definitions", () => {
       throw new Error("Expected sacrificial_seraph on battlefield.");
     }
 
-    expect(seraph.counters?.["+1/+1"]).toBe(1);
+    expect(getPermanentCounterCount(seraph, "+1/+1")).toBe(2);
+    expect(getDerivedPermanentStat(battle, seraph, "power")).toBe(4);
     expect(battle.player.graveyard.map((card) => card.definitionId)).toContain("guardian");
   });
 

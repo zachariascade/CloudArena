@@ -21,8 +21,9 @@
   "defense": null,
   "artist": null,
   "image": {
-    "type": "placeholder",
-    "path": null
+    "type": "local",
+    "path": "images/cards/jesus-et-le-centurion.jpg",
+    "artist": "Unknown medieval artist"
   },
   "imagePrompt": null,
   "mechanics": [
@@ -42,13 +43,9 @@
   "title": "Man Under Authority",
   "images": {
     "classics": {
-      "type": "remote",
-      "path": "https://commons.wikimedia.org/wiki/Special:FilePath/Jesus_and_the_centurion_in_Capernaum.jpg",
-      "artist": "Unknown medieval artist",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jesus_and_the_centurion_in_Capernaum.jpg",
-      "license": "Public domain; Wikimedia Commons hosts a faithful reproduction of a public-domain work.",
-      "creditText": "Unknown medieval artist, Jesus and the Centurion in Capernaum",
-      "sourceNotes": "This is a direct subject match for the centurion card."
+      "type": "local",
+      "path": "images/cards/jesus-et-le-centurion.jpg",
+      "artist": "Unknown medieval artist"
     }
   }
 }

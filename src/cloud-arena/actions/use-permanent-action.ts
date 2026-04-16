@@ -6,6 +6,7 @@ import {
 import { getAbilityActionAmount, getActivatedAbilities, getActivatedAbilityById } from "../core/activated-abilities.js";
 import { getDerivedPermanentActionAmount } from "../core/derived-stats.js";
 import { findPermanentById } from "../core/selectors.js";
+import { emitRulesEvent } from "../core/rules-events.js";
 import type { BattleState, UsePermanentAction } from "../core/types.js";
 
 export function usePermanentAction(
@@ -61,18 +62,38 @@ export function usePermanentAction(
     } else {
       resolveEffects(state, ability.effects, {
         abilitySourcePermanentId: permanent.instanceId,
+        sourceCardInstanceId: permanent.sourceCardInstanceId,
+        abilityTargeting: ability.targeting,
       });
     }
     permanent.isDefending = false;
   } else if (action.action === "attack") {
     const attackAmount = getDerivedPermanentActionAmount(state, permanent, "attack");
     dealDamageToEnemy(state, attackAmount, "permanent_action", permanent.instanceId);
+    emitRulesEvent(state, {
+      type: "permanent_attacked",
+      turnNumber: state.turnNumber,
+      permanentId: permanent.instanceId,
+      sourceCardInstanceId: permanent.sourceCardInstanceId,
+      definitionId: permanent.definitionId,
+      controllerId: permanent.controllerId ?? "player",
+      slotIndex: permanent.slotIndex,
+    });
     permanent.isDefending = false;
   } else if (action.action === "defend") {
     permanent.isDefending = true;
     if (!state.blockingQueue.includes(permanent.instanceId)) {
       state.blockingQueue.push(permanent.instanceId);
     }
+    emitRulesEvent(state, {
+      type: "permanent_blocked",
+      turnNumber: state.turnNumber,
+      permanentId: permanent.instanceId,
+      sourceCardInstanceId: permanent.sourceCardInstanceId,
+      definitionId: permanent.definitionId,
+      controllerId: permanent.controllerId ?? "player",
+      slotIndex: permanent.slotIndex,
+    });
   }
 
   permanent.hasActedThisTurn = true;

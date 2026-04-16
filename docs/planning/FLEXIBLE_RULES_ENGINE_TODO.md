@@ -259,6 +259,7 @@ const freeEquipmentOnEnter: Ability = {
   - `gain_block`
   - `summon_permanent`
   - `attach_from_hand`
+  - implemented: battlefield equipment `Equip` via `attach_from_battlefield`
 - Each effect should be a resolver that can emit follow-up rules events.
 
 ## 7. Build Trigger Resolution
@@ -339,16 +340,17 @@ These are not part of the minimum first sprint, but they are strong categories t
 ### Additional Ability Categories
 
 - Zone-change abilities:
-  - "when this leaves the battlefield"
-  - "when a card is discarded"
+  - implemented: "when this leaves the battlefield"
+  - implemented: "when a card is discarded"
+  - implemented: "when a card is drawn"
   - "return a card from your graveyard"
 - Cast and play distinction:
   - separate "cast", "played", "put onto battlefield", and "enters battlefield"
   - this matters for cheats, summons, and attachment shortcuts
 - Combat-state triggers:
-  - "when this attacks"
-  - "when this blocks"
-  - "when this becomes blocked"
+  - implemented: "when this attacks"
+  - implemented: "when this blocks"
+  - implemented: "when this becomes blocked"
 - Targeted abilities:
   - target selection should be a first-class concept instead of being hidden in effect code
 - Modal and choice abilities:
@@ -375,10 +377,6 @@ These are not part of the minimum first sprint, but they are strong categories t
 
 - Add events for:
   - `spell_cast`
-  - `card_drawn`
-  - `card_discarded`
-  - `permanent_attacked`
-  - `permanent_blocked`
   - `combat_started`
   - `combat_ended`
   - `turn_ended`
@@ -386,9 +384,15 @@ These are not part of the minimum first sprint, but they are strong categories t
   - `player_damaged`
   - `permanent_targeted`
   - `zone_changed`
-  - `permanent_left_battlefield`
   - `permanent_sacrificed`
   - `damage_dealt`
+- Implemented now:
+  - `card_drawn`
+  - `card_discarded`
+  - `permanent_left_battlefield`
+  - `permanent_attacked`
+  - `permanent_blocked`
+  - `permanent_becomes_blocked`
 - Keep distinctions between `died`, `sacrificed`, and `left_battlefield` so future mechanics do not collapse into one ambiguous event.
 
 ### Additional Selector Dimensions
@@ -409,7 +413,7 @@ These are not part of the minimum first sprint, but they are strong categories t
 ### Additional Effect Primitive Categories
 
 - Consider adding generic effects for:
-  - `draw_card`
+  - implemented: `draw_card`
   - `discard_card`
   - `move_to_zone`
   - `destroy`

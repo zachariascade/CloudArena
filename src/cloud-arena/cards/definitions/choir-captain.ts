@@ -8,7 +8,7 @@ export const choirCaptainCardDefinition: CardDefinition = {
   subtypes: ["Angel"],
   onPlay: [],
   power: 2,
-  health: 9,
+  health: 3,
   abilities: [
     {
       kind: "static",

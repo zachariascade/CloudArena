@@ -12,17 +12,133 @@ import {
   isEquipmentPermanent,
 } from "./permanents.js";
 import { emitRulesEvent } from "./rules-events.js";
-import { selectObjects, selectPermanents, type SelectorContext } from "./selectors.js";
+import { drawCards } from "./draw.js";
+import { findPermanentById, selectObjects, selectPermanents, type SelectorContext } from "./selectors.js";
 import { evaluateValueExpression } from "./value-expressions.js";
 import type {
   BattleState,
   CardInstance,
   Effect,
+  Targeting,
   PermanentState,
   Selector,
 } from "./types.js";
 
-export type EffectResolutionContext = SelectorContext;
+export type EffectResolutionContext = SelectorContext & {
+  abilityTargeting?: Targeting;
+};
+
+function getCounterSource(
+  context: EffectResolutionContext,
+): { sourceKind: "card" | "permanent"; sourceId: string } {
+  if (context.abilitySourcePermanentId) {
+    return {
+      sourceKind: "permanent",
+      sourceId: context.abilitySourcePermanentId,
+    };
+  }
+
+  if (context.sourceCardInstanceId) {
+    return {
+      sourceKind: "card",
+      sourceId: context.sourceCardInstanceId,
+    };
+  }
+
+  return {
+    sourceKind: "card",
+    sourceId: "unknown",
+  };
+}
+
+function createCounterId(state: BattleState): string {
+  const counterId = `counter_${state.turnNumber}_${state.nextCounterIndex}`;
+  state.nextCounterIndex += 1;
+  return counterId;
+}
+
+function createTargetRequestId(state: BattleState): string {
+  const targetRequestId = `target_${state.turnNumber}_${state.nextTargetRequestIndex}`;
+  state.nextTargetRequestIndex += 1;
+  return targetRequestId;
+}
+
+function formatCounterLabel(powerDelta: number, healthDelta: number): string {
+  const formatSigned = (value: number): string => `${value >= 0 ? "+" : ""}${value}`;
+  return `${formatSigned(powerDelta)}/${formatSigned(healthDelta)}`;
+}
+
+function applyHealthCounterDelta(permanent: PermanentState, delta: number): void {
+  if (delta === 0) {
+    return;
+  }
+
+  const nextMaxHealth = Math.max(0, permanent.maxHealth + delta);
+  const nextHealth = Math.max(0, Math.min(permanent.health + delta, nextMaxHealth));
+  permanent.maxHealth = nextMaxHealth;
+  permanent.health = nextHealth;
+}
+
+function addCounterInstance(
+  state: BattleState,
+  permanent: PermanentState,
+  counter: {
+    id: string;
+    counter: string;
+    stat: "power" | "health";
+    amount: number;
+    sourceKind: "card" | "permanent";
+    sourceId: string;
+  },
+): void {
+  permanent.counters = [...(permanent.counters ?? []), counter];
+
+  if (counter.stat === "health") {
+    applyHealthCounterDelta(permanent, counter.amount);
+  }
+
+  emitRulesEvent(state, {
+    type: "counter_added",
+    turnNumber: state.turnNumber,
+    permanentId: permanent.instanceId,
+    counterId: counter.id,
+    counter: counter.counter,
+    stat: counter.stat,
+    amount: counter.amount,
+    sourceKind: counter.sourceKind,
+    sourceId: counter.sourceId,
+  });
+}
+
+function removeCounterInstance(
+  state: BattleState,
+  permanent: PermanentState,
+  counterIndex: number,
+): void {
+  const counter = permanent.counters?.[counterIndex];
+
+  if (!counter) {
+    return;
+  }
+
+  permanent.counters = (permanent.counters ?? []).filter((_, index) => index !== counterIndex);
+
+  if (counter.stat === "health") {
+    applyHealthCounterDelta(permanent, -counter.amount);
+  }
+
+  emitRulesEvent(state, {
+    type: "counter_removed",
+    turnNumber: state.turnNumber,
+    permanentId: permanent.instanceId,
+    counterId: counter.id,
+    counter: counter.counter,
+    stat: counter.stat,
+    amount: counter.amount,
+    sourceKind: counter.sourceKind,
+    sourceId: counter.sourceId,
+  });
+}
 
 export function dealDamageToEnemy(
   state: BattleState,
@@ -130,7 +246,97 @@ function resolvePermanentTargets(
     return selectPermanents(state, { relation: "self" }, context);
   }
 
+  if (context.chosenTargetPermanentId) {
+    const chosenTarget = findPermanentById(state, context.chosenTargetPermanentId);
+
+    if (!chosenTarget) {
+      return [];
+    }
+
+    const legalTargets = selectPermanents(state, target, {
+      ...context,
+      chosenTargetPermanentId: undefined,
+    });
+
+    if (!legalTargets.some((permanent) => permanent.instanceId === chosenTarget.instanceId)) {
+      throw new Error(`Permanent ${chosenTarget.instanceId} is not a valid target for this effect.`);
+    }
+
+    return [chosenTarget];
+  }
+
   return selectPermanents(state, target, context);
+}
+
+function isTargetedEffect(effect: Effect): boolean {
+  return "targeting" in effect && effect.targeting !== undefined;
+}
+
+function getTargetSelectorForEffect(effect: Effect): Selector | null {
+  switch (effect.type) {
+    case "sacrifice":
+      return effect.selector;
+    case "add_counter":
+    case "remove_counter":
+    case "deal_damage":
+    case "gain_block":
+    case "draw_card":
+    case "attach_from_battlefield":
+      return typeof effect.target === "string" ? null : effect.target;
+    case "summon_permanent":
+    case "attach_from_hand":
+      return null;
+  }
+
+  return null;
+}
+
+function applyTargetingToSelector(
+  selector: Selector,
+  targeting: Targeting | undefined,
+): Selector {
+  if (targeting?.allowSelfTarget === false && !selector.relation) {
+    return {
+      ...selector,
+      relation: "another",
+    };
+  }
+
+  return selector;
+}
+
+function queueTargetRequest(
+  state: BattleState,
+  effect: Effect,
+  effects: Effect[],
+  nextEffectIndex: number,
+  context: EffectResolutionContext,
+): void {
+  const targeting = {
+    ...(context.abilityTargeting ?? {}),
+    ...((effect as { targeting?: Targeting }).targeting ?? {}),
+  };
+  const prompt = targeting?.prompt ?? "Choose a target";
+
+  const selector = getTargetSelectorForEffect(effect);
+
+  if (!selector) {
+    throw new Error("Targeted effects must specify a selector target.");
+  }
+
+  state.pendingTargetRequest = {
+    id: createTargetRequestId(state),
+    prompt,
+    optional: targeting?.optional ?? false,
+    selector: applyTargetingToSelector(selector, targeting),
+    effects,
+    nextEffectIndex,
+    context: {
+      abilitySourcePermanentId: context.abilitySourcePermanentId,
+      triggerSubjectPermanentId: context.triggerSubjectPermanentId,
+      sourceCardInstanceId: context.sourceCardInstanceId,
+    },
+  };
 }
 
 function removeCardFromHand(state: BattleState, cardInstanceId: string): CardInstance {
@@ -149,6 +355,69 @@ function resolveAddCounterEffect(
   effect: Extract<Effect, { type: "add_counter" }>,
   context: EffectResolutionContext,
 ): void {
+  const targets = resolvePermanentTargets(state, effect.target, context);
+  const source = getCounterSource(context);
+
+  if (typeof effect.powerDelta === "number" || typeof effect.healthDelta === "number") {
+    const powerDelta = effect.powerDelta ?? 0;
+    const healthDelta = effect.healthDelta ?? 0;
+
+    if (powerDelta === 0 && healthDelta === 0) {
+      return;
+    }
+
+    const counterLabel = effect.counter ?? formatCounterLabel(powerDelta, healthDelta);
+
+    for (const permanent of targets) {
+      if (powerDelta !== 0) {
+        addCounterInstance(state, permanent, {
+          id: createCounterId(state),
+          counter: counterLabel,
+          stat: "power",
+          amount: powerDelta,
+          sourceKind: source.sourceKind,
+          sourceId: source.sourceId,
+        });
+      }
+
+      if (healthDelta !== 0) {
+        addCounterInstance(state, permanent, {
+          id: createCounterId(state),
+          counter: counterLabel,
+          stat: "health",
+          amount: healthDelta,
+          sourceKind: source.sourceKind,
+          sourceId: source.sourceId,
+        });
+      }
+    }
+
+    return;
+  }
+
+  const amount = Math.max(0, evaluateValueExpression(state, effect.amount ?? { type: "constant", value: 0 }, context));
+
+  if (amount <= 0 || !effect.counter || !effect.stat) {
+    return;
+  }
+
+  for (const permanent of targets) {
+    addCounterInstance(state, permanent, {
+      id: createCounterId(state),
+      counter: effect.counter,
+      stat: effect.stat,
+      amount,
+      sourceKind: source.sourceKind,
+      sourceId: source.sourceId,
+    });
+  }
+}
+
+function resolveRemoveCounterEffect(
+  state: BattleState,
+  effect: Extract<Effect, { type: "remove_counter" }>,
+  context: EffectResolutionContext,
+): void {
   const amount = Math.max(0, evaluateValueExpression(state, effect.amount, context));
 
   if (amount <= 0) {
@@ -158,19 +427,32 @@ function resolveAddCounterEffect(
   const targets = resolvePermanentTargets(state, effect.target, context);
 
   for (const permanent of targets) {
-    const nextAmount = (permanent.counters?.[effect.counter] ?? 0) + amount;
-    permanent.counters = {
-      ...(permanent.counters ?? {}),
-      [effect.counter]: nextAmount,
-    };
+    const matchingCounterIndexes = (permanent.counters ?? [])
+      .map((counter, index) => ({ counter, index }))
+      .filter(({ counter }) =>
+        (effect.counterId ? counter.id === effect.counterId : counter.counter === effect.counter) &&
+        (!effect.stat || counter.stat === effect.stat) &&
+        (!effect.sourceKind || counter.sourceKind === effect.sourceKind) &&
+        (!effect.sourceId || counter.sourceId === effect.sourceId),
+      )
+      .map(({ index }) => index)
+      .sort((left, right) => right - left);
 
-    emitRulesEvent(state, {
-      type: "counter_added",
-      turnNumber: state.turnNumber,
-      permanentId: permanent.instanceId,
-      counter: effect.counter,
-      amount,
-    });
+    let remainingToRemove = amount;
+
+    for (const index of matchingCounterIndexes) {
+      if (remainingToRemove <= 0) {
+        break;
+      }
+
+      const counter = permanent.counters?.[index];
+      if (!counter) {
+        continue;
+      }
+
+      removeCounterInstance(state, permanent, index);
+      remainingToRemove -= 1;
+    }
   }
 }
 
@@ -179,6 +461,21 @@ function resolveSacrificeEffect(
   effect: Extract<Effect, { type: "sacrifice" }>,
   context: EffectResolutionContext,
 ): void {
+  if (context.chosenTargetPermanentId) {
+    const legalTargets = selectPermanents(state, effect.selector, {
+      ...context,
+      chosenTargetPermanentId: undefined,
+    });
+    const chosenTarget = legalTargets.find(
+      (permanent) => permanent.instanceId === context.chosenTargetPermanentId,
+    );
+
+    if (chosenTarget) {
+      destroyPermanent(state, chosenTarget.instanceId);
+      return;
+    }
+  }
+
   const targets = choosePermanents(state, {
     selector: effect.selector,
     amount: effect.amount,
@@ -220,7 +517,7 @@ function resolveDealDamageEffect(
     return;
   }
 
-  for (const permanent of selectPermanents(state, effect.target, context)) {
+  for (const permanent of resolvePermanentTargets(state, effect.target, context)) {
     dealDamageToPermanent(state, permanent, amount);
   }
 }
@@ -243,6 +540,28 @@ function resolveGainBlockEffect(
 
   for (const permanent of resolvePermanentTargets(state, effect.target, context)) {
     gainBlockToPermanent(state, permanent, amount);
+  }
+}
+
+function resolveDrawCardEffect(
+  state: BattleState,
+  effect: Extract<Effect, { type: "draw_card" }>,
+  context: EffectResolutionContext,
+): void {
+  const amount = Math.max(0, evaluateValueExpression(state, effect.amount, context));
+
+  if (amount <= 0) {
+    return;
+  }
+
+  const drawnCards = drawCards(state, amount);
+
+  for (const card of drawnCards.cards) {
+    state.log.push({
+      type: "card_drawn",
+      turnNumber: state.turnNumber,
+      cardId: card.definitionId,
+    });
   }
 }
 
@@ -331,6 +650,91 @@ function resolveAttachFromHandEffect(
   attachPermanentToTarget(state, attachmentPermanent, targetPermanent);
 }
 
+function resolveAttachFromBattlefieldEffect(
+  state: BattleState,
+  effect: Extract<Effect, { type: "attach_from_battlefield" }>,
+  context: EffectResolutionContext,
+): void {
+  const sourcePermanentId = context.abilitySourcePermanentId;
+
+  if (!sourcePermanentId) {
+    throw new Error("attach_from_battlefield effects require an ability source permanent.");
+  }
+
+  const attachmentPermanent = findPermanentById(state, sourcePermanentId);
+
+  if (!attachmentPermanent) {
+    throw new Error(`Permanent ${sourcePermanentId} was not found on the battlefield.`);
+  }
+
+  const targetPermanent = resolvePermanentTargets(state, effect.target, context)[0];
+
+  if (!targetPermanent) {
+    return;
+  }
+
+  if (!isEquipmentPermanent(state, attachmentPermanent)) {
+    throw new Error(`Permanent ${attachmentPermanent.instanceId} is not a valid Equipment attachment.`);
+  }
+
+  attachPermanentToTarget(state, attachmentPermanent, targetPermanent);
+}
+
+function resolveEffectsFromIndex(
+  state: BattleState,
+  effects: Effect[],
+  context: EffectResolutionContext,
+  startIndex = 0,
+): void {
+  if (state.pendingTargetRequest) {
+    throw new Error("Cannot resolve effects while a target selection is pending.");
+  }
+
+  for (let index = startIndex; index < effects.length; index += 1) {
+    const effect = effects[index];
+
+    if (!effect) {
+      continue;
+    }
+
+    const requiresTargetSelection =
+      isTargetedEffect(effect) || context.abilityTargeting !== undefined;
+
+    if (requiresTargetSelection && !context.chosenTargetPermanentId) {
+      const selector = getTargetSelectorForEffect(effect);
+
+      if (selector) {
+        const targeting = {
+          ...(context.abilityTargeting ?? {}),
+          ...((effect as { targeting?: Targeting }).targeting ?? {}),
+        };
+        const legalTargets = selectPermanents(
+          state,
+          applyTargetingToSelector(selector, targeting),
+          context,
+        );
+
+        if (legalTargets.length === 0) {
+          if (targeting.optional) {
+            continue;
+          }
+
+          return;
+        }
+      }
+
+      queueTargetRequest(state, effect, effects, index, context);
+      return;
+    }
+
+    resolveEffect(state, effect, context);
+
+    if (state.pendingTargetRequest) {
+      return;
+    }
+  }
+}
+
 export function resolveEffect(
   state: BattleState,
   effect: Effect,
@@ -339,6 +743,9 @@ export function resolveEffect(
   switch (effect.type) {
     case "add_counter":
       resolveAddCounterEffect(state, effect, context);
+      return;
+    case "remove_counter":
+      resolveRemoveCounterEffect(state, effect, context);
       return;
     case "sacrifice":
       resolveSacrificeEffect(state, effect, context);
@@ -349,11 +756,17 @@ export function resolveEffect(
     case "gain_block":
       resolveGainBlockEffect(state, effect, context);
       return;
+    case "draw_card":
+      resolveDrawCardEffect(state, effect, context);
+      return;
     case "summon_permanent":
       resolveSummonPermanentEffect(state, effect, context);
       return;
     case "attach_from_hand":
       resolveAttachFromHandEffect(state, effect, context);
+      return;
+    case "attach_from_battlefield":
+      resolveAttachFromBattlefieldEffect(state, effect, context);
       return;
   }
 }
@@ -363,9 +776,49 @@ export function resolveEffects(
   effects: Effect[],
   context: EffectResolutionContext = {},
 ): void {
-  for (const effect of effects) {
-    resolveEffect(state, effect, context);
+  resolveEffectsFromIndex(state, effects, context);
+}
+
+export function resolveSpellEffects(
+  state: BattleState,
+  effects: Effect[],
+  context: EffectResolutionContext = {},
+): void {
+  resolveEffectsFromIndex(state, effects, context);
+}
+
+export function resolvePendingTargetRequest(
+  state: BattleState,
+  targetPermanentId: string,
+): void {
+  const pending = state.pendingTargetRequest;
+
+  if (!pending) {
+    throw new Error("There is no pending target request to resolve.");
   }
+
+  const chosenTarget = findPermanentById(state, targetPermanentId);
+
+  if (!chosenTarget) {
+    throw new Error(`Permanent ${targetPermanentId} was not found on the battlefield.`);
+  }
+
+  const legalTargets = selectPermanents(state, pending.selector, pending.context);
+  if (!legalTargets.some((permanent) => permanent.instanceId === chosenTarget.instanceId)) {
+    throw new Error(`Permanent ${targetPermanentId} is not a valid target.`);
+  }
+
+  state.pendingTargetRequest = null;
+
+  resolveEffectsFromIndex(
+    state,
+    pending.effects,
+    {
+      ...pending.context,
+      chosenTargetPermanentId: chosenTarget.instanceId,
+    },
+    pending.nextEffectIndex,
+  );
 }
 
 export function getEffectDamageAmount(effect: {

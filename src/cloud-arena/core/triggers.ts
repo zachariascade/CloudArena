@@ -1,133 +1,288 @@
 import {
   getCardDefinitionFromLibrary,
-  hasCardType,
-  isEquipmentCardDefinition,
-  isPermanentCardDefinition,
 } from "../cards/definitions.js";
 import { resolveEffects } from "./effects.js";
 import { cleanupDefeatedPermanents } from "./permanents.js";
-import { selectObjects } from "./selectors.js";
+import { matchesSelectorObject, selectObjects } from "./selectors.js";
 import { evaluateValueExpression } from "./value-expressions.js";
 import type {
   Ability,
   BattleState,
+  CardInstance,
   Condition,
+  PermanentState,
   RulesEvent,
-  Selector,
 } from "./types.js";
+import type { SelectedObject } from "./selectors.js";
+
+type TriggerEventWithPermanentSnapshot = Extract<
+  RulesEvent,
+  { type: "permanent_died" | "permanent_left_battlefield" | "permanent_attacked" | "permanent_blocked" | "permanent_becomes_blocked" }
+>;
 
 type TriggerResolution = {
   ability: Ability;
-  abilitySourcePermanentId: string;
+  abilitySourcePermanentId?: string;
+  abilitySourceCardInstanceId?: string;
   triggerSubjectPermanentId?: string;
+  triggerSubjectCardInstanceId?: string;
+  sourceCardInstanceId?: string;
 };
 
-function matchesEventSelector(
+function toPermanentSelectedObject(
   state: BattleState,
-  selector: Selector | undefined,
+  permanent: PermanentState,
+): SelectedObject {
+  return {
+    kind: "permanent",
+    zone: "battlefield",
+    permanent,
+    definition: getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId),
+    controllerId: permanent.controllerId ?? "player",
+  };
+}
+
+function toSyntheticPermanentSelectedObject(
+  state: BattleState,
+  event: TriggerEventWithPermanentSnapshot,
+): SelectedObject {
+  const definition = getCardDefinitionFromLibrary(state.cardDefinitions, event.definitionId);
+
+  return {
+    kind: "permanent",
+    zone: "battlefield",
+    permanent: {
+      instanceId: event.permanentId,
+      sourceCardInstanceId: event.sourceCardInstanceId,
+      name: definition.name,
+      definitionId: event.definitionId,
+      controllerId: event.controllerId,
+      power: 0,
+      health: 0,
+      maxHealth: 0,
+      block: 0,
+      recoveryPolicy: "none",
+      counters: [],
+      attachments: [],
+      attachedTo: null,
+      abilities: definition.abilities ? definition.abilities.map((ability) => ({ ...ability })) : [],
+      disabledAbilityIds: [],
+      disabledRulesActions: [],
+      hasActedThisTurn: false,
+      isDefending: false,
+      slotIndex: event.slotIndex,
+    },
+    definition,
+    controllerId: event.controllerId,
+  };
+}
+
+function toCardSelectedObject(
+  state: BattleState,
+  card: CardInstance,
+  zone: "hand" | "graveyard" | "discard",
+): SelectedObject {
+  return {
+    kind: "card",
+    zone,
+    card,
+    definition: getCardDefinitionFromLibrary(state.cardDefinitions, card.definitionId),
+    controllerId: "player",
+  };
+}
+
+function getCardInZone(
+  cards: CardInstance[],
+  cardInstanceId: string,
+): CardInstance | null {
+  return cards.find((card) => card.instanceId === cardInstanceId) ?? null;
+}
+
+function getTriggerSubjectObject(
+  state: BattleState,
   event: RulesEvent,
-  abilitySourcePermanentId: string,
-): boolean {
-  if (!selector) {
-    return true;
+): SelectedObject | null {
+  switch (event.type) {
+    case "permanent_entered": {
+      const permanent = state.battlefield.find((entry) => entry?.instanceId === event.permanentId) ?? null;
+
+      return permanent ? toPermanentSelectedObject(state, permanent) : null;
+    }
+    case "permanent_died":
+    case "permanent_left_battlefield":
+      return toSyntheticPermanentSelectedObject(state, event);
+    case "permanent_attacked":
+    case "permanent_blocked":
+    case "permanent_becomes_blocked":
+      return toSyntheticPermanentSelectedObject(state, event);
+    case "counter_added": {
+      const permanent = state.battlefield.find((entry) => entry?.instanceId === event.permanentId) ?? null;
+
+      return permanent ? toPermanentSelectedObject(state, permanent) : null;
+    }
+    case "card_drawn": {
+      const card = getCardInZone(state.player.hand, event.cardInstanceId);
+
+      return card ? toCardSelectedObject(state, card, "hand") : null;
+    }
+    case "card_discarded": {
+      const card = getCardInZone(state.player.discardPile, event.cardInstanceId);
+
+      return card ? toCardSelectedObject(state, card, "discard") : null;
+    }
+    case "card_played":
+    case "attachment_attached":
+    case "counter_removed":
+      return null;
+    default:
+      return null;
+  }
+}
+
+function getAbilitySourceObjects(state: BattleState, triggerSubject: SelectedObject | null): SelectedObject[] {
+  const sources = [
+    ...selectObjects(state, { zone: "battlefield" }),
+    ...selectObjects(state, { zone: "hand" }),
+    ...selectObjects(state, { zone: "graveyard" }),
+    ...selectObjects(state, { zone: "discard" }),
+  ];
+
+  if (triggerSubject) {
+    const sourceId =
+      triggerSubject.kind === "permanent"
+        ? triggerSubject.permanent.instanceId
+        : triggerSubject.card.instanceId;
+
+    if (
+      !sources.some((object) =>
+        object.kind === "permanent"
+          ? object.permanent.instanceId === sourceId
+          : object.card.instanceId === sourceId,
+      )
+    ) {
+      sources.push(triggerSubject);
+    }
   }
 
-  if (selector.zone && selector.zone !== "battlefield") {
-    return false;
-  }
-
-  if (
-    event.type !== "permanent_entered" &&
-    event.type !== "permanent_died" &&
-    event.type !== "counter_added"
-  ) {
-    return false;
-  }
-
-  const eventPermanentId = event.permanentId;
-  const definitionId =
-    event.type === "counter_added"
-      ? state.battlefield.find((permanent) => permanent?.instanceId === event.permanentId)?.definitionId
-      : event.definitionId;
-
-  if (!definitionId) {
-    return false;
-  }
-
-  const definition = getCardDefinitionFromLibrary(state.cardDefinitions, definitionId);
-  const controllerId =
-    event.type === "counter_added"
-      ? state.battlefield.find((permanent) => permanent?.instanceId === event.permanentId)?.controllerId ?? "player"
-      : event.controllerId ?? "player";
-
-  if (selector.controller === "you" && controllerId !== "player") {
-    return false;
-  }
-
-  if (selector.controller === "opponent" && controllerId === "player") {
-    return false;
-  }
-
-  if (selector.cardType === "equipment" && !isEquipmentCardDefinition(definition)) {
-    return false;
-  }
-
-  if (selector.cardType === "permanent" && !isPermanentCardDefinition(definition)) {
-    return false;
-  }
-
-  if (
-    selector.cardType &&
-    selector.cardType !== "equipment" &&
-    selector.cardType !== "permanent" &&
-    !hasCardType(definition, selector.cardType)
-  ) {
-    return false;
-  }
-
-  if (selector.subtype && !(definition.subtypes?.includes(selector.subtype) ?? false)) {
-    return false;
-  }
-
-  if (selector.relation === "self" && eventPermanentId !== abilitySourcePermanentId) {
-    return false;
-  }
-
-  if (selector.relation === "another" && eventPermanentId === abilitySourcePermanentId) {
-    return false;
-  }
-
-  return true;
+  return sources;
 }
 
 function matchesTrigger(
-  state: BattleState,
   ability: Ability,
   event: RulesEvent,
-  abilitySourcePermanentId: string,
+  abilitySource: SelectedObject,
+  triggerSubject: SelectedObject,
 ): boolean {
   if (ability.kind !== "triggered" || !ability.trigger) {
     return false;
   }
 
+  const context: TriggerResolution = {
+    ability,
+    abilitySourcePermanentId:
+      abilitySource.kind === "permanent" ? abilitySource.permanent.instanceId : undefined,
+    abilitySourceCardInstanceId:
+      abilitySource.kind === "card" ? abilitySource.card.instanceId : undefined,
+    triggerSubjectPermanentId:
+      triggerSubject.kind === "permanent" ? triggerSubject.permanent.instanceId : undefined,
+    triggerSubjectCardInstanceId:
+      triggerSubject.kind === "card" ? triggerSubject.card.instanceId : undefined,
+    sourceCardInstanceId:
+      abilitySource.kind === "card"
+        ? abilitySource.card.instanceId
+        : triggerSubject.kind === "card"
+          ? triggerSubject.card.instanceId
+          : undefined,
+  };
+
   switch (ability.trigger.event) {
     case "self_enters_battlefield":
-      return event.type === "permanent_entered" && event.permanentId === abilitySourcePermanentId;
+      return (
+        event.type === "permanent_entered" &&
+        abilitySource.kind === "permanent" &&
+        triggerSubject.kind === "permanent" &&
+        abilitySource.permanent.instanceId === triggerSubject.permanent.instanceId
+      );
     case "permanent_enters_battlefield":
       return (
         event.type === "permanent_entered" &&
-        matchesEventSelector(state, ability.trigger.selector, event, abilitySourcePermanentId)
+        triggerSubject.kind === "permanent" &&
+        (!ability.trigger.selector ||
+          matchesSelectorObject(triggerSubject, ability.trigger.selector, context))
       );
     case "permanent_died":
+      if (event.type !== "permanent_died" || triggerSubject.kind !== "permanent") {
+        return false;
+      }
+
+      if (ability.trigger.selector?.relation === "self") {
+        const { relation: _relation, ...selectorWithoutRelation } = ability.trigger.selector;
+
+        if (
+          abilitySource.kind === "card" &&
+          triggerSubject.permanent.sourceCardInstanceId === abilitySource.card.instanceId &&
+          matchesSelectorObject(triggerSubject, selectorWithoutRelation, context)
+        ) {
+          return true;
+        }
+
+        return false;
+      }
+
       return (
-        event.type === "permanent_died" &&
-        matchesEventSelector(state, ability.trigger.selector, event, abilitySourcePermanentId)
+        !ability.trigger.selector ||
+        matchesSelectorObject(triggerSubject, ability.trigger.selector, context)
+      );
+    case "permanent_left_battlefield":
+      return (
+        event.type === "permanent_left_battlefield" &&
+        triggerSubject.kind === "permanent" &&
+        (!ability.trigger.selector ||
+          matchesSelectorObject(triggerSubject, ability.trigger.selector, context))
+      );
+    case "permanent_attacked":
+      return (
+        event.type === "permanent_attacked" &&
+        triggerSubject.kind === "permanent" &&
+        (!ability.trigger.selector ||
+          matchesSelectorObject(triggerSubject, ability.trigger.selector, context))
+      );
+    case "permanent_blocked":
+      return (
+        event.type === "permanent_blocked" &&
+        triggerSubject.kind === "permanent" &&
+        (!ability.trigger.selector ||
+          matchesSelectorObject(triggerSubject, ability.trigger.selector, context))
+      );
+    case "permanent_becomes_blocked":
+      return (
+        event.type === "permanent_becomes_blocked" &&
+        triggerSubject.kind === "permanent" &&
+        (!ability.trigger.selector ||
+          matchesSelectorObject(triggerSubject, ability.trigger.selector, context))
       );
     case "counter_added":
       return (
         event.type === "counter_added" &&
+        triggerSubject.kind === "permanent" &&
         (!ability.trigger.counter || ability.trigger.counter === event.counter) &&
-        matchesEventSelector(state, ability.trigger.selector, event, abilitySourcePermanentId)
+        (!ability.trigger.stat || ability.trigger.stat === event.stat) &&
+        (!ability.trigger.selector ||
+          matchesSelectorObject(triggerSubject, ability.trigger.selector, context))
+      );
+    case "card_drawn":
+      return (
+        event.type === "card_drawn" &&
+        triggerSubject.kind === "card" &&
+        (!ability.trigger.selector ||
+          matchesSelectorObject(triggerSubject, ability.trigger.selector, context))
+      );
+    case "card_discarded":
+      return (
+        event.type === "card_discarded" &&
+        triggerSubject.kind === "card" &&
+        (!ability.trigger.selector ||
+          matchesSelectorObject(triggerSubject, ability.trigger.selector, context))
       );
     case "turn_started":
       return false;
@@ -168,19 +323,39 @@ function collectTriggeredAbilities(
   state: BattleState,
   event: RulesEvent,
 ): TriggerResolution[] {
-  return state.battlefield.flatMap((permanent) => {
-    if (!permanent?.abilities?.length) {
-      return [];
-    }
+  const triggerSubject = getTriggerSubjectObject(state, event);
 
-    return permanent.abilities.flatMap((ability) =>
-      matchesTrigger(state, ability, event, permanent.instanceId)
+  if (!triggerSubject) {
+    return [];
+  }
+
+  const abilitySources = getAbilitySourceObjects(state, triggerSubject);
+
+  return abilitySources.flatMap((abilitySource) => {
+    const abilities =
+      abilitySource.kind === "permanent"
+        ? abilitySource.permanent.abilities ?? []
+        : abilitySource.definition.abilities ?? [];
+
+    return abilities.flatMap((ability) =>
+      matchesTrigger(ability, event, abilitySource, triggerSubject)
         ? [
             {
               ability,
-              abilitySourcePermanentId: permanent.instanceId,
+              abilitySourcePermanentId:
+                abilitySource.kind === "permanent" ? abilitySource.permanent.instanceId : undefined,
+              abilitySourceCardInstanceId:
+                abilitySource.kind === "card" ? abilitySource.card.instanceId : undefined,
               triggerSubjectPermanentId:
-                "permanentId" in event ? event.permanentId : undefined,
+                triggerSubject.kind === "permanent" ? triggerSubject.permanent.instanceId : undefined,
+              triggerSubjectCardInstanceId:
+                triggerSubject.kind === "card" ? triggerSubject.card.instanceId : undefined,
+              sourceCardInstanceId:
+                abilitySource.kind === "card"
+                  ? abilitySource.card.instanceId
+                  : triggerSubject.kind === "card"
+                    ? triggerSubject.card.instanceId
+                    : undefined,
             },
           ]
         : [],

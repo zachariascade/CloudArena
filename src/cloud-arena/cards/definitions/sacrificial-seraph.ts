@@ -41,8 +41,8 @@ export const sacrificialSeraphCardDefinition: CardDefinition = {
         {
           type: "add_counter",
           target: "self",
-          counter: "+1/+1",
-          amount: { type: "constant", value: 1 },
+          powerDelta: 1,
+          healthDelta: 1,
         },
       ],
     },

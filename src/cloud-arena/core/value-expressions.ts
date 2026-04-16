@@ -1,4 +1,5 @@
 import { getDerivedPermanentStat } from "./derived-stats.js";
+import { getPermanentCounterCount } from "./counters.js";
 import { findPermanentById, selectObjects, type SelectorContext } from "./selectors.js";
 import type {
   BattleState,
@@ -53,7 +54,7 @@ export function evaluateValueExpression(
       return selectObjects(state, expression.selector, context).length;
     case "counter_count": {
       const permanent = getReferencedPermanent(state, expression.target, context);
-      return permanent?.counters?.[expression.counter] ?? 0;
+      return permanent ? getPermanentCounterCount(permanent, expression.counter, expression.stat) : 0;
     }
     case "property": {
       const permanent = getReferencedPermanent(state, expression.target, context);
