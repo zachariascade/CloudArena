@@ -193,6 +193,9 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
     ? model.stats.filter((stat) => stat !== blockStat)
     : model.stats;
   const usesSideCombatPanel = model.variant === "player" || model.variant === "enemy";
+  const isPermanentCard = model.variant === "permanent";
+  const isExhaustedPermanent = isPermanentCard && model.stateFlags.includes("spent");
+  const isDefendingPermanent = isPermanentCard && model.stateFlags.includes("defending");
   const cardFace = (
     <article className="card-face">
       <header className="card-face-header">
@@ -262,7 +265,14 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
       <div className="display-card-static-face">{cardFace}</div>
     );
   const combatPanel = model.healthBar ? (
-    <div className="display-card-health-panel">
+    <div
+      className={[
+        "display-card-health-panel",
+        isDefendingPermanent ? "is-defending" : null,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
       <div className="display-card-health-strip">
         {blockStat ? (
           <div className="display-card-block-pill" aria-label={`${model.name} block ${blockStat.value}`}>
@@ -379,7 +389,13 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
 
   return (
     <div
-      className={`card-face-tile tone-${model.frameTone} display-card-shell display-card-${model.variant} ${className ?? ""}`.trim()}
+      className={[
+        `card-face-tile tone-${model.frameTone} display-card-shell display-card-${model.variant}`,
+        isExhaustedPermanent ? "is-exhausted" : null,
+        className ?? null,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-variant={model.variant}
     >
       {usesSideCombatPanel && combatPanel ? (

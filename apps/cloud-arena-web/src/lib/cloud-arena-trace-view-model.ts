@@ -51,6 +51,7 @@ export type TraceViewerStepViewModel = {
     block: number;
     energy: number;
     hand: TraceViewerCardSnapshot[];
+    drawPile: TraceViewerCardSnapshot[];
     drawPileCount: number;
     discardPile: TraceViewerCardSnapshot[];
     graveyard: TraceViewerCardSnapshot[];
@@ -155,6 +156,19 @@ function toCardSnapshot(
   card: CardInstance,
 ): TraceViewerCardSnapshot {
   const definition = getCardDefinitionFromLibrary(cardDefinitions, card.definitionId);
+  const spellEffects = definition.spellEffects ?? [];
+
+  function formatSigned(value: number): string {
+    return `${value >= 0 ? "+" : ""}${value}`;
+  }
+
+  function formatCounterLabel(effect: Extract<typeof spellEffects[number], { type: "add_counter" }>): string {
+    if (typeof effect.powerDelta === "number" || typeof effect.healthDelta === "number") {
+      return `${formatSigned(effect.powerDelta ?? 0)}/${formatSigned(effect.healthDelta ?? 0)}`;
+    }
+
+    return effect.counter ?? "+0/+0";
+  }
 
   return {
     instanceId: card.instanceId,
@@ -165,24 +179,56 @@ function toCardSnapshot(
       isPermanentCardDefinition(definition)
         ? [
             ...(hasCardType(definition, "creature") ? [`Attack ${definition.power}`, "Defend"] : []),
-            ...getActivatedAbilities(definition.abilities)
-              .map((ability) => ability.activation.actionId.replace(/_/g, " ")),
+              ...getActivatedAbilities(definition.abilities)
+              .map((ability) => {
+                if (ability.activation.actionId === "equip") {
+                  return "Equip";
+                }
+
+                return ability.activation.actionId.replace(/_/g, " ");
+              }),
           ]
             .join(" • ")
-        : definition.onPlay
+        : (spellEffects.length > 0 ? spellEffects : definition.onPlay)
             .map((effect) => {
-              if (typeof effect.attackAmount === "number" && effect.attackAmount > 0) {
+              if (!("type" in effect) && typeof effect.attackAmount === "number" && effect.attackAmount > 0) {
                 const hits = effect.attackTimes && effect.attackTimes > 1
                   ? ` x${effect.attackTimes}`
                   : "";
                 return `Attack ${effect.attackAmount}${hits}`;
               }
 
-              if (typeof effect.blockAmount === "number" && effect.blockAmount > 0) {
+              if (!("type" in effect) && typeof effect.blockAmount === "number" && effect.blockAmount > 0) {
                 return `Defend ${effect.blockAmount}`;
               }
 
-              if (effect.summonSelf) {
+              if ("type" in effect && effect.type === "add_counter") {
+                const targetLabel =
+                  effect.target === "self"
+                    ? "self"
+                    : effect.target.zone === "battlefield" && effect.target.cardType === "permanent"
+                      ? "each permanent"
+                      : "target";
+                const amount =
+                  typeof effect.powerDelta === "number" || typeof effect.healthDelta === "number"
+                    ? Math.max(Math.abs(effect.powerDelta ?? 0), Math.abs(effect.healthDelta ?? 0))
+                    : "amount" in effect && effect.amount?.type === "constant"
+                      ? effect.amount.value
+                      : 1;
+                return `Add ${amount} ${formatCounterLabel(effect)} counter(s) to ${targetLabel}`;
+              }
+
+              if ("type" in effect && effect.type === "remove_counter") {
+                const targetLabel =
+                  effect.target === "self"
+                    ? "self"
+                    : effect.target.zone === "battlefield" && effect.target.cardType === "permanent"
+                      ? "each permanent"
+                      : "target";
+                return `Remove ${effect.amount.type === "constant" ? effect.amount.value : 1} ${effect.counter} counter(s) from ${targetLabel}`;
+              }
+
+              if (!("type" in effect) && effect.summonSelf) {
                 return "Summon";
               }
 
@@ -430,6 +476,7 @@ function snapshotReplayState(
       block: state.player.block,
       energy: state.player.energy,
       hand: state.player.hand.map((card) => toCardSnapshot(state.cardDefinitions, card)),
+      drawPile: state.player.drawPile.map((card) => toCardSnapshot(state.cardDefinitions, card)),
       drawPileCount: state.player.drawPile.length,
       discardPile: state.player.discardPile.map((card) => toCardSnapshot(state.cardDefinitions, card)),
       graveyard: state.player.graveyard.map((card) => toCardSnapshot(state.cardDefinitions, card)),

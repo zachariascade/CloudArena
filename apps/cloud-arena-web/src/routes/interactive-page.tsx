@@ -70,6 +70,10 @@ function findBattleFinishedEvent(log: BattleEvent[]): Extract<BattleEvent, { typ
   return null;
 }
 
+function createBattleSeed(): number {
+  return Math.max(1, Date.now());
+}
+
 export function CloudArenaInteractivePage({
   apiBaseUrl,
 }: CloudArenaInteractivePageProps): ReactElement {
@@ -83,6 +87,8 @@ export function CloudArenaInteractivePage({
   const [lastSubmittedActionLabel, setLastSubmittedActionLabel] = useState<string | null>(null);
 
   async function createSession(seed?: number): Promise<void> {
+    const resolvedSeed = seed ?? createBattleSeed();
+
     setIsCreatingSession(true);
     setStatus("loading");
     setError(null);
@@ -90,7 +96,8 @@ export function CloudArenaInteractivePage({
     try {
       const response = await api.createCloudArenaSession({
         scenarioId: "mixed_guardian",
-        seed,
+        seed: resolvedSeed,
+        shuffleDeck: true,
       });
       setSnapshot(response.data);
       setSeedDraft(String(response.data.seed));
@@ -112,7 +119,7 @@ export function CloudArenaInteractivePage({
     setError(null);
 
     void api.createCloudArenaSession(
-      { scenarioId: "mixed_guardian" },
+      { scenarioId: "mixed_guardian", seed: createBattleSeed(), shuffleDeck: true },
       { signal: abortController.signal },
     )
       .then((response) => {
@@ -165,7 +172,7 @@ export function CloudArenaInteractivePage({
       if (isMissingCloudArenaSessionError(resolvedError)) {
         setLastSubmittedActionLabel(null);
         setError(new Error("The live battle session expired after the API restarted. A fresh battle has been created."));
-        await createSession(snapshot.seed);
+        await createSession();
         return;
       }
 
@@ -185,8 +192,7 @@ export function CloudArenaInteractivePage({
     setError(null);
 
     try {
-      const response = await api.resetCloudArenaSession(snapshot.sessionId);
-      setSnapshot(response.data);
+      await createSession();
       setLastSubmittedActionLabel(null);
       setStatus("ready");
     } catch (nextError: unknown) {
@@ -195,7 +201,7 @@ export function CloudArenaInteractivePage({
       if (isMissingCloudArenaSessionError(resolvedError)) {
         setLastSubmittedActionLabel(null);
         setError(new Error("The live battle session expired after the API restarted. A fresh battle has been created."));
-        await createSession(snapshot.seed);
+        await createSession();
         return;
       }
 
@@ -249,11 +255,29 @@ export function CloudArenaInteractivePage({
     const endTurnToApply = endTurnAction.action;
 
     function onWindowKeyDown(event: KeyboardEvent): void {
+      const target = event.target;
+
+      if (
+        target instanceof HTMLElement &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.tagName === "SELECT" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+
       if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) {
         return;
       }
 
-      if (event.key === "Enter") {
+      if (event.key.toLowerCase() === "r") {
+        event.preventDefault();
+        void handleReset();
+        return;
+      }
+
+      if (event.key === "Enter" || event.key.toLowerCase() === "e") {
         event.preventDefault();
         void handleApplyAction(endTurnToApply);
       }
@@ -337,7 +361,9 @@ export function CloudArenaInteractivePage({
               ))}
             </div>
             <p className="trace-viewer-keyboard-hint">
-              Keyboard: <code>Enter</code> ends the turn when that action is available.
+              Keyboard: <code>Enter</code> or <code>E</code> ends the turn when that action is available.
+              <span> </span>
+              <code>R</code> resets the battle.
             </p>
           </section>
 
@@ -393,12 +419,7 @@ export function CloudArenaInteractivePage({
           onUsePermanentAction={
             isSubmitting
               ? undefined
-              : (permanentId, action) =>
-                  void handleApplyAction({
-                    type: "use_permanent_action",
-                    permanentId,
-                    action,
-                  })
+              : (action) => void handleApplyAction(action)
           }
           playableHandCardInstanceIds={playableHandCardInstanceIds}
           playablePermanentActions={playablePermanentActions}

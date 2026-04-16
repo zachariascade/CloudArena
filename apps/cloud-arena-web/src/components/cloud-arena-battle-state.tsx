@@ -12,13 +12,12 @@ import {
   mapArenaPermanentToDisplayCard,
   mapArenaPlayerToDisplayCard,
 } from "../lib/cloud-arena-display-card.js";
+import { cardDefinitions } from "../../../../src/cloud-arena/index.js";
 import type {
   BattleAction,
   ActivatedAbilityActionId,
   RulesActionId,
 } from "../../../../src/cloud-arena/index.js";
-
-const ENABLE_HOVER_INSPECTOR = false;
 
 type CloudArenaBattleStateProps = {
   battle: CloudArenaBattleViewModel;
@@ -26,7 +25,7 @@ type CloudArenaBattleStateProps = {
   disablePermanentActions?: boolean;
   disableTurnActions?: boolean;
   maxPlayerEnergy?: number;
-  onUsePermanentAction?: (permanentId: string, action: ActivatedAbilityActionId | RulesActionId) => void;
+  onUsePermanentAction?: (action: Extract<BattleAction, { type: "use_permanent_action" }>) => void;
   onPlayHandCard?: (cardInstanceId: string) => void;
   onTurnAction?: (action: BattleAction) => void;
   playablePermanentActions?: Array<{
@@ -78,9 +77,25 @@ export function CloudArenaBattleState({
         label: entry.label,
       }));
 
+  function getDefinitionJson(definitionId: string): string | null {
+    const definition = cardDefinitions[definitionId];
+
+    if (!definition) {
+      return null;
+    }
+
+    return JSON.stringify(definition, null, 2);
+  }
+
   function getPermanentCounterEntries(
     permanent: NonNullable<CloudArenaBattleViewModel["battlefield"][number]>,
   ): Array<{ counter: string; amount: number }> {
+    if (Array.isArray(permanent.counters)) {
+      return permanent.counters
+        .filter((entry) => entry.amount > 0)
+        .map((entry) => ({ counter: entry.counter, amount: entry.amount }));
+    }
+
     return Object.entries(permanent.counters ?? {})
       .filter((entry): entry is [string, number] => typeof entry[1] === "number" && entry[1] > 0)
       .map(([counter, amount]) => ({ counter, amount }));
@@ -98,6 +113,10 @@ export function CloudArenaBattleState({
         return "Apply Block";
       }
 
+      if (action.activation.actionId === "equip") {
+        return "Equip";
+      }
+
       return action.activation.actionId.replace(/_/g, " ");
     }
 
@@ -110,13 +129,15 @@ export function CloudArenaBattleState({
     models.set("enemy", enemyCard);
 
     for (const card of battle.player.hand) {
+      const handCardModel = mapArenaHandCardToDisplayCard(card, {
+        isPlayable: playableHandCards.has(card.instanceId),
+        disabled: disableHandCardActions,
+        onPlay: onPlayHandCard,
+      });
+
       models.set(
         `hand:${card.instanceId}`,
-        mapArenaHandCardToDisplayCard(card, {
-          isPlayable: playableHandCards.has(card.instanceId),
-          disabled: disableHandCardActions,
-          onPlay: onPlayHandCard,
-        }),
+        handCardModel,
       );
     }
 
@@ -125,11 +146,13 @@ export function CloudArenaBattleState({
         continue;
       }
 
+      const battlefieldCardModel = mapArenaPermanentToDisplayCard(slot, {
+        disableActions: disablePermanentActions,
+      });
+
       models.set(
         `battlefield:${slot.instanceId}`,
-        mapArenaPermanentToDisplayCard(slot, {
-          disableActions: disablePermanentActions,
-        }),
+        battlefieldCardModel,
       );
     }
 
@@ -147,10 +170,28 @@ export function CloudArenaBattleState({
     playerCard,
   ]);
 
-  const inspectorModel = hoveredInspectorKey
-    ? inspectableModels.get(hoveredInspectorKey) ?? null
-    : null;
   const getInspectableModel = (key: string) => inspectableModels.get(key) ?? enemyCard;
+  const hoveredInspectorDefinitionJson = hoveredInspectorKey
+    ? (() => {
+        if (hoveredInspectorKey === "player" || hoveredInspectorKey === "enemy") {
+          return null;
+        }
+
+        if (hoveredInspectorKey.startsWith("hand:")) {
+          const cardInstanceId = hoveredInspectorKey.slice("hand:".length);
+          const card = battle.player.hand.find((entry) => entry.instanceId === cardInstanceId);
+          return card ? getDefinitionJson(card.definitionId) : null;
+        }
+
+        if (hoveredInspectorKey.startsWith("battlefield:")) {
+          const permanentId = hoveredInspectorKey.slice("battlefield:".length);
+          const permanent = battle.battlefield.find((entry) => entry?.instanceId === permanentId) ?? null;
+          return permanent ? getDefinitionJson(permanent.definitionId) : null;
+        }
+
+        return null;
+      })()
+    : null;
 
   function getAnchoredInspectorPosition(
     targetRect: DOMRect,
@@ -185,41 +226,19 @@ export function CloudArenaBattleState({
     };
   }
 
-  function setInspectorFromMouse(key: string, event: MouseEvent<HTMLElement>): void {
-    if (!ENABLE_HOVER_INSPECTOR) {
-      return;
-    }
-
+  function openInspector(key: string, event: MouseEvent<HTMLElement>): void {
     setHoveredInspectorKey(key);
     setHoveredInspectorPosition(
       getAnchoredInspectorPosition(event.currentTarget.getBoundingClientRect()),
     );
   }
 
-  function setInspectorFromFocus(key: string, event: FocusEvent<HTMLElement>): void {
-    if (!ENABLE_HOVER_INSPECTOR) {
-      return;
+  function isInspectorRelatedTarget(target: EventTarget | null): boolean {
+    if (!(target instanceof Element)) {
+      return false;
     }
 
-    setHoveredInspectorKey(key);
-    setHoveredInspectorPosition(
-      getAnchoredInspectorPosition(event.currentTarget.getBoundingClientRect()),
-    );
-  }
-
-  function clearInspector(key: string): void {
-    if (!ENABLE_HOVER_INSPECTOR) {
-      return;
-    }
-
-    setHoveredInspectorKey((current) => {
-      if (current !== key) {
-        return current;
-      }
-
-      setHoveredInspectorPosition(null);
-      return null;
-    });
+    return target.closest(".cloud-arena-inspector-panel") !== null;
   }
 
   function getPermanentMenuActions(
@@ -236,7 +255,12 @@ export function CloudArenaBattleState({
           label: `Attack ${permanent.power}`,
           disabled: disablePermanentActions,
           onSelect: onUsePermanentAction
-            ? () => onUsePermanentAction(permanent.instanceId, "attack")
+            ? () => onUsePermanentAction({
+                type: "use_permanent_action",
+                permanentId: permanent.instanceId,
+                source: "rules",
+                action: "attack",
+              })
             : undefined,
         }]
       : [];
@@ -257,7 +281,13 @@ export function CloudArenaBattleState({
         label: getPermanentActionLabel(action),
         disabled: disablePermanentActions,
         onSelect: onUsePermanentAction
-          ? () => onUsePermanentAction(permanent.instanceId, mode)
+          ? () => onUsePermanentAction({
+              type: "use_permanent_action",
+              permanentId: permanent.instanceId,
+              source: "ability",
+              action: mode,
+              abilityId: action.id,
+            })
           : undefined,
       }];
     });
@@ -268,7 +298,12 @@ export function CloudArenaBattleState({
           label: "Defend",
           disabled: disablePermanentActions,
           onSelect: onUsePermanentAction
-            ? () => onUsePermanentAction(permanent.instanceId, "defend")
+            ? () => onUsePermanentAction({
+                type: "use_permanent_action",
+                permanentId: permanent.instanceId,
+                source: "rules",
+                action: "defend",
+              })
             : undefined,
         }]
       : [];
@@ -277,7 +312,7 @@ export function CloudArenaBattleState({
   }
 
   useEffect(() => {
-    if (!openPermanentMenuId) {
+    if (!openPermanentMenuId && !hoveredInspectorKey) {
       return;
     }
 
@@ -285,16 +320,20 @@ export function CloudArenaBattleState({
       const battleMain = battleMainRef.current;
       const target = event.target;
 
-      if (!(target instanceof Node) || !battleMain?.contains(target)) {
-        setOpenPermanentMenuId(null);
+      if (isInspectorRelatedTarget(target)) {
         return;
       }
 
-      if (target instanceof HTMLElement && target.closest(".trace-viewer-battlefield-slot")) {
+      if (!(target instanceof Node) || !battleMain?.contains(target)) {
+        setOpenPermanentMenuId(null);
+        setHoveredInspectorKey(null);
+        setHoveredInspectorPosition(null);
         return;
       }
 
       setOpenPermanentMenuId(null);
+      setHoveredInspectorKey(null);
+      setHoveredInspectorPosition(null);
     }
 
     function onDocumentKeyDown(event: KeyboardEvent): void {
@@ -309,22 +348,27 @@ export function CloudArenaBattleState({
       document.removeEventListener("mousedown", onDocumentMouseDown);
       document.removeEventListener("keydown", onDocumentKeyDown);
     };
-  }, [openPermanentMenuId]);
+  }, [hoveredInspectorKey, openPermanentMenuId]);
 
   function bindInspectorInteractions(key: string): {
     onMouseEnter: (event: MouseEvent<HTMLElement>) => void;
-    onMouseLeave: () => void;
+    onMouseLeave: (event: MouseEvent<HTMLElement>) => void;
     onFocus: (event: FocusEvent<HTMLElement>) => void;
-    onBlur: () => void;
+    onBlur: (event: FocusEvent<HTMLElement>) => void;
     onClick: () => void;
   } {
     return {
-      onMouseEnter: (event) => setInspectorFromMouse(key, event),
-      onMouseLeave: () => clearInspector(key),
-      onFocus: (event) => setInspectorFromFocus(key, event),
-      onBlur: () => clearInspector(key),
+      onMouseEnter: () => undefined,
+      onMouseLeave: () => undefined,
+      onFocus: () => undefined,
+      onBlur: () => undefined,
       onClick: () => undefined,
     };
+  }
+
+  function handleDetailsClick(key: string, event: MouseEvent<HTMLElement>): void {
+    event.stopPropagation();
+    openInspector(key, event);
   }
 
   return (
@@ -380,30 +424,35 @@ export function CloudArenaBattleState({
 
           <CloudArenaBattlefieldPanel
             battlefield={battle.battlefield}
+            legalActions={battle.legalActions}
             getInspectableModel={getInspectableModel}
             getPermanentMenuActions={getPermanentMenuActions}
             getPermanentCounterEntries={getPermanentCounterEntries}
             bindInspectorInteractions={bindInspectorInteractions}
+            onOpenDetails={handleDetailsClick}
             openPermanentMenuId={openPermanentMenuId}
             onPermanentMenuToggle={(permanentId) =>
               setOpenPermanentMenuId((current) => current === permanentId ? null : permanentId)}
             onPermanentMenuClose={() => setOpenPermanentMenuId(null)}
+            onTargetPermanentSelect={onTurnAction}
           />
 
           <CloudArenaHandTray
             battle={battle}
             getInspectableModel={getInspectableModel}
             bindInspectorInteractions={bindInspectorInteractions}
+            onOpenDetails={handleDetailsClick}
             isPlayableHandCard={(cardInstanceId) => playableHandCards.has(cardInstanceId)}
             groupedTurnActionsCount={groupedTurnActions.length}
           />
         </div>
 
-        <CloudArenaInspectorPanel
-          model={ENABLE_HOVER_INSPECTOR ? inspectorModel : null}
-          position={ENABLE_HOVER_INSPECTOR ? hoveredInspectorPosition : null}
-          sidePanel={sidePanel}
-        />
+        {hoveredInspectorKey ? (
+          <CloudArenaInspectorPanel
+            definitionJson={hoveredInspectorDefinitionJson}
+            position={hoveredInspectorPosition}
+          />
+        ) : null}
         {sidePanel ? (
           <div className="panel trace-viewer-panel cloud-arena-battle-sidepanel">
             {sidePanel}

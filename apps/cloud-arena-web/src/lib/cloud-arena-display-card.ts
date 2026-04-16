@@ -21,6 +21,7 @@ type ArenaCardPresentation = {
   footerCode: string;
   footerCredit: string;
   collectorNumber: string;
+  footerStat?: string | null;
 };
 
 function buildArenaImage(
@@ -59,8 +60,8 @@ const ARENA_HAND_CARD_PRESENTATIONS: Record<string, ArenaCardPresentation> = {
     typeLine: "Instant - Guard",
     manaCost: "{1}",
     frameTone: "white",
-    imagePath: "card_0036_watcher_at_edens_gate.jpg",
-    imageAlt: "A vigilant guardian standing at Eden's gate",
+    imagePath: "card_0033_eden_garden_of_delight.jpg",
+    imageAlt: "A steadfast shelter standing against the storm",
     flavorText: "Meet the blow with discipline, not panic.",
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
@@ -71,12 +72,60 @@ const ARENA_HAND_CARD_PRESENTATIONS: Record<string, ArenaCardPresentation> = {
     typeLine: "Instant - Clash",
     manaCost: "{2}",
     frameTone: "split-white-red",
-    imagePath: "card_0032_flaming_sword_of_the_east.png",
-    imageAlt: "A flaming sword held in defense",
+    imagePath: "card_0031_tree_of_forbidden_knowledge.jpg",
+    imageAlt: "A hard-earned warning wrapped around a burning edge",
     flavorText: "Turn defense into pressure before the enemy can reset.",
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "003",
+  },
+  focused_blessing: {
+    title: "Focused Blessing",
+    typeLine: "Instant",
+    manaCost: "{1}",
+    frameTone: "white",
+    imagePath: "card_0004_gabriel.svg",
+    imageAlt: "A radiant blessing aimed with deliberate focus",
+    flavorText: "A single faithful touch can sharpen a whole line of resolve.",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "011",
+  },
+  targeted_smite: {
+    title: "Targeted Smite",
+    typeLine: "Instant",
+    manaCost: "{1}",
+    frameTone: "red",
+    imagePath: "card_0023_cain_marked_exile.jpg",
+    imageAlt: "A marked exile struck by a precise judgment",
+    flavorText: "Judgment lands best when it does not wander.",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "012",
+  },
+  forced_sacrifice: {
+    title: "Forced Sacrifice",
+    typeLine: "Instant",
+    manaCost: "{1}",
+    frameTone: "split-black-red",
+    imagePath: "classics/card_0056_the_fall.png",
+    imageAlt: "A shadowed descent demanding a costly offering",
+    flavorText: "Some offerings are not chosen freely.",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "013",
+  },
+  forbidden_insight: {
+    title: "Forbidden Insight",
+    typeLine: "Instant",
+    manaCost: "{2}",
+    frameTone: "blue",
+    imagePath: "card_0031_tree_of_forbidden_knowledge.jpg",
+    imageAlt: "A moment of hidden understanding opening like a book of fire",
+    flavorText: "Some truths are dangerous, but they still fill the hand with answers.",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "016",
   },
   guardian: {
     title: "Keeper of the Gate",
@@ -89,6 +138,7 @@ const ARENA_HAND_CARD_PRESENTATIONS: Record<string, ArenaCardPresentation> = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "004",
+    footerStat: "4/4",
   },
   anointed_banner: {
     title: "Consecrated Standard",
@@ -102,48 +152,102 @@ const ARENA_HAND_CARD_PRESENTATIONS: Record<string, ArenaCardPresentation> = {
     footerCredit: "Cloud Arena",
     collectorNumber: "005",
   },
+  mass_benediction: {
+    title: "Mass Benediction",
+    typeLine: "Instant",
+    manaCost: "{2}",
+    frameTone: "white",
+    imagePath: "card_0027_let_there_be_light.png",
+    imageAlt: "A radiant blessing washing over a gathered host",
+    flavorText: "When the field is already crowded with resolve, every presence turns brighter.",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "010",
+  },
+  graveyard_hymn: {
+    title: "Graveyard Hymn",
+    typeLine: "Creature - Angel",
+    manaCost: "{2}",
+    frameTone: "white",
+    imagePath: "card_0004_gabriel.svg",
+    imageAlt: "An angel singing over the battlefield",
+    flavorText: "Even in ruin, a faithful voice can make the whole field rise again.",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "015",
+    footerStat: "2/2",
+  },
   sacrificial_seraph: {
     title: "Winged Collector",
     typeLine: "Creature - Angel",
     manaCost: "{2}",
     frameTone: "white",
-    imagePath: "card_0003_michael.jpg",
+    imagePath: "card_0003_michael.avif",
     imageAlt: "An angel descending over a battlefield altar",
     flavorText: "Every offering leaves it brighter, sharper, and harder to oppose.",
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "006",
+    footerStat: "3/5",
+  },
+  sanctified_guide: {
+    title: "Sanctified Guide",
+    typeLine: "Creature - Angel",
+    manaCost: "{3}",
+    frameTone: "white",
+    imagePath: "card_0037_builder_of_the_tower.jpg",
+    imageAlt: "An angel guiding a single blessing onto the field",
+    flavorText: "A steady hand can direct grace exactly where the line is thinnest.",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "014",
+    footerStat: "2/4",
+  },
+  token_angel: {
+    title: "Token Angel",
+    typeLine: "Creature - Angel",
+    manaCost: "{1}",
+    frameTone: "white",
+    imagePath: "classics/card_0059_dove_with_the_olive_branch.jpg",
+    imageAlt: "A small angel token hovering over the battlefield",
+    flavorText: "A little light, repeated where it is needed, still holds the line.",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "006A",
+    footerStat: "1/1",
   },
   choir_captain: {
     title: "Voice Above the Host",
     typeLine: "Creature - Angel",
     manaCost: "{3}",
     frameTone: "white",
-    imagePath: "card_0004_gabriel.jpg",
+    imagePath: "classics/card_0055_image_of_god.jpg",
     imageAlt: "An angelic captain calling ranks into formation",
     flavorText: "Its song counts every wing and turns presence into power.",
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "007",
+    footerStat: "2/3",
   },
   armory_disciple: {
     title: "Bearer of the Forge",
     typeLine: "Creature - Human",
     manaCost: "{2}",
     frameTone: "white",
-    imagePath: "card_0057_garments_of_skin.jpg",
+    imagePath: "card_0041_tubal_cain_forger_of_bronze_and_iron.jpg",
     imageAlt: "A disciple receiving blessed arms before battle",
     flavorText: "The right tool arrives the moment discipline becomes devotion.",
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "008",
+    footerStat: "2/4",
   },
   holy_blade: {
     title: "Blessed Edge",
     typeLine: "Artifact - Equipment",
     manaCost: "{1}",
     frameTone: "colorless",
-    imagePath: "card_0032_flaming_sword_of_the_east.png",
+    imagePath: "card_0048_the_serpent_whisperer_in_the_garden.png",
     imageAlt: "A radiant sword suspended in sacred light",
     flavorText: "No hand keeps it long; it belongs where the charge is fiercest.",
     footerCode: "ARE",
@@ -206,20 +310,7 @@ export function mapArenaPlayerToDisplayCard(
     statusLabel: "hero",
     statusTone: "approved",
     stats: [{ label: "Block", value: String(player.block) }],
-    textBlocks: [
-      {
-        kind: "passive",
-        text: `At the start of your turn, prepare ${player.energy} energy for the exchange ahead.`,
-      },
-      {
-        kind: "rules",
-        text: `Hand ${player.hand.length}. Draw ${player.drawPileCount}. Discard ${player.discardPile.length}. Graveyard ${player.graveyard.length}.`,
-      },
-      {
-        kind: "flavor",
-        text: "Every turn is a choice between weathering the blow and ending the fight.",
-      },
-    ],
+    textBlocks: [],
     badges: ["hero"],
     actions: [],
     stateFlags: [],
@@ -312,11 +403,11 @@ export function mapArenaHandCardToDisplayCard(
     footerCode: presentation.footerCode,
     footerCredit: presentation.footerCredit,
     collectorNumber: presentation.collectorNumber,
-    footerStat: null,
+    footerStat: presentation.footerStat ?? null,
     healthBar: null,
     energyBar: null,
-    statusLabel: options.isPlayable ? "playable" : "waiting",
-    statusTone: options.isPlayable ? "balanced" : "draft",
+    statusLabel: null,
+    statusTone: undefined,
     stats: [],
     textBlocks: [
       {
@@ -327,7 +418,7 @@ export function mapArenaHandCardToDisplayCard(
         ? [{ kind: "flavor" as const, text: presentation.flavorText }]
         : []),
     ],
-    badges: [options.isPlayable ? "playable" : "unavailable"],
+    badges: [],
     actions:
       options.isPlayable && options.onPlay
         ? [
@@ -354,6 +445,10 @@ function getPermanentActionText(
 
     if (action.activation.actionId === "apply_block") {
       return "Apply Block";
+    }
+
+    if (action.activation.actionId === "equip") {
+      return "Equip";
     }
 
     return action.activation.actionId.replace(/_/g, " ");
@@ -446,11 +541,14 @@ export function mapArenaPermanentToDisplayCard(
       },
     ];
   });
+  const hasAvailableActions =
+    !permanent.hasActedThisTurn && (permanent.isCreature || permanent.actions.length > 0);
+  const permanentAvailabilityState = hasAvailableActions ? "ready" : "spent";
 
   return {
     variant: "permanent",
     name: permanent.name,
-    title: presentation.title ?? `Slot ${permanent.slotIndex + 1}`,
+    title: presentation.title ?? null,
     subtitle: presentation.typeLine,
     frameTone: presentation.frameTone,
     manaCost: presentation.manaCost,
@@ -464,16 +562,12 @@ export function mapArenaPermanentToDisplayCard(
     footerCode: presentation.footerCode,
     footerCredit: presentation.footerCredit,
     collectorNumber: `${presentation.collectorNumber}-${permanent.slotIndex + 1}`,
-    footerStat: null,
-    healthBar: {
-      current: permanent.health,
-      max: permanent.maxHealth,
-      label: `${permanent.health}/${permanent.maxHealth}`,
-    },
+    footerStat: `${permanent.power}/${permanent.health}`,
+    healthBar: null,
     energyBar: null,
-    statusLabel: null,
-    statusTone: permanent.hasActedThisTurn ? "draft" : "balanced",
-    stats: [{ label: "Block", value: String(permanent.block) }],
+    statusLabel: permanent.isDefending ? "defending" : null,
+    statusTone: permanent.isDefending ? "approved" : undefined,
+    stats: [],
     textBlocks: [
       ...(permanent.isCreature
         ? [
@@ -495,13 +589,10 @@ export function mapArenaPermanentToDisplayCard(
         ? [{ kind: "flavor" as const, text: presentation.flavorText }]
         : []),
     ],
-    badges: [
-      permanent.isDefending ? "defending" : "ready",
-      ...(permanent.hasActedThisTurn ? ["acted"] : []),
-    ],
+    badges: [],
     actions: [...nativeActionButtons, ...activatedActionButtons],
     stateFlags: [
-      permanent.hasActedThisTurn ? "acted" : "ready",
+      permanent.hasActedThisTurn ? "spent" : permanentAvailabilityState,
       permanent.isDefending ? "defending" : "open",
     ],
   };

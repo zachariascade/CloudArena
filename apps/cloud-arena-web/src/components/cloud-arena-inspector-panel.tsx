@@ -1,23 +1,22 @@
-import type { CSSProperties, ReactElement, ReactNode } from "react";
-
-import type { DisplayCardModel } from "../lib/display-card.js";
-import { DisplayCard } from "./display-card.js";
+import type { CSSProperties, MouseEventHandler, ReactElement } from "react";
 
 type CloudArenaInspectorPanelProps = {
-  model: DisplayCardModel | null;
+  definitionJson: string | null;
   position?: {
     left: number;
     top: number;
   } | null;
-  sidePanel?: ReactNode;
+  onMouseEnter?: MouseEventHandler<HTMLElement>;
+  onMouseLeave?: MouseEventHandler<HTMLElement>;
 };
 
 export function CloudArenaInspectorPanel({
-  model,
+  definitionJson,
   position = null,
-  sidePanel,
+  onMouseEnter,
+  onMouseLeave,
 }: CloudArenaInspectorPanelProps): ReactElement {
-  if (!model) {
+  if (!definitionJson) {
     return <></>;
   }
 
@@ -32,13 +31,14 @@ export function CloudArenaInspectorPanel({
     <aside
       className="panel trace-viewer-panel cloud-arena-inspector-panel"
       aria-live="polite"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       style={style}
     >
-      <DisplayCard
-        className="cloud-arena-inspector-card"
-        model={model}
-      />
-      {sidePanel ? <div className="cloud-arena-inspector-sidepanel">{sidePanel}</div> : null}
+      <div className="cloud-arena-inspector-definition">
+        <strong className="cloud-arena-inspector-definition-title">Card Definition</strong>
+        <pre className="cloud-arena-inspector-definition-json">{definitionJson}</pre>
+      </div>
     </aside>
   );
 }

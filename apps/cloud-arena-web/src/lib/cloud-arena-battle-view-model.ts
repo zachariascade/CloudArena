@@ -26,6 +26,7 @@ export type CloudArenaBattleViewModel = {
     block: number;
     energy: number;
     hand: CloudArenaCardSnapshot[];
+    drawPile: CloudArenaCardSnapshot[];
     drawPileCount: number;
     discardPile: CloudArenaCardSnapshot[];
     graveyard: CloudArenaCardSnapshot[];
@@ -60,6 +61,7 @@ export function buildBattleViewModelFromTraceStep(
       block: step.player.block,
       energy: step.player.energy,
       hand: step.player.hand.map((card) => ({ ...card })),
+      drawPile: [],
       drawPileCount: step.player.drawPileCount,
       discardPile: step.player.discardPile.map((card) => ({ ...card })),
       graveyard: step.player.graveyard.map((card) => ({ ...card })),
@@ -107,6 +109,7 @@ export function buildBattleViewModelFromSessionSnapshot(
       block: snapshot.player.block,
       energy: snapshot.player.energy,
       hand: snapshot.player.hand.map((card) => ({ ...card })),
+      drawPile: snapshot.player.drawPile.map((card) => ({ ...card })),
       drawPileCount: snapshot.player.drawPileCount,
       discardPile: snapshot.player.discardPile.map((card) => ({ ...card })),
       graveyard: snapshot.player.graveyard.map((card) => ({ ...card })),

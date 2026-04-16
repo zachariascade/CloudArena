@@ -538,6 +538,101 @@ export function renderCloudArcanumWebHtml(
         font-weight: 700;
       }
 
+      .cloud-arena-hud-stat-pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.26rem 0.6rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(71, 85, 105, 0.14);
+        color: var(--ink);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.01em;
+      }
+
+      .cloud-arena-hud-player-line {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.75rem;
+        align-items: center;
+      }
+
+      .cloud-arena-hud-player-track {
+        display: grid;
+        gap: 0.45rem;
+        min-width: 0;
+      }
+
+      .cloud-arena-hud-block-badge {
+        display: inline-grid;
+        place-items: center;
+        align-self: stretch;
+        min-width: 3.3rem;
+        min-height: 3.3rem;
+        padding: 0.35rem 0.55rem;
+        border-radius: 14px;
+        border: 1px solid rgba(30, 64, 175, 0.22);
+        background: linear-gradient(180deg, rgba(96, 165, 250, 0.95), rgba(37, 99, 235, 0.95));
+        color: #f8fbff;
+        box-shadow: 0 14px 28px rgba(37, 99, 235, 0.18);
+      }
+
+      .cloud-arena-hud-block-caption {
+        font-size: 0.64rem;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        line-height: 1;
+      }
+
+      .cloud-arena-hud-block-value {
+        font-size: 1rem;
+        font-weight: 900;
+        line-height: 1;
+      }
+
+      .cloud-arena-hud-enemy-line {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 0.75rem;
+        align-items: center;
+      }
+
+      .cloud-arena-hud-enemy-track {
+        display: grid;
+        gap: 0.45rem;
+        min-width: 0;
+      }
+
+      .cloud-arena-hud-attack-badge {
+        display: inline-grid;
+        place-items: center;
+        align-self: stretch;
+        min-width: 3.3rem;
+        min-height: 3.3rem;
+        padding: 0.35rem 0.55rem;
+        border-radius: 14px;
+        border: 1px solid rgba(127, 29, 29, 0.38);
+        background: linear-gradient(180deg, #ef4444, #b91c1c);
+        color: #fff7f7;
+        box-shadow: 0 14px 28px rgba(185, 28, 28, 0.22);
+      }
+
+      .cloud-arena-hud-attack-caption {
+        font-size: 0.64rem;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        line-height: 1;
+      }
+
+      .cloud-arena-hud-attack-value {
+        font-size: 1rem;
+        font-weight: 900;
+        line-height: 1;
+      }
+
       .cloud-arena-hud-health-bar {
         width: 100%;
         height: 0.52rem;
@@ -688,6 +783,13 @@ export function renderCloudArcanumWebHtml(
         justify-content: start;
       }
 
+      .trace-viewer-board-scroll {
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 0.15rem 0.15rem 0.45rem;
+        scroll-snap-type: x proximity;
+      }
+
       .trace-viewer-hand-scroll {
         display: grid;
         grid-auto-flow: column;
@@ -740,8 +842,12 @@ export function renderCloudArcanumWebHtml(
 
       .trace-viewer-board-grid {
         align-items: start;
-        grid-template-columns: repeat(3, minmax(var(--display-card-width), var(--display-card-width)));
-        justify-content: space-between;
+        grid-auto-flow: column;
+        grid-auto-columns: var(--display-card-width);
+        grid-template-columns: none;
+        width: max-content;
+        min-width: 100%;
+        justify-content: start;
       }
 
       .cloud-arena-battlefield-card {
@@ -758,9 +864,24 @@ export function renderCloudArcanumWebHtml(
         text-align: left;
       }
 
+      .cloud-arena-permanent-button.is-targetable {
+        border-radius: 18px;
+        box-shadow:
+          0 0 0 2px rgba(38, 99, 235, 0.24),
+          0 0 0 8px rgba(59, 130, 246, 0.12);
+      }
+
+      .cloud-arena-permanent-button.is-targetable:hover {
+        box-shadow:
+          0 0 0 2px rgba(38, 99, 235, 0.34),
+          0 0 0 10px rgba(59, 130, 246, 0.18),
+          0 20px 34px rgba(28, 23, 19, 0.14);
+      }
+
       .trace-viewer-battlefield-slot {
         position: relative;
         width: var(--display-card-width);
+        scroll-snap-align: start;
       }
 
       .cloud-arena-permanent-button:focus-visible {
@@ -819,8 +940,8 @@ export function renderCloudArcanumWebHtml(
 
       @media (max-width: 959px) {
         .trace-viewer-board-grid {
-          grid-template-columns: repeat(auto-fit, minmax(var(--display-card-width), var(--display-card-width)));
-          justify-content: center;
+          width: max-content;
+          justify-content: start;
         }
 
         .cloud-arena-permanent-menu {
@@ -998,6 +1119,10 @@ export function renderCloudArcanumWebHtml(
         gap: 0.4rem;
       }
 
+      .display-card-shell.is-exhausted {
+        opacity: 0.58;
+      }
+
       .display-card-character-layout {
         display: grid;
         grid-template-columns: minmax(0, var(--display-card-width)) minmax(12rem, 1fr);
@@ -1040,6 +1165,13 @@ export function renderCloudArcanumWebHtml(
         background: rgba(255, 255, 255, 0.62);
       }
 
+      .display-card-health-panel.is-defending {
+        border-color: rgba(37, 99, 235, 0.22);
+        background:
+          radial-gradient(circle at top left, rgba(147, 197, 253, 0.34), transparent 56%),
+          linear-gradient(180deg, rgba(239, 246, 255, 0.98), rgba(219, 234, 254, 0.92));
+      }
+
       .display-card-player > .display-card-character-layout > .display-card-health-panel,
       .display-card-enemy > .display-card-character-layout > .display-card-health-panel {
         align-self: stretch;
@@ -1057,6 +1189,10 @@ export function renderCloudArcanumWebHtml(
         grid-template-columns: auto minmax(0, 1fr);
         align-items: center;
         gap: 0.65rem;
+      }
+
+      .display-card-health-panel.is-defending .display-card-health-strip {
+        align-items: stretch;
       }
 
       .display-card-health-meter {
@@ -1186,6 +1322,56 @@ export function renderCloudArcanumWebHtml(
 
       .cloud-arena-hand-card-shell {
         flex: 0 0 auto;
+        position: relative;
+        padding-bottom: 1.8rem;
+      }
+
+      .cloud-arena-card-details-button {
+        position: absolute;
+        left: 50%;
+        bottom: 0.1rem;
+        transform: translateX(-50%);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 1.45rem;
+        padding: 0.2rem 0.55rem;
+        border-radius: 999px;
+        border: 1px solid rgba(154, 52, 18, 0.2);
+        background: rgba(255, 251, 246, 0.92);
+        color: var(--accent);
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        cursor: pointer;
+        box-shadow: 0 6px 16px rgba(98, 57, 18, 0.08);
+        white-space: nowrap;
+        z-index: 3;
+      }
+
+      .cloud-arena-card-details-button:hover {
+        color: var(--accent-strong);
+        border-color: rgba(154, 52, 18, 0.3);
+        background: rgba(255, 247, 237, 0.98);
+      }
+
+      .cloud-arena-card-details-button:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+      }
+
+      .cloud-arena-battlefield-slot {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.35rem;
+      }
+
+      .cloud-arena-battlefield-details-button {
+        position: static;
+        transform: none;
+        margin-top: 0;
       }
 
       .cloud-arena-zone-chip-row {
@@ -1223,11 +1409,11 @@ export function renderCloudArcanumWebHtml(
       .cloud-arena-inspector-panel {
         position: absolute;
         z-index: 30;
-        width: min(22rem, calc(100vw - 3rem));
+        width: min(28rem, calc(100vw - 3rem));
         max-height: min(75dvh, 42rem);
-        padding: 0.85rem;
+        padding: 0.9rem 1rem;
         overflow: hidden;
-        pointer-events: none;
+        pointer-events: auto;
         transform: translate3d(0, 0, 0);
         box-shadow: 0 28px 70px rgba(28, 23, 19, 0.24);
         border-color: rgba(95, 84, 76, 0.24);
@@ -1235,27 +1421,33 @@ export function renderCloudArcanumWebHtml(
         backdrop-filter: blur(16px);
       }
 
-      .cloud-arena-inspector-card {
-        align-self: start;
+      .cloud-arena-inspector-definition {
+        display: grid;
+        gap: 0.65rem;
       }
 
-      .cloud-arena-inspector-card .display-card-health-panel,
-      .cloud-arena-inspector-card .display-card-intent-banner,
-      .cloud-arena-inspector-card .display-card-health-strip,
-      .cloud-arena-inspector-card .display-card-energy-panel,
-      .cloud-arena-inspector-card .display-card-stat-row,
-      .cloud-arena-inspector-card .display-card-badges-inline,
-      .cloud-arena-inspector-card .display-card-actions-inline {
-        display: none;
+      .cloud-arena-inspector-definition-title {
+        color: var(--accent);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
       }
 
-      .cloud-arena-inspector-card .display-card-character-layout,
-      .cloud-arena-inspector-card .display-card-character-layout-enemy {
-        display: block;
-      }
-
-      .cloud-arena-inspector-sidepanel {
-        min-height: 0;
+      .cloud-arena-inspector-definition-json {
+        margin: 0;
+        max-height: 62dvh;
+        overflow: auto;
+        padding: 0.8rem 0.85rem;
+        border-radius: 14px;
+        border: 1px solid rgba(130, 94, 52, 0.14);
+        background: rgba(255, 255, 255, 0.7);
+        color: var(--ink);
+        font-family: "SFMono-Regular", Consolas, monospace;
+        font-size: 0.74rem;
+        line-height: 1.45;
+        white-space: pre-wrap;
+        word-break: break-word;
       }
 
       .cloud-arena-battle-sidepanel {
