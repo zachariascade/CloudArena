@@ -20,8 +20,9 @@ This is the product-specific entry point for Cloud Arena docs.
 - [Lean V1 Combat Engine Checklist](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/LEAN_V1_COMBAT_ENGINE_CHECKLIST.md)
 - [Lean V1 Combat Engine Implementation Plan](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/LEAN_V1_COMBAT_ENGINE_IMPLEMENTATION_PLAN.md)
 
-## Replay And Interactive UI
+## Legacy Replay Surface
 
+- [Replay Dead End](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/REPLAY_DEAD_END.md)
 - [Trace Based Simulator Design](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/TRACE_BASED_SIMULATOR_DESIGN.md)
 - [Lean V1 Trace Simulator TODO](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/LEAN_V1_TRACE_SIMULATOR_TODO.md)
 - [Trace Viewer UI Implementation Plan](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/TRACE_VIEWER_UI_IMPLEMENTATION_PLAN.md)

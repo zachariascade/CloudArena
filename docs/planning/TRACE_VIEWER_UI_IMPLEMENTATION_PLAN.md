@@ -1,5 +1,9 @@
 # Trace Viewer UI Implementation Plan
 
+> Legacy note: this replay/trace-viewer path is now treated as a dead end.
+> Keep it functional if needed, but do not expand it with new gameplay systems
+> or deeper state reconstruction.
+
 ## Purpose
 
 This plan covers Phase 9 of the Cloud Arena simulator work: a minimal read-only UI for viewing a single simulation trace.

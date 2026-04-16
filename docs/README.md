@@ -10,7 +10,8 @@ This folder is organized both by purpose and by product so active work, referenc
 If you are starting fresh:
 
 - use `docs/arcanum/` for MTG-style catalog, deckbuilding, and content work
-- use `docs/arena/` for combat, simulation, replay, and session work
+- use `docs/arena/` for combat, simulation, and session work
+- treat replay and trace-viewer material in `docs/arena/` as legacy scaffolding
 
 ## Folders
 

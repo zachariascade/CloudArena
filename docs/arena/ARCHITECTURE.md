@@ -2,7 +2,10 @@
 
 This document is the high-level architecture guide for the Cloud Arena side of the repo.
 
-Cloud Arena is the combat, simulation, and replay product.
+Cloud Arena is the combat and simulation product.
+
+Replay and trace visualization exist only as legacy scaffolding and should be
+treated as a dead end, not a place to build new features.
 
 ## Product Responsibility
 
@@ -12,7 +15,7 @@ Cloud Arena owns:
 - battle state transitions
 - scenario presets and enemy behavior
 - session creation and action handling
-- replay and trace visualization
+- replay and trace visualization, legacy only
 - simulation and batch-run scripts
 - Arena-owned card definitions and battle entities
 
@@ -23,7 +26,7 @@ Cloud Arena does not own the MTG-style canonical card catalog, deck files, or co
 - `apps/cloud-arena-api/`
   - Fastify app for Arena sessions and battle actions
 - `apps/cloud-arena-web/`
-  - React app for interactive battles and replay UI
+  - React app for interactive battles and legacy trace viewer UI
 - `src/cloud-arena/`
   - Arena engine, rules, scenarios, and Arena-owned contracts
 - `src/domain/`
