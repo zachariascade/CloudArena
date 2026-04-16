@@ -7,6 +7,6 @@ export const holyBladeCardDefinition: CardDefinition = {
   cost: 1,
   subtypes: ["Equipment"],
   onPlay: [],
-  power: 0,
+  power: 1,
   health: 1,
 };

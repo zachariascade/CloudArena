@@ -2,6 +2,7 @@ import type { ReactElement } from "react";
 import type { FocusEvent, MouseEvent } from "react";
 
 import type { CloudArenaBattleViewModel } from "../lib/cloud-arena-battle-view-model.js";
+import { AbilityCostChip } from "./ability-cost-chip.js";
 import { DisplayCard } from "./display-card.js";
 import type { BattleAction } from "../../../../src/cloud-arena/index.js";
 
@@ -14,6 +15,7 @@ type CloudArenaBattlefieldPanelProps = {
   ) => Array<{
     action: string;
     label: string;
+    costs: Array<{ type: "free" } | { type: "energy"; amount: number } | { type: "tap" }>;
     disabled?: boolean;
     onSelect?: () => void;
   }>;
@@ -141,24 +143,25 @@ export function CloudArenaBattlefieldPanel({
                         onClick={(event) => event.stopPropagation()}
                       >
                         {menuActions.map((action) => (
-                          <button
-                            key={`${slot.instanceId}-${action.action}`}
-                            type="button"
-                            className="cloud-arena-permanent-menu-button"
-                            role="menuitem"
+                        <button
+                          key={`${slot.instanceId}-${action.action}`}
+                          type="button"
+                          className="cloud-arena-permanent-menu-button"
+                          role="menuitem"
                             disabled={action.disabled}
                             onMouseDown={(event) => event.stopPropagation()}
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              onPermanentMenuClose?.();
-                              action.onSelect?.();
-                            }}
-                          >
-                            {action.label}
-                          </button>
-                        ))}
-                      </div>
-                    ) : null}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            onPermanentMenuClose?.();
+                            action.onSelect?.();
+                          }}
+                        >
+                            <span className="cloud-arena-permanent-menu-button-label">{action.label}</span>
+                            <AbilityCostChip costs={action.costs} className="cloud-arena-permanent-menu-button-cost" />
+                        </button>
+                      ))}
+                    </div>
+                  ) : null}
                   </div>
                 );
               })()

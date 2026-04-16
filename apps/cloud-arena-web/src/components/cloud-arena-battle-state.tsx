@@ -7,12 +7,15 @@ import { CloudArenaHandTray } from "./cloud-arena-hand-tray.js";
 import { CloudArenaHudBand } from "./cloud-arena-hud-band.js";
 import { CloudArenaInspectorPanel } from "./cloud-arena-inspector-panel.js";
 import {
+  cardDefinitions,
+  getAbilityCostDisplayParts,
+} from "../../../../src/cloud-arena/index.js";
+import {
   mapArenaEnemyToDisplayCard,
   mapArenaHandCardToDisplayCard,
   mapArenaPermanentToDisplayCard,
   mapArenaPlayerToDisplayCard,
 } from "../lib/cloud-arena-display-card.js";
-import { cardDefinitions } from "../../../../src/cloud-arena/index.js";
 import type {
   BattleAction,
   ActivatedAbilityActionId,
@@ -28,10 +31,6 @@ type CloudArenaBattleStateProps = {
   onUsePermanentAction?: (action: Extract<BattleAction, { type: "use_permanent_action" }>) => void;
   onPlayHandCard?: (cardInstanceId: string) => void;
   onTurnAction?: (action: BattleAction) => void;
-  playablePermanentActions?: Array<{
-    permanentId: string;
-    action: ActivatedAbilityActionId | RulesActionId;
-  }>;
   playableHandCardInstanceIds?: string[];
   turnActions?: Array<{
     action: BattleAction;
@@ -49,7 +48,6 @@ export function CloudArenaBattleState({
   onUsePermanentAction,
   onPlayHandCard,
   onTurnAction,
-  playablePermanentActions = [],
   playableHandCardInstanceIds = [],
   turnActions = [],
   sidePanel,
@@ -57,11 +55,6 @@ export function CloudArenaBattleState({
   const battleWindowRef = useRef<HTMLDivElement | null>(null);
   const battleMainRef = useRef<HTMLDivElement | null>(null);
   const playableHandCards = new Set(playableHandCardInstanceIds);
-  const playablePermanentActionKeys = new Set(
-    playablePermanentActions.map(
-      (entry) => `${entry.permanentId}:${entry.action}`,
-    ),
-  );
   const playerCard = mapArenaPlayerToDisplayCard(battle.player);
   const enemyCard = mapArenaEnemyToDisplayCard(battle.enemy);
   const [hoveredInspectorKey, setHoveredInspectorKey] = useState<string | null>(null);
@@ -97,30 +90,27 @@ export function CloudArenaBattleState({
     }
 
     return Object.entries(permanent.counters ?? {})
-      .filter((entry): entry is [string, number] => typeof entry[1] === "number" && entry[1] > 0)
-      .map(([counter, amount]) => ({ counter, amount }));
+    .filter((entry): entry is [string, number] => typeof entry[1] === "number" && entry[1] > 0)
+    .map(([counter, amount]) => ({ counter, amount }));
   }
 
   function getPermanentActionLabel(
+    permanent: NonNullable<CloudArenaBattleViewModel["battlefield"][number]>,
     action: NonNullable<CloudArenaBattleViewModel["battlefield"][number]>["actions"][number],
   ): string {
-    if (action.kind === "activated") {
-      if (action.activation.actionId === "attack") {
-        return "Attack";
-      }
-
-      if (action.activation.actionId === "apply_block") {
-        return "Apply Block";
-      }
-
-      if (action.activation.actionId === "equip") {
-        return "Equip";
-      }
-
-      return action.activation.actionId.replace(/_/g, " ");
+    if (action.activation.actionId === "attack") {
+      return `Attack ${permanent.power}`;
     }
 
-    return "Action";
+    if (action.activation.actionId === "apply_block") {
+      return "Apply Block";
+    }
+
+    if (action.activation.actionId === "equip") {
+      return "Equip";
+    }
+
+    return action.activation.actionId.replace(/_/g, " ");
   }
 
   const inspectableModels = useMemo(() => {
@@ -166,7 +156,6 @@ export function CloudArenaBattleState({
     onPlayHandCard,
     onUsePermanentAction,
     playableHandCards,
-    playablePermanentActionKeys,
     playerCard,
   ]);
 
@@ -246,14 +235,29 @@ export function CloudArenaBattleState({
   ): Array<{
     action: ActivatedAbilityActionId | RulesActionId;
     label: string;
+    costs: Array<{ type: "free" } | { type: "energy"; amount: number } | { type: "tap" }>;
     disabled?: boolean;
     onSelect?: () => void;
   }> {
-    const nativeAttackAction = permanent.isCreature && playablePermanentActionKeys.has(`${permanent.instanceId}:attack`)
+    const legalBattlefieldActionKeys = new Set(
+      battle.legalActions
+        .filter(
+          (entry) =>
+            entry.action.type === "use_permanent_action" &&
+            entry.action.permanentId === permanent.instanceId,
+        )
+        .map((entry) => {
+          const action = entry.action as Extract<BattleAction, { type: "use_permanent_action" }>;
+          return `${action.permanentId}:${action.action}`;
+        }),
+    );
+
+    const nativeAttackAction = permanent.isCreature
       ? [{
           action: "attack" as const,
           label: `Attack ${permanent.power}`,
-          disabled: disablePermanentActions,
+          costs: [{ type: "free" as const }],
+          disabled: disablePermanentActions || !legalBattlefieldActionKeys.has(`${permanent.instanceId}:attack`),
           onSelect: onUsePermanentAction
             ? () => onUsePermanentAction({
                 type: "use_permanent_action",
@@ -270,16 +274,12 @@ export function CloudArenaBattleState({
       }
 
       const mode = action.activation.actionId;
-      const isPlayable = playablePermanentActionKeys.has(`${permanent.instanceId}:${mode}`);
-
-      if (!isPlayable) {
-        return [];
-      }
 
       return [{
         action: mode,
-        label: getPermanentActionLabel(action),
-        disabled: disablePermanentActions,
+        label: getPermanentActionLabel(permanent, action),
+        costs: getAbilityCostDisplayParts(action),
+        disabled: disablePermanentActions || !legalBattlefieldActionKeys.has(`${permanent.instanceId}:${mode}`),
         onSelect: onUsePermanentAction
           ? () => onUsePermanentAction({
               type: "use_permanent_action",
@@ -292,11 +292,12 @@ export function CloudArenaBattleState({
       }];
     });
 
-    const defendAction = playablePermanentActionKeys.has(`${permanent.instanceId}:defend`)
+    const defendAction = true
       ? [{
           action: "defend" as const,
           label: "Defend",
-          disabled: disablePermanentActions,
+          costs: [{ type: "free" as const }],
+          disabled: disablePermanentActions || !legalBattlefieldActionKeys.has(`${permanent.instanceId}:defend`),
           onSelect: onUsePermanentAction
             ? () => onUsePermanentAction({
                 type: "use_permanent_action",
@@ -429,9 +430,9 @@ export function CloudArenaBattleState({
             getPermanentMenuActions={getPermanentMenuActions}
             getPermanentCounterEntries={getPermanentCounterEntries}
             bindInspectorInteractions={bindInspectorInteractions}
-            onOpenDetails={handleDetailsClick}
-            openPermanentMenuId={openPermanentMenuId}
-            onPermanentMenuToggle={(permanentId) =>
+    onOpenDetails={handleDetailsClick}
+    openPermanentMenuId={openPermanentMenuId}
+    onPermanentMenuToggle={(permanentId) =>
               setOpenPermanentMenuId((current) => current === permanentId ? null : permanentId)}
             onPermanentMenuClose={() => setOpenPermanentMenuId(null)}
             onTargetPermanentSelect={onTurnAction}

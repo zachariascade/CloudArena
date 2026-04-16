@@ -14,6 +14,7 @@ import manaWSymbol from "../assets/mtg-symbols/mana/W.svg";
 import { getCloudArenaRuntimeConfig } from "../lib/runtime-config.js";
 
 import type { DisplayCardModel } from "../lib/display-card.js";
+import { AbilityCostChip } from "./ability-cost-chip.js";
 
 type DisplayCardProps = {
   model: DisplayCardModel;
@@ -251,6 +252,7 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
 
   const isCardButton = model.actions.length === 1 && model.variant === "mtg";
   const singleAction = isCardButton ? model.actions[0] : null;
+  const isTappedPermanent = isPermanentCard && model.stateFlags.includes("tapped");
   const faceContent =
     isCardButton && singleAction ? (
       <button
@@ -358,7 +360,8 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
                   disabled={action.disabled}
                   onClick={() => action.onSelect?.()}
                 >
-                  {action.label}
+                  <span className="card-face-preview-button-label">{action.label}</span>
+                  <AbilityCostChip costs={action.costs ?? [{ type: "free" }]} className="card-face-preview-button-cost" />
                 </button>
               ))}
             </div>
@@ -392,6 +395,7 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
       className={[
         `card-face-tile tone-${model.frameTone} display-card-shell display-card-${model.variant}`,
         isExhaustedPermanent ? "is-exhausted" : null,
+        isTappedPermanent ? "is-tapped" : null,
         className ?? null,
       ]
         .filter(Boolean)

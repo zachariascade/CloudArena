@@ -7,16 +7,19 @@ import { chooseOptionalEffect, choosePermanents, chooseSingleObject } from "./ch
 import { getTotalAttackAmount, hasBlockAmount } from "./combat-values.js";
 import {
   attachPermanentToTarget,
+  adjustPermanentHealth,
   summonPermanentFromCard,
   destroyPermanent,
   isEquipmentPermanent,
 } from "./permanents.js";
 import { emitRulesEvent } from "./rules-events.js";
 import { drawCards } from "./draw.js";
+import { payAbilityCostBundle } from "./activated-abilities.js";
 import { findPermanentById, selectObjects, selectPermanents, type SelectorContext } from "./selectors.js";
 import { evaluateValueExpression } from "./value-expressions.js";
 import type {
   BattleState,
+  AbilityCost,
   CardInstance,
   Effect,
   Targeting,
@@ -26,6 +29,7 @@ import type {
 
 export type EffectResolutionContext = SelectorContext & {
   abilityTargeting?: Targeting;
+  abilityCosts?: AbilityCost[];
 };
 
 function getCounterSource(
@@ -68,17 +72,6 @@ function formatCounterLabel(powerDelta: number, healthDelta: number): string {
   return `${formatSigned(powerDelta)}/${formatSigned(healthDelta)}`;
 }
 
-function applyHealthCounterDelta(permanent: PermanentState, delta: number): void {
-  if (delta === 0) {
-    return;
-  }
-
-  const nextMaxHealth = Math.max(0, permanent.maxHealth + delta);
-  const nextHealth = Math.max(0, Math.min(permanent.health + delta, nextMaxHealth));
-  permanent.maxHealth = nextMaxHealth;
-  permanent.health = nextHealth;
-}
-
 function addCounterInstance(
   state: BattleState,
   permanent: PermanentState,
@@ -94,7 +87,7 @@ function addCounterInstance(
   permanent.counters = [...(permanent.counters ?? []), counter];
 
   if (counter.stat === "health") {
-    applyHealthCounterDelta(permanent, counter.amount);
+    adjustPermanentHealth(permanent, counter.amount);
   }
 
   emitRulesEvent(state, {
@@ -124,7 +117,7 @@ function removeCounterInstance(
   permanent.counters = (permanent.counters ?? []).filter((_, index) => index !== counterIndex);
 
   if (counter.stat === "health") {
-    applyHealthCounterDelta(permanent, -counter.amount);
+    adjustPermanentHealth(permanent, -counter.amount);
   }
 
   emitRulesEvent(state, {
@@ -336,6 +329,7 @@ function queueTargetRequest(
       triggerSubjectPermanentId: context.triggerSubjectPermanentId,
       sourceCardInstanceId: context.sourceCardInstanceId,
     },
+    abilityCosts: context.abilityCosts,
   };
 }
 
@@ -806,6 +800,16 @@ export function resolvePendingTargetRequest(
   const legalTargets = selectPermanents(state, pending.selector, pending.context);
   if (!legalTargets.some((permanent) => permanent.instanceId === chosenTarget.instanceId)) {
     throw new Error(`Permanent ${targetPermanentId} is not a valid target.`);
+  }
+
+  if (pending.abilityCosts && pending.context.abilitySourcePermanentId) {
+    const sourcePermanent = findPermanentById(state, pending.context.abilitySourcePermanentId);
+
+    if (!sourcePermanent) {
+      throw new Error(`Permanent ${pending.context.abilitySourcePermanentId} was not found on the battlefield.`);
+    }
+
+    payAbilityCostBundle(state, sourcePermanent, pending.abilityCosts);
   }
 
   state.pendingTargetRequest = null;

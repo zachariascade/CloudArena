@@ -897,7 +897,9 @@ export function renderCloudArcanumWebHtml(
         z-index: 12;
         display: grid;
         gap: 0.45rem;
-        min-width: 9rem;
+        width: max-content;
+        min-width: 13rem;
+        max-width: 18rem;
         padding: 0.65rem;
         border: 1px solid rgba(95, 84, 76, 0.22);
         border-radius: 16px;
@@ -906,6 +908,10 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cloud-arena-permanent-menu-button {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
         min-height: 2.25rem;
         padding: 0.55rem 0.8rem;
         border-radius: 12px;
@@ -916,6 +922,7 @@ export function renderCloudArcanumWebHtml(
         font-weight: 700;
         text-align: left;
         cursor: pointer;
+        white-space: nowrap;
       }
 
       .cloud-arena-permanent-menu-button:hover:enabled {
@@ -926,6 +933,53 @@ export function renderCloudArcanumWebHtml(
       .cloud-arena-permanent-menu-button:disabled {
         opacity: 0.58;
         cursor: default;
+      }
+
+      .cloud-arena-permanent-menu-button-label {
+        min-width: 0;
+        white-space: nowrap;
+      }
+
+      .cloud-arena-ability-cost-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.18rem;
+        min-width: 1.45rem;
+        padding: 0.12rem 0.45rem;
+        border-radius: 999px;
+        border: 1px solid rgba(154, 52, 18, 0.18);
+        background: rgba(255, 255, 255, 0.88);
+        color: var(--ink);
+        font-size: 0.68rem;
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: 0.01em;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .cloud-arena-ability-cost-chip-part {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.18rem;
+      }
+
+      .cloud-arena-ability-cost-chip-separator {
+        color: rgba(95, 84, 76, 0.88);
+      }
+
+      .cloud-arena-ability-cost-chip-icon {
+        display: inline-grid;
+        place-items: center;
+        width: 0.9rem;
+        height: 0.9rem;
+      }
+
+      .cloud-arena-ability-cost-chip-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
       }
 
       .cloud-arena-hand-card {
@@ -950,6 +1004,8 @@ export function renderCloudArcanumWebHtml(
           top: auto;
           bottom: 0.5rem;
           min-width: 0;
+          width: auto;
+          max-width: none;
         }
       }
 
@@ -1120,6 +1176,10 @@ export function renderCloudArcanumWebHtml(
       }
 
       .display-card-shell.is-exhausted {
+        opacity: 0.58;
+      }
+
+      .display-card-shell.is-tapped {
         opacity: 0.58;
       }
 
@@ -2396,6 +2456,9 @@ export function renderCloudArcanumWebHtml(
       }
 
       .card-face-preview-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
         padding: 0;
         border: 0;
         background: transparent;
@@ -2407,6 +2470,14 @@ export function renderCloudArcanumWebHtml(
         cursor: pointer;
         text-decoration: underline;
         text-underline-offset: 0.18em;
+      }
+
+      .card-face-preview-button-label {
+        min-width: 0;
+      }
+
+      .card-face-preview-button-cost {
+        transform: translateY(-0.02em);
       }
 
       .card-face-preview-button:focus-visible,

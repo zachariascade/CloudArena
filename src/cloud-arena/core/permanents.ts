@@ -13,6 +13,88 @@ import type {
   PermanentState,
 } from "./types.js";
 
+export function adjustPermanentHealth(
+  permanent: PermanentState,
+  delta: number,
+): void {
+  if (delta === 0) {
+    return;
+  }
+
+  const nextMaxHealth = Math.max(0, permanent.maxHealth + delta);
+  const nextHealth = Math.max(0, Math.min(permanent.health + delta, nextMaxHealth));
+  permanent.maxHealth = nextMaxHealth;
+  permanent.health = nextHealth;
+}
+
+function createEquipmentModifierId(attachmentPermanentId: string, stat: "power" | "health"): string {
+  return `modifier_${attachmentPermanentId}_${stat}`;
+}
+
+function getEquipmentModifiersForAttachment(
+  state: BattleState,
+  attachmentPermanent: PermanentState,
+): Array<{
+  id: string;
+  stat: "power" | "health";
+  amount: number;
+  sourceKind: "equipment";
+  sourceId: string;
+}> {
+  const definition = asPermanentCardDefinition(
+    getCardDefinitionFromLibrary(state.cardDefinitions, attachmentPermanent.definitionId),
+  );
+
+  if (!isEquipmentCardDefinition(definition)) {
+    return [];
+  }
+
+  return [
+    ...(definition.power !== 0
+      ? [{
+          id: createEquipmentModifierId(attachmentPermanent.instanceId, "power"),
+          stat: "power" as const,
+          amount: definition.power,
+          sourceKind: "equipment" as const,
+          sourceId: attachmentPermanent.instanceId,
+        }]
+      : []),
+    ...(definition.health !== 0
+      ? [{
+          id: createEquipmentModifierId(attachmentPermanent.instanceId, "health"),
+          stat: "health" as const,
+          amount: definition.health,
+          sourceKind: "equipment" as const,
+          sourceId: attachmentPermanent.instanceId,
+        }]
+      : []),
+  ];
+}
+
+function removeSourceModifiers(
+  permanent: PermanentState,
+  sourceKind: "equipment",
+  sourceId: string,
+): Array<{ stat: "power" | "health"; amount: number }> {
+  const retainedModifiers: NonNullable<PermanentState["modifiers"]> = [];
+  const removedModifiers: Array<{ stat: "power" | "health"; amount: number }> = [];
+
+  for (const modifier of permanent.modifiers ?? []) {
+    if (modifier.sourceKind === sourceKind && modifier.sourceId === sourceId) {
+      removedModifiers.push({
+        stat: modifier.stat,
+        amount: modifier.amount,
+      });
+      continue;
+    }
+
+    retainedModifiers.push(modifier);
+  }
+
+  permanent.modifiers = retainedModifiers;
+  return removedModifiers;
+}
+
 function createDefaultEquipmentAbility(): ActivatedAbility {
   return {
     id: "equip",
@@ -85,12 +167,14 @@ export function summonPermanentFromCard(
     block: 0,
     recoveryPolicy: definition.recoveryPolicy ?? LEAN_V1_DEFAULT_RECOVERY_POLICY,
     counters: [],
+    modifiers: [],
     attachments: [],
     attachedTo: null,
     abilities: getInitialAbilitiesForDefinition(definition),
     disabledAbilityIds: [],
     disabledRulesActions: [],
     hasActedThisTurn: false,
+    isTapped: false,
     isDefending: false,
     slotIndex: openSlot,
   };
@@ -160,6 +244,14 @@ export function detachPermanent(
   );
 
   if (attachedTarget) {
+    const removedModifiers = removeSourceModifiers(attachedTarget, "equipment", attachmentPermanent.instanceId);
+
+    for (const removedModifier of removedModifiers) {
+      if (removedModifier.stat === "health") {
+        adjustPermanentHealth(attachedTarget, -removedModifier.amount);
+      }
+    }
+
     attachedTarget.attachments = (attachedTarget.attachments ?? []).filter(
       (entry) => entry !== attachmentPermanent.instanceId,
     );
@@ -183,6 +275,15 @@ export function attachPermanentToTarget(
   detachPermanent(state, attachmentPermanent.instanceId);
   targetPermanent.attachments = [...(targetPermanent.attachments ?? []), attachmentPermanent.instanceId];
   attachmentPermanent.attachedTo = targetPermanent.instanceId;
+
+  const modifiers = getEquipmentModifiersForAttachment(state, attachmentPermanent);
+  targetPermanent.modifiers = [...(targetPermanent.modifiers ?? []), ...modifiers];
+
+  for (const modifier of modifiers) {
+    if (modifier.stat === "health") {
+      adjustPermanentHealth(targetPermanent, modifier.amount);
+    }
+  }
 
   emitRulesEvent(state, {
     type: "attachment_attached",

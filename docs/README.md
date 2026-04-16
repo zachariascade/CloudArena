@@ -34,6 +34,8 @@ Product-specific architecture and navigation docs for Cloud Arena.
 
 Core project direction and longer-range roadmap docs. This folder still contains both Arcanum and Arena planning docs, but the product indexes above now point to the right subset.
 
+- `LOW_TIER_ENEMY_IMPLEMENTATION_PLAN.md`
+- `ENEMY_PROGRESSIONS_AND_PLAYER_GROWTH.md`
 - `CLOUD_ARCANUM_ARENA_SEPARATION_BOUNDARY.md`
 - `CLOUD_ARCANUM_ARENA_SEPARATION_TODO.md`
 - `COMBAT_ENGINE_IMPLEMENTATION_BRIEF.md`

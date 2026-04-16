@@ -129,13 +129,13 @@ describe("cloud arena trace viewer scaffold", () => {
       "Guardian",
       "Token Angel",
       "Focused Blessing",
+      "Graveyard Hymn",
       "Targeted Smite",
-      "Forced Sacrifice",
     ]);
     expect(stepViewModels[1]?.battlefield[0]?.instanceId).toBe("guardian_1");
     expect(stepViewModels[4]?.turnNumber).toBe(2);
     expect(stepViewModels[4]?.player.hand).toHaveLength(4);
-    expect(stepViewModels[4]?.visibleLog.at(-1)?.type).toBe("block_gained");
+    expect(stepViewModels[4]?.visibleLog.at(-1)?.type).toBe("permanent_summoned");
   });
 
   it("groups visible log events by turn for the log panel", () => {
@@ -146,7 +146,7 @@ describe("cloud arena trace viewer scaffold", () => {
     );
 
     expect(groups.map((group) => group.turnNumber)).toEqual([1, 2]);
-    expect(groups[1]?.events.at(-1)?.event.type).toBe("block_gained");
+    expect(groups[1]?.events.at(-1)?.event.type).toBe("permanent_summoned");
   });
 
   it("normalizes replay steps into the shared battle view model", () => {
@@ -266,6 +266,7 @@ describe("cloud arena trace viewer scaffold", () => {
           attachments: [],
           attachedTo: null,
           hasActedThisTurn: false,
+          isTapped: false,
           isDefending: false,
           slotIndex: 0,
           actions: [],
@@ -306,6 +307,7 @@ describe("cloud arena trace viewer scaffold", () => {
       attachments: [],
       attachedTo: null,
       hasActedThisTurn: true,
+      isTapped: false,
       isDefending: true,
       slotIndex: 0,
       actions: [],
@@ -334,6 +336,7 @@ describe("cloud arena trace viewer scaffold", () => {
       attachments: [],
       attachedTo: null,
       hasActedThisTurn: false,
+      isTapped: false,
       isDefending: false,
       slotIndex: 0,
       actions: [],
@@ -369,7 +372,7 @@ describe("cloud arena trace viewer scaffold", () => {
             definitionId: "guardian",
             name: "Guardian",
             cost: 2,
-            effectSummary: "Attack 4 • Defend • apply block",
+            effectSummary: "Attack 4 • Defend • Pay 1 energy: apply block",
           },
         ],
         drawPile: [],
@@ -401,6 +404,7 @@ describe("cloud arena trace viewer scaffold", () => {
           attachments: [],
           attachedTo: null,
           hasActedThisTurn: false,
+          isTapped: false,
           isDefending: false,
           slotIndex: 0,
           actions: [
@@ -444,7 +448,6 @@ describe("cloud arena trace viewer scaffold", () => {
         disablePermanentActions: true,
         disableTurnActions: true,
         playableHandCardInstanceIds: ["card_1"],
-        playablePermanentActions: [{ permanentId: "guardian_1", action: "attack" }],
         turnActions: [{ action: { type: "end_turn" }, label: "End turn" }],
       }),
     );
@@ -544,7 +547,7 @@ describe("cloud arena trace viewer scaffold", () => {
     expect(firstStepHtml).toContain("aria-label=\"Long Battle Demon health\"");
     expect(firstStepHtml).toContain("data-variant=\"mtg\"");
     expect(firstStepHtml).toContain("aria-label=\"{3}\"");
-    expect(firstStepHtml).toContain("Attack 4 • Defend • apply block");
+    expect(firstStepHtml).toContain("Attack 4 • Defend • Pay 1 energy: apply block");
     expect(firstStepHtml).toContain("Attack");
     expect(firstStepHtml).toContain("aria-label=\"{1}\"");
     expect(firstStepHtml).toContain("Attack 1 • Defend");

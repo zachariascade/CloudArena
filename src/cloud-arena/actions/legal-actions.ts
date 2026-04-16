@@ -1,5 +1,9 @@
 import { hasCardType, getCardDefinitionFromLibrary } from "../cards/definitions.js";
-import { getActivatedAbilities } from "../core/activated-abilities.js";
+import {
+  abilityCostsTap,
+  getActivatedAbilities,
+  getAbilityEnergyCost,
+} from "../core/activated-abilities.js";
 import { hasOpenBattlefieldSlot, selectPermanents } from "../core/selectors.js";
 import type { BattleAction, BattleState, Effect, Selector } from "../core/types.js";
 
@@ -87,12 +91,24 @@ export function getLegalActions(state: BattleState): BattleAction[] {
 
   const permanentActions: BattleAction[] = state.battlefield
     .filter((permanent): permanent is NonNullable<typeof permanent> => permanent !== null)
-    .filter((permanent) => !permanent.hasActedThisTurn)
     .flatMap((permanent) => {
       const definition = getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId);
       const activatedAbilityActions = getActivatedAbilities(permanent.abilities)
         .filter((ability) => ability.activation.actionId !== "attack")
         .filter((ability) => !(permanent.disabledAbilityIds ?? []).includes(ability.id))
+        .filter((ability) => {
+          const energyCost = getAbilityEnergyCost(ability);
+
+          if (energyCost > state.player.energy) {
+            return false;
+          }
+
+          if (abilityCostsTap(ability) && permanent.isTapped) {
+            return false;
+          }
+
+          return true;
+        })
         .filter((ability) =>
           ability.effects.every((effect) => {
             const selector = getEffectTargetSelector(effect);
@@ -123,9 +139,11 @@ export function getLegalActions(state: BattleState): BattleAction[] {
           source: "ability" as const,
           action: ability.activation.actionId,
           abilityId: ability.id,
-        }));
+        }))
+        .filter(() => !permanent.hasActedThisTurn);
       const creatureRulesActions =
         hasCardType(definition, "creature") &&
+        !permanent.hasActedThisTurn &&
         (permanent.disabledRulesActions ?? []).length < 2
           ? ([
               ...( !(permanent.disabledRulesActions ?? []).includes("attack")

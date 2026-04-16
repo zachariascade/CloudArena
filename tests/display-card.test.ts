@@ -136,6 +136,7 @@ describe("shared display card mappers", () => {
         maxHealth: 10,
         block: 2,
         hasActedThisTurn: false,
+        isTapped: false,
         isDefending: true,
         slotIndex: 0,
         actions: [
@@ -180,6 +181,88 @@ describe("shared display card mappers", () => {
     expect(onAttack).toHaveBeenCalledTimes(1);
   });
 
+  it("renders cost chips in the Cloud Arena battlefield action menu", () => {
+    const battlefieldPermanent = {
+      instanceId: "guide_1",
+      sourceCardInstanceId: "card_2",
+      definitionId: "sanctified_guide",
+      name: "Sanctified Guide",
+      isCreature: true,
+      power: 2,
+      health: 4,
+      maxHealth: 4,
+      block: 0,
+      counters: {},
+      attachments: [],
+      attachedTo: null,
+      hasActedThisTurn: false,
+      isTapped: false,
+      isDefending: false,
+      slotIndex: 1,
+      actions: [
+        {
+          id: "bless_target",
+          kind: "activated",
+          activation: { type: "action", actionId: "bless_target" },
+          costs: [{ type: "tap" }],
+          targeting: { allowSelfTarget: false },
+          effects: [
+            {
+              type: "add_counter",
+              target: "self",
+              counter: "+1/+1",
+              stat: "power",
+              amount: { type: "constant", value: 1 },
+            },
+          ],
+        },
+      ],
+    } as Parameters<typeof mapArenaPermanentToDisplayCard>[0];
+
+    const panelHtml = renderToStaticMarkup(
+      createElement(CloudArenaBattlefieldPanel, {
+        battlefield: [battlefieldPermanent],
+        legalActions: [],
+        getInspectableModel: () => mapArenaPermanentToDisplayCard(battlefieldPermanent, {
+          playableActions: [],
+        }),
+        getPermanentMenuActions: () => [
+          {
+            action: "bless_target",
+            label: "Bless",
+            costs: [{ type: "tap" as const }],
+            onSelect: () => undefined,
+          },
+          {
+            action: "free_action",
+            label: "Free Action",
+            costs: [{ type: "free" as const }],
+            onSelect: () => undefined,
+          },
+        ],
+        getPermanentCounterEntries: () => [],
+        bindInspectorInteractions: () => ({
+          onMouseEnter: () => undefined,
+          onMouseLeave: () => undefined,
+          onFocus: () => undefined,
+          onBlur: () => undefined,
+          onClick: () => undefined,
+        }),
+        onOpenDetails: () => undefined,
+        openPermanentMenuId: "guide_1",
+        onPermanentMenuToggle: () => undefined,
+        onPermanentMenuClose: () => undefined,
+        onTargetPermanentSelect: () => undefined,
+      }),
+    );
+
+    expect(panelHtml).toContain("Bless");
+    expect(panelHtml).toContain("Free Action");
+    expect(panelHtml).toContain("aria-label=\"Cost Tap\"");
+    expect(panelHtml).toContain("aria-label=\"Cost 0\"");
+    expect(panelHtml).toContain("T.svg");
+  });
+
   it("maps graveyard hymn as a creature instead of a spell", () => {
     const hymn = mapArenaHandCardToDisplayCard(
       {
@@ -208,6 +291,7 @@ describe("shared display card mappers", () => {
       attachments: [],
       attachedTo: null,
       hasActedThisTurn: false,
+      isTapped: false,
       isDefending: false,
       slotIndex: 2,
       actions: [],
@@ -271,6 +355,7 @@ describe("shared display card mappers", () => {
           attachments: [],
           attachedTo: null,
           hasActedThisTurn: false,
+          isTapped: false,
           isDefending: false,
           slotIndex: 0,
           actions: [],
@@ -469,6 +554,7 @@ describe("shared display card mappers", () => {
       attachments: [],
       attachedTo: null,
       hasActedThisTurn: false,
+      isTapped: false,
       isDefending: false,
       slotIndex: 1,
       actions: [
@@ -566,6 +652,7 @@ describe("shared display card component", () => {
             maxHealth: 10,
             block: 2,
             hasActedThisTurn: false,
+            isTapped: false,
             isDefending: true,
             slotIndex: 0,
             actions: [

@@ -4,7 +4,9 @@ import {
   applyBattleAction,
   attachPermanentToTarget,
   canAttachPermanentToTarget,
+  detachPermanent,
   destroyPermanent,
+  getDerivedPermanentStat,
   getLegalActions,
   isEquipmentPermanent,
   type BattleAction,
@@ -41,7 +43,7 @@ const ATTACHMENT_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
     cost: 1,
     subtypes: ["Equipment"],
     onPlay: [],
-    power: 0,
+    power: 1,
     health: 1,
     abilities: [],
   },
@@ -194,6 +196,43 @@ describe("cloud arena attachments", () => {
 
     expect(blade.attachedTo).toBe(angel.instanceId);
     expect(angel.attachments).toEqual([blade.instanceId]);
+    expect(getDerivedPermanentStat(battle, angel, "power")).toBe(5);
+    expect(angel.health).toBe(11);
+    expect(angel.maxHealth).toBe(11);
+  });
+
+  it("removes equipment bonuses when the equipment detaches", () => {
+    const battle = createAttachmentBattle();
+    battle.player.energy = 10;
+
+    for (const card of battle.player.hand.filter((entry) =>
+      entry.definitionId === "angel_bearer" || entry.definitionId === "holy_blade"
+    )) {
+      applyBattleAction(battle, {
+        type: "play_card",
+        cardInstanceId: card.instanceId,
+      });
+    }
+
+    const angel = battle.battlefield.find((permanent) => permanent?.definitionId === "angel_bearer");
+    const blade = battle.battlefield.find((permanent) => permanent?.definitionId === "holy_blade");
+
+    if (!angel || !blade) {
+      throw new Error("Expected angel and equipment on battlefield.");
+    }
+
+    attachPermanentToTarget(battle, blade, angel);
+    expect(getDerivedPermanentStat(battle, angel, "power")).toBe(5);
+    expect(angel.health).toBe(11);
+    expect(angel.maxHealth).toBe(11);
+
+    detachPermanent(battle, blade.instanceId);
+
+    expect(blade.attachedTo).toBeNull();
+    expect(angel.attachments).toEqual([]);
+    expect(getDerivedPermanentStat(battle, angel, "power")).toBe(4);
+    expect(angel.health).toBe(10);
+    expect(angel.maxHealth).toBe(10);
   });
 
   it("hides equip when there is no other permanent to attach to", () => {

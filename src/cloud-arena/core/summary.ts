@@ -54,6 +54,7 @@ export function buildBattleSummary(state: BattleState): BattleSummary {
         `hp=${permanent.health}/${permanent.maxHealth}`,
         `block=${permanent.block}`,
         `acted=${permanent.hasActedThisTurn ? "yes" : "no"}`,
+        `tapped=${permanent.isTapped ? "yes" : "no"}`,
         `defending=${permanent.isDefending ? "yes" : "no"}`,
       ].join(", ");
     }),

@@ -14,6 +14,7 @@ export const guardianCardDefinition: CardDefinition = {
       id: "guardian_apply_block",
       kind: "activated",
       activation: { type: "action", actionId: "apply_block" },
+      costs: [{ type: "energy", amount: 1 }],
       effects: [
         {
           type: "gain_block",

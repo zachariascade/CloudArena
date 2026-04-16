@@ -325,13 +325,6 @@ export function CloudArenaInteractivePage({
     .filter((option): option is typeof option & { action: Extract<BattleAction, { type: "play_card" }> } =>
       option.action.type === "play_card")
     .map((option) => option.action.cardInstanceId);
-  const playablePermanentActions = snapshot.legalActions
-    .filter((option): option is typeof option & { action: Extract<BattleAction, { type: "use_permanent_action" }> } =>
-      option.action.type === "use_permanent_action")
-    .map((option) => ({
-      permanentId: option.action.permanentId,
-      action: option.action.action,
-    }));
 
   return (
     <PageLayout
@@ -422,7 +415,6 @@ export function CloudArenaInteractivePage({
               : (action) => void handleApplyAction(action)
           }
           playableHandCardInstanceIds={playableHandCardInstanceIds}
-          playablePermanentActions={playablePermanentActions}
           sidePanel={<CloudArenaLogPanel groups={viewModel.logGroups} />}
         />
       </div>

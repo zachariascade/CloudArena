@@ -55,6 +55,7 @@ export type CloudArenaPermanentSnapshot = {
   attachments?: string[];
   attachedTo?: string | null;
   hasActedThisTurn: boolean;
+  isTapped: boolean;
   isDefending: boolean;
   slotIndex: number;
   actions: ActivatedAbility[];

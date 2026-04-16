@@ -1,4 +1,7 @@
-import { LEAN_V1_DEFAULT_TURN_ENERGY } from "../../../../src/cloud-arena/index.js";
+import {
+  LEAN_V1_DEFAULT_TURN_ENERGY,
+  getAbilityCostDisplayParts,
+} from "../../../../src/cloud-arena/index.js";
 import type {
   CloudArenaCardSnapshot,
   CloudArenaPermanentSnapshot,
@@ -247,8 +250,8 @@ const ARENA_HAND_CARD_PRESENTATIONS: Record<string, ArenaCardPresentation> = {
     typeLine: "Artifact - Equipment",
     manaCost: "{1}",
     frameTone: "colorless",
-    imagePath: "card_0048_the_serpent_whisperer_in_the_garden.png",
-    imageAlt: "A radiant sword suspended in sacred light",
+    imagePath: "card_0027_let_there_be_light.png",
+    imageAlt: "A radiant blade formed from sacred light",
     flavorText: "No hand keeps it long; it belongs where the charge is fiercest.",
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
@@ -520,6 +523,7 @@ export function mapArenaPermanentToDisplayCard(
       {
         id: `${permanent.instanceId}-${mode}-${index}`,
         label: options.disableActions ? `${mappedAction.label}...` : mappedAction.label,
+        costs: getAbilityCostDisplayParts(action),
         disabled: options.disableActions,
         onSelect: mappedAction.onSelect,
       },
@@ -536,6 +540,7 @@ export function mapArenaPermanentToDisplayCard(
       {
         id: action.id,
         label: options.disableActions ? `${mappedAction.label}...` : mappedAction.label,
+        costs: [{ type: "free" as const }],
         disabled: options.disableActions,
         onSelect: mappedAction.onSelect,
       },
@@ -565,8 +570,16 @@ export function mapArenaPermanentToDisplayCard(
     footerStat: `${permanent.power}/${permanent.health}`,
     healthBar: null,
     energyBar: null,
-    statusLabel: permanent.isDefending ? "defending" : null,
-    statusTone: permanent.isDefending ? "approved" : undefined,
+    statusLabel: permanent.isTapped
+      ? "tapped"
+      : permanent.isDefending
+        ? "defending"
+        : null,
+    statusTone: permanent.isTapped
+      ? "draft"
+      : permanent.isDefending
+        ? "approved"
+        : undefined,
     stats: [],
     textBlocks: [
       ...(permanent.isCreature
@@ -593,6 +606,7 @@ export function mapArenaPermanentToDisplayCard(
     actions: [...nativeActionButtons, ...activatedActionButtons],
     stateFlags: [
       permanent.hasActedThisTurn ? "spent" : permanentAvailabilityState,
+      permanent.isTapped ? "tapped" : "untapped",
       permanent.isDefending ? "defending" : "open",
     ],
   };

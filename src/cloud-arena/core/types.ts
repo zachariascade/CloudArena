@@ -27,11 +27,21 @@ export type DamageOverflowPolicy = "stop_at_blocker" | "trample";
 export type DefenderRecoveryPolicy = "none" | "full_heal";
 export type CounterStat = "power" | "health";
 export type CounterSourceKind = "card" | "permanent";
+export type ModifierSourceKind = "equipment" | "card" | "permanent";
 export type Targeting = {
   prompt?: string;
   optional?: boolean;
   allowSelfTarget?: boolean;
 };
+
+export type AbilityCost =
+  | {
+      type: "energy";
+      amount: number;
+    }
+  | {
+      type: "tap";
+    };
 
 export type CardEffect = {
   attackAmount?: number;
@@ -62,6 +72,7 @@ export type PendingTargetRequest = {
   selector: Selector;
   effects: Effect[];
   nextEffectIndex: number;
+  abilityCosts?: AbilityCost[];
   context: {
     abilitySourcePermanentId?: string;
     triggerSubjectPermanentId?: string;
@@ -233,6 +244,7 @@ export type ActivatedAbility = {
   id: string;
   kind: "activated";
   activation: ActionAbilityActivation;
+  costs?: AbilityCost[];
   conditions?: Condition[];
   effects: Effect[];
   targeting?: Targeting;
@@ -575,12 +587,14 @@ export type PermanentState = {
   block: number;
   recoveryPolicy: DefenderRecoveryPolicy;
   counters?: PermanentCounter[];
+  modifiers?: PermanentModifier[];
   attachments?: string[];
   attachedTo?: string | null;
   abilities?: Ability[];
   disabledAbilityIds?: string[];
   disabledRulesActions?: RulesActionId[];
   hasActedThisTurn: boolean;
+  isTapped: boolean;
   isDefending: boolean;
   slotIndex: number;
 };
@@ -591,6 +605,14 @@ export type PermanentCounter = {
   stat: CounterStat;
   amount: number;
   sourceKind: CounterSourceKind;
+  sourceId: string;
+};
+
+export type PermanentModifier = {
+  id: string;
+  stat: CounterStat;
+  amount: number;
+  sourceKind: ModifierSourceKind;
   sourceId: string;
 };
 

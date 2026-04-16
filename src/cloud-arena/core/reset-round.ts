@@ -25,6 +25,7 @@ export function resetRound(state: BattleState): BattleState {
       permanent.health = permanent.maxHealth;
     }
     permanent.hasActedThisTurn = false;
+    permanent.isTapped = false;
     permanent.isDefending = false;
   });
 

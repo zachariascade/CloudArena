@@ -3,11 +3,20 @@ import {
   gainBlockToPlayer,
   resolveEffects,
 } from "../core/effects.js";
-import { getAbilityActionAmount, getActivatedAbilities, getActivatedAbilityById } from "../core/activated-abilities.js";
+import {
+  getAbilityActionAmount,
+  getActivatedAbilities,
+  getActivatedAbilityById,
+  payAbilityCostBundle,
+} from "../core/activated-abilities.js";
 import { getDerivedPermanentActionAmount } from "../core/derived-stats.js";
 import { findPermanentById } from "../core/selectors.js";
 import { emitRulesEvent } from "../core/rules-events.js";
-import type { BattleState, UsePermanentAction } from "../core/types.js";
+import type { ActivatedAbility, BattleState, UsePermanentAction } from "../core/types.js";
+
+function abilityRequiresTargetSelection(ability: ActivatedAbility): boolean {
+  return ability.targeting !== undefined || ability.effects.some((effect) => "targeting" in effect && effect.targeting !== undefined);
+}
 
 export function usePermanentAction(
   state: BattleState,
@@ -23,11 +32,11 @@ export function usePermanentAction(
     throw new Error(`Permanent ${action.permanentId} was not found on the battlefield.`);
   }
 
+  const actionSource = action.source ?? (action.action === "attack" || action.action === "defend" ? "rules" : "ability");
   if (permanent.hasActedThisTurn) {
     throw new Error(`Permanent ${action.permanentId} has already acted this turn.`);
   }
 
-  const actionSource = action.source ?? (action.action === "attack" || action.action === "defend" ? "rules" : "ability");
   const abilityId =
     actionSource === "ability"
       ? action.abilityId ??
@@ -57,16 +66,23 @@ export function usePermanentAction(
     }
 
     if (action.action === "apply_block") {
+      if (ability.costs && !abilityRequiresTargetSelection(ability)) {
+        payAbilityCostBundle(state, permanent, ability.costs);
+      }
       const blockAmount = getAbilityActionAmount(state, permanent, ability) ?? 0;
       gainBlockToPlayer(state, blockAmount);
     } else {
+      if (!abilityRequiresTargetSelection(ability)) {
+        payAbilityCostBundle(state, permanent, ability.costs ?? []);
+      }
+
       resolveEffects(state, ability.effects, {
         abilitySourcePermanentId: permanent.instanceId,
         sourceCardInstanceId: permanent.sourceCardInstanceId,
         abilityTargeting: ability.targeting,
+        abilityCosts: ability.costs,
       });
     }
-    permanent.isDefending = false;
   } else if (action.action === "attack") {
     const attackAmount = getDerivedPermanentActionAmount(state, permanent, "attack");
     dealDamageToEnemy(state, attackAmount, "permanent_action", permanent.instanceId);

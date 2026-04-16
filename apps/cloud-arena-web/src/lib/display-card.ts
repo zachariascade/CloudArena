@@ -1,3 +1,5 @@
+import type { AbilityCostDisplayPart } from "../../../../src/cloud-arena/index.js";
+
 export type DisplayCardVariant = "mtg" | "player" | "enemy" | "permanent";
 
 export type DisplayCardImage = {
@@ -22,6 +24,7 @@ export type DisplayCardAction = {
   label: string;
   disabled?: boolean;
   emphasis?: "primary" | "neutral";
+  costs?: AbilityCostDisplayPart[];
   onSelect?: () => void;
 };
 

@@ -33,11 +33,20 @@ export {
   chooseSingleObject,
 } from "./core/choices.js";
 export {
+  abilityCostsTap,
+  canPayAbilityCosts,
+  canPayAbilityCostBundle,
+  formatAbilityCosts,
   formatActivatedAbilityLabel,
   getActivatedAbilities,
   getActivatedAbilityById,
   getAbilityActionAmount,
+  getAbilityCostDisplayParts,
+  getAbilityCosts,
+  getAbilityEnergyCost,
   isActivatedAbility,
+  payAbilityCostBundle,
+  payAbilityCosts,
 } from "./core/activated-abilities.js";
 export {
   getDerivedPermanentActionAmount,
@@ -140,6 +149,7 @@ export type {
 export type {
   Ability,
   AbilityKind,
+  AbilityCost,
   ActivatedAbility,
   ActivatedAbilityActionId,
   ActionAbilityActivation,
@@ -191,3 +201,4 @@ export type {
   ValueExpression,
   ZoneName,
 } from "./core/types.js";
+export type { AbilityCostDisplayPart } from "./core/activated-abilities.js";

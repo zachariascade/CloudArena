@@ -88,6 +88,16 @@ const TRIGGER_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
       },
     ],
   },
+  reliquary_shard: {
+    id: "reliquary_shard",
+    name: "Reliquary Shard",
+    cardTypes: ["artifact"],
+    cost: 1,
+    onPlay: [],
+    power: 0,
+    health: 1,
+    abilities: [],
+  },
   graveyard_hymn: {
     id: "graveyard_hymn",
     name: "Graveyard Hymn",
@@ -111,7 +121,7 @@ const TRIGGER_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
             type: "add_counter",
             target: {
               zone: "battlefield",
-              cardType: "permanent",
+              cardType: "creature",
             },
             powerDelta: 1,
             healthDelta: 1,
@@ -342,11 +352,12 @@ describe("cloud arena trigger resolution", () => {
     ).toBe(true);
   });
 
-  it("buffs all permanents when it dies", () => {
+  it("buffs only creatures when it dies", () => {
     const battle = createTestBattle({
       cardDefinitions: TRIGGER_TEST_CARD_DEFINITIONS,
       playerDeck: [
         "guardian",
+        "reliquary_shard",
         "graveyard_hymn",
         "offering_thrall",
         "attack",
@@ -363,15 +374,20 @@ describe("cloud arena trigger resolution", () => {
     battle.player.energy = 10;
 
     const guardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
+    const shardCard = battle.player.hand.find((card) => card.definitionId === "reliquary_shard");
     const hymnCard = battle.player.hand.find((card) => card.definitionId === "graveyard_hymn");
 
-    if (!guardianCard || !hymnCard) {
-      throw new Error("Expected guardian and graveyard_hymn in opening hand.");
+    if (!guardianCard || !shardCard || !hymnCard) {
+      throw new Error("Expected guardian, reliquary_shard, and graveyard_hymn in opening hand.");
     }
 
     applyBattleAction(battle, {
       type: "play_card",
       cardInstanceId: guardianCard.instanceId,
+    });
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: shardCard.instanceId,
     });
     applyBattleAction(battle, {
       type: "play_card",
@@ -384,9 +400,12 @@ describe("cloud arena trigger resolution", () => {
     const guardianPermanent = battle.battlefield.find(
       (permanent) => permanent?.definitionId === "guardian",
     );
+    const shardPermanent = battle.battlefield.find(
+      (permanent) => permanent?.definitionId === "reliquary_shard",
+    );
 
-    if (!hymnPermanent || !guardianPermanent) {
-      throw new Error("Expected both permanents on the battlefield.");
+    if (!hymnPermanent || !guardianPermanent || !shardPermanent) {
+      throw new Error("Expected all permanents on the battlefield.");
     }
 
     destroyPermanent(battle, hymnPermanent.instanceId);
@@ -395,6 +414,7 @@ describe("cloud arena trigger resolution", () => {
     expect(battle.player.graveyard.map((card) => card.definitionId)).toContain("graveyard_hymn");
     expect(getPermanentCounterCount(guardianPermanent, "+1/+1")).toBe(2);
     expect(getDerivedPermanentStat(battle, guardianPermanent, "power")).toBe(5);
+    expect(getPermanentCounterCount(shardPermanent, "+1/+1")).toBe(0);
   });
 
   it("draws cards from an enter-the-battlefield trigger", () => {

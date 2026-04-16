@@ -17,6 +17,7 @@ export const sanctifiedGuideCardDefinition: CardDefinition = {
         type: "action",
         actionId: "bless_target",
       },
+      costs: [{ type: "tap" }],
       targeting: {
         prompt: "Choose a creature to bless",
         allowSelfTarget: false,

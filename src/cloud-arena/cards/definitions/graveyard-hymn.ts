@@ -18,16 +18,16 @@ export const graveyardHymnCardDefinition: CardDefinition = {
           relation: "self",
         },
       },
-      effects: [
-        {
-          type: "add_counter",
-          target: {
-            zone: "battlefield",
-            cardType: "permanent",
+        effects: [
+          {
+            type: "add_counter",
+            target: {
+              zone: "battlefield",
+              cardType: "creature",
+            },
+            powerDelta: 1,
+            healthDelta: 1,
           },
-          powerDelta: 1,
-          healthDelta: 1,
-        },
       ],
     },
   ],

@@ -20,6 +20,15 @@ function getCounterModifierForStat(
   }
 }
 
+function getModifierBonusForStat(
+  permanent: PermanentState,
+  stat: DerivedStatName,
+): number {
+  return (permanent.modifiers ?? [])
+    .filter((modifier) => modifier.stat === stat)
+    .reduce((sum, modifier) => sum + modifier.amount, 0);
+}
+
 function getBasePermanentStat(
   permanent: PermanentState,
   stat: DerivedStatName,
@@ -49,6 +58,10 @@ export function getDerivedPermanentStat(
   stat: DerivedStatName,
 ): number {
   let value = getBasePermanentStat(permanent, stat) + getCounterModifierForStat(permanent, stat);
+
+  if (stat === "power") {
+    value += getModifierBonusForStat(permanent, stat);
+  }
 
   for (const modifier of getStaticModifiersForPermanent(permanent)) {
     if (modifier.stat !== stat) {

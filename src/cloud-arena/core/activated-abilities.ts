@@ -1,6 +1,7 @@
 import { evaluateValueExpression } from "./value-expressions.js";
 import type {
   Ability,
+  AbilityCost,
   ActivatedAbility,
   BattleState,
   PermanentState,
@@ -12,6 +13,52 @@ export function isActivatedAbility(ability: Ability): ability is ActivatedAbilit
 
 export function getActivatedAbilities(abilities: Ability[] | undefined): ActivatedAbility[] {
   return (abilities ?? []).filter(isActivatedAbility);
+}
+
+export function getAbilityCosts(ability: ActivatedAbility): AbilityCost[] {
+  return ability.costs ?? [];
+}
+
+export function getAbilityEnergyCost(ability: ActivatedAbility): number {
+  return getAbilityCosts(ability)
+    .filter((cost): cost is Extract<AbilityCost, { type: "energy" }> => cost.type === "energy")
+    .reduce((sum, cost) => sum + cost.amount, 0);
+}
+
+export function abilityCostsTap(ability: ActivatedAbility): boolean {
+  return getAbilityCosts(ability).some((cost) => cost.type === "tap");
+}
+
+export type AbilityCostDisplayPart =
+  | {
+      type: "free";
+    }
+  | {
+      type: "energy";
+      amount: number;
+    }
+  | {
+      type: "tap";
+    };
+
+export function getAbilityCostDisplayParts(
+  ability: ActivatedAbility,
+): AbilityCostDisplayPart[] {
+  const costs = getAbilityCosts(ability);
+  const energyCost = costs
+    .filter((cost): cost is Extract<AbilityCost, { type: "energy" }> => cost.type === "energy")
+    .reduce((sum, cost) => sum + cost.amount, 0);
+  const parts: AbilityCostDisplayPart[] = [];
+
+  if (energyCost > 0) {
+    parts.push({ type: "energy", amount: energyCost });
+  }
+
+  if (costs.some((cost) => cost.type === "tap")) {
+    parts.push({ type: "tap" });
+  }
+
+  return parts.length > 0 ? parts : [{ type: "free" }];
 }
 
 export function getActivatedAbilityById(
@@ -51,24 +98,90 @@ export function getAbilityActionAmount(
   return null;
 }
 
+export function formatAbilityCosts(ability: ActivatedAbility): string {
+  const parts = getAbilityCosts(ability).map((cost) => {
+    if (cost.type === "tap") {
+      return "Tap";
+    }
+
+    return `Pay ${cost.amount} energy`;
+  });
+
+  return parts.length > 0 ? `${parts.join(" + ")}: ` : "";
+}
+
+export function canPayAbilityCosts(
+  state: BattleState,
+  permanent: PermanentState,
+  ability: ActivatedAbility,
+): boolean {
+  return canPayAbilityCostBundle(state, permanent, getAbilityCosts(ability));
+}
+
+export function payAbilityCosts(
+  state: BattleState,
+  permanent: PermanentState,
+  ability: ActivatedAbility,
+): void {
+  payAbilityCostBundle(state, permanent, getAbilityCosts(ability));
+}
+
+export function canPayAbilityCostBundle(
+  state: BattleState,
+  permanent: PermanentState,
+  costs: AbilityCost[],
+): boolean {
+  const energyCost = costs
+    .filter((cost): cost is Extract<AbilityCost, { type: "energy" }> => cost.type === "energy")
+    .reduce((sum, cost) => sum + cost.amount, 0);
+  const needsTap = costs.some((cost) => cost.type === "tap");
+
+  return state.player.energy >= energyCost && (!needsTap || !permanent.isTapped);
+}
+
+export function payAbilityCostBundle(
+  state: BattleState,
+  permanent: PermanentState,
+  costs: AbilityCost[],
+): void {
+  const energyCost = costs
+    .filter((cost): cost is Extract<AbilityCost, { type: "energy" }> => cost.type === "energy")
+    .reduce((sum, cost) => sum + cost.amount, 0);
+
+  if (state.player.energy < energyCost) {
+    throw new Error("Not enough energy to use ability.");
+  }
+
+  if (costs.some((cost) => cost.type === "tap" && permanent.isTapped)) {
+    throw new Error(`Permanent ${permanent.instanceId} is already tapped.`);
+  }
+
+  state.player.energy -= energyCost;
+
+  if (costs.some((cost) => cost.type === "tap")) {
+    permanent.isTapped = true;
+  }
+}
+
 export function formatActivatedAbilityLabel(
   state: BattleState,
   permanent: PermanentState,
   ability: ActivatedAbility,
 ): string {
   const amount = getAbilityActionAmount(state, permanent, ability);
+  const costPrefix = formatAbilityCosts(ability);
 
   if (ability.activation.actionId === "attack") {
-    return typeof amount === "number" ? `Attack ${amount}` : "Attack";
+    return `${costPrefix}${typeof amount === "number" ? `Attack ${amount}` : "Attack"}`;
   }
 
   if (ability.activation.actionId === "apply_block") {
-    return typeof amount === "number" ? `Apply Block ${amount}` : "Apply Block";
+    return `${costPrefix}${typeof amount === "number" ? `Apply Block ${amount}` : "Apply Block"}`;
   }
 
   if (ability.activation.actionId === "equip") {
-    return "Equip";
+    return `${costPrefix}Equip`;
   }
 
-  return ability.activation.actionId.replace(/_/g, " ");
+  return `${costPrefix}${ability.activation.actionId.replace(/_/g, " ")}`;
 }
