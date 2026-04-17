@@ -6,6 +6,7 @@ import {
   createBattle,
   destroyPermanent,
   getDerivedPermanentStat,
+  getLegalActions,
   getPermanentCounterCount,
 } from "../../src/cloud-arena/index.js";
 
@@ -30,7 +31,7 @@ describe("cloud arena advanced mechanics integration", () => {
       },
     });
 
-    battle.player.energy = 10;
+    battle.player.energy = 12;
 
     const guardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
     const seraphCard = battle.player.hand.find((card) => card.definitionId === "sacrificial_seraph");
@@ -81,21 +82,55 @@ describe("cloud arena advanced mechanics integration", () => {
     });
 
     const disciple = battle.battlefield.find((permanent) => permanent?.definitionId === "armory_disciple");
+    const bladeCard = battle.player.hand.find((card) => card.definitionId === "holy_blade");
+
+    if (!disciple || !bladeCard) {
+      throw new Error("Expected armory_disciple on battlefield and holy_blade in hand.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: bladeCard.instanceId,
+    });
+
     const blade = battle.battlefield.find((permanent) => permanent?.definitionId === "holy_blade");
 
-    if (!disciple || !blade) {
-      throw new Error("Expected armory_disciple and holy_blade on battlefield.");
+    if (!blade) {
+      throw new Error("Expected holy_blade on battlefield.");
     }
+
+    const equipAction = getLegalActions(battle).find(
+      (action) =>
+        action.type === "use_permanent_action" &&
+        action.permanentId === blade.instanceId &&
+        action.action === "equip",
+    );
+
+    if (!equipAction || equipAction.type !== "use_permanent_action") {
+      throw new Error("Expected equip action for holy_blade.");
+    }
+
+    applyBattleAction(battle, equipAction);
+
+    const targetAction = getLegalActions(battle).find(
+      (action) =>
+        action.type === "choose_target" &&
+        action.targetPermanentId === disciple.instanceId,
+    );
+
+    if (!targetAction || targetAction.type !== "choose_target") {
+      throw new Error("Expected a legal equip target to be available.");
+    }
+
+    applyBattleAction(battle, targetAction);
 
     expect(blade.attachedTo).toBe(disciple.instanceId);
     expect(disciple.attachments).toContain(blade.instanceId);
+    expect(getDerivedPermanentStat(battle, disciple, "power")).toBe(3);
     expect(battle.rules.some((event) => event.type === "counter_added")).toBe(true);
     expect(battle.rules.some((event) => event.type === "attachment_attached")).toBe(true);
     expect(
       battle.choices.some((choice) => choice.kind === "select_permanents"),
-    ).toBe(true);
-    expect(
-      battle.choices.some((choice) => choice.kind === "optional_effect" && choice.selectedIds.includes("yes")),
     ).toBe(true);
     expect(battle.rulesCursor).toBe(battle.rules.length);
   });

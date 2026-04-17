@@ -55,6 +55,7 @@ export function CloudArenaBattleState({
   const battleWindowRef = useRef<HTMLDivElement | null>(null);
   const battleMainRef = useRef<HTMLDivElement | null>(null);
   const playableHandCards = new Set(playableHandCardInstanceIds);
+  const enemyBattlefield = battle.enemyBattlefield ?? Array.from({ length: battle.battlefield.length }, () => null);
   const playerCard = mapArenaPlayerToDisplayCard(battle.player);
   const enemyCard = mapArenaEnemyToDisplayCard(battle.enemy);
   const [hoveredInspectorKey, setHoveredInspectorKey] = useState<string | null>(null);
@@ -146,9 +147,25 @@ export function CloudArenaBattleState({
       );
     }
 
+    for (const slot of enemyBattlefield) {
+      if (!slot) {
+        continue;
+      }
+
+      const enemyBattlefieldCardModel = mapArenaPermanentToDisplayCard(slot, {
+        disableActions: disablePermanentActions,
+      });
+
+      models.set(
+        `enemy_battlefield:${slot.instanceId}`,
+        enemyBattlefieldCardModel,
+      );
+    }
+
     return models;
   }, [
     battle.battlefield,
+    enemyBattlefield,
     battle.player.hand,
     disableHandCardActions,
     disablePermanentActions,
@@ -175,6 +192,12 @@ export function CloudArenaBattleState({
         if (hoveredInspectorKey.startsWith("battlefield:")) {
           const permanentId = hoveredInspectorKey.slice("battlefield:".length);
           const permanent = battle.battlefield.find((entry) => entry?.instanceId === permanentId) ?? null;
+          return permanent ? getDefinitionJson(permanent.definitionId) : null;
+        }
+
+        if (hoveredInspectorKey.startsWith("enemy_battlefield:")) {
+          const permanentId = hoveredInspectorKey.slice("enemy_battlefield:".length);
+          const permanent = enemyBattlefield.find((entry) => entry?.instanceId === permanentId) ?? null;
           return permanent ? getDefinitionJson(permanent.definitionId) : null;
         }
 
@@ -424,6 +447,21 @@ export function CloudArenaBattleState({
           />
 
           <CloudArenaBattlefieldPanel
+            title="Enemy Battlefield"
+            zoneKeyPrefix="enemy_battlefield"
+            battlefield={enemyBattlefield}
+            legalActions={battle.legalActions}
+            getInspectableModel={getInspectableModel}
+            getPermanentMenuActions={() => []}
+            getPermanentCounterEntries={getPermanentCounterEntries}
+            bindInspectorInteractions={bindInspectorInteractions}
+            onOpenDetails={handleDetailsClick}
+            onTargetPermanentSelect={onTurnAction}
+          />
+
+          <CloudArenaBattlefieldPanel
+            title="Battlefield"
+            zoneKeyPrefix="battlefield"
             battlefield={battle.battlefield}
             legalActions={battle.legalActions}
             getInspectableModel={getInspectableModel}

@@ -9,6 +9,7 @@ export const mixedGuardianDeckPreset: CloudArenaDeckPreset = {
     "focused_blessing",
     "graveyard_hymn",
     "targeted_smite",
+    "targeted_strike",
     "forced_sacrifice",
     "attack",
     "defend",

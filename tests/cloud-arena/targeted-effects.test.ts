@@ -112,6 +112,25 @@ const TARGETED_EFFECT_TEST_DEFINITIONS: CardDefinitionLibrary = {
       },
     ],
   },
+  targeted_strike: {
+    id: "targeted_strike",
+    name: "Targeted Strike",
+    cardTypes: ["instant"],
+    cost: 1,
+    onPlay: [
+      {
+        attackAmount: 4,
+        target: {
+          zone: "enemy_battlefield",
+          controller: "opponent",
+          cardType: "permanent",
+        },
+        targeting: {
+          prompt: "Choose an enemy to strike",
+        },
+      },
+    ],
+  },
   forced_sacrifice: {
     id: "forced_sacrifice",
     name: "Forced Sacrifice",
@@ -271,6 +290,49 @@ describe("cloud arena targeted effects", () => {
     ).toBeUndefined();
     expect(battle.player.graveyard.map((card) => card.definitionId)).toContain("guardian");
     expect(battle.player.discardPile.map((card) => card.definitionId)).toContain("forced_sacrifice");
+  });
+
+  it("lets an attack target a specific enemy permanent", () => {
+    const battle = createBattle({
+      seed: 1,
+      cardDefinitions: {
+        ...cardDefinitions,
+        ...TARGETED_EFFECT_TEST_DEFINITIONS,
+      },
+      playerDeck: ["targeted_strike", "attack"],
+      enemy: {
+        name: "Targeting Dummy",
+        health: 30,
+        basePower: 12,
+        startingTokens: ["token_imp"],
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+
+    battle.player.energy = 10;
+
+    const strikeCard = battle.player.hand.find((card) => card.definitionId === "targeted_strike");
+    const targetToken = battle.enemyBattlefield.find((entry) => entry !== null);
+
+    if (!strikeCard || !targetToken) {
+      throw new Error("Expected targeted_strike and an enemy token in the opening state.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: strikeCard.instanceId,
+    });
+
+    expect(battle.pendingTargetRequest).toBeTruthy();
+    expect(battle.pendingTargetRequest?.selector.zone).toBe("enemy_battlefield");
+
+    applyBattleAction(battle, {
+      type: "choose_target",
+      targetPermanentId: targetToken.instanceId,
+    });
+
+    expect(targetToken.health).toBe(0);
+    expect(battle.pendingTargetRequest).toBeNull();
   });
 
   it("pauses a targeted permanent ability and resolves it onto the clicked creature", () => {

@@ -12,7 +12,20 @@ import {
 import { getDerivedPermanentActionAmount } from "../core/derived-stats.js";
 import { findPermanentById } from "../core/selectors.js";
 import { emitRulesEvent } from "../core/rules-events.js";
-import type { ActivatedAbility, BattleState, UsePermanentAction } from "../core/types.js";
+import type {
+  ActivatedAbility,
+  BattleState,
+  Selector,
+  UsePermanentAction,
+} from "../core/types.js";
+
+function createEnemyBattlefieldAttackSelector(): Selector {
+  return {
+    zone: "enemy_battlefield",
+    controller: "opponent",
+    cardType: "permanent",
+  };
+}
 
 function abilityRequiresTargetSelection(ability: ActivatedAbility): boolean {
   return ability.targeting !== undefined || ability.effects.some((effect) => "targeting" in effect && effect.targeting !== undefined);
@@ -85,7 +98,7 @@ export function usePermanentAction(
     }
   } else if (action.action === "attack") {
     const attackAmount = getDerivedPermanentActionAmount(state, permanent, "attack");
-    dealDamageToEnemy(state, attackAmount, "permanent_action", permanent.instanceId);
+
     emitRulesEvent(state, {
       type: "permanent_attacked",
       turnNumber: state.turnNumber,
@@ -95,6 +108,34 @@ export function usePermanentAction(
       controllerId: permanent.controllerId ?? "player",
       slotIndex: permanent.slotIndex,
     });
+
+    if (state.enemyBattlefield.some((slot) => slot !== null)) {
+      const selector = createEnemyBattlefieldAttackSelector();
+      state.pendingTargetRequest = {
+        id: `target_${state.turnNumber}_${state.nextTargetRequestIndex}`,
+        prompt: "Choose an enemy to attack",
+        optional: false,
+        selector,
+        effects: [
+          {
+            type: "deal_damage",
+            target: selector,
+            amount: { type: "constant", value: attackAmount },
+          },
+        ],
+        nextEffectIndex: 0,
+        context: {
+          abilitySourcePermanentId: permanent.instanceId,
+          sourceCardInstanceId: permanent.sourceCardInstanceId,
+        },
+      };
+      state.nextTargetRequestIndex += 1;
+      permanent.isDefending = false;
+      permanent.hasActedThisTurn = true;
+      return state;
+    }
+
+    dealDamageToEnemy(state, attackAmount, "permanent_action", permanent.instanceId);
     permanent.isDefending = false;
   } else if (action.action === "defend") {
     permanent.isDefending = true;

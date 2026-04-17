@@ -15,7 +15,7 @@ export type SelectorCardType = CardType | "permanent" | "equipment";
 export type AbilityKind = "triggered" | "activated" | "static" | "replacement";
 export type ActivatedAbilityActionId = string;
 export type RulesActionId = "attack" | "defend";
-export type ZoneName = "battlefield" | "hand" | "graveyard" | "discard";
+export type ZoneName = "battlefield" | "enemy_battlefield" | "hand" | "graveyard" | "discard";
 export type SelectorController = "you" | "opponent" | "any";
 export type SelectorRelation = "self" | "another";
 export type SelectorSource = "trigger_subject" | "ability_source";
@@ -48,7 +48,8 @@ export type CardEffect = {
   attackTimes?: number;
   blockAmount?: number;
   summonSelf?: boolean;
-  target: EffectTarget;
+  target: EffectTarget | Selector;
+  targeting?: Targeting;
 };
 
 export type ActionAbilityActivation = {
@@ -211,6 +212,7 @@ export type Effect =
       type: "summon_permanent";
       cardId: CardDefinitionId;
       amount?: ValueExpression;
+      controllerId?: "player" | "enemy";
     }
   | {
       type: "attach_from_hand";
@@ -318,6 +320,7 @@ export type BattleEvent =
       permanentId: string;
       definitionId: CardDefinitionId;
       slotIndex: number;
+      controllerId?: "player" | "enemy";
     }
   | {
       type: "permanent_acted";
@@ -333,10 +336,17 @@ export type BattleEvent =
       intent: EnemyIntent;
     }
   | {
+      type: "enemy_power_gained";
+      turnNumber: number;
+      amount: number;
+      newBasePower: number;
+    }
+  | {
       type: "permanent_destroyed";
       turnNumber: number;
       permanentId: string;
       definitionId: CardDefinitionId;
+      controllerId?: "player" | "enemy";
     }
   | {
       type: "counter_added";
@@ -531,8 +541,14 @@ export type EnemyCardDefinition = {
   effects: Array<{
     attackAmount?: number;
     attackTimes?: number;
+    attackPowerMultiplier?: number;
     blockAmount?: number;
+    blockPowerMultiplier?: number;
+    powerDelta?: number;
     overflowPolicy?: DamageOverflowPolicy;
+    spawnCardId?: CardDefinitionId;
+    spawnCount?: number;
+    controllerId?: "player" | "enemy";
     target: EffectTarget;
   }>;
 };
@@ -546,7 +562,10 @@ export type EnemyIntent = {
   attackAmount?: number;
   attackTimes?: number;
   blockAmount?: number;
+  powerDelta?: number;
   overflowPolicy?: DamageOverflowPolicy;
+  spawnCardId?: CardDefinitionId;
+  spawnCount?: number;
 };
 
 export type EnemyBehaviorStep = EnemyIntent;
@@ -580,7 +599,7 @@ export type PermanentState = {
   sourceCardInstanceId: string;
   name: string;
   definitionId: CardDefinitionId;
-  controllerId?: string;
+  controllerId?: "player" | "enemy";
   power: number;
   health: number;
   maxHealth: number;
@@ -621,11 +640,13 @@ export type BattleState = {
   phase: BattlePhase;
   seed: number;
   nextCounterIndex: number;
+  nextEnemyTokenIndex: number;
   nextTargetRequestIndex: number;
   cardDefinitions: CardDefinitionLibrary;
   player: PlayerState;
   enemy: EnemyState;
   battlefield: Array<PermanentState | null>;
+  enemyBattlefield: Array<PermanentState | null>;
   pendingTargetRequest?: PendingTargetRequest | null;
   blockingQueue: string[];
   log: BattleEvent[];
@@ -665,6 +686,7 @@ export type BehaviorEnemyConfig = {
   health: number;
   basePower: number;
   behavior: EnemyBehaviorStep[];
+  startingTokens?: CardDefinitionId[];
   cards?: never;
 };
 
@@ -673,6 +695,7 @@ export type CardEnemyConfig = {
   health: number;
   basePower: number;
   cards: EnemyCardDefinition[];
+  startingTokens?: CardDefinitionId[];
   behavior?: never;
 };
 

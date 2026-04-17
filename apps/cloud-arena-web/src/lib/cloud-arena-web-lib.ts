@@ -3,7 +3,6 @@ export {
   createCloudArenaApiClient,
 } from "./cloud-arena-api-client.js";
 export { CloudArcanumApiClientError } from "./base-api-client.js";
-export { cloudArenaSampleTrace, mixedGuardianSampleTrace } from "./cloud-arena-sample-trace.js";
 export {
   buildBattleViewModelFromSessionSnapshot,
   buildBattleViewModelFromTraceStep,
@@ -14,7 +13,6 @@ export {
 } from "./cloud-arena-view-model.js";
 export type {
   CloudArenaCurrentActionViewModel,
-  CloudArenaReplayContextViewModel,
   CloudArenaSessionContextViewModel,
   CloudArenaSummaryPill,
   CloudArenaViewModel,
@@ -35,13 +33,8 @@ export type {
 } from "./display-card.js";
 export {
   buildTraceStepViewModels,
-  clampTraceViewerStepIndex,
   formatTraceActionRecord,
   formatTraceEvent,
-  getTraceViewerCurrentActionRecord,
-  getTraceViewerStepCount,
-  getTraceViewerStepIndexAfterCommand,
   groupTraceEventsByTurn,
 } from "./cloud-arena-trace-view-model.js";
-export { useCloudArenaReplayController } from "./use-cloud-arena-replay-controller.js";
 export { getCloudArenaRuntimeConfig } from "./runtime-config.js";

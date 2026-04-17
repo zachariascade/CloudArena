@@ -4,6 +4,7 @@ import {
   applyBattleAction,
   cardDefinitions,
   createBattle,
+  getLegalActions,
   getDerivedPermanentStat,
   getPermanentCounterCount,
 } from "../../src/cloud-arena/index.js";
@@ -105,7 +106,7 @@ describe("cloud arena prototype card definitions", () => {
     expect(getDerivedPermanentStat(battle, captain, "power")).toBe(4);
   });
 
-  it("supports armory_disciple free equipment attachment in the default card library", () => {
+  it("supports armory_disciple equipping holy_blade in the default card library", () => {
     const battle = createBattle({
       seed: 1,
       playerHealth: 100,
@@ -138,6 +139,17 @@ describe("cloud arena prototype card definitions", () => {
       cardInstanceId: discipleCard.instanceId,
     });
 
+    const bladeCard = battle.player.hand.find((card) => card.definitionId === "holy_blade");
+
+    if (!bladeCard) {
+      throw new Error("Expected holy_blade in hand after playing armory_disciple.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: bladeCard.instanceId,
+    });
+
     const disciple = battle.battlefield.find((permanent) => permanent?.definitionId === "armory_disciple");
     const blade = battle.battlefield.find((permanent) => permanent?.definitionId === "holy_blade");
 
@@ -145,13 +157,35 @@ describe("cloud arena prototype card definitions", () => {
       throw new Error("Expected armory_disciple and holy_blade on battlefield.");
     }
 
+    const equipAction = getLegalActions(battle).find(
+      (action) =>
+        action.type === "use_permanent_action" &&
+        action.permanentId === blade.instanceId &&
+        action.action === "equip",
+    );
+
+    if (!equipAction || equipAction.type !== "use_permanent_action") {
+      throw new Error("Expected equip action for holy_blade.");
+    }
+
+    applyBattleAction(battle, equipAction);
+
+    const targetAction = getLegalActions(battle).find(
+      (action) =>
+        action.type === "choose_target" &&
+        action.targetPermanentId === disciple.instanceId,
+    );
+
+    if (!targetAction || targetAction.type !== "choose_target") {
+      throw new Error("Expected a legal target for holy_blade.");
+    }
+
+    applyBattleAction(battle, targetAction);
+
     expect(blade.attachedTo).toBe(disciple.instanceId);
     expect(disciple.attachments).toContain(blade.instanceId);
-    expect(
-      battle.choices.some((choice) =>
-        choice.kind === "optional_effect" &&
-        choice.selectedIds.includes("yes"),
-      ),
-    ).toBe(true);
+    expect(getDerivedPermanentStat(battle, disciple, "power")).toBe(3);
+    expect(disciple.health).toBe(5);
+    expect(disciple.maxHealth).toBe(5);
   });
 });

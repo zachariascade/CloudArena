@@ -7,6 +7,8 @@ import { DisplayCard } from "./display-card.js";
 import type { BattleAction } from "../../../../src/cloud-arena/index.js";
 
 type CloudArenaBattlefieldPanelProps = {
+  title?: string;
+  zoneKeyPrefix?: "battlefield" | "enemy_battlefield";
   battlefield: CloudArenaBattleViewModel["battlefield"];
   legalActions: CloudArenaBattleViewModel["legalActions"];
   getInspectableModel: (key: string) => Parameters<typeof DisplayCard>[0]["model"];
@@ -37,6 +39,8 @@ type CloudArenaBattlefieldPanelProps = {
 };
 
 export function CloudArenaBattlefieldPanel({
+  title = "Battlefield",
+  zoneKeyPrefix = "battlefield",
   battlefield,
   legalActions,
   getInspectableModel,
@@ -54,7 +58,7 @@ export function CloudArenaBattlefieldPanel({
   return (
     <section className="panel trace-viewer-panel trace-viewer-panel-wide trace-viewer-battlefield-panel cloud-arena-battlefield-panel">
       <div className="cloud-arena-section-heading">
-        <strong>Battlefield</strong>
+        <strong>{title}</strong>
         <span>{occupiedSlots}/{battlefield.length} occupied</span>
       </div>
       <div className="trace-viewer-board-scroll" aria-label="Battlefield">
@@ -124,13 +128,13 @@ export function CloudArenaBattlefieldPanel({
                     >
                       <DisplayCard
                         className="trace-viewer-battlefield-card cloud-arena-battlefield-card"
-                        model={getInspectableModel(`battlefield:${slot.instanceId}`)}
+                        model={getInspectableModel(`${zoneKeyPrefix}:${slot.instanceId}`)}
                       />
                     </div>
                     <button
                       type="button"
                       className="cloud-arena-card-details-button cloud-arena-battlefield-details-button"
-                      onClick={(event) => onOpenDetails(`battlefield:${slot.instanceId}`, event)}
+                      onClick={(event) => onOpenDetails(`${zoneKeyPrefix}:${slot.instanceId}`, event)}
                     >
                       details
                     </button>

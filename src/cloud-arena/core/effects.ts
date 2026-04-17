@@ -22,6 +22,7 @@ import type {
   AbilityCost,
   CardInstance,
   Effect,
+  CardEffect,
   Targeting,
   PermanentState,
   Selector,
@@ -575,11 +576,16 @@ function resolveSummonPermanentEffect(
       throw new Error(`Effect cannot summon non-permanent card ${effect.cardId}.`);
     }
 
+    const controllerId = effect.controllerId ?? "player";
     const cardInstanceId = `effect_${effect.cardId}_${state.turnNumber}_${state.rules.length + index + 1}`;
-    summonPermanentFromCard(state, {
-      instanceId: cardInstanceId,
-      definitionId: effect.cardId,
-    });
+    summonPermanentFromCard(
+      state,
+      {
+        instanceId: cardInstanceId,
+        definitionId: effect.cardId,
+      },
+      controllerId,
+    );
   }
 }
 
@@ -832,24 +838,56 @@ export function getEffectDamageAmount(effect: {
   return getTotalAttackAmount(effect);
 }
 
+function isSelectorTarget(target: CardEffect["target"]): target is Selector {
+  return typeof target === "object";
+}
+
+function createEnemyBattlefieldAttackSelector(): Selector {
+  return {
+    zone: "enemy_battlefield",
+    controller: "opponent",
+    cardType: "permanent",
+  };
+}
+
 export function resolveLegacyCardEffects(
   state: BattleState,
-  effects: Array<{
-    attackAmount?: number;
-    attackTimes?: number;
-    blockAmount?: number;
-    target: "player" | "enemy";
-  }>,
+  effects: CardEffect[],
+  context: EffectResolutionContext = {},
 ): void {
   for (const effect of effects) {
     const damageAmount = getTotalAttackAmount(effect);
+
+    if (damageAmount > 0 && isSelectorTarget(effect.target)) {
+      resolveEffects(state, [
+        {
+          type: "deal_damage",
+          target: effect.target,
+          amount: { type: "constant", value: damageAmount },
+          targeting: effect.targeting,
+        },
+      ], context);
+      continue;
+    }
+
+    if (damageAmount > 0 && effect.target === "enemy" && state.enemyBattlefield.some((slot) => slot !== null)) {
+      resolveEffects(state, [
+        {
+          type: "deal_damage",
+          target: createEnemyBattlefieldAttackSelector(),
+          amount: { type: "constant", value: damageAmount },
+          targeting: effect.targeting ?? { prompt: "Choose an enemy to attack" },
+        },
+      ], context);
+      continue;
+    }
 
     if (effect.target === "enemy" && damageAmount > 0) {
       resolveEffect(state, {
         type: "deal_damage",
         target: "enemy",
         amount: { type: "constant", value: damageAmount },
-      });
+      }, context);
     }
 
     if (effect.target === "player" && hasBlockAmount(effect)) {
@@ -857,7 +895,7 @@ export function resolveLegacyCardEffects(
         type: "gain_block",
         target: "player",
         amount: { type: "constant", value: effect.blockAmount ?? 0 },
-      });
+      }, context);
     }
   }
 }

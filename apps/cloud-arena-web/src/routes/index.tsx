@@ -9,7 +9,6 @@ import {
 
 import { CloudArenaAppShell, ErrorState, PageLayout } from "../components/index.js";
 import { CloudArenaInteractivePage } from "./interactive-page.js";
-import { CloudArenaTraceViewerPage } from "./trace-viewer-page.js";
 
 type CloudArenaRouteContext = {
   apiBaseUrl: string;
@@ -47,8 +46,7 @@ function CloudArenaRouteErrorBoundary({
           description={error.statusText || "The router reported an unexpected failure."}
           details={
             <p>
-              Return to <Link className="text-link" to="/">battle</Link>,{" "}
-              <Link className="text-link" to="/trace-viewer">replay</Link>, or{" "}
+              Return to <Link className="text-link" to="/">battle</Link>, or{" "}
               <a className="text-link" href={`${cloudArcanumWebBaseUrl.replace(/\/$/, "")}/cards`}>
                 card catalog
               </a>
@@ -86,10 +84,6 @@ export function createCloudArenaRouter(context: CloudArenaRouteContext) {
         {
           index: true,
           element: <CloudArenaInteractivePage apiBaseUrl={context.apiBaseUrl} />,
-        },
-        {
-          path: "trace-viewer",
-          element: <CloudArenaTraceViewerPage />,
         },
       ],
       errorElement: (

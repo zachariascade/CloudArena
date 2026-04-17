@@ -7,7 +7,7 @@ import {
 import { cardDefinitions } from "../cards/definitions.js";
 import { drawUpToHandSize, shuffleCards } from "./draw.js";
 import { getEnemyPlanStepAtIndexFromInput } from "./enemy-plan.js";
-import { cleanupDefeatedPermanents } from "./permanents.js";
+import { cleanupDefeatedPermanents, summonPermanentFromCard } from "./permanents.js";
 import { processTriggeredAbilities } from "./triggers.js";
 import type {
   BattleState,
@@ -46,6 +46,7 @@ export function createBattle(input: CreateBattleInput): BattleState {
     phase: "player_action",
     seed,
     nextCounterIndex: 1,
+    nextEnemyTokenIndex: 1,
     nextTargetRequestIndex: 1,
     cardDefinitions: resolvedCardDefinitions,
     player: {
@@ -71,6 +72,7 @@ export function createBattle(input: CreateBattleInput): BattleState {
       currentCard: initialEnemyPlan.card,
     },
     battlefield: Array.from({ length: LEAN_V1_BOARD_SLOT_COUNT }, () => null),
+    enemyBattlefield: Array.from({ length: LEAN_V1_BOARD_SLOT_COUNT }, () => null),
     pendingTargetRequest: null,
     blockingQueue: [],
     log: [
@@ -84,6 +86,17 @@ export function createBattle(input: CreateBattleInput): BattleState {
     choices: [],
   };
 
+  for (const tokenCardId of input.enemy.startingTokens ?? []) {
+    summonPermanentFromCard(
+      state,
+      {
+        instanceId: `enemy_starting_token_${tokenCardId}_${state.nextEnemyTokenIndex}`,
+        definitionId: tokenCardId,
+      },
+      "enemy",
+    );
+    state.nextEnemyTokenIndex += 1;
+  }
   const openingDraw = drawUpToHandSize(state, LEAN_V1_HAND_SIZE);
   cleanupDefeatedPermanents(state);
   processTriggeredAbilities(state);

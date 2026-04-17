@@ -24,9 +24,7 @@ import {
   type BattleAction,
   type BattleEvent,
   type BattleState,
-  type CreateBattleInput,
   type CloudArenaScenarioPreset,
-  type SimulationTrace,
 } from "../../../../src/cloud-arena/index.js";
 
 type CloudArenaSessionRecord = {
@@ -206,7 +204,7 @@ function createActionOption(
     case "choose_target": {
       const permanent = state.battlefield.find(
         (entry) => entry?.instanceId === action.targetPermanentId,
-      );
+      ) ?? state.enemyBattlefield.find((entry) => entry?.instanceId === action.targetPermanentId);
       const name = permanent?.name ?? action.targetPermanentId;
 
       return {
@@ -246,40 +244,6 @@ function createActionOption(
   }
 }
 
-function findWinner(log: BattleEvent[]): "player" | "enemy" | "unknown" {
-  for (let index = log.length - 1; index >= 0; index -= 1) {
-    const event = log[index];
-
-    if (event?.type === "battle_finished") {
-      return event.winner;
-    }
-  }
-
-  return "unknown";
-}
-
-function buildEnemyConfigFromState(state: BattleState): CreateBattleInput["enemy"] {
-  if (state.enemy.cards.length > 0) {
-    return {
-      name: state.enemy.name,
-      health: state.enemy.maxHealth,
-      basePower: state.enemy.basePower,
-      cards: state.enemy.cards.map((card) => ({
-        id: card.id,
-        name: card.name,
-        effects: card.effects.map((effect) => ({ ...effect })),
-      })),
-    };
-  }
-
-  return {
-    name: state.enemy.name,
-    health: state.enemy.maxHealth,
-    basePower: state.enemy.basePower,
-    behavior: state.enemy.behavior.map((step) => ({ ...step })),
-  };
-}
-
 function parseCardInstanceIndex(instanceId: string): number {
   const parsed = Number(instanceId.replace(/^card_/, ""));
   return Number.isInteger(parsed) ? parsed : Number.MAX_SAFE_INTEGER;
@@ -309,35 +273,6 @@ function reconstructPlayerDeck(state: BattleState): string[] {
   return [...cardMap.entries()]
     .sort(([leftId], [rightId]) => parseCardInstanceIndex(leftId) - parseCardInstanceIndex(rightId))
     .map(([, definitionId]) => definitionId);
-}
-
-function buildReplayTraceFromSessionRecord(record: CloudArenaSessionRecord): SimulationTrace {
-  const summary = buildBattleSummary(record.state);
-  const log = [...record.state.log];
-
-  return {
-    config: {
-      seed: record.seed,
-      playerHealth: record.state.player.maxHealth,
-      cardDefinitions: record.state.cardDefinitions,
-      playerDeck: reconstructPlayerDeck(record.state),
-      enemy: buildEnemyConfigFromState(record.state),
-      maxSteps: Math.max(1, record.actionHistory.length + 1),
-      agent: "interactive_session",
-    },
-    result: {
-      winner: findWinner(log),
-      finalPhase: record.state.phase,
-      finalTurnNumber: record.state.turnNumber,
-    },
-    finalSummary: summary,
-    actionHistory: record.actionHistory.map((entry) => ({
-      action: { ...entry.action },
-      turnNumber: entry.turnNumber,
-      phase: entry.phase,
-    })),
-    log,
-  };
 }
 
 function getLegalActionOptions(state: BattleState): CloudArenaActionOption[] {
@@ -420,6 +355,33 @@ function buildSessionSnapshot(
           }
         : null,
     ),
+    enemyBattlefield: state.enemyBattlefield.map((permanent) =>
+      permanent
+        ? {
+            instanceId: permanent.instanceId,
+            sourceCardInstanceId: permanent.sourceCardInstanceId,
+            definitionId: permanent.definitionId,
+            name: permanent.name,
+            controllerId: permanent.controllerId,
+            isCreature: hasCardType(
+              getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId),
+              "creature",
+            ),
+            power: getDerivedPermanentStat(state, permanent, "power"),
+            health: permanent.health,
+            maxHealth: permanent.maxHealth,
+            block: permanent.block,
+            counters: summarizePermanentCounters(permanent.counters),
+            attachments: [...(permanent.attachments ?? [])],
+            attachedTo: permanent.attachedTo ?? null,
+            hasActedThisTurn: permanent.hasActedThisTurn,
+            isTapped: permanent.isTapped,
+            isDefending: permanent.isDefending,
+            slotIndex: permanent.slotIndex,
+            actions: getActivatedAbilities(permanent.abilities).map((ability) => ({ ...ability })),
+          }
+        : null,
+    ),
     blockingQueue: [...state.blockingQueue],
     legalActions,
     actionHistory: record.actionHistory.map((entry) => ({
@@ -434,7 +396,6 @@ function buildSessionSnapshot(
 export type CloudArenaSessionService = {
   applyAction: (sessionId: string, action: BattleAction) => CloudArenaSessionSnapshot;
   createSession: (request?: CloudArenaCreateSessionRequest) => CloudArenaSessionSnapshot;
-  exportReplay: (sessionId: string) => SimulationTrace;
   getSession: (sessionId: string) => CloudArenaSessionSnapshot;
   resetSession: (sessionId: string) => CloudArenaSessionSnapshot;
 };
@@ -491,10 +452,6 @@ export function createCloudArenaSessionService(): CloudArenaSessionService {
 
     getSession(sessionId) {
       return buildSessionSnapshot(requireSession(sessionId));
-    },
-
-    exportReplay(sessionId) {
-      return buildReplayTraceFromSessionRecord(requireSession(sessionId));
     },
 
     applyAction(sessionId, action) {

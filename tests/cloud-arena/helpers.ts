@@ -41,6 +41,90 @@ export const TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
     cost: 1,
     onPlay: [{ attackAmount: 3, attackTimes: 2, target: "enemy" }],
   },
+  token_imp: {
+    id: "token_imp",
+    name: "Token Imp",
+    cardTypes: ["creature"],
+    cost: 0,
+    onPlay: [],
+    power: 2,
+    health: 4,
+    recoveryPolicy: "none",
+    abilities: [],
+  },
+  enemy_husk: {
+    id: "enemy_husk",
+    name: "Enemy Husk",
+    cardTypes: ["creature"],
+    cost: 0,
+    onPlay: [],
+    power: 2,
+    health: 6,
+    recoveryPolicy: "full_heal",
+    abilities: [],
+  },
+  enemy_shade: {
+    id: "enemy_shade",
+    name: "Enemy Shade",
+    cardTypes: ["creature"],
+    cost: 0,
+    onPlay: [],
+    power: 2,
+    health: 6,
+    recoveryPolicy: "none",
+    abilities: [],
+  },
+  enemy_brute: {
+    id: "enemy_brute",
+    name: "Enemy Brute",
+    cardTypes: ["creature"],
+    cost: 0,
+    onPlay: [],
+    power: 2,
+    health: 10,
+    recoveryPolicy: "none",
+    abilities: [],
+  },
+  enemy_targeted_smite: {
+    id: "enemy_targeted_smite",
+    name: "Enemy Targeted Smite",
+    cardTypes: ["instant"],
+    cost: 1,
+    onPlay: [],
+    spellEffects: [
+      {
+        type: "deal_damage",
+        target: {
+          zone: "enemy_battlefield",
+          controller: "opponent",
+          cardType: "permanent",
+        },
+        targeting: {
+          prompt: "Choose an enemy token",
+        },
+        amount: { type: "constant", value: 3 },
+      },
+    ],
+  },
+  targeted_strike: {
+    id: "targeted_strike",
+    name: "Targeted Strike",
+    cardTypes: ["instant"],
+    cost: 1,
+    onPlay: [
+      {
+        attackAmount: 4,
+        target: {
+          zone: "enemy_battlefield",
+          controller: "opponent",
+          cardType: "permanent",
+        },
+        targeting: {
+          prompt: "Choose an enemy to strike",
+        },
+      },
+    ],
+  },
   guardian: {
     id: "guardian",
     name: "Guardian",
@@ -87,6 +171,7 @@ type CreateTestBattleInput = {
     basePower?: number;
     behavior?: EnemyBehaviorStep[];
     cards?: EnemyCardDefinition[];
+    startingTokens?: CardDefinitionId[];
   };
   seed?: number;
 };
@@ -104,6 +189,7 @@ export function createTestBattle(input: CreateTestBattleInput): BattleState {
       ...(input.enemy?.cards
         ? { cards: input.enemy.cards }
         : { behavior: input.enemy?.behavior ?? [{ attackAmount: 12 }] }),
+      startingTokens: input.enemy?.startingTokens,
     },
   });
 }
@@ -150,6 +236,8 @@ export function formatBattleEvent(event: BattleEvent): string {
       return `turn ${event.turnNumber}: permanent ${event.permanentId} used ${event.action}`;
     case "enemy_intent_resolved":
       return `turn ${event.turnNumber}: enemy resolved ${formatEnemyIntent(event.intent)}`;
+    case "enemy_power_gained":
+      return `turn ${event.turnNumber}: enemy gained ${event.amount} power, base power now ${event.newBasePower}`;
     case "permanent_destroyed":
       return `turn ${event.turnNumber}: permanent ${event.permanentId} (${event.definitionId}) was destroyed`;
     case "turn_ended":

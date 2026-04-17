@@ -16,7 +16,10 @@ export const cloudArenaApiRoutes = {
 
 export type CloudArenaApiRouteName = keyof typeof cloudArenaApiRoutes;
 
-export type CloudArenaSessionScenarioId = "mixed_guardian";
+export type CloudArenaSessionScenarioId =
+  | "mixed_guardian"
+  | "grunt_demon"
+  | "imp_caller";
 
 export type CloudArenaCreateSessionRequest = {
   scenarioId?: CloudArenaSessionScenarioId;
@@ -107,6 +110,7 @@ export type CloudArenaSessionSnapshot = {
     intentLabel: string;
   };
   battlefield: Array<CloudArenaPermanentSnapshot | null>;
+  enemyBattlefield: Array<CloudArenaPermanentSnapshot | null>;
   blockingQueue: string[];
   legalActions: CloudArenaActionOption[];
   actionHistory: CloudArenaSessionActionRecord[];

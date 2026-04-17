@@ -24,6 +24,21 @@ export function formatEnemyIntent(intent: EnemyIntent): string {
   const attackAmount = getEnemyIntentAttackHitAmount(intent);
   const attackTimes = getEnemyIntentAttackTimes(intent);
   const blockAmount = getEnemyIntentBlockAmount(intent);
+  const powerDelta = intent.powerDelta ?? 0;
+  const spawnCardId = intent.spawnCardId;
+  const spawnCount = intent.spawnCount ?? 0;
+
+  const spawnText =
+    spawnCardId && spawnCount > 0 ? `spawn ${spawnCardId}${spawnCount > 1 ? ` x${spawnCount}` : ""}` : "";
+  const powerText = powerDelta !== 0 ? `${powerDelta > 0 ? "+" : ""}${powerDelta} power` : "";
+
+  if (attackAmount > 0 && blockAmount > 0 && (spawnText || powerText)) {
+    if (attackTimes > 1) {
+      return `attack ${attackAmount} x${attackTimes}${intent.overflowPolicy === "trample" ? " trample" : ""} + block ${blockAmount}${spawnText ? ` + ${spawnText}` : ""}${powerText ? ` + ${powerText}` : ""}`;
+    }
+
+    return `attack ${attackAmount}${intent.overflowPolicy === "trample" ? " trample" : ""} + block ${blockAmount}${spawnText ? ` + ${spawnText}` : ""}${powerText ? ` + ${powerText}` : ""}`;
+  }
 
   if (attackAmount > 0 && blockAmount > 0) {
     if (attackTimes > 1) {
@@ -34,6 +49,14 @@ export function formatEnemyIntent(intent: EnemyIntent): string {
   }
 
   if (attackAmount > 0) {
+    if (spawnText || powerText) {
+      if (attackTimes > 1) {
+        return `attack ${attackAmount} x${attackTimes}${intent.overflowPolicy === "trample" ? " trample" : ""}${spawnText ? ` + ${spawnText}` : ""}${powerText ? ` + ${powerText}` : ""}`;
+      }
+
+      return `attack ${attackAmount}${intent.overflowPolicy === "trample" ? " trample" : ""}${spawnText ? ` + ${spawnText}` : ""}${powerText ? ` + ${powerText}` : ""}`;
+    }
+
     if (attackTimes > 1) {
       return `attack ${attackAmount} x${attackTimes}${intent.overflowPolicy === "trample" ? " trample" : ""}`;
     }
@@ -42,7 +65,15 @@ export function formatEnemyIntent(intent: EnemyIntent): string {
   }
 
   if (blockAmount > 0) {
+    if (spawnText || powerText) {
+      return `defend ${blockAmount}${spawnText ? ` + ${spawnText}` : ""}${powerText ? ` + ${powerText}` : ""}`;
+    }
+
     return `defend ${blockAmount}`;
+  }
+
+  if (spawnText || powerText) {
+    return [spawnText, powerText].filter(Boolean).join(" + ");
   }
 
   return "idle";

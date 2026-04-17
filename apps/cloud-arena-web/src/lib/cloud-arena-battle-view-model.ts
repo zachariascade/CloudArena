@@ -40,6 +40,7 @@ export type CloudArenaBattleViewModel = {
     intentLabel: string;
   };
   battlefield: Array<CloudArenaPermanentSnapshot | null>;
+  enemyBattlefield?: Array<CloudArenaPermanentSnapshot | null>;
   blockingQueue: string[];
   legalActions: CloudArenaActionOption[];
 };
@@ -82,6 +83,7 @@ export function buildBattleViewModelFromTraceStep(
           }
         : null,
     ),
+    enemyBattlefield: Array.from({ length: step.battlefield.length }, () => null),
     blockingQueue: [...step.blockingQueue],
     legalActions: [],
   };
@@ -123,6 +125,14 @@ export function buildBattleViewModelFromSessionSnapshot(
       intentLabel: snapshot.enemy.intentLabel,
     },
     battlefield: snapshot.battlefield.map((slot) =>
+      slot
+        ? {
+            ...slot,
+            actions: slot.actions.map((action) => ({ ...action })),
+          }
+        : null,
+    ),
+    enemyBattlefield: snapshot.enemyBattlefield.map((slot) =>
       slot
         ? {
             ...slot,

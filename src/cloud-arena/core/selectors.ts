@@ -28,14 +28,14 @@ export type SelectedObject =
       zone: Exclude<ZoneName, "battlefield">;
       card: CardInstance;
       definition: CardDefinition;
-      controllerId: string;
+      controllerId: "player";
     }
   | {
       kind: "permanent";
-      zone: "battlefield";
+      zone: "battlefield" | "enemy_battlefield";
       permanent: PermanentState;
       definition: CardDefinition;
-      controllerId: string;
+      controllerId: "player" | "enemy";
     };
 
 function getPlayerCardsInZone(
@@ -50,6 +50,8 @@ function getPlayerCardsInZone(
     case "discard":
       return state.player.discardPile;
   }
+
+  throw new Error(`Unsupported zone: ${zone}`);
 }
 
 function getSelectedObjectsInZone(
@@ -68,7 +70,25 @@ function getSelectedObjectsInZone(
           zone,
           permanent,
           definition: getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId),
-          controllerId: permanent.controllerId ?? "player",
+          controllerId: (permanent.controllerId ?? "player") as "player" | "enemy",
+        },
+      ];
+    });
+  }
+
+  if (zone === "enemy_battlefield") {
+    return state.enemyBattlefield.flatMap((permanent) => {
+      if (!permanent) {
+        return [];
+      }
+
+      return [
+        {
+          kind: "permanent" as const,
+          zone,
+          permanent,
+          definition: getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId),
+          controllerId: (permanent.controllerId ?? "enemy") as "player" | "enemy",
         },
       ];
     });
@@ -197,7 +217,7 @@ export function selectObjects(
 ): SelectedObject[] {
   const zones: ZoneName[] = selector.zone
     ? [selector.zone]
-    : ["battlefield", "hand", "graveyard", "discard"];
+    : ["battlefield", "enemy_battlefield", "hand", "graveyard", "discard"];
 
   return zones.flatMap((zone) =>
     getSelectedObjectsInZone(state, zone).filter((object) => matchesSelectorObject(object, selector, context)),
@@ -211,7 +231,7 @@ export function selectPermanents(
 ): PermanentState[] {
   const battlefieldSelector: Selector = {
     ...selector,
-    zone: "battlefield",
+    zone: selector.zone ?? "battlefield",
   };
 
   return selectObjects(state, battlefieldSelector, context).flatMap((object) =>
@@ -223,7 +243,11 @@ export function findPermanentById(
   state: BattleState,
   permanentId: string,
 ): PermanentState | null {
-  return state.battlefield.find((permanent) => permanent?.instanceId === permanentId) ?? null;
+  return (
+    state.battlefield.find((permanent) => permanent?.instanceId === permanentId) ??
+    state.enemyBattlefield.find((permanent) => permanent?.instanceId === permanentId) ??
+    null
+  );
 }
 
 export function hasOpenBattlefieldSlot(state: BattleState): boolean {

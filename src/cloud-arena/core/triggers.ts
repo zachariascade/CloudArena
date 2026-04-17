@@ -38,7 +38,7 @@ function toPermanentSelectedObject(
     zone: "battlefield",
     permanent,
     definition: getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId),
-    controllerId: permanent.controllerId ?? "player",
+    controllerId: (permanent.controllerId ?? "player") as "player" | "enemy",
   };
 }
 
@@ -56,7 +56,7 @@ function toSyntheticPermanentSelectedObject(
       sourceCardInstanceId: event.sourceCardInstanceId,
       name: definition.name,
       definitionId: event.definitionId,
-      controllerId: event.controllerId,
+      controllerId: event.controllerId as "player" | "enemy",
       power: 0,
       health: 0,
       maxHealth: 0,
@@ -75,7 +75,7 @@ function toSyntheticPermanentSelectedObject(
       slotIndex: event.slotIndex,
     },
     definition,
-    controllerId: event.controllerId,
+    controllerId: event.controllerId as "player" | "enemy",
   };
 }
 

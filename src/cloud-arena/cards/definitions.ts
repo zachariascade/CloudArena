@@ -14,6 +14,8 @@ import { massBenedictionCardDefinition } from "./definitions/mass-benediction.js
 import { sacrificialSeraphCardDefinition } from "./definitions/sacrificial-seraph.js";
 import { sanctifiedGuideCardDefinition } from "./definitions/sanctified-guide.js";
 import { targetedSmiteCardDefinition } from "./definitions/targeted-smite.js";
+import { targetedStrikeCardDefinition } from "./definitions/targeted-strike.js";
+import { tokenImpCardDefinition } from "./definitions/token-imp.js";
 import { tokenAngelCardDefinition } from "./definitions/token-angel.js";
 import type {
   CardDefinition,
@@ -50,6 +52,8 @@ export const cardDefinitions: CardDefinitionLibrary = {
   sacrificial_seraph: sacrificialSeraphCardDefinition,
   sanctified_guide: sanctifiedGuideCardDefinition,
   targeted_smite: targetedSmiteCardDefinition,
+  targeted_strike: targetedStrikeCardDefinition,
+  token_imp: tokenImpCardDefinition,
   token_angel: tokenAngelCardDefinition,
 };
 

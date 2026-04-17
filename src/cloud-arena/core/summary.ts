@@ -21,6 +21,7 @@ export type BattleSummary = {
     intent: string;
   };
   battlefield: string[];
+  enemyBattlefield: string[];
   blockingQueue: string[];
 };
 
@@ -58,6 +59,20 @@ export function buildBattleSummary(state: BattleState): BattleSummary {
         `defending=${permanent.isDefending ? "yes" : "no"}`,
       ].join(", ");
     }),
+    enemyBattlefield: state.enemyBattlefield.map((permanent, index) => {
+      if (!permanent) {
+        return `slot ${index + 1}: empty`;
+      }
+
+      return [
+        `slot ${index + 1}: ${permanent.name}`,
+        `hp=${permanent.health}/${permanent.maxHealth}`,
+        `block=${permanent.block}`,
+        `acted=${permanent.hasActedThisTurn ? "yes" : "no"}`,
+        `tapped=${permanent.isTapped ? "yes" : "no"}`,
+        `defending=${permanent.isDefending ? "yes" : "no"}`,
+      ].join(", ");
+    }),
     blockingQueue: [...state.blockingQueue],
   };
 }
@@ -69,6 +84,7 @@ export function formatBattleSummary(summary: BattleSummary): string {
     `player: hp=${summary.player.health}/${summary.player.maxHealth}, block=${summary.player.block}, energy=${summary.player.energy}, hand=${summary.player.handCount}, discard=${summary.player.discardCount}, graveyard=${summary.player.graveyardCount}`,
     `enemy: ${summary.enemy.name}, hp=${summary.enemy.health}/${summary.enemy.maxHealth}, block=${summary.enemy.block}, intent=${summary.enemy.intent}`,
     `battlefield:\n${summary.battlefield.join("\n")}`,
+    `enemy battlefield:\n${summary.enemyBattlefield.join("\n")}`,
     `blocking queue: ${summary.blockingQueue.length > 0 ? summary.blockingQueue.join(", ") : "empty"}`,
   ].join("\n");
 }

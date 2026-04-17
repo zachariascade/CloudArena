@@ -65,7 +65,9 @@ export function playCard(state: BattleState, cardInstanceId: string): BattleStat
     summonPermanentFromCard(state, card);
   }
 
-  resolveLegacyCardEffects(state, definition.onPlay);
+  resolveLegacyCardEffects(state, definition.onPlay, {
+    sourceCardInstanceId: card.instanceId,
+  });
   if (definition.spellEffects?.length) {
     resolveSpellEffects(state, definition.spellEffects, {
       sourceCardInstanceId: card.instanceId,

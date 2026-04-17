@@ -1,4 +1,3 @@
-import { getTotalAttackAmount, hasAttackAmount, hasBlockAmount } from "./combat-values.js";
 import type {
   CreateBattleInput,
   EnemyCardDefinition,
@@ -6,30 +5,49 @@ import type {
   EnemyState,
 } from "./types.js";
 
-function getEnemyIntentFromCard(card: EnemyCardDefinition): EnemyIntent {
-  const attackEffects = card.effects.filter(
-    (effect) => effect.target === "player" && hasAttackAmount(effect),
-  );
+function getEnemyIntentFromCard(card: EnemyCardDefinition, basePower: number): EnemyIntent {
   let attackAmount = 0;
   let blockAmount = 0;
   let attackTimes: number | undefined;
+  let overflowPolicy: EnemyIntent["overflowPolicy"] | undefined;
+  let powerDelta = 0;
+  let summonCardId: string | undefined;
+  let summonCount = 0;
 
   for (const effect of card.effects) {
-    if (effect.target === "player" && hasAttackAmount(effect)) {
-      attackAmount += getTotalAttackAmount(effect);
+    if (effect.target === "player" && (effect.attackAmount !== undefined || effect.attackPowerMultiplier !== undefined)) {
+      const baseAttackAmount =
+        typeof effect.attackAmount === "number"
+          ? effect.attackAmount
+          : typeof effect.attackPowerMultiplier === "number"
+            ? Math.max(0, Math.floor(basePower * effect.attackPowerMultiplier))
+            : 0;
+      attackAmount += baseAttackAmount * Math.max(1, effect.attackTimes ?? 1);
+      attackTimes = effect.attackTimes;
+      overflowPolicy = effect.overflowPolicy ?? overflowPolicy;
     }
 
-    if (effect.target === "enemy" && hasBlockAmount(effect)) {
-      blockAmount += effect.blockAmount ?? 0;
+    if (effect.target === "enemy" && (effect.blockAmount !== undefined || effect.blockPowerMultiplier !== undefined)) {
+      const baseBlockAmount =
+        typeof effect.blockAmount === "number"
+          ? effect.blockAmount
+          : typeof effect.blockPowerMultiplier === "number"
+            ? Math.max(0, Math.floor(basePower * effect.blockPowerMultiplier))
+            : 0;
+      blockAmount += baseBlockAmount;
+    }
+
+    if (effect.target === "enemy" && typeof effect.powerDelta === "number") {
+      powerDelta += effect.powerDelta;
+    }
+
+    if (effect.target === "enemy" && effect.spawnCardId) {
+      summonCardId = effect.spawnCardId;
+      summonCount += effect.spawnCount ?? 1;
     }
   }
 
-  if (attackEffects.length === 1) {
-    attackAmount = attackEffects[0]?.attackAmount ?? attackAmount;
-    attackTimes = attackEffects[0]?.attackTimes;
-  }
-
-  if (attackAmount <= 0 && blockAmount <= 0) {
+  if (attackAmount <= 0 && blockAmount <= 0 && powerDelta <= 0 && !summonCardId) {
     return {};
   }
 
@@ -37,8 +55,10 @@ function getEnemyIntentFromCard(card: EnemyCardDefinition): EnemyIntent {
     attackAmount: attackAmount > 0 ? attackAmount : undefined,
     attackTimes: attackAmount > 0 ? attackTimes : undefined,
     blockAmount: blockAmount > 0 ? blockAmount : undefined,
-    overflowPolicy:
-      attackEffects.length === 1 ? attackEffects[0]?.overflowPolicy : undefined,
+    powerDelta: powerDelta > 0 ? powerDelta : powerDelta < 0 ? powerDelta : undefined,
+    overflowPolicy,
+    spawnCardId: summonCardId,
+    spawnCount: summonCount > 0 ? summonCount : undefined,
   };
 }
 
@@ -57,7 +77,7 @@ function buildEnemyPlanStepFromInput(
   }
 
   const card = enemy.cards?.[index];
-  return card ? { intent: getEnemyIntentFromCard(card), card } : null;
+  return card ? { intent: getEnemyIntentFromCard(card, enemy.basePower), card } : null;
 }
 
 export function getEnemyPlanLength(
@@ -78,12 +98,12 @@ export function getEnemyPlanStepAtIndexFromInput(
 }
 
 export function getEnemyPlanStepAtIndexFromState(
-  enemy: Pick<EnemyState, "behavior" | "cards">,
+  enemy: Pick<EnemyState, "behavior" | "cards" | "basePower">,
   index: number,
 ): EnemyPlanStep | null {
   if (enemy.cards.length > 0) {
     const card = enemy.cards[index];
-    return card ? { intent: getEnemyIntentFromCard(card), card } : null;
+    return card ? { intent: getEnemyIntentFromCard(card, enemy.basePower), card } : null;
   }
 
   const intent = enemy.behavior[index];
@@ -99,6 +119,7 @@ export function cloneEnemyConfig(
       health: enemy.health,
       basePower: enemy.basePower,
       behavior: enemy.behavior.map((step) => ({ ...step })),
+      startingTokens: enemy.startingTokens ? [...enemy.startingTokens] : undefined,
     };
   }
 
@@ -106,6 +127,7 @@ export function cloneEnemyConfig(
     name: enemy.name,
     health: enemy.health,
     basePower: enemy.basePower,
+    startingTokens: enemy.startingTokens ? [...enemy.startingTokens] : undefined,
     cards: (enemy.cards ?? []).map((card) => ({
       ...card,
       effects: card.effects.map((effect) => ({ ...effect })),

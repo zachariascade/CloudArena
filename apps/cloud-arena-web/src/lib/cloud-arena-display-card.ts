@@ -180,6 +180,19 @@ const ARENA_HAND_CARD_PRESENTATIONS: Record<string, ArenaCardPresentation> = {
     collectorNumber: "015",
     footerStat: "2/2",
   },
+  token_imp: {
+    title: "Token Imp",
+    typeLine: "Creature - Demon Imp",
+    manaCost: "{0}",
+    frameTone: "split-black-red",
+    imagePath: "token_imp.svg",
+    imageAlt: "A small imp with ember wings and a sly grin",
+    flavorText: "Small enough to underestimate, loud enough to matter.",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "006B",
+    footerStat: "2/4",
+  },
   sacrificial_seraph: {
     title: "Winged Collector",
     typeLine: "Creature - Angel",
@@ -279,6 +292,22 @@ const ARENA_ENEMY_PRESENTATION = {
   collectorNumber: "E01",
 };
 
+const ARENA_ENEMY_PRESENTATIONS: Record<string, typeof ARENA_ENEMY_PRESENTATION> = {
+  "Grunt Demon": {
+    frameTone: "split-black-red",
+    typeLine: "Enemy - Demon",
+    imagePath: "grunt_demon.svg",
+    imageAlt: "A horned demon soldier framed by smoke and ember light",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "E02",
+  },
+};
+
+function getArenaEnemyPresentation(enemyName: string): typeof ARENA_ENEMY_PRESENTATION {
+  return ARENA_ENEMY_PRESENTATIONS[enemyName] ?? ARENA_ENEMY_PRESENTATION;
+}
+
 export function mapArenaPlayerToDisplayCard(
   player: CloudArenaBattleViewModel["player"],
 ): DisplayCardModel {
@@ -323,23 +352,25 @@ export function mapArenaPlayerToDisplayCard(
 export function mapArenaEnemyToDisplayCard(
   enemy: CloudArenaBattleViewModel["enemy"],
 ): DisplayCardModel {
+  const presentation = getArenaEnemyPresentation(enemy.name);
+
   return {
     variant: "enemy",
     name: enemy.name,
     title: "Harbinger of Attrition",
     subtitle: "Enemy - Demon",
-    frameTone: ARENA_ENEMY_PRESENTATION.frameTone,
+    frameTone: presentation.frameTone,
     manaCost: null,
     image: buildArenaImage(
-      ARENA_ENEMY_PRESENTATION.imagePath,
-      ARENA_ENEMY_PRESENTATION.imageAlt,
+      presentation.imagePath,
+      presentation.imageAlt,
       enemy.name,
-      ARENA_ENEMY_PRESENTATION.footerCredit,
+      presentation.footerCredit,
     ),
     metaLine: null,
-    footerCode: ARENA_ENEMY_PRESENTATION.footerCode,
-    footerCredit: ARENA_ENEMY_PRESENTATION.footerCredit,
-    collectorNumber: ARENA_ENEMY_PRESENTATION.collectorNumber,
+    footerCode: presentation.footerCode,
+    footerCredit: presentation.footerCredit,
+    collectorNumber: presentation.collectorNumber,
     footerStat: null,
     healthBar: {
       current: enemy.health,

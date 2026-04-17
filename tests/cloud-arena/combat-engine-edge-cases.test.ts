@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   applyBattleAction,
   buildBattleSummary,
+  getLegalActions,
   playCard,
   usePermanentAction,
 } from "../../src/cloud-arena/index.js";
@@ -208,7 +209,7 @@ describe("cloud arena combat engine edge cases", () => {
     applyBattleAction(battle, { type: "end_turn" });
 
     expect(battle.player.health).toBe(startingHealth - 8);
-    expect(battle.battlefield[0]?.health).toBe(2);
+    expect(battle.battlefield[0]?.health).toBe(10);
     expect(battle.battlefield[0]?.block).toBe(0);
   });
 
@@ -302,6 +303,44 @@ describe("cloud arena combat engine edge cases", () => {
     expect(battle.battlefield[0]).toBeNull();
     expect(battle.player.graveyard.map((card) => card.definitionId)).toEqual(["guardian"]);
     expect(battle.player.health).toBe(startingHealth - 11);
+  });
+
+  it("makes attack cards target enemy battlefield permanents when they exist", () => {
+    const battle = createTestBattle({
+      playerDeck: ["attack", "defend", "attack", "defend", "attack"],
+      enemy: {
+        name: "Enemy Brute",
+        health: 30,
+        basePower: 1,
+        startingTokens: ["enemy_brute"],
+        behavior: [{ attackAmount: 0 }],
+      },
+    });
+
+    const attackCard = battle.player.hand.find((card) => card.definitionId === "attack");
+    const enemyPermanent = battle.enemyBattlefield.find((entry) => entry?.definitionId === "enemy_brute");
+
+    if (!attackCard || !enemyPermanent) {
+      throw new Error("Expected both an attack card and an enemy permanent.");
+    }
+
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: attackCard.instanceId });
+
+    expect(battle.pendingTargetRequest).toBeTruthy();
+    expect(battle.pendingTargetRequest?.selector.zone).toBe("enemy_battlefield");
+
+    const attackTarget = getLegalActions(battle).find(
+      (action) => action.type === "choose_target" && action.targetPermanentId === enemyPermanent.instanceId,
+    );
+
+    if (!attackTarget || attackTarget.type !== "choose_target") {
+      throw new Error("Expected the enemy permanent to be a legal attack target.");
+    }
+
+    applyBattleAction(battle, attackTarget);
+
+    expect(enemyPermanent.health).toBe(4);
+    expect(battle.pendingTargetRequest).toBeNull();
   });
 
   it("battle ends when enemy health reaches zero", () => {
@@ -741,7 +780,14 @@ describe("cloud arena combat engine edge cases", () => {
         intent: "attack 10",
       },
       battlefield: [
-        "slot 1: Guardian, hp=10/10, block=0, acted=no, defending=no",
+        "slot 1: Guardian, hp=10/10, block=0, acted=no, tapped=no, defending=no",
+        "slot 2: empty",
+        "slot 3: empty",
+        "slot 4: empty",
+        "slot 5: empty",
+      ],
+      enemyBattlefield: [
+        "slot 1: empty",
         "slot 2: empty",
         "slot 3: empty",
         "slot 4: empty",
@@ -749,5 +795,109 @@ describe("cloud arena combat engine edge cases", () => {
       ],
       blockingQueue: [],
     });
+  });
+
+  it("lets creature attacks target enemy permanents and respects full heal recovery policy", () => {
+    const battle = createTestBattle({
+      playerDeck: ["guardian", "defend", "attack", "defend", "attack"],
+      enemy: {
+        name: "Enemy Husk",
+        health: 30,
+        basePower: 1,
+        startingTokens: ["enemy_husk"],
+        behavior: [{ attackAmount: 0 }],
+      },
+    });
+
+    const guardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
+    if (!guardianCard) {
+      throw new Error("Expected Guardian in opening hand.");
+    }
+
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: guardianCard.instanceId });
+
+    const guardianPermanent = battle.battlefield[0];
+    const enemyPermanent = battle.enemyBattlefield.find((entry) => entry?.definitionId === "enemy_husk");
+
+    if (!guardianPermanent || !enemyPermanent) {
+      throw new Error("Expected both the Guardian and an enemy husk on the field.");
+    }
+
+    applyBattleAction(battle, {
+      type: "use_permanent_action",
+      permanentId: guardianPermanent.instanceId,
+      source: "rules",
+      action: "attack",
+    });
+
+    const attackTarget = battle.pendingTargetRequest
+      ? getLegalActions(battle).find(
+          (action) => action.type === "choose_target" && action.targetPermanentId === enemyPermanent.instanceId,
+        )
+      : null;
+
+    if (!attackTarget || attackTarget.type !== "choose_target") {
+      throw new Error("Expected the enemy husk to be a legal attack target.");
+    }
+
+    applyBattleAction(battle, attackTarget);
+
+    expect(enemyPermanent.health).toBe(2);
+
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(enemyPermanent.health).toBe(6);
+  });
+
+  it("keeps damage on enemy permanents with none recovery policy", () => {
+    const battle = createTestBattle({
+      playerDeck: ["guardian", "defend", "attack", "defend", "attack"],
+      enemy: {
+        name: "Enemy Shade",
+        health: 30,
+        basePower: 1,
+        startingTokens: ["enemy_shade"],
+        behavior: [{ attackAmount: 0 }],
+      },
+    });
+
+    const guardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
+    if (!guardianCard) {
+      throw new Error("Expected Guardian in opening hand.");
+    }
+
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: guardianCard.instanceId });
+
+    const guardianPermanent = battle.battlefield[0];
+    const enemyPermanent = battle.enemyBattlefield.find((entry) => entry?.definitionId === "enemy_shade");
+
+    if (!guardianPermanent || !enemyPermanent) {
+      throw new Error("Expected both the Guardian and an enemy shade on the field.");
+    }
+
+    applyBattleAction(battle, {
+      type: "use_permanent_action",
+      permanentId: guardianPermanent.instanceId,
+      source: "rules",
+      action: "attack",
+    });
+
+    const attackTarget = battle.pendingTargetRequest
+      ? getLegalActions(battle).find(
+          (action) => action.type === "choose_target" && action.targetPermanentId === enemyPermanent.instanceId,
+        )
+      : null;
+
+    if (!attackTarget || attackTarget.type !== "choose_target") {
+      throw new Error("Expected the enemy shade to be a legal attack target.");
+    }
+
+    applyBattleAction(battle, attackTarget);
+
+    expect(enemyPermanent.health).toBe(2);
+
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(enemyPermanent.health).toBe(2);
   });
 });

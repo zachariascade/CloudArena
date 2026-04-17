@@ -1,7 +1,11 @@
 import type { ReactElement } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import type { CloudArenaSessionSnapshot } from "../../../../src/cloud-arena/api-contract.js";
+import type {
+  CloudArenaSessionSnapshot,
+  CloudArenaSessionScenarioId,
+} from "../../../../src/cloud-arena/api-contract.js";
 import type { BattleAction, BattleEvent } from "../../../../src/cloud-arena/index.js";
 import { LEAN_V1_DEFAULT_TURN_ENERGY } from "../../../../src/cloud-arena/index.js";
 import {
@@ -23,6 +27,49 @@ type CloudArenaInteractivePageProps = {
 };
 
 type InteractiveStatus = "loading" | "ready" | "error";
+
+const CLOUD_ARENA_SCENARIO_OPTIONS: Array<{
+  id: CloudArenaSessionScenarioId;
+  label: string;
+  description: string;
+}> = [
+  {
+    id: "mixed_guardian",
+    label: "Mixed Guardian",
+    description: "Balanced baseline battle",
+  },
+  {
+    id: "grunt_demon",
+    label: "Grunt Demon",
+    description: "Simple low-tier attacker",
+  },
+  {
+    id: "imp_caller",
+    label: "Imp Caller",
+    description: "Token pressure test",
+  },
+];
+
+const CLOUD_ARENA_SCENARIO_QUERY_PARAM = "enemy";
+
+function isCloudArenaSessionScenarioId(value: string): value is CloudArenaSessionScenarioId {
+  return CLOUD_ARENA_SCENARIO_OPTIONS.some((option) => option.id === value);
+}
+
+function getScenarioDraftFromUrl(): CloudArenaSessionScenarioId {
+  if (typeof window === "undefined") {
+    return "mixed_guardian";
+  }
+
+  const searchParams = new URLSearchParams(window.location.search);
+  const queryValue = searchParams.get(CLOUD_ARENA_SCENARIO_QUERY_PARAM);
+
+  if (queryValue && isCloudArenaSessionScenarioId(queryValue)) {
+    return queryValue;
+  }
+
+  return "mixed_guardian";
+}
 
 function formatApiErrorDetails(error: Error | CloudArcanumApiClientError): ReactElement {
   if (error instanceof CloudArcanumApiClientError) {
@@ -78,15 +125,40 @@ export function CloudArenaInteractivePage({
   apiBaseUrl,
 }: CloudArenaInteractivePageProps): ReactElement {
   const api = useMemo(() => createCloudArenaApiClient({ baseUrl: apiBaseUrl }), [apiBaseUrl]);
+  const location = useLocation();
+  const navigate = useNavigate();
   const [snapshot, setSnapshot] = useState<CloudArenaSessionSnapshot | null>(null);
   const [status, setStatus] = useState<InteractiveStatus>("loading");
   const [error, setError] = useState<Error | CloudArcanumApiClientError | null>(null);
   const [isCreatingSession, setIsCreatingSession] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [seedDraft, setSeedDraft] = useState("1");
+  const [scenarioDraft, setScenarioDraft] = useState<CloudArenaSessionScenarioId>(getScenarioDraftFromUrl);
   const [lastSubmittedActionLabel, setLastSubmittedActionLabel] = useState<string | null>(null);
+  const initialScenarioDraftRef = useRef(scenarioDraft);
 
-  async function createSession(seed?: number): Promise<void> {
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const currentQueryScenario = searchParams.get(CLOUD_ARENA_SCENARIO_QUERY_PARAM);
+
+    if (currentQueryScenario === scenarioDraft) {
+      return;
+    }
+
+    searchParams.set(CLOUD_ARENA_SCENARIO_QUERY_PARAM, scenarioDraft);
+    navigate(
+      {
+        pathname: location.pathname,
+        search: `?${searchParams.toString()}`,
+      },
+      { replace: true },
+    );
+  }, [location.pathname, location.search, navigate, scenarioDraft]);
+
+  async function createSession(
+    seed?: number,
+    scenarioId: CloudArenaSessionScenarioId = scenarioDraft,
+  ): Promise<void> {
     const resolvedSeed = seed ?? createBattleSeed();
 
     setIsCreatingSession(true);
@@ -95,12 +167,13 @@ export function CloudArenaInteractivePage({
 
     try {
       const response = await api.createCloudArenaSession({
-        scenarioId: "mixed_guardian",
+        scenarioId,
         seed: resolvedSeed,
         shuffleDeck: true,
       });
       setSnapshot(response.data);
       setSeedDraft(String(response.data.seed));
+      setScenarioDraft(response.data.scenarioId);
       setLastSubmittedActionLabel(null);
       setStatus("ready");
     } catch (nextError: unknown) {
@@ -119,7 +192,7 @@ export function CloudArenaInteractivePage({
     setError(null);
 
     void api.createCloudArenaSession(
-      { scenarioId: "mixed_guardian", seed: createBattleSeed(), shuffleDeck: true },
+      { scenarioId: initialScenarioDraftRef.current, seed: createBattleSeed(), shuffleDeck: true },
       { signal: abortController.signal },
     )
       .then((response) => {
@@ -129,6 +202,7 @@ export function CloudArenaInteractivePage({
 
         setSnapshot(response.data);
         setSeedDraft(String(response.data.seed));
+        setScenarioDraft(response.data.scenarioId);
         setStatus("ready");
       })
       .catch((nextError: unknown) => {
@@ -172,7 +246,7 @@ export function CloudArenaInteractivePage({
       if (isMissingCloudArenaSessionError(resolvedError)) {
         setLastSubmittedActionLabel(null);
         setError(new Error("The live battle session expired after the API restarted. A fresh battle has been created."));
-        await createSession();
+        await createSession(undefined, scenarioDraft);
         return;
       }
 
@@ -192,7 +266,7 @@ export function CloudArenaInteractivePage({
     setError(null);
 
     try {
-      await createSession();
+      await createSession(undefined, scenarioDraft);
       setLastSubmittedActionLabel(null);
       setStatus("ready");
     } catch (nextError: unknown) {
@@ -201,7 +275,7 @@ export function CloudArenaInteractivePage({
       if (isMissingCloudArenaSessionError(resolvedError)) {
         setLastSubmittedActionLabel(null);
         setError(new Error("The live battle session expired after the API restarted. A fresh battle has been created."));
-        await createSession();
+        await createSession(undefined, scenarioDraft);
         return;
       }
 
@@ -232,7 +306,7 @@ export function CloudArenaInteractivePage({
       return;
     }
 
-    await createSession(seed);
+    await createSession(seed, scenarioDraft);
   }
 
   const turnActions = snapshot?.legalActions
@@ -362,6 +436,20 @@ export function CloudArenaInteractivePage({
 
           <section className="panel trace-viewer-panel">
             <strong>Battle controls</strong>
+            <div style={{ height: "0.75rem" }} />
+            <label className="field">
+              <span>Scenario</span>
+              <select
+                value={scenarioDraft}
+                onChange={(event) => setScenarioDraft(event.target.value as CloudArenaSessionScenarioId)}
+              >
+                {CLOUD_ARENA_SCENARIO_OPTIONS.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.label} - {option.description}
+                  </option>
+                ))}
+              </select>
+            </label>
             <div style={{ height: "0.75rem" }} />
             <label className="field">
               <span>Seed</span>

@@ -8,7 +8,6 @@ type CloudArenaAppShellProps = {
 
 const navigationItems = [
   { to: "/", label: "Battle", end: true },
-  { to: "/trace-viewer", label: "Replay" },
 ];
 
 export function CloudArenaAppShell({

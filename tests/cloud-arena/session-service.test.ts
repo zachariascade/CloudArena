@@ -226,31 +226,6 @@ describe("cloud arena session service", () => {
     expect(reset.player.hand).toEqual(session.player.hand);
   });
 
-  it("exports a SimulationTrace-compatible replay artifact from a live session", () => {
-    const service = createCloudArenaSessionService();
-    const session = service.createSession({
-      scenarioId: "mixed_guardian",
-      seed: 11,
-    });
-    const actionToApply =
-      session.legalActions.find((entry) => entry.action.type !== "end_turn")?.action ??
-      session.legalActions[0]?.action;
-
-    if (!actionToApply) {
-      throw new Error("Expected at least one legal action.");
-    }
-
-    service.applyAction(session.sessionId, actionToApply);
-    const trace = service.exportReplay(session.sessionId);
-
-    expect(trace.config.seed).toBe(11);
-    expect(trace.config.agent).toBe("interactive_session");
-    expect(trace.config.playerDeck.length).toBeGreaterThan(0);
-    expect(trace.actionHistory).toHaveLength(1);
-    expect(trace.log.length).toBeGreaterThan(0);
-    expect(trace.finalSummary.turnNumber).toBeGreaterThan(0);
-  });
-
   it("throws structured errors for missing sessions and illegal actions", () => {
     const service = createCloudArenaSessionService();
     const session = service.createSession();

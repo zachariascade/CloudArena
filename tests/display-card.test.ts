@@ -108,6 +108,38 @@ describe("shared display card mappers", () => {
     expect(enemy.textBlocks[0]?.text).toContain("is preparing attack 10 x2");
   });
 
+  it("uses imp and grunt art for arena battle pieces", () => {
+    const imp = mapArenaPermanentToDisplayCard({
+      instanceId: "token_imp_1",
+      sourceCardInstanceId: "card_1",
+      definitionId: "token_imp",
+      name: "Token Imp",
+      isCreature: true,
+      power: 2,
+      health: 4,
+      maxHealth: 4,
+      block: 0,
+      hasActedThisTurn: false,
+      isTapped: false,
+      isDefending: false,
+      slotIndex: 0,
+      actions: [],
+    });
+    const grunt = mapArenaEnemyToDisplayCard({
+      name: "Grunt Demon",
+      health: 18,
+      maxHealth: 18,
+      block: 0,
+      intent: { attackAmount: 5 },
+      intentLabel: "attack 5",
+    });
+
+    expect(imp.image?.url).toContain("/images/cards/token_imp.svg");
+    expect(imp.image?.alt).toContain("imp");
+    expect(grunt.image?.url).toContain("/images/cards/grunt_demon.svg");
+    expect(grunt.image?.alt).toContain("horned demon soldier");
+  });
+
   it("maps arena hand cards and permanents with actions", () => {
     const onPlay = vi.fn();
     const onAttack = vi.fn();

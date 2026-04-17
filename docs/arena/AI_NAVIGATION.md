@@ -36,11 +36,7 @@ For replay and interactive UI work:
 - `apps/cloud-arena-web/src/lib/`
 - `tests/cloud-arena/trace-viewer.test.ts`
 
-For simulation tooling:
-
-- `scripts/run-cloud-arena-demo.ts`
-- `scripts/run-cloud-arena-simulation.ts`
-- `scripts/run-cloud-arena-batch-simulation.ts`
+Replay tooling is now legacy-only. Do not expand it.
 
 ## Usually Avoid
 

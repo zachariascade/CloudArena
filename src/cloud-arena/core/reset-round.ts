@@ -29,6 +29,20 @@ export function resetRound(state: BattleState): BattleState {
     permanent.isDefending = false;
   });
 
+  state.enemyBattlefield.forEach((permanent) => {
+    if (!permanent) {
+      return;
+    }
+
+    permanent.block = 0;
+    if (permanent.recoveryPolicy === "full_heal") {
+      permanent.health = permanent.maxHealth;
+    }
+    permanent.hasActedThisTurn = false;
+    permanent.isTapped = false;
+    permanent.isDefending = false;
+  });
+
   const enemyPlanLength = getEnemyPlanLength(state.enemy);
 
   state.enemy.behaviorIndex = (state.enemy.behaviorIndex + 1) % enemyPlanLength;

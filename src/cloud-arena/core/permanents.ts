@@ -142,9 +142,11 @@ export function toPermanentInstanceId(card: CardInstance): string {
 export function summonPermanentFromCard(
   state: BattleState,
   card: CardInstance,
-  controllerId = "player",
+  controllerId: "player" | "enemy" = "player",
 ): PermanentState {
-  const openSlot = state.battlefield.findIndex((slot) => slot === null);
+  const battlefield =
+    controllerId === "enemy" ? state.enemyBattlefield : state.battlefield;
+  const openSlot = battlefield.findIndex((slot) => slot === null);
 
   if (openSlot === -1) {
     throw new Error(`Cannot summon ${card.definitionId} without an open battlefield slot.`);
@@ -179,7 +181,7 @@ export function summonPermanentFromCard(
     slotIndex: openSlot,
   };
 
-  state.battlefield[openSlot] = permanent;
+  battlefield[openSlot] = permanent;
 
   state.log.push({
     type: "permanent_summoned",
@@ -187,6 +189,7 @@ export function summonPermanentFromCard(
     permanentId,
     definitionId: definition.id,
     slotIndex: openSlot,
+    controllerId,
   });
 
   emitRulesEvent(state, {
@@ -314,13 +317,17 @@ export function destroyPermanent(
   state: BattleState,
   permanentId: string,
 ): boolean {
-  const permanentIndex = state.battlefield.findIndex((permanent) => permanent?.instanceId === permanentId);
+  const battlefield =
+    state.battlefield.findIndex((permanent) => permanent?.instanceId === permanentId) !== -1
+      ? state.battlefield
+      : state.enemyBattlefield;
+  const permanentIndex = battlefield.findIndex((permanent) => permanent?.instanceId === permanentId);
 
   if (permanentIndex === -1) {
     return false;
   }
 
-  const permanent = state.battlefield[permanentIndex];
+  const permanent = battlefield[permanentIndex];
 
   if (!permanent) {
     return false;
@@ -344,12 +351,15 @@ export function destroyPermanent(
     turnNumber: state.turnNumber,
     permanentId: permanent.instanceId,
     definitionId: permanent.definitionId,
+    controllerId: permanent.controllerId ?? "player",
   });
 
-  state.player.graveyard.push({
-    instanceId: permanent.sourceCardInstanceId,
-    definitionId: permanent.definitionId,
-  });
+  if ((permanent.controllerId ?? "player") !== "enemy") {
+    state.player.graveyard.push({
+      instanceId: permanent.sourceCardInstanceId,
+      definitionId: permanent.definitionId,
+    });
+  }
 
   emitRulesEvent(state, {
     type: "permanent_died",
@@ -361,14 +371,14 @@ export function destroyPermanent(
     slotIndex: permanent.slotIndex,
   });
 
-  state.battlefield[permanentIndex] = null;
+  battlefield[permanentIndex] = null;
   state.blockingQueue = state.blockingQueue.filter((entry) => entry !== permanent.instanceId);
 
   return true;
 }
 
 export function cleanupDefeatedPermanents(state: BattleState): BattleState {
-  for (const permanent of state.battlefield) {
+  for (const permanent of [...state.battlefield, ...state.enemyBattlefield]) {
     if (!permanent || permanent.health > 0) {
       continue;
     }

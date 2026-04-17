@@ -2,6 +2,7 @@ import type {
   CloudArenaActionRequest,
   CloudArenaCreateSessionRequest,
   CloudArenaSessionRouteParams,
+  CloudArenaSessionScenarioId,
 } from "../../../../src/cloud-arena/api-contract.js";
 import { cloudArenaApiRoutes } from "../../../../src/cloud-arena/api-contract.js";
 import type { BattleAction } from "../../../../src/cloud-arena/index.js";
@@ -24,6 +25,12 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+const allowedScenarioIds: CloudArenaSessionScenarioId[] = [
+  "mixed_guardian",
+  "grunt_demon",
+  "imp_caller",
+];
+
 function parseCreateSessionBody(body: unknown): CloudArenaCreateSessionRequest {
   if (body === undefined) {
     return {};
@@ -36,8 +43,10 @@ function parseCreateSessionBody(body: unknown): CloudArenaCreateSessionRequest {
   const { scenarioId, seed } = body;
   const { shuffleDeck } = body;
 
-  if (scenarioId !== undefined && scenarioId !== "mixed_guardian") {
-    throw new CloudArenaInvalidSetupError('scenarioId must be "mixed_guardian".');
+  if (scenarioId !== undefined && !allowedScenarioIds.includes(scenarioId as CloudArenaSessionScenarioId)) {
+    throw new CloudArenaInvalidSetupError(
+      `scenarioId must be one of ${allowedScenarioIds.map((id) => `"${id}"`).join(", ")}.`,
+    );
   }
 
   if (

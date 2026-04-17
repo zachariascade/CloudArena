@@ -1,5 +1,9 @@
 # Lean V1 Trace Simulator TODO
 
+> Historical note: the standalone simulation scripts and replay/export surface
+> described here have been treated as a dead end and are being removed. Keep
+> this document only as context for the engine design history.
+
 ## Purpose
 
 This TODO list covers the next phase after the Lean V1 combat engine: using `src/cloud-arena/` to run deterministic simulated battles and produce useful trace output for design iteration.
@@ -64,7 +68,6 @@ Recommended heuristic priorities:
 
 ## Phase 4: Script Entry Point
 
-- [x] Add a script such as `scripts/run-cloud-arena-simulation.ts`
 - [x] Add a package command for running one simulation locally
 - [ ] Print:
   - [x] final outcome
