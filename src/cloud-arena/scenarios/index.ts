@@ -1,4 +1,5 @@
 import { gruntDemonScenarioPreset } from "./grunt-demon.js";
+import { demonPackScenarioPreset } from "./demon-pack.js";
 import { impCallerScenarioPreset } from "./imp-caller.js";
 import { mixedGuardianScenarioPreset } from "./mixed-guardian.js";
 
@@ -31,6 +32,7 @@ export const cloudArenaScenarioPresets: Record<
   CloudArenaScenarioId,
   CloudArenaScenarioPreset
 > = {
+  demon_pack: demonPackScenarioPreset,
   grunt_demon: gruntDemonScenarioPreset,
   imp_caller: impCallerScenarioPreset,
   mixed_guardian: mixedGuardianScenarioPreset,

@@ -18,6 +18,7 @@ export type CloudArenaApiRouteName = keyof typeof cloudArenaApiRoutes;
 
 export type CloudArenaSessionScenarioId =
   | "mixed_guardian"
+  | "demon_pack"
   | "grunt_demon"
   | "imp_caller";
 
@@ -49,6 +50,8 @@ export type CloudArenaPermanentSnapshot = {
   definitionId: CardDefinitionId;
   name: string;
   controllerId?: string;
+  intentLabel?: string | null;
+  intentQueueLabels?: string[] | null;
   isCreature: boolean;
   power: number;
   health: number;
@@ -108,6 +111,7 @@ export type CloudArenaSessionSnapshot = {
     block: number;
     intent: EnemyIntent;
     intentLabel: string;
+    intentQueueLabels: string[];
   };
   battlefield: Array<CloudArenaPermanentSnapshot | null>;
   enemyBattlefield: Array<CloudArenaPermanentSnapshot | null>;

@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 
-import type { TraceViewerEventGroup } from "../lib/cloud-arena-trace-view-model.js";
+import type { TraceViewerEventGroup } from "../lib/cloud-arena-view-model-helpers.js";
 import { formatTraceEvent } from "../lib/cloud-arena-web-lib.js";
 
 type CloudArenaLogPanelProps = {

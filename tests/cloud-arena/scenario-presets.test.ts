@@ -15,6 +15,7 @@ import {
 describe("cloud arena scenario presets", () => {
   it("defines the expected scenario coverage presets", () => {
     expect(Object.keys(cloudArenaScenarioPresets)).toEqual([
+      "demon_pack",
       "grunt_demon",
       "imp_caller",
       "mixed_guardian",
@@ -24,6 +25,7 @@ describe("cloud arena scenario presets", () => {
   it("exposes reusable deck and enemy preset registries", () => {
     expect(Object.keys(cloudArenaDeckPresets)).toEqual(["mixed_guardian"]);
     expect(Object.keys(cloudArenaEnemyPresets)).toEqual([
+      "demon_pack",
       "grunt_demon",
       "bruiser_demon",
       "warder_demon",
@@ -55,13 +57,16 @@ describe("cloud arena scenario presets", () => {
     expect(mixedGuardian.enemy.cards.length).toBeGreaterThanOrEqual(3);
   });
 
-  it("exposes the new low-tier enemy families with token support", () => {
+  it("exposes the new low-tier enemy families and pack bodies", () => {
     const grunt = getEnemyPreset("grunt_demon");
+    const pack = getEnemyPreset("demon_pack");
     const bruiser = getEnemyPreset("bruiser_demon");
     const warder = getEnemyPreset("warder_demon");
     const impCaller = getEnemyPreset("imp_caller");
 
     expect(grunt.basePower).toBe(5);
+    expect(pack.leaderDefinitionId).toBe("enemy_pack_alpha");
+    expect(pack.startingPermanents).toEqual(["enemy_husk", "enemy_brute"]);
     expect(bruiser.basePower).toBe(6);
     expect(warder.basePower).toBe(4);
     expect(impCaller.startingTokens).toEqual(["token_imp"]);

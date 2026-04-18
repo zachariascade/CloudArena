@@ -2,6 +2,7 @@ import {
   asPermanentCardDefinition,
   getCardDefinitionFromLibrary,
   isEquipmentCardDefinition,
+  hasCardType,
 } from "../cards/definitions.js";
 import { LEAN_V1_DEFAULT_RECOVERY_POLICY } from "./constants.js";
 import { emitRulesEvent } from "./rules-events.js";
@@ -10,6 +11,8 @@ import type {
   ActivatedAbility,
   BattleState,
   CardInstance,
+  CardDefinitionId,
+  EnemyState,
   PermanentState,
 } from "./types.js";
 
@@ -205,6 +208,145 @@ export function summonPermanentFromCard(
   return permanent;
 }
 
+export function createEnemyLeaderPermanent(
+  state: BattleState,
+  enemy: Pick<EnemyState, "name" | "health" | "basePower" | "intent"> & {
+    definitionId?: CardDefinitionId;
+  },
+): PermanentState {
+  const openSlot = state.enemyBattlefield.findIndex((slot) => slot === null);
+
+  if (openSlot === -1) {
+    throw new Error(`Cannot create enemy leader ${enemy.name} without an open battlefield slot.`);
+  }
+
+  const permanent: PermanentState = {
+    instanceId: `enemy_leader_${state.turnNumber}_${state.nextEnemyTokenIndex}`,
+    sourceCardInstanceId: `enemy_leader_${state.turnNumber}_${state.nextEnemyTokenIndex}`,
+    name: enemy.name,
+    definitionId: enemy.definitionId ?? "enemy_leader",
+    controllerId: "enemy",
+    isEnemyLeader: true,
+    intentLabel: null,
+    intentQueueLabels: [],
+    power: enemy.basePower,
+    health: enemy.health,
+    maxHealth: enemy.health,
+    block: 0,
+    recoveryPolicy: "none",
+    counters: [],
+    modifiers: [],
+    attachments: [],
+    attachedTo: null,
+    abilities: [],
+    disabledAbilityIds: [],
+    disabledRulesActions: [],
+    hasActedThisTurn: false,
+    isTapped: false,
+    isDefending: false,
+    slotIndex: openSlot,
+  };
+
+  state.enemyBattlefield[openSlot] = permanent;
+
+  emitRulesEvent(state, {
+    type: "permanent_entered",
+    turnNumber: state.turnNumber,
+    permanentId: permanent.instanceId,
+    sourceCardInstanceId: permanent.sourceCardInstanceId,
+    definitionId: permanent.definitionId,
+    controllerId: "enemy",
+    slotIndex: openSlot,
+  });
+
+  state.log.push({
+    type: "permanent_summoned",
+    turnNumber: state.turnNumber,
+    permanentId: permanent.instanceId,
+    definitionId: permanent.definitionId,
+    slotIndex: openSlot,
+    controllerId: "enemy",
+  });
+
+  return permanent;
+}
+
+export function getEnemyLeaderPermanent(state: BattleState): PermanentState | null {
+  if (state.enemy.leaderPermanentId) {
+    return (
+      state.enemyBattlefield.find((permanent) => permanent?.instanceId === state.enemy.leaderPermanentId) ??
+      null
+    );
+  }
+
+  return state.enemyBattlefield.find((permanent) => permanent?.isEnemyLeader) ?? null;
+}
+
+export function getPrimaryEnemyPermanent(state: BattleState): PermanentState | null {
+  const enemyLeaderPermanent = getEnemyLeaderPermanent(state);
+
+  if (enemyLeaderPermanent && enemyLeaderPermanent.health > 0) {
+    return enemyLeaderPermanent;
+  }
+
+  return (
+    state.enemyBattlefield.find((permanent) => {
+      if (!permanent || permanent.health <= 0) {
+        return false;
+      }
+
+      const definition = getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId);
+      return hasCardType(definition, "creature");
+    }) ?? null
+  );
+}
+
+export function hasLivingEnemyCreatures(state: BattleState): boolean {
+  return state.enemyBattlefield.some((permanent) => {
+    if (!permanent || permanent.health <= 0) {
+      return false;
+    }
+
+    const definition = getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId);
+    return hasCardType(definition, "creature");
+  });
+}
+
+export function syncEnemyStateFromLeaderPermanent(state: BattleState): void {
+  const leaderPermanent = getEnemyLeaderPermanent(state);
+
+  if (!leaderPermanent) {
+    return;
+  }
+
+  state.enemy.name = leaderPermanent.name;
+  state.enemy.health = leaderPermanent.health;
+  state.enemy.maxHealth = leaderPermanent.maxHealth;
+  state.enemy.block = leaderPermanent.block;
+  state.enemy.basePower = leaderPermanent.power;
+  state.enemy.intentQueueLabels = [...(leaderPermanent.intentQueueLabels ?? [])];
+}
+
+export function syncEnemyLeaderPermanentFromState(
+  state: BattleState,
+  intentLabel?: string | null,
+  intentQueueLabels?: string[] | null,
+): void {
+  const leaderPermanent = getEnemyLeaderPermanent(state);
+
+  if (!leaderPermanent) {
+    return;
+  }
+
+  leaderPermanent.name = state.enemy.name;
+  leaderPermanent.health = state.enemy.health;
+  leaderPermanent.maxHealth = state.enemy.maxHealth;
+  leaderPermanent.block = state.enemy.block;
+  leaderPermanent.power = state.enemy.basePower;
+  leaderPermanent.intentLabel = intentLabel ?? leaderPermanent.intentLabel ?? null;
+  leaderPermanent.intentQueueLabels = intentQueueLabels ?? leaderPermanent.intentQueueLabels ?? [];
+}
+
 export function isEquipmentPermanent(state: BattleState, permanent: PermanentState): boolean {
   const definition = getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId);
   return isEquipmentCardDefinition(definition);
@@ -359,6 +501,13 @@ export function destroyPermanent(
       instanceId: permanent.sourceCardInstanceId,
       definitionId: permanent.definitionId,
     });
+  }
+
+  if (permanent.isEnemyLeader) {
+    state.enemy.health = 0;
+    state.enemy.block = 0;
+    state.enemy.intentQueueLabels = [];
+    state.enemy.leaderPermanentId = null;
   }
 
   emitRulesEvent(state, {

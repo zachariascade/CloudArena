@@ -14,6 +14,7 @@ function simpleDeterministicAgent(
   _state: BattleState,
   legalActions: BattleAction[],
 ): BattleAction {
+  const chooseTargetAction = legalActions.find((action) => action.type === "choose_target");
   const playAttack = legalActions.find(
     (action) => action.type === "play_card" && action.cardInstanceId.includes("card_"),
   );
@@ -26,13 +27,17 @@ function simpleDeterministicAgent(
     (action) => action.type === "use_permanent_action" && action.action === "defend",
   );
   const defendCardAction = legalActions.find((action) => action.type === "play_card");
+  const endTurnAction = legalActions.find((action) => action.type === "end_turn");
 
   return (
+    chooseTargetAction ??
     permanentAttack ??
     playAttack ??
     attackCardAction ??
     permanentDefend ??
     defendCardAction ??
+    endTurnAction ??
+    legalActions[0] ??
     { type: "end_turn" }
   );
 }
@@ -51,6 +56,12 @@ describe("cloud arena simulation runner", () => {
         behavior: [{ attackAmount: 8 }],
       },
       agent: (state, legalActions) => {
+        const chooseTargetAction = legalActions.find((action) => action.type === "choose_target");
+
+        if (chooseTargetAction) {
+          return chooseTargetAction;
+        }
+
         const attackAction = legalActions.find((action) => {
           if (action.type !== "play_card") {
             return false;
@@ -60,7 +71,7 @@ describe("cloud arena simulation runner", () => {
           return card?.definitionId === "attack";
         });
 
-        return attackAction ?? { type: "end_turn" };
+        return attackAction ?? legalActions.find((action) => action.type === "end_turn") ?? legalActions[0]!;
       },
     });
 
@@ -81,8 +92,26 @@ describe("cloud arena simulation runner", () => {
         turnNumber: 1,
         phase: "player_action",
         action: {
+          type: "choose_target",
+          targetPermanentId: "enemy_leader_1_1",
+        },
+        reason: undefined,
+      },
+      {
+        turnNumber: 1,
+        phase: "player_action",
+        action: {
           type: "play_card",
           cardInstanceId: "card_2",
+        },
+        reason: undefined,
+      },
+      {
+        turnNumber: 1,
+        phase: "player_action",
+        action: {
+          type: "choose_target",
+          targetPermanentId: "enemy_leader_1_1",
         },
         reason: undefined,
       },
@@ -137,6 +166,12 @@ describe("cloud arena simulation runner", () => {
         ],
       },
       agent: (state, legalActions) => {
+        const chooseTargetAction = legalActions.find((action) => action.type === "choose_target");
+
+        if (chooseTargetAction) {
+          return chooseTargetAction;
+        }
+
         const guardianAction = legalActions.find((action) => {
           if (action.type !== "play_card") {
             return false;
@@ -223,6 +258,12 @@ describe("cloud arena simulation runner", () => {
         behavior: [{ attackAmount: 8, blockAmount: 4 }],
       },
       agent: (state, legalActions) => {
+        const chooseTargetAction = legalActions.find((action) => action.type === "choose_target");
+
+        if (chooseTargetAction) {
+          return chooseTargetAction;
+        }
+
         const defendAction = legalActions.find((action) => {
           if (action.type !== "play_card") {
             return false;
@@ -245,7 +286,7 @@ describe("cloud arena simulation runner", () => {
           return card?.definitionId === "attack";
         });
 
-        return attackAction ?? defendAction ?? { type: "end_turn" };
+        return attackAction ?? defendAction ?? legalActions.find((action) => action.type === "end_turn") ?? legalActions[0]!;
       },
     });
 
@@ -284,7 +325,7 @@ describe("cloud arena simulation runner", () => {
   it("records attackTimes intents in trace output using per-hit formatting", () => {
     const result = runSimulation({
       seed: 1,
-      maxSteps: 10,
+      maxSteps: 20,
       cardDefinitions: TEST_CARD_DEFINITIONS,
       playerDeck: ["attack", "attack", "attack", "attack", "attack"],
       enemy: {
@@ -294,6 +335,12 @@ describe("cloud arena simulation runner", () => {
         behavior: [{ attackAmount: 6, attackTimes: 2 }],
       },
       agent: (state, legalActions) => {
+        const chooseTargetAction = legalActions.find((action) => action.type === "choose_target");
+
+        if (chooseTargetAction) {
+          return chooseTargetAction;
+        }
+
         const attackAction = legalActions.find((action) => {
           if (action.type !== "play_card") {
             return false;
@@ -303,7 +350,7 @@ describe("cloud arena simulation runner", () => {
           return card?.definitionId === "attack";
         });
 
-        return attackAction ?? { type: "end_turn" };
+        return attackAction ?? legalActions.find((action) => action.type === "end_turn") ?? legalActions[0]!;
       },
     });
 
@@ -342,6 +389,12 @@ describe("cloud arena simulation runner", () => {
         ],
       },
       agent: (state, legalActions) => {
+        const chooseTargetAction = legalActions.find((action) => action.type === "choose_target");
+
+        if (chooseTargetAction) {
+          return chooseTargetAction;
+        }
+
         const defendAction = legalActions.find((action) => {
           if (action.type !== "play_card") {
             return false;
@@ -364,7 +417,7 @@ describe("cloud arena simulation runner", () => {
           return card?.definitionId === "attack";
         });
 
-        return attackAction ?? defendAction ?? { type: "end_turn" };
+        return attackAction ?? defendAction ?? legalActions.find((action) => action.type === "end_turn") ?? legalActions[0]!;
       },
     });
 

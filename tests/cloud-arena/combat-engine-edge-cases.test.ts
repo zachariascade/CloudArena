@@ -70,6 +70,17 @@ describe("cloud arena combat engine edge cases", () => {
       action: "attack",
     });
 
+    const leaderTarget = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+
+    if (!leaderTarget) {
+      throw new Error("Expected an enemy leader target.");
+    }
+
+    applyBattleAction(battle, {
+      type: "choose_target",
+      targetPermanentId: leaderTarget.instanceId,
+    });
+
     expect(() =>
       applyBattleAction(battle, {
         type: "use_permanent_action",
@@ -204,7 +215,17 @@ describe("cloud arena combat engine edge cases", () => {
       permanentId: guardianPermanent.instanceId,
       action: "defend",
     });
+    const leaderTarget = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+
+    if (!leaderTarget) {
+      throw new Error("Expected an enemy leader target.");
+    }
+
     applyBattleAction(battle, { type: "play_card", cardInstanceId: attackCard.instanceId });
+    applyBattleAction(battle, {
+      type: "choose_target",
+      targetPermanentId: leaderTarget.instanceId,
+    });
     applyBattleAction(battle, { type: "play_card", cardInstanceId: roundTwoDefend.instanceId });
     applyBattleAction(battle, { type: "end_turn" });
 
@@ -339,7 +360,7 @@ describe("cloud arena combat engine edge cases", () => {
 
     applyBattleAction(battle, attackTarget);
 
-    expect(enemyPermanent.health).toBe(4);
+    expect(enemyPermanent.health).toBe(2);
     expect(battle.pendingTargetRequest).toBeNull();
   });
 
@@ -365,6 +386,17 @@ describe("cloud arena combat engine edge cases", () => {
       cardInstanceId: attackCard.instanceId,
     });
 
+    const leaderTarget = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+
+    if (!leaderTarget) {
+      throw new Error("Expected an enemy leader target.");
+    }
+
+    applyBattleAction(battle, {
+      type: "choose_target",
+      targetPermanentId: leaderTarget.instanceId,
+    });
+
     expect(battle.phase).toBe("finished");
     expect(battle.enemy.health).toBe(0);
     expect(battle.log.at(-1)).toEqual({
@@ -375,6 +407,55 @@ describe("cloud arena combat engine edge cases", () => {
       enemyHealth: battle.enemy.health,
       permanents: [],
     });
+  });
+
+  it("battle continues while enemy creature tokens remain after the leader dies", () => {
+    const battle = createTestBattle({
+      playerDeck: ["attack", "attack", "defend", "defend", "attack"],
+      enemy: {
+        name: "Imp Caller",
+        health: 6,
+        basePower: 3,
+        startingTokens: ["token_imp"],
+        behavior: [{ attackAmount: 3 }],
+      },
+    });
+
+    const leader = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+    const token = battle.enemyBattlefield.find((entry) => entry?.definitionId === "token_imp");
+    const firstAttackCard = battle.player.hand.find((card) => card.definitionId === "attack");
+    const secondAttackCard = battle.player.hand.find(
+      (card) => card.definitionId === "attack" && card.instanceId !== firstAttackCard?.instanceId,
+    );
+
+    if (!leader || !token || !firstAttackCard || !secondAttackCard) {
+      throw new Error("Expected the leader, token, and two attack cards to be available.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: firstAttackCard.instanceId,
+    });
+    applyBattleAction(battle, {
+      type: "choose_target",
+      targetPermanentId: leader.instanceId,
+    });
+
+    expect(battle.phase).toBe("player_action");
+    expect(battle.enemyBattlefield.some((entry) => entry?.definitionId === "token_imp")).toBe(true);
+    expect(battle.enemyBattlefield.some((entry) => entry?.isEnemyLeader)).toBe(false);
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: secondAttackCard.instanceId,
+    });
+    applyBattleAction(battle, {
+      type: "choose_target",
+      targetPermanentId: token.instanceId,
+    });
+
+    expect(battle.phase).toBe("finished");
+    expect(battle.log.at(-1)?.type).toBe("battle_finished");
   });
 
   it("battle ends when player health reaches zero", () => {
@@ -560,6 +641,7 @@ describe("cloud arena combat engine edge cases", () => {
     }
 
     expect(battle.rules.map((event) => event.type)).toEqual([
+      "permanent_entered",
       "card_drawn",
       "card_drawn",
       "card_drawn",
@@ -603,6 +685,15 @@ describe("cloud arena combat engine edge cases", () => {
         event.type === "permanent_died",
       ),
     ).toEqual([
+      {
+        type: "permanent_entered",
+        turnNumber: 1,
+        permanentId: "enemy_leader_1_1",
+        sourceCardInstanceId: "enemy_leader_1_1",
+        definitionId: "enemy_leader",
+        controllerId: "enemy",
+        slotIndex: 0,
+      },
       {
         type: "card_played",
         turnNumber: 1,
@@ -695,12 +786,24 @@ describe("cloud arena combat engine edge cases", () => {
       action: "defend",
     });
     applyBattleAction(battle, { type: "play_card", cardInstanceId: attackCard.instanceId });
+
+    const leaderTarget = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+
+    if (!leaderTarget) {
+      throw new Error("Expected an enemy leader target.");
+    }
+
+    applyBattleAction(battle, {
+      type: "choose_target",
+      targetPermanentId: leaderTarget.instanceId,
+    });
     applyBattleAction(battle, { type: "play_card", cardInstanceId: roundTwoDefend.instanceId });
     applyBattleAction(battle, { type: "end_turn" });
 
     expect(formatBattleLog(battle)).toMatchInlineSnapshot(`
       [
         "turn 1: battle created",
+        "turn 1: summoned enemy_leader as enemy_leader_1_1 into slot 1",
         "turn 1: start turn, drew 5, energy 3, enemy intent attack 15",
         "turn 1: player drew guardian",
         "turn 1: player drew defend",
@@ -722,7 +825,7 @@ describe("cloud arena combat engine edge cases", () => {
         "turn 2: player drew defend",
         "turn 2: permanent guardian_1 used defend",
         "turn 2: played attack",
-        "turn 2: card dealt 6 damage to enemy",
+        "turn 2: card dealt 6 damage to permanent enemy_leader_1_1",
         "turn 2: played defend",
         "turn 2: player gained 7 block",
         "turn 2: end turn",
@@ -787,7 +890,7 @@ describe("cloud arena combat engine edge cases", () => {
         "slot 5: empty",
       ],
       enemyBattlefield: [
-        "slot 1: empty",
+        "slot 1: Ravaging Demon, hp=30/30, block=0, acted=no, tapped=no, defending=no",
         "slot 2: empty",
         "slot 3: empty",
         "slot 4: empty",

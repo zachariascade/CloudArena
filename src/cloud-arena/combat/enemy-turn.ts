@@ -1,16 +1,22 @@
+import { getCardDefinitionFromLibrary, hasCardType } from "../cards/definitions.js";
+import { getDerivedPermanentActionAmount } from "../core/derived-stats.js";
+import {
+  syncEnemyLeaderPermanentFromState,
+  syncEnemyStateFromLeaderPermanent,
+  summonPermanentFromCard,
+} from "../core/permanents.js";
+import { formatEnemyIntent } from "../core/enemy-intent.js";
+import { emitRulesEvent } from "../core/rules-events.js";
+import { settleEnemyAttackDamage } from "./settle-damage.js";
+import type { BattleState, CardInstance, EnemyCardDefinition } from "../core/types.js";
 import {
   getEnemyIntentAttackAmount,
   getEnemyIntentBlockAmount,
 } from "../core/enemy-intent.js";
-import { getDerivedPermanentActionAmount } from "../core/derived-stats.js";
-import { summonPermanentFromCard } from "../core/permanents.js";
-import { emitRulesEvent } from "../core/rules-events.js";
-import { settleEnemyAttackDamage } from "./settle-damage.js";
-import type { BattleState, CardInstance, EnemyCardDefinition } from "../core/types.js";
 
 function summonEnemyToken(state: BattleState, cardId: string): void {
   const card: CardInstance = {
-    instanceId: `enemy_token_${state.turnNumber}_${state.nextEnemyTokenIndex}`,
+    instanceId: `card_${state.turnNumber}_${state.nextEnemyTokenIndex}`,
     definitionId: cardId,
   };
 
@@ -76,13 +82,19 @@ function resolveEnemyCard(state: BattleState, card: EnemyCardDefinition): void {
   }
 }
 
-function resolveEnemyTokens(state: BattleState): void {
-  for (const token of state.enemyBattlefield) {
-    if (!token || token.health <= 0) {
+function resolveEnemyBattlefieldCreatures(state: BattleState): void {
+  for (const permanent of state.enemyBattlefield) {
+    if (!permanent || permanent.health <= 0 || permanent.isEnemyLeader) {
       continue;
     }
 
-    const attackAmount = getDerivedPermanentActionAmount(state, token, "attack");
+    const definition = getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId);
+
+    if (!hasCardType(definition, "creature")) {
+      continue;
+    }
+
+    const attackAmount = getDerivedPermanentActionAmount(state, permanent, "attack");
 
     if (attackAmount <= 0) {
       continue;
@@ -91,7 +103,7 @@ function resolveEnemyTokens(state: BattleState): void {
     state.log.push({
       type: "permanent_acted",
       turnNumber: state.turnNumber,
-      permanentId: token.instanceId,
+      permanentId: permanent.instanceId,
       source: "rules",
       action: "attack",
     });
@@ -99,15 +111,15 @@ function resolveEnemyTokens(state: BattleState): void {
     emitRulesEvent(state, {
       type: "permanent_attacked",
       turnNumber: state.turnNumber,
-      permanentId: token.instanceId,
-      sourceCardInstanceId: token.sourceCardInstanceId,
-      definitionId: token.definitionId,
-      controllerId: token.controllerId ?? "enemy",
-      slotIndex: token.slotIndex,
+      permanentId: permanent.instanceId,
+      sourceCardInstanceId: permanent.sourceCardInstanceId,
+      definitionId: permanent.definitionId,
+      controllerId: permanent.controllerId ?? "enemy",
+      slotIndex: permanent.slotIndex,
     });
 
     settleEnemyAttackDamage(state, attackAmount, "stop_at_blocker");
-    token.hasActedThisTurn = true;
+    permanent.hasActedThisTurn = true;
   }
 }
 
@@ -119,6 +131,11 @@ export function resolveEnemyTurn(state: BattleState): BattleState {
   // Lean V1 rule: enemy block lasts through the player's next turn, then clears
   // right before the enemy resolves its next intent.
   state.enemy.block = 0;
+  syncEnemyLeaderPermanentFromState(
+    state,
+    formatEnemyIntent(state.enemy.intent),
+    state.enemy.intentQueueLabels,
+  );
 
   state.log.push({
     type: "enemy_intent_resolved",
@@ -148,7 +165,14 @@ export function resolveEnemyTurn(state: BattleState): BattleState {
     }
   }
 
-  resolveEnemyTokens(state);
+  syncEnemyLeaderPermanentFromState(
+    state,
+    formatEnemyIntent(state.enemy.intent),
+    state.enemy.intentQueueLabels,
+  );
+
+  resolveEnemyBattlefieldCreatures(state);
+  syncEnemyStateFromLeaderPermanent(state);
 
   return state;
 }

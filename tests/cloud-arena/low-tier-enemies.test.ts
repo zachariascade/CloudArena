@@ -20,8 +20,11 @@ describe("cloud arena low-tier enemies", () => {
     });
 
     const startingHealth = battle.player.health;
+    const leader = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
 
     expect(battle.enemy.intent).toEqual({ attackAmount: 5 });
+    expect(leader?.name).toBe("Grunt Demon");
+    expect(leader?.definitionId).toBe("enemy_leader");
 
     applyBattleAction(battle, { type: "end_turn" });
 
@@ -66,7 +69,9 @@ describe("cloud arena low-tier enemies", () => {
       },
     });
 
-    const startingTokens = battle.enemyBattlefield.filter((entry): entry is NonNullable<typeof entry> => entry !== null);
+    const startingTokens = battle.enemyBattlefield.filter(
+      (entry): entry is NonNullable<typeof entry> => entry !== null && !entry.isEnemyLeader,
+    );
     const startingHealth = battle.player.health;
 
     expect(startingTokens.map((token) => token.definitionId)).toEqual(["token_imp"]);
@@ -74,7 +79,9 @@ describe("cloud arena low-tier enemies", () => {
 
     applyBattleAction(battle, { type: "end_turn" });
 
-    const tokensAfterSpawn = battle.enemyBattlefield.filter((entry): entry is NonNullable<typeof entry> => entry !== null);
+    const tokensAfterSpawn = battle.enemyBattlefield.filter(
+      (entry): entry is NonNullable<typeof entry> => entry !== null && !entry.isEnemyLeader,
+    );
 
     expect(tokensAfterSpawn.length).toBe(2);
     expect(battle.player.health).toBe(startingHealth - 4);
@@ -95,7 +102,9 @@ describe("cloud arena low-tier enemies", () => {
     });
 
     const targetedSmite = battle.player.hand.find((card) => card.definitionId === "enemy_targeted_smite");
-    const targetToken = battle.enemyBattlefield.find((entry) => entry !== null);
+    const targetToken = battle.enemyBattlefield.find(
+      (entry): entry is NonNullable<typeof entry> => entry !== null && entry.definitionId === "token_imp",
+    );
 
     if (!targetedSmite || !targetToken) {
       throw new Error("Expected a targeted smite and an enemy token in the opening state.");
@@ -116,5 +125,45 @@ describe("cloud arena low-tier enemies", () => {
 
     expect(targetToken.health).toBe(1);
     expect(battle.pendingTargetRequest).toBeNull();
+  });
+
+  it("starts a multi-enemy pack encounter with multiple enemy permanents", () => {
+    const battle = createTestBattle({
+      playerDeck: ["attack", "defend", "attack", "defend", "attack"],
+      enemy: {
+        name: "Demon Pack",
+        health: 24,
+        basePower: 3,
+        cards: [
+          { id: "attack_once", name: "Attack Once", effects: [{ target: "player", attackAmount: 3 }] },
+          { id: "gain_block", name: "Gain Block", effects: [{ target: "enemy", blockPowerMultiplier: 1 }] },
+          { id: "attack_twice", name: "Attack Twice", effects: [{ target: "player", attackAmount: 3, attackTimes: 2 }] },
+        ],
+        startingPermanents: ["enemy_husk", "enemy_brute"],
+      },
+    });
+
+    const enemyBodies = battle.enemyBattlefield.filter(
+      (entry): entry is NonNullable<typeof entry> => entry !== null,
+    );
+
+    expect(enemyBodies).toHaveLength(3);
+    expect(enemyBodies.filter((entry) => entry.definitionId === "enemy_husk")).toHaveLength(1);
+    expect(enemyBodies.filter((entry) => entry.definitionId === "enemy_brute")).toHaveLength(1);
+    expect(battle.enemyBattlefield.some((entry) => entry?.isEnemyLeader)).toBe(true);
+
+    const startHealth = battle.player.health;
+    applyBattleAction(battle, { type: "end_turn" });
+
+    const actedPermanents = battle.log.filter(
+      (event): event is Extract<(typeof battle.log)[number], { type: "permanent_acted" }> =>
+        event.type === "permanent_acted" && event.turnNumber === 1,
+    );
+
+    expect(actedPermanents.map((event) => event.permanentId).sort()).toEqual([
+      "enemy_brute_1_3",
+      "enemy_husk_1_2",
+    ]);
+    expect(battle.player.health).toBeLessThan(startHealth);
   });
 });

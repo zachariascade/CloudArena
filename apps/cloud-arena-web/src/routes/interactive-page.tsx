@@ -34,6 +34,11 @@ const CLOUD_ARENA_SCENARIO_OPTIONS: Array<{
   description: string;
 }> = [
   {
+    id: "demon_pack",
+    label: "Demon Pack",
+    description: "Leader plus two demon bodies",
+  },
+  {
     id: "mixed_guardian",
     label: "Mixed Guardian",
     description: "Balanced baseline battle",

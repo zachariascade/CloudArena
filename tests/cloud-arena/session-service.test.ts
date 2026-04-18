@@ -53,6 +53,43 @@ describe("cloud arena session service", () => {
     expect(snapshot.actionHistory).toEqual([]);
   });
 
+  it("surfaces enemy telegraph queue labels in the session snapshot", () => {
+    const service = createCloudArenaSessionService();
+    const snapshot = service.createSession({
+      scenarioId: "imp_caller",
+      seed: 11,
+    });
+
+    expect(snapshot.enemy.intentLabel).toBeTruthy();
+    expect(snapshot.enemy.intentQueueLabels.length).toBeGreaterThanOrEqual(2);
+    expect(snapshot.enemy.intentQueueLabels[0]).toBe(snapshot.enemy.intentLabel);
+    expect(snapshot.enemy.intentQueueLabels.some((label) => label.includes("spawn"))).toBe(true);
+    expect(
+      snapshot.enemyBattlefield.every(
+        (slot) => !slot || slot.intentQueueLabels === null || Array.isArray(slot.intentQueueLabels),
+      ),
+    ).toBe(true);
+  });
+
+  it("creates multi-enemy pack encounters with multiple enemy bodies on the battlefield", () => {
+    const service = createCloudArenaSessionService();
+    const snapshot = service.createSession({
+      scenarioId: "demon_pack",
+      seed: 13,
+    });
+
+    const enemyBodies = snapshot.enemyBattlefield.filter(
+      (entry): entry is NonNullable<typeof entry> => entry !== null,
+    );
+
+    expect(snapshot.scenarioId).toBe("demon_pack");
+    expect(snapshot.enemy.name).toBe("Demon Pack");
+    expect(enemyBodies.length).toBeGreaterThanOrEqual(3);
+    expect(enemyBodies.some((entry) => entry.definitionId === "enemy_pack_alpha")).toBe(true);
+    expect(enemyBodies.filter((entry) => entry.definitionId === "enemy_husk")).toHaveLength(1);
+    expect(enemyBodies.filter((entry) => entry.definitionId === "enemy_brute")).toHaveLength(1);
+  });
+
   it("applies legal actions and records action history", () => {
     const service = createCloudArenaSessionService();
     const session = service.createSession({

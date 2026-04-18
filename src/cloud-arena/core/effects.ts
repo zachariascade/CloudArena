@@ -11,6 +11,7 @@ import {
   summonPermanentFromCard,
   destroyPermanent,
   isEquipmentPermanent,
+  syncEnemyStateFromLeaderPermanent,
 } from "./permanents.js";
 import { emitRulesEvent } from "./rules-events.js";
 import { drawCards } from "./draw.js";
@@ -140,6 +141,38 @@ export function dealDamageToEnemy(
   source: "card" | "permanent_action" = "card",
   sourceId?: string,
 ): number {
+  const leaderPermanentId = state.enemy.leaderPermanentId;
+  const leaderPermanent = leaderPermanentId
+    ? state.enemyBattlefield.find((permanent) => permanent?.instanceId === leaderPermanentId) ?? null
+    : null;
+
+  if (leaderPermanent) {
+    const damageDealt = Math.max(0, Math.min(amount, leaderPermanent.block + leaderPermanent.health));
+
+    if (leaderPermanent.block >= amount) {
+      leaderPermanent.block -= amount;
+    } else {
+      const remainingDamage = amount - leaderPermanent.block;
+      leaderPermanent.block = 0;
+      leaderPermanent.health -= remainingDamage;
+    }
+
+    syncEnemyStateFromLeaderPermanent(state);
+
+    if (damageDealt > 0) {
+      state.log.push({
+        type: "damage_dealt",
+        turnNumber: state.turnNumber,
+        source,
+        sourceId,
+        target: "enemy",
+        amount: damageDealt,
+      });
+    }
+
+    return damageDealt;
+  }
+
   const damageDealt = Math.max(0, Math.min(amount, state.enemy.block + state.enemy.health));
 
   if (state.enemy.block >= amount) {
@@ -189,6 +222,9 @@ export function gainBlockToPermanent(
   }
 
   permanent.block += amount;
+  if (permanent.isEnemyLeader) {
+    syncEnemyStateFromLeaderPermanent(state);
+  }
   state.log.push({
     type: "block_gained",
     turnNumber: state.turnNumber,
@@ -214,6 +250,10 @@ export function dealDamageToPermanent(
     const remainingDamage = amount - permanent.block;
     permanent.block = 0;
     permanent.health -= remainingDamage;
+  }
+
+  if (permanent.isEnemyLeader) {
+    syncEnemyStateFromLeaderPermanent(state);
   }
 
   if (damageDealt > 0) {

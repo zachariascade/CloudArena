@@ -83,6 +83,8 @@ export {
   detachPermanent,
   destroyPermanent,
   cleanupDefeatedPermanents,
+  getEnemyLeaderPermanent,
+  getPrimaryEnemyPermanent,
   isEquipmentPermanent,
   summonPermanentFromCard,
   toPermanentInstanceId,

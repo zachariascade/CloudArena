@@ -1,4 +1,5 @@
 import { formatEnemyIntent } from "./enemy-intent.js";
+import { getPrimaryEnemyPermanent } from "./permanents.js";
 import type { BattleState } from "./types.js";
 
 export type BattleSummary = {
@@ -26,6 +27,12 @@ export type BattleSummary = {
 };
 
 export function buildBattleSummary(state: BattleState): BattleSummary {
+  const primaryEnemyPermanent = getPrimaryEnemyPermanent(state);
+  const enemyName = primaryEnemyPermanent?.name ?? state.enemy.name;
+  const enemyHealth = primaryEnemyPermanent?.health ?? state.enemy.health;
+  const enemyMaxHealth = primaryEnemyPermanent?.maxHealth ?? state.enemy.maxHealth;
+  const enemyBlock = primaryEnemyPermanent?.block ?? state.enemy.block;
+
   return {
     turnNumber: state.turnNumber,
     phase: state.phase,
@@ -39,10 +46,10 @@ export function buildBattleSummary(state: BattleState): BattleSummary {
       graveyardCount: state.player.graveyard.length,
     },
     enemy: {
-      name: state.enemy.name,
-      health: state.enemy.health,
-      maxHealth: state.enemy.maxHealth,
-      block: state.enemy.block,
+      name: enemyName,
+      health: enemyHealth,
+      maxHealth: enemyMaxHealth,
+      block: enemyBlock,
       intent: formatEnemyIntent(state.enemy.intent),
     },
     battlefield: state.battlefield.map((permanent, index) => {

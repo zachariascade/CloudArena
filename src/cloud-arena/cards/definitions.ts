@@ -10,6 +10,10 @@ import { forbiddenInsightCardDefinition } from "./definitions/forbidden-insight.
 import { graveyardHymnCardDefinition } from "./definitions/graveyard-hymn.js";
 import { guardianCardDefinition } from "./definitions/guardian.js";
 import { holyBladeCardDefinition } from "./definitions/holy-blade.js";
+import { enemyBruteCardDefinition } from "./definitions/enemy-brute.js";
+import { enemyLeaderCardDefinition } from "./definitions/enemy-leader.js";
+import { enemyHuskCardDefinition } from "./definitions/enemy-husk.js";
+import { enemyPackAlphaCardDefinition } from "./definitions/enemy-pack-alpha.js";
 import { massBenedictionCardDefinition } from "./definitions/mass-benediction.js";
 import { sacrificialSeraphCardDefinition } from "./definitions/sacrificial-seraph.js";
 import { sanctifiedGuideCardDefinition } from "./definitions/sanctified-guide.js";
@@ -48,6 +52,10 @@ export const cardDefinitions: CardDefinitionLibrary = {
   graveyard_hymn: graveyardHymnCardDefinition,
   guardian: guardianCardDefinition,
   holy_blade: holyBladeCardDefinition,
+  enemy_leader: enemyLeaderCardDefinition,
+  enemy_husk: enemyHuskCardDefinition,
+  enemy_brute: enemyBruteCardDefinition,
+  enemy_pack_alpha: enemyPackAlphaCardDefinition,
   mass_benediction: massBenedictionCardDefinition,
   sacrificial_seraph: sacrificialSeraphCardDefinition,
   sanctified_guide: sanctifiedGuideCardDefinition,

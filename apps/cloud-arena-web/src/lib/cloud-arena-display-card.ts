@@ -232,6 +232,19 @@ const ARENA_HAND_CARD_PRESENTATIONS: Record<string, ArenaCardPresentation> = {
     collectorNumber: "006A",
     footerStat: "1/1",
   },
+  enemy_leader: {
+    title: "Enemy Leader",
+    typeLine: "Enemy - Demon",
+    manaCost: "{0}",
+    frameTone: "split-black-red",
+    imagePath: "card_0009_lucifer_fallen_angel_of_light.webp",
+    imageAlt: "A fallen angel wreathed in fire and shadow",
+    flavorText: "The battle's answer stands on the board, not behind it.",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "E00",
+    footerStat: null,
+  },
   choir_captain: {
     title: "Voice Above the Host",
     typeLine: "Creature - Angel",
@@ -302,10 +315,74 @@ const ARENA_ENEMY_PRESENTATIONS: Record<string, typeof ARENA_ENEMY_PRESENTATION>
     footerCredit: "Cloud Arena",
     collectorNumber: "E02",
   },
+  "Demon Husk": {
+    frameTone: "split-black-red",
+    typeLine: "Enemy - Demon",
+    imagePath: "grunt_demon.svg",
+    imageAlt: "A lean demon husk with cracked armor and ember-lit eyes",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "E03",
+  },
+  "Demon Brute": {
+    frameTone: "split-black-red",
+    typeLine: "Enemy - Demon",
+    imagePath: "card_0009_lucifer_fallen_angel_of_light.webp",
+    imageAlt: "A hulking demon brute wrapped in fire and shadow",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "E04",
+  },
+  "Pack Alpha": {
+    frameTone: "split-black-red",
+    typeLine: "Enemy - Demon",
+    imagePath: "grunt_demon.svg",
+    imageAlt: "A pack leader demon with a commanding stare and ember-lit armor",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "E05",
+  },
 };
 
 function getArenaEnemyPresentation(enemyName: string): typeof ARENA_ENEMY_PRESENTATION {
   return ARENA_ENEMY_PRESENTATIONS[enemyName] ?? ARENA_ENEMY_PRESENTATION;
+}
+
+function getEnemyTelegraphTextBlocks(input: {
+  intentLabel?: string | null;
+  intentQueueLabels?: string[] | null;
+}): Array<
+  | {
+      kind: "intent";
+      text: string;
+    }
+> {
+  const blocks: Array<
+    | {
+        kind: "intent";
+        text: string;
+      }
+  > = [];
+
+  if (input.intentLabel) {
+    blocks.push({
+      kind: "intent",
+      text: `Telegraph: ${input.intentLabel}`,
+    });
+  }
+
+  const queueLabels = input.intentLabel
+    ? (input.intentQueueLabels ?? []).slice(1)
+    : (input.intentQueueLabels ?? []);
+
+  queueLabels.forEach((label, index) => {
+    blocks.push({
+      kind: "intent",
+      text: `${index === 0 ? "Next" : "Then"}: ${label}`,
+    });
+  });
+
+  return blocks;
 }
 
 export function mapArenaPlayerToDisplayCard(
@@ -386,6 +463,10 @@ export function mapArenaEnemyToDisplayCard(
         kind: "intent",
         text: `${enemy.name} is preparing ${enemy.intentLabel}.`,
       },
+      ...getEnemyTelegraphTextBlocks({
+        intentLabel: enemy.intentLabel,
+        intentQueueLabels: enemy.intentQueueLabels,
+      }),
       {
         kind: "rules",
         text: `Current block ${enemy.block}. If left unanswered, the next enemy resolution will hit in full.`,
@@ -613,6 +694,10 @@ export function mapArenaPermanentToDisplayCard(
         : undefined,
     stats: [],
     textBlocks: [
+      ...getEnemyTelegraphTextBlocks({
+        intentLabel: permanent.intentLabel,
+        intentQueueLabels: permanent.intentQueueLabels,
+      }),
       ...(permanent.isCreature
         ? [
             { kind: "rules" as const, text: `Attack ${permanent.power}` },

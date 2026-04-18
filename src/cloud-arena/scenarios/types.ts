@@ -5,6 +5,7 @@ export type CloudArenaDeckPresetId =
 
 export type CloudArenaEnemyPresetId =
   | "bruiser_demon"
+  | "demon_pack"
   | "grunt_demon"
   | "imp_caller"
   | "long_battle_demon"
@@ -12,6 +13,7 @@ export type CloudArenaEnemyPresetId =
 
 export type CloudArenaScenarioId =
   | "grunt_demon"
+  | "demon_pack"
   | "imp_caller"
   | "mixed_guardian";
 
@@ -27,7 +29,9 @@ export type CloudArenaEnemyPreset = {
   health: number;
   basePower: number;
   cards: CardEnemyConfig["cards"];
+  leaderDefinitionId?: CardDefinitionId;
   startingTokens?: CardDefinitionId[];
+  startingPermanents?: CardDefinitionId[];
 };
 
 export type CloudArenaScenarioPreset = {

@@ -17,6 +17,8 @@ import {
   getCardDefinitionFromLibrary,
   getActivatedAbilities,
   getLegalActions,
+  getEnemyLeaderPermanent,
+  getPrimaryEnemyPermanent,
   getScenarioPreset,
   hasCardType,
   isPermanentCardDefinition,
@@ -297,6 +299,7 @@ function buildSessionSnapshot(
 ): CloudArenaSessionSnapshot {
   const { state } = record;
   const legalActions = getLegalActionOptions(state);
+  const primaryEnemyPermanent = getPrimaryEnemyPermanent(state);
 
   return {
     sessionId: record.id,
@@ -321,12 +324,13 @@ function buildSessionSnapshot(
       graveyard: state.player.graveyard.map((card) => toCardSnapshot(state, card)),
     },
     enemy: {
-      name: state.enemy.name,
-      health: state.enemy.health,
-      maxHealth: state.enemy.maxHealth,
-      block: state.enemy.block,
+      name: primaryEnemyPermanent?.name ?? state.enemy.name,
+      health: primaryEnemyPermanent?.health ?? state.enemy.health,
+      maxHealth: primaryEnemyPermanent?.maxHealth ?? state.enemy.maxHealth,
+      block: primaryEnemyPermanent?.block ?? state.enemy.block,
       intent: { ...state.enemy.intent },
-      intentLabel: formatEnemyIntent(state.enemy.intent),
+      intentLabel: primaryEnemyPermanent?.intentLabel ?? formatEnemyIntent(state.enemy.intent),
+      intentQueueLabels: primaryEnemyPermanent?.intentQueueLabels ?? [...state.enemy.intentQueueLabels],
     },
     battlefield: state.battlefield.map((permanent) =>
       permanent
@@ -351,6 +355,8 @@ function buildSessionSnapshot(
             isTapped: permanent.isTapped,
             isDefending: permanent.isDefending,
             slotIndex: permanent.slotIndex,
+            intentLabel: permanent.intentLabel ?? null,
+            intentQueueLabels: permanent.intentQueueLabels ?? null,
             actions: getActivatedAbilities(permanent.abilities).map((ability) => ({ ...ability })),
           }
         : null,
@@ -378,6 +384,8 @@ function buildSessionSnapshot(
             isTapped: permanent.isTapped,
             isDefending: permanent.isDefending,
             slotIndex: permanent.slotIndex,
+            intentLabel: permanent.intentLabel ?? null,
+            intentQueueLabels: permanent.intentQueueLabels ?? null,
             actions: getActivatedAbilities(permanent.abilities).map((ability) => ({ ...ability })),
           }
         : null,

@@ -34,7 +34,6 @@ For replay and interactive UI work:
 - `apps/cloud-arena-web/src/routes/`
 - `apps/cloud-arena-web/src/components/`
 - `apps/cloud-arena-web/src/lib/`
-- `tests/cloud-arena/trace-viewer.test.ts`
 
 Replay tooling is now legacy-only. Do not expand it.
 

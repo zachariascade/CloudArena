@@ -69,7 +69,7 @@ Recommended files:
 - `apps/cloud-arcanum-web/src/routes/cloud-arena-trace-viewer-page.tsx`
 - `apps/cloud-arcanum-web/src/components/cloud-arena-trace-viewer.tsx`
 - `apps/cloud-arcanum-web/src/components/cloud-arena-trace-panels.tsx`
-- `apps/cloud-arcanum-web/src/lib/cloud-arena-trace-view-model.ts`
+- `apps/cloud-arcanum-web/src/lib/cloud-arena-view-model-helpers.ts`
 - `apps/cloud-arcanum-web/src/lib/cloud-arena-sample-trace.ts`
 
 ## Architecture

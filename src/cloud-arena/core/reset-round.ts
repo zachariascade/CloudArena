@@ -3,8 +3,17 @@ import {
   LEAN_V1_HAND_SIZE,
 } from "./constants.js";
 import { discardHand, drawUpToHandSize } from "./draw.js";
-import { getEnemyPlanLength, getEnemyPlanStepAtIndexFromState } from "./enemy-plan.js";
-import { cleanupDefeatedPermanents } from "./permanents.js";
+import {
+  getEnemyIntentQueueLabels,
+  getEnemyPlanLength,
+  getEnemyPlanStepAtIndexFromState,
+} from "./enemy-plan.js";
+import {
+  cleanupDefeatedPermanents,
+  syncEnemyStateFromLeaderPermanent,
+  syncEnemyLeaderPermanentFromState,
+} from "./permanents.js";
+import { formatEnemyIntent } from "./enemy-intent.js";
 import { processTriggeredAbilities } from "./triggers.js";
 import type { BattleState } from "./types.js";
 
@@ -42,6 +51,7 @@ export function resetRound(state: BattleState): BattleState {
     permanent.isTapped = false;
     permanent.isDefending = false;
   });
+  syncEnemyStateFromLeaderPermanent(state);
 
   const enemyPlanLength = getEnemyPlanLength(state.enemy);
 
@@ -58,6 +68,12 @@ export function resetRound(state: BattleState): BattleState {
 
   state.enemy.intent = nextEnemyPlan.intent;
   state.enemy.currentCard = nextEnemyPlan.card;
+  state.enemy.intentQueueLabels = getEnemyIntentQueueLabels(state.enemy, 2);
+  syncEnemyLeaderPermanentFromState(
+    state,
+    formatEnemyIntent(state.enemy.intent),
+    state.enemy.intentQueueLabels,
+  );
 
   discardHand(state);
   const drawResult = drawUpToHandSize(state, LEAN_V1_HAND_SIZE);

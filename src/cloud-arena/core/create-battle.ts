@@ -6,8 +6,17 @@ import {
 } from "./constants.js";
 import { cardDefinitions } from "../cards/definitions.js";
 import { drawUpToHandSize, shuffleCards } from "./draw.js";
-import { getEnemyPlanStepAtIndexFromInput } from "./enemy-plan.js";
-import { cleanupDefeatedPermanents, summonPermanentFromCard } from "./permanents.js";
+import {
+  getEnemyIntentQueueLabels,
+  getEnemyPlanStepAtIndexFromInput,
+} from "./enemy-plan.js";
+import { formatEnemyIntent } from "./enemy-intent.js";
+import {
+  cleanupDefeatedPermanents,
+  createEnemyLeaderPermanent,
+  syncEnemyLeaderPermanentFromState,
+  summonPermanentFromCard,
+} from "./permanents.js";
 import { processTriggeredAbilities } from "./triggers.js";
 import type {
   BattleState,
@@ -66,10 +75,12 @@ export function createBattle(input: CreateBattleInput): BattleState {
       block: 0,
       basePower: input.enemy.basePower,
       intent: initialEnemyPlan.intent,
+      intentQueueLabels: [],
       behavior: enemyBehavior,
       cards: enemyCards,
       behaviorIndex: 0,
       currentCard: initialEnemyPlan.card,
+      leaderPermanentId: null,
     },
     battlefield: Array.from({ length: LEAN_V1_BOARD_SLOT_COUNT }, () => null),
     enemyBattlefield: Array.from({ length: LEAN_V1_BOARD_SLOT_COUNT }, () => null),
@@ -86,17 +97,46 @@ export function createBattle(input: CreateBattleInput): BattleState {
     choices: [],
   };
 
+  const enemyLeaderPermanent = createEnemyLeaderPermanent(state, {
+    name: input.enemy.name,
+    health: input.enemy.health,
+    basePower: input.enemy.basePower,
+    intent: initialEnemyPlan.intent,
+    definitionId: input.enemy.leaderDefinitionId,
+  });
+  state.enemy.leaderPermanentId = enemyLeaderPermanent.instanceId;
+  state.nextEnemyTokenIndex += 1;
+  state.enemy.intentQueueLabels = getEnemyIntentQueueLabels(state.enemy, 2);
+  syncEnemyLeaderPermanentFromState(
+    state,
+    formatEnemyIntent(initialEnemyPlan.intent),
+    state.enemy.intentQueueLabels,
+  );
+
   for (const tokenCardId of input.enemy.startingTokens ?? []) {
     summonPermanentFromCard(
       state,
       {
-        instanceId: `enemy_starting_token_${tokenCardId}_${state.nextEnemyTokenIndex}`,
+        instanceId: `card_${state.turnNumber}_${state.nextEnemyTokenIndex}`,
         definitionId: tokenCardId,
       },
       "enemy",
     );
     state.nextEnemyTokenIndex += 1;
   }
+
+  for (const permanentCardId of input.enemy.startingPermanents ?? []) {
+    summonPermanentFromCard(
+      state,
+      {
+        instanceId: `card_${state.turnNumber}_${state.nextEnemyTokenIndex}`,
+        definitionId: permanentCardId,
+      },
+      "enemy",
+    );
+    state.nextEnemyTokenIndex += 1;
+  }
+
   const openingDraw = drawUpToHandSize(state, LEAN_V1_HAND_SIZE);
   cleanupDefeatedPermanents(state);
   processTriggeredAbilities(state);

@@ -36,5 +36,5 @@ export {
   formatTraceActionRecord,
   formatTraceEvent,
   groupTraceEventsByTurn,
-} from "./cloud-arena-trace-view-model.js";
+} from "./cloud-arena-view-model-helpers.js";
 export { getCloudArenaRuntimeConfig } from "./runtime-config.js";

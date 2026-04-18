@@ -3,7 +3,11 @@ import { playCard } from "../actions/play-card.js";
 import { usePermanentAction } from "../actions/use-permanent-action.js";
 import { resolveEnemyTurn } from "../combat/enemy-turn.js";
 import { resolvePendingTargetRequest } from "./effects.js";
-import { cleanupDefeatedPermanents } from "./permanents.js";
+import {
+  cleanupDefeatedPermanents,
+  hasLivingEnemyCreatures,
+  getPrimaryEnemyPermanent,
+} from "./permanents.js";
 import { resetRound } from "./reset-round.js";
 import { processTriggeredAbilities } from "./triggers.js";
 import type { BattleAction, BattleState } from "./types.js";
@@ -12,12 +16,14 @@ function createBattleFinishedEvent(
   state: BattleState,
   winner: "player" | "enemy",
 ) {
+  const primaryEnemyPermanent = getPrimaryEnemyPermanent(state);
+
   return {
     type: "battle_finished" as const,
     turnNumber: state.turnNumber,
     winner,
     playerHealth: state.player.health,
-    enemyHealth: state.enemy.health,
+    enemyHealth: primaryEnemyPermanent?.health ?? 0,
     permanents: state.battlefield.flatMap((permanent) =>
       permanent
         ? [
@@ -33,7 +39,7 @@ function createBattleFinishedEvent(
 }
 
 function checkBattleFinished(state: BattleState): BattleState {
-  if (state.enemy.health <= 0) {
+  if (!hasLivingEnemyCreatures(state)) {
     state.phase = "finished";
     state.log.push(createBattleFinishedEvent(state, "player"));
     return state;
@@ -86,8 +92,10 @@ export function applyBattleAction(state: BattleState, action: BattleAction): Bat
       processTriggeredAbilities(state);
       cleanupDeadPermanents(state);
       checkBattleFinished(state);
-      if (state.player.health > 0 && state.enemy.health > 0) {
-        resetRound(state);
+      {
+        if (state.player.health > 0 && hasLivingEnemyCreatures(state)) {
+          resetRound(state);
+        }
       }
       return state;
   }

@@ -26,6 +26,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 const allowedScenarioIds: CloudArenaSessionScenarioId[] = [
+  "demon_pack",
   "mixed_guardian",
   "grunt_demon",
   "imp_caller",

@@ -14,7 +14,7 @@ import {
   type TraceViewerStepViewModel,
   formatTraceActionRecord,
   groupTraceEventsByTurn,
-} from "./cloud-arena-trace-view-model.js";
+} from "./cloud-arena-view-model-helpers.js";
 
 export type CloudArenaSummaryPill = {
   label: string;
@@ -58,6 +58,21 @@ export type CloudArenaViewModel = {
   replay: CloudArenaReplayContextViewModel | null;
   session: CloudArenaSessionContextViewModel | null;
 };
+
+function getScenarioLabel(scenarioId: string): string {
+  switch (scenarioId) {
+    case "demon_pack":
+      return "Demon Pack";
+    case "grunt_demon":
+      return "Grunt Demon";
+    case "imp_caller":
+      return "Imp Caller";
+    case "mixed_guardian":
+      return "Mixed Guardian";
+    default:
+      return scenarioId;
+  }
+}
 
 export function buildCloudArenaViewModelFromTraceStep(input: {
   currentStepIndex: number;
@@ -114,7 +129,7 @@ export function buildCloudArenaViewModelFromSessionSnapshot(
     mode: "interactive",
     battle,
     summary: [
-      { label: "Scenario", value: "Mixed Guardian" },
+      { label: "Scenario", value: getScenarioLabel(snapshot.scenarioId) },
       { label: "Seed", value: String(snapshot.seed) },
       { label: "Turn", value: String(snapshot.turnNumber) },
       { label: "Phase", value: snapshot.phase },

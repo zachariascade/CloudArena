@@ -312,7 +312,9 @@ describe("cloud arena targeted effects", () => {
     battle.player.energy = 10;
 
     const strikeCard = battle.player.hand.find((card) => card.definitionId === "targeted_strike");
-    const targetToken = battle.enemyBattlefield.find((entry) => entry !== null);
+    const targetToken = battle.enemyBattlefield.find(
+      (entry): entry is NonNullable<typeof entry> => entry !== null && entry.definitionId === "token_imp",
+    );
 
     if (!strikeCard || !targetToken) {
       throw new Error("Expected targeted_strike and an enemy token in the opening state.");

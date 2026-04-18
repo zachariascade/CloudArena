@@ -577,10 +577,12 @@ export type EnemyState = {
   block: number;
   basePower: number;
   intent: EnemyIntent;
+  intentQueueLabels: string[];
   behavior: EnemyBehaviorStep[];
   cards: EnemyCardDefinition[];
   behaviorIndex: number;
   currentCard: EnemyCardDefinition | null;
+  leaderPermanentId: string | null;
 };
 
 export type PlayerState = {
@@ -600,6 +602,9 @@ export type PermanentState = {
   name: string;
   definitionId: CardDefinitionId;
   controllerId?: "player" | "enemy";
+  isEnemyLeader?: boolean;
+  intentLabel?: string | null;
+  intentQueueLabels?: string[] | null;
   power: number;
   health: number;
   maxHealth: number;
@@ -686,7 +691,9 @@ export type BehaviorEnemyConfig = {
   health: number;
   basePower: number;
   behavior: EnemyBehaviorStep[];
+  leaderDefinitionId?: CardDefinitionId;
   startingTokens?: CardDefinitionId[];
+  startingPermanents?: CardDefinitionId[];
   cards?: never;
 };
 
@@ -695,7 +702,9 @@ export type CardEnemyConfig = {
   health: number;
   basePower: number;
   cards: EnemyCardDefinition[];
+  leaderDefinitionId?: CardDefinitionId;
   startingTokens?: CardDefinitionId[];
+  startingPermanents?: CardDefinitionId[];
   behavior?: never;
 };
 

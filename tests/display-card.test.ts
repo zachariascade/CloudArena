@@ -76,6 +76,7 @@ describe("shared display card mappers", () => {
       block: 3,
       intent: { attackAmount: 10, attackTimes: 2 },
       intentLabel: "attack 10 x2",
+      intentQueueLabels: ["attack 10 x2", "defend 4", "spawn token_imp"],
     });
 
     expect(player.variant).toBe("player");
@@ -106,6 +107,7 @@ describe("shared display card mappers", () => {
     });
     expect(enemy.stats.find((entry) => entry.label === "HP")).toBeUndefined();
     expect(enemy.textBlocks[0]?.text).toContain("is preparing attack 10 x2");
+    expect(enemy.textBlocks.some((entry) => entry.kind === "intent" && entry.text === "Next: defend 4")).toBe(true);
   });
 
   it("uses imp and grunt art for arena battle pieces", () => {
@@ -190,6 +192,25 @@ describe("shared display card mappers", () => {
         ],
       },
     );
+    const enemyLeaderCard = mapArenaPermanentToDisplayCard({
+      instanceId: "enemy_leader_1",
+      sourceCardInstanceId: "enemy_leader_1",
+      definitionId: "enemy_leader",
+      name: "Grunt Demon",
+      controllerId: "enemy",
+      isCreature: true,
+      power: 5,
+      health: 18,
+      maxHealth: 18,
+      block: 0,
+      intentLabel: "attack 5",
+      intentQueueLabels: ["attack 5", "attack 7"],
+      hasActedThisTurn: false,
+      isTapped: false,
+      isDefending: false,
+      slotIndex: 0,
+      actions: [],
+    });
 
     expect(handCard.actions).toHaveLength(1);
     expect(handCard.title).toBe("Keeper of the Gate");
@@ -211,6 +232,8 @@ describe("shared display card mappers", () => {
     expect(permanentCard.actions).toHaveLength(1);
     permanentCard.actions[0]?.onSelect?.();
     expect(onAttack).toHaveBeenCalledTimes(1);
+    expect(enemyLeaderCard.textBlocks.some((entry) => entry.kind === "intent" && entry.text.includes("attack 5"))).toBe(true);
+    expect(enemyLeaderCard.textBlocks.some((entry) => entry.kind === "intent" && entry.text === "Next: attack 7")).toBe(true);
   });
 
   it("renders cost chips in the Cloud Arena battlefield action menu", () => {
@@ -667,6 +690,7 @@ describe("shared display card component", () => {
           block: 0,
           intent: { attackAmount: 12 },
           intentLabel: "attack 12",
+          intentQueueLabels: ["attack 12", "defend 3"],
         }),
       }),
     );

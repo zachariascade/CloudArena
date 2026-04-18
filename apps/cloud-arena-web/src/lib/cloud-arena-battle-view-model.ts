@@ -10,7 +10,7 @@ import type {
 } from "../../../../src/cloud-arena/index.js";
 import { formatEnemyIntent } from "../../../../src/cloud-arena/index.js";
 
-import type { TraceViewerStepViewModel } from "./cloud-arena-trace-view-model.js";
+import type { TraceViewerStepViewModel } from "./cloud-arena-view-model-helpers.js";
 
 export type CloudArenaBattleViewModel = {
   turnNumber: number;
@@ -38,6 +38,7 @@ export type CloudArenaBattleViewModel = {
     block: number;
     intent: EnemyIntent;
     intentLabel: string;
+    intentQueueLabels?: string[];
   };
   battlefield: Array<CloudArenaPermanentSnapshot | null>;
   enemyBattlefield?: Array<CloudArenaPermanentSnapshot | null>;
@@ -74,6 +75,7 @@ export function buildBattleViewModelFromTraceStep(
       block: step.enemy.block,
       intent: { ...step.enemy.intent },
       intentLabel: formatEnemyIntent(step.enemy.intent),
+      intentQueueLabels: [],
     },
     battlefield: step.battlefield.map((slot) =>
       slot
@@ -123,6 +125,7 @@ export function buildBattleViewModelFromSessionSnapshot(
       block: snapshot.enemy.block,
       intent: { ...snapshot.enemy.intent },
       intentLabel: snapshot.enemy.intentLabel,
+      intentQueueLabels: [...snapshot.enemy.intentQueueLabels],
     },
     battlefield: snapshot.battlefield.map((slot) =>
       slot

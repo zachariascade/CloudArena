@@ -54,13 +54,24 @@ export const TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
   },
   enemy_husk: {
     id: "enemy_husk",
-    name: "Enemy Husk",
+    name: "Demon Husk",
     cardTypes: ["creature"],
     cost: 0,
     onPlay: [],
     power: 2,
     health: 6,
     recoveryPolicy: "full_heal",
+    abilities: [],
+  },
+  enemy_brute: {
+    id: "enemy_brute",
+    name: "Demon Brute",
+    cardTypes: ["creature"],
+    cost: 0,
+    onPlay: [],
+    power: 4,
+    health: 8,
+    recoveryPolicy: "none",
     abilities: [],
   },
   enemy_shade: {
@@ -74,15 +85,14 @@ export const TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
     recoveryPolicy: "none",
     abilities: [],
   },
-  enemy_brute: {
-    id: "enemy_brute",
-    name: "Enemy Brute",
+  enemy_leader: {
+    id: "enemy_leader",
+    name: "Enemy Leader",
     cardTypes: ["creature"],
     cost: 0,
     onPlay: [],
-    power: 2,
-    health: 10,
-    recoveryPolicy: "none",
+    power: 0,
+    health: 0,
     abilities: [],
   },
   enemy_targeted_smite: {
@@ -172,6 +182,7 @@ type CreateTestBattleInput = {
     behavior?: EnemyBehaviorStep[];
     cards?: EnemyCardDefinition[];
     startingTokens?: CardDefinitionId[];
+    startingPermanents?: CardDefinitionId[];
   };
   seed?: number;
 };
@@ -190,6 +201,7 @@ export function createTestBattle(input: CreateTestBattleInput): BattleState {
         ? { cards: input.enemy.cards }
         : { behavior: input.enemy?.behavior ?? [{ attackAmount: 12 }] }),
       startingTokens: input.enemy?.startingTokens,
+      startingPermanents: input.enemy?.startingPermanents,
     },
   });
 }
