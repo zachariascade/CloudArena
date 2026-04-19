@@ -898,6 +898,8 @@ export function renderCloudArcanumWebHtml(
         justify-content: center;
         justify-items: center;
         padding: clamp(0.6rem, 1vw, 0.95rem);
+        overflow: visible;
+        isolation: isolate;
         border: 1px solid rgba(95, 84, 76, 0.11);
         border-radius: 1.35rem;
         background:
@@ -934,6 +936,33 @@ export function renderCloudArcanumWebHtml(
         .cards-gallery {
           grid-template-columns: repeat(auto-fit, minmax(var(--display-card-width), var(--display-card-width)));
         }
+      }
+
+      .cards-gallery > .card-face-link {
+        position: relative;
+        margin-inline-start: calc(var(--card-stack-shift, 0rem) * -1);
+        margin-block-start: calc(var(--card-stack-lift, 0rem) * 0.25);
+        transform: translate3d(0, 0, 0) rotate(var(--card-stack-tilt, 0deg));
+        transform-origin: 50% 88%;
+        transition:
+          transform 180ms ease,
+          filter 180ms ease;
+        will-change: transform;
+      }
+
+      .cards-gallery > .card-face-link:first-child {
+        margin-inline-start: 0;
+      }
+
+      .cards-gallery > .card-face-link:hover,
+      .cards-gallery > .card-face-link:focus-visible,
+      .cards-gallery > .card-face-link:focus-within {
+        z-index: 999;
+        transform:
+          translate3d(0, calc(var(--card-stack-lift, 0rem) * -1.25), 0)
+          scale(1.03)
+          rotate(0deg);
+        filter: saturate(1.04);
       }
 
       .cards-gallery-printlike .card-face-link:hover .card-face {

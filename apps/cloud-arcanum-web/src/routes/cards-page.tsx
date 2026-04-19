@@ -1,4 +1,4 @@
-import type { ChangeEvent, FormEvent, ReactElement } from "react";
+import type { ChangeEvent, CSSProperties, FormEvent, ReactElement } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 
 import type {
@@ -523,21 +523,22 @@ export function CardsPage({ apiBaseUrl }: CardsPageProps): ReactElement {
                 </div>
               </div>
               <section className="cards-gallery cards-gallery-printlike">
-                {items.map((card) => {
+                {items.map((card, index) => {
                   const detailPath = query.themeId
                     ? `/cards/${card.id}?themeId=${encodeURIComponent(query.themeId)}`
                     : `/cards/${card.id}`;
+                  const stackSlot = Math.min(index, 10);
+                  const cardStyle: CSSProperties & Record<string, string | number> = {
+                    zIndex: index + 1,
+                    ["--card-stack-shift"]: `${stackSlot * 0.42}rem`,
+                    ["--card-stack-lift"]: `${stackSlot * 0.06}rem`,
+                    ["--card-stack-tilt"]: `${((index % 5) - 2) * 0.3}deg`,
+                  };
 
                   return (
-                  <Link
-                    key={card.id}
-                    className="card-face-link"
-                    to={detailPath}
-                  >
-                    <DisplayCard
-                      model={mapCloudArcanumCardToDisplayCard(card)}
-                    />
-                  </Link>
+                    <Link key={card.id} className="card-face-link" style={cardStyle} to={detailPath}>
+                      <DisplayCard model={mapCloudArcanumCardToDisplayCard(card)} />
+                    </Link>
                   );
                 })}
               </section>
