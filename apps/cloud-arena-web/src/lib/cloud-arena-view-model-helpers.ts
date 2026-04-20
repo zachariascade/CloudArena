@@ -1,8 +1,8 @@
 import {
   formatEnemyIntent,
   getCardDefinitionFromLibrary,
-  getActivatedAbilities,
   getEnemyPlanStepAtIndexFromInput,
+  getActivatedAbilities,
   formatAbilityCosts,
   hasCardType,
   isPermanentCardDefinition,
@@ -15,6 +15,7 @@ import {
   type SimulationActionRecord,
   type SimulationTrace,
 } from "../../../../src/cloud-arena/index.js";
+import { summarizeCardDefinition } from "../../../../src/cloud-arena/card-summary.js";
 
 export type TraceViewerStepCommand = "first" | "previous" | "next" | "last";
 
@@ -161,87 +162,13 @@ function toCardSnapshot(
   card: CardInstance,
 ): TraceViewerCardSnapshot {
   const definition = getCardDefinitionFromLibrary(cardDefinitions, card.definitionId);
-  const spellEffects = definition.spellEffects ?? [];
-
-  function formatSigned(value: number): string {
-    return `${value >= 0 ? "+" : ""}${value}`;
-  }
-
-  function formatCounterLabel(effect: Extract<typeof spellEffects[number], { type: "add_counter" }>): string {
-    if (typeof effect.powerDelta === "number" || typeof effect.healthDelta === "number") {
-      return `${formatSigned(effect.powerDelta ?? 0)}/${formatSigned(effect.healthDelta ?? 0)}`;
-    }
-
-    return effect.counter ?? "+0/+0";
-  }
 
   return {
     instanceId: card.instanceId,
     definitionId: card.definitionId,
     name: definition.name,
     cost: definition.cost,
-    effectSummary:
-          isPermanentCardDefinition(definition)
-        ? [
-            ...(hasCardType(definition, "creature") ? [`Attack ${definition.power}`, "Defend"] : []),
-              ...getActivatedAbilities(definition.abilities)
-              .map((ability) => {
-                const costPrefix = formatAbilityCosts(ability);
-
-                if (ability.activation.actionId === "equip") {
-                  return `${costPrefix}Equip`;
-                }
-
-                return `${costPrefix}${ability.activation.actionId.replace(/_/g, " ")}`;
-              }),
-          ]
-            .join(" • ")
-        : (spellEffects.length > 0 ? spellEffects : definition.onPlay)
-            .map((effect) => {
-              if (!("type" in effect) && typeof effect.attackAmount === "number" && effect.attackAmount > 0) {
-                const hits = effect.attackTimes && effect.attackTimes > 1
-                  ? ` x${effect.attackTimes}`
-                  : "";
-                return `Attack ${effect.attackAmount}${hits}`;
-              }
-
-              if (!("type" in effect) && typeof effect.blockAmount === "number" && effect.blockAmount > 0) {
-                return `Defend ${effect.blockAmount}`;
-              }
-
-              if ("type" in effect && effect.type === "add_counter") {
-                const targetLabel =
-                  effect.target === "self"
-                    ? "self"
-                    : effect.target.zone === "battlefield" && effect.target.cardType === "permanent"
-                      ? "each permanent"
-                      : "target";
-                const amount =
-                  typeof effect.powerDelta === "number" || typeof effect.healthDelta === "number"
-                    ? Math.max(Math.abs(effect.powerDelta ?? 0), Math.abs(effect.healthDelta ?? 0))
-                    : "amount" in effect && effect.amount?.type === "constant"
-                      ? effect.amount.value
-                      : 1;
-                return `Add ${amount} ${formatCounterLabel(effect)} counter(s) to ${targetLabel}`;
-              }
-
-              if ("type" in effect && effect.type === "remove_counter") {
-                const targetLabel =
-                  effect.target === "self"
-                    ? "self"
-                    : effect.target.zone === "battlefield" && effect.target.cardType === "permanent"
-                      ? "each permanent"
-                      : "target";
-                return `Remove ${effect.amount.type === "constant" ? effect.amount.value : 1} ${effect.counter} counter(s) from ${targetLabel}`;
-              }
-
-              if (!("type" in effect) && effect.summonSelf) {
-                return "Summon";
-              }
-
-              return "Effect";
-            })
-            .join(" • "),
+    effectSummary: summarizeCardDefinition(definition).join(" • "),
   };
 }
 
@@ -589,6 +516,11 @@ function applyEvent(
         }
       }
       return;
+    case "energy_gained":
+      if (event.target === "player") {
+        state.player.energy += event.amount;
+      }
+      return;
     case "damage_dealt":
       if (event.target === "player") {
         applyDamageToBlockAndHealth(state.player, event.amount);
@@ -844,6 +776,8 @@ export function formatTraceEvent(event: BattleEvent): string {
       return `Turn ${event.turnNumber}: enemy played ${event.cardId}`;
     case "block_gained":
       return `Turn ${event.turnNumber}: ${event.target}${event.targetId ? ` ${event.targetId}` : ""} gained ${event.amount} block`;
+    case "energy_gained":
+      return `Turn ${event.turnNumber}: ${event.source}${event.sourceId ? ` ${event.sourceId}` : ""} gained ${event.amount} energy`;
     case "damage_dealt":
       return `Turn ${event.turnNumber}: ${event.source}${event.sourceId ? ` ${event.sourceId}` : ""} dealt ${event.amount} damage to ${event.target}${event.targetId ? ` ${event.targetId}` : ""}`;
     case "permanent_summoned":

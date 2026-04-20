@@ -14,7 +14,6 @@ import manaWSymbol from "../assets/mtg-symbols/mana/W.svg";
 import { getCloudArenaRuntimeConfig } from "../lib/runtime-config.js";
 
 import type { DisplayCardModel } from "../lib/display-card.js";
-import { getDisplayCardSection } from "../lib/display-card.js";
 import { AbilityCostChip } from "./ability-cost-chip.js";
 
 type DisplayCardProps = {
@@ -23,7 +22,11 @@ type DisplayCardProps = {
 };
 
 function formatCardDisplayName(name: string, title: string | null | undefined): string {
-  return title ? `${name}, ${title}` : name;
+  if (!title || title === name) {
+    return name;
+  }
+
+  return `${name}, ${title}`;
 }
 
 function clampHealthPercent(current: number, max: number): number {
@@ -145,7 +148,7 @@ function resolveDisplayImageUrl(url: string | null | undefined): string | null {
 }
 
 function renderDisplayImage(model: DisplayCardModel): ReactElement {
-  const image = getDisplayCardSection(model, "art")?.image ?? model.image ?? null;
+  const image = model.image ?? null;
   const resolvedUrl = resolveDisplayImageUrl(image?.url);
 
   if (resolvedUrl) {
@@ -174,27 +177,17 @@ function renderDisplayImage(model: DisplayCardModel): ReactElement {
 }
 
 export function DisplayCard({ model, className }: DisplayCardProps): ReactElement {
-  const identitySection = getDisplayCardSection(model, "identity");
-  const summarySection = getDisplayCardSection(model, "summary");
-  const combatSection = getDisplayCardSection(model, "combat");
-  const statsSection = getDisplayCardSection(model, "stats");
-  const statusSection = getDisplayCardSection(model, "status");
-  const actionsSection = getDisplayCardSection(model, "actions");
-  const metadataSection = getDisplayCardSection(model, "metadata");
-  const displayName = formatCardDisplayName(
-    identitySection?.name ?? model.name,
-    identitySection?.title ?? model.title,
-  );
-  const healthBar = combatSection?.healthBar ?? model.healthBar ?? null;
-  const energyBar = combatSection?.energyBar ?? model.energyBar ?? null;
-  const footerStat = combatSection?.footerStat ?? model.footerStat ?? null;
-  const textBlocks = summarySection?.textBlocks ?? model.textBlocks;
-  const stats = statsSection?.stats ?? model.stats;
-  const statusLabel = statusSection?.statusLabel ?? model.statusLabel ?? null;
-  const statusTone = statusSection?.statusTone ?? model.statusTone;
-  const badges = statusSection?.badges ?? model.badges;
-  const stateFlags = statusSection?.stateFlags ?? model.stateFlags;
-  const actions = actionsSection?.actions ?? model.actions;
+  const displayName = formatCardDisplayName(model.name, model.title);
+  const healthBar = model.healthBar ?? null;
+  const energyBar = model.energyBar ?? null;
+  const footerStat = model.footerStat ?? null;
+  const textBlocks = model.textBlocks;
+  const stats = model.stats;
+  const statusLabel = model.statusLabel ?? null;
+  const statusTone = model.statusTone;
+  const badges = model.badges;
+  const stateFlags = model.stateFlags;
+  const actions = model.actions;
   const healthPercent = healthBar
     ? clampHealthPercent(healthBar.current, healthBar.max)
     : 0;
@@ -224,13 +217,13 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
         <div className="card-face-title-wrap">
           <h3>{displayName}</h3>
         </div>
-        <div className="card-face-mana-wrap">{renderManaCost(identitySection?.manaCost ?? model.manaCost)}</div>
+        <div className="card-face-mana-wrap">{renderManaCost(model.manaCost)}</div>
       </header>
 
       {renderDisplayImage(model)}
 
       <div className="card-face-typeline">
-        <span>{identitySection?.subtitle ?? model.subtitle ?? "Card"}</span>
+        <span>{model.subtitle ?? "Card"}</span>
         <span className="card-face-rarity-badge is-na">{model.variant.toUpperCase()}</span>
       </div>
 
@@ -253,7 +246,7 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
       <footer className="card-face-footer">
         <div className="card-face-footer-top">
           <div className="card-face-footer-printline">
-            <span>{metadataSection?.footerCode ?? model.footerCode}</span>
+            <span>{model.footerCode}</span>
           </div>
           {footerStat ? (
             <div className="card-face-footer-stats">
@@ -264,8 +257,8 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
           ) : null}
         </div>
         <div className="card-face-footer-bottom">
-          <div className="card-face-footer-artist">{metadataSection?.footerCredit ?? model.footerCredit}</div>
-          <div className="card-face-collector-number">{metadataSection?.collectorNumber ?? model.collectorNumber}</div>
+          <div className="card-face-footer-artist">{model.footerCredit}</div>
+          <div className="card-face-collector-number">{model.collectorNumber}</div>
         </div>
       </footer>
     </article>

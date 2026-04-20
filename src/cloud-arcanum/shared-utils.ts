@@ -79,7 +79,11 @@ export function formatCardDisplayName(
   name: string,
   title: string | null | undefined,
 ): string {
-  return title ? `${name}, ${title}` : name;
+  if (!title || title === name) {
+    return name;
+  }
+
+  return `${name}, ${title}`;
 }
 
 function isNullishOrEmptyString(value: unknown): boolean {

@@ -2,6 +2,8 @@ import type { ReactElement } from "react";
 import type { FocusEvent, MouseEvent } from "react";
 
 import type { CloudArenaBattleViewModel } from "../lib/cloud-arena-battle-view-model.js";
+import type { CloudArenaBattleMotionState } from "../lib/cloud-arena-battle-motion.js";
+import { mapArenaPermanentToDisplayCard } from "../lib/display-card.js";
 import { AbilityCostChip } from "./ability-cost-chip.js";
 import { DisplayCard } from "./display-card.js";
 import {
@@ -13,6 +15,7 @@ type CloudArenaBattlefieldPanelProps = {
   zoneKeyPrefix?: "battlefield" | "enemy_battlefield";
   battlefield: CloudArenaBattleViewModel["battlefield"];
   legalActions: CloudArenaBattleViewModel["legalActions"];
+  motionState: CloudArenaBattleMotionState;
   getInspectableModel: (key: string) => Parameters<typeof DisplayCard>[0]["model"];
   getPermanentMenuActions: (
     permanent: NonNullable<CloudArenaBattleViewModel["battlefield"][number]>,
@@ -154,10 +157,143 @@ function getPermanentIntentBubble(
   return null;
 }
 
+function getStackedAttachments(
+  battlefield: CloudArenaBattleViewModel["battlefield"],
+  permanent: NonNullable<CloudArenaBattleViewModel["battlefield"][number]>,
+): NonNullable<CloudArenaBattleViewModel["battlefield"][number]>[] {
+  return (permanent.attachments ?? [])
+    .map((attachmentId) => battlefield.find((entry) => entry?.instanceId === attachmentId) ?? null)
+    .filter((attachment): attachment is NonNullable<typeof attachment> => attachment !== null);
+}
+
+function getPermanentMenuActionList(
+  permanent: NonNullable<CloudArenaBattleViewModel["battlefield"][number]>,
+  getPermanentMenuActions: CloudArenaBattlefieldPanelProps["getPermanentMenuActions"],
+  openPermanentMenuId: string | null,
+  onPermanentMenuToggle: CloudArenaBattlefieldPanelProps["onPermanentMenuToggle"],
+  onPermanentMenuClose: CloudArenaBattlefieldPanelProps["onPermanentMenuClose"],
+  onTargetPermanentSelect: CloudArenaBattlefieldPanelProps["onTargetPermanentSelect"],
+  getInspectableModel: CloudArenaBattlefieldPanelProps["getInspectableModel"],
+  zoneKeyPrefix: "battlefield" | "enemy_battlefield",
+  bindInspectorInteractions: CloudArenaBattlefieldPanelProps["bindInspectorInteractions"],
+  onOpenDetails: CloudArenaBattlefieldPanelProps["onOpenDetails"],
+): ReactElement {
+  const menuActions = getPermanentMenuActions(permanent);
+  const permanentCardModel = getInspectableModel(`${zoneKeyPrefix}:${permanent.instanceId}`);
+  const targetAction = undefined;
+  const isActionListOpen = menuActions.length > 0 && openPermanentMenuId === permanent.instanceId;
+  const isAttackAnimated = false;
+  const isHitAnimated = false;
+
+  return (
+    <>
+      {isActionListOpen ? (
+        <div
+          className={[
+            "trace-viewer-battlefield-card",
+            "cloud-arena-battlefield-card",
+            "cloud-arena-permanent-action-face",
+            `tone-${permanentCardModel.frameTone}`,
+          ].join(" ")}
+          role="menu"
+          aria-label={`${permanent.name} actions`}
+          onMouseDown={(event) => event.stopPropagation()}
+          onClick={(event) => event.stopPropagation()}
+        >
+          <div className="cloud-arena-permanent-action-face-header">
+            <h3>{permanentCardModel.name}</h3>
+          </div>
+          <div className="cloud-arena-permanent-action-face-rules">
+            <div className="cloud-arena-permanent-action-face-list">
+              {menuActions.map((action) => (
+                <button
+                  key={`${permanent.instanceId}-${action.action}`}
+                  type="button"
+                  className="cloud-arena-permanent-menu-button"
+                  role="menuitem"
+                  disabled={action.disabled}
+                  onMouseDown={(event) => event.stopPropagation()}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onPermanentMenuClose?.();
+                    action.onSelect?.();
+                  }}
+                >
+                  <span className="cloud-arena-permanent-menu-button-label">{action.label}</span>
+                  <AbilityCostChip costs={action.costs} className="cloud-arena-permanent-menu-button-cost" />
+                </button>
+              ))}
+            </div>
+          </div>
+          <button
+            type="button"
+            className="cloud-arena-permanent-menu-button cloud-arena-permanent-action-face-back"
+            onMouseDown={(event) => event.stopPropagation()}
+            onClick={(event) => {
+              event.stopPropagation();
+              onPermanentMenuClose?.();
+            }}
+          >
+            Back
+          </button>
+        </div>
+      ) : (
+        <div
+          className={`cloud-arena-permanent-button${targetAction ? " is-targetable" : ""}${isAttackAnimated ? " is-attacking" : ""}${isHitAnimated ? " is-hit" : ""}`}
+          role="button"
+          tabIndex={0}
+          {...bindInspectorInteractions(`${zoneKeyPrefix}:${permanent.instanceId}`)}
+          onClick={() => {
+            if (targetAction && onTargetPermanentSelect) {
+              onTargetPermanentSelect(targetAction);
+              return;
+            }
+
+            if (menuActions.length > 0) {
+              onPermanentMenuToggle?.(permanent.instanceId);
+            }
+          }}
+          onKeyDown={(event) => {
+            if (event.key !== "Enter" && event.key !== " ") {
+              return;
+            }
+
+            event.preventDefault();
+
+            if (targetAction && onTargetPermanentSelect) {
+              onTargetPermanentSelect(targetAction);
+              return;
+            }
+
+            if (menuActions.length > 0) {
+              onPermanentMenuToggle?.(permanent.instanceId);
+            }
+          }}
+          aria-expanded={menuActions.length > 0 ? false : undefined}
+          aria-haspopup={menuActions.length > 0 ? "menu" : undefined}
+        >
+          <DisplayCard
+            className={`trace-viewer-battlefield-card cloud-arena-battlefield-card${isAttackAnimated ? " is-attacking" : ""}${isHitAnimated ? " is-hit" : ""}`}
+            model={permanentCardModel}
+          />
+        </div>
+      )}
+      <button
+        type="button"
+        className="cloud-arena-card-details-button cloud-arena-battlefield-details-button"
+        onClick={(event) => onOpenDetails(`${zoneKeyPrefix}:${permanent.instanceId}`, event)}
+      >
+        details
+      </button>
+    </>
+  );
+}
+
 export function CloudArenaBattlefieldPanel({
   zoneKeyPrefix = "battlefield",
   battlefield,
   legalActions,
+  motionState,
   getInspectableModel,
   getPermanentMenuActions,
   getPermanentCounterEntries,
@@ -168,184 +304,270 @@ export function CloudArenaBattlefieldPanel({
   onPermanentMenuClose,
   onTargetPermanentSelect,
 }: CloudArenaBattlefieldPanelProps): ReactElement {
+  const renderedBattlefield = battlefield.flatMap((slot, index) =>
+    slot?.attachedTo
+      ? []
+      : [
+          {
+            slot,
+            index,
+          },
+        ],
+  );
+
   return (
     <section className="panel trace-viewer-panel trace-viewer-battlefield-panel cloud-arena-battlefield-panel">
       <div className="trace-viewer-board-scroll" aria-label="Battlefield">
         <div className="trace-viewer-card-grid trace-viewer-board-grid">
-          {battlefield.map((slot, index) => (
-            slot ? (
-              (() => {
-                const menuActions = getPermanentMenuActions(slot);
-                const permanentCardModel = getInspectableModel(`${zoneKeyPrefix}:${slot.instanceId}`);
-                const targetAction = legalActions.find(
-                  (entry) =>
-                    entry.action.type === "choose_target" &&
-                    entry.action.targetPermanentId === slot.instanceId,
-                );
-                const isActionListOpen =
-                  !targetAction && menuActions.length > 0 && openPermanentMenuId === slot.instanceId;
+          {renderedBattlefield.map(({ slot, index }) => {
+            const slotKey = `${zoneKeyPrefix}:${index}`;
+            const deathOverlay = motionState.deathOverlays[slotKey] ?? null;
+            const attachedPermanents = slot ? getStackedAttachments(battlefield, slot) : [];
+            const activeAttachment = slot
+              ? attachedPermanents.find((attachment) => attachment.instanceId === openPermanentMenuId) ?? null
+              : null;
+            const stackedAttachments = activeAttachment
+              ? attachedPermanents.filter((attachment) => attachment.instanceId !== activeAttachment.instanceId)
+              : attachedPermanents;
 
-                return (
-                  <div
-                    key={`slot-${index + 1}`}
-                    className="trace-viewer-battlefield-slot"
-                    {...bindInspectorInteractions(`battlefield:${slot.instanceId}`)}
-                  >
-                    {(() => {
-                      const intentBubble = getPermanentIntentBubble(slot);
+            return (
+              <div
+                key={`slot-${index + 1}`}
+                className={[
+                  "trace-viewer-battlefield-slot",
+                  zoneKeyPrefix === "battlefield" ? "is-player-side" : "is-enemy-side",
+                  slot?.instanceId && motionState.attackIds[slot.instanceId] ? "is-attacking" : null,
+                  slot?.instanceId && motionState.hitIds[slot.instanceId] ? "is-hit" : null,
+                  !slot && deathOverlay ? "is-emptying" : null,
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+                {...(slot ? bindInspectorInteractions(`battlefield:${slot.instanceId}`) : {})}
+              >
+                {slot ? (
+                  (() => {
+                    const menuActions = getPermanentMenuActions(slot);
+                    const permanentCardModel = getInspectableModel(`${zoneKeyPrefix}:${slot.instanceId}`);
+                    const targetAction = legalActions.find(
+                      (entry) =>
+                        entry.action.type === "choose_target" &&
+                        entry.action.targetPermanentId === slot.instanceId,
+                    );
+                    const isActionListOpen =
+                      !targetAction && menuActions.length > 0 && openPermanentMenuId === slot.instanceId;
+                    const isAttackAnimated = Boolean(motionState.attackIds[slot.instanceId]);
+                    const isHitAnimated = Boolean(motionState.hitIds[slot.instanceId]);
 
-                      return intentBubble ? (
-                        <div
-                          className={[
-                            "cloud-arena-permanent-intent-bubble",
-                            `is-${intentBubble.tone}`,
-                          ].join(" ")}
-                          aria-label={`${slot.name} intent ${intentBubble.label}${intentBubble.detail ? ` ${intentBubble.detail}` : ""}`}
-                        >
-                          {intentBubble.tone === "attack" ? (
-                            <>
-                              <span className="cloud-arena-permanent-intent-badge">
-                                {intentBubble.value}
-                              </span>
-                              <span className="cloud-arena-permanent-intent-label">
-                                {intentBubble.label}
-                              </span>
-                            </>
-                          ) : (
-                            <span className="cloud-arena-permanent-intent-label">
-                              {intentBubble.label}
-                            </span>
-                          )}
-                          {intentBubble.detail ? (
-                            <span className="cloud-arena-permanent-intent-detail">
-                              {intentBubble.detail}
-                            </span>
+                    return (
+                      <>
+                        <div className="cloud-arena-battlefield-piece-stack">
+                          {zoneKeyPrefix === "enemy_battlefield" ? (() => {
+                            const intentBubble = getPermanentIntentBubble(slot);
+
+                            return intentBubble ? (
+                              <div
+                                className={[
+                                  "cloud-arena-permanent-intent-bubble",
+                                  `is-${intentBubble.tone}`,
+                                ].join(" ")}
+                                aria-label={`${slot.name} intent ${intentBubble.label}${intentBubble.detail ? ` ${intentBubble.detail}` : ""}`}
+                              >
+                                {intentBubble.tone === "attack" ? (
+                                  <>
+                                    <span className="cloud-arena-permanent-intent-badge">
+                                      {intentBubble.value}
+                                    </span>
+                                    <span className="cloud-arena-permanent-intent-label">
+                                      {intentBubble.label}
+                                    </span>
+                                  </>
+                                ) : (
+                                  <span className="cloud-arena-permanent-intent-label">
+                                    {intentBubble.label}
+                                  </span>
+                                )}
+                                {intentBubble.detail ? (
+                                  <span className="cloud-arena-permanent-intent-detail">
+                                    {intentBubble.detail}
+                                  </span>
+                                ) : null}
+                              </div>
+                            ) : null;
+                          })() : null}
+                          {zoneKeyPrefix === "enemy_battlefield" && getPermanentCounterEntries(slot).length > 0 ? (
+                            <div className="trace-viewer-counter-row" aria-label={`${slot.name} counters`}>
+                              {getPermanentCounterEntries(slot).map((entry) => (
+                                <span
+                                  key={`${slot.instanceId}-${entry.counter}`}
+                                  className="trace-viewer-counter-chip"
+                                >
+                                  {entry.counter} x{entry.amount}
+                                </span>
+                              ))}
+                            </div>
                           ) : null}
-                        </div>
-                      ) : null;
-                    })()}
-                    {getPermanentCounterEntries(slot).length > 0 ? (
-                      <div className="trace-viewer-counter-row" aria-label={`${slot.name} counters`}>
-                        {getPermanentCounterEntries(slot).map((entry) => (
-                          <span
-                            key={`${slot.instanceId}-${entry.counter}`}
-                            className="trace-viewer-counter-chip"
-                          >
-                            {entry.counter} x{entry.amount}
-                          </span>
-                        ))}
-                      </div>
-                    ) : null}
-                    {isActionListOpen ? (
-                      <div
-                        className={[
-                          "trace-viewer-battlefield-card",
-                          "cloud-arena-battlefield-card",
-                          "cloud-arena-permanent-action-face",
-                          `tone-${permanentCardModel.frameTone}`,
-                        ].join(" ")}
-                        role="menu"
-                        aria-label={`${slot.name} actions`}
-                        onMouseDown={(event) => event.stopPropagation()}
-                        onClick={(event) => event.stopPropagation()}
-                      >
-                        <div className="cloud-arena-permanent-action-face-header">
-                          <h3>{permanentCardModel.name}</h3>
-                        </div>
-                        <div className="cloud-arena-permanent-action-face-rules">
-                          <div className="cloud-arena-permanent-action-face-list">
-                            {menuActions.map((action) => (
+                          {isActionListOpen ? (
+                            <div
+                              className={[
+                                "trace-viewer-battlefield-card",
+                                "cloud-arena-battlefield-card",
+                                "cloud-arena-permanent-action-face",
+                                `tone-${permanentCardModel.frameTone}`,
+                              ].join(" ")}
+                              role="menu"
+                              aria-label={`${slot.name} actions`}
+                              onMouseDown={(event) => event.stopPropagation()}
+                              onClick={(event) => event.stopPropagation()}
+                            >
+                              <div className="cloud-arena-permanent-action-face-header">
+                                <h3>{permanentCardModel.name}</h3>
+                              </div>
+                              <div className="cloud-arena-permanent-action-face-rules">
+                                <div className="cloud-arena-permanent-action-face-list">
+                                  {menuActions.map((action) => (
+                                    <button
+                                      key={`${slot.instanceId}-${action.action}`}
+                                      type="button"
+                                      className="cloud-arena-permanent-menu-button"
+                                      role="menuitem"
+                                      disabled={action.disabled}
+                                      onMouseDown={(event) => event.stopPropagation()}
+                                      onClick={(event) => {
+                                        event.stopPropagation();
+                                        onPermanentMenuClose?.();
+                                        action.onSelect?.();
+                                      }}
+                                    >
+                                      <span className="cloud-arena-permanent-menu-button-label">{action.label}</span>
+                                      <AbilityCostChip costs={action.costs} className="cloud-arena-permanent-menu-button-cost" />
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
                               <button
-                                key={`${slot.instanceId}-${action.action}`}
                                 type="button"
-                                className="cloud-arena-permanent-menu-button"
-                                role="menuitem"
-                                disabled={action.disabled}
+                                className="cloud-arena-permanent-menu-button cloud-arena-permanent-action-face-back"
                                 onMouseDown={(event) => event.stopPropagation()}
                                 onClick={(event) => {
                                   event.stopPropagation();
                                   onPermanentMenuClose?.();
-                                  action.onSelect?.();
                                 }}
                               >
-                                <span className="cloud-arena-permanent-menu-button-label">{action.label}</span>
-                                <AbilityCostChip costs={action.costs} className="cloud-arena-permanent-menu-button-cost" />
+                                Back
                               </button>
-                            ))}
-                          </div>
+                            </div>
+                          ) : (
+                            <div
+                              className={`cloud-arena-permanent-button${targetAction ? " is-targetable" : ""}${isAttackAnimated ? " is-attacking" : ""}${isHitAnimated ? " is-hit" : ""}`}
+                              role="button"
+                              tabIndex={0}
+                              onClick={() => {
+                                if (targetAction && onTargetPermanentSelect) {
+                                  onTargetPermanentSelect(targetAction.action);
+                                  return;
+                                }
+
+                                if (menuActions.length > 0) {
+                                  onPermanentMenuToggle?.(slot.instanceId);
+                                }
+                              }}
+                              onKeyDown={(event) => {
+                                if (event.key !== "Enter" && event.key !== " ") {
+                                  return;
+                                }
+
+                                event.preventDefault();
+
+                                if (targetAction && onTargetPermanentSelect) {
+                                  onTargetPermanentSelect(targetAction.action);
+                                  return;
+                                }
+
+                                if (menuActions.length > 0) {
+                                  onPermanentMenuToggle?.(slot.instanceId);
+                                }
+                              }}
+                              aria-expanded={menuActions.length > 0 ? false : undefined}
+                              aria-haspopup={!targetAction && menuActions.length > 0 ? "menu" : undefined}
+                            >
+                              <DisplayCard
+                                className={`trace-viewer-battlefield-card cloud-arena-battlefield-card${isAttackAnimated ? " is-attacking" : ""}${isHitAnimated ? " is-hit" : ""}`}
+                                model={permanentCardModel}
+                              />
+                            </div>
+                          )}
+                          {stackedAttachments.length > 0 ? (
+                            <div className="cloud-arena-battlefield-attachment-stack">
+                              {stackedAttachments.map((attachment, attachmentIndex) => (
+                                <div
+                                  key={attachment.instanceId}
+                                  className="cloud-arena-battlefield-attachment-card-shell"
+                                  style={{ zIndex: stackedAttachments.length - attachmentIndex }}
+                                >
+                                  {getPermanentMenuActionList(
+                                    attachment,
+                                    getPermanentMenuActions,
+                                    openPermanentMenuId,
+                                    onPermanentMenuToggle,
+                                    onPermanentMenuClose,
+                                    onTargetPermanentSelect,
+                                    getInspectableModel,
+                                    zoneKeyPrefix,
+                                    bindInspectorInteractions,
+                                    onOpenDetails,
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          ) : null}
+                          {activeAttachment ? (
+                            <div className="cloud-arena-battlefield-active-attachment-overlay">
+                              {getPermanentMenuActionList(
+                                activeAttachment,
+                                getPermanentMenuActions,
+                                openPermanentMenuId,
+                                onPermanentMenuToggle,
+                                onPermanentMenuClose,
+                                onTargetPermanentSelect,
+                                getInspectableModel,
+                                zoneKeyPrefix,
+                                bindInspectorInteractions,
+                                onOpenDetails,
+                              )}
+                            </div>
+                          ) : null}
                         </div>
                         <button
                           type="button"
-                          className="cloud-arena-permanent-menu-button cloud-arena-permanent-action-face-back"
-                          onMouseDown={(event) => event.stopPropagation()}
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            onPermanentMenuClose?.();
-                          }}
+                          className="cloud-arena-card-details-button cloud-arena-battlefield-details-button"
+                          onClick={(event) => onOpenDetails(`${zoneKeyPrefix}:${slot.instanceId}`, event)}
                         >
-                          Back
+                          details
                         </button>
-                      </div>
-                    ) : (
-                      <div
-                        className={`cloud-arena-permanent-button${targetAction ? " is-targetable" : ""}`}
-                        role="button"
-                        tabIndex={0}
-                        onClick={() => {
-                          if (targetAction && onTargetPermanentSelect) {
-                            onTargetPermanentSelect(targetAction.action);
-                            return;
-                          }
-
-                          if (menuActions.length > 0) {
-                            onPermanentMenuToggle?.(slot.instanceId);
-                          }
-                        }}
-                        onKeyDown={(event) => {
-                          if (event.key !== "Enter" && event.key !== " ") {
-                            return;
-                          }
-
-                          event.preventDefault();
-
-                          if (targetAction && onTargetPermanentSelect) {
-                            onTargetPermanentSelect(targetAction.action);
-                            return;
-                          }
-
-                          if (menuActions.length > 0) {
-                            onPermanentMenuToggle?.(slot.instanceId);
-                          }
-                        }}
-                        aria-expanded={menuActions.length > 0 ? false : undefined}
-                        aria-haspopup={!targetAction && menuActions.length > 0 ? "menu" : undefined}
-                      >
+                      </>
+                    );
+                  })()
+                ) : (
+                  <>
+                    <article className="trace-viewer-card trace-viewer-card-empty trace-viewer-battlefield-card cloud-arena-empty-slot">
+                      <strong>Slot {index + 1}</strong>
+                      <div className="trace-viewer-card-meta">empty</div>
+                    </article>
+                    {deathOverlay ? (
+                      <div className="cloud-arena-permanent-death-overlay" aria-hidden="true">
                         <DisplayCard
-                          className="trace-viewer-battlefield-card cloud-arena-battlefield-card"
-                          model={permanentCardModel}
+                          className="trace-viewer-battlefield-card cloud-arena-battlefield-card cloud-arena-permanent-death-card"
+                          model={mapArenaPermanentToDisplayCard(deathOverlay.permanent, {
+                            disableActions: true,
+                          })}
                         />
                       </div>
-                    )}
-                    <button
-                      type="button"
-                      className="cloud-arena-card-details-button cloud-arena-battlefield-details-button"
-                      onClick={(event) => onOpenDetails(`${zoneKeyPrefix}:${slot.instanceId}`, event)}
-                    >
-                      details
-                    </button>
-                  </div>
-                );
-              })()
-            ) : (
-              <article
-                key={`slot-${index + 1}`}
-                className="trace-viewer-card trace-viewer-card-empty trace-viewer-battlefield-card cloud-arena-empty-slot"
-              >
-                <strong>Slot {index + 1}</strong>
-                <div className="trace-viewer-card-meta">empty</div>
-              </article>
-            )
-          ))}
+                    ) : null}
+                  </>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

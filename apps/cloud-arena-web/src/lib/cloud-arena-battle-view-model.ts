@@ -36,6 +36,7 @@ export type CloudArenaBattleViewModel = {
     health: number;
     maxHealth: number;
     block: number;
+    leaderDefinitionId?: string | null;
     intent: EnemyIntent;
     intentLabel: string;
     intentQueueLabels?: string[];
@@ -74,6 +75,7 @@ export function buildBattleViewModelFromTraceStep(
       health: step.enemy.health,
       maxHealth: step.enemy.maxHealth,
       block: step.enemy.block,
+      leaderDefinitionId: null,
       intent: { ...step.enemy.intent },
       intentLabel: step.enemy.intentLabel,
       intentQueueLabels: [],
@@ -100,6 +102,18 @@ export function buildBattleViewModelFromSessionSnapshot(
     ...option,
     action: { ...option.action },
   }));
+  const pendingCardPlay = snapshot.pendingTargetRequest?.context?.pendingCardPlay ?? null;
+  const pendingCardPlayHandIndex = snapshot.pendingTargetRequest?.context?.pendingCardPlayHandIndex ?? null;
+  const handCards = snapshot.player.hand.map((card) => ({ ...card }));
+
+  if (pendingCardPlay && !handCards.some((card) => card.instanceId === pendingCardPlay.instanceId)) {
+    const insertAt =
+      typeof pendingCardPlayHandIndex === "number"
+        ? Math.max(0, Math.min(pendingCardPlayHandIndex, handCards.length))
+        : handCards.length;
+
+    handCards.splice(insertAt, 0, { ...pendingCardPlay });
+  }
 
   return {
     turnNumber: snapshot.turnNumber,
@@ -114,7 +128,7 @@ export function buildBattleViewModelFromSessionSnapshot(
       maxHealth: snapshot.player.maxHealth,
       block: snapshot.player.block,
       energy: snapshot.player.energy,
-      hand: snapshot.player.hand.map((card) => ({ ...card })),
+      hand: handCards,
       drawPile: snapshot.player.drawPile.map((card) => ({ ...card })),
       drawPileCount: snapshot.player.drawPileCount,
       discardPile: snapshot.player.discardPile.map((card) => ({ ...card })),
@@ -125,6 +139,7 @@ export function buildBattleViewModelFromSessionSnapshot(
       health: snapshot.enemy.health,
       maxHealth: snapshot.enemy.maxHealth,
       block: snapshot.enemy.block,
+      leaderDefinitionId: snapshot.enemy.leaderDefinitionId ?? null,
       intent: { ...snapshot.enemy.intent },
       intentLabel: snapshot.enemy.intentLabel,
       intentQueueLabels: [...snapshot.enemy.intentQueueLabels],
@@ -149,6 +164,9 @@ export function buildBattleViewModelFromSessionSnapshot(
       ? {
           ...snapshot.pendingTargetRequest,
           selector: { ...snapshot.pendingTargetRequest.selector },
+          context: snapshot.pendingTargetRequest.context
+            ? { ...snapshot.pendingTargetRequest.context }
+            : undefined,
         }
       : null,
     blockingQueue: [...snapshot.blockingQueue],

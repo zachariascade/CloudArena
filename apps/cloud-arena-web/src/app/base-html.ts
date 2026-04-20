@@ -905,6 +905,7 @@ export function renderCloudArcanumWebHtml(
       .cloud-arena-battlefield-panel .trace-viewer-board-scroll {
         flex: 1 1 auto;
         min-height: 0;
+        overflow-y: auto;
       }
 
       .trace-viewer-battle-actions {
@@ -1003,7 +1004,7 @@ export function renderCloudArcanumWebHtml(
         display: flex;
         min-height: 0;
         overflow-x: auto;
-        overflow-y: hidden;
+        overflow-y: auto;
         padding: 0.15rem 0.15rem 0.45rem;
         scroll-snap-type: x proximity;
       }
@@ -1012,10 +1013,10 @@ export function renderCloudArcanumWebHtml(
         display: grid;
         grid-auto-flow: column;
         grid-auto-columns: var(--display-card-width);
-        gap: 0.4rem;
+        gap: 0;
         overflow-x: auto;
         overflow-y: hidden;
-        padding: 0.8rem 0.15rem 0.8rem;
+        padding: 1rem 0.35rem 0.95rem;
         scroll-snap-type: x proximity;
         --hand-card-stack-x-scale: 1;
         --hand-card-stack-y-scale: 1;
@@ -1045,7 +1046,42 @@ export function renderCloudArcanumWebHtml(
       }
 
       .trace-viewer-hand-card-disabled {
-        opacity: 0.58;
+        position: relative;
+        filter: grayscale(0.9) saturate(0.72) brightness(0.94) contrast(0.92);
+        box-shadow:
+          inset 0 0 0 1px rgba(120, 94, 62, 0.18),
+          0 10px 24px rgba(98, 57, 18, 0.08);
+      }
+
+      .trace-viewer-hand-card-disabled::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        background:
+          linear-gradient(180deg, rgba(120, 94, 62, 0.1), rgba(120, 94, 62, 0.03)),
+          repeating-linear-gradient(135deg, rgba(120, 94, 62, 0.08) 0 0.45rem, transparent 0.45rem 0.95rem);
+        box-shadow: inset 0 0 0 1px rgba(120, 94, 62, 0.12);
+      }
+
+      .trace-viewer-hand-card-pending {
+        position: relative;
+        filter: saturate(0.92) brightness(0.98);
+        box-shadow:
+          inset 0 0 0 1px rgba(154, 52, 18, 0.2),
+          0 0 0 1px rgba(154, 52, 18, 0.08),
+          0 14px 30px rgba(98, 57, 18, 0.18);
+      }
+
+      .trace-viewer-hand-card-pending::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        background: linear-gradient(180deg, rgba(154, 52, 18, 0.04), rgba(154, 52, 18, 0));
+        box-shadow: inset 0 0 0 1px rgba(154, 52, 18, 0.1);
       }
 
       .trace-viewer-hand-card-button:hover:enabled {
@@ -1077,6 +1113,8 @@ export function renderCloudArcanumWebHtml(
 
       .cloud-arena-permanent-button {
         display: block;
+        position: relative;
+        z-index: 2;
         width: 100%;
         padding: 0;
         border: 0;
@@ -1103,6 +1141,228 @@ export function renderCloudArcanumWebHtml(
         position: relative;
         width: var(--display-card-width);
         scroll-snap-align: start;
+      }
+
+      .cloud-arena-battlefield-piece-stack {
+        position: relative;
+        display: grid;
+        z-index: 2;
+        justify-items: center;
+        width: 100%;
+      }
+
+      .cloud-arena-battlefield-attachment-stack {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        justify-items: center;
+        width: 100%;
+        margin-top: -4.3rem;
+        pointer-events: auto;
+      }
+
+      .cloud-arena-battlefield-attachment-card-shell {
+        position: relative;
+        width: 100%;
+      }
+
+      .cloud-arena-battlefield-attachment-card {
+        transform: scale(0.965);
+        transform-origin: top center;
+        filter: saturate(0.94) brightness(0.98);
+        opacity: 0.97;
+      }
+
+      .cloud-arena-battlefield-attachment-card-shell + .cloud-arena-battlefield-attachment-card-shell {
+        margin-top: -4.55rem;
+      }
+
+      .cloud-arena-battlefield-active-attachment-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        display: grid;
+        justify-items: center;
+        pointer-events: auto;
+      }
+
+      .trace-viewer-battlefield-slot.is-player-side.is-attacking .trace-viewer-battlefield-card {
+        animation: cloudArenaBattleAttackRight 420ms ease-out both;
+        transform-origin: 32% 84%;
+      }
+
+      .trace-viewer-battlefield-slot.is-enemy-side.is-attacking .trace-viewer-battlefield-card {
+        animation: cloudArenaBattleAttackLeft 420ms ease-out both;
+        transform-origin: 68% 84%;
+      }
+
+      .trace-viewer-battlefield-slot.is-player-side.is-attacking .cloud-arena-permanent-button {
+        animation: cloudArenaBattleAttackRight 420ms ease-out both;
+        transform-origin: 32% 84%;
+        will-change: transform, filter;
+        z-index: 2;
+      }
+
+      .trace-viewer-battlefield-slot.is-enemy-side.is-attacking .cloud-arena-permanent-button {
+        animation: cloudArenaBattleAttackLeft 420ms ease-out both;
+        transform-origin: 68% 84%;
+        will-change: transform, filter;
+        z-index: 2;
+      }
+
+      .trace-viewer-battlefield-slot.is-attacking .trace-viewer-battlefield-card {
+        will-change: transform, filter;
+        transform-origin: 50% 84%;
+      }
+
+      .trace-viewer-battlefield-slot.is-hit .trace-viewer-battlefield-card {
+        animation: cloudArenaBattleHit 260ms ease-out both;
+        transform-origin: 50% 84%;
+      }
+
+      .cloud-arena-permanent-death-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        display: grid;
+        place-items: start;
+        pointer-events: none;
+      }
+
+      .cloud-arena-permanent-death-card {
+        animation: cloudArenaBattleDeath 760ms ease-out both;
+        transform-origin: 50% 72%;
+        filter: saturate(0.88) brightness(1.02);
+      }
+
+      .cloud-arena-permanent-death-card .card-face {
+        box-shadow:
+          0 12px 18px rgba(28, 23, 19, 0.12),
+          inset 0 0 0 3px rgba(14, 11, 9, 0.92),
+          inset 0 0 0 2px var(--card-highlight),
+          inset 0 0 0 4px rgba(255, 255, 255, 0.14);
+      }
+
+      @keyframes cloudArenaBattleAttackRight {
+        0% {
+          transform: translateY(0) scale(1) rotate(0deg);
+          filter: saturate(1);
+        }
+
+        18% {
+          transform: translate(4px, -4px) scale(1.02) rotate(-1deg);
+          filter: saturate(1.1) brightness(1.04);
+        }
+
+        42% {
+          transform: translate(28px, -14px) scale(1.11) rotate(-5deg);
+          filter: saturate(1.18) brightness(1.1);
+          box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.14), 0 24px 34px rgba(28, 23, 19, 0.18);
+        }
+
+        68% {
+          transform: translate(12px, -6px) scale(1.04) rotate(-2deg);
+        }
+
+        100% {
+          transform: translateY(0) scale(1) rotate(0deg);
+          filter: saturate(1);
+          box-shadow: none;
+        }
+      }
+
+      @keyframes cloudArenaBattleAttackLeft {
+        0% {
+          transform: translateY(0) scale(1) rotate(0deg);
+          filter: saturate(1);
+        }
+
+        18% {
+          transform: translate(-4px, -4px) scale(1.02) rotate(1deg);
+          filter: saturate(1.1) brightness(1.04);
+        }
+
+        42% {
+          transform: translate(-28px, -14px) scale(1.11) rotate(5deg);
+          filter: saturate(1.18) brightness(1.1);
+          box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.14), 0 24px 34px rgba(28, 23, 19, 0.18);
+        }
+
+        68% {
+          transform: translate(-12px, -6px) scale(1.04) rotate(2deg);
+        }
+
+        100% {
+          transform: translateY(0) scale(1) rotate(0deg);
+          filter: saturate(1);
+          box-shadow: none;
+        }
+      }
+
+      @keyframes cloudArenaBattleHit {
+        0% {
+          transform: translateX(0) scale(1);
+          filter: brightness(1) saturate(1);
+          box-shadow: none;
+        }
+
+        18% {
+          transform: translateX(-4px) scale(0.995);
+          filter: brightness(1.1) saturate(1.12);
+          box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.18);
+        }
+
+        36% {
+          transform: translateX(4px) scale(1.01);
+        }
+
+        54% {
+          transform: translateX(-2px) scale(0.998);
+        }
+
+        72% {
+          transform: translateX(1px) scale(1.005);
+        }
+
+        100% {
+          transform: translateX(0) scale(1);
+          filter: brightness(1) saturate(1);
+          box-shadow: none;
+        }
+      }
+
+      @keyframes cloudArenaBattleDeath {
+        0% {
+          transform: translateY(0) scale(1) rotate(0deg);
+          opacity: 1;
+          filter: saturate(1) brightness(1);
+        }
+
+        35% {
+          transform: translateY(4px) scale(0.985) rotate(-1deg);
+          opacity: 0.9;
+          filter: saturate(0.88) brightness(1.06);
+        }
+
+        68% {
+          transform: translateY(18px) scale(0.9) rotate(-4deg);
+          opacity: 0.38;
+          filter: saturate(0.6) brightness(0.95) blur(0.6px);
+        }
+
+        100% {
+          transform: translateY(28px) scale(0.78) rotate(-6deg);
+          opacity: 0;
+          filter: saturate(0.45) brightness(0.9) blur(1px);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .trace-viewer-battlefield-slot.is-attacking .trace-viewer-battlefield-card,
+        .trace-viewer-battlefield-slot.is-hit .trace-viewer-battlefield-card,
+        .cloud-arena-permanent-death-card {
+          animation: none;
+        }
       }
 
       .cloud-arena-permanent-intent-bubble {
@@ -1329,7 +1589,7 @@ export function renderCloudArcanumWebHtml(
         }
 
         .trace-viewer-hand-scroll {
-          --hand-card-stack-x-scale: 0.72;
+          --hand-card-stack-x-scale: 0.7;
           --hand-card-stack-y-scale: 0.82;
           --hand-card-stack-tilt-scale: 0.8;
         }
@@ -1352,7 +1612,7 @@ export function renderCloudArcanumWebHtml(
 
       @media (max-width: 639px) {
         .trace-viewer-hand-scroll {
-          --hand-card-stack-x-scale: 0.5;
+          --hand-card-stack-x-scale: 0.55;
           --hand-card-stack-y-scale: 0.72;
           --hand-card-stack-tilt-scale: 0.68;
         }
@@ -1525,11 +1785,32 @@ export function renderCloudArcanumWebHtml(
       }
 
       .display-card-shell.is-exhausted {
-        opacity: 0.58;
+        position: relative;
+        filter: grayscale(0.9) saturate(0.72) brightness(0.94) contrast(0.92);
+        box-shadow:
+          inset 0 0 0 1px rgba(120, 94, 62, 0.18),
+          0 10px 24px rgba(98, 57, 18, 0.08);
+      }
+
+      .display-card-shell.is-exhausted::after,
+      .display-card-shell.is-tapped::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        background:
+          linear-gradient(180deg, rgba(120, 94, 62, 0.1), rgba(120, 94, 62, 0.03)),
+          repeating-linear-gradient(135deg, rgba(120, 94, 62, 0.08) 0 0.45rem, transparent 0.45rem 0.95rem);
+        box-shadow: inset 0 0 0 1px rgba(120, 94, 62, 0.12);
       }
 
       .display-card-shell.is-tapped {
-        opacity: 0.58;
+        position: relative;
+        filter: grayscale(0.9) saturate(0.72) brightness(0.94) contrast(0.92);
+        box-shadow:
+          inset 0 0 0 1px rgba(120, 94, 62, 0.18),
+          0 10px 24px rgba(98, 57, 18, 0.08);
       }
 
       .display-card-character-layout {
@@ -1942,10 +2223,11 @@ export function renderCloudArcanumWebHtml(
       .cloud-arena-hand-card-shell {
         flex: 0 0 auto;
         position: relative;
+        z-index: var(--hand-card-stack-z, 0);
         padding-bottom: 1.8rem;
         scroll-snap-align: start;
-        margin-inline-start: calc(
-          var(--hand-card-stack-shift, 0rem) * var(--hand-card-stack-x-scale, 1) * -1
+        inset-inline-start: calc(
+          var(--hand-card-stack-shift, 0rem) * var(--hand-card-stack-x-scale, 1) * var(--hand-card-stack-index, 0) * -1
         );
         margin-block-start: calc(var(--hand-card-stack-lift, 0rem) * var(--hand-card-stack-y-scale, 1));
         transform: translate3d(0, 0, 0)
@@ -1957,13 +2239,9 @@ export function renderCloudArcanumWebHtml(
         will-change: transform;
       }
 
-      .cloud-arena-hand-card-shell:first-child {
-        margin-inline-start: 0;
-      }
-
       .cloud-arena-hand-card-shell:hover,
       .cloud-arena-hand-card-shell:focus-within {
-        z-index: 999;
+        z-index: 1000;
         filter: saturate(1.03);
         transform:
           translate3d(0, calc(var(--hand-card-stack-lift, 0rem) * -1.15), 0)
@@ -2495,7 +2773,7 @@ export function renderCloudArcanumWebHtml(
         --card-rules-font: "Baskerville", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
         --card-title-size: clamp(0.8rem, 5.8cqw, 1.42rem);
         --card-typeline-size: clamp(0.68rem, 3.8cqw, 0.84rem);
-        --card-rules-size: clamp(0.68rem, 3.9cqw, 0.9rem);
+        --card-rules-size: clamp(0.78rem, 4.4cqw, 1.02rem);
         --card-footer-size: clamp(0.5rem, 2.55cqw, 0.62rem);
         display: grid;
         gap: 0.35rem;
@@ -3156,7 +3434,7 @@ export function renderCloudArcanumWebHtml(
       .card-face-rules-line {
         display: -webkit-box;
         overflow: hidden;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         text-wrap: pretty;
       }
@@ -3164,7 +3442,7 @@ export function renderCloudArcanumWebHtml(
       .card-face-rules-line.is-flavor {
         font-style: italic;
         color: color-mix(in srgb, #2d2416 78%, var(--card-accent) 22%);
-        -webkit-line-clamp: 3;
+        -webkit-line-clamp: 4;
       }
 
       .card-face-rules-line.has-flavor-divider {

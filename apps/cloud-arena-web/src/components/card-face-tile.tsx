@@ -128,7 +128,7 @@ export function buildRulesPreview(
 
   if (oracleLines.length > 0) {
     const previewLines: RulesPreviewLine[] = oracleLines
-      .slice(0, card.flavorText ? 2 : 3)
+      .slice(0, card.flavorText ? 3 : 4)
       .map((line) => ({
         kind: "oracle" as const,
         text: line,

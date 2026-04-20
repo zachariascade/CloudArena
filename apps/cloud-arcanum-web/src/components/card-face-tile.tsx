@@ -19,7 +19,7 @@ import manaWSymbol from "../assets/mtg-symbols/mana/W.svg";
 import rarityExpansionSymbol from "../assets/mtg-symbols/rarity/expansion.svg";
 
 export type RulesPreviewLine = {
-  kind: "oracle" | "flavor";
+  kind: "oracle";
   text: string;
 };
 
@@ -85,30 +85,10 @@ export function buildRulesPreview(
     : [];
 
   if (oracleLines.length > 0) {
-    const previewLines: RulesPreviewLine[] = oracleLines
-      .slice(0, card.flavorText ? 2 : 3)
-      .map((line) => ({
-        kind: "oracle" as const,
-        text: line,
-      }));
-
-    if (card.flavorText) {
-      previewLines.push({
-        kind: "flavor",
-        text: card.flavorText,
-      });
-    }
-
-    return previewLines;
-  }
-
-  if (card.flavorText) {
-    return [
-      {
-        kind: "flavor",
-        text: card.flavorText,
-      },
-    ];
+    return oracleLines.slice(0, 4).map((line) => ({
+      kind: "oracle" as const,
+      text: line,
+    }));
   }
 
   return [
@@ -318,9 +298,6 @@ export function CardFaceTile({
   const dialogId = useId();
   const rulesPreview = buildRulesPreview(card);
   const stats = buildCardFaceStats(card);
-  const hasFlavorDivider =
-    rulesPreview.some((line) => line.kind === "oracle") &&
-    rulesPreview.some((line) => line.kind === "flavor");
   const displayName = formatCardDisplayName(card.name, card.title);
   const frameTone = buildFrameTone(card);
   const stateClasses = [
@@ -412,13 +389,7 @@ export function CardFaceTile({
         {rulesPreview.map((line) => (
           <p
             key={`${line.kind}:${line.text}`}
-            className={[
-              "card-face-rules-line",
-              line.kind === "flavor" ? "is-flavor" : null,
-              line.kind === "flavor" && hasFlavorDivider ? "has-flavor-divider" : null,
-            ]
-              .filter(Boolean)
-              .join(" ")}
+            className="card-face-rules-line"
           >
             {renderRulesText(line.text)}
           </p>

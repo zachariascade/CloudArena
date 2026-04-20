@@ -5,8 +5,6 @@ import type {
 } from "../../../../src/cloud-arcanum/api-contract.js";
 import {
   buildDisplayCardModel,
-  buildDisplayCardSections,
-  getDisplayCardSection,
   type DisplayCardAction,
   type DisplayCardImage,
   type DisplayCardModel,
@@ -22,11 +20,10 @@ export type {
   DisplayCardModel,
   DisplayCardStat,
   DisplayCardTextBlock,
-  DisplayCardSection,
   DisplayCardVariant,
 } from "../../../../src/presentation/display-card.js";
 
-export { buildDisplayCardModel, buildDisplayCardSections, getDisplayCardSection };
+export { buildDisplayCardModel };
 
 type CloudArcanumDisplayCardInput = {
   id?: string;
@@ -138,7 +135,7 @@ export function mapCloudArcanumCardToDisplayCard(
       oracleText: card.oracleText,
       flavorText: card.flavorText,
     }).map((entry): DisplayCardTextBlock => ({
-      kind: entry.kind === "oracle" ? "rules" : "flavor",
+      kind: "rules",
       text: entry.text,
     })),
     badges: [status],

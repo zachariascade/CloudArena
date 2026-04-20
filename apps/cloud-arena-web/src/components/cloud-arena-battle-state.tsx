@@ -2,6 +2,11 @@ import type { FocusEvent, MouseEvent, ReactElement } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { CloudArenaBattleViewModel } from "../lib/cloud-arena-battle-view-model.js";
+import {
+  getBattleMotionDiff,
+  getBattleMotionOverlayKey,
+  type CloudArenaBattleMotionState,
+} from "../lib/cloud-arena-battle-motion.js";
 import { CloudArenaBattlefieldPanel } from "./cloud-arena-battlefield-panel.js";
 import { CloudArenaHandTray } from "./cloud-arena-hand-tray.js";
 import { CloudArenaInspectorPanel } from "./cloud-arena-inspector-panel.js";
@@ -14,7 +19,7 @@ import {
   mapArenaHandCardToDisplayCard,
   mapArenaPermanentToDisplayCard,
   mapArenaPlayerToDisplayCard,
-} from "../lib/cloud-arena-display-card.js";
+} from "../lib/display-card.js";
 import type {
   BattleAction,
   ActivatedAbilityActionId,
@@ -51,6 +56,8 @@ export function CloudArenaBattleState({
 }: CloudArenaBattleStateProps): ReactElement {
   const battleWindowRef = useRef<HTMLDivElement | null>(null);
   const battleMainRef = useRef<HTMLDivElement | null>(null);
+  const previousBattleRef = useRef<CloudArenaBattleViewModel | null>(null);
+  const animationTimersRef = useRef<Record<string, number>>({});
   const playableHandCards = new Set(playableHandCardInstanceIds);
   const enemyBattlefield = battle.enemyBattlefield ?? Array.from({ length: battle.battlefield.length }, () => null);
   const playerCard = mapArenaPlayerToDisplayCard(battle.player);
@@ -61,6 +68,11 @@ export function CloudArenaBattleState({
     top: number;
   } | null>(null);
   const [openPermanentMenuId, setOpenPermanentMenuId] = useState<string | null>(null);
+  const [motionState, setMotionState] = useState<CloudArenaBattleMotionState>({
+    attackIds: {},
+    hitIds: {},
+    deathOverlays: {},
+  });
   const groupedTurnActions = turnActions.length > 0
     ? turnActions
     : battle.actionGroups.turn.map((entry) => ({
@@ -108,7 +120,105 @@ export function CloudArenaBattleState({
       return "Equip";
     }
 
+    if (action.activation.actionId === "gain_energy") {
+      return "Gain Energy";
+    }
+
     return action.activation.actionId.replace(/_/g, " ");
+  }
+
+  function clearMotionTimer(key: string): void {
+    const existingTimer = animationTimersRef.current[key];
+
+    if (existingTimer !== undefined) {
+      window.clearTimeout(existingTimer);
+      delete animationTimersRef.current[key];
+    }
+  }
+
+  function playAttackAnimation(attackId: string, durationMs: number): void {
+    const key = `attack:${attackId}`;
+    clearMotionTimer(key);
+
+    setMotionState((current) => ({
+      ...current,
+      attackIds: {
+        ...current.attackIds,
+        [attackId]: true,
+      },
+    }));
+
+    animationTimersRef.current[key] = window.setTimeout(() => {
+      setMotionState((current) => {
+        if (!(attackId in current.attackIds)) {
+          return current;
+        }
+
+        const attackIds = { ...current.attackIds };
+        delete attackIds[attackId];
+        return { ...current, attackIds };
+      });
+
+      delete animationTimersRef.current[key];
+    }, durationMs);
+  }
+
+  function playHitAnimation(hitId: string, durationMs: number): void {
+    const key = `hit:${hitId}`;
+    clearMotionTimer(key);
+
+    setMotionState((current) => ({
+      ...current,
+      hitIds: {
+        ...current.hitIds,
+        [hitId]: true,
+      },
+    }));
+
+    animationTimersRef.current[key] = window.setTimeout(() => {
+      setMotionState((current) => {
+        if (!(hitId in current.hitIds)) {
+          return current;
+        }
+
+        const hitIds = { ...current.hitIds };
+        delete hitIds[hitId];
+        return { ...current, hitIds };
+      });
+
+      delete animationTimersRef.current[key];
+    }, durationMs);
+  }
+
+  function playDeathAnimation(
+    overlayKey: string,
+    durationMs: number,
+    overlay: CloudArenaBattleMotionState["deathOverlays"][string],
+  ): void {
+    const key = `death:${overlayKey}`;
+    clearMotionTimer(key);
+
+    setMotionState((current) => ({
+      ...current,
+      deathOverlays: {
+        ...current.deathOverlays,
+        [overlayKey]: overlay,
+      },
+    }));
+
+    animationTimersRef.current[key] = window.setTimeout(() => {
+      setMotionState((current) => {
+        if (!(overlayKey in current.deathOverlays)) {
+          return current;
+        }
+
+        const deathOverlays = { ...current.deathOverlays };
+        delete deathOverlays[overlayKey];
+        return { ...current, deathOverlays };
+      });
+
+      delete animationTimersRef.current[key];
+    }, durationMs);
   }
 
   const inspectableModels = useMemo(() => {
@@ -172,6 +282,56 @@ export function CloudArenaBattleState({
     playableHandCards,
     playerCard,
   ]);
+
+  useEffect(() => {
+    const previousBattle = previousBattleRef.current;
+    previousBattleRef.current = battle;
+
+    if (!previousBattle) {
+      return () => undefined;
+    }
+
+    const previousPendingTargetRequest = previousBattle.pendingTargetRequest;
+    const currentPendingTargetRequest = battle.pendingTargetRequest;
+    const resolvedAttackSourceId =
+      previousPendingTargetRequest &&
+      !currentPendingTargetRequest &&
+      previousPendingTargetRequest.targetKind === "permanent" &&
+      previousPendingTargetRequest.context?.abilitySourcePermanentId &&
+      previousPendingTargetRequest.prompt.toLowerCase().includes("attack")
+        ? previousPendingTargetRequest.context.abilitySourcePermanentId
+        : null;
+
+    if (resolvedAttackSourceId) {
+      playAttackAnimation(resolvedAttackSourceId, 560);
+    }
+
+    const diff = getBattleMotionDiff(previousBattle, battle);
+
+    if (!resolvedAttackSourceId) {
+      for (const attackId of diff.attackIds) {
+        playAttackAnimation(attackId, 420);
+      }
+    }
+
+    for (const hitId of diff.hitIds) {
+      playHitAnimation(hitId, 260);
+    }
+
+    for (const overlay of diff.deathOverlays) {
+      const overlayKey = getBattleMotionOverlayKey(overlay);
+      playDeathAnimation(overlayKey, 760, overlay);
+    }
+
+    return () => undefined;
+  }, [battle]);
+
+  useEffect(() => () => {
+    for (const timerId of Object.values(animationTimersRef.current)) {
+      window.clearTimeout(timerId);
+    }
+    animationTimersRef.current = {};
+  }, []);
 
   const getInspectableModel = (key: string) => inspectableModels.get(key) ?? enemyCard;
   const hoveredInspectorDefinitionJson = hoveredInspectorKey
@@ -397,15 +557,16 @@ export function CloudArenaBattleState({
       <div ref={battleWindowRef} className="cloud-arena-battle-window">
         <div ref={battleMainRef} className="cloud-arena-battle-main">
           <div className="cloud-arena-battlefield-stage">
-            <CloudArenaBattlefieldPanel
-              zoneKeyPrefix="battlefield"
-              battlefield={battle.battlefield}
-              legalActions={battle.legalActions}
-              getInspectableModel={getInspectableModel}
-              getPermanentMenuActions={getPermanentMenuActions}
-              getPermanentCounterEntries={getPermanentCounterEntries}
-              bindInspectorInteractions={bindInspectorInteractions}
-              onOpenDetails={handleDetailsClick}
+          <CloudArenaBattlefieldPanel
+            zoneKeyPrefix="battlefield"
+            battlefield={battle.battlefield}
+            legalActions={battle.legalActions}
+            motionState={motionState}
+            getInspectableModel={getInspectableModel}
+            getPermanentMenuActions={getPermanentMenuActions}
+            getPermanentCounterEntries={getPermanentCounterEntries}
+            bindInspectorInteractions={bindInspectorInteractions}
+            onOpenDetails={handleDetailsClick}
               openPermanentMenuId={openPermanentMenuId}
               onPermanentMenuToggle={(permanentId) =>
                 setOpenPermanentMenuId((current) => (current === permanentId ? null : permanentId))}
@@ -413,14 +574,15 @@ export function CloudArenaBattleState({
               onTargetPermanentSelect={onTurnAction}
             />
 
-            <CloudArenaBattlefieldPanel
-              zoneKeyPrefix="enemy_battlefield"
-              battlefield={enemyBattlefield}
-              legalActions={battle.legalActions}
-              getInspectableModel={getInspectableModel}
-              getPermanentMenuActions={() => []}
-              getPermanentCounterEntries={getPermanentCounterEntries}
-              bindInspectorInteractions={bindInspectorInteractions}
+          <CloudArenaBattlefieldPanel
+            zoneKeyPrefix="enemy_battlefield"
+            battlefield={enemyBattlefield}
+            legalActions={battle.legalActions}
+            motionState={motionState}
+            getInspectableModel={getInspectableModel}
+            getPermanentMenuActions={() => []}
+            getPermanentCounterEntries={getPermanentCounterEntries}
+            bindInspectorInteractions={bindInspectorInteractions}
               onOpenDetails={handleDetailsClick}
               onTargetPermanentSelect={onTurnAction}
             />

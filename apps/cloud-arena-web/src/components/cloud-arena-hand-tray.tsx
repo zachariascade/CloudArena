@@ -7,7 +7,7 @@ import { DisplayCard } from "./display-card.js";
 import {
   mapArenaGraveyardCardToDisplayCard,
   mapArenaHandCardToDisplayCard,
-} from "../lib/cloud-arena-display-card.js";
+} from "../lib/display-card.js";
 import type { BattleAction } from "../../../../src/cloud-arena/index.js";
 
 type PileKind = "draw" | "discard" | "graveyard";
@@ -69,6 +69,7 @@ export function CloudArenaHandTray({
   onInspectPlayer,
 }: CloudArenaHandTrayProps): ReactElement {
   const [openPile, setOpenPile] = useState<PileKind | null>(null);
+  const pendingHandCardInstanceId = battle.pendingTargetRequest?.context?.pendingCardPlay?.instanceId ?? null;
   const isSelectingGraveyardCard =
     battle.pendingTargetRequest?.targetKind === "card" &&
     battle.pendingTargetRequest.selector.zone === "graveyard";
@@ -283,10 +284,11 @@ export function CloudArenaHandTray({
               const isPlayable = isPlayableHandCard(card.instanceId);
               const stackSlot = Math.min(index, 8);
               const cardStyle: CSSProperties & Record<string, string | number> = {
-                zIndex: index + 1,
-                ["--hand-card-stack-shift"]: `${stackSlot * 0.42}rem`,
-                ["--hand-card-stack-lift"]: `${stackSlot * 0.08}rem`,
-                ["--hand-card-stack-tilt"]: `${((index % 5) - 2) * 0.22}deg`,
+                ["--hand-card-stack-index"]: stackSlot,
+                ["--hand-card-stack-shift"]: `calc(var(--display-card-width) * .45)`,
+                ["--hand-card-stack-lift"]: `${stackSlot * 0.1}rem`,
+                ["--hand-card-stack-tilt"]: `${((index % 5) - 2) * 0.55}deg`,
+                ["--hand-card-stack-z"]: battle.player.hand.length - index,
               };
 
               return (
@@ -297,7 +299,16 @@ export function CloudArenaHandTray({
                   {...bindInspectorInteractions(`hand:${card.instanceId}`)}
                 >
                   <DisplayCard
-                    className={`trace-viewer-hand-card ${isPlayable ? "trace-viewer-hand-card-playable" : "trace-viewer-hand-card-disabled"} cloud-arena-hand-card`.trim()}
+                    className={[
+                      "trace-viewer-hand-card",
+                      isPlayable ? "trace-viewer-hand-card-playable" : "trace-viewer-hand-card-disabled",
+                      card.instanceId === pendingHandCardInstanceId
+                        ? "trace-viewer-hand-card-pending"
+                        : null,
+                      "cloud-arena-hand-card",
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
                     model={getInspectableModel(`hand:${card.instanceId}`)}
                   />
                   <button

@@ -23,7 +23,7 @@ export {
   mapArenaHandCardToDisplayCard,
   mapArenaPermanentToDisplayCard,
   mapArenaPlayerToDisplayCard,
-} from "./cloud-arena-display-card.js";
+} from "./display-card.js";
 export type {
   DisplayCardAction,
   DisplayCardImage,

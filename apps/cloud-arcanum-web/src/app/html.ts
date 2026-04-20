@@ -978,7 +978,7 @@ export function renderCloudArcanumWebHtml(
         --card-face-padding: clamp(0.28rem, 1.5cqw, 0.45rem);
         --card-title-size: clamp(0.62rem, 4.4cqw, 1.08rem);
         --card-typeline-size: clamp(0.55rem, 3cqw, 0.72rem);
-        --card-rules-size: clamp(0.56rem, 3.1cqw, 0.74rem);
+        --card-rules-size: clamp(0.66rem, 3.6cqw, 0.88rem);
         --card-footer-size: clamp(0.42rem, 2.1cqw, 0.52rem);
       }
 
@@ -999,7 +999,7 @@ export function renderCloudArcanumWebHtml(
         --card-rules-font: "Baskerville", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
         --card-title-size: clamp(0.8rem, 5.8cqw, 1.42rem);
         --card-typeline-size: clamp(0.68rem, 3.8cqw, 0.84rem);
-        --card-rules-size: clamp(0.68rem, 3.9cqw, 0.9rem);
+        --card-rules-size: clamp(0.78rem, 4.4cqw, 1.02rem);
         --card-footer-size: clamp(0.5rem, 2.55cqw, 0.62rem);
         display: grid;
         gap: 0.35rem;
@@ -1740,7 +1740,7 @@ export function renderCloudArcanumWebHtml(
       .card-face-rules-line {
         display: -webkit-box;
         overflow: hidden;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         text-wrap: pretty;
       }
@@ -1748,7 +1748,7 @@ export function renderCloudArcanumWebHtml(
       .card-face-rules-line.is-flavor {
         font-style: italic;
         color: color-mix(in srgb, #2d2416 78%, var(--card-accent) 22%);
-        -webkit-line-clamp: 3;
+        -webkit-line-clamp: 4;
       }
 
       .card-face-rules-line.has-flavor-divider {
@@ -2452,7 +2452,7 @@ export function renderCloudArcanumWebHtml(
           --card-face-padding: 0.1in;
           --card-title-size: 0.105in;
           --card-typeline-size: 0.075in;
-          --card-rules-size: 0.07in;
+          --card-rules-size: 0.085in;
           --card-footer-size: 0.05in;
         }
 

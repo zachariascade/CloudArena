@@ -14,8 +14,15 @@ import {
   mapArenaHandCardToDisplayCard,
   mapArenaPermanentToDisplayCard,
   mapArenaPlayerToDisplayCard,
-} from "../apps/cloud-arena-web/src/lib/cloud-arena-display-card.js";
+} from "../apps/cloud-arena-web/src/lib/display-card.js";
 import type { CloudArenaBattleViewModel } from "../apps/cloud-arena-web/src/lib/cloud-arena-battle-view-model.js";
+import type { CloudArenaBattleMotionState } from "../apps/cloud-arena-web/src/lib/cloud-arena-battle-motion.js";
+
+const EMPTY_BATTLE_MOTION_STATE: CloudArenaBattleMotionState = {
+  attackIds: {},
+  hitIds: {},
+  deathOverlays: {},
+};
 
 describe("shared display card mappers", () => {
   it("maps a Cloud Arcanum card into the mtg display model", () => {
@@ -80,7 +87,7 @@ describe("shared display card mappers", () => {
     });
 
     expect(player.variant).toBe("player");
-    expect(player.name).toBe("Pilgrim Duelist");
+    expect(player.name).toBe("Player");
     expect(player.title).toBe("Vanguard of the Arena");
     expect(player.image?.url).toContain("/images/cards/card_0021_adam_first_of_dust.jpg");
     expect(player.footerStat).toBeNull();
@@ -96,25 +103,13 @@ describe("shared display card mappers", () => {
     });
     expect(player.stats.find((entry) => entry.label === "HP")).toBeUndefined();
     expect(player.stats.find((entry) => entry.label === "Energy")).toBeUndefined();
-    expect(player.sections.map((section) => section.kind)).toEqual([
-      "identity",
-      "art",
-      "summary",
-      "combat",
-      "stats",
-      "status",
-      "actions",
-      "metadata",
-    ]);
-    expect(player.sections.find((section) => section.kind === "combat")).toMatchObject({
-      healthBar: {
-        current: 28,
-        max: 30,
-      },
-      energyBar: {
-        current: 2,
-        max: 3,
-      },
+    expect(player.healthBar).toMatchObject({
+      current: 28,
+      max: 30,
+    });
+    expect(player.energyBar).toMatchObject({
+      current: 2,
+      max: 3,
     });
     expect(enemy.variant).toBe("enemy");
     expect(enemy.title).toBe("Harbinger of Attrition");
@@ -128,10 +123,98 @@ describe("shared display card mappers", () => {
     expect(enemy.stats.find((entry) => entry.label === "HP")).toBeUndefined();
     expect(enemy.textBlocks[0]?.text).toContain("is preparing attack 10 x2");
     expect(enemy.textBlocks.some((entry) => entry.kind === "intent" && entry.text === "Next: defend 4")).toBe(true);
-    expect(enemy.sections.find((section) => section.kind === "status")).toMatchObject({
-      statusLabel: "enemy",
-      badges: ["boss"],
-    });
+    expect(enemy.statusLabel).toBe("enemy");
+    expect(enemy.badges).toEqual(["boss"]);
+    expect(enemy.statusTone).toBe("draft");
+  });
+
+  it("maps Radiant Conduit as a creature in the arena hand face", () => {
+    const conduit = mapArenaHandCardToDisplayCard(
+      {
+        instanceId: "card_1",
+        definitionId: "radiant_conduit",
+        name: "Radiant Conduit",
+        cost: 2,
+        effectSummary: "Tap: Gain 1 energy.",
+      },
+      {
+        isPlayable: true,
+      },
+    );
+
+    expect(conduit.subtitle).toBe("Creature - Angel");
+    expect(conduit.title).toBe("Radiant Conduit");
+    expect(conduit.textBlocks[0]?.text).toBe("Tap: Gain 1 energy.");
+    expect(conduit.image?.url).toContain("/images/cards/2B5A00FD-D279-48BD-AEFE-0711AC4E9F54.jpeg");
+  });
+
+  it("uses local art for the remaining arena hand spells", () => {
+    const battlefieldInsight = mapArenaHandCardToDisplayCard(
+      {
+        instanceId: "card_3",
+        definitionId: "battlefield_insight",
+        name: "Battlefield Insight",
+        cost: 2,
+        effectSummary: "Draw a card for each creature you control.",
+      },
+      { isPlayable: true },
+    );
+    const restorativeTouch = mapArenaHandCardToDisplayCard(
+      {
+        instanceId: "card_4",
+        definitionId: "restorative_touch",
+        name: "Restorative Touch",
+        cost: 1,
+        effectSummary: "Heal 3 to a permanent.",
+      },
+      { isPlayable: true },
+    );
+    const targetedStrike = mapArenaHandCardToDisplayCard(
+      {
+        instanceId: "card_5",
+        definitionId: "targeted_strike",
+        name: "Targeted Strike",
+        cost: 1,
+        effectSummary: "Deal 4 damage to a chosen enemy.",
+      },
+      { isPlayable: true },
+    );
+    const stunningRebuke = mapArenaHandCardToDisplayCard(
+      {
+        instanceId: "card_6",
+        definitionId: "stunning_rebuke",
+        name: "Stunning Rebuke",
+        cost: 2,
+        effectSummary: "Stun the enemy.",
+      },
+      { isPlayable: true },
+    );
+
+    expect(battlefieldInsight.image?.url).toContain("/images/cards/card_0037_builder_of_the_tower.jpg");
+    expect(restorativeTouch.image?.url).toContain("/images/cards/card_0030_tree_of_life.jpg");
+    expect(targetedStrike.image?.url).toContain("/images/cards/card_0023_cain_marked_exile.jpg");
+    expect(stunningRebuke.image?.url).toContain("/images/cards/card_0032_flaming_sword_of_the_east.png");
+  });
+
+  it("maps Armory Seraph as a creature in the arena hand face", () => {
+    const seraph = mapArenaHandCardToDisplayCard(
+      {
+        instanceId: "card_2",
+        definitionId: "armory_seraph",
+        name: "Armory Seraph",
+        cost: 3,
+        effectSummary: "Whenever an equipment you control enters the battlefield, draw a card.",
+      },
+      {
+        isPlayable: true,
+      },
+    );
+
+    expect(seraph.subtitle).toBe("Creature - Angel");
+    expect(seraph.title).toBe("Armory Seraph");
+    expect(seraph.textBlocks[0]?.text).toBe(
+      "Whenever an equipment you control enters the battlefield, draw a card.",
+    );
   });
 
   it("uses imp and grunt art for arena battle pieces", () => {
@@ -156,14 +239,80 @@ describe("shared display card mappers", () => {
       health: 18,
       maxHealth: 18,
       block: 0,
+      leaderDefinitionId: "enemy_grunt_demon",
       intent: { attackAmount: 5 },
       intentLabel: "attack 5",
     });
 
-    expect(imp.image?.url).toContain("/images/cards/token_imp.svg");
+    expect(imp.image?.url).toContain("/images/cards/38790FFE-A07F-43DA-ACBD-AFAED530BB8E.jpeg");
     expect(imp.image?.alt).toContain("imp");
     expect(grunt.image?.url).toContain("/images/cards/grunt_demon.svg");
     expect(grunt.image?.alt).toContain("horned demon soldier");
+  });
+
+  it("uses the provided JPEG for Imp Caller art", () => {
+    const impCaller = mapArenaEnemyToDisplayCard({
+      name: "Imp Caller",
+      health: 20,
+      maxHealth: 20,
+      block: 0,
+      leaderDefinitionId: "enemy_imp_caller",
+      intent: { attackAmount: 3 },
+      intentLabel: "attack 3",
+      intentQueueLabels: ["attack 3", "spawn imp"],
+    });
+
+    expect(impCaller.image?.url).toContain("/images/cards/0AF7C779-AF9B-4662-82E4-F481882E7788.jpeg");
+    expect(impCaller.image?.alt).toContain("Imp Caller");
+    expect(impCaller.title).toBe("Imp Caller");
+  });
+
+  it("uses the provided JPEG for the Imp Caller battlefield leader", () => {
+    const impCallerLeader = mapArenaPermanentToDisplayCard({
+      instanceId: "enemy_leader_1",
+      sourceCardInstanceId: "enemy_leader_1",
+      definitionId: "enemy_imp_caller",
+      name: "Imp Caller",
+      controllerId: "enemy",
+      isCreature: true,
+      power: 3,
+      health: 20,
+      maxHealth: 20,
+      block: 0,
+      intentLabel: "attack 3",
+      intentQueueLabels: ["attack 3", "spawn imp"],
+      hasActedThisTurn: false,
+      isTapped: false,
+      isDefending: false,
+      slotIndex: 0,
+      actions: [],
+    });
+
+    expect(impCallerLeader.image?.url).toContain("/images/cards/0AF7C779-AF9B-4662-82E4-F481882E7788.jpeg");
+    expect(impCallerLeader.image?.alt).toContain("Imp Caller");
+  });
+
+  it("uses the suggested image for Garden of Earthly Delights", () => {
+    const garden = mapArenaPermanentToDisplayCard({
+      instanceId: "garden_1",
+      sourceCardInstanceId: "card_1",
+      definitionId: "garden_of_earthly_delights",
+      name: "Garden of Earthly Delights",
+      isCreature: false,
+      power: 0,
+      health: 5,
+      maxHealth: 5,
+      block: 0,
+      hasActedThisTurn: false,
+      isTapped: false,
+      isDefending: false,
+      slotIndex: 0,
+      actions: [],
+    });
+
+    expect(garden.image?.url).toContain("/images/cards/669F9BF4-F0AF-4A1B-9CB5-9A083E3EEEF9.jpeg");
+    expect(garden.image?.alt).toContain("Garden of Earthly Delights");
+    expect(garden.title).toBe("Garden of Earthly Delights");
   });
 
   it("maps arena hand cards and permanents with actions", () => {
@@ -175,7 +324,7 @@ describe("shared display card mappers", () => {
         definitionId: "guardian",
         name: "Guardian",
         cost: 3,
-        effectSummary: "Summon a guardian with 10 health.",
+        effectSummary: "Pay 1 energy: Gain 5 block.",
       },
       {
         isPlayable: true,
@@ -219,7 +368,7 @@ describe("shared display card mappers", () => {
     const enemyLeaderCard = mapArenaPermanentToDisplayCard({
       instanceId: "enemy_leader_1",
       sourceCardInstanceId: "enemy_leader_1",
-      definitionId: "enemy_leader",
+      definitionId: "enemy_grunt_demon",
       name: "Grunt Demon",
       controllerId: "enemy",
       isCreature: true,
@@ -248,16 +397,15 @@ describe("shared display card mappers", () => {
     expect(permanentCard.healthBar).toBeNull();
     expect(permanentCard.statusLabel).toBe("defending");
     expect(permanentCard.stats).toHaveLength(0);
-    expect(permanentCard.textBlocks.map((entry) => entry.text)).toContain(
-      "This card is set to intercept the next enemy assault.",
+    expect(permanentCard.textBlocks.map((entry) => entry.text)).toEqual(
+      handCard.textBlocks.map((entry) => entry.text),
     );
     expect(permanentCard.image?.url).toContain("/images/cards/card_0036_watcher_at_edens_gate.jpg");
     expect(permanentCard.badges).toHaveLength(0);
     expect(permanentCard.actions).toHaveLength(1);
     permanentCard.actions[0]?.onSelect?.();
     expect(onAttack).toHaveBeenCalledTimes(1);
-    expect(enemyLeaderCard.textBlocks.some((entry) => entry.kind === "intent" && entry.text.includes("attack 5"))).toBe(true);
-    expect(enemyLeaderCard.textBlocks.some((entry) => entry.kind === "intent" && entry.text === "Next: attack 7")).toBe(true);
+    expect(enemyLeaderCard.textBlocks.every((entry) => entry.kind === "rules")).toBe(true);
   });
 
   it("renders cost chips in the Cloud Arena battlefield action face", () => {
@@ -299,12 +447,13 @@ describe("shared display card mappers", () => {
     } as Parameters<typeof mapArenaPermanentToDisplayCard>[0];
 
     const panelHtml = renderToStaticMarkup(
-      createElement(CloudArenaBattlefieldPanel, {
-        battlefield: [battlefieldPermanent],
-        legalActions: [],
-        getInspectableModel: () => mapArenaPermanentToDisplayCard(battlefieldPermanent, {
-          playableActions: [],
-        }),
+        createElement(CloudArenaBattlefieldPanel, {
+          battlefield: [battlefieldPermanent],
+          legalActions: [],
+          motionState: EMPTY_BATTLE_MOTION_STATE,
+          getInspectableModel: () => mapArenaPermanentToDisplayCard(battlefieldPermanent, {
+            playableActions: [],
+          }),
         getPermanentMenuActions: () => [
           {
             action: "bless_target",
@@ -344,6 +493,190 @@ describe("shared display card mappers", () => {
     expect(panelHtml).toContain("T.svg");
   });
 
+  it("stacks attached equipment under the permanent that carries it", () => {
+    const hostPermanent = {
+      instanceId: "disciple_1",
+      sourceCardInstanceId: "card_1",
+      definitionId: "armory_disciple",
+      name: "Armory Disciple",
+      isCreature: true,
+      power: 2,
+      health: 4,
+      maxHealth: 4,
+      block: 0,
+      counters: {},
+      attachments: ["holy_blade_1"],
+      attachedTo: null,
+      hasActedThisTurn: false,
+      isTapped: false,
+      isDefending: false,
+      slotIndex: 0,
+      actions: [],
+    } as Parameters<typeof mapArenaPermanentToDisplayCard>[0];
+    const attachedEquipment = {
+      instanceId: "holy_blade_1",
+      sourceCardInstanceId: "card_2",
+      definitionId: "holy_blade",
+      name: "Holy Blade",
+      isCreature: false,
+      power: 1,
+      health: 1,
+      maxHealth: 1,
+      block: 0,
+      counters: {},
+      attachments: [],
+      attachedTo: "disciple_1",
+      hasActedThisTurn: false,
+      isTapped: false,
+      isDefending: false,
+      slotIndex: 1,
+      actions: [
+        {
+          id: "holy_blade_equip",
+          kind: "activated",
+          activation: { type: "action", actionId: "equip" },
+          targeting: { allowSelfTarget: false },
+          effects: [],
+        },
+      ],
+    } as Parameters<typeof mapArenaPermanentToDisplayCard>[0];
+
+    const html = renderToStaticMarkup(
+      createElement(CloudArenaBattlefieldPanel, {
+        battlefield: [hostPermanent, attachedEquipment],
+        legalActions: [],
+        motionState: EMPTY_BATTLE_MOTION_STATE,
+        getInspectableModel: (key) =>
+          key === "battlefield:disciple_1"
+            ? mapArenaPermanentToDisplayCard(hostPermanent, {})
+            : mapArenaPermanentToDisplayCard(attachedEquipment, {}),
+        getPermanentMenuActions: (permanent) =>
+          permanent.instanceId === "holy_blade_1"
+            ? [
+                {
+                  action: "equip",
+                  label: "Re-equip",
+                  costs: [{ type: "free" as const }],
+                  onSelect: () => undefined,
+                },
+              ]
+            : [],
+        getPermanentCounterEntries: () => [],
+        bindInspectorInteractions: () => ({
+          onMouseEnter: () => undefined,
+          onMouseLeave: () => undefined,
+          onFocus: () => undefined,
+          onBlur: () => undefined,
+          onClick: () => undefined,
+        }),
+        onOpenDetails: () => undefined,
+        openPermanentMenuId: "holy_blade_1",
+        onPermanentMenuToggle: () => undefined,
+        onPermanentMenuClose: () => undefined,
+        onTargetPermanentSelect: () => undefined,
+      }),
+    );
+
+    expect(html).toContain("cloud-arena-battlefield-active-attachment-overlay");
+    expect(html).toContain("Armory Disciple");
+    expect(html).toContain("Holy Blade");
+    expect(html).toContain("Re-equip");
+  });
+
+  it("only renders permanent intent bubbles for enemy battlefield permanents", () => {
+    const attackingPermanent = {
+      instanceId: "guardian_1",
+      sourceCardInstanceId: "card_1",
+      definitionId: "guardian",
+      name: "Guardian",
+      isCreature: true,
+      power: 4,
+      health: 10,
+      maxHealth: 10,
+      block: 0,
+      hasActedThisTurn: false,
+      isTapped: false,
+      isDefending: false,
+      slotIndex: 0,
+      intentLabel: "attack 4",
+      actions: [],
+    } as Parameters<typeof mapArenaPermanentToDisplayCard>[0];
+    const renderPanel = (zoneKeyPrefix?: "battlefield" | "enemy_battlefield") =>
+      renderToStaticMarkup(
+        createElement(CloudArenaBattlefieldPanel, {
+          zoneKeyPrefix,
+          battlefield: [attackingPermanent],
+          legalActions: [],
+          motionState: EMPTY_BATTLE_MOTION_STATE,
+          getInspectableModel: () => mapArenaPermanentToDisplayCard(attackingPermanent, {
+            playableActions: [],
+          }),
+          getPermanentMenuActions: () => [],
+          getPermanentCounterEntries: () => [],
+          bindInspectorInteractions: () => ({
+            onMouseEnter: () => undefined,
+            onMouseLeave: () => undefined,
+            onFocus: () => undefined,
+            onBlur: () => undefined,
+            onClick: () => undefined,
+          }),
+          onOpenDetails: () => undefined,
+          openPermanentMenuId: null,
+        }),
+      );
+
+    expect(renderPanel()).not.toContain("cloud-arena-permanent-intent-bubble");
+    expect(renderPanel("enemy_battlefield")).toContain("cloud-arena-permanent-intent-bubble");
+  });
+
+  it("only renders permanent counter chips for enemy battlefield permanents", () => {
+    const counteredPermanent = {
+      instanceId: "guide_1",
+      sourceCardInstanceId: "card_2",
+      definitionId: "sanctified_guide",
+      name: "Sanctified Guide",
+      isCreature: true,
+      power: 3,
+      health: 4,
+      maxHealth: 4,
+      block: 0,
+      counters: { "+1/+1": 1 },
+      hasActedThisTurn: false,
+      isTapped: false,
+      isDefending: false,
+      slotIndex: 0,
+      actions: [],
+    } as Parameters<typeof mapArenaPermanentToDisplayCard>[0];
+    const renderPanel = (zoneKeyPrefix?: "battlefield" | "enemy_battlefield") =>
+      renderToStaticMarkup(
+        createElement(CloudArenaBattlefieldPanel, {
+          zoneKeyPrefix,
+          battlefield: [counteredPermanent],
+          legalActions: [],
+          motionState: EMPTY_BATTLE_MOTION_STATE,
+          getInspectableModel: () => mapArenaPermanentToDisplayCard(counteredPermanent, {
+            playableActions: [],
+          }),
+          getPermanentMenuActions: () => [],
+          getPermanentCounterEntries: () => [{ counter: "+1/+1", amount: 1 }],
+          bindInspectorInteractions: () => ({
+            onMouseEnter: () => undefined,
+            onMouseLeave: () => undefined,
+            onFocus: () => undefined,
+            onBlur: () => undefined,
+            onClick: () => undefined,
+          }),
+          onOpenDetails: () => undefined,
+          openPermanentMenuId: null,
+        }),
+      );
+
+    expect(renderPanel()).not.toContain("trace-viewer-counter-row");
+    expect(renderPanel()).not.toContain("+1/+1 x1");
+    expect(renderPanel("enemy_battlefield")).toContain("trace-viewer-counter-row");
+    expect(renderPanel("enemy_battlefield")).toContain("+1/+1 x1");
+  });
+
   it("maps graveyard hymn as a creature instead of a spell", () => {
     const hymn = mapArenaHandCardToDisplayCard(
       {
@@ -351,7 +684,7 @@ describe("shared display card mappers", () => {
         definitionId: "graveyard_hymn",
         name: "Graveyard Hymn",
         cost: 2,
-        effectSummary: "When this dies, bless every permanent.",
+        effectSummary: "When this dies, each creature on the battlefield gets +1/+1.",
       },
       {
         isPlayable: true,
@@ -382,6 +715,9 @@ describe("shared display card mappers", () => {
     expect(hymn.title).toBe("Graveyard Hymn");
     expect(permanentHymn.title).toBe("Graveyard Hymn");
     expect(permanentHymn.subtitle).toBe("Creature - Angel");
+    expect(permanentHymn.textBlocks.map((entry) => entry.text)).toEqual(
+      hymn.textBlocks.map((entry) => entry.text),
+    );
   });
 
   it("renders details controls for hand cards and battlefield permanents", () => {
@@ -488,6 +824,7 @@ describe("shared display card mappers", () => {
         createElement(CloudArenaBattlefieldPanel, {
           battlefield: battle.battlefield,
           legalActions: [],
+          motionState: EMPTY_BATTLE_MOTION_STATE,
           getInspectableModel: (key) =>
             key === "battlefield:graveyard_hymn_1"
               ? mapArenaPermanentToDisplayCard(battle.battlefield[0]!, {})
@@ -669,13 +1006,77 @@ describe("shared display card mappers", () => {
     expect(bannerCard.name).toBe("Anointed Banner");
     expect(bannerCard.title).toBe("Consecrated Standard");
     expect(bannerCard.subtitle).toBe("Artifact");
-    expect(bannerCard.textBlocks.map((entry) => entry.text)).not.toContain(
-      "This guardian is ready to press the attack or hold the line.",
-    );
+    expect(bannerCard.textBlocks.some((entry) => entry.text.length > 0)).toBe(true);
   });
 });
 
 describe("shared display card component", () => {
+  it("does not repeat the name when no custom title is present", () => {
+    const html = renderToStaticMarkup(
+      createElement(DisplayCard, {
+        model: {
+          variant: "mtg",
+          name: "Plain Card",
+          title: null,
+          subtitle: "Instant",
+          frameTone: "white",
+          manaCost: "{1}",
+          image: null,
+          metaLine: null,
+          footerCode: "ARE",
+          footerCredit: "Cloud Arena",
+          collectorNumber: "P00",
+          footerStat: null,
+          healthBar: null,
+          energyBar: null,
+          statusLabel: null,
+          statusTone: undefined,
+          stats: [],
+          textBlocks: [],
+          badges: [],
+          actions: [],
+          stateFlags: [],
+        },
+      }),
+    );
+
+    expect(html).toContain(">Plain Card<");
+    expect(html).not.toContain(">Plain Card, Plain Card<");
+  });
+
+  it("does not repeat the name when the title matches the name", () => {
+    const html = renderToStaticMarkup(
+      createElement(DisplayCard, {
+        model: {
+          variant: "mtg",
+          name: "Radiant Conduit",
+          title: "Radiant Conduit",
+          subtitle: "Creature - Angel",
+          frameTone: "white",
+          manaCost: "{2}",
+          image: null,
+          metaLine: null,
+          footerCode: "ARE",
+          footerCredit: "Cloud Arena",
+          collectorNumber: "020",
+          footerStat: null,
+          healthBar: null,
+          energyBar: null,
+          statusLabel: null,
+          statusTone: undefined,
+          stats: [],
+          textBlocks: [],
+          badges: [],
+          actions: [],
+          stateFlags: [],
+        },
+      }),
+    );
+
+    expect(html).toContain("<h3>Radiant Conduit</h3>");
+    expect(html).not.toContain(">Radiant Conduit, Radiant Conduit<");
+  });
+
   it("renders mtg and arena variants without requiring identical fields", () => {
     const mtgHtml = renderToStaticMarkup(
       createElement(DisplayCard, {
@@ -799,7 +1200,7 @@ describe("shared display card component", () => {
     expect(mtgHtml).toContain("printable-card-face");
     expect(arenaHandHtml).toContain("card-face-stats-box");
     expect(arenaHandHtml).toContain(">4/4<");
-    expect(playerHtml).toContain("aria-label=\"Pilgrim Duelist energy\"");
+    expect(playerHtml).toContain("aria-label=\"Player energy\"");
     expect(playerHtml).toContain(">2/3<");
     expect(playerHtml).toContain("display-card-energy-segment is-filled");
     expect(playerHtml).toContain("display-card-energy-segment is-empty");
