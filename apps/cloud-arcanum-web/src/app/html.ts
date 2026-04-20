@@ -1694,6 +1694,19 @@ export function renderCloudArcanumWebHtml(
         container-type: inline-size;
       }
 
+      .card-catalog-preview-modal {
+        width: min(96vw, 42rem);
+      }
+
+      .card-catalog-preview-shell {
+        --display-card-width: min(68vw, 24rem);
+      }
+
+      .card-catalog-preview-card {
+        width: min(100%, var(--display-card-width));
+        justify-self: center;
+      }
+
       .card-preview-nav-left {
         justify-self: end;
       }

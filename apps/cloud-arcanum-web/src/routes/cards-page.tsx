@@ -1,4 +1,6 @@
 import type { ChangeEvent, CSSProperties, FormEvent, ReactElement } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useSearchParams, Link } from "react-router-dom";
 
 import type {
@@ -430,17 +432,130 @@ function SetThemePanel({
   );
 }
 
+function CardCatalogPreviewModal({
+  card,
+  hasNextCard,
+  hasPreviousCard,
+  onClose,
+  onShowNextCard,
+  onShowPreviousCard,
+}: {
+  card: CardListItem;
+  hasNextCard: boolean;
+  hasPreviousCard: boolean;
+  onClose: () => void;
+  onShowNextCard: () => void;
+  onShowPreviousCard: () => void;
+}): ReactElement | null {
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const dialogId = useId();
+
+  useEffect(() => {
+    closeButtonRef.current?.focus();
+
+    function handleKeyDown(event: KeyboardEvent): void {
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
+
+      if (event.key === "ArrowLeft" && hasPreviousCard) {
+        event.preventDefault();
+        onShowPreviousCard();
+        return;
+      }
+
+      if (event.key === "ArrowRight" && hasNextCard) {
+        event.preventDefault();
+        onShowNextCard();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [hasNextCard, hasPreviousCard, onClose, onShowNextCard, onShowPreviousCard]);
+
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  const modal = (
+    <div
+      className="card-preview-modal-backdrop"
+      onClick={onClose}
+      role="presentation"
+    >
+      <div
+        id={dialogId}
+        aria-label={`${card.name} preview`}
+        aria-modal="true"
+        className="card-preview-modal card-catalog-preview-modal"
+        onClick={(event) => event.stopPropagation()}
+        role="dialog"
+      >
+        <div className="card-preview-toolbar">
+          <button
+            aria-label="Close preview"
+            className="card-preview-close"
+            onClick={onClose}
+            ref={closeButtonRef}
+            type="button"
+          >
+            Close
+          </button>
+        </div>
+        <div className="card-preview-stage">
+          <button
+            aria-label="Previous card"
+            className="card-preview-nav card-preview-nav-left"
+            disabled={!hasPreviousCard}
+            onClick={onShowPreviousCard}
+            type="button"
+          >
+            ←
+          </button>
+          <div className="card-preview-shell card-catalog-preview-shell">
+            <DisplayCard
+              className="card-catalog-preview-card"
+              model={mapCloudArcanumCardToDisplayCard(card)}
+            />
+          </div>
+          <button
+            aria-label="Next card"
+            className="card-preview-nav card-preview-nav-right"
+            disabled={!hasNextCard}
+            onClick={onShowNextCard}
+            type="button"
+          >
+            →
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return createPortal(modal, document.body);
+}
+
 export function CardsPage({ apiBaseUrl }: CardsPageProps): ReactElement {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [previewCardIndex, setPreviewCardIndex] = useState<number | null>(null);
+  const searchParamsKey = searchParams.toString();
   const query = parseCardListQuery(searchParams);
   const api = createCloudArcanumApiClient({ baseUrl: apiBaseUrl });
+
+  useEffect(() => {
+    setPreviewCardIndex(null);
+  }, [searchParamsKey]);
 
   const cardsState = useApiRequest(
     async (signal) => {
       const response = await api.listCards(query, { signal });
       return { items: response.data, meta: response.meta };
     },
-    [apiBaseUrl, searchParams.toString()],
+    [apiBaseUrl, searchParamsKey],
   ) as ListResourceState<CardListItem, CardsListMeta>;
 
   const filtersState = useApiRequest(
@@ -513,6 +628,22 @@ export function CardsPage({ apiBaseUrl }: CardsPageProps): ReactElement {
       {cardsState.status === "success" && cardsState.data ? (
         (() => {
           const items = cardsState.data.items;
+          const previewCard =
+            previewCardIndex === null ? null : items[previewCardIndex] ?? null;
+
+          function showPreviousPreviewCard(): void {
+            setPreviewCardIndex((currentIndex) =>
+              currentIndex === null ? null : Math.max(0, currentIndex - 1),
+            );
+          }
+
+          function showNextPreviewCard(): void {
+            setPreviewCardIndex((currentIndex) =>
+              currentIndex === null
+                ? null
+                : Math.min(items.length - 1, currentIndex + 1),
+            );
+          }
 
           return items.length > 0 ? (
             <>
@@ -524,9 +655,6 @@ export function CardsPage({ apiBaseUrl }: CardsPageProps): ReactElement {
               </div>
               <section className="cards-gallery cards-gallery-printlike">
                 {items.map((card, index) => {
-                  const detailPath = query.themeId
-                    ? `/cards/${card.id}?themeId=${encodeURIComponent(query.themeId)}`
-                    : `/cards/${card.id}`;
                   const stackSlot = Math.min(index, 10);
                   const cardStyle: CSSProperties & Record<string, string | number> = {
                     zIndex: index + 1,
@@ -536,12 +664,30 @@ export function CardsPage({ apiBaseUrl }: CardsPageProps): ReactElement {
                   };
 
                   return (
-                    <Link key={card.id} className="card-face-link" style={cardStyle} to={detailPath}>
+                    <button
+                      key={card.id}
+                      aria-label={`Open ${card.name}`}
+                      aria-haspopup="dialog"
+                      className="card-face-link"
+                      onClick={() => setPreviewCardIndex(index)}
+                      style={cardStyle}
+                      type="button"
+                    >
                       <DisplayCard model={mapCloudArcanumCardToDisplayCard(card)} />
-                    </Link>
+                    </button>
                   );
                 })}
               </section>
+              {previewCard ? (
+                <CardCatalogPreviewModal
+                  card={previewCard}
+                  hasNextCard={previewCardIndex !== null && previewCardIndex < items.length - 1}
+                  hasPreviousCard={previewCardIndex !== null && previewCardIndex > 0}
+                  onClose={() => setPreviewCardIndex(null)}
+                  onShowNextCard={showNextPreviewCard}
+                  onShowPreviousCard={showPreviousPreviewCard}
+                />
+              ) : null}
             </>
           ) : (
           <EmptyState

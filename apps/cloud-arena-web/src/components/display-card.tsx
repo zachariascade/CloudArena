@@ -14,6 +14,7 @@ import manaWSymbol from "../assets/mtg-symbols/mana/W.svg";
 import { getCloudArenaRuntimeConfig } from "../lib/runtime-config.js";
 
 import type { DisplayCardModel } from "../lib/display-card.js";
+import { getDisplayCardSection } from "../lib/display-card.js";
 import { AbilityCostChip } from "./ability-cost-chip.js";
 
 type DisplayCardProps = {
@@ -144,7 +145,7 @@ function resolveDisplayImageUrl(url: string | null | undefined): string | null {
 }
 
 function renderDisplayImage(model: DisplayCardModel): ReactElement {
-  const image = model.image ?? null;
+  const image = getDisplayCardSection(model, "art")?.image ?? model.image ?? null;
   const resolvedUrl = resolveDisplayImageUrl(image?.url);
 
   if (resolvedUrl) {
@@ -163,9 +164,9 @@ function renderDisplayImage(model: DisplayCardModel): ReactElement {
     <div className="card-face-art">
       <div
         className="card-face-art-fallback"
-        aria-label={model.image?.fallbackLabel ?? `${model.name} preview`}
+        aria-label={image?.fallbackLabel ?? `${model.name} preview`}
       >
-        <strong>{model.image?.fallbackLabel ?? "Preview pending"}</strong>
+        <strong>{image?.fallbackLabel ?? "Preview pending"}</strong>
         <span>{model.subtitle ?? model.metaLine ?? model.variant}</span>
       </div>
     </div>
@@ -173,43 +174,63 @@ function renderDisplayImage(model: DisplayCardModel): ReactElement {
 }
 
 export function DisplayCard({ model, className }: DisplayCardProps): ReactElement {
-  const displayName = formatCardDisplayName(model.name, model.title);
-  const healthPercent = model.healthBar
-    ? clampHealthPercent(model.healthBar.current, model.healthBar.max)
+  const identitySection = getDisplayCardSection(model, "identity");
+  const summarySection = getDisplayCardSection(model, "summary");
+  const combatSection = getDisplayCardSection(model, "combat");
+  const statsSection = getDisplayCardSection(model, "stats");
+  const statusSection = getDisplayCardSection(model, "status");
+  const actionsSection = getDisplayCardSection(model, "actions");
+  const metadataSection = getDisplayCardSection(model, "metadata");
+  const displayName = formatCardDisplayName(
+    identitySection?.name ?? model.name,
+    identitySection?.title ?? model.title,
+  );
+  const healthBar = combatSection?.healthBar ?? model.healthBar ?? null;
+  const energyBar = combatSection?.energyBar ?? model.energyBar ?? null;
+  const footerStat = combatSection?.footerStat ?? model.footerStat ?? null;
+  const textBlocks = summarySection?.textBlocks ?? model.textBlocks;
+  const stats = statsSection?.stats ?? model.stats;
+  const statusLabel = statusSection?.statusLabel ?? model.statusLabel ?? null;
+  const statusTone = statusSection?.statusTone ?? model.statusTone;
+  const badges = statusSection?.badges ?? model.badges;
+  const stateFlags = statusSection?.stateFlags ?? model.stateFlags;
+  const actions = actionsSection?.actions ?? model.actions;
+  const healthPercent = healthBar
+    ? clampHealthPercent(healthBar.current, healthBar.max)
     : 0;
-  const energySegments = model.energyBar
-    ? clampMeterCount(model.energyBar.current, model.energyBar.max)
+  const energySegments = energyBar
+    ? clampMeterCount(energyBar.current, energyBar.max)
     : 0;
-  const blockStat = model.healthBar
-    ? model.stats.find((stat) => stat.label.toLowerCase() === "block") ?? null
+  const blockStat = healthBar
+    ? stats.find((stat) => stat.label.toLowerCase() === "block") ?? null
     : null;
   const intentBlock =
     model.variant === "enemy"
-      ? model.textBlocks.find((block) => block.kind === "intent") ?? null
+      ? textBlocks.find((block) => block.kind === "intent") ?? null
       : null;
   const visibleTextBlocks = intentBlock
-    ? model.textBlocks.filter((block) => block !== intentBlock)
-    : model.textBlocks;
+    ? textBlocks.filter((block) => block !== intentBlock)
+    : textBlocks;
   const visibleStats = blockStat
-    ? model.stats.filter((stat) => stat !== blockStat)
-    : model.stats;
+    ? stats.filter((stat) => stat !== blockStat)
+    : stats;
   const usesSideCombatPanel = model.variant === "player" || model.variant === "enemy";
   const isPermanentCard = model.variant === "permanent";
-  const isExhaustedPermanent = isPermanentCard && model.stateFlags.includes("spent");
-  const isDefendingPermanent = isPermanentCard && model.stateFlags.includes("defending");
+  const isExhaustedPermanent = isPermanentCard && stateFlags.includes("spent");
+  const isDefendingPermanent = isPermanentCard && stateFlags.includes("defending");
   const cardFace = (
     <article className="card-face">
       <header className="card-face-header">
         <div className="card-face-title-wrap">
           <h3>{displayName}</h3>
         </div>
-        <div className="card-face-mana-wrap">{renderManaCost(model.manaCost)}</div>
+        <div className="card-face-mana-wrap">{renderManaCost(identitySection?.manaCost ?? model.manaCost)}</div>
       </header>
 
       {renderDisplayImage(model)}
 
       <div className="card-face-typeline">
-        <span>{model.subtitle ?? "Card"}</span>
+        <span>{identitySection?.subtitle ?? model.subtitle ?? "Card"}</span>
         <span className="card-face-rarity-badge is-na">{model.variant.toUpperCase()}</span>
       </div>
 
@@ -232,27 +253,27 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
       <footer className="card-face-footer">
         <div className="card-face-footer-top">
           <div className="card-face-footer-printline">
-            <span>{model.footerCode}</span>
+            <span>{metadataSection?.footerCode ?? model.footerCode}</span>
           </div>
-          {model.footerStat ? (
+          {footerStat ? (
             <div className="card-face-footer-stats">
               <div className="card-face-stats-box">
-                <strong>{model.footerStat}</strong>
+                <strong>{footerStat}</strong>
               </div>
             </div>
           ) : null}
         </div>
         <div className="card-face-footer-bottom">
-          <div className="card-face-footer-artist">{model.footerCredit}</div>
-          <div className="card-face-collector-number">{model.collectorNumber}</div>
+          <div className="card-face-footer-artist">{metadataSection?.footerCredit ?? model.footerCredit}</div>
+          <div className="card-face-collector-number">{metadataSection?.collectorNumber ?? model.collectorNumber}</div>
         </div>
       </footer>
     </article>
   );
 
-  const isCardButton = model.actions.length === 1 && model.variant === "mtg";
-  const singleAction = isCardButton ? model.actions[0] : null;
-  const isTappedPermanent = isPermanentCard && model.stateFlags.includes("tapped");
+  const isCardButton = actions.length === 1 && model.variant === "mtg";
+  const singleAction = isCardButton ? actions[0] : null;
+  const isTappedPermanent = isPermanentCard && stateFlags.includes("tapped");
   const faceContent =
     isCardButton && singleAction ? (
       <button
@@ -266,7 +287,7 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
     ) : (
       <div className="display-card-static-face">{cardFace}</div>
     );
-  const combatPanel = model.healthBar ? (
+  const combatPanel = healthBar ? (
     <div
       className={[
         "display-card-health-panel",
@@ -286,15 +307,15 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
         <div className="display-card-health-meter">
           <div className="display-card-health-row">
             <span>Health</span>
-            <strong>{model.healthBar.label ?? `${model.healthBar.current}/${model.healthBar.max}`}</strong>
+            <strong>{healthBar.label ?? `${healthBar.current}/${healthBar.max}`}</strong>
           </div>
           <div
             className="trace-viewer-health-bar"
             role="progressbar"
             aria-label={`${model.name} health`}
             aria-valuemin={0}
-            aria-valuemax={model.healthBar.max}
-            aria-valuenow={model.healthBar.current}
+            aria-valuemax={healthBar.max}
+            aria-valuenow={healthBar.current}
           >
             <div
               className="trace-viewer-health-bar-fill"
@@ -303,24 +324,24 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
           </div>
         </div>
       </div>
-      {model.energyBar ? (
+      {energyBar ? (
         <div className="display-card-energy-panel">
           <div className="display-card-health-row">
             <span>Energy</span>
-            <strong>{model.energyBar.label ?? `${model.energyBar.current}/${model.energyBar.max}`}</strong>
+            <strong>{energyBar.label ?? `${energyBar.current}/${energyBar.max}`}</strong>
           </div>
           <div
             className="display-card-energy-bar"
             role="meter"
             aria-label={`${model.name} energy`}
             aria-valuemin={0}
-            aria-valuemax={model.energyBar.max}
-            aria-valuenow={model.energyBar.current}
+            aria-valuemax={energyBar.max}
+            aria-valuenow={energyBar.current}
             style={{
-              gridTemplateColumns: `repeat(${Math.max(1, model.energyBar.max)}, minmax(0, 1fr))`,
+              gridTemplateColumns: `repeat(${Math.max(1, energyBar.max)}, minmax(0, 1fr))`,
             }}
           >
-            {Array.from({ length: Math.max(0, model.energyBar.max) }, (_, index) => (
+            {Array.from({ length: Math.max(0, energyBar.max) }, (_, index) => (
               <span
                 key={`energy-${index}`}
                 className={[
@@ -341,18 +362,18 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
   ) : null;
   const lowerContent = (
     <>
-      {model.statusLabel || model.actions.length > 0 || model.badges.length > 0 ? (
+      {statusLabel || actions.length > 0 || badges.length > 0 ? (
         <div className="card-face-meta-row">
-          {model.statusLabel ? (
-            <span className={`card-face-status ${model.statusTone ?? ""}`.trim()}>
-              {model.statusLabel}
+          {statusLabel ? (
+            <span className={`card-face-status ${statusTone ?? ""}`.trim()}>
+              {statusLabel}
             </span>
           ) : (
             <span />
           )}
-          {model.actions.length > 0 && !isCardButton ? (
+          {actions.length > 0 && !isCardButton ? (
             <div className="display-card-actions-inline">
-              {model.actions.map((action) => (
+              {actions.map((action) => (
                 <button
                   key={action.id}
                   type="button"
@@ -365,9 +386,9 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
                 </button>
               ))}
             </div>
-          ) : model.badges.length > 0 ? (
+          ) : badges.length > 0 ? (
             <div className="display-card-badges-inline">
-              {model.badges.map((badge) => (
+              {badges.map((badge) => (
                 <span key={badge} className="card-face-status">
                   {badge}
                 </span>

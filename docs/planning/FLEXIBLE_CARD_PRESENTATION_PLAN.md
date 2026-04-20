@@ -124,6 +124,26 @@ Suggested fields:
 
 This is where we define how the same underlying entity appears in different contexts.
 
+### 3a. Shared Content Sections
+
+The underlying content sections should be the same across profiles. The UI object should not invent separate content trees for each presentation mode.
+
+Instead, define one shared section model that can be rendered differently depending on profile and context.
+
+Examples of shared sections:
+
+- identity section
+- art section
+- rules or summary section
+- stat section
+- status section
+- action section
+- metadata section
+
+Each profile can reorder, resize, emphasize, hide, or compress these sections, but the underlying section data stays consistent.
+
+This keeps Arena and MTG-style cards aligned at the data level while still allowing the UI to present them very differently.
+
 ## Important Design Principle
 
 Do not model "card" as a single fixed object with optional MTG leftovers.
@@ -236,6 +256,8 @@ Examples:
 - Arena player preset -> `RenderableEntityDefinition`
 
 This avoids rewriting the engine and lets us adapt incrementally.
+
+The mapping layer should preserve the same underlying section payloads and only adapt presentation concerns such as ordering, emphasis, and visibility.
 
 ### Phase 3: Build a New Generic Renderer
 
