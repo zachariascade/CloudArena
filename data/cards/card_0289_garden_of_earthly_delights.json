@@ -1,0 +1,36 @@
+{
+  "id": "card_0289",
+  "name": "Garden of Earthly Delights",
+  "slug": "garden_of_earthly_delights",
+  "setId": "set_earlyworld",
+  "typeLine": "Legendary Enchantment",
+  "manaCost": null,
+  "manaValue": 0,
+  "colors": [],
+  "colorIdentity": [],
+  "rarity": "mythic",
+  "oracleText": null,
+  "flavorText": null,
+  "power": null,
+  "toughness": null,
+  "loyalty": null,
+  "defense": null,
+  "artist": null,
+  "image": {
+    "type": "local",
+    "path": "images/cards/669F9BF4-F0AF-4A1B-9CB5-9A083E3EEEF9.jpeg",
+    "artist": "Jheronimus Bosch"
+  },
+  "imagePrompt": null,
+  "mechanics": [],
+  "tags": [
+    "early-world",
+    "garden",
+    "art"
+  ],
+  "status": "draft",
+  "notes": "Draft card wired to the local Bosch reference image supplied for Cloud Arcanum rendering.",
+  "createdAt": "2026-04-20T10:00:00-06:00",
+  "updatedAt": "2026-04-20T10:00:00-06:00",
+  "title": null
+}
