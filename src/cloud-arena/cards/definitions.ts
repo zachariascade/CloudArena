@@ -15,10 +15,13 @@ import { enemyLeaderCardDefinition } from "./definitions/enemy-leader.js";
 import { enemyHuskCardDefinition } from "./definitions/enemy-husk.js";
 import { enemyPackAlphaCardDefinition } from "./definitions/enemy-pack-alpha.js";
 import { massBenedictionCardDefinition } from "./definitions/mass-benediction.js";
+import { restorativeTouchCardDefinition } from "./definitions/restorative-touch.js";
+import { resurrectCardDefinition } from "./definitions/resurrect.js";
 import { sacrificialSeraphCardDefinition } from "./definitions/sacrificial-seraph.js";
 import { sanctifiedGuideCardDefinition } from "./definitions/sanctified-guide.js";
 import { targetedSmiteCardDefinition } from "./definitions/targeted-smite.js";
 import { targetedStrikeCardDefinition } from "./definitions/targeted-strike.js";
+import { stunningRebukeCardDefinition } from "./definitions/stunning-rebuke.js";
 import { tokenImpCardDefinition } from "./definitions/token-imp.js";
 import { tokenAngelCardDefinition } from "./definitions/token-angel.js";
 import type {
@@ -57,10 +60,13 @@ export const cardDefinitions: CardDefinitionLibrary = {
   enemy_brute: enemyBruteCardDefinition,
   enemy_pack_alpha: enemyPackAlphaCardDefinition,
   mass_benediction: massBenedictionCardDefinition,
+  restorative_touch: restorativeTouchCardDefinition,
+  resurrect: resurrectCardDefinition,
   sacrificial_seraph: sacrificialSeraphCardDefinition,
   sanctified_guide: sanctifiedGuideCardDefinition,
   targeted_smite: targetedSmiteCardDefinition,
   targeted_strike: targetedStrikeCardDefinition,
+  stunning_rebuke: stunningRebukeCardDefinition,
   token_imp: tokenImpCardDefinition,
   token_angel: tokenAngelCardDefinition,
 };

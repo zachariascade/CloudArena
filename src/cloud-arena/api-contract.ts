@@ -4,8 +4,10 @@ import type {
   BattleEvent,
   BattlePhase,
   CardDefinitionId,
+  CloudArenaDeckPresetId,
   EnemyIntent,
 } from "./index.js";
+export type { CloudArenaDeckPresetId } from "./index.js";
 
 export const cloudArenaApiRoutes = {
   cloudArenaSessions: "/api/cloud-arena/sessions",
@@ -24,6 +26,7 @@ export type CloudArenaSessionScenarioId =
 
 export type CloudArenaCreateSessionRequest = {
   scenarioId?: CloudArenaSessionScenarioId;
+  deckId?: CloudArenaDeckPresetId;
   seed?: number;
   shuffleDeck?: boolean;
 };
@@ -67,6 +70,21 @@ export type CloudArenaPermanentSnapshot = {
   actions: ActivatedAbility[];
 };
 
+export type CloudArenaPendingTargetRequestSnapshot = {
+  id: string;
+  prompt: string;
+  optional: boolean;
+  targetKind: "permanent" | "card";
+  selector: {
+    zone?: string;
+    controller?: string;
+    cardType?: string;
+    subtype?: string;
+    relation?: string;
+    source?: string;
+  };
+};
+
 export type CloudArenaActionOption = {
   action: BattleAction;
   label: string;
@@ -81,12 +99,14 @@ export type CloudArenaSessionActionRecord = {
 
 export type CloudArenaSessionResetSource = {
   scenarioId: CloudArenaSessionScenarioId;
+  deckId: CloudArenaDeckPresetId | null;
   seed: number;
 };
 
 export type CloudArenaSessionSnapshot = {
   sessionId: string;
   scenarioId: CloudArenaSessionScenarioId;
+  deckId: CloudArenaDeckPresetId | null;
   status: "active" | "finished";
   turnNumber: number;
   phase: BattlePhase;
@@ -115,6 +135,7 @@ export type CloudArenaSessionSnapshot = {
   };
   battlefield: Array<CloudArenaPermanentSnapshot | null>;
   enemyBattlefield: Array<CloudArenaPermanentSnapshot | null>;
+  pendingTargetRequest: CloudArenaPendingTargetRequestSnapshot | null;
   blockingQueue: string[];
   legalActions: CloudArenaActionOption[];
   actionHistory: CloudArenaSessionActionRecord[];

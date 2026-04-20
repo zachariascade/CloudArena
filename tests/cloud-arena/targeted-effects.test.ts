@@ -153,6 +153,27 @@ const TARGETED_EFFECT_TEST_DEFINITIONS: CardDefinitionLibrary = {
       },
     ],
   },
+  restorative_touch: {
+    id: "restorative_touch",
+    name: "Restorative Touch",
+    cardTypes: ["instant"],
+    cost: 1,
+    onPlay: [],
+    spellEffects: [
+      {
+        type: "add_counter",
+        target: {
+          zone: "battlefield",
+          controller: "any",
+          cardType: "permanent",
+        },
+        targeting: {
+          prompt: "Choose a permanent to heal",
+        },
+        healthDelta: 3,
+      },
+    ],
+  },
 };
 
 function createTargetedEffectsBattle() {
@@ -335,6 +356,58 @@ describe("cloud arena targeted effects", () => {
 
     expect(targetToken.health).toBe(0);
     expect(battle.pendingTargetRequest).toBeNull();
+  });
+
+  it("heals a permanent from either side of the battlefield", () => {
+    const battle = createBattle({
+      seed: 1,
+      cardDefinitions: {
+        ...cardDefinitions,
+        ...TARGETED_EFFECT_TEST_DEFINITIONS,
+      },
+      playerDeck: ["guardian", "restorative_touch"],
+      enemy: {
+        name: "Targeting Dummy",
+        health: 30,
+        basePower: 12,
+        startingTokens: ["token_imp"],
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+
+    battle.player.energy = 10;
+
+    const healCard = battle.player.hand.find((card) => card.definitionId === "restorative_touch");
+    const guardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
+    const targetToken = battle.enemyBattlefield.find(
+      (entry): entry is NonNullable<typeof entry> => entry !== null && entry.definitionId === "token_imp",
+    );
+
+    if (!healCard || !guardianCard || !targetToken) {
+      throw new Error("Expected guardian, restorative_touch, and an enemy token in the opening state.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: guardianCard.instanceId,
+    });
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: healCard.instanceId,
+    });
+
+    expect(battle.pendingTargetRequest).toBeTruthy();
+    expect(battle.pendingTargetRequest?.selector.controller).toBe("any");
+
+    applyBattleAction(battle, {
+      type: "choose_target",
+      targetPermanentId: targetToken.instanceId,
+    });
+
+    expect(targetToken.maxHealth).toBe(7);
+    expect(targetToken.health).toBe(7);
+    expect(battle.pendingTargetRequest).toBeNull();
+    expect(battle.player.discardPile.map((card) => card.definitionId)).toContain("restorative_touch");
   });
 
   it("pauses a targeted permanent ability and resolves it onto the clicked creature", () => {

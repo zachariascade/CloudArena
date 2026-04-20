@@ -1,10 +1,12 @@
 import type {
   CloudArenaActionRequest,
   CloudArenaCreateSessionRequest,
+  CloudArenaDeckPresetId,
   CloudArenaSessionRouteParams,
   CloudArenaSessionScenarioId,
 } from "../../../../src/cloud-arena/api-contract.js";
 import { cloudArenaApiRoutes } from "../../../../src/cloud-arena/api-contract.js";
+import { cloudArenaDeckPresets } from "../../../../src/cloud-arena/index.js";
 import type { BattleAction } from "../../../../src/cloud-arena/index.js";
 
 import {
@@ -32,6 +34,8 @@ const allowedScenarioIds: CloudArenaSessionScenarioId[] = [
   "imp_caller",
 ];
 
+const allowedDeckIds = Object.keys(cloudArenaDeckPresets) as CloudArenaDeckPresetId[];
+
 function parseCreateSessionBody(body: unknown): CloudArenaCreateSessionRequest {
   if (body === undefined) {
     return {};
@@ -41,12 +45,18 @@ function parseCreateSessionBody(body: unknown): CloudArenaCreateSessionRequest {
     throw new CloudArenaInvalidSetupError("Session request body must be an object.");
   }
 
-  const { scenarioId, seed } = body;
+  const { scenarioId, deckId, seed } = body;
   const { shuffleDeck } = body;
 
   if (scenarioId !== undefined && !allowedScenarioIds.includes(scenarioId as CloudArenaSessionScenarioId)) {
     throw new CloudArenaInvalidSetupError(
       `scenarioId must be one of ${allowedScenarioIds.map((id) => `"${id}"`).join(", ")}.`,
+    );
+  }
+
+  if (deckId !== undefined && !allowedDeckIds.includes(deckId as CloudArenaDeckPresetId)) {
+    throw new CloudArenaInvalidSetupError(
+      `deckId must be one of ${allowedDeckIds.map((id) => `"${id}"`).join(", ")}.`,
     );
   }
 
@@ -63,6 +73,7 @@ function parseCreateSessionBody(body: unknown): CloudArenaCreateSessionRequest {
 
   return {
     scenarioId: scenarioId as CloudArenaCreateSessionRequest["scenarioId"],
+    deckId: deckId as CloudArenaCreateSessionRequest["deckId"],
     seed: seed as number | undefined,
     shuffleDeck: shuffleDeck as boolean | undefined,
   };

@@ -70,6 +70,7 @@ export type PendingTargetRequest = {
   id: string;
   prompt: string;
   optional: boolean;
+  targetKind: "permanent" | "card";
   selector: Selector;
   effects: Effect[];
   nextEffectIndex: number;
@@ -78,6 +79,10 @@ export type PendingTargetRequest = {
     abilitySourcePermanentId?: string;
     triggerSubjectPermanentId?: string;
     sourceCardInstanceId?: string;
+    pendingCardPlay?: {
+      cardInstanceId: string;
+      definitionId: CardDefinitionId;
+    };
   };
 };
 
@@ -153,6 +158,14 @@ export type Trigger =
       selector?: Selector;
     }
   | {
+      event: "card_played";
+      selector?: Selector;
+    }
+  | {
+      event: "spell_cast";
+      selector?: Selector;
+    }
+  | {
       event: "card_discarded";
       selector?: Selector;
     }
@@ -225,6 +238,15 @@ export type Effect =
       type: "attach_from_battlefield";
       target: "self" | Selector;
       targeting?: Targeting;
+    }
+  | {
+      type: "return_from_graveyard";
+      selector: Selector;
+      targeting?: Targeting;
+    }
+  | {
+      type: "stun";
+      target: "enemy";
     };
 
 export type StatModifier = {
@@ -294,6 +316,11 @@ export type BattleEvent =
       cardId: CardDefinitionId;
     }
   | {
+      type: "spell_cast";
+      turnNumber: number;
+      cardId: CardDefinitionId;
+    }
+  | {
       type: "enemy_card_played";
       turnNumber: number;
       cardId: string;
@@ -340,6 +367,10 @@ export type BattleEvent =
       turnNumber: number;
       amount: number;
       newBasePower: number;
+    }
+  | {
+      type: "enemy_stunned";
+      turnNumber: number;
     }
   | {
       type: "permanent_destroyed";
@@ -390,6 +421,13 @@ export type BattleEvent =
 export type RulesEvent =
   | {
       type: "card_played";
+      turnNumber: number;
+      cardInstanceId: string;
+      definitionId: CardDefinitionId;
+      controllerId: string;
+    }
+  | {
+      type: "spell_cast";
       turnNumber: number;
       cardInstanceId: string;
       definitionId: CardDefinitionId;
@@ -501,7 +539,7 @@ export type ChoiceRecord = {
   id: string;
   turnNumber: number;
   controllerId: string;
-  kind: "select_permanents" | "select_hand_card" | "optional_effect";
+  kind: "select_permanents" | "select_hand_card" | "select_graveyard_card" | "optional_effect";
   reason: string;
   optional: boolean;
   options: ChoiceOption[];
@@ -529,6 +567,7 @@ export type PermanentCardDefinition = BaseCardDefinition & {
   power: number;
   health: number;
   recoveryPolicy?: DefenderRecoveryPolicy;
+  preSummonEffects?: Effect[];
 };
 
 export type CardDefinition = SpellCardDefinition | PermanentCardDefinition;
@@ -583,6 +622,7 @@ export type EnemyState = {
   behaviorIndex: number;
   currentCard: EnemyCardDefinition | null;
   leaderPermanentId: string | null;
+  stunnedThisTurn: boolean;
 };
 
 export type PlayerState = {
@@ -682,6 +722,10 @@ export type BattleAction =
   | {
       type: "choose_target";
       targetPermanentId: string;
+    }
+  | {
+      type: "choose_card";
+      targetCardInstanceId: string;
     }
   | UsePermanentAction
   | EndTurnAction;

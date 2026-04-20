@@ -8,15 +8,24 @@ import { getTotalAttackAmount, hasBlockAmount } from "./combat-values.js";
 import {
   attachPermanentToTarget,
   adjustPermanentHealth,
+  canSummonPermanentFromCard,
   summonPermanentFromCard,
+  trySummonPermanentFromCard,
   destroyPermanent,
   isEquipmentPermanent,
   syncEnemyStateFromLeaderPermanent,
+  syncEnemyLeaderPermanentFromState,
 } from "./permanents.js";
 import { emitRulesEvent } from "./rules-events.js";
 import { drawCards } from "./draw.js";
 import { payAbilityCostBundle } from "./activated-abilities.js";
-import { findPermanentById, selectObjects, selectPermanents, type SelectorContext } from "./selectors.js";
+import {
+  findPermanentById,
+  selectObjects,
+  selectPermanents,
+  type SelectedObject,
+  type SelectorContext,
+} from "./selectors.js";
 import { evaluateValueExpression } from "./value-expressions.js";
 import type {
   BattleState,
@@ -27,11 +36,16 @@ import type {
   Targeting,
   PermanentState,
   Selector,
+  BattleAction,
 } from "./types.js";
 
 export type EffectResolutionContext = SelectorContext & {
   abilityTargeting?: Targeting;
   abilityCosts?: AbilityCost[];
+  pendingCardPlay?: {
+    cardInstanceId: string;
+    definitionId: string;
+  };
 };
 
 function getCounterSource(
@@ -317,6 +331,8 @@ function getTargetSelectorForEffect(effect: Effect): Selector | null {
     case "draw_card":
     case "attach_from_battlefield":
       return typeof effect.target === "string" ? null : effect.target;
+    case "return_from_graveyard":
+      return effect.selector;
     case "summon_permanent":
     case "attach_from_hand":
       return null;
@@ -358,10 +374,18 @@ function queueTargetRequest(
     throw new Error("Targeted effects must specify a selector target.");
   }
 
+  const legalTargets = selectObjects(state, applyTargetingToSelector(selector, targeting), context);
+  const targetKind = legalTargets[0]?.kind ?? (
+    selector.zone === "hand" || selector.zone === "graveyard" || selector.zone === "discard"
+      ? "card"
+      : "permanent"
+  );
+
   state.pendingTargetRequest = {
     id: createTargetRequestId(state),
     prompt,
     optional: targeting?.optional ?? false,
+    targetKind,
     selector: applyTargetingToSelector(selector, targeting),
     effects,
     nextEffectIndex,
@@ -369,6 +393,7 @@ function queueTargetRequest(
       abilitySourcePermanentId: context.abilitySourcePermanentId,
       triggerSubjectPermanentId: context.triggerSubjectPermanentId,
       sourceCardInstanceId: context.sourceCardInstanceId,
+      pendingCardPlay: context.pendingCardPlay,
     },
     abilityCosts: context.abilityCosts,
   };
@@ -618,7 +643,7 @@ function resolveSummonPermanentEffect(
 
     const controllerId = effect.controllerId ?? "player";
     const cardInstanceId = `effect_${effect.cardId}_${state.turnNumber}_${state.rules.length + index + 1}`;
-    summonPermanentFromCard(
+    trySummonPermanentFromCard(
       state,
       {
         instanceId: cardInstanceId,
@@ -682,8 +707,15 @@ function resolveAttachFromHandEffect(
     throw new Error(`Card ${definition.id} cannot be attached because it is not a permanent.`);
   }
 
+  if (!canSummonPermanentFromCard(state)) {
+    return;
+  }
+
   const card = removeCardFromHand(state, attachmentCard.card.instanceId);
-  const attachmentPermanent = summonPermanentFromCard(state, card);
+  const attachmentPermanent = trySummonPermanentFromCard(state, card);
+  if (!attachmentPermanent) {
+    return;
+  }
   if (!isEquipmentPermanent(state, attachmentPermanent)) {
     throw new Error(`Permanent ${attachmentPermanent.instanceId} is not a valid Equipment attachment.`);
   }
@@ -720,6 +752,70 @@ function resolveAttachFromBattlefieldEffect(
   attachPermanentToTarget(state, attachmentPermanent, targetPermanent);
 }
 
+function resolveReturnFromGraveyardEffect(
+  state: BattleState,
+  effect: Extract<Effect, { type: "return_from_graveyard" }>,
+  context: EffectResolutionContext,
+): void {
+  const targets = resolveCardTargets(state, effect.selector, context);
+  const chosenCard = targets[0];
+
+  if (!chosenCard) {
+    return;
+  }
+
+  state.player.graveyard = state.player.graveyard.filter(
+    (card) => card.instanceId !== chosenCard.instanceId,
+  );
+  state.player.hand.push(chosenCard);
+  emitRulesEvent(state, {
+    type: "card_drawn",
+    turnNumber: state.turnNumber,
+    cardInstanceId: chosenCard.instanceId,
+    definitionId: chosenCard.definitionId,
+    controllerId: "player",
+  });
+}
+
+function resolveStunEffect(state: BattleState, effect: Extract<Effect, { type: "stun" }>): void {
+  if (effect.target === "enemy") {
+    state.enemy.stunnedThisTurn = true;
+    syncEnemyLeaderPermanentFromState(state);
+  }
+}
+
+function resolveCardTargets(
+  state: BattleState,
+  target: Selector,
+  context: EffectResolutionContext,
+): CardInstance[] {
+  const selectedObjects = selectObjects(state, target, context);
+
+  if (context.chosenTargetCardInstanceId) {
+    const chosenTarget = selectedObjects.find(
+      (object): object is Extract<SelectedObject, { kind: "card" }> =>
+        object.kind === "card" &&
+        object.card.instanceId === context.chosenTargetCardInstanceId,
+    );
+
+    if (!chosenTarget) {
+      throw new Error(`Card ${context.chosenTargetCardInstanceId} is not a valid target for this effect.`);
+    }
+
+    return [chosenTarget.card];
+  }
+
+  const chosenCards: CardInstance[] = [];
+
+  for (const object of selectedObjects) {
+    if (object.kind === "card") {
+      chosenCards.push(object.card);
+    }
+  }
+
+  return chosenCards;
+}
+
 function resolveEffectsFromIndex(
   state: BattleState,
   effects: Effect[],
@@ -739,8 +835,10 @@ function resolveEffectsFromIndex(
 
     const requiresTargetSelection =
       isTargetedEffect(effect) || context.abilityTargeting !== undefined;
+    const hasChosenTarget =
+      context.chosenTargetPermanentId !== undefined || context.chosenTargetCardInstanceId !== undefined;
 
-    if (requiresTargetSelection && !context.chosenTargetPermanentId) {
+    if (requiresTargetSelection && !hasChosenTarget) {
       const selector = getTargetSelectorForEffect(effect);
 
       if (selector) {
@@ -748,7 +846,7 @@ function resolveEffectsFromIndex(
           ...(context.abilityTargeting ?? {}),
           ...((effect as { targeting?: Targeting }).targeting ?? {}),
         };
-        const legalTargets = selectPermanents(
+        const legalTargets = selectObjects(
           state,
           applyTargetingToSelector(selector, targeting),
           context,
@@ -808,6 +906,12 @@ export function resolveEffect(
     case "attach_from_battlefield":
       resolveAttachFromBattlefieldEffect(state, effect, context);
       return;
+    case "return_from_graveyard":
+      resolveReturnFromGraveyardEffect(state, effect, context);
+      return;
+    case "stun":
+      resolveStunEffect(state, effect);
+      return;
   }
 }
 
@@ -829,7 +933,7 @@ export function resolveSpellEffects(
 
 export function resolvePendingTargetRequest(
   state: BattleState,
-  targetPermanentId: string,
+  action: Extract<BattleAction, { type: "choose_target" } | { type: "choose_card" }>,
 ): void {
   const pending = state.pendingTargetRequest;
 
@@ -837,15 +941,68 @@ export function resolvePendingTargetRequest(
     throw new Error("There is no pending target request to resolve.");
   }
 
-  const chosenTarget = findPermanentById(state, targetPermanentId);
+  if (pending.targetKind === "card") {
+    if (action.type !== "choose_card") {
+      throw new Error("A card must be chosen before taking another action.");
+    }
 
-  if (!chosenTarget) {
-    throw new Error(`Permanent ${targetPermanentId} was not found on the battlefield.`);
+    const legalTargets = selectObjects(state, pending.selector, pending.context);
+    const chosenTarget = legalTargets.find(
+      (object) => object.kind === "card" && object.card.instanceId === action.targetCardInstanceId,
+    );
+
+    if (!chosenTarget || chosenTarget.kind !== "card") {
+      throw new Error(`Card ${action.targetCardInstanceId} is not a valid target.`);
+    }
+
+    if (pending.abilityCosts && pending.context.abilitySourcePermanentId) {
+      const sourcePermanent = findPermanentById(state, pending.context.abilitySourcePermanentId);
+
+      if (!sourcePermanent) {
+        throw new Error(`Permanent ${pending.context.abilitySourcePermanentId} was not found on the battlefield.`);
+      }
+
+      payAbilityCostBundle(state, sourcePermanent, pending.abilityCosts);
+    }
+
+    state.pendingTargetRequest = null;
+
+    resolveEffectsFromIndex(
+      state,
+      pending.effects,
+      {
+        ...pending.context,
+        chosenTargetCardInstanceId: chosenTarget.card.instanceId,
+      },
+      pending.nextEffectIndex,
+    );
+
+    if (!state.pendingTargetRequest && pending.context.pendingCardPlay) {
+      summonPermanentFromCard(
+        state,
+        {
+          instanceId: pending.context.pendingCardPlay.cardInstanceId,
+          definitionId: pending.context.pendingCardPlay.definitionId,
+        },
+      );
+    }
+
+    return;
   }
 
-  const legalTargets = selectPermanents(state, pending.selector, pending.context);
-  if (!legalTargets.some((permanent) => permanent.instanceId === chosenTarget.instanceId)) {
-    throw new Error(`Permanent ${targetPermanentId} is not a valid target.`);
+  if (action.type !== "choose_target") {
+    throw new Error("A permanent must be chosen before taking another action.");
+  }
+
+  const chosenTarget = findPermanentById(state, action.targetPermanentId);
+
+  if (!chosenTarget) {
+    throw new Error(`Permanent ${action.targetPermanentId} was not found on the battlefield.`);
+  }
+
+  const legalTargets = selectObjects(state, pending.selector, pending.context);
+  if (!legalTargets.some((object) => object.kind === "permanent" && object.permanent.instanceId === chosenTarget.instanceId)) {
+    throw new Error(`Permanent ${action.targetPermanentId} is not a valid target.`);
   }
 
   if (pending.abilityCosts && pending.context.abilitySourcePermanentId) {
@@ -869,6 +1026,16 @@ export function resolvePendingTargetRequest(
     },
     pending.nextEffectIndex,
   );
+
+  if (!state.pendingTargetRequest && pending.context.pendingCardPlay) {
+    summonPermanentFromCard(
+      state,
+      {
+        instanceId: pending.context.pendingCardPlay.cardInstanceId,
+        definitionId: pending.context.pendingCardPlay.definitionId,
+      },
+    );
+  }
 }
 
 export function getEffectDamageAmount(effect: {

@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 import type {
   CloudArenaActionOption,
   CloudArenaCreateSessionRequest,
+  CloudArenaDeckPresetId,
   CloudArenaSessionActionRecord,
   CloudArenaSessionScenarioId,
   CloudArenaSessionSnapshot,
@@ -19,6 +20,7 @@ import {
   getLegalActions,
   getEnemyLeaderPermanent,
   getPrimaryEnemyPermanent,
+  getDeckPreset,
   getScenarioPreset,
   hasCardType,
   isPermanentCardDefinition,
@@ -32,15 +34,18 @@ import {
 type CloudArenaSessionRecord = {
   id: string;
   scenarioId: CloudArenaSessionScenarioId;
+  deckId: CloudArenaDeckPresetId | null;
   seed: number;
   shuffleDeck: boolean;
   createdAt: string;
   resetSource: {
     scenarioId: CloudArenaSessionScenarioId;
+    deckId: CloudArenaDeckPresetId | null;
     seed: number;
   };
   actionHistory: CloudArenaSessionActionRecord[];
   state: BattleState;
+  playerDeck: string[];
 };
 
 export class CloudArenaSessionNotFoundError extends Error {
@@ -101,15 +106,35 @@ function resolveScenario(
   return getScenarioPreset(request.scenarioId ?? "mixed_guardian");
 }
 
+function resolvePlayerDeck(
+  request: CloudArenaCreateSessionRequest,
+  scenario: CloudArenaScenarioPreset,
+): { deckId: CloudArenaDeckPresetId | null; cards: string[] } {
+  if (request.deckId) {
+    const deck = getDeckPreset(request.deckId);
+
+    return {
+      deckId: deck.id,
+      cards: deck.cards,
+    };
+  }
+
+  return {
+    deckId: null,
+    cards: scenario.deck,
+  };
+}
+
 function createScenarioBattle(
   scenario: CloudArenaScenarioPreset,
+  playerDeck: string[],
   seed: number,
   shuffleDeck: boolean,
 ): BattleState {
   return createBattle({
     seed,
     playerHealth: scenario.playerHealth,
-    playerDeck: scenario.deck,
+    playerDeck,
     shuffleDeck,
     enemy: scenario.enemy,
   });
@@ -215,6 +240,20 @@ function createActionOption(
         source: "battlefield",
       };
     }
+    case "choose_card": {
+      const card = state.player.graveyard.find(
+        (entry) => entry.instanceId === action.targetCardInstanceId,
+      );
+      const name = card
+        ? getCardDefinitionFromLibrary(state.cardDefinitions, card.definitionId).name
+        : action.targetCardInstanceId;
+
+      return {
+        action,
+        label: `Return ${name} to hand`,
+        source: "hand",
+      };
+    }
     case "use_permanent_action": {
       const permanent = state.battlefield.find(
         (entry) => entry?.instanceId === action.permanentId,
@@ -304,6 +343,7 @@ function buildSessionSnapshot(
   return {
     sessionId: record.id,
     scenarioId: record.scenarioId,
+    deckId: record.deckId,
     status: state.phase === "finished" ? "finished" : "active",
     turnNumber: state.turnNumber,
     phase: state.phase,
@@ -329,7 +369,7 @@ function buildSessionSnapshot(
       maxHealth: primaryEnemyPermanent?.maxHealth ?? state.enemy.maxHealth,
       block: primaryEnemyPermanent?.block ?? state.enemy.block,
       intent: { ...state.enemy.intent },
-      intentLabel: primaryEnemyPermanent?.intentLabel ?? formatEnemyIntent(state.enemy.intent),
+      intentLabel: primaryEnemyPermanent?.intentLabel ?? (state.enemy.stunnedThisTurn ? "Stunned" : formatEnemyIntent(state.enemy.intent)),
       intentQueueLabels: primaryEnemyPermanent?.intentQueueLabels ?? [...state.enemy.intentQueueLabels],
     },
     battlefield: state.battlefield.map((permanent) =>
@@ -390,6 +430,15 @@ function buildSessionSnapshot(
           }
         : null,
     ),
+    pendingTargetRequest: state.pendingTargetRequest
+      ? {
+          id: state.pendingTargetRequest.id,
+          prompt: state.pendingTargetRequest.prompt,
+          optional: state.pendingTargetRequest.optional,
+          targetKind: state.pendingTargetRequest.targetKind,
+          selector: { ...state.pendingTargetRequest.selector },
+        }
+      : null,
     blockingQueue: [...state.blockingQueue],
     legalActions,
     actionHistory: record.actionHistory.map((entry) => ({
@@ -415,21 +464,25 @@ export function createCloudArenaSessionService(): CloudArenaSessionService {
     request: CloudArenaCreateSessionRequest = {},
   ): CloudArenaSessionRecord {
     const scenario = resolveScenario(request);
+    const playerDeck = resolvePlayerDeck(request, scenario);
     const seed = request.seed ?? 1;
     const shuffleDeck = request.shuffleDeck ?? false;
 
     return {
       id: randomUUID(),
       scenarioId: scenario.id,
+      deckId: playerDeck.deckId,
       seed,
       shuffleDeck,
       createdAt: new Date().toISOString(),
       resetSource: {
         scenarioId: scenario.id,
+        deckId: playerDeck.deckId,
         seed,
       },
       actionHistory: [],
-      state: createScenarioBattle(scenario, seed, shuffleDeck),
+      state: createScenarioBattle(scenario, playerDeck.cards, seed, shuffleDeck),
+      playerDeck: [...playerDeck.cards],
     };
   }
 
@@ -447,7 +500,7 @@ export function createCloudArenaSessionService(): CloudArenaSessionService {
     const scenario = getScenarioPreset(record.scenarioId);
 
     record.actionHistory = [];
-    record.state = createScenarioBattle(scenario, record.seed, record.shuffleDeck);
+    record.state = createScenarioBattle(scenario, record.playerDeck, record.seed, record.shuffleDeck);
   }
 
   return {

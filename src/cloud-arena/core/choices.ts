@@ -91,10 +91,14 @@ export function chooseSingleObject(
 ): SelectedObject | null {
   const candidates = selectObjects(state, input.selector, input.context ?? {});
   const selected = candidates[0] ?? null;
+  const kind =
+    input.selector.zone === "graveyard"
+      ? "select_graveyard_card"
+      : "select_hand_card";
 
   recordChoice(state, {
     controllerId: input.controllerId,
-    kind: "select_hand_card",
+    kind,
     optional: input.optional ?? false,
     options: candidates.map(toObjectChoiceOption),
     reason: input.reason,

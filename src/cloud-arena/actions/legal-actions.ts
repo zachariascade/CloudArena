@@ -4,8 +4,9 @@ import {
   getActivatedAbilities,
   getAbilityEnergyCost,
 } from "../core/activated-abilities.js";
-import { hasOpenBattlefieldSlot, selectPermanents } from "../core/selectors.js";
+import { hasOpenBattlefieldSlot, selectObjects, selectPermanents } from "../core/selectors.js";
 import type { BattleAction, BattleState, Effect, Selector } from "../core/types.js";
+import type { SelectedObject } from "../core/selectors.js";
 
 function getEffectTargetSelector(effect: Effect): Selector | null {
   switch (effect.type) {
@@ -59,6 +60,19 @@ export function getLegalActions(state: BattleState): BattleAction[] {
   }
 
   if (state.pendingTargetRequest) {
+    if (state.pendingTargetRequest.targetKind === "card") {
+      return selectObjects(
+        state,
+        state.pendingTargetRequest.selector,
+        state.pendingTargetRequest.context,
+      )
+        .filter((object): object is Extract<SelectedObject, { kind: "card" }> => object.kind === "card")
+        .map((card) => ({
+          type: "choose_card" as const,
+          targetCardInstanceId: card.card.instanceId,
+        }));
+    }
+
     return selectPermanents(
       state,
       state.pendingTargetRequest.selector,

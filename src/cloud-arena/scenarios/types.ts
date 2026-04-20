@@ -1,6 +1,9 @@
 import type { CardDefinitionId, CardEnemyConfig } from "../core/types.js";
 
 export type CloudArenaDeckPresetId =
+  | "master_deck"
+  | "wide_angels"
+  | "tall_creatures"
   | "mixed_guardian";
 
 export type CloudArenaEnemyPresetId =

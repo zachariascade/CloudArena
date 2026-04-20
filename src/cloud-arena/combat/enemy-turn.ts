@@ -3,7 +3,7 @@ import { getDerivedPermanentActionAmount } from "../core/derived-stats.js";
 import {
   syncEnemyLeaderPermanentFromState,
   syncEnemyStateFromLeaderPermanent,
-  summonPermanentFromCard,
+  trySummonPermanentFromCard,
 } from "../core/permanents.js";
 import { formatEnemyIntent } from "../core/enemy-intent.js";
 import { emitRulesEvent } from "../core/rules-events.js";
@@ -21,7 +21,7 @@ function summonEnemyToken(state: BattleState, cardId: string): void {
   };
 
   state.nextEnemyTokenIndex += 1;
-  summonPermanentFromCard(state, card, "enemy");
+  trySummonPermanentFromCard(state, card, "enemy");
 }
 
 function resolveEnemyCard(state: BattleState, card: EnemyCardDefinition): void {
@@ -142,6 +142,15 @@ export function resolveEnemyTurn(state: BattleState): BattleState {
     turnNumber: state.turnNumber,
     intent: state.enemy.intent,
   });
+
+  if (state.enemy.stunnedThisTurn) {
+    state.log.push({
+      type: "enemy_stunned",
+      turnNumber: state.turnNumber,
+    });
+    state.enemy.currentCard = null;
+    return state;
+  }
 
   if (state.enemy.currentCard) {
     resolveEnemyCard(state, state.enemy.currentCard);

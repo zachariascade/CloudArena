@@ -20,6 +20,11 @@ type TriggerEventWithPermanentSnapshot = Extract<
   { type: "permanent_died" | "permanent_left_battlefield" | "permanent_attacked" | "permanent_blocked" | "permanent_becomes_blocked" }
 >;
 
+type TriggerEventWithCardSnapshot = Extract<
+  RulesEvent,
+  { type: "card_played" | "spell_cast" | "card_drawn" | "card_discarded" }
+>;
+
 type TriggerResolution = {
   ability: Ability;
   abilitySourcePermanentId?: string;
@@ -93,6 +98,23 @@ function toCardSelectedObject(
   };
 }
 
+function toSyntheticCardSelectedObject(
+  state: BattleState,
+  event: TriggerEventWithCardSnapshot,
+  zone: "hand" | "discard",
+): SelectedObject {
+  return {
+    kind: "card",
+    zone,
+    card: {
+      instanceId: event.cardInstanceId,
+      definitionId: event.definitionId,
+    },
+    definition: getCardDefinitionFromLibrary(state.cardDefinitions, event.definitionId),
+    controllerId: "player",
+  };
+}
+
 function getCardInZone(
   cards: CardInstance[],
   cardInstanceId: string,
@@ -133,6 +155,8 @@ function getTriggerSubjectObject(
       return card ? toCardSelectedObject(state, card, "discard") : null;
     }
     case "card_played":
+    case "spell_cast":
+      return toSyntheticCardSelectedObject(state, event, "hand");
     case "attachment_attached":
     case "counter_removed":
       return null;
@@ -141,7 +165,11 @@ function getTriggerSubjectObject(
   }
 }
 
-function getAbilitySourceObjects(state: BattleState, triggerSubject: SelectedObject | null): SelectedObject[] {
+function getAbilitySourceObjects(
+  state: BattleState,
+  triggerSubject: SelectedObject | null,
+  event: RulesEvent,
+): SelectedObject[] {
   const sources = [
     ...selectObjects(state, { zone: "battlefield" }),
     ...selectObjects(state, { zone: "hand" }),
@@ -149,7 +177,11 @@ function getAbilitySourceObjects(state: BattleState, triggerSubject: SelectedObj
     ...selectObjects(state, { zone: "discard" }),
   ];
 
-  if (triggerSubject) {
+  if (
+    triggerSubject &&
+    event.type !== "card_played" &&
+    event.type !== "spell_cast"
+  ) {
     const sourceId =
       triggerSubject.kind === "permanent"
         ? triggerSubject.permanent.instanceId
@@ -279,6 +311,68 @@ function matchesTrigger(
         (!ability.trigger.selector ||
           matchesSelectorObject(triggerSubject, ability.trigger.selector, context))
       );
+    case "card_played":
+      if (event.type !== "card_played" || triggerSubject.kind !== "card") {
+        return false;
+      }
+
+      if (ability.trigger.selector?.relation === "self") {
+        const { relation: _relation, ...selectorWithoutRelation } = ability.trigger.selector;
+
+        if (
+          abilitySource.kind === "card" &&
+          triggerSubject.card.instanceId === abilitySource.card.instanceId &&
+          matchesSelectorObject(triggerSubject, selectorWithoutRelation, context)
+        ) {
+          return true;
+        }
+
+        if (
+          abilitySource.kind === "permanent" &&
+          triggerSubject.card.instanceId === abilitySource.permanent.sourceCardInstanceId &&
+          matchesSelectorObject(triggerSubject, selectorWithoutRelation, context)
+        ) {
+          return true;
+        }
+
+        return false;
+      }
+
+      return (
+        !ability.trigger.selector ||
+        matchesSelectorObject(triggerSubject, ability.trigger.selector, context)
+      );
+    case "spell_cast":
+      if (event.type !== "spell_cast" || triggerSubject.kind !== "card") {
+        return false;
+      }
+
+      if (ability.trigger.selector?.relation === "self") {
+        const { relation: _relation, ...selectorWithoutRelation } = ability.trigger.selector;
+
+        if (
+          abilitySource.kind === "card" &&
+          triggerSubject.card.instanceId === abilitySource.card.instanceId &&
+          matchesSelectorObject(triggerSubject, selectorWithoutRelation, context)
+        ) {
+          return true;
+        }
+
+        if (
+          abilitySource.kind === "permanent" &&
+          triggerSubject.card.instanceId === abilitySource.permanent.sourceCardInstanceId &&
+          matchesSelectorObject(triggerSubject, selectorWithoutRelation, context)
+        ) {
+          return true;
+        }
+
+        return false;
+      }
+
+      return (
+        !ability.trigger.selector ||
+        matchesSelectorObject(triggerSubject, ability.trigger.selector, context)
+      );
     case "card_discarded":
       return (
         event.type === "card_discarded" &&
@@ -331,7 +425,7 @@ function collectTriggeredAbilities(
     return [];
   }
 
-  const abilitySources = getAbilitySourceObjects(state, triggerSubject);
+  const abilitySources = getAbilitySourceObjects(state, triggerSubject, event);
 
   return abilitySources.flatMap((abilitySource) => {
     const abilities =

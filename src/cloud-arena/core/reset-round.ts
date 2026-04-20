@@ -56,6 +56,7 @@ export function resetRound(state: BattleState): BattleState {
   const enemyPlanLength = getEnemyPlanLength(state.enemy);
 
   state.enemy.behaviorIndex = (state.enemy.behaviorIndex + 1) % enemyPlanLength;
+  state.enemy.stunnedThisTurn = false;
 
   const nextEnemyPlan = getEnemyPlanStepAtIndexFromState(
     state.enemy,

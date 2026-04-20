@@ -9,24 +9,23 @@ export const sacrificialSeraphCardDefinition: CardDefinition = {
   onPlay: [],
   power: 3,
   health: 8,
-  abilities: [
+  preSummonEffects: [
     {
-      kind: "triggered",
-      trigger: { event: "self_enters_battlefield" },
-      effects: [
-        {
-          type: "sacrifice",
-          selector: {
-            zone: "battlefield",
-            controller: "you",
-            cardType: "permanent",
-            relation: "another",
-          },
-          amount: 1,
-          choice: "controller",
-        },
-      ],
+      type: "sacrifice",
+      selector: {
+        zone: "battlefield",
+        controller: "you",
+        cardType: "creature",
+        relation: "another",
+      },
+      targeting: {
+        prompt: "Choose a creature to sacrifice",
+      },
+      amount: 1,
+      choice: "controller",
     },
+  ],
+  abilities: [
     {
       kind: "triggered",
       trigger: {

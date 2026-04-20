@@ -81,6 +81,7 @@ export function createBattle(input: CreateBattleInput): BattleState {
       behaviorIndex: 0,
       currentCard: initialEnemyPlan.card,
       leaderPermanentId: null,
+      stunnedThisTurn: false,
     },
     battlefield: Array.from({ length: LEAN_V1_BOARD_SLOT_COUNT }, () => null),
     enemyBattlefield: Array.from({ length: LEAN_V1_BOARD_SLOT_COUNT }, () => null),

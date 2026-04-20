@@ -1,5 +1,6 @@
 import { getCardDefinitionFromLibrary, isPermanentCardDefinition } from "../cards/definitions.js";
 import { resolveLegacyCardEffects, resolveSpellEffects } from "../core/effects.js";
+import { selectPermanents } from "../core/selectors.js";
 import { summonPermanentFromCard } from "../core/permanents.js";
 import { emitRulesEvent } from "../core/rules-events.js";
 import type {
@@ -61,20 +62,53 @@ export function playCard(state: BattleState, cardInstanceId: string): BattleStat
     controllerId: "player",
   });
 
-  if (isPermanentCardDefinition(definition)) {
-    summonPermanentFromCard(state, card);
-  }
+  if (!isPermanentCardDefinition(definition)) {
+    state.log.push({
+      type: "spell_cast",
+      turnNumber: state.turnNumber,
+      cardId: card.definitionId,
+    });
+    emitRulesEvent(state, {
+      type: "spell_cast",
+      turnNumber: state.turnNumber,
+      cardInstanceId: card.instanceId,
+      definitionId: card.definitionId,
+      controllerId: "player",
+    });
 
-  resolveLegacyCardEffects(state, definition.onPlay, {
-    sourceCardInstanceId: card.instanceId,
-  });
-  if (definition.spellEffects?.length) {
-    resolveSpellEffects(state, definition.spellEffects, {
+    resolveLegacyCardEffects(state, definition.onPlay, {
       sourceCardInstanceId: card.instanceId,
     });
-  }
+    if (state.pendingTargetRequest) {
+      emitRulesEvent(state, {
+        type: "card_discarded",
+        turnNumber: state.turnNumber,
+        cardInstanceId: card.instanceId,
+        definitionId: card.definitionId,
+        controllerId: "player",
+      });
+      state.player.discardPile.push(card);
+      return state;
+    }
 
-  if (!isPermanentCardDefinition(definition)) {
+    if (definition.spellEffects?.length) {
+      resolveSpellEffects(state, definition.spellEffects, {
+        sourceCardInstanceId: card.instanceId,
+      });
+    }
+
+    if (state.pendingTargetRequest) {
+      emitRulesEvent(state, {
+        type: "card_discarded",
+        turnNumber: state.turnNumber,
+        cardInstanceId: card.instanceId,
+        definitionId: card.definitionId,
+        controllerId: "player",
+      });
+      state.player.discardPile.push(card);
+      return state;
+    }
+
     emitRulesEvent(state, {
       type: "card_discarded",
       turnNumber: state.turnNumber,
@@ -83,7 +117,51 @@ export function playCard(state: BattleState, cardInstanceId: string): BattleStat
       controllerId: "player",
     });
     state.player.discardPile.push(card);
+    return state;
   }
+
+  resolveLegacyCardEffects(state, definition.onPlay, {
+    sourceCardInstanceId: card.instanceId,
+    pendingCardPlay: {
+      cardInstanceId: card.instanceId,
+      definitionId: card.definitionId,
+    },
+  });
+  if (state.pendingTargetRequest) {
+    return state;
+  }
+
+  if (definition.preSummonEffects?.length) {
+    const hasPreSummonTarget = definition.preSummonEffects.some(
+      (effect) =>
+        effect.type === "sacrifice" &&
+        selectPermanents(state, effect.selector, {
+          sourceCardInstanceId: card.instanceId,
+          pendingCardPlay: {
+            cardInstanceId: card.instanceId,
+            definitionId: card.definitionId,
+          },
+        }).length > 0,
+    );
+
+    if (!hasPreSummonTarget) {
+      return state;
+    }
+
+    resolveSpellEffects(state, definition.preSummonEffects, {
+      sourceCardInstanceId: card.instanceId,
+      pendingCardPlay: {
+        cardInstanceId: card.instanceId,
+        definitionId: card.definitionId,
+      },
+    });
+  }
+
+  if (state.pendingTargetRequest) {
+    return state;
+  }
+
+  summonPermanentFromCard(state, card);
 
   return state;
 }

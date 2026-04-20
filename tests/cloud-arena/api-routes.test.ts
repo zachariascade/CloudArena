@@ -15,6 +15,7 @@ describe("cloud arena api routes", () => {
       url: "/api/cloud-arena/sessions",
       payload: {
         scenarioId: "mixed_guardian",
+        deckId: "wide_angels",
         seed: 7,
         shuffleDeck: true,
       },
@@ -23,10 +24,12 @@ describe("cloud arena api routes", () => {
     expect(createResponse.statusCode).toBe(200);
     expect(createResponse.json().data.sessionId).toBeTypeOf("string");
     expect(createResponse.json().data.scenarioId).toBe("mixed_guardian");
+    expect(createResponse.json().data.deckId).toBe("wide_angels");
     expect(createResponse.json().data.seed).toBe(7);
     expect(createResponse.json().data.createdAt).toBeTypeOf("string");
     expect(createResponse.json().data.resetSource).toEqual({
       scenarioId: "mixed_guardian",
+      deckId: "wide_angels",
       seed: 7,
     });
     expect(createResponse.json().data.actionHistory).toEqual([]);

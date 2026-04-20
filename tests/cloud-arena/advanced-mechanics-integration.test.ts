@@ -51,6 +51,24 @@ describe("cloud arena advanced mechanics integration", () => {
       cardInstanceId: seraphCard.instanceId,
     });
 
+    expect(battle.pendingTargetRequest).toBeTruthy();
+
+    const sacrificedGuardian = battle.battlefield.find((permanent) => permanent?.definitionId === "guardian");
+    const seraphTarget = battle.pendingTargetRequest
+      ? getLegalActions(battle).find(
+          (action) =>
+            action.type === "choose_target" &&
+            sacrificedGuardian !== null &&
+            action.targetPermanentId === sacrificedGuardian?.instanceId,
+        )
+      : undefined;
+
+    if (!sacrificedGuardian || !seraphTarget || seraphTarget.type !== "choose_target") {
+      throw new Error("Expected sacrificial_seraph to request a guardian sacrifice target.");
+    }
+
+    applyBattleAction(battle, seraphTarget);
+
     const seraph = battle.battlefield.find((permanent) => permanent?.definitionId === "sacrificial_seraph");
 
     if (!seraph) {
@@ -60,6 +78,19 @@ describe("cloud arena advanced mechanics integration", () => {
     expect(getPermanentCounterCount(seraph, "+1/+1")).toBe(2);
     expect(getDerivedPermanentStat(battle, seraph, "power")).toBe(4);
     expect(battle.player.graveyard.map((card) => card.definitionId)).toEqual(["guardian"]);
+    expect(
+      battle.rules.findIndex(
+        (event) =>
+          event.type === "permanent_left_battlefield" &&
+          event.definitionId === "guardian",
+      ),
+    ).toBeLessThan(
+      battle.rules.findIndex(
+        (event) =>
+          event.type === "permanent_entered" &&
+          event.definitionId === "sacrificial_seraph",
+      ),
+    );
 
     applyBattleAction(battle, {
       type: "play_card",
@@ -129,9 +160,6 @@ describe("cloud arena advanced mechanics integration", () => {
     expect(getDerivedPermanentStat(battle, disciple, "power")).toBe(3);
     expect(battle.rules.some((event) => event.type === "counter_added")).toBe(true);
     expect(battle.rules.some((event) => event.type === "attachment_attached")).toBe(true);
-    expect(
-      battle.choices.some((choice) => choice.kind === "select_permanents"),
-    ).toBe(true);
     expect(battle.rulesCursor).toBe(battle.rules.length);
   });
 });

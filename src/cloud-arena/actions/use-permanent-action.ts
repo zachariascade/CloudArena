@@ -115,6 +115,7 @@ export function usePermanentAction(
         id: `target_${state.turnNumber}_${state.nextTargetRequestIndex}`,
         prompt: "Choose an enemy to attack",
         optional: false,
+        targetKind: "permanent",
         selector,
         effects: [
           {

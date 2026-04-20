@@ -208,6 +208,28 @@ export function summonPermanentFromCard(
   return permanent;
 }
 
+export function canSummonPermanentFromCard(
+  state: BattleState,
+  controllerId: "player" | "enemy" = "player",
+): boolean {
+  const battlefield =
+    controllerId === "enemy" ? state.enemyBattlefield : state.battlefield;
+
+  return battlefield.some((slot) => slot === null);
+}
+
+export function trySummonPermanentFromCard(
+  state: BattleState,
+  card: CardInstance,
+  controllerId: "player" | "enemy" = "player",
+): PermanentState | null {
+  if (!canSummonPermanentFromCard(state, controllerId)) {
+    return null;
+  }
+
+  return summonPermanentFromCard(state, card, controllerId);
+}
+
 export function createEnemyLeaderPermanent(
   state: BattleState,
   enemy: Pick<EnemyState, "name" | "health" | "basePower" | "intent"> & {
@@ -343,7 +365,9 @@ export function syncEnemyLeaderPermanentFromState(
   leaderPermanent.maxHealth = state.enemy.maxHealth;
   leaderPermanent.block = state.enemy.block;
   leaderPermanent.power = state.enemy.basePower;
-  leaderPermanent.intentLabel = intentLabel ?? leaderPermanent.intentLabel ?? null;
+  leaderPermanent.intentLabel = state.enemy.stunnedThisTurn
+    ? "Stunned"
+    : intentLabel ?? leaderPermanent.intentLabel ?? null;
   leaderPermanent.intentQueueLabels = intentQueueLabels ?? leaderPermanent.intentQueueLabels ?? [];
 }
 

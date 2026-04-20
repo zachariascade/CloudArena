@@ -17,6 +17,19 @@ export const TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
     cost: 1,
     onPlay: [{ attackAmount: 6, target: "enemy" }],
   },
+  stunning_rebuke: {
+    id: "stunning_rebuke",
+    name: "Stunning Rebuke",
+    cardTypes: ["instant"],
+    cost: 2,
+    onPlay: [],
+    spellEffects: [
+      {
+        type: "stun",
+        target: "enemy",
+      },
+    ],
+  },
   defend: {
     id: "defend",
     name: "Defend",
@@ -236,6 +249,8 @@ export function formatBattleEvent(event: BattleEvent): string {
       return `turn ${event.turnNumber}: player drew ${event.cardId}`;
     case "card_played":
       return `turn ${event.turnNumber}: played ${event.cardId}`;
+    case "spell_cast":
+      return `turn ${event.turnNumber}: cast ${event.cardId}`;
     case "enemy_card_played":
       return `turn ${event.turnNumber}: enemy played ${event.cardId}`;
     case "block_gained":
@@ -250,6 +265,8 @@ export function formatBattleEvent(event: BattleEvent): string {
       return `turn ${event.turnNumber}: enemy resolved ${formatEnemyIntent(event.intent)}`;
     case "enemy_power_gained":
       return `turn ${event.turnNumber}: enemy gained ${event.amount} power, base power now ${event.newBasePower}`;
+    case "enemy_stunned":
+      return `turn ${event.turnNumber}: enemy action was stunned and cancelled`;
     case "permanent_destroyed":
       return `turn ${event.turnNumber}: permanent ${event.permanentId} (${event.definitionId}) was destroyed`;
     case "turn_ended":

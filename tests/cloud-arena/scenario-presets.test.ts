@@ -23,7 +23,12 @@ describe("cloud arena scenario presets", () => {
   });
 
   it("exposes reusable deck and enemy preset registries", () => {
-    expect(Object.keys(cloudArenaDeckPresets)).toEqual(["mixed_guardian"]);
+    expect(Object.keys(cloudArenaDeckPresets)).toEqual([
+      "master_deck",
+      "wide_angels",
+      "tall_creatures",
+      "mixed_guardian",
+    ]);
     expect(Object.keys(cloudArenaEnemyPresets)).toEqual([
       "demon_pack",
       "grunt_demon",

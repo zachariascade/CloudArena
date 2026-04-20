@@ -3,11 +3,36 @@ import { describe, expect, it } from "vitest";
 import {
   applyBattleAction,
   buildBattleSummary,
+  cardDefinitions,
+  destroyPermanent,
   getLegalActions,
   playCard,
   usePermanentAction,
+  type CardDefinitionLibrary,
 } from "../../src/cloud-arena/index.js";
 import { createTestBattle, formatBattleLog } from "./helpers.js";
+
+const RESURRECT_TEST_DEFINITIONS: CardDefinitionLibrary = {
+  resurrect: {
+    id: "resurrect",
+    name: "Resurrect",
+    cardTypes: ["instant"],
+    cost: 2,
+    onPlay: [],
+    spellEffects: [
+      {
+        type: "return_from_graveyard",
+        selector: {
+          zone: "graveyard",
+          controller: "you",
+        },
+        targeting: {
+          prompt: "Choose a card from your graveyard",
+        },
+      },
+    ],
+  },
+};
 
 describe("cloud arena combat engine edge cases", () => {
   it("cannot play a card without enough energy", () => {
@@ -137,6 +162,52 @@ describe("cloud arena combat engine edge cases", () => {
         cardInstanceId: sixthGuardianInHand.instanceId,
       }),
     ).toThrow("open battlefield slot");
+  });
+
+  it("skips enemy summons when the enemy battlefield is full and still resolves lethal damage", () => {
+    const battle = createTestBattle({
+      playerHealth: 1,
+      playerDeck: ["attack", "defend", "attack", "defend", "attack"],
+      enemy: {
+        name: "Overflowing Caller",
+        health: 30,
+        basePower: 1,
+        behavior: [{ attackAmount: 1 }],
+        cards: [
+          {
+            id: "spawn_then_strike",
+            name: "Spawn Then Strike",
+            effects: [
+              {
+                spawnCardId: "token_imp",
+                spawnCount: 1,
+                target: "enemy",
+              },
+              {
+                attackAmount: 1,
+                target: "player",
+              },
+            ],
+          },
+        ],
+        startingPermanents: [
+          "enemy_husk",
+          "enemy_husk",
+          "enemy_husk",
+          "enemy_husk",
+        ],
+      },
+    });
+
+    expect(battle.enemyBattlefield.filter(Boolean)).toHaveLength(5);
+    expect(battle.enemyBattlefield.some((entry) => entry?.definitionId === "token_imp")).toBe(false);
+
+    expect(() => applyBattleAction(battle, { type: "end_turn" })).not.toThrow();
+
+    expect(battle.phase).toBe("finished");
+    expect(battle.player.health).toBeLessThanOrEqual(0);
+    expect(battle.enemyBattlefield.filter(Boolean)).toHaveLength(5);
+    expect(battle.enemyBattlefield.some((entry) => entry?.definitionId === "token_imp")).toBe(false);
   });
 
   it("low-level actions fail during the wrong phase", () => {
@@ -619,6 +690,70 @@ describe("cloud arena combat engine edge cases", () => {
     ]);
   });
 
+  it("returns a chosen graveyard card to hand with resurrect", () => {
+    const battle = createTestBattle({
+      cardDefinitions: {
+        ...cardDefinitions,
+        ...RESURRECT_TEST_DEFINITIONS,
+      },
+      playerDeck: ["guardian", "resurrect", "attack", "defend", "attack"],
+      enemy: {
+        name: "Ravaging Demon",
+        health: 30,
+        basePower: 12,
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+
+    battle.player.energy = 10;
+
+    const guardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
+    const resurrectCard = battle.player.hand.find((card) => card.definitionId === "resurrect");
+
+    if (!guardianCard || !resurrectCard) {
+      throw new Error("Expected Guardian and Resurrect in opening hand.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: guardianCard.instanceId,
+    });
+
+    const guardianPermanent = battle.battlefield[0];
+
+    if (!guardianPermanent) {
+      throw new Error("Expected Guardian on battlefield.");
+    }
+
+    destroyPermanent(battle, guardianPermanent.instanceId);
+
+    expect(battle.player.graveyard.map((card) => card.instanceId)).toContain(guardianCard.instanceId);
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: resurrectCard.instanceId,
+    });
+
+    expect(battle.pendingTargetRequest?.targetKind).toBe("card");
+    expect(battle.pendingTargetRequest?.selector.zone).toBe("graveyard");
+
+    const chooseCardAction = getLegalActions(battle).find(
+      (action): action is Extract<typeof action, { type: "choose_card" }> =>
+        action.type === "choose_card" &&
+        action.targetCardInstanceId === guardianCard.instanceId,
+    );
+
+    if (!chooseCardAction) {
+      throw new Error("Expected a choose_card action for the graveyard card.");
+    }
+
+    applyBattleAction(battle, chooseCardAction);
+
+    expect(battle.pendingTargetRequest).toBeNull();
+    expect(battle.player.graveyard.map((card) => card.instanceId)).not.toContain(guardianCard.instanceId);
+    expect(battle.player.hand.map((card) => card.instanceId)).toContain(guardianCard.instanceId);
+  });
+
   it("records internal rules events separately from the battle log", () => {
     const battle = createTestBattle({
       playerDeck: ["guardian", "defend", "attack", "attack", "defend"],
@@ -813,6 +948,7 @@ describe("cloud arena combat engine edge cases", () => {
         "turn 1: played guardian",
         "turn 1: summoned guardian as guardian_1 into slot 1",
         "turn 1: played defend",
+        "turn 1: cast defend",
         "turn 1: player gained 7 block",
         "turn 1: end turn",
         "turn 1: enemy resolved attack 15",
@@ -825,8 +961,10 @@ describe("cloud arena combat engine edge cases", () => {
         "turn 2: player drew defend",
         "turn 2: permanent guardian_1 used defend",
         "turn 2: played attack",
+        "turn 2: cast attack",
         "turn 2: card dealt 6 damage to permanent enemy_leader_1_1",
         "turn 2: played defend",
+        "turn 2: cast defend",
         "turn 2: player gained 7 block",
         "turn 2: end turn",
         "turn 2: enemy resolved attack 15",
@@ -1002,5 +1140,40 @@ describe("cloud arena combat engine edge cases", () => {
     applyBattleAction(battle, { type: "end_turn" });
 
     expect(enemyPermanent.health).toBe(2);
+  });
+
+  it("stuns the enemy so their action is cancelled for the turn", () => {
+    const battle = createTestBattle({
+      playerDeck: ["stunning_rebuke", "defend", "attack", "defend", "attack"],
+      enemy: {
+        name: "Stunned Opponent",
+        health: 30,
+        basePower: 12,
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+
+    const stunCard = battle.player.hand.find((card) => card.definitionId === "stunning_rebuke");
+
+    if (!stunCard) {
+      throw new Error("Expected Stunning Rebuke in opening hand.");
+    }
+
+    const startingHealth = battle.player.health;
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: stunCard.instanceId,
+    });
+
+    const enemyLeader = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+
+    expect(enemyLeader?.intentLabel).toBe("Stunned");
+
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(battle.player.health).toBe(startingHealth);
+    expect(battle.enemy.stunnedThisTurn).toBe(false);
+    expect(battle.log.some((event) => event.type === "enemy_stunned")).toBe(true);
   });
 });

@@ -62,7 +62,7 @@ export function applyBattleAction(state: BattleState, action: BattleAction): Bat
     throw new Error("Cannot apply actions to a finished battle.");
   }
 
-  if (state.pendingTargetRequest && action.type !== "choose_target") {
+  if (state.pendingTargetRequest && action.type !== "choose_target" && action.type !== "choose_card") {
     throw new Error("A target must be chosen before taking another action.");
   }
 
@@ -74,7 +74,13 @@ export function applyBattleAction(state: BattleState, action: BattleAction): Bat
       cleanupDeadPermanents(state);
       return checkBattleFinished(state);
     case "choose_target":
-      resolvePendingTargetRequest(state, action.targetPermanentId);
+      resolvePendingTargetRequest(state, action);
+      cleanupDeadPermanents(state);
+      processTriggeredAbilities(state);
+      cleanupDeadPermanents(state);
+      return checkBattleFinished(state);
+    case "choose_card":
+      resolvePendingTargetRequest(state, action);
       cleanupDeadPermanents(state);
       processTriggeredAbilities(state);
       cleanupDeadPermanents(state);

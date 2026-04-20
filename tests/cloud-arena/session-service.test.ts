@@ -38,15 +38,18 @@ describe("cloud arena session service", () => {
     const service = createCloudArenaSessionService();
     const snapshot = service.createSession({
       scenarioId: "mixed_guardian",
+      deckId: "wide_angels",
       seed: 9,
     });
 
     expect(snapshot.sessionId).toBeTypeOf("string");
     expect(snapshot.scenarioId).toBe("mixed_guardian");
+    expect(snapshot.deckId).toBe("wide_angels");
     expect(snapshot.seed).toBe(9);
     expect(snapshot.createdAt).toBeTypeOf("string");
     expect(snapshot.resetSource).toEqual({
       scenarioId: "mixed_guardian",
+      deckId: "wide_angels",
       seed: 9,
     });
     expect(snapshot.legalActions.length).toBeGreaterThan(0);
@@ -241,6 +244,7 @@ describe("cloud arena session service", () => {
     const service = createCloudArenaSessionService();
     const session = service.createSession({
       scenarioId: "mixed_guardian",
+      deckId: "tall_creatures",
       seed: 3,
     });
     const actionToApply =
@@ -257,6 +261,7 @@ describe("cloud arena session service", () => {
     expect(reset.seed).toBe(3);
     expect(reset.resetSource).toEqual({
       scenarioId: "mixed_guardian",
+      deckId: "tall_creatures",
       seed: 3,
     });
     expect(reset.actionHistory).toEqual([]);

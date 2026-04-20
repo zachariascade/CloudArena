@@ -20,6 +20,11 @@ export type SelectorContext = {
   triggerSubjectCardInstanceId?: string;
   sourceCardInstanceId?: string;
   chosenTargetPermanentId?: string;
+  chosenTargetCardInstanceId?: string;
+  pendingCardPlay?: {
+    cardInstanceId: string;
+    definitionId: string;
+  };
 };
 
 export type SelectedObject =
@@ -234,7 +239,22 @@ export function selectPermanents(
     zone: selector.zone ?? "battlefield",
   };
 
-  return selectObjects(state, battlefieldSelector, context).flatMap((object) =>
+  const selectedObjects =
+    battlefieldSelector.zone === "battlefield" && battlefieldSelector.controller === "any"
+      ? [
+          ...selectObjects(state, battlefieldSelector, context),
+          ...selectObjects(
+            state,
+            {
+              ...battlefieldSelector,
+              zone: "enemy_battlefield",
+            },
+            context,
+          ),
+        ]
+      : selectObjects(state, battlefieldSelector, context);
+
+  return selectedObjects.flatMap((object) =>
     object.kind === "permanent" ? [object.permanent] : [],
   );
 }

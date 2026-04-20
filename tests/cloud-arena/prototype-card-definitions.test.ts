@@ -4,6 +4,7 @@ import {
   applyBattleAction,
   cardDefinitions,
   createBattle,
+  type CardDefinitionLibrary,
   getLegalActions,
   getDerivedPermanentStat,
   getPermanentCounterCount,
@@ -48,6 +49,22 @@ describe("cloud arena prototype card definitions", () => {
       cardInstanceId: seraphCard.instanceId,
     });
 
+    expect(battle.pendingTargetRequest).toBeTruthy();
+
+    const guardian = battle.battlefield.find((permanent) => permanent?.definitionId === "guardian");
+    const targetAction = getLegalActions(battle).find(
+      (action) =>
+        action.type === "choose_target" &&
+        guardian !== null &&
+        action.targetPermanentId === guardian?.instanceId,
+    );
+
+    if (!targetAction || targetAction.type !== "choose_target" || !guardian) {
+      throw new Error("Expected a legal sacrifice target for sacrificial_seraph.");
+    }
+
+    applyBattleAction(battle, targetAction);
+
     const seraph = battle.battlefield.find((permanent) => permanent?.definitionId === "sacrificial_seraph");
 
     if (!seraph) {
@@ -57,6 +74,104 @@ describe("cloud arena prototype card definitions", () => {
     expect(getPermanentCounterCount(seraph, "+1/+1")).toBe(2);
     expect(getDerivedPermanentStat(battle, seraph, "power")).toBe(4);
     expect(battle.player.graveyard.map((card) => card.definitionId)).toContain("guardian");
+  });
+
+  it("supports card_played and spell_cast triggers", () => {
+    const cardDefinitionsWithTriggers: CardDefinitionLibrary = {
+      ...cardDefinitions,
+      herald_of_release: {
+        id: "herald_of_release",
+        name: "Herald of Release",
+        cardTypes: ["creature"],
+        cost: 2,
+        onPlay: [],
+        power: 2,
+        health: 2,
+        abilities: [
+          {
+            kind: "triggered",
+            trigger: { event: "card_played", selector: { relation: "self" } },
+            effects: [
+              {
+                type: "add_counter",
+                target: "self",
+                powerDelta: 1,
+                healthDelta: 1,
+              },
+            ],
+          },
+        ],
+      },
+      release_blessing: {
+        id: "release_blessing",
+        name: "Release Blessing",
+        cardTypes: ["instant"],
+        cost: 1,
+        onPlay: [],
+        abilities: [
+          {
+            kind: "triggered",
+            trigger: { event: "spell_cast", selector: { relation: "self" } },
+            effects: [
+              {
+                type: "gain_block",
+                target: "player",
+                amount: { type: "constant", value: 4 },
+              },
+            ],
+          },
+        ],
+      },
+    };
+
+    const battle = createBattle({
+      seed: 1,
+      playerHealth: 100,
+      cardDefinitions: cardDefinitionsWithTriggers,
+      playerDeck: [
+        "herald_of_release",
+        "release_blessing",
+        "attack",
+        "defend",
+        "attack",
+      ],
+      enemy: {
+        name: "Trigger Dummy",
+        health: 40,
+        basePower: 12,
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+
+    battle.player.energy = 10;
+
+    const heraldCard = battle.player.hand.find((card) => card.definitionId === "herald_of_release");
+    const blessingCard = battle.player.hand.find((card) => card.definitionId === "release_blessing");
+
+    if (!heraldCard || !blessingCard) {
+      throw new Error("Expected trigger cards in opening hand.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: heraldCard.instanceId,
+    });
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: blessingCard.instanceId,
+    });
+
+    const herald = battle.battlefield.find((permanent) => permanent?.definitionId === "herald_of_release");
+
+    if (!herald) {
+      throw new Error("Expected herald_of_release on battlefield.");
+    }
+
+    expect(getPermanentCounterCount(herald, "+1/+1")).toBe(2);
+    expect(getDerivedPermanentStat(battle, herald, "power")).toBe(3);
+    expect(battle.player.block).toBe(4);
+    expect(battle.rules.some((event) => event.type === "card_played")).toBe(true);
+    expect(battle.rules.some((event) => event.type === "spell_cast")).toBe(true);
   });
 
   it("supports choir_captain static scaling in the default card library", () => {
