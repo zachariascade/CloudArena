@@ -5,6 +5,18 @@ export const massBenedictionCardDefinition: CardDefinition = {
   name: "Mass Benediction",
   cardTypes: ["instant"],
   cost: 2,
+  display: {
+    title: "Mass Benediction",
+    subtitle: "Instant",
+    frameTone: "white",
+    manaCost: "{2}",
+    imagePath: "card_0027_let_there_be_light.png",
+    imageAlt: "A radiant blessing washing over a gathered host",
+    flavorText: "When the field is already crowded with resolve, every presence turns brighter.",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "010",
+  },
   onPlay: [],
   spellEffects: [
     {

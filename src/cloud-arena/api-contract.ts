@@ -83,6 +83,12 @@ export type CloudArenaPendingTargetRequestSnapshot = {
     relation?: string;
     source?: string;
   };
+  context?: {
+    abilitySourcePermanentId?: string;
+    sourceCardInstanceId?: string;
+    pendingCardPlay?: CloudArenaCardSnapshot;
+    pendingCardPlayHandIndex?: number;
+  };
 };
 
 export type CloudArenaActionOption = {
@@ -129,6 +135,7 @@ export type CloudArenaSessionSnapshot = {
     health: number;
     maxHealth: number;
     block: number;
+    leaderDefinitionId?: CardDefinitionId | null;
     intent: EnemyIntent;
     intentLabel: string;
     intentQueueLabels: string[];

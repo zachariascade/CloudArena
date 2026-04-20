@@ -86,6 +86,7 @@ export {
   getEnemyLeaderPermanent,
   getPrimaryEnemyPermanent,
   isEquipmentPermanent,
+  permanentAttacksAllEnemyPermanents,
   summonPermanentFromCard,
   toPermanentInstanceId,
 } from "./core/permanents.js";

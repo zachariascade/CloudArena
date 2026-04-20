@@ -6,6 +6,7 @@ export const gruntDemonEnemyPreset: CloudArenaEnemyPreset = {
   name: "Grunt Demon",
   health: 18,
   basePower: 5,
+  leaderDefinitionId: "enemy_grunt_demon",
   cards: [
     attackOnceWithBasePower(),
     attackOnceWithBasePower(),

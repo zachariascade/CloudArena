@@ -30,12 +30,18 @@ export function playCard(state: BattleState, cardInstanceId: string): BattleStat
   }
 
   const card = state.player.hand.find((entry) => entry.instanceId === cardInstanceId);
+  const handIndex = state.player.hand.findIndex((entry) => entry.instanceId === cardInstanceId);
 
   if (!card) {
     throw new Error(`Card ${cardInstanceId} was not found in hand.`);
   }
 
   const definition = getCardDefinitionFromLibrary(state.cardDefinitions, card.definitionId);
+  const pendingCardContext = {
+    cardInstanceId: card.instanceId,
+    definitionId: card.definitionId,
+    handIndex,
+  };
 
   if (state.player.energy < definition.cost) {
     throw new Error(`Not enough energy to play ${definition.name}.`);
@@ -78,6 +84,7 @@ export function playCard(state: BattleState, cardInstanceId: string): BattleStat
 
     resolveLegacyCardEffects(state, definition.onPlay, {
       sourceCardInstanceId: card.instanceId,
+      pendingCardPreview: pendingCardContext,
     });
     if (state.pendingTargetRequest) {
       emitRulesEvent(state, {
@@ -94,6 +101,7 @@ export function playCard(state: BattleState, cardInstanceId: string): BattleStat
     if (definition.spellEffects?.length) {
       resolveSpellEffects(state, definition.spellEffects, {
         sourceCardInstanceId: card.instanceId,
+        pendingCardPreview: pendingCardContext,
       });
     }
 
@@ -122,10 +130,7 @@ export function playCard(state: BattleState, cardInstanceId: string): BattleStat
 
   resolveLegacyCardEffects(state, definition.onPlay, {
     sourceCardInstanceId: card.instanceId,
-    pendingCardPlay: {
-      cardInstanceId: card.instanceId,
-      definitionId: card.definitionId,
-    },
+    pendingCardPlay: pendingCardContext,
   });
   if (state.pendingTargetRequest) {
     return state;
@@ -137,10 +142,7 @@ export function playCard(state: BattleState, cardInstanceId: string): BattleStat
         effect.type === "sacrifice" &&
         selectPermanents(state, effect.selector, {
           sourceCardInstanceId: card.instanceId,
-          pendingCardPlay: {
-            cardInstanceId: card.instanceId,
-            definitionId: card.definitionId,
-          },
+          pendingCardPlay: pendingCardContext,
         }).length > 0,
     );
 
@@ -150,10 +152,7 @@ export function playCard(state: BattleState, cardInstanceId: string): BattleStat
 
     resolveSpellEffects(state, definition.preSummonEffects, {
       sourceCardInstanceId: card.instanceId,
-      pendingCardPlay: {
-        cardInstanceId: card.instanceId,
-        definitionId: card.definitionId,
-      },
+      pendingCardPlay: pendingCardContext,
     });
   }
 

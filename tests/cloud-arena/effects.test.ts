@@ -8,6 +8,9 @@ import {
   resolveEffects,
   type CardDefinitionLibrary,
 } from "../../src/cloud-arena/index.js";
+import { armorySeraphCardDefinition } from "../../src/cloud-arena/cards/definitions/armory-seraph.js";
+import { battlefieldInsightCardDefinition } from "../../src/cloud-arena/cards/definitions/battlefield-insight.js";
+import { forbiddenInsightCardDefinition } from "../../src/cloud-arena/cards/definitions/forbidden-insight.js";
 import { createTestBattle } from "./helpers.js";
 
 const EFFECT_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
@@ -93,6 +96,16 @@ const EFFECT_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
     cardTypes: ["instant"],
     cost: 1,
     onPlay: [{ attackAmount: 6, target: "enemy" }],
+  },
+  enemy_leader: {
+    id: "enemy_leader",
+    name: "Enemy Leader",
+    cardTypes: ["creature"],
+    cost: 0,
+    onPlay: [],
+    power: 0,
+    health: 0,
+    abilities: [],
   },
   banner_blessing: {
     id: "banner_blessing",
@@ -386,6 +399,142 @@ describe("cloud arena effect primitives", () => {
     });
 
     expect(battle.player.hand.length).toBe(6);
+    expect(battle.player.drawPile.length).toBe(drawPileBefore - 1);
+  });
+
+  it("draws three cards from Forbidden Insight", () => {
+    const battle = createTestBattle({
+      cardDefinitions: {
+        ...EFFECT_TEST_CARD_DEFINITIONS,
+        forbidden_insight: forbiddenInsightCardDefinition,
+      },
+      playerDeck: [
+        "forbidden_insight",
+        "angel_host",
+        "altar_keeper",
+        "holy_blade",
+        "attack",
+        "defend",
+        "vision_surge",
+        "lorekeeper",
+      ],
+      enemy: {
+        name: "Insight Dummy",
+        health: 30,
+        basePower: 12,
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+    battle.player.energy = 10;
+
+    const forbiddenInsightCard = battle.player.hand.find(
+      (card) => card.definitionId === "forbidden_insight",
+    );
+
+    if (!forbiddenInsightCard) {
+      throw new Error("Expected Forbidden Insight in hand.");
+    }
+
+    const handBefore = battle.player.hand.length;
+    const drawPileBefore = battle.player.drawPile.length;
+
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: forbiddenInsightCard.instanceId });
+
+    expect(battle.player.hand.length).toBe(handBefore + 2);
+    expect(battle.player.drawPile.length).toBe(drawPileBefore - 3);
+    expect(battle.rules.filter((event) => event.type === "card_drawn").length).toBe(8);
+  });
+
+  it("draws cards equal to the number of creatures on the battlefield", () => {
+    const battle = createTestBattle({
+      cardDefinitions: {
+        ...EFFECT_TEST_CARD_DEFINITIONS,
+        battlefield_insight: battlefieldInsightCardDefinition,
+      },
+      playerDeck: [
+        "angel_host",
+        "altar_keeper",
+        "battlefield_insight",
+        "vision_surge",
+        "lorekeeper",
+        "holy_blade",
+        "attack",
+        "defend",
+      ],
+      enemy: {
+        name: "Battlefield Dummy",
+        health: 30,
+        basePower: 12,
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+    battle.player.energy = 10;
+
+    const angelCard = battle.player.hand.find((card) => card.definitionId === "angel_host");
+    const altarKeeperCard = battle.player.hand.find((card) => card.definitionId === "altar_keeper");
+    const battlefieldInsightCard = battle.player.hand.find(
+      (card) => card.definitionId === "battlefield_insight",
+    );
+
+    if (!angelCard || !altarKeeperCard || !battlefieldInsightCard) {
+      throw new Error("Expected setup cards in hand.");
+    }
+
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: angelCard.instanceId });
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: altarKeeperCard.instanceId });
+
+    const handBefore = battle.player.hand.length;
+    const drawPileBefore = battle.player.drawPile.length;
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: battlefieldInsightCard.instanceId,
+    });
+
+    expect(battle.battlefield.filter(Boolean)).toHaveLength(2);
+    expect(battle.player.hand.length).toBe(handBefore + 1);
+    expect(battle.player.drawPile.length).toBe(drawPileBefore - 2);
+  });
+
+  it("draws a card when an equipment you control enters the battlefield", () => {
+    const battle = createTestBattle({
+      cardDefinitions: {
+        ...EFFECT_TEST_CARD_DEFINITIONS,
+        armory_seraph: armorySeraphCardDefinition,
+      },
+      playerDeck: [
+        "armory_seraph",
+        "holy_blade",
+        "attack",
+        "defend",
+        "attack",
+        "defend",
+      ],
+      enemy: {
+        name: "Armory Dummy",
+        health: 30,
+        basePower: 12,
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+    battle.player.energy = 10;
+
+    const seraphCard = battle.player.hand.find((card) => card.definitionId === "armory_seraph");
+    const bladeCard = battle.player.hand.find((card) => card.definitionId === "holy_blade");
+
+    if (!seraphCard || !bladeCard) {
+      throw new Error("Expected Armory Seraph and Holy Blade in hand.");
+    }
+
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: seraphCard.instanceId });
+
+    const handBefore = battle.player.hand.length;
+    const drawPileBefore = battle.player.drawPile.length;
+
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: bladeCard.instanceId });
+
+    expect(battle.battlefield.some((permanent) => permanent?.definitionId === "armory_seraph")).toBe(true);
+    expect(battle.player.hand.length).toBe(handBefore);
     expect(battle.player.drawPile.length).toBe(drawPileBefore - 1);
   });
 });

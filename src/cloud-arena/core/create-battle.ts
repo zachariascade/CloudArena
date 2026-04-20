@@ -74,6 +74,7 @@ export function createBattle(input: CreateBattleInput): BattleState {
       maxHealth: input.enemy.health,
       block: 0,
       basePower: input.enemy.basePower,
+      leaderDefinitionId: input.enemy.leaderDefinitionId ?? null,
       intent: initialEnemyPlan.intent,
       intentQueueLabels: [],
       behavior: enemyBehavior,

@@ -24,12 +24,14 @@ import {
   getScenarioPreset,
   hasCardType,
   isPermanentCardDefinition,
+  permanentAttacksAllEnemyPermanents,
   summarizePermanentCounters,
   type BattleAction,
   type BattleEvent,
   type BattleState,
   type CloudArenaScenarioPreset,
 } from "../../../../src/cloud-arena/index.js";
+import { summarizeCardDefinition } from "../../../../src/cloud-arena/card-summary.js";
 
 type CloudArenaSessionRecord = {
   id: string;
@@ -151,61 +153,7 @@ function toCardSnapshot(
     definitionId: card.definitionId,
     name: definition.name,
     cost: definition.cost,
-    effectSummary:
-      isPermanentCardDefinition(definition)
-        ? [
-            ...(hasCardType(definition, "creature") ? [`Attack ${definition.power}`, "Defend"] : []),
-            ...getActivatedAbilities(definition.abilities)
-              .map((ability) =>
-                formatActivatedAbilityLabel(
-                  state,
-                  {
-                    instanceId: `preview_${definition.id}`,
-                    sourceCardInstanceId: `preview_${definition.id}`,
-                    definitionId: definition.id,
-                    name: definition.name,
-                    power: definition.power,
-                    health: definition.health,
-                    maxHealth: definition.health,
-                    block: 0,
-                    recoveryPolicy: definition.recoveryPolicy ?? "none",
-                    counters: [],
-                    modifiers: [],
-                    attachments: [],
-                    attachedTo: null,
-                    abilities: definition.abilities ? definition.abilities.map((abilityEntry) => ({ ...abilityEntry })) : [],
-                    disabledAbilityIds: [],
-                    disabledRulesActions: [],
-                    hasActedThisTurn: false,
-                    isTapped: false,
-                    isDefending: false,
-                    slotIndex: 0,
-                  },
-                  ability,
-                ),
-              ),
-          ]
-            .join(" • ")
-        : definition.onPlay
-            .map((effect) => {
-              if (typeof effect.attackAmount === "number" && effect.attackAmount > 0) {
-                const hits = effect.attackTimes && effect.attackTimes > 1
-                  ? ` x${effect.attackTimes}`
-                  : "";
-                return `Attack ${effect.attackAmount}${hits}`;
-              }
-
-              if (typeof effect.blockAmount === "number" && effect.blockAmount > 0) {
-                return `Defend ${effect.blockAmount}`;
-              }
-
-              if (effect.summonSelf) {
-                return "Summon";
-              }
-
-              return "Effect";
-            })
-            .join(" • "),
+    effectSummary: summarizeCardDefinition(definition).join(" • "),
   };
 }
 
@@ -259,13 +207,21 @@ function createActionOption(
         (entry) => entry?.instanceId === action.permanentId,
       );
       const name = permanent?.name ?? action.permanentId;
+      const attacksAllEnemyPermanents =
+        action.action === "attack" && permanent
+          ? permanentAttacksAllEnemyPermanents(state, permanent)
+          : false;
       const verb =
         action.source === "rules"
           ? action.action === "attack"
-            ? "Attack with"
+            ? attacksAllEnemyPermanents
+              ? "Attack all with"
+              : "Attack with"
             : "Defend with"
           : action.action === "attack"
-            ? "Attack with"
+            ? attacksAllEnemyPermanents
+              ? "Attack all with"
+              : "Attack with"
             : action.action === "apply_block"
               ? "Apply block with"
               : "Use ability on";
@@ -339,6 +295,10 @@ function buildSessionSnapshot(
   const { state } = record;
   const legalActions = getLegalActionOptions(state);
   const primaryEnemyPermanent = getPrimaryEnemyPermanent(state);
+  const pendingHandCard =
+    state.pendingTargetRequest?.context.pendingCardPlay ??
+    state.pendingTargetRequest?.context.pendingCardPreview ??
+    null;
 
   return {
     sessionId: record.id,
@@ -368,6 +328,7 @@ function buildSessionSnapshot(
       health: primaryEnemyPermanent?.health ?? state.enemy.health,
       maxHealth: primaryEnemyPermanent?.maxHealth ?? state.enemy.maxHealth,
       block: primaryEnemyPermanent?.block ?? state.enemy.block,
+      leaderDefinitionId: state.enemy.leaderDefinitionId,
       intent: { ...state.enemy.intent },
       intentLabel: primaryEnemyPermanent?.intentLabel ?? (state.enemy.stunnedThisTurn ? "Stunned" : formatEnemyIntent(state.enemy.intent)),
       intentQueueLabels: primaryEnemyPermanent?.intentQueueLabels ?? [...state.enemy.intentQueueLabels],
@@ -437,6 +398,19 @@ function buildSessionSnapshot(
           optional: state.pendingTargetRequest.optional,
           targetKind: state.pendingTargetRequest.targetKind,
           selector: { ...state.pendingTargetRequest.selector },
+          // Keep the card visible in hand while target selection is pending.
+          // Permanent cards use pendingCardPlay; spells use pendingCardPreview.
+          context: {
+            abilitySourcePermanentId: state.pendingTargetRequest.context.abilitySourcePermanentId,
+            sourceCardInstanceId: state.pendingTargetRequest.context.sourceCardInstanceId,
+            pendingCardPlay: pendingHandCard
+              ? toCardSnapshot(state, {
+                  instanceId: pendingHandCard.cardInstanceId,
+                  definitionId: pendingHandCard.definitionId,
+                })
+              : undefined,
+            pendingCardPlayHandIndex: pendingHandCard?.handIndex,
+          },
         }
       : null,
     blockingQueue: [...state.blockingQueue],

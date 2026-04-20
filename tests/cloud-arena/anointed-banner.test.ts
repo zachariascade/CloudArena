@@ -10,7 +10,7 @@ import {
 } from "../../src/cloud-arena/index.js";
 
 describe("cloud arena anointed banner", () => {
-  it("adds a +1/+1 counter to all permanents when it enters the battlefield", () => {
+  it("adds a +1/+1 counter to a creature when it enters the battlefield", () => {
     const battle = createBattle({
       seed: 1,
       cardDefinitions,
@@ -40,11 +40,11 @@ describe("cloud arena anointed banner", () => {
 
     applyBattleAction(battle, {
       type: "play_card",
-      cardInstanceId: guardianCard.instanceId,
+      cardInstanceId: bannerCard.instanceId,
     });
     applyBattleAction(battle, {
       type: "play_card",
-      cardInstanceId: bannerCard.instanceId,
+      cardInstanceId: guardianCard.instanceId,
     });
 
     const guardian = battle.battlefield.find((permanent) => permanent?.definitionId === "guardian");
@@ -55,13 +55,11 @@ describe("cloud arena anointed banner", () => {
     }
 
     expect(getPermanentCounterCount(guardian, "+1/+1")).toBe(2);
-    expect(getPermanentCounterCount(banner, "+1/+1")).toBe(2);
+    expect(getPermanentCounterCount(banner, "+1/+1")).toBe(0);
     expect(getDerivedPermanentStat(battle, guardian, "power")).toBe(5);
     expect(getDerivedPermanentActionAmount(battle, guardian, "attack")).toBe(5);
-    expect(
-      battle.rules.filter((event) => event.type === "counter_added").length,
-    ).toBe(4);
+    expect(battle.rules.filter((event) => event.type === "counter_added").length).toBe(2);
     expect(guardian.health).toBe(5);
-    expect(banner.health).toBe(7);
+    expect(banner.health).toBe(6);
   });
 });

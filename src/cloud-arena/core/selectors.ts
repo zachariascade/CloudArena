@@ -8,6 +8,7 @@ import type {
   BattleState,
   CardDefinition,
   CardInstance,
+  PendingHandCardContext,
   PermanentState,
   Selector,
   ZoneName,
@@ -21,10 +22,8 @@ export type SelectorContext = {
   sourceCardInstanceId?: string;
   chosenTargetPermanentId?: string;
   chosenTargetCardInstanceId?: string;
-  pendingCardPlay?: {
-    cardInstanceId: string;
-    definitionId: string;
-  };
+  pendingCardPlay?: PendingHandCardContext;
+  pendingCardPreview?: PendingHandCardContext;
 };
 
 export type SelectedObject =

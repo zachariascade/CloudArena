@@ -1,20 +1,20 @@
 import type { CardDefinition } from "../../core/types.js";
 
-export const enemyLeaderCardDefinition: CardDefinition = {
-  id: "enemy_leader",
-  name: "Enemy Leader",
+export const enemyImpCallerCardDefinition: CardDefinition = {
+  id: "enemy_imp_caller",
+  name: "Imp Caller",
   cardTypes: ["creature"],
   cost: 0,
   display: {
-    title: "Enemy Leader",
+    title: "Imp Caller",
     subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",
-    imagePath: "card_0009_lucifer_fallen_angel_of_light.webp",
-    imageAlt: "A fallen angel wreathed in fire and shadow",
+    imagePath: "0AF7C779-AF9B-4662-82E4-F481882E7788.jpeg",
+    imageAlt: "The Imp Caller looming over a swarm of impish minions",
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
-    collectorNumber: "E00",
+    collectorNumber: "E06",
   },
   onPlay: [],
   power: 0,

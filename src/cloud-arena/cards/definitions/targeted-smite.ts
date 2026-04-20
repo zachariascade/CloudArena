@@ -5,6 +5,18 @@ export const targetedSmiteCardDefinition: CardDefinition = {
   name: "Targeted Smite",
   cardTypes: ["instant"],
   cost: 1,
+  display: {
+    title: "Targeted Smite",
+    subtitle: "Instant",
+    frameTone: "red",
+    manaCost: "{1}",
+    imagePath: "card_0023_cain_marked_exile.jpg",
+    imageAlt: "A marked exile struck by a precise judgment",
+    flavorText: "Judgment lands best when it does not wander.",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "012",
+  },
   onPlay: [],
   spellEffects: [
     {

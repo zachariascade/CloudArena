@@ -221,6 +221,50 @@ describe("cloud arena prototype card definitions", () => {
     expect(getDerivedPermanentStat(battle, captain, "power")).toBe(4);
   });
 
+  it("supports garden_of_earthly_delights in the default card library", () => {
+    const battle = createBattle({
+      seed: 1,
+      playerHealth: 100,
+      cardDefinitions,
+      playerDeck: [
+        "garden_of_earthly_delights",
+        "guardian",
+        "attack",
+        "defend",
+        "attack",
+      ],
+      enemy: {
+        name: "Prototype Dummy",
+        health: 40,
+        basePower: 12,
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+
+    battle.player.energy = 10;
+
+    const gardenCard = battle.player.hand.find((card) => card.definitionId === "garden_of_earthly_delights");
+    const guardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
+
+    if (!gardenCard || !guardianCard) {
+      throw new Error("Expected garden_of_earthly_delights and guardian in opening hand.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: gardenCard.instanceId,
+    });
+
+    expect(battle.player.block).toBe(3);
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: guardianCard.instanceId,
+    });
+
+    expect(battle.player.block).toBe(4);
+  });
+
   it("supports armory_disciple equipping holy_blade in the default card library", () => {
     const battle = createBattle({
       seed: 1,

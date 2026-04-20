@@ -6,6 +6,7 @@ export const impCallerEnemyPreset: CloudArenaEnemyPreset = {
   name: "Imp Caller",
   health: 20,
   basePower: 3,
+  leaderDefinitionId: "enemy_imp_caller",
   startingTokens: ["token_imp"],
   cards: [
     spawnSimpleToken("token_imp"),

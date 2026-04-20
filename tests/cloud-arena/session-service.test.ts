@@ -56,6 +56,42 @@ describe("cloud arena session service", () => {
     expect(snapshot.actionHistory).toEqual([]);
   });
 
+  it("summarizes sacrifice costs on cards in the session snapshot", () => {
+    const service = createCloudArenaSessionService();
+    const snapshot = service.createSession({
+      scenarioId: "mixed_guardian",
+      deckId: "tall_creatures",
+      seed: 9,
+    });
+    const seraph = snapshot.player.hand.find((card) => card.definitionId === "sacrificial_seraph");
+
+    if (!seraph) {
+      throw new Error("Expected sacrificial_seraph in the opening hand.");
+    }
+
+    expect(seraph.effectSummary).not.toContain("Summon");
+    expect(seraph.effectSummary).not.toContain("Attack");
+    expect(seraph.effectSummary).not.toContain("Defend");
+    expect(seraph.effectSummary).toContain("As an additional cost, sacrifice another creature you control.");
+  });
+
+  it("summarizes equipment bonuses on cards in the session snapshot", () => {
+    const service = createCloudArenaSessionService();
+    const snapshot = service.createSession({
+      scenarioId: "mixed_guardian",
+      deckId: "tall_creatures",
+      seed: 9,
+    });
+    const blade = snapshot.player.hand.find((card) => card.definitionId === "holy_blade");
+
+    if (!blade) {
+      throw new Error("Expected holy_blade in the opening hand.");
+    }
+
+    expect(blade.effectSummary).toContain("Equip a permanent.");
+    expect(blade.effectSummary).toContain("Equipped permanent gets +1/+1.");
+  });
+
   it("surfaces enemy telegraph queue labels in the session snapshot", () => {
     const service = createCloudArenaSessionService();
     const snapshot = service.createSession({
@@ -216,6 +252,44 @@ describe("cloud arena session service", () => {
     expect(benediction).toBeTruthy();
     expect(guardian?.counters?.["+1/+1"]).toBe(2);
     expect(guardian?.power).toBe(5);
+  });
+
+  it("includes the pending spell play context while a target is being chosen", () => {
+    const service = createCloudArenaSessionService();
+    const session = service.createSession({
+      scenarioId: "mixed_guardian",
+      seed: 5,
+    });
+    const tokenAngelAction = findPlayableCardAction(
+      session.player.hand,
+      session.legalActions,
+      "token_angel",
+    );
+
+    if (!tokenAngelAction) {
+      throw new Error("Expected to find a playable token angel card.");
+    }
+
+    const afterTokenAngel = service.applyAction(session.sessionId, tokenAngelAction);
+    const focusedBlessingAction = findPlayableCardAction(
+      afterTokenAngel.player.hand,
+      afterTokenAngel.legalActions,
+      "focused_blessing",
+    );
+
+    if (!focusedBlessingAction) {
+      throw new Error("Expected to find a playable focused blessing card.");
+    }
+
+    const updated = service.applyAction(afterTokenAngel.sessionId, focusedBlessingAction);
+
+    expect(updated.pendingTargetRequest).toBeTruthy();
+    expect(updated.pendingTargetRequest?.context?.pendingCardPlay).toMatchObject({
+      instanceId: focusedBlessingAction.cardInstanceId,
+      definitionId: "focused_blessing",
+      name: "Focused Blessing",
+    });
+    expect(updated.pendingTargetRequest?.context?.pendingCardPlayHandIndex).toBe(1);
   });
 
   it("resolves the full enemy turn when end turn is applied", () => {

@@ -1,20 +1,20 @@
 import type { CardDefinition } from "../../core/types.js";
 
-export const enemyLeaderCardDefinition: CardDefinition = {
-  id: "enemy_leader",
-  name: "Enemy Leader",
+export const enemyGruntDemonCardDefinition: CardDefinition = {
+  id: "enemy_grunt_demon",
+  name: "Grunt Demon",
   cardTypes: ["creature"],
   cost: 0,
   display: {
-    title: "Enemy Leader",
+    title: "Grunt Demon",
     subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",
-    imagePath: "card_0009_lucifer_fallen_angel_of_light.webp",
-    imageAlt: "A fallen angel wreathed in fire and shadow",
+    imagePath: "grunt_demon.svg",
+    imageAlt: "A horned demon soldier framed by smoke and ember light",
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
-    collectorNumber: "E00",
+    collectorNumber: "E02",
   },
   onPlay: [],
   power: 0,

@@ -183,5 +183,9 @@ export function formatActivatedAbilityLabel(
     return `${costPrefix}Equip`;
   }
 
+  if (ability.activation.actionId === "gain_energy") {
+    return `${costPrefix}Gain Energy`;
+  }
+
   return `${costPrefix}${ability.activation.actionId.replace(/_/g, " ")}`;
 }

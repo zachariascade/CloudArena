@@ -47,6 +47,16 @@ const ATTACHMENT_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
     health: 1,
     abilities: [],
   },
+  enemy_leader: {
+    id: "enemy_leader",
+    name: "Enemy Leader",
+    cardTypes: ["creature"],
+    cost: 0,
+    onPlay: [],
+    power: 0,
+    health: 0,
+    abilities: [],
+  },
   attack: {
     id: "attack",
     name: "Attack",

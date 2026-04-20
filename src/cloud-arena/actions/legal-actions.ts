@@ -4,6 +4,7 @@ import {
   getActivatedAbilities,
   getAbilityEnergyCost,
 } from "../core/activated-abilities.js";
+import { evaluateCondition } from "../core/conditions.js";
 import { hasOpenBattlefieldSlot, selectObjects, selectPermanents } from "../core/selectors.js";
 import type { BattleAction, BattleState, Effect, Selector } from "../core/types.js";
 import type { SelectedObject } from "../core/selectors.js";
@@ -110,6 +111,14 @@ export function getLegalActions(state: BattleState): BattleAction[] {
       const activatedAbilityActions = getActivatedAbilities(permanent.abilities)
         .filter((ability) => ability.activation.actionId !== "attack")
         .filter((ability) => !(permanent.disabledAbilityIds ?? []).includes(ability.id))
+        .filter((ability) =>
+          (ability.conditions ?? []).every((condition) =>
+            evaluateCondition(state, condition, {
+              abilitySourcePermanentId: permanent.instanceId,
+              sourceCardInstanceId: permanent.sourceCardInstanceId,
+            }),
+          ),
+        )
         .filter((ability) => {
           const energyCost = getAbilityEnergyCost(ability);
 

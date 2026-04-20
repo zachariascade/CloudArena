@@ -376,6 +376,36 @@ export function isEquipmentPermanent(state: BattleState, permanent: PermanentSta
   return isEquipmentCardDefinition(definition);
 }
 
+function findPermanentOnBattlefield(
+  state: BattleState,
+  permanentId: string,
+): PermanentState | null {
+  return (
+    state.battlefield.find((permanent) => permanent?.instanceId === permanentId) ??
+    state.enemyBattlefield.find((permanent) => permanent?.instanceId === permanentId) ??
+    null
+  );
+}
+
+export function permanentAttacksAllEnemyPermanents(
+  state: BattleState,
+  permanent: PermanentState,
+): boolean {
+  return (permanent.attachments ?? []).some((attachmentId) => {
+    const attachmentPermanent = findPermanentOnBattlefield(state, attachmentId);
+
+    if (!attachmentPermanent) {
+      return false;
+    }
+
+    const definition = asPermanentCardDefinition(
+      getCardDefinitionFromLibrary(state.cardDefinitions, attachmentPermanent.definitionId),
+    );
+
+    return isEquipmentCardDefinition(definition) && definition.attackAllEnemyPermanents === true;
+  });
+}
+
 export function canAttachPermanentToTarget(
   state: BattleState,
   attachmentPermanent: PermanentState,

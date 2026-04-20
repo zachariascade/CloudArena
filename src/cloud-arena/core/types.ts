@@ -34,6 +34,12 @@ export type Targeting = {
   allowSelfTarget?: boolean;
 };
 
+export type PendingHandCardContext = {
+  cardInstanceId: string;
+  definitionId: CardDefinitionId;
+  handIndex: number;
+};
+
 export type AbilityCost =
   | {
       type: "energy";
@@ -79,10 +85,8 @@ export type PendingTargetRequest = {
     abilitySourcePermanentId?: string;
     triggerSubjectPermanentId?: string;
     sourceCardInstanceId?: string;
-    pendingCardPlay?: {
-      cardInstanceId: string;
-      definitionId: CardDefinitionId;
-    };
+    pendingCardPlay?: PendingHandCardContext;
+    pendingCardPreview?: PendingHandCardContext;
   };
 };
 
@@ -111,6 +115,12 @@ export type Condition =
   | {
       type: "exists";
       selector: Selector;
+    }
+  | {
+      type: "threshold";
+      selector: Selector;
+      op?: ConditionOperator;
+      value: number;
     }
   | {
       type: "compare";
@@ -218,6 +228,12 @@ export type Effect =
   | {
       type: "draw_card";
       target: "self" | "player";
+      amount: ValueExpression;
+      targeting?: Targeting;
+    }
+  | {
+      type: "gain_energy";
+      target: "player";
       amount: ValueExpression;
       targeting?: Targeting;
     }
@@ -331,6 +347,14 @@ export type BattleEvent =
       target: "player" | "enemy" | "permanent";
       targetId?: string;
       amount: number;
+    }
+  | {
+      type: "energy_gained";
+      turnNumber: number;
+      target: "player";
+      amount: number;
+      source: "card" | "enemy_intent" | "permanent_action" | "ability";
+      sourceId?: string;
     }
   | {
       type: "damage_dealt";
@@ -547,12 +571,27 @@ export type ChoiceRecord = {
   strategy: ChoiceStrategy;
 };
 
+export type CardDisplayDefinition = {
+  title: string | null;
+  subtitle: string | null;
+  frameTone: string;
+  manaCost: string | null;
+  imagePath?: string;
+  imageAlt?: string;
+  flavorText?: string | null;
+  footerCode: string;
+  footerCredit: string;
+  collectorNumber: string;
+  footerStat?: string | null;
+};
+
 export type BaseCardDefinition = {
   id: CardDefinitionId;
   name: string;
   cost: number;
   cardTypes: CardType[];
   subtypes?: string[];
+  display?: CardDisplayDefinition;
   onPlay: CardEffect[];
   spellEffects?: Effect[];
   abilities?: Ability[];
@@ -568,6 +607,7 @@ export type PermanentCardDefinition = BaseCardDefinition & {
   health: number;
   recoveryPolicy?: DefenderRecoveryPolicy;
   preSummonEffects?: Effect[];
+  attackAllEnemyPermanents?: boolean;
 };
 
 export type CardDefinition = SpellCardDefinition | PermanentCardDefinition;
@@ -615,6 +655,7 @@ export type EnemyState = {
   maxHealth: number;
   block: number;
   basePower: number;
+  leaderDefinitionId: CardDefinitionId | null;
   intent: EnemyIntent;
   intentQueueLabels: string[];
   behavior: EnemyBehaviorStep[];

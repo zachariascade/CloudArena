@@ -2,9 +2,9 @@ import {
   getCardDefinitionFromLibrary,
 } from "../cards/definitions.js";
 import { resolveEffects } from "./effects.js";
+import { evaluateCondition } from "./conditions.js";
 import { cleanupDefeatedPermanents } from "./permanents.js";
 import { matchesSelectorObject, selectObjects } from "./selectors.js";
-import { evaluateValueExpression } from "./value-expressions.js";
 import type {
   Ability,
   BattleState,
@@ -382,36 +382,6 @@ function matchesTrigger(
       );
     case "turn_started":
       return false;
-  }
-}
-
-function evaluateCondition(
-  state: BattleState,
-  condition: Condition,
-  context: TriggerResolution,
-): boolean {
-  switch (condition.type) {
-    case "exists":
-      return selectObjects(state, condition.selector, context).length > 0;
-    case "compare": {
-      const left = evaluateValueExpression(state, condition.left, context);
-      const right = evaluateValueExpression(state, condition.right, context);
-
-      switch (condition.op) {
-        case "==":
-          return left === right;
-        case "!=":
-          return left !== right;
-        case ">":
-          return left > right;
-        case ">=":
-          return left >= right;
-        case "<":
-          return left < right;
-        case "<=":
-          return left <= right;
-      }
-    }
   }
 }
 

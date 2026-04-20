@@ -84,7 +84,7 @@ describe("cloud arena low-tier enemies", () => {
     );
 
     expect(tokensAfterSpawn.length).toBe(2);
-    expect(battle.player.health).toBe(startingHealth - 4);
+    expect(battle.player.health).toBe(startingHealth - 2);
     expect(formatBattleLog(battle)).toContain("turn 1: enemy played token_imp_spawn_1");
   });
 
@@ -125,6 +125,31 @@ describe("cloud arena low-tier enemies", () => {
 
     expect(targetToken.health).toBe(1);
     expect(battle.pendingTargetRequest).toBeNull();
+  });
+
+  it("does not let a spawned imp attack on the same resolution step", () => {
+    const preset = getEnemyPreset("imp_caller");
+    const battle = createTestBattle({
+      playerDeck: ["defend", "attack", "attack", "defend", "attack"],
+      enemy: {
+        name: preset.name,
+        health: preset.health,
+        basePower: preset.basePower,
+        cards: preset.cards,
+        startingTokens: preset.startingTokens,
+      },
+    });
+
+    const startingHealth = battle.player.health;
+
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(battle.player.health).toBe(startingHealth - 2);
+    expect(
+      battle.enemyBattlefield.filter(
+        (entry): entry is NonNullable<typeof entry> => entry !== null && entry.definitionId === "token_imp",
+      ),
+    ).toHaveLength(2);
   });
 
   it("starts a multi-enemy pack encounter with multiple enemy permanents", () => {

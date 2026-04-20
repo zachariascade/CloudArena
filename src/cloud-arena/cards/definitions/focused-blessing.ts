@@ -5,6 +5,18 @@ export const focusedBlessingCardDefinition: CardDefinition = {
   name: "Focused Blessing",
   cardTypes: ["instant"],
   cost: 1,
+  display: {
+    title: "Focused Blessing",
+    subtitle: "Instant",
+    frameTone: "white",
+    manaCost: "{1}",
+    imagePath: "card_0004_gabriel.svg",
+    imageAlt: "A radiant blessing aimed with deliberate focus",
+    flavorText: "A single faithful touch can sharpen a whole line of resolve.",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "011",
+  },
   onPlay: [],
   spellEffects: [
     {

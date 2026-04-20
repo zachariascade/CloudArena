@@ -5,12 +5,24 @@ export const forbiddenInsightCardDefinition: CardDefinition = {
   name: "Forbidden Insight",
   cardTypes: ["instant"],
   cost: 2,
+  display: {
+    title: "Forbidden Insight",
+    subtitle: "Instant",
+    frameTone: "blue",
+    manaCost: "{2}",
+    imagePath: "card_0031_tree_of_forbidden_knowledge.jpg",
+    imageAlt: "A moment of hidden understanding opening like a book of fire",
+    flavorText: "Some truths are dangerous, but they still fill the hand with answers.",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "016",
+  },
   onPlay: [],
   spellEffects: [
     {
       type: "draw_card",
       target: "self",
-      amount: { type: "constant", value: 2 },
+      amount: { type: "constant", value: 3 },
     },
   ],
 };

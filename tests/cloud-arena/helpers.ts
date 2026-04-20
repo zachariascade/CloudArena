@@ -255,6 +255,8 @@ export function formatBattleEvent(event: BattleEvent): string {
       return `turn ${event.turnNumber}: enemy played ${event.cardId}`;
     case "block_gained":
       return `turn ${event.turnNumber}: ${event.target}${event.targetId ? ` ${event.targetId}` : ""} gained ${event.amount} block`;
+    case "energy_gained":
+      return `turn ${event.turnNumber}: ${event.source}${event.sourceId ? ` ${event.sourceId}` : ""} gained ${event.amount} energy`;
     case "damage_dealt":
       return `turn ${event.turnNumber}: ${event.source}${event.sourceId ? ` ${event.sourceId}` : ""} dealt ${event.amount} damage to ${event.target}${event.targetId ? ` ${event.targetId}` : ""}`;
     case "permanent_summoned":

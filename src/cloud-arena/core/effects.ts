@@ -37,15 +37,14 @@ import type {
   PermanentState,
   Selector,
   BattleAction,
+  PendingHandCardContext,
 } from "./types.js";
 
 export type EffectResolutionContext = SelectorContext & {
   abilityTargeting?: Targeting;
   abilityCosts?: AbilityCost[];
-  pendingCardPlay?: {
-    cardInstanceId: string;
-    definitionId: string;
-  };
+  pendingCardPlay?: PendingHandCardContext;
+  pendingCardPreview?: PendingHandCardContext;
 };
 
 function getCounterSource(
@@ -394,6 +393,7 @@ function queueTargetRequest(
       triggerSubjectPermanentId: context.triggerSubjectPermanentId,
       sourceCardInstanceId: context.sourceCardInstanceId,
       pendingCardPlay: context.pendingCardPlay,
+      pendingCardPreview: context.pendingCardPreview,
     },
     abilityCosts: context.abilityCosts,
   };
@@ -623,6 +623,32 @@ function resolveDrawCardEffect(
       cardId: card.definitionId,
     });
   }
+}
+
+function resolveGainEnergyEffect(
+  state: BattleState,
+  effect: Extract<Effect, { type: "gain_energy" }>,
+  context: EffectResolutionContext,
+): void {
+  const amount = Math.max(0, evaluateValueExpression(state, effect.amount, context));
+
+  if (amount <= 0) {
+    return;
+  }
+
+  if (effect.target !== "player") {
+    return;
+  }
+
+  state.player.energy += amount;
+  state.log.push({
+    type: "energy_gained",
+    turnNumber: state.turnNumber,
+    target: "player",
+    amount,
+    source: context.abilitySourcePermanentId ? "permanent_action" : context.sourceCardInstanceId ? "card" : "ability",
+    sourceId: context.abilitySourcePermanentId ?? context.sourceCardInstanceId,
+  });
 }
 
 function resolveSummonPermanentEffect(
@@ -896,6 +922,9 @@ export function resolveEffect(
       return;
     case "draw_card":
       resolveDrawCardEffect(state, effect, context);
+      return;
+    case "gain_energy":
+      resolveGainEnergyEffect(state, effect, context);
       return;
     case "summon_permanent":
       resolveSummonPermanentEffect(state, effect, context);

@@ -1,5 +1,6 @@
 import {
   dealDamageToEnemy,
+  dealDamageToPermanent,
   gainBlockToPlayer,
   resolveEffects,
 } from "../core/effects.js";
@@ -9,8 +10,10 @@ import {
   getActivatedAbilityById,
   payAbilityCostBundle,
 } from "../core/activated-abilities.js";
+import { evaluateCondition } from "../core/conditions.js";
 import { getDerivedPermanentActionAmount } from "../core/derived-stats.js";
 import { findPermanentById } from "../core/selectors.js";
+import { permanentAttacksAllEnemyPermanents } from "../core/permanents.js";
 import { emitRulesEvent } from "../core/rules-events.js";
 import type {
   ActivatedAbility,
@@ -78,6 +81,17 @@ export function usePermanentAction(
       throw new Error(`Permanent ${action.permanentId} cannot use ability ${abilityId}.`);
     }
 
+    if (
+      !(ability.conditions ?? []).every((condition) =>
+        evaluateCondition(state, condition, {
+          abilitySourcePermanentId: permanent.instanceId,
+          sourceCardInstanceId: permanent.sourceCardInstanceId,
+        }),
+      )
+    ) {
+      throw new Error(`Permanent ${action.permanentId} cannot use ability ${abilityId} right now.`);
+    }
+
     if (action.action === "apply_block") {
       if (ability.costs && !abilityRequiresTargetSelection(ability)) {
         payAbilityCostBundle(state, permanent, ability.costs);
@@ -98,6 +112,7 @@ export function usePermanentAction(
     }
   } else if (action.action === "attack") {
     const attackAmount = getDerivedPermanentActionAmount(state, permanent, "attack");
+    const attackAllEnemyPermanents = permanentAttacksAllEnemyPermanents(state, permanent);
 
     emitRulesEvent(state, {
       type: "permanent_attacked",
@@ -110,6 +125,20 @@ export function usePermanentAction(
     });
 
     if (state.enemyBattlefield.some((slot) => slot !== null)) {
+      if (attackAllEnemyPermanents) {
+        for (const target of state.enemyBattlefield) {
+          if (!target) {
+            continue;
+          }
+
+          dealDamageToPermanent(state, target, attackAmount, "permanent_action", permanent.instanceId);
+        }
+
+        permanent.isDefending = false;
+        permanent.hasActedThisTurn = true;
+        return state;
+      }
+
       const selector = createEnemyBattlefieldAttackSelector();
       state.pendingTargetRequest = {
         id: `target_${state.turnNumber}_${state.nextTargetRequestIndex}`,

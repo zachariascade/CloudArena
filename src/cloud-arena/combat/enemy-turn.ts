@@ -14,14 +14,18 @@ import {
   getEnemyIntentBlockAmount,
 } from "../core/enemy-intent.js";
 
-function summonEnemyToken(state: BattleState, cardId: string): void {
+function summonEnemyToken(state: BattleState, cardId: string, enterSick = false): void {
   const card: CardInstance = {
     instanceId: `card_${state.turnNumber}_${state.nextEnemyTokenIndex}`,
     definitionId: cardId,
   };
 
   state.nextEnemyTokenIndex += 1;
-  trySummonPermanentFromCard(state, card, "enemy");
+  const permanent = trySummonPermanentFromCard(state, card, "enemy");
+
+  if (enterSick && permanent) {
+    permanent.hasActedThisTurn = true;
+  }
 }
 
 function resolveEnemyCard(state: BattleState, card: EnemyCardDefinition): void {
@@ -76,7 +80,7 @@ function resolveEnemyCard(state: BattleState, card: EnemyCardDefinition): void {
       const count = effect.spawnCount ?? 1;
 
       for (let index = 0; index < count; index += 1) {
-        summonEnemyToken(state, effect.spawnCardId);
+        summonEnemyToken(state, effect.spawnCardId, true);
       }
     }
   }
@@ -85,6 +89,10 @@ function resolveEnemyCard(state: BattleState, card: EnemyCardDefinition): void {
 function resolveEnemyBattlefieldCreatures(state: BattleState): void {
   for (const permanent of state.enemyBattlefield) {
     if (!permanent || permanent.health <= 0 || permanent.isEnemyLeader) {
+      continue;
+    }
+
+    if (permanent.hasActedThisTurn) {
       continue;
     }
 

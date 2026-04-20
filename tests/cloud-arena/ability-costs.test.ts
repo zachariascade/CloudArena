@@ -172,4 +172,70 @@ describe("cloud arena ability costs", () => {
       ),
     ).toBe(true);
   });
+
+  it("lets Radiant Conduit push energy past the turn cap", () => {
+    const battle = createBattle({
+      seed: 1,
+      playerHealth: 100,
+      cardDefinitions,
+      playerDeck: [
+        "radiant_conduit",
+        "guardian",
+        "attack",
+        "defend",
+        "attack",
+      ],
+      enemy: {
+        name: "Cost Dummy",
+        health: 30,
+        basePower: 12,
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+
+    battle.player.energy = 10;
+
+    const conduitCard = battle.player.hand.find((card) => card.definitionId === "radiant_conduit");
+
+    if (!conduitCard) {
+      throw new Error("Expected Radiant Conduit in opening hand.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: conduitCard.instanceId,
+    });
+
+    const conduit = battle.battlefield.find((permanent) => permanent?.definitionId === "radiant_conduit");
+
+    if (!conduit) {
+      throw new Error("Expected Radiant Conduit on battlefield.");
+    }
+
+    battle.player.energy = 3;
+
+    const gainEnergyAction = getLegalActions(battle).find(
+      (action) =>
+        action.type === "use_permanent_action" &&
+        action.permanentId === conduit.instanceId &&
+        action.action === "gain_energy",
+    );
+
+    if (!gainEnergyAction || gainEnergyAction.type !== "use_permanent_action") {
+      throw new Error("Expected Radiant Conduit gain_energy ability to be legal.");
+    }
+
+    applyBattleAction(battle, gainEnergyAction);
+
+    expect(battle.player.energy).toBe(4);
+    expect(conduit.isTapped).toBe(true);
+    expect(
+      getLegalActions(battle).some(
+        (action) =>
+          action.type === "use_permanent_action" &&
+          action.permanentId === conduit.instanceId &&
+          action.action === "gain_energy",
+      ),
+    ).toBe(false);
+  });
 });

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { applyBattleAction, createBattle, type CardDefinitionLibrary } from "../../src/cloud-arena/index.js";
+import { judgmentBladeCardDefinition } from "../../src/cloud-arena/cards/definitions/judgment-blade.js";
 import { createTestBattle, formatBattleLog, TEST_CARD_DEFINITIONS } from "./helpers.js";
 
 describe("cloud arena combat engine permanent flow", () => {
@@ -98,6 +99,17 @@ describe("cloud arena combat engine permanent flow", () => {
       type: "play_card",
       cardInstanceId: roundTwoAttackOne.instanceId,
     });
+    const firstAttackTarget = battle.enemyBattlefield.find((permanent) => permanent?.isEnemyLeader);
+
+    if (!firstAttackTarget) {
+      throw new Error("Expected enemy leader to target.");
+    }
+
+    applyBattleAction(battle, {
+      type: "choose_target",
+      targetPermanentId: firstAttackTarget.instanceId,
+    });
+
     applyBattleAction(battle, {
       type: "play_card",
       cardInstanceId: roundTwoDefend.instanceId,
@@ -105,6 +117,16 @@ describe("cloud arena combat engine permanent flow", () => {
     applyBattleAction(battle, {
       type: "play_card",
       cardInstanceId: roundTwoAttackTwo.instanceId,
+    });
+    const secondAttackTarget = battle.enemyBattlefield.find((permanent) => permanent?.isEnemyLeader);
+
+    if (!secondAttackTarget) {
+      throw new Error("Expected enemy leader to target.");
+    }
+
+    applyBattleAction(battle, {
+      type: "choose_target",
+      targetPermanentId: secondAttackTarget.instanceId,
     });
 
     expect(battle.enemy.health).toBe(18);
@@ -169,10 +191,18 @@ describe("cloud arena combat engine permanent flow", () => {
       action: "attack",
     });
 
+    const attackTarget = battle.enemyBattlefield.find((permanent) => permanent?.isEnemyLeader);
+
+    if (!attackTarget) {
+      throw new Error("Expected enemy leader to target.");
+    }
+
+    applyBattleAction(battle, {
+      type: "choose_target",
+      targetPermanentId: attackTarget.instanceId,
+    });
+
     expect(battle.enemy.health).toBe(18);
-    expect(formatBattleLog(battle)).toContain(
-      `turn 2: permanent_action ${bladeDancerPermanent.instanceId} dealt 6 damage to enemy`,
-    );
   });
 
   it("full-heal defenders restore their health at the start of the next round", () => {
@@ -235,6 +265,91 @@ describe("cloud arena combat engine permanent flow", () => {
     expect(battle.battlefield[0]?.health).toBe(8);
     expect(formatBattleLog(battle)).toContain(
       `turn 2: enemy_intent dealt 6 damage to permanent ${renewingGuardian.instanceId}`,
+    );
+  });
+
+  it("sweeps every enemy permanent when Judgment Blade is equipped", () => {
+    const cardDefinitions: CardDefinitionLibrary = {
+      ...TEST_CARD_DEFINITIONS,
+      judgment_blade: judgmentBladeCardDefinition,
+    };
+    const battle = createTestBattle({
+      cardDefinitions,
+      playerDeck: [
+        "guardian",
+        "judgment_blade",
+        "attack",
+        "defend",
+        "attack",
+      ],
+      enemy: {
+        name: "Ravaging Demon",
+        health: 30,
+        basePower: 10,
+        behavior: [
+          { attackAmount: 10 },
+        ],
+        startingPermanents: [
+          "enemy_husk",
+          "enemy_brute",
+        ],
+      },
+    });
+    battle.player.energy = 10;
+
+    const guardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
+    const bladeCard = battle.player.hand.find((card) => card.definitionId === "judgment_blade");
+
+    if (!guardianCard || !bladeCard) {
+      throw new Error("Expected Guardian and Judgment Blade in opening hand.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: guardianCard.instanceId,
+    });
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: bladeCard.instanceId,
+    });
+
+    const bladePermanent = battle.battlefield.find((permanent) => permanent?.definitionId === "judgment_blade");
+    const guardianPermanent = battle.battlefield.find((permanent) => permanent?.definitionId === "guardian");
+
+    if (!bladePermanent || !guardianPermanent) {
+      throw new Error("Expected Guardian and Judgment Blade on the battlefield.");
+    }
+
+    applyBattleAction(battle, {
+      type: "use_permanent_action",
+      permanentId: bladePermanent.instanceId,
+      source: "ability",
+      action: "equip",
+      abilityId: "equip",
+    });
+
+    applyBattleAction(battle, {
+      type: "choose_target",
+      targetPermanentId: guardianPermanent.instanceId,
+    });
+
+    applyBattleAction(battle, {
+      type: "use_permanent_action",
+      permanentId: guardianPermanent.instanceId,
+      source: "rules",
+      action: "attack",
+    });
+
+    const enemyPermanents = battle.enemyBattlefield.filter(
+      (permanent): permanent is NonNullable<typeof permanent> => permanent !== null,
+    );
+
+    expect(battle.pendingTargetRequest).toBeNull();
+    expect(enemyPermanents).toHaveLength(3);
+    expect(enemyPermanents.map((permanent) => permanent.health)).toEqual([25, 1, 3]);
+    expect(battle.enemy.health).toBe(25);
+    expect(formatBattleLog(battle)).toContain(
+      `turn 1: permanent_action ${guardianPermanent.instanceId} dealt 5 damage to permanent ${enemyPermanents[1]?.instanceId}`,
     );
   });
 });
