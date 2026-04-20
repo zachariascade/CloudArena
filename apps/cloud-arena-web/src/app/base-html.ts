@@ -1012,11 +1012,14 @@ export function renderCloudArcanumWebHtml(
         display: grid;
         grid-auto-flow: column;
         grid-auto-columns: var(--display-card-width);
-        gap: 0.8rem;
+        gap: 0.4rem;
         overflow-x: auto;
         overflow-y: hidden;
-        padding: 0.15rem 0.15rem 0.45rem;
+        padding: 0.8rem 0.15rem 0.8rem;
         scroll-snap-type: x proximity;
+        --hand-card-stack-x-scale: 1;
+        --hand-card-stack-y-scale: 1;
+        --hand-card-stack-tilt-scale: 1;
       }
 
       .trace-viewer-hand-card {
@@ -1325,6 +1328,12 @@ export function renderCloudArcanumWebHtml(
           grid-template-columns: minmax(0, 1fr);
         }
 
+        .trace-viewer-hand-scroll {
+          --hand-card-stack-x-scale: 0.72;
+          --hand-card-stack-y-scale: 0.82;
+          --hand-card-stack-tilt-scale: 0.8;
+        }
+
         .cloud-arena-hand-hud {
           width: min(100%, 22rem);
           min-height: 0;
@@ -1339,6 +1348,14 @@ export function renderCloudArcanumWebHtml(
           grid-template-columns: repeat(auto-fit, minmax(min(13rem, 44vw), 1fr));
         }
 
+      }
+
+      @media (max-width: 639px) {
+        .trace-viewer-hand-scroll {
+          --hand-card-stack-x-scale: 0.5;
+          --hand-card-stack-y-scale: 0.72;
+          --hand-card-stack-tilt-scale: 0.68;
+        }
       }
 
       .trace-viewer-card {
@@ -1926,6 +1943,32 @@ export function renderCloudArcanumWebHtml(
         flex: 0 0 auto;
         position: relative;
         padding-bottom: 1.8rem;
+        scroll-snap-align: start;
+        margin-inline-start: calc(
+          var(--hand-card-stack-shift, 0rem) * var(--hand-card-stack-x-scale, 1) * -1
+        );
+        margin-block-start: calc(var(--hand-card-stack-lift, 0rem) * var(--hand-card-stack-y-scale, 1));
+        transform: translate3d(0, 0, 0)
+          rotate(calc(var(--hand-card-stack-tilt, 0deg) * var(--hand-card-stack-tilt-scale, 1)));
+        transform-origin: 50% 88%;
+        transition:
+          transform 180ms ease,
+          filter 180ms ease;
+        will-change: transform;
+      }
+
+      .cloud-arena-hand-card-shell:first-child {
+        margin-inline-start: 0;
+      }
+
+      .cloud-arena-hand-card-shell:hover,
+      .cloud-arena-hand-card-shell:focus-within {
+        z-index: 999;
+        filter: saturate(1.03);
+        transform:
+          translate3d(0, calc(var(--hand-card-stack-lift, 0rem) * -1.15), 0)
+          scale(1.03)
+          rotate(0deg);
       }
 
       .cloud-arena-card-details-button {

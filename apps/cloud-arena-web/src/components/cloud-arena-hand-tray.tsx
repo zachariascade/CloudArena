@@ -1,7 +1,6 @@
 import { createPortal } from "react-dom";
 import { useEffect, useMemo, useState } from "react";
-import type { ReactElement } from "react";
-import type { FocusEvent, MouseEvent } from "react";
+import type { CSSProperties, FocusEvent, MouseEvent, ReactElement } from "react";
 
 import type { CloudArenaBattleViewModel } from "../lib/cloud-arena-battle-view-model.js";
 import { DisplayCard } from "./display-card.js";
@@ -280,12 +279,21 @@ export function CloudArenaHandTray({
         </div>
         <div className="trace-viewer-hand-scroll" aria-label="Player hand">
           {battle.player.hand.length > 0 ? (
-            battle.player.hand.map((card) => {
+            battle.player.hand.map((card, index) => {
               const isPlayable = isPlayableHandCard(card.instanceId);
+              const stackSlot = Math.min(index, 8);
+              const cardStyle: CSSProperties & Record<string, string | number> = {
+                zIndex: index + 1,
+                ["--hand-card-stack-shift"]: `${stackSlot * 0.42}rem`,
+                ["--hand-card-stack-lift"]: `${stackSlot * 0.08}rem`,
+                ["--hand-card-stack-tilt"]: `${((index % 5) - 2) * 0.22}deg`,
+              };
+
               return (
                 <div
                   key={card.instanceId}
                   className="cloud-arena-hand-card-shell"
+                  style={cardStyle}
                   {...bindInspectorInteractions(`hand:${card.instanceId}`)}
                 >
                   <DisplayCard
