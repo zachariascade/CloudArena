@@ -16,7 +16,7 @@ export function PageLayout({
   const hasHeader = kicker || title || description;
 
   return (
-    <section className="panel">
+    <section className="panel page-layout">
       {hasHeader ? (
         <header className="section-header">
           {kicker ? <div className="section-kicker">{kicker}</div> : null}

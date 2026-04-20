@@ -64,6 +64,7 @@ export type TraceViewerStepViewModel = {
     maxHealth: number;
     block: number;
     intent: EnemyIntent;
+    intentLabel: string;
   };
   battlefield: Array<TraceViewerPermanentSnapshot | null>;
   blockingQueue: string[];
@@ -98,10 +99,12 @@ type TraceViewerReplayState = {
     maxHealth: number;
     block: number;
     intent: EnemyIntent;
+    intentLabel: string;
   };
   battlefield: Array<TraceViewerPermanentSnapshot | null>;
   blockingQueue: string[];
   drawCountThisTurn: number;
+  enemyStunnedThisTurn: boolean;
 };
 
 function cloneCards(cards: CardInstance[]): CardInstance[] {
@@ -269,10 +272,12 @@ function createInitialReplayState(trace: SimulationTrace): TraceViewerReplayStat
       maxHealth: trace.config.enemy.health,
       block: 0,
       intent: initialEnemyPlan.intent,
+      intentLabel: formatEnemyIntent(initialEnemyPlan.intent),
     },
     battlefield: Array.from({ length: boardSize }, () => null),
     blockingQueue: [],
     drawCountThisTurn: 0,
+    enemyStunnedThisTurn: false,
   };
 }
 
@@ -505,6 +510,7 @@ function snapshotReplayState(
       maxHealth: state.enemy.maxHealth,
       block: state.enemy.block,
       intent: { ...state.enemy.intent },
+      intentLabel: state.enemyStunnedThisTurn ? "Stunned" : formatEnemyIntent(state.enemy.intent),
     },
     battlefield: cloneBattlefield(state.battlefield),
     blockingQueue: [...state.blockingQueue],
@@ -544,6 +550,8 @@ function applyEvent(
       state.turnNumber = event.turnNumber;
       state.player.energy = event.energy;
       state.enemy.intent = event.enemyIntent;
+      state.enemy.intentLabel = formatEnemyIntent(event.enemyIntent);
+      state.enemyStunnedThisTurn = false;
       state.drawCountThisTurn = 0;
       return;
     case "card_drawn":
@@ -565,6 +573,8 @@ function applyEvent(
       }
       return;
     }
+    case "spell_cast":
+      return;
     case "enemy_card_played":
       return;
     case "block_gained":
@@ -651,6 +661,10 @@ function applyEvent(
     }
     case "enemy_intent_resolved":
       state.enemy.block = 0;
+      return;
+    case "enemy_stunned":
+      state.enemy.intentLabel = "Stunned";
+      state.enemyStunnedThisTurn = true;
       return;
     case "permanent_destroyed": {
       const battlefieldIndex = state.battlefield.findIndex(
@@ -824,6 +838,8 @@ export function formatTraceEvent(event: BattleEvent): string {
       return `Turn ${event.turnNumber}: player drew ${event.cardId}`;
     case "card_played":
       return `Turn ${event.turnNumber}: played ${event.cardId}`;
+    case "spell_cast":
+      return `Turn ${event.turnNumber}: cast ${event.cardId}`;
     case "enemy_card_played":
       return `Turn ${event.turnNumber}: enemy played ${event.cardId}`;
     case "block_gained":
@@ -836,6 +852,8 @@ export function formatTraceEvent(event: BattleEvent): string {
       return `Turn ${event.turnNumber}: permanent ${event.permanentId} used ${event.action}`;
     case "enemy_intent_resolved":
       return `Turn ${event.turnNumber}: enemy resolved ${formatEnemyIntent(event.intent)}`;
+    case "enemy_stunned":
+      return `Turn ${event.turnNumber}: enemy action was stunned and cancelled`;
     case "permanent_destroyed":
       return `Turn ${event.turnNumber}: permanent ${event.permanentId} (${event.definitionId}) was destroyed`;
     case "turn_ended":

@@ -6,12 +6,13 @@ import type {
   CloudArenaCardSnapshot,
   CloudArenaPermanentSnapshot,
 } from "../../../../src/cloud-arena/api-contract.js";
+import {
+  buildDisplayCardModel,
+  type DisplayCardImage,
+  type DisplayCardModel,
+} from "../../../../src/presentation/display-card.js";
 
 import type { CloudArenaBattleViewModel } from "./cloud-arena-battle-view-model.js";
-import type {
-  DisplayCardImage,
-  DisplayCardModel,
-} from "./display-card.js";
 
 type ArenaCardPresentation = {
   title: string | null;
@@ -129,6 +130,18 @@ const ARENA_HAND_CARD_PRESENTATIONS: Record<string, ArenaCardPresentation> = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "016",
+  },
+  resurrect: {
+    title: "Return to the Hand",
+    typeLine: "Instant",
+    manaCost: "{2}",
+    frameTone: "white",
+    imagePath: "card_0004_gabriel.svg",
+    imageAlt: "A radiant hand lifting a card back from the grave",
+    flavorText: "What falls away can be gathered back, cleanly and with purpose.",
+    footerCode: "ARE",
+    footerCredit: "Cloud Arena",
+    collectorNumber: "017",
   },
   guardian: {
     title: "Keeper of the Gate",
@@ -388,9 +401,9 @@ function getEnemyTelegraphTextBlocks(input: {
 export function mapArenaPlayerToDisplayCard(
   player: CloudArenaBattleViewModel["player"],
 ): DisplayCardModel {
-  return {
+  return buildDisplayCardModel({
     variant: "player",
-    name: "Pilgrim Duelist",
+    name: "Player",
     title: "Vanguard of the Arena",
     subtitle: "Legendary Hero",
     frameTone: ARENA_PLAYER_PRESENTATION.frameTone,
@@ -423,7 +436,7 @@ export function mapArenaPlayerToDisplayCard(
     badges: ["hero"],
     actions: [],
     stateFlags: [],
-  };
+  });
 }
 
 export function mapArenaEnemyToDisplayCard(
@@ -431,7 +444,7 @@ export function mapArenaEnemyToDisplayCard(
 ): DisplayCardModel {
   const presentation = getArenaEnemyPresentation(enemy.name);
 
-  return {
+  return buildDisplayCardModel({
     variant: "enemy",
     name: enemy.name,
     title: "Harbinger of Attrition",
@@ -479,7 +492,7 @@ export function mapArenaEnemyToDisplayCard(
     badges: ["boss"],
     actions: [],
     stateFlags: [],
-  };
+  });
 }
 
 export function mapArenaHandCardToDisplayCard(
@@ -488,6 +501,7 @@ export function mapArenaHandCardToDisplayCard(
     isPlayable: boolean;
     disabled?: boolean;
     onPlay?: (cardInstanceId: string) => void;
+    actionLabel?: string;
   },
 ): DisplayCardModel {
   const presentation = ARENA_HAND_CARD_PRESENTATIONS[card.definitionId] ?? {
@@ -501,7 +515,7 @@ export function mapArenaHandCardToDisplayCard(
     collectorNumber: card.definitionId.toUpperCase(),
   };
 
-  return {
+  return buildDisplayCardModel({
     variant: "mtg",
     name: card.name,
     title: presentation.title,
@@ -539,7 +553,7 @@ export function mapArenaHandCardToDisplayCard(
         ? [
             {
               id: `play-${card.instanceId}`,
-              label: options.disabled ? "Waiting..." : "Play card",
+              label: options.disabled ? "Waiting..." : (options.actionLabel ?? "Play card"),
               disabled: options.disabled,
               emphasis: "primary",
               onSelect: () => options.onPlay?.(card.instanceId),
@@ -547,7 +561,23 @@ export function mapArenaHandCardToDisplayCard(
           ]
         : [],
     stateFlags: options.isPlayable ? ["playable"] : ["disabled"],
-  };
+  });
+}
+
+export function mapArenaGraveyardCardToDisplayCard(
+  card: CloudArenaCardSnapshot,
+  options: {
+    disabled?: boolean;
+    onChoose?: (cardInstanceId: string) => void;
+    actionLabel?: string;
+  },
+): DisplayCardModel {
+  return mapArenaHandCardToDisplayCard(card, {
+    isPlayable: true,
+    disabled: options.disabled,
+    onPlay: options.onChoose,
+    actionLabel: options.actionLabel ?? "Return to hand",
+  });
 }
 
 function getPermanentActionText(
@@ -662,7 +692,7 @@ export function mapArenaPermanentToDisplayCard(
     !permanent.hasActedThisTurn && (permanent.isCreature || permanent.actions.length > 0);
   const permanentAvailabilityState = hasAvailableActions ? "ready" : "spent";
 
-  return {
+  return buildDisplayCardModel({
     variant: "permanent",
     name: permanent.name,
     title: presentation.title ?? null,
@@ -694,15 +724,17 @@ export function mapArenaPermanentToDisplayCard(
         : undefined,
     stats: [],
     textBlocks: [
-      ...getEnemyTelegraphTextBlocks({
-        intentLabel: permanent.intentLabel,
-        intentQueueLabels: permanent.intentQueueLabels,
-      }),
       ...(permanent.isCreature
         ? [
             { kind: "rules" as const, text: `Attack ${permanent.power}` },
             { kind: "rules" as const, text: "Defend" },
           ]
+        : []),
+      ...(permanent.controllerId === "enemy"
+        ? getEnemyTelegraphTextBlocks({
+            intentLabel: permanent.intentLabel,
+            intentQueueLabels: permanent.intentQueueLabels,
+          })
         : []),
       ...permanent.actions.map((action) => ({
         kind: "rules" as const,
@@ -725,5 +757,5 @@ export function mapArenaPermanentToDisplayCard(
       permanent.isTapped ? "tapped" : "untapped",
       permanent.isDefending ? "defending" : "open",
     ],
-  };
+  });
 }

@@ -1,4 +1,4 @@
-import type { CSSProperties, MouseEventHandler, ReactElement } from "react";
+import type { MouseEventHandler, ReactElement } from "react";
 
 type CloudArenaInspectorPanelProps = {
   definitionJson: string | null;
@@ -20,20 +20,12 @@ export function CloudArenaInspectorPanel({
     return <></>;
   }
 
-  const style: CSSProperties | undefined = position
-    ? {
-        left: `${position.left}px`,
-        top: `${position.top}px`,
-      }
-    : undefined;
-
   return (
     <aside
       className="panel trace-viewer-panel cloud-arena-inspector-panel"
       aria-live="polite"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      style={style}
     >
       <div className="cloud-arena-inspector-definition">
         <strong className="cloud-arena-inspector-definition-title">Card Definition</strong>

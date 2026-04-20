@@ -2,13 +2,13 @@ import type {
   CloudArenaActionOption,
   CloudArenaCardSnapshot,
   CloudArenaPermanentSnapshot,
+  CloudArenaPendingTargetRequestSnapshot,
   CloudArenaSessionSnapshot,
 } from "../../../../src/cloud-arena/api-contract.js";
 import type {
   BattlePhase,
   EnemyIntent,
 } from "../../../../src/cloud-arena/index.js";
-import { formatEnemyIntent } from "../../../../src/cloud-arena/index.js";
 
 import type { TraceViewerStepViewModel } from "./cloud-arena-view-model-helpers.js";
 
@@ -42,6 +42,7 @@ export type CloudArenaBattleViewModel = {
   };
   battlefield: Array<CloudArenaPermanentSnapshot | null>;
   enemyBattlefield?: Array<CloudArenaPermanentSnapshot | null>;
+  pendingTargetRequest?: CloudArenaPendingTargetRequestSnapshot | null;
   blockingQueue: string[];
   legalActions: CloudArenaActionOption[];
 };
@@ -74,7 +75,7 @@ export function buildBattleViewModelFromTraceStep(
       maxHealth: step.enemy.maxHealth,
       block: step.enemy.block,
       intent: { ...step.enemy.intent },
-      intentLabel: formatEnemyIntent(step.enemy.intent),
+      intentLabel: step.enemy.intentLabel,
       intentQueueLabels: [],
     },
     battlefield: step.battlefield.map((slot) =>
@@ -86,6 +87,7 @@ export function buildBattleViewModelFromTraceStep(
         : null,
     ),
     enemyBattlefield: Array.from({ length: step.battlefield.length }, () => null),
+    pendingTargetRequest: null,
     blockingQueue: [...step.blockingQueue],
     legalActions: [],
   };
@@ -143,6 +145,12 @@ export function buildBattleViewModelFromSessionSnapshot(
           }
         : null,
     ),
+    pendingTargetRequest: snapshot.pendingTargetRequest
+      ? {
+          ...snapshot.pendingTargetRequest,
+          selector: { ...snapshot.pendingTargetRequest.selector },
+        }
+      : null,
     blockingQueue: [...snapshot.blockingQueue],
     legalActions,
   };

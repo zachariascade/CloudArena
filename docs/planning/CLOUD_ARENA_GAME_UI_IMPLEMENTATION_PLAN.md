@@ -116,6 +116,10 @@ Keep the battle renderer focused on combat presentation and move admin controls 
 
 ### Phase 1: Lock The Viewport
 
+Status:
+
+- completed
+
 Goal:
 
 - make the app behave like a fixed-screen game client
@@ -136,6 +140,10 @@ Likely files:
 
 ### Phase 2: Build The Game Shell
 
+Status:
+
+- completed
+
 Goal:
 
 - replace the current dashboard-style header with a game-style header strip
@@ -143,8 +151,8 @@ Goal:
 Work:
 
 - keep branding compact
-- add a menu button or menu cluster
-- move non-essential links into the menu
+- add a hamburger menu button in the top-right corner
+- move navigation links into a slide-out sidebar
 - make the header visually feel attached to the game frame
 
 Likely files:
@@ -153,6 +161,10 @@ Likely files:
 - new header/menu components under `apps/cloud-arena-web/src/components/`
 
 ### Phase 3: Reduce The Main Battle UI
+
+Status:
+
+- completed
 
 Goal:
 
@@ -174,15 +186,19 @@ Likely files:
 
 ### Phase 4: Move Admin Tools Behind The Menu
 
+Status:
+
+- completed
+
 Goal:
 
 - keep setup and debugging available without cluttering the battle
 
 Work:
 
-- place scenario selection in an admin drawer or modal
-- move seed override and battle reset into the same admin surface
-- move logs into a collapsible overlay or drawer
+- place scenario selection in the sidebar drawer
+- move seed override and battle reset into the same sidebar surface
+- move logs into the same sidebar area
 - make the menu usable while preserving battle focus
 
 Likely files:
@@ -192,6 +208,10 @@ Likely files:
 - new menu/drawer components under `apps/cloud-arena-web/src/components/`
 
 ### Phase 5: Make The Layout Responsive
+
+Status:
+
+- in progress
 
 Goal:
 
@@ -210,6 +230,10 @@ Likely files:
 - battle presentation components in `apps/cloud-arena-web/src/components/`
 
 ### Phase 6: Polish The Game Feel
+
+Status:
+
+- pending
 
 Goal:
 

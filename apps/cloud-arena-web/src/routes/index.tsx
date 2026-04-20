@@ -1,7 +1,6 @@
 import type { ReactElement } from "react";
 import {
   Link,
-  Outlet,
   createBrowserRouter,
   isRouteErrorResponse,
   useRouteError,
@@ -14,18 +13,6 @@ type CloudArenaRouteContext = {
   apiBaseUrl: string;
   cloudArcanumWebBaseUrl: string;
 };
-
-function CloudArenaFrame({
-  cloudArcanumWebBaseUrl,
-}: {
-  cloudArcanumWebBaseUrl: string;
-}): ReactElement {
-  return (
-    <CloudArenaAppShell cloudArcanumWebBaseUrl={cloudArcanumWebBaseUrl}>
-      <Outlet />
-    </CloudArenaAppShell>
-  );
-}
 
 function CloudArenaRouteErrorBoundary({
   cloudArcanumWebBaseUrl,
@@ -79,13 +66,12 @@ export function createCloudArenaRouter(context: CloudArenaRouteContext) {
   return createBrowserRouter([
     {
       path: "/",
-      element: <CloudArenaFrame cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl} />,
-      children: [
-        {
-          index: true,
-          element: <CloudArenaInteractivePage apiBaseUrl={context.apiBaseUrl} />,
-        },
-      ],
+      element: (
+        <CloudArenaInteractivePage
+          apiBaseUrl={context.apiBaseUrl}
+          cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}
+        />
+      ),
       errorElement: (
         <CloudArenaAppShell cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}>
           <CloudArenaRouteErrorBoundary cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl} />

@@ -1,10 +1,9 @@
-import type { FocusEvent, MouseEvent, ReactElement, ReactNode } from "react";
+import type { FocusEvent, MouseEvent, ReactElement } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { CloudArenaBattleViewModel } from "../lib/cloud-arena-battle-view-model.js";
 import { CloudArenaBattlefieldPanel } from "./cloud-arena-battlefield-panel.js";
 import { CloudArenaHandTray } from "./cloud-arena-hand-tray.js";
-import { CloudArenaHudBand } from "./cloud-arena-hud-band.js";
 import { CloudArenaInspectorPanel } from "./cloud-arena-inspector-panel.js";
 import {
   cardDefinitions,
@@ -36,7 +35,6 @@ type CloudArenaBattleStateProps = {
     action: BattleAction;
     label: string;
   }>;
-  sidePanel?: ReactNode;
 };
 
 export function CloudArenaBattleState({
@@ -50,7 +48,6 @@ export function CloudArenaBattleState({
   onTurnAction,
   playableHandCardInstanceIds = [],
   turnActions = [],
-  sidePanel,
 }: CloudArenaBattleStateProps): ReactElement {
   const battleWindowRef = useRef<HTMLDivElement | null>(null);
   const battleMainRef = useRef<HTMLDivElement | null>(null);
@@ -399,90 +396,47 @@ export function CloudArenaBattleState({
     <section className="cloud-arena-battle-shell">
       <div ref={battleWindowRef} className="cloud-arena-battle-window">
         <div ref={battleMainRef} className="cloud-arena-battle-main">
-          <div className="cloud-arena-battle-command-row">
-            <div className="cloud-arena-battle-meta">
-              <span className="summary-pill">
-                Hand actions <strong>{battle.actionGroups.hand.length}</strong>
-              </span>
-              <span className="summary-pill">
-                Battlefield actions <strong>{battle.actionGroups.battlefield.length}</strong>
-              </span>
-              <span className="summary-pill">
-                Turn <strong>{battle.turnNumber}</strong>
-              </span>
-              <span className="summary-pill">
-                Phase <strong>{battle.phase}</strong>
-              </span>
-            </div>
-            {groupedTurnActions.length > 0 ? (
-              <div className="trace-viewer-battle-actions">
-                {groupedTurnActions.map((entry, index) => (
-                  <button
-                    key={`${entry.label}-${index}`}
-                    type="button"
-                    className="primary-button trace-viewer-battle-action-button"
-                    disabled={disableTurnActions}
-                    onClick={() => onTurnAction?.(entry.action)}
-                  >
-                    {entry.action.type === "end_turn" ? `${entry.label} (E)` : entry.label}
-                  </button>
-                ))}
-              </div>
-            ) : null}
+          <div className="cloud-arena-battlefield-stage">
+            <CloudArenaBattlefieldPanel
+              zoneKeyPrefix="battlefield"
+              battlefield={battle.battlefield}
+              legalActions={battle.legalActions}
+              getInspectableModel={getInspectableModel}
+              getPermanentMenuActions={getPermanentMenuActions}
+              getPermanentCounterEntries={getPermanentCounterEntries}
+              bindInspectorInteractions={bindInspectorInteractions}
+              onOpenDetails={handleDetailsClick}
+              openPermanentMenuId={openPermanentMenuId}
+              onPermanentMenuToggle={(permanentId) =>
+                setOpenPermanentMenuId((current) => (current === permanentId ? null : permanentId))}
+              onPermanentMenuClose={() => setOpenPermanentMenuId(null)}
+              onTargetPermanentSelect={onTurnAction}
+            />
+
+            <CloudArenaBattlefieldPanel
+              zoneKeyPrefix="enemy_battlefield"
+              battlefield={enemyBattlefield}
+              legalActions={battle.legalActions}
+              getInspectableModel={getInspectableModel}
+              getPermanentMenuActions={() => []}
+              getPermanentCounterEntries={getPermanentCounterEntries}
+              bindInspectorInteractions={bindInspectorInteractions}
+              onOpenDetails={handleDetailsClick}
+              onTargetPermanentSelect={onTurnAction}
+            />
           </div>
-
-          <CloudArenaHudBand
-            enemy={battle.enemy}
-            player={{
-              health: battle.player.health,
-              maxHealth: battle.player.maxHealth,
-              block: battle.player.block,
-              energy: battle.player.energy,
-              handCount: battle.player.hand.length,
-              drawPileCount: battle.player.drawPileCount,
-            }}
-            maxPlayerEnergy={maxPlayerEnergy}
-            onInspectEnemy={bindInspectorInteractions("enemy")}
-            onInspectPlayer={bindInspectorInteractions("player")}
-          />
-
-          <CloudArenaBattlefieldPanel
-            title="Enemy Battlefield"
-            zoneKeyPrefix="enemy_battlefield"
-            battlefield={enemyBattlefield}
-            legalActions={battle.legalActions}
-            getInspectableModel={getInspectableModel}
-            getPermanentMenuActions={() => []}
-            getPermanentCounterEntries={getPermanentCounterEntries}
-            bindInspectorInteractions={bindInspectorInteractions}
-            onOpenDetails={handleDetailsClick}
-            onTargetPermanentSelect={onTurnAction}
-          />
-
-          <CloudArenaBattlefieldPanel
-            title="Battlefield"
-            zoneKeyPrefix="battlefield"
-            battlefield={battle.battlefield}
-            legalActions={battle.legalActions}
-            getInspectableModel={getInspectableModel}
-            getPermanentMenuActions={getPermanentMenuActions}
-            getPermanentCounterEntries={getPermanentCounterEntries}
-            bindInspectorInteractions={bindInspectorInteractions}
-    onOpenDetails={handleDetailsClick}
-    openPermanentMenuId={openPermanentMenuId}
-    onPermanentMenuToggle={(permanentId) =>
-              setOpenPermanentMenuId((current) => current === permanentId ? null : permanentId)}
-            onPermanentMenuClose={() => setOpenPermanentMenuId(null)}
-            onTargetPermanentSelect={onTurnAction}
-          />
 
           <CloudArenaHandTray
             battle={battle}
+            player={battle.player}
+            maxPlayerEnergy={maxPlayerEnergy}
             getInspectableModel={getInspectableModel}
             bindInspectorInteractions={bindInspectorInteractions}
             onOpenDetails={handleDetailsClick}
             isPlayableHandCard={(cardInstanceId) => playableHandCards.has(cardInstanceId)}
             groupedTurnActionsCount={groupedTurnActions.length}
+            onBattleAction={onTurnAction}
+            onInspectPlayer={bindInspectorInteractions("player")}
           />
         </div>
 
@@ -491,11 +445,6 @@ export function CloudArenaBattleState({
             definitionJson={hoveredInspectorDefinitionJson}
             position={hoveredInspectorPosition}
           />
-        ) : null}
-        {sidePanel ? (
-          <div className="panel trace-viewer-panel cloud-arena-battle-sidepanel">
-            {sidePanel}
-          </div>
         ) : null}
       </div>
     </section>

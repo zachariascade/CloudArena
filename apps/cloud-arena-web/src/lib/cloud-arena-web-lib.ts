@@ -19,6 +19,7 @@ export type {
 } from "./cloud-arena-view-model.js";
 export {
   mapArenaEnemyToDisplayCard,
+  mapArenaGraveyardCardToDisplayCard,
   mapArenaHandCardToDisplayCard,
   mapArenaPermanentToDisplayCard,
   mapArenaPlayerToDisplayCard,

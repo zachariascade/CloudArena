@@ -40,6 +40,7 @@ export type CloudArenaReplayContextViewModel = {
 export type CloudArenaSessionContextViewModel = {
   sessionId: string;
   scenarioId: string;
+  deckId: string | null;
   status: CloudArenaSessionSnapshot["status"];
   seed: number;
   createdAt: string;
@@ -71,6 +72,25 @@ function getScenarioLabel(scenarioId: string): string {
       return "Mixed Guardian";
     default:
       return scenarioId;
+  }
+}
+
+function getDeckLabel(deckId: string | null): string {
+  if (deckId === null) {
+    return "Scenario Default";
+  }
+
+  switch (deckId) {
+    case "master_deck":
+      return "Master Deck";
+    case "wide_angels":
+      return "Wide Angels";
+    case "tall_creatures":
+      return "Tall Creatures";
+    case "mixed_guardian":
+      return "Mixed Guardian";
+    default:
+      return deckId;
   }
 }
 
@@ -130,6 +150,7 @@ export function buildCloudArenaViewModelFromSessionSnapshot(
     battle,
     summary: [
       { label: "Scenario", value: getScenarioLabel(snapshot.scenarioId) },
+      { label: "Deck", value: getDeckLabel(snapshot.deckId) },
       { label: "Seed", value: String(snapshot.seed) },
       { label: "Turn", value: String(snapshot.turnNumber) },
       { label: "Phase", value: snapshot.phase },
@@ -158,6 +179,7 @@ export function buildCloudArenaViewModelFromSessionSnapshot(
     session: {
       sessionId: snapshot.sessionId,
       scenarioId: snapshot.scenarioId,
+      deckId: snapshot.deckId,
       status: snapshot.status,
       seed: snapshot.seed,
       createdAt: snapshot.createdAt,

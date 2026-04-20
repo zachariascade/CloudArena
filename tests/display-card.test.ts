@@ -96,6 +96,26 @@ describe("shared display card mappers", () => {
     });
     expect(player.stats.find((entry) => entry.label === "HP")).toBeUndefined();
     expect(player.stats.find((entry) => entry.label === "Energy")).toBeUndefined();
+    expect(player.sections.map((section) => section.kind)).toEqual([
+      "identity",
+      "art",
+      "summary",
+      "combat",
+      "stats",
+      "status",
+      "actions",
+      "metadata",
+    ]);
+    expect(player.sections.find((section) => section.kind === "combat")).toMatchObject({
+      healthBar: {
+        current: 28,
+        max: 30,
+      },
+      energyBar: {
+        current: 2,
+        max: 3,
+      },
+    });
     expect(enemy.variant).toBe("enemy");
     expect(enemy.title).toBe("Harbinger of Attrition");
     expect(enemy.image?.url).toContain("/images/cards/card_0009_lucifer_fallen_angel_of_light.webp");
@@ -108,6 +128,10 @@ describe("shared display card mappers", () => {
     expect(enemy.stats.find((entry) => entry.label === "HP")).toBeUndefined();
     expect(enemy.textBlocks[0]?.text).toContain("is preparing attack 10 x2");
     expect(enemy.textBlocks.some((entry) => entry.kind === "intent" && entry.text === "Next: defend 4")).toBe(true);
+    expect(enemy.sections.find((section) => section.kind === "status")).toMatchObject({
+      statusLabel: "enemy",
+      badges: ["boss"],
+    });
   });
 
   it("uses imp and grunt art for arena battle pieces", () => {
@@ -236,7 +260,7 @@ describe("shared display card mappers", () => {
     expect(enemyLeaderCard.textBlocks.some((entry) => entry.kind === "intent" && entry.text === "Next: attack 7")).toBe(true);
   });
 
-  it("renders cost chips in the Cloud Arena battlefield action menu", () => {
+  it("renders cost chips in the Cloud Arena battlefield action face", () => {
     const battlefieldPermanent = {
       instanceId: "guide_1",
       sourceCardInstanceId: "card_2",
@@ -313,6 +337,8 @@ describe("shared display card mappers", () => {
 
     expect(panelHtml).toContain("Bless");
     expect(panelHtml).toContain("Free Action");
+    expect(panelHtml).toContain("cloud-arena-permanent-action-face");
+    expect(panelHtml).toContain("Back");
     expect(panelHtml).toContain("aria-label=\"Cost Tap\"");
     expect(panelHtml).toContain("aria-label=\"Cost 0\"");
     expect(panelHtml).toContain("T.svg");
@@ -426,6 +452,8 @@ describe("shared display card mappers", () => {
         null,
         createElement(CloudArenaHandTray, {
           battle,
+          player: battle.player,
+          maxPlayerEnergy: 3,
           getInspectableModel: (key) =>
             key === "hand:card_1"
               ? mapArenaHandCardToDisplayCard(battle.player.hand[0]!, {
@@ -449,6 +477,13 @@ describe("shared display card mappers", () => {
           onOpenDetails: () => undefined,
           isPlayableHandCard: () => true,
           groupedTurnActionsCount: 0,
+          onInspectPlayer: {
+            onMouseEnter: () => undefined,
+            onMouseLeave: () => undefined,
+            onFocus: () => undefined,
+            onBlur: () => undefined,
+            onClick: () => undefined,
+          },
         }),
         createElement(CloudArenaBattlefieldPanel, {
           battlefield: battle.battlefield,
@@ -526,6 +561,8 @@ describe("shared display card mappers", () => {
     const html = renderToStaticMarkup(
       createElement(CloudArenaHandTray, {
         battle,
+        player: battle.player,
+        maxPlayerEnergy: 3,
         getInspectableModel: (key) =>
           key === "hand:card_1"
             ? mapArenaHandCardToDisplayCard(battle.player.hand[0]!, {
@@ -549,6 +586,13 @@ describe("shared display card mappers", () => {
         onOpenDetails: () => undefined,
         isPlayableHandCard: () => true,
         groupedTurnActionsCount: 0,
+        onInspectPlayer: {
+          onMouseEnter: () => undefined,
+          onMouseLeave: () => undefined,
+          onFocus: () => undefined,
+          onBlur: () => undefined,
+          onClick: () => undefined,
+        },
       }),
     );
 
