@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cloud-arcanum.local/schemas/deck.schema.json",
+  "$id": "https://cloud-arena.local/schemas/deck.schema.json",
   "title": "Cloud Arcanum Deck",
   "type": "object",
   "additionalProperties": false,

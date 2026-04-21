@@ -45,20 +45,17 @@ Cloud Arena may depend on:
 
 Cloud Arena should avoid depending on:
 
-- `apps/cloud-arcanum-web/**`
-- Arcanum browsing routes
-- Arcanum API composition
-- Arcanum-specific view models
-
-If Arena links back to Arcanum, that should stay a narrow URL-level integration instead of a code-level dependency.
+- legacy browsing routes
+- legacy content pipelines
+- product-specific view models outside Arena
 
 ## Runtime Shape
 
 Typical local flow:
 
-- `dev:arena:api` runs the Arena API
-- `dev:arena:web` runs the Arena frontend
-- `dev:arena` runs both together
+- `dev:api` runs the Arena API
+- `dev:web` runs the Arena frontend
+- `dev` runs both together
 - `arena:demo` and `arena:simulate*` run offline Arena behavior scripts
 
 ## Key Docs
@@ -70,4 +67,3 @@ Typical local flow:
 - [Trace Based Simulator Design](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/TRACE_BASED_SIMULATOR_DESIGN.md)
 - [Trace Viewer UI Implementation Plan](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/TRACE_VIEWER_UI_IMPLEMENTATION_PLAN.md)
 - [Interactive Cloud Arena TODO](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/INTERACTIVE_CLOUD_ARENA_TODO.md)
-- [Cloud Arcanum / Cloud Arena Separation Boundary](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/CLOUD_ARCANUM_ARENA_SEPARATION_BOUNDARY.md)

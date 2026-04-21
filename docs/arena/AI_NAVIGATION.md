@@ -39,19 +39,15 @@ Replay tooling is now legacy-only. Do not expand it.
 
 ## Usually Avoid
 
-Unless the task is explicitly about a read-only integration or shared schema:
+Unless the task is explicitly about a shared schema:
 
-- `apps/cloud-arcanum-web/`
-- `apps/cloud-arcanum-api/`
-- `src/cloud-arcanum/`
-- `tests/cloud-arcanum/`
-- `data/cards/`, `data/decks/`, `data/sets/`, `data/universes/`
+- legacy browsing folders
+- legacy content folders
 
 ## Good Defaults
 
 - prefer Arena-owned tests when verifying Arena changes
-- treat Arcanum links as integration surfaces, not implementation dependencies
-- prefer `dev:arena`, `dev:arena:*`, and `arena:*` scripts for local work
+- prefer `dev`, `dev:api`, `dev:web`, `dev:arena`, and `arena:*` scripts for local work
 
 ## Related Index
 

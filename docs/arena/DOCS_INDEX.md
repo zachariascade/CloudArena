@@ -28,8 +28,3 @@ This is the product-specific entry point for Cloud Arena docs.
 - [Trace Viewer UI Implementation Plan](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/TRACE_VIEWER_UI_IMPLEMENTATION_PLAN.md)
 - [Interactive Cloud Arena TODO](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/INTERACTIVE_CLOUD_ARENA_TODO.md)
 - [Flexible Rules Engine TODO](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/FLEXIBLE_RULES_ENGINE_TODO.md)
-
-## Cross-Product Boundary
-
-- [Cloud Arcanum / Cloud Arena Separation Boundary](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/CLOUD_ARCANUM_ARENA_SEPARATION_BOUNDARY.md)
-- [Cloud Arcanum / Cloud Arena Separation TODO](/Users/cadezacharias/Documents/MTG/Cloud%20Arcanum/docs/planning/CLOUD_ARCANUM_ARENA_SEPARATION_TODO.md)

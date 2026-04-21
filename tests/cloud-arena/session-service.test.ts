@@ -287,7 +287,7 @@ describe("cloud arena session service", () => {
     expect(updated.pendingTargetRequest?.context?.pendingCardPlay).toMatchObject({
       instanceId: focusedBlessingAction.cardInstanceId,
       definitionId: "focused_blessing",
-      name: "Focused Blessing",
+      name: "Aaronic Blessing",
     });
     expect(updated.pendingTargetRequest?.context?.pendingCardPlayHandIndex).toBe(1);
   });

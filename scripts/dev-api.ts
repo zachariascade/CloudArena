@@ -1,5 +1,5 @@
-import { startCloudArcanumApiServer } from "../apps/cloud-arcanum-api/src/server.js";
+import { startCloudArenaApiServer } from "../apps/cloud-arena-api/src/server.js";
 
-const location = await startCloudArcanumApiServer();
+const location = await startCloudArenaApiServer();
 
-console.log(`Cloud Arcanum API listening at http://${location.host}:${location.port}`);
+console.log(`Cloud Arena API listening at http://${location.host}:${location.port}`);

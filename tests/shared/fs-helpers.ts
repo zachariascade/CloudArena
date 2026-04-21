@@ -8,7 +8,7 @@ const currentFile = fileURLToPath(import.meta.url);
 export const repoRoot = path.resolve(path.dirname(currentFile), "..", "..");
 
 export async function createTempProject(): Promise<string> {
-  const tempRoot = await mkdtemp(path.join(os.tmpdir(), "cloud-arcanum-test-"));
+  const tempRoot = await mkdtemp(path.join(os.tmpdir(), "cloud-arena-test-"));
   await cp(path.join(repoRoot, "data"), path.join(tempRoot, "data"), {
     recursive: true,
   });

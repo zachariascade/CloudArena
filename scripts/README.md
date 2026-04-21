@@ -3,11 +3,9 @@
 Scripts are grouped by product responsibility.
 
 - `dev-*.ts` scripts start local app stacks
-- `ingest-*`, `export-*`, and `validate.ts` support Arcanum content workflows
+- `run-cloud-arena-*.ts`, `build-arena-*`, and `preview-arena-static-site.ts` support Arena workflows
 
 Preferred command namespaces:
 
-- `dev:arcanum*`
 - `dev:arena*`
-- `arcanum:*`
 - `arena:*`

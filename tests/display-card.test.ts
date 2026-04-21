@@ -2,13 +2,10 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 
-import { DisplayCard } from "../apps/cloud-arcanum-web/src/components/display-card.js";
+import { DisplayCard } from "../apps/cloud-arena-web/src/components/display-card.js";
 import { CloudArenaBattlefieldPanel } from "../apps/cloud-arena-web/src/components/cloud-arena-battlefield-panel.js";
 import { CloudArenaHandTray } from "../apps/cloud-arena-web/src/components/cloud-arena-hand-tray.js";
 import { CloudArenaInspectorPanel } from "../apps/cloud-arena-web/src/components/cloud-arena-inspector-panel.js";
-import {
-  mapCloudArcanumCardToDisplayCard,
-} from "../apps/cloud-arcanum-web/src/lib/display-card.js";
 import {
   mapArenaEnemyToDisplayCard,
   mapArenaHandCardToDisplayCard,
@@ -25,43 +22,27 @@ const EMPTY_BATTLE_MOTION_STATE: CloudArenaBattleMotionState = {
 };
 
 describe("shared display card mappers", () => {
-  it("maps a Cloud Arcanum card into the mtg display model", () => {
-    const model = mapCloudArcanumCardToDisplayCard({
-      name: "Moses",
-      title: "Lawgiver",
-      typeLine: "Legendary Creature - Human Prophet",
-      manaCost: "{2}{W}{U}",
-      power: "3",
-      toughness: "4",
-      loyalty: null,
-      defense: null,
-      image: {
-        kind: "remote",
-        sourcePath: null,
-        publicUrl: "https://example.com/moses.jpg",
-        isRenderable: true,
-        alt: "Moses raising his staff",
-        artist: "Artist",
-        sourceUrl: null,
-        license: null,
-        creditText: null,
-        sourceNotes: null,
-        requestedThemeId: null,
-        resolvedThemeId: null,
-        fellBack: false,
+  it("maps an arena hand card into the mtg display model", () => {
+    const model = mapArenaHandCardToDisplayCard(
+      {
+        instanceId: "card_1",
+        definitionId: "guardian",
+        name: "Guardian",
+        cost: 3,
+        effectSummary: "Summon a guardian with 10 health.",
       },
-      oracleText: "When Moses enters, draw a card.",
-      flavorText: "He led through the waters.",
-      status: "balanced",
-    });
+      {
+        isPlayable: true,
+      },
+    );
 
     expect(model.variant).toBe("mtg");
-    expect(model.name).toBe("Moses");
-    expect(model.title).toBe("Lawgiver");
-    expect(model.subtitle).toContain("Legendary Creature");
-    expect(model.image?.url).toBe("https://example.com/moses.jpg");
-    expect(model.textBlocks.map((entry) => entry.text)).toContain("When Moses enters, draw a card.");
-    expect(model.badges).toEqual(["balanced"]);
+    expect(model.name).toBe("Guardian");
+    expect(model.title).toBe("Watcher at Eden's Gate");
+    expect(model.subtitle).toBe("Creature - Angel");
+    expect(model.image?.url).toContain("/images/cards/card_0036_watcher_at_edens_gate.jpg");
+    expect(model.textBlocks.map((entry) => entry.text)).toContain("Summon a guardian with 10 health.");
+    expect(model.badges).toEqual([]);
   });
 
   it("maps arena player and enemy summaries into display cards", () => {
@@ -137,7 +118,7 @@ describe("shared display card mappers", () => {
     );
 
     expect(conduit.subtitle).toBe("Creature - Angel");
-    expect(conduit.title).toBe("Radiant Conduit");
+    expect(conduit.title).toBe("Pillar of Fire");
     expect(conduit.textBlocks[0]?.text).toBe("Tap: Gain 1 energy.");
     expect(conduit.image?.url).toContain("/images/cards/2B5A00FD-D279-48BD-AEFE-0711AC4E9F54.jpeg");
   });
@@ -205,7 +186,7 @@ describe("shared display card mappers", () => {
     );
 
     expect(seraph.subtitle).toBe("Creature - Angel");
-    expect(seraph.title).toBe("Armory Seraph");
+    expect(seraph.title).toBe("Gabriel, Herald of the Armory");
     expect(seraph.textBlocks[0]?.text).toBe(
       "Whenever an equipment you control enters the battlefield, draw a card.",
     );
@@ -256,7 +237,7 @@ describe("shared display card mappers", () => {
 
     expect(impCaller.image?.url).toContain("/images/cards/0AF7C779-AF9B-4662-82E4-F481882E7788.jpeg");
     expect(impCaller.image?.alt).toContain("Imp Caller");
-    expect(impCaller.title).toBe("Imp Caller");
+    expect(impCaller.title).toBe("Caller of Unclean Spirits");
   });
 
   it("uses the provided JPEG for the Imp Caller battlefield leader", () => {
@@ -378,7 +359,7 @@ describe("shared display card mappers", () => {
     });
 
     expect(handCard.actions).toHaveLength(1);
-    expect(handCard.title).toBe("Keeper of the Gate");
+    expect(handCard.title).toBe("Watcher at Eden's Gate");
     expect(handCard.image?.url).toContain("/images/cards/card_0036_watcher_at_edens_gate.jpg");
     expect(handCard.footerStat).toBe("4/4");
     handCard.actions[0]?.onSelect?.();
@@ -704,8 +685,8 @@ describe("shared display card mappers", () => {
     });
 
     expect(hymn.subtitle).toBe("Creature - Angel");
-    expect(hymn.title).toBe("Graveyard Hymn");
-    expect(permanentHymn.title).toBe("Graveyard Hymn");
+    expect(hymn.title).toBe("Song of the Dry Bones");
+    expect(permanentHymn.title).toBe("Song of the Dry Bones");
     expect(permanentHymn.subtitle).toBe("Creature - Angel");
     expect(permanentHymn.textBlocks.map((entry) => entry.text)).toEqual(
       hymn.textBlocks.map((entry) => entry.text),
@@ -1067,38 +1048,6 @@ describe("shared display card component", () => {
   });
 
   it("renders mtg and arena variants without requiring identical fields", () => {
-    const mtgHtml = renderToStaticMarkup(
-      createElement(DisplayCard, {
-        model: mapCloudArcanumCardToDisplayCard({
-          name: "Deborah",
-          title: "Judge of Israel",
-          typeLine: "Legendary Creature - Human Advisor",
-          manaCost: "{1}{W}",
-          power: "2",
-          toughness: "3",
-          loyalty: null,
-          defense: null,
-          image: {
-            kind: "placeholder",
-            sourcePath: null,
-            publicUrl: null,
-            isRenderable: false,
-            alt: "Deborah placeholder art",
-            artist: null,
-            sourceUrl: null,
-            license: null,
-            creditText: null,
-            sourceNotes: null,
-            requestedThemeId: null,
-            resolvedThemeId: null,
-            fellBack: false,
-          },
-          oracleText: "Other creatures you control get +0/+1.",
-          flavorText: null,
-          status: "draft",
-        }),
-      }),
-    );
     const arenaHandHtml = renderToStaticMarkup(
       createElement(DisplayCard, {
         model: mapArenaHandCardToDisplayCard(
@@ -1167,7 +1116,7 @@ describe("shared display card component", () => {
       }),
     );
     const playerHtml = renderToStaticMarkup(
-        createElement(DisplayCard, {
+      createElement(DisplayCard, {
         model: mapArenaPlayerToDisplayCard({
           health: 28,
           maxHealth: 30,
@@ -1177,10 +1126,6 @@ describe("shared display card component", () => {
       }),
     );
 
-    expect(mtgHtml).toContain("data-variant=\"mtg\"");
-    expect(mtgHtml).toContain("Judge of Israel");
-    expect(mtgHtml).toContain("Preview pending");
-    expect(mtgHtml).toContain("printable-card-face");
     expect(arenaHandHtml).toContain("card-face-stats-box");
     expect(arenaHandHtml).toContain(">4/4<");
     expect(playerHtml).toContain("aria-label=\"Player energy\"");

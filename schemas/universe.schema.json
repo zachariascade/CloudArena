@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cloud-arcanum.local/schemas/universe.schema.json",
+  "$id": "https://cloud-arena.local/schemas/universe.schema.json",
   "title": "Cloud Arcanum Universe",
   "type": "object",
   "additionalProperties": false,

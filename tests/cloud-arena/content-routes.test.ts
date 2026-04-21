@@ -3,7 +3,7 @@ import { chdir, cwd } from "node:process";
 import { describe, expect, it } from "vitest";
 
 import { createCloudArenaApiApp } from "../../apps/cloud-arena-api/src/app.js";
-import { createTempProject, cleanupTempProject } from "../cloud-arcanum/helpers.js";
+import { createTempProject, cleanupTempProject } from "../shared/fs-helpers.js";
 
 describe("cloud arena content routes", () => {
   it("lists cards, manages decks, and accepts saved decks when creating sessions", async () => {
