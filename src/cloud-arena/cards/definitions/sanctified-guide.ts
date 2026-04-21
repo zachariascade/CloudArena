@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const sanctifiedGuideCardDefinition: CardDefinition = {
   id: "sanctified_guide",
-  name: "Sanctified Guide",
+  name: "Pillar of Cloud",
   cardTypes: ["creature"],
   cost: 3,
   display: {
-    title: "Sanctified Guide",
+    title: "Pillar of Cloud",
     subtitle: "Creature - Angel",
     frameTone: "white",
     manaCost: "{3}",

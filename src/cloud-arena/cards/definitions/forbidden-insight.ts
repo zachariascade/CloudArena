@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const forbiddenInsightCardDefinition: CardDefinition = {
   id: "forbidden_insight",
-  name: "Forbidden Insight",
+  name: "Tree of Forbidden Knowledge",
   cardTypes: ["instant"],
   cost: 2,
   display: {
-    title: "Forbidden Insight",
+    title: "Tree of Forbidden Knowledge",
     subtitle: "Instant",
     frameTone: "blue",
     manaCost: "{2}",

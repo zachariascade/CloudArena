@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const judgmentBladeCardDefinition: CardDefinition = {
   id: "judgment_blade",
-  name: "Judgment Blade",
+  name: "Sword of Judgment",
   cardTypes: ["artifact"],
   cost: 3,
   display: {
-    title: "Judgment Blade",
+    title: "Sword of Judgment",
     subtitle: "Artifact - Equipment",
     frameTone: "colorless",
     manaCost: "{3}",

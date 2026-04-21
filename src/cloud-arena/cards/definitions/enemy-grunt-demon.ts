@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const enemyGruntDemonCardDefinition: CardDefinition = {
   id: "enemy_grunt_demon",
-  name: "Grunt Demon",
+  name: "Demon Horde",
   cardTypes: ["creature"],
   cost: 0,
   display: {
-    title: "Grunt Demon",
+    title: "Demon Horde",
     subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",

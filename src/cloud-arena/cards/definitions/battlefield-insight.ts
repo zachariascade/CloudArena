@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const battlefieldInsightCardDefinition: CardDefinition = {
   id: "battlefield_insight",
-  name: "Battlefield Insight",
+  name: "Watchman on the Wall",
   cardTypes: ["instant"],
   cost: 2,
   display: {
-    title: "Battlefield Insight",
+    title: "Watchman on the Wall",
     subtitle: "Instant",
     frameTone: "white",
     manaCost: "{2}",

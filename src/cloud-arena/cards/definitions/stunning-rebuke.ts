@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const stunningRebukeCardDefinition: CardDefinition = {
   id: "stunning_rebuke",
-  name: "Stunning Rebuke",
+  name: "Rebuke from the Whirlwind",
   cardTypes: ["instant"],
   cost: 2,
   display: {
-    title: "Stunning Rebuke",
+    title: "Rebuke from the Whirlwind",
     subtitle: "Instant",
     frameTone: "red",
     manaCost: "{2}",

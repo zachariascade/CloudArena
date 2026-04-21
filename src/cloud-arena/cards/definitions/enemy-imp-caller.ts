@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const enemyImpCallerCardDefinition: CardDefinition = {
   id: "enemy_imp_caller",
-  name: "Imp Caller",
+  name: "Caller of Unclean Spirits",
   cardTypes: ["creature"],
   cost: 0,
   display: {
-    title: "Imp Caller",
+    title: "Caller of Unclean Spirits",
     subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",

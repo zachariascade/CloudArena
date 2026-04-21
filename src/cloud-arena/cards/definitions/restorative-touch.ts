@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const restorativeTouchCardDefinition: CardDefinition = {
   id: "restorative_touch",
-  name: "Restorative Touch",
+  name: "Your Faith Has Made You Well",
   cardTypes: ["instant"],
   cost: 1,
   display: {
-    title: "Restorative Touch",
+    title: "Your Faith Has Made You Well",
     subtitle: "Instant",
     frameTone: "white",
     manaCost: "{1}",

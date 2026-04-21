@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const tokenAngelCardDefinition: CardDefinition = {
   id: "token_angel",
-  name: "Token Angel",
+  name: "Angel of the Lord",
   cardTypes: ["creature"],
   cost: 1,
   display: {
-    title: "Token Angel",
+    title: "Angel of the Lord",
     subtitle: "Creature - Angel",
     frameTone: "white",
     manaCost: "{1}",

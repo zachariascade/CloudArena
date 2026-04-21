@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const holyBladeCardDefinition: CardDefinition = {
   id: "holy_blade",
-  name: "Holy Blade",
+  name: "Sword of the Cherubim",
   cardTypes: ["artifact"],
   cost: 1,
   display: {
-    title: "Blessed Edge",
+    title: "Sword of the Cherubim",
     subtitle: "Artifact - Equipment",
     frameTone: "colorless",
     manaCost: "{1}",

@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const attackCardDefinition: CardDefinition = {
   id: "attack",
-  name: "Attack",
+  name: "Flaming Sword of the East",
   cardTypes: ["instant"],
   cost: 1,
   display: {
-    title: "Opening Cut",
+    title: "Flaming Sword of the East",
     subtitle: "Instant - Assault",
     frameTone: "red",
     manaCost: "{1}",

@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const tokenImpCardDefinition: CardDefinition = {
   id: "token_imp",
-  name: "Token Imp",
+  name: "Unclean Spirit",
   cardTypes: ["creature"],
   cost: 0,
   display: {
-    title: "Token Imp",
+    title: "Unclean Spirit",
     subtitle: "Creature - Demon Imp",
     frameTone: "split-black-red",
     manaCost: "{0}",

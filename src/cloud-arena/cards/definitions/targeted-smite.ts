@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const targetedSmiteCardDefinition: CardDefinition = {
   id: "targeted_smite",
-  name: "Targeted Smite",
+  name: "Hand of the Lord",
   cardTypes: ["instant"],
   cost: 1,
   display: {
-    title: "Targeted Smite",
+    title: "Hand of the Lord",
     subtitle: "Instant",
     frameTone: "red",
     manaCost: "{1}",

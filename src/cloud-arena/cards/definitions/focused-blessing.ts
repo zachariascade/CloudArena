@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const focusedBlessingCardDefinition: CardDefinition = {
   id: "focused_blessing",
-  name: "Focused Blessing",
+  name: "Aaronic Blessing",
   cardTypes: ["instant"],
   cost: 1,
   display: {
-    title: "Focused Blessing",
+    title: "Aaronic Blessing",
     subtitle: "Instant",
     frameTone: "white",
     manaCost: "{1}",

@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const armorySeraphCardDefinition: CardDefinition = {
   id: "armory_seraph",
-  name: "Armory Seraph",
+  name: "Gabriel, Herald of the Armory",
   cardTypes: ["creature"],
   cost: 3,
   display: {
-    title: "Armory Seraph",
+    title: "Gabriel, Herald of the Armory",
     subtitle: "Creature - Angel",
     frameTone: "white",
     manaCost: "{3}",

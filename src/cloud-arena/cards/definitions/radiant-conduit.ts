@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const radiantConduitCardDefinition: CardDefinition = {
   id: "radiant_conduit",
-  name: "Radiant Conduit",
+  name: "Pillar of Fire",
   cardTypes: ["creature"],
   cost: 2,
   display: {
-    title: "Radiant Conduit",
+    title: "Pillar of Fire",
     subtitle: "Creature - Angel",
     frameTone: "white",
     manaCost: "{2}",

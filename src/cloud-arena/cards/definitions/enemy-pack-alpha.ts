@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const enemyPackAlphaCardDefinition: CardDefinition = {
   id: "enemy_pack_alpha",
-  name: "Pack Alpha",
+  name: "Legion",
   cardTypes: ["creature"],
   cost: 0,
   display: {
-    title: "Pack Alpha",
+    title: "Legion",
     subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",

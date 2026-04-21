@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const sacrificialSeraphCardDefinition: CardDefinition = {
   id: "sacrificial_seraph",
-  name: "Sacrificial Seraph",
+  name: "Seraph of the Altar",
   cardTypes: ["creature"],
   cost: 2,
   display: {
-    title: "Winged Collector",
+    title: "Seraph of the Altar",
     subtitle: "Creature - Angel",
     frameTone: "white",
     manaCost: "{2}",

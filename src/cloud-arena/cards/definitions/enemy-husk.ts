@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const enemyHuskCardDefinition: CardDefinition = {
   id: "enemy_husk",
-  name: "Demon Husk",
+  name: "Vessel of Wrath",
   cardTypes: ["creature"],
   cost: 0,
   display: {
-    title: "Demon Husk",
+    title: "Vessel of Wrath",
     subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",

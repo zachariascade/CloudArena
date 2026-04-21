@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const targetedStrikeCardDefinition: CardDefinition = {
   id: "targeted_strike",
-  name: "Targeted Strike",
+  name: "David's Stone",
   cardTypes: ["instant"],
   cost: 1,
   display: {
-    title: "Targeted Strike",
+    title: "David's Stone",
     subtitle: "Instant",
     frameTone: "red",
     manaCost: "{1}",

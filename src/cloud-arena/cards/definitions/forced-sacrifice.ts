@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const forcedSacrificeCardDefinition: CardDefinition = {
   id: "forced_sacrifice",
-  name: "Forced Sacrifice",
+  name: "Binding of Isaac",
   cardTypes: ["instant"],
   cost: 1,
   display: {
-    title: "Forced Sacrifice",
+    title: "Binding of Isaac",
     subtitle: "Instant",
     frameTone: "split-black-red",
     manaCost: "{1}",

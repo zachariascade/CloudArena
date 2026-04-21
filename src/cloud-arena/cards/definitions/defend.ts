@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const defendCardDefinition: CardDefinition = {
   id: "defend",
-  name: "Defend",
+  name: "Shield of Faith",
   cardTypes: ["instant"],
   cost: 1,
   display: {
-    title: "Stand Firm",
+    title: "Shield of Faith",
     subtitle: "Instant - Guard",
     frameTone: "white",
     manaCost: "{1}",

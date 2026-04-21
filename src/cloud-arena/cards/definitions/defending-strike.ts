@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const defendingStrikeCardDefinition: CardDefinition = {
   id: "defending_strike",
-  name: "Defending Strike",
+  name: "Zeal of Phinehas",
   cardTypes: ["instant"],
   cost: 2,
   display: {
-    title: "Shield and Scourge",
+    title: "Zeal of Phinehas",
     subtitle: "Instant - Clash",
     frameTone: "split-white-red",
     manaCost: "{2}",

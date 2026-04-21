@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const guardianCardDefinition: CardDefinition = {
   id: "guardian",
-  name: "Guardian",
+  name: "Watcher at Eden's Gate",
   cardTypes: ["creature"],
   cost: 3,
   display: {
-    title: "Keeper of the Gate",
+    title: "Watcher at Eden's Gate",
     subtitle: "Creature - Angel",
     frameTone: "white",
     manaCost: "{3}",

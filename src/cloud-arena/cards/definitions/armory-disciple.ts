@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const armoryDiscipleCardDefinition: CardDefinition = {
   id: "armory_disciple",
-  name: "Armory Disciple",
+  name: "Tubal-Cain, Forger of Bronze and Iron",
   cardTypes: ["creature"],
   cost: 2,
   display: {
-    title: "Bearer of the Forge",
+    title: "Tubal-Cain, Forger of Bronze and Iron",
     subtitle: "Creature - Human",
     frameTone: "white",
     manaCost: "{2}",

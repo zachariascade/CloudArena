@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const enemyBruteCardDefinition: CardDefinition = {
   id: "enemy_brute",
-  name: "Demon Brute",
+  name: "Beast of the Pit",
   cardTypes: ["creature"],
   cost: 0,
   display: {
-    title: "Demon Brute",
+    title: "Beast of the Pit",
     subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",

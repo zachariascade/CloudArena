@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const massBenedictionCardDefinition: CardDefinition = {
   id: "mass_benediction",
-  name: "Mass Benediction",
+  name: "Priestly Benediction",
   cardTypes: ["instant"],
   cost: 2,
   display: {
-    title: "Mass Benediction",
+    title: "Priestly Benediction",
     subtitle: "Instant",
     frameTone: "white",
     manaCost: "{2}",

@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const enemyLeaderCardDefinition: CardDefinition = {
   id: "enemy_leader",
-  name: "Enemy Leader",
+  name: "Prince of This World",
   cardTypes: ["creature"],
   cost: 0,
   display: {
-    title: "Enemy Leader",
+    title: "Prince of This World",
     subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",

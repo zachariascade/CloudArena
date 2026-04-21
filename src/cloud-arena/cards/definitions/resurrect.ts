@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const resurrectCardDefinition: CardDefinition = {
   id: "resurrect",
-  name: "Resurrect",
+  name: "Raised from the Tomb",
   cardTypes: ["instant"],
   cost: 2,
   display: {
-    title: "Return to the Hand",
+    title: "Raised from the Tomb",
     subtitle: "Instant",
     frameTone: "white",
     manaCost: "{2}",

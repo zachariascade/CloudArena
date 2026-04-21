@@ -2,11 +2,11 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const graveyardHymnCardDefinition: CardDefinition = {
   id: "graveyard_hymn",
-  name: "Graveyard Hymn",
+  name: "Song of the Dry Bones",
   cardTypes: ["creature"],
   cost: 2,
   display: {
-    title: "Graveyard Hymn",
+    title: "Song of the Dry Bones",
     subtitle: "Creature - Angel",
     frameTone: "white",
     manaCost: "{2}",
