@@ -1,56 +1,26 @@
 import { randomUUID } from "node:crypto";
 
 import type {
-  CloudArenaActionOption,
   CloudArenaCreateSessionRequest,
-  CloudArenaSessionActionRecord,
-  CloudArenaSessionScenarioId,
   CloudArenaSessionSnapshot,
 } from "../../../../src/cloud-arena/api-contract.js";
 import {
-  applyBattleAction,
-  buildBattleSummary,
-  createBattle,
-  formatActivatedAbilityLabel,
-  formatEnemyIntent,
-  getDerivedPermanentStat,
-  getCardDefinitionFromLibrary,
-  getActivatedAbilities,
-  getLegalActions,
-  getEnemyLeaderPermanent,
-  getPrimaryEnemyPermanent,
-  getScenarioPreset,
-  hasCardType,
-  isPermanentCardDefinition,
-  permanentAttacksAllEnemyPermanents,
-  summarizePermanentCounters,
+  applyCloudArenaSessionAction,
+  buildCloudArenaSessionSnapshot,
+  createCloudArenaSessionRecord,
+  resolveCloudArenaSessionScenario,
+  resetCloudArenaSessionRecord,
+  CloudArenaFinishedBattleError,
+  CloudArenaInvalidActionError,
   type BattleAction,
-  type BattleEvent,
-  type BattleState,
+  type CloudArenaResolvedPlayerDeck,
+  type CloudArenaSessionRecord,
   type CloudArenaScenarioPreset,
 } from "../../../../src/cloud-arena/index.js";
-import { summarizeCardDefinition } from "../../../../src/cloud-arena/card-summary.js";
 import {
   expandCloudArenaDeckSource,
   resolveCloudArenaDeckSourceByIdSync,
 } from "./cloud-arena-decks.js";
-
-type CloudArenaSessionRecord = {
-  id: string;
-  scenarioId: CloudArenaSessionScenarioId;
-  deckId: string | null;
-  seed: number;
-  shuffleDeck: boolean;
-  createdAt: string;
-  resetSource: {
-    scenarioId: CloudArenaSessionScenarioId;
-    deckId: string | null;
-    seed: number;
-  };
-  actionHistory: CloudArenaSessionActionRecord[];
-  state: BattleState;
-  playerDeck: string[];
-};
 
 export class CloudArenaSessionNotFoundError extends Error {
   constructor(sessionId: string) {
@@ -59,61 +29,15 @@ export class CloudArenaSessionNotFoundError extends Error {
   }
 }
 
-export class CloudArenaInvalidActionError extends Error {
-  constructor(action: BattleAction) {
-    super(`Illegal Cloud Arena action: ${JSON.stringify(action)}`);
-    this.name = "CloudArenaInvalidActionError";
-  }
-}
-
-export class CloudArenaFinishedBattleError extends Error {
-  constructor(sessionId: string) {
-    super(`Cloud Arena session "${sessionId}" is already finished and cannot accept new actions.`);
-    this.name = "CloudArenaFinishedBattleError";
-  }
-}
-
-function toActionKey(action: BattleAction): string {
-  return JSON.stringify(action);
-}
-
-function normalizeBattleAction(action: BattleAction): BattleAction {
-  if (action.type !== "use_permanent_action") {
-    return action;
-  }
-
-  if (action.source) {
-    return action;
-  }
-
-  if (action.action === "attack" || action.action === "defend") {
-    return {
-      type: "use_permanent_action",
-      permanentId: action.permanentId,
-      source: "rules",
-      action: action.action,
-    };
-  }
-
-  return {
-    type: "use_permanent_action",
-    permanentId: action.permanentId,
-    source: "ability",
-    action: action.action,
-    abilityId: action.abilityId,
-  };
-}
-
-function resolveScenario(
-  request: CloudArenaCreateSessionRequest = {},
-): CloudArenaScenarioPreset {
-  return getScenarioPreset(request.scenarioId ?? "mixed_guardian");
-}
+export {
+  CloudArenaFinishedBattleError,
+  CloudArenaInvalidActionError,
+};
 
 function resolvePlayerDeck(
   request: CloudArenaCreateSessionRequest,
   scenario: CloudArenaScenarioPreset,
-): { deckId: string | null; cards: string[] } {
+): CloudArenaResolvedPlayerDeck {
   if (request.deckId) {
     const deck = resolveCloudArenaDeckSourceByIdSync(request.deckId);
 
@@ -133,303 +57,6 @@ function resolvePlayerDeck(
   };
 }
 
-function createScenarioBattle(
-  scenario: CloudArenaScenarioPreset,
-  playerDeck: string[],
-  seed: number,
-  shuffleDeck: boolean,
-): BattleState {
-  return createBattle({
-    seed,
-    playerHealth: scenario.playerHealth,
-    playerDeck,
-    shuffleDeck,
-    enemy: scenario.enemy,
-  });
-}
-
-function toCardSnapshot(
-  state: BattleState,
-  card: BattleState["player"]["hand"][number],
-) {
-  const definition = getCardDefinitionFromLibrary(state.cardDefinitions, card.definitionId);
-
-  return {
-    instanceId: card.instanceId,
-    definitionId: card.definitionId,
-    name: definition.name,
-    cost: definition.cost,
-    effectSummary: summarizeCardDefinition(definition).join(" • "),
-  };
-}
-
-function createActionOption(
-  state: BattleState,
-  action: BattleAction,
-): CloudArenaActionOption {
-  switch (action.type) {
-    case "play_card": {
-      const card = state.player.hand.find(
-        (entry) => entry.instanceId === action.cardInstanceId,
-      );
-      const name = card
-        ? getCardDefinitionFromLibrary(state.cardDefinitions, card.definitionId).name
-        : action.cardInstanceId;
-
-      return {
-        action,
-        label: `Play ${name}`,
-        source: "hand",
-      };
-    }
-    case "choose_target": {
-      const permanent = state.battlefield.find(
-        (entry) => entry?.instanceId === action.targetPermanentId,
-      ) ?? state.enemyBattlefield.find((entry) => entry?.instanceId === action.targetPermanentId);
-      const name = permanent?.name ?? action.targetPermanentId;
-
-      return {
-        action,
-        label: `Target ${name}`,
-        source: "battlefield",
-      };
-    }
-    case "choose_card": {
-      const card = state.player.graveyard.find(
-        (entry) => entry.instanceId === action.targetCardInstanceId,
-      );
-      const name = card
-        ? getCardDefinitionFromLibrary(state.cardDefinitions, card.definitionId).name
-        : action.targetCardInstanceId;
-
-      return {
-        action,
-        label: `Return ${name} to hand`,
-        source: "hand",
-      };
-    }
-    case "use_permanent_action": {
-      const permanent = state.battlefield.find(
-        (entry) => entry?.instanceId === action.permanentId,
-      );
-      const name = permanent?.name ?? action.permanentId;
-      const attacksAllEnemyPermanents =
-        action.action === "attack" && permanent
-          ? permanentAttacksAllEnemyPermanents(state, permanent)
-          : false;
-      const verb =
-        action.source === "rules"
-          ? action.action === "attack"
-            ? attacksAllEnemyPermanents
-              ? "Attack all with"
-              : "Attack with"
-            : "Defend with"
-          : action.action === "attack"
-            ? attacksAllEnemyPermanents
-              ? "Attack all with"
-              : "Attack with"
-            : action.action === "apply_block"
-              ? "Apply block with"
-              : "Use ability on";
-
-      return {
-        action,
-        label: `${verb} ${name}`,
-        source: "battlefield",
-      };
-    }
-    case "end_turn":
-      return {
-        action,
-        label: "End turn",
-        source: "turn",
-      };
-  }
-}
-
-function parseCardInstanceIndex(instanceId: string): number {
-  const parsed = Number(instanceId.replace(/^card_/, ""));
-  return Number.isInteger(parsed) ? parsed : Number.MAX_SAFE_INTEGER;
-}
-
-function reconstructPlayerDeck(state: BattleState): string[] {
-  const cardMap = new Map<string, string>();
-  const ownedCards = [
-    ...state.player.drawPile,
-    ...state.player.hand,
-    ...state.player.discardPile,
-    ...state.player.graveyard,
-    ...state.battlefield.flatMap((permanent) =>
-      permanent?.controllerId === "player"
-        ? [{
-            instanceId: permanent.sourceCardInstanceId,
-            definitionId: permanent.definitionId,
-          }]
-        : [],
-    ),
-  ];
-
-  for (const card of ownedCards) {
-    cardMap.set(card.instanceId, card.definitionId);
-  }
-
-  return [...cardMap.entries()]
-    .sort(([leftId], [rightId]) => parseCardInstanceIndex(leftId) - parseCardInstanceIndex(rightId))
-    .map(([, definitionId]) => definitionId);
-}
-
-function getLegalActionOptions(state: BattleState): CloudArenaActionOption[] {
-  if (state.phase === "finished") {
-    return [];
-  }
-
-  return getLegalActions(state).map((action) => createActionOption(state, action));
-}
-
-function validateAction(state: BattleState, action: BattleAction): void {
-  const legalActionKeys = new Set(getLegalActions(state).map(toActionKey));
-  const normalizedAction = normalizeBattleAction(action);
-
-  if (!legalActionKeys.has(toActionKey(normalizedAction))) {
-    throw new CloudArenaInvalidActionError(normalizedAction);
-  }
-}
-
-function buildSessionSnapshot(
-  record: CloudArenaSessionRecord,
-): CloudArenaSessionSnapshot {
-  const { state } = record;
-  const legalActions = getLegalActionOptions(state);
-  const primaryEnemyPermanent = getPrimaryEnemyPermanent(state);
-  const pendingHandCard =
-    state.pendingTargetRequest?.context.pendingCardPlay ??
-    state.pendingTargetRequest?.context.pendingCardPreview ??
-    null;
-
-  return {
-    sessionId: record.id,
-    scenarioId: record.scenarioId,
-    deckId: record.deckId,
-    status: state.phase === "finished" ? "finished" : "active",
-    turnNumber: state.turnNumber,
-    phase: state.phase,
-    seed: record.seed,
-    createdAt: record.createdAt,
-    resetSource: {
-      ...record.resetSource,
-    },
-    player: {
-      health: state.player.health,
-      maxHealth: state.player.maxHealth,
-      block: state.player.block,
-      energy: state.player.energy,
-      hand: state.player.hand.map((card) => toCardSnapshot(state, card)),
-      drawPile: state.player.drawPile.map((card) => toCardSnapshot(state, card)),
-      drawPileCount: state.player.drawPile.length,
-      discardPile: state.player.discardPile.map((card) => toCardSnapshot(state, card)),
-      graveyard: state.player.graveyard.map((card) => toCardSnapshot(state, card)),
-    },
-    enemy: {
-      name: primaryEnemyPermanent?.name ?? state.enemy.name,
-      health: primaryEnemyPermanent?.health ?? state.enemy.health,
-      maxHealth: primaryEnemyPermanent?.maxHealth ?? state.enemy.maxHealth,
-      block: primaryEnemyPermanent?.block ?? state.enemy.block,
-      leaderDefinitionId: state.enemy.leaderDefinitionId,
-      intent: { ...state.enemy.intent },
-      intentLabel: primaryEnemyPermanent?.intentLabel ?? (state.enemy.stunnedThisTurn ? "Stunned" : formatEnemyIntent(state.enemy.intent)),
-      intentQueueLabels: primaryEnemyPermanent?.intentQueueLabels ?? [...state.enemy.intentQueueLabels],
-    },
-    battlefield: state.battlefield.map((permanent) =>
-      permanent
-        ? {
-            instanceId: permanent.instanceId,
-            sourceCardInstanceId: permanent.sourceCardInstanceId,
-            definitionId: permanent.definitionId,
-            name: permanent.name,
-            controllerId: permanent.controllerId,
-            isCreature: hasCardType(
-              getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId),
-              "creature",
-            ),
-            power: getDerivedPermanentStat(state, permanent, "power"),
-            health: permanent.health,
-            maxHealth: permanent.maxHealth,
-            block: permanent.block,
-            counters: summarizePermanentCounters(permanent.counters),
-            attachments: [...(permanent.attachments ?? [])],
-            attachedTo: permanent.attachedTo ?? null,
-            hasActedThisTurn: permanent.hasActedThisTurn,
-            isTapped: permanent.isTapped,
-            isDefending: permanent.isDefending,
-            slotIndex: permanent.slotIndex,
-            intentLabel: permanent.intentLabel ?? null,
-            intentQueueLabels: permanent.intentQueueLabels ?? null,
-            actions: getActivatedAbilities(permanent.abilities).map((ability) => ({ ...ability })),
-          }
-        : null,
-    ),
-    enemyBattlefield: state.enemyBattlefield.map((permanent) =>
-      permanent
-        ? {
-            instanceId: permanent.instanceId,
-            sourceCardInstanceId: permanent.sourceCardInstanceId,
-            definitionId: permanent.definitionId,
-            name: permanent.name,
-            controllerId: permanent.controllerId,
-            isCreature: hasCardType(
-              getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId),
-              "creature",
-            ),
-            power: getDerivedPermanentStat(state, permanent, "power"),
-            health: permanent.health,
-            maxHealth: permanent.maxHealth,
-            block: permanent.block,
-            counters: summarizePermanentCounters(permanent.counters),
-            attachments: [...(permanent.attachments ?? [])],
-            attachedTo: permanent.attachedTo ?? null,
-            hasActedThisTurn: permanent.hasActedThisTurn,
-            isTapped: permanent.isTapped,
-            isDefending: permanent.isDefending,
-            slotIndex: permanent.slotIndex,
-            intentLabel: permanent.intentLabel ?? null,
-            intentQueueLabels: permanent.intentQueueLabels ?? null,
-            actions: getActivatedAbilities(permanent.abilities).map((ability) => ({ ...ability })),
-          }
-        : null,
-    ),
-    pendingTargetRequest: state.pendingTargetRequest
-      ? {
-          id: state.pendingTargetRequest.id,
-          prompt: state.pendingTargetRequest.prompt,
-          optional: state.pendingTargetRequest.optional,
-          targetKind: state.pendingTargetRequest.targetKind,
-          selector: { ...state.pendingTargetRequest.selector },
-          // Keep the card visible in hand while target selection is pending.
-          // Permanent cards use pendingCardPlay; spells use pendingCardPreview.
-          context: {
-            abilitySourcePermanentId: state.pendingTargetRequest.context.abilitySourcePermanentId,
-            sourceCardInstanceId: state.pendingTargetRequest.context.sourceCardInstanceId,
-            pendingCardPlay: pendingHandCard
-              ? toCardSnapshot(state, {
-                  instanceId: pendingHandCard.cardInstanceId,
-                  definitionId: pendingHandCard.definitionId,
-                })
-              : undefined,
-            pendingCardPlayHandIndex: pendingHandCard?.handIndex,
-          },
-        }
-      : null,
-    blockingQueue: [...state.blockingQueue],
-    legalActions,
-    actionHistory: record.actionHistory.map((entry) => ({
-      action: { ...entry.action },
-      turnNumber: entry.turnNumber,
-      phase: entry.phase,
-    })),
-    log: [...state.log],
-  };
-}
-
 export type CloudArenaSessionService = {
   applyAction: (sessionId: string, action: BattleAction) => CloudArenaSessionSnapshot;
   createSession: (request?: CloudArenaCreateSessionRequest) => CloudArenaSessionSnapshot;
@@ -443,27 +70,15 @@ export function createCloudArenaSessionService(): CloudArenaSessionService {
   function createSessionRecord(
     request: CloudArenaCreateSessionRequest = {},
   ): CloudArenaSessionRecord {
-    const scenario = resolveScenario(request);
-    const playerDeck = resolvePlayerDeck(request, scenario);
-    const seed = request.seed ?? 1;
-    const shuffleDeck = request.shuffleDeck ?? false;
+    const scenario = resolveCloudArenaSessionScenario(request);
 
-    return {
+    return createCloudArenaSessionRecord({
       id: randomUUID(),
-      scenarioId: scenario.id,
-      deckId: playerDeck.deckId,
-      seed,
-      shuffleDeck,
       createdAt: new Date().toISOString(),
-      resetSource: {
-        scenarioId: scenario.id,
-        deckId: playerDeck.deckId,
-        seed,
-      },
-      actionHistory: [],
-      state: createScenarioBattle(scenario, playerDeck.cards, seed, shuffleDeck),
-      playerDeck: [...playerDeck.cards],
-    };
+      request,
+      scenario,
+      playerDeck: resolvePlayerDeck(request, scenario),
+    });
   }
 
   function requireSession(sessionId: string): CloudArenaSessionRecord {
@@ -476,48 +91,30 @@ export function createCloudArenaSessionService(): CloudArenaSessionService {
     return session;
   }
 
-  function resetSessionRecord(record: CloudArenaSessionRecord): void {
-    const scenario = getScenarioPreset(record.scenarioId);
-
-    record.actionHistory = [];
-    record.state = createScenarioBattle(scenario, record.playerDeck, record.seed, record.shuffleDeck);
-  }
-
   return {
     createSession(request = {}) {
       const record = createSessionRecord(request);
 
       sessions.set(record.id, record);
-      return buildSessionSnapshot(record);
+      return buildCloudArenaSessionSnapshot(record);
     },
 
     getSession(sessionId) {
-      return buildSessionSnapshot(requireSession(sessionId));
+      return buildCloudArenaSessionSnapshot(requireSession(sessionId));
     },
 
     applyAction(sessionId, action) {
       const record = requireSession(sessionId);
 
-      if (record.state.phase === "finished") {
-        throw new CloudArenaFinishedBattleError(sessionId);
-      }
-
-      const normalizedAction = normalizeBattleAction(action);
-      validateAction(record.state, normalizedAction);
-
-      record.actionHistory.push({
-        action: { ...normalizedAction },
-        turnNumber: record.state.turnNumber,
-        phase: record.state.phase,
-      });
-      applyBattleAction(record.state, normalizedAction);
-      return buildSessionSnapshot(record);
+      applyCloudArenaSessionAction(record, action);
+      return buildCloudArenaSessionSnapshot(record);
     },
 
     resetSession(sessionId) {
       const record = requireSession(sessionId);
-      resetSessionRecord(record);
-      return buildSessionSnapshot(record);
+
+      resetCloudArenaSessionRecord(record);
+      return buildCloudArenaSessionSnapshot(record);
     },
   };
 }

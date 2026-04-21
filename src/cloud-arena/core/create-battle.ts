@@ -35,7 +35,12 @@ function toCardInstances(deck: CardDefinitionId[]): CardInstance[] {
 export function createBattle(input: CreateBattleInput): BattleState {
   const seed = input.seed ?? 1;
   const playerHealth = input.playerHealth ?? LEAN_V1_STARTING_PLAYER_HEALTH;
-  const resolvedCardDefinitions = input.cardDefinitions ?? cardDefinitions;
+  const resolvedCardDefinitions = input.cardDefinitions
+    ? {
+        enemy_leader: cardDefinitions.enemy_leader,
+        ...input.cardDefinitions,
+      }
+    : cardDefinitions;
   const initialDrawPile = input.shuffleDeck
     ? shuffleCards(toCardInstances(input.playerDeck), seed).map((card, index) => ({
         ...card,

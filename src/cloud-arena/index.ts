@@ -128,8 +128,50 @@ export {
 export { settleEnemyAttackDamage } from "./combat/settle-damage.js";
 export { buildBattleSummary, formatBattleSummary } from "./core/summary.js";
 export { usePermanentAction } from "./actions/use-permanent-action.js";
+export {
+  cloneCloudArenaSavedDeck,
+  createCloudArenaDeckDetail,
+  createCloudArenaDeckSummary,
+  createCloudArenaDeckValidationIssue,
+  expandCloudArenaDeckSource,
+  expandCloudArenaSavedDeck,
+  getCloudArenaDeckDetailByIdFromCollection,
+  getCloudArenaPresetDeckDetail,
+  getCloudArenaPresetDeckSummaries,
+  listCloudArenaCardSummaries,
+  listCloudArenaDeckSummariesFromCollection,
+  normalizeCloudArenaSavedDeckDraft,
+  resolveCloudArenaDeckSourceFromCollection,
+  validateCloudArenaSavedDeckDraft,
+  validateCloudArenaSavedDeckFile,
+} from "./deck-content.js";
+export {
+  applyCloudArenaSessionAction,
+  buildCloudArenaSessionSnapshot,
+  createCloudArenaSessionRecord,
+  createScenarioBattle,
+  normalizeBattleAction,
+  resetCloudArenaSessionRecord,
+  resolveCloudArenaSessionScenario,
+  validateCloudArenaBattleAction,
+  CloudArenaFinishedBattleError,
+  CloudArenaInvalidActionError,
+} from "./session-core.js";
 
 export type { BattleSummary } from "./core/summary.js";
+export type {
+  CloudArenaDeckValidationIssue,
+  CloudArenaResolvedDeckSource,
+  CloudArenaSavedDeck,
+  CloudArenaSavedDeckCardEntry,
+  CloudArenaSavedDeckCollection,
+  CloudArenaSavedDeckDraft,
+  CloudArenaSavedDeckRecord,
+} from "./deck-content.js";
+export type {
+  CloudArenaResolvedPlayerDeck,
+  CloudArenaSessionRecord,
+} from "./session-core.js";
 export type {
   BatchSimulationInput,
   BatchSimulationResult,

@@ -2,16 +2,21 @@ import type { ReactElement } from "react";
 import {
   Link,
   createBrowserRouter,
+  createHashRouter,
   isRouteErrorResponse,
   useRouteError,
 } from "react-router-dom";
 
 import { CloudArenaAppShell, ErrorState, PageLayout } from "../components/index.js";
+import type { CloudArenaContentMode, CloudArenaSessionMode } from "../lib/cloud-arena-web-lib.js";
 import { CloudArenaDeckBuilderPage } from "./deckbuilder-page.js";
 import { CloudArenaInteractivePage } from "./interactive-page.js";
 
 type CloudArenaRouteContext = {
   apiBaseUrl: string;
+  contentMode: CloudArenaContentMode;
+  sessionMode: CloudArenaSessionMode;
+  routerMode?: "browser" | "hash";
   cloudArcanumWebBaseUrl: string;
 };
 
@@ -64,12 +69,14 @@ function CloudArenaRouteErrorBoundary({
 }
 
 export function createCloudArenaRouter(context: CloudArenaRouteContext) {
-  return createBrowserRouter([
+  const routes = [
     {
       path: "/",
       element: (
         <CloudArenaInteractivePage
           apiBaseUrl={context.apiBaseUrl}
+          contentMode={context.contentMode}
+          sessionMode={context.sessionMode}
           cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}
         />
       ),
@@ -84,6 +91,7 @@ export function createCloudArenaRouter(context: CloudArenaRouteContext) {
       element: (
         <CloudArenaDeckBuilderPage
           apiBaseUrl={context.apiBaseUrl}
+          contentMode={context.contentMode}
           cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}
         />
       ),
@@ -93,5 +101,9 @@ export function createCloudArenaRouter(context: CloudArenaRouteContext) {
         </CloudArenaAppShell>
       ),
     },
-  ]);
+  ];
+
+  return context.routerMode === "hash"
+    ? createHashRouter(routes)
+    : createBrowserRouter(routes);
 }

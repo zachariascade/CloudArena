@@ -274,7 +274,7 @@ describe("cloud arena trigger resolution", () => {
       battle.rules
         .filter((event) =>
           event.type === "card_played" ||
-          event.type === "permanent_entered" ||
+          (event.type === "permanent_entered" && event.definitionId !== "enemy_leader") ||
           event.type === "permanent_left_battlefield" ||
           event.type === "permanent_died" ||
           event.type === "counter_added",

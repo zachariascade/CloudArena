@@ -143,7 +143,11 @@ function resolveDisplayImageUrl(url: string | null | undefined): string | null {
     return url;
   }
 
-  const { cloudArcanumApiBaseUrl } = getCloudArenaRuntimeConfig();
+  const { cloudArcanumApiBaseUrl, contentMode, sessionMode } = getCloudArenaRuntimeConfig();
+  if (!cloudArcanumApiBaseUrl || contentMode === "local" || sessionMode === "local") {
+    return `.${url}`;
+  }
+
   return `${cloudArcanumApiBaseUrl.replace(/\/$/, "")}${url}`;
 }
 

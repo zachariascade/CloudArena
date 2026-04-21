@@ -16,6 +16,7 @@ const entryFile = path.resolve(
 );
 const outputDirectory = path.resolve(projectRoot, "dist/apps/cloud-arena-web/client");
 const watchMode = process.argv.includes("--watch");
+const publicPath = process.env.CLOUD_ARENA_PUBLIC_PATH ?? "/assets";
 
 function resolveEsbuildBinary(): string {
   const binaryCandidates = [
@@ -43,7 +44,7 @@ const esbuildArgs = [
   "--format=esm",
   "--jsx=automatic",
   "--loader:.svg=file",
-  "--public-path=/assets",
+  `--public-path=${publicPath}`,
   `--outfile=${path.join(outputDirectory, "app.js")}`,
   "--platform=browser",
   "--sourcemap",

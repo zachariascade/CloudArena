@@ -21,12 +21,17 @@ import {
 import {
   buildCloudArenaViewModelFromSessionSnapshot,
   CloudArcanumApiClientError,
-  createCloudArenaApiClient,
+  createCloudArenaContentController,
+  createCloudArenaSessionController,
   formatTraceEvent,
+  type CloudArenaContentMode,
+  type CloudArenaSessionMode,
 } from "../lib/cloud-arena-web-lib.js";
 
 type CloudArenaInteractivePageProps = {
   apiBaseUrl: string;
+  contentMode: CloudArenaContentMode;
+  sessionMode: CloudArenaSessionMode;
   cloudArcanumWebBaseUrl: string;
 };
 
@@ -259,9 +264,18 @@ function createBattleSeed(): number {
 
 export function CloudArenaInteractivePage({
   apiBaseUrl,
+  contentMode,
+  sessionMode,
   cloudArcanumWebBaseUrl,
 }: CloudArenaInteractivePageProps): ReactElement {
-  const api = useMemo(() => createCloudArenaApiClient({ baseUrl: apiBaseUrl }), [apiBaseUrl]);
+  const sessions = useMemo(
+    () => createCloudArenaSessionController({ apiBaseUrl, mode: sessionMode }),
+    [apiBaseUrl, sessionMode],
+  );
+  const content = useMemo(
+    () => createCloudArenaContentController({ apiBaseUrl, mode: contentMode }),
+    [apiBaseUrl, contentMode],
+  );
   const location = useLocation();
   const navigate = useNavigate();
   const [snapshot, setSnapshot] = useState<CloudArenaSessionSnapshot | null>(null);
@@ -332,7 +346,7 @@ export function CloudArenaInteractivePage({
     setError(null);
 
     try {
-      const response = await api.createCloudArenaSession({
+      const response = await sessions.createCloudArenaSession({
         scenarioId,
         deckId,
         seed: resolvedSeed,
@@ -359,7 +373,7 @@ export function CloudArenaInteractivePage({
     setStatus("loading");
     setError(null);
 
-    void api.createCloudArenaSession(
+    void sessions.createCloudArenaSession(
       {
         scenarioId: initialScenarioDraftRef.current,
         deckId: initialDeckDraftRef.current,
@@ -396,12 +410,12 @@ export function CloudArenaInteractivePage({
       });
 
     return () => abortController.abort();
-  }, [api]);
+  }, [sessions]);
 
   useEffect(() => {
     const abortController = new AbortController();
 
-    void api.listCloudArenaDecks({}, { signal: abortController.signal })
+    void content.listCloudArenaDecks({}, { signal: abortController.signal })
       .then((response) => {
         if (!abortController.signal.aborted) {
           setDeckSummaries(response.data);
@@ -414,7 +428,7 @@ export function CloudArenaInteractivePage({
       });
 
     return () => abortController.abort();
-  }, [api]);
+  }, [content]);
 
   async function handleApplyAction(action: BattleAction): Promise<void> {
     if (!snapshot || battleIsFinished || isActionInFlightRef.current) {
@@ -430,7 +444,7 @@ export function CloudArenaInteractivePage({
     setLastSubmittedActionLabel(selectedOption?.label ?? null);
 
     try {
-      const response = await api.applyCloudArenaAction(snapshot.sessionId, { action });
+      const response = await sessions.applyCloudArenaAction(snapshot.sessionId, { action });
       setSnapshot(response.data);
       setStatus("ready");
     } catch (nextError: unknown) {
@@ -450,7 +464,7 @@ export function CloudArenaInteractivePage({
 
       if (isStaleActionError) {
         try {
-          const refreshedSession = await api.getCloudArenaSession(snapshot.sessionId);
+          const refreshedSession = await sessions.getCloudArenaSession(snapshot.sessionId);
 
           if (didSessionAdvance(snapshot, refreshedSession.data)) {
             setSnapshot(refreshedSession.data);
@@ -493,7 +507,7 @@ export function CloudArenaInteractivePage({
     setError(null);
 
     try {
-      const response = await api.resetCloudArenaSession(snapshot.sessionId);
+      const response = await sessions.resetCloudArenaSession(snapshot.sessionId);
       setSnapshot(response.data);
       setSeedDraft(String(response.data.seed));
       setScenarioDraft(response.data.scenarioId);
@@ -596,20 +610,6 @@ export function CloudArenaInteractivePage({
     return () => window.removeEventListener("keydown", onWindowKeyDown);
   }, [battleIsFinished, endTurnAction, isCreatingSession, isSubmitting, snapshot]);
 
-  if (status === "loading" || !snapshot) {
-    return (
-      <CloudArenaAppShell
-        cloudArcanumWebBaseUrl={cloudArcanumWebBaseUrl}
-        sidebarContent={buildSidebarContent({})}
-      >
-        <LoadingState
-          title="Creating battle session"
-          description="The client is requesting a fresh simulation snapshot from the Cloud Arena API."
-        />
-      </CloudArenaAppShell>
-    );
-  }
-
   if (status === "error" && error) {
     return (
       <CloudArenaAppShell
@@ -620,6 +620,24 @@ export function CloudArenaInteractivePage({
           title="Battle session failed"
           description="The interactive battle view could not load or continue."
           details={formatApiErrorDetails(error)}
+        />
+      </CloudArenaAppShell>
+    );
+  }
+
+  if (status === "loading" || !snapshot) {
+    return (
+      <CloudArenaAppShell
+        cloudArcanumWebBaseUrl={cloudArcanumWebBaseUrl}
+        sidebarContent={buildSidebarContent({})}
+      >
+        <LoadingState
+          title="Creating battle session"
+          description={
+            sessionMode === "local"
+              ? "The browser is preparing a fresh simulation snapshot."
+              : "The client is requesting a fresh simulation snapshot from the Cloud Arena API."
+          }
         />
       </CloudArenaAppShell>
     );

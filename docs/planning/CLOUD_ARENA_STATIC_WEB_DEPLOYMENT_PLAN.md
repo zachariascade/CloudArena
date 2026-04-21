@@ -419,6 +419,12 @@ Likely files:
 
 ### Phase 2: Shared Content And Deck Core
 
+Status:
+
+- completed
+- browser-safe card listing, preset deck summary/detail, saved deck validation, deck expansion, and collection-based deck resolution now live in `src/cloud-arena/deck-content.ts`
+- the filesystem API deck service now delegates pure behavior to the shared module while retaining Node-only storage concerns
+
 Goal:
 
 - separate pure deckbuilder behavior from Node filesystem storage
@@ -443,6 +449,21 @@ Likely files:
 
 ### Phase 3: Local Browser Deck Repository
 
+Status:
+
+- completed
+- completed in current slice:
+  - added `apps/cloud-arena-web/src/lib/cloud-arena-local-decks.ts`
+  - added focused local repository tests for catalog listing, preset deck detail, saved deck create/update/delete, persistence, filtering, and validation
+  - added a content controller with `remote` and `local` modes
+  - added `contentMode` to the Arena runtime config
+  - wired the deckbuilder route through the content controller
+  - wired the battle deck chooser through the content controller
+  - kept `remote` as the default for local API development
+  - verified `local` mode can serve card and deck content without an API
+- caveat:
+  - browser-saved decks can now be listed and selected in local content mode, but starting battles with them still needs the Phase 4 local session adapter
+
 Goal:
 
 - make the deckbuilder usable without HTTP or filesystem writes
@@ -465,6 +486,17 @@ Likely files:
 
 ### Phase 4: Local Browser Session Adapter
 
+Status:
+
+- completed
+- extracted browser-safe session/snapshot helpers into `src/cloud-arena/session-core.ts`
+- refactored the API session service into a thin Map-backed adapter over the shared session core
+- added `apps/cloud-arena-web/src/lib/cloud-arena-local-session.ts`
+- added a session controller with `remote` and `local` modes
+- added `sessionMode` to Arena runtime config
+- wired the interactive battle route through the session controller
+- added focused tests for local sessions, browser-saved deck battle startup, action application, reset, and local session-controller mode
+
 Goal:
 
 - make the frontend able to run battles without HTTP
@@ -485,6 +517,16 @@ Likely files:
 - `apps/cloud-arena-web/src/routes/interactive-page.tsx`
 
 ### Phase 5: Static Build Output
+
+Status:
+
+- completed
+- completed slice:
+  - added static HTML generation into `dist/apps/cloud-arena-web/static`
+  - made arena client asset public path configurable with `CLOUD_ARENA_PUBLIC_PATH`
+  - added static build and preview scripts
+  - verified static output uses local content/session runtime config
+  - smoke-tested `/`, `/assets/app.js`, and `/decks` from the static preview server
 
 Goal:
 
@@ -507,6 +549,16 @@ Likely files:
 - `package.json`
 
 ### Phase 6: GitHub Pages Routing And Deployment
+
+Status:
+
+- completed
+- completed slice:
+  - added hash-router mode for static hosting
+  - emitted `404.html` beside `index.html`
+  - added GitHub Pages deployment workflow
+  - documented static build and Pages settings
+  - verified static output uses local content/session config and hash routing
 
 Goal:
 

@@ -43,7 +43,9 @@ export function resetRound(state: BattleState): BattleState {
       return;
     }
 
-    permanent.block = 0;
+    if (!permanent.isEnemyLeader) {
+      permanent.block = 0;
+    }
     if (permanent.recoveryPolicy === "full_heal") {
       permanent.health = permanent.maxHealth;
     }

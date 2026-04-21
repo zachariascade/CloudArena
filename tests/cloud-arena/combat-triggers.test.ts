@@ -122,6 +122,16 @@ describe("cloud arena combat-state triggers", () => {
       permanentId: chorusPermanent.instanceId,
       action: "attack",
     });
+    const leaderTarget = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+
+    if (!leaderTarget) {
+      throw new Error("Expected enemy leader target.");
+    }
+
+    applyBattleAction(battle, {
+      type: "choose_target",
+      targetPermanentId: leaderTarget.instanceId,
+    });
 
     expect(getPermanentCounterCount(chorusPermanent, "rage", "power")).toBe(1);
     expect(
