@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 744 1039" role="img" aria-labelledby="title desc">
+  <title id="title">Token Imp placeholder card art</title>
+  <desc id="desc">A small imp with ember wings and a sly grin.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#28131d"/>
+      <stop offset="100%" stop-color="#5a1d1d"/>
+    </linearGradient>
+  </defs>
+  <rect width="744" height="1039" fill="url(#bg)"/>
+  <rect x="48" y="48" width="648" height="943" rx="28" fill="none" stroke="#d9a24a" stroke-width="10"/>
+  <path d="M188 542 C210 408, 316 330, 372 330 C428 330, 534 408, 556 542 C476 500, 268 500, 188 542 Z" fill="#8f2d2d" stroke="#f0b85b" stroke-width="8"/>
+  <path d="M260 380 L214 330 L244 440 Z" fill="#d9a24a"/>
+  <path d="M484 380 L530 330 L500 440 Z" fill="#d9a24a"/>
+  <circle cx="326" cy="520" r="18" fill="#fff0c2"/>
+  <circle cx="418" cy="520" r="18" fill="#fff0c2"/>
+  <path d="M304 598 C340 638, 404 638, 440 598" fill="none" stroke="#fff0c2" stroke-width="10" stroke-linecap="round"/>
+  <path d="M244 644 C286 700, 326 726, 372 726 C418 726, 458 700, 500 644" fill="none" stroke="#ff8f57" stroke-width="12" stroke-linecap="round"/>
+  <path d="M242 674 C296 728, 330 758, 372 758 C414 758, 448 728, 502 674" fill="none" stroke="#ffcf7a" stroke-width="8" stroke-linecap="round"/>
+  <text x="372" y="820" text-anchor="middle" font-family="Georgia, serif" font-size="46" fill="#fff0c2">Token Imp</text>
+  <text x="372" y="874" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#f0b85b">Small and relentless</text>
+</svg>

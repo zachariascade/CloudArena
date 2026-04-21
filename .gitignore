@@ -2,5 +2,7 @@
 node_modules/
 .npm-cache/
 dist/
-images/
+images/*
+!images/cards/
+!images/cards/**
 output/imagegen/
