@@ -86,7 +86,7 @@ export class BaseCloudApiClient {
     path: string,
     options: {
       body?: unknown;
-      method?: "GET" | "POST";
+      method?: "GET" | "POST" | "PUT" | "DELETE";
       signal?: AbortSignal;
     } = {},
   ): Promise<CloudApiResponse<TName>> {

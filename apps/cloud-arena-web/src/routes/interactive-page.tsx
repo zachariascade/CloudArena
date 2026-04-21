@@ -4,7 +4,8 @@ import { createPortal } from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import type {
-  CloudArenaDeckPresetId,
+  CloudArenaDeckKind,
+  CloudArenaDeckSummary,
   CloudArenaSessionSnapshot,
   CloudArenaSessionScenarioId,
 } from "../../../../src/cloud-arena/api-contract.js";
@@ -30,6 +31,18 @@ type CloudArenaInteractivePageProps = {
 };
 
 type InteractiveStatus = "loading" | "ready" | "error";
+type CloudArenaDeckChooserOption = {
+  id: string;
+  label: string;
+  description: string;
+  kind: CloudArenaDeckKind;
+  disabled?: boolean;
+};
+
+type CloudArenaDeckChooserGroup = {
+  label: string;
+  options: CloudArenaDeckChooserOption[];
+};
 
 const CLOUD_ARENA_SCENARIO_OPTIONS: Array<{
   id: CloudArenaSessionScenarioId;
@@ -59,7 +72,7 @@ const CLOUD_ARENA_SCENARIO_OPTIONS: Array<{
 ];
 
 const CLOUD_ARENA_DECK_OPTIONS: Array<{
-  id: CloudArenaDeckPresetId;
+  id: string;
   label: string;
   description: string;
 }> = [
@@ -87,8 +100,81 @@ function isCloudArenaSessionScenarioId(value: string): value is CloudArenaSessio
   return CLOUD_ARENA_SCENARIO_OPTIONS.some((option) => option.id === value);
 }
 
-function isCloudArenaDeckPresetId(value: string): value is CloudArenaDeckPresetId {
-  return CLOUD_ARENA_DECK_OPTIONS.some((option) => option.id === value);
+function createPresetDeckChooserOption(option: (typeof CLOUD_ARENA_DECK_OPTIONS)[number]): CloudArenaDeckChooserOption {
+  return {
+    id: option.id,
+    label: option.label,
+    description: option.description,
+    kind: "preset",
+  };
+}
+
+function createSavedDeckChooserOption(deck: CloudArenaDeckSummary): CloudArenaDeckChooserOption {
+  return {
+    id: deck.id,
+    label: deck.name,
+    description: `${deck.cardCount} cards, ${deck.uniqueCardCount} unique`,
+    kind: "saved",
+  };
+}
+
+export function buildCloudArenaDeckChooserGroups(
+  deckSummaries: CloudArenaDeckSummary[] | null,
+  selectedDeckId: string,
+): CloudArenaDeckChooserGroup[] {
+  const availableDecks = deckSummaries ?? [];
+  const presetOptions = availableDecks
+    .filter((deck) => deck.kind === "preset")
+    .map((deck) => ({
+      id: deck.id,
+      label: deck.name,
+      description: `${deck.cardCount} cards, ${deck.uniqueCardCount} unique`,
+      kind: deck.kind,
+    }));
+  const fallbackPresetOptions = CLOUD_ARENA_DECK_OPTIONS.map(createPresetDeckChooserOption);
+  const savedDeckOptions = availableDecks
+    .filter((deck) => deck.kind === "saved")
+    .map(createSavedDeckChooserOption);
+  const shouldInjectSelectedDeck =
+    selectedDeckId.length > 0 &&
+    !presetOptions.some((option) => option.id === selectedDeckId) &&
+    !fallbackPresetOptions.some((option) => option.id === selectedDeckId) &&
+    !savedDeckOptions.some((option) => option.id === selectedDeckId);
+
+  const resolvedPresetOptions = presetOptions.length > 0 ? presetOptions : fallbackPresetOptions;
+  const resolvedSavedDeckOptions = shouldInjectSelectedDeck
+    ? [
+        {
+          id: selectedDeckId,
+          label: `Saved deck ${selectedDeckId}`,
+          description: "Selected from the battle setup URL",
+          kind: "saved" as const,
+        },
+        ...savedDeckOptions,
+      ]
+    : savedDeckOptions;
+
+  return [
+    {
+      label: "Built-in presets",
+      options: resolvedPresetOptions,
+    },
+    {
+      label: "Saved decks",
+      options:
+        resolvedSavedDeckOptions.length > 0
+          ? resolvedSavedDeckOptions
+          : [
+              {
+                id: "",
+                label: "No saved decks yet",
+                description: "Create a deck in the deck builder to use it here.",
+                kind: "saved" as const,
+                disabled: true,
+              },
+            ],
+    },
+  ];
 }
 
 function getScenarioDraftFromUrl(): CloudArenaSessionScenarioId {
@@ -106,7 +192,7 @@ function getScenarioDraftFromUrl(): CloudArenaSessionScenarioId {
   return "mixed_guardian";
 }
 
-function getDeckDraftFromUrl(): CloudArenaDeckPresetId {
+function getDeckDraftFromUrl(): string {
   if (typeof window === "undefined") {
     return "master_deck";
   }
@@ -114,7 +200,7 @@ function getDeckDraftFromUrl(): CloudArenaDeckPresetId {
   const searchParams = new URLSearchParams(window.location.search);
   const queryValue = searchParams.get(CLOUD_ARENA_DECK_QUERY_PARAM);
 
-  if (queryValue && isCloudArenaDeckPresetId(queryValue)) {
+  if (queryValue) {
     return queryValue;
   }
 
@@ -185,12 +271,21 @@ export function CloudArenaInteractivePage({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [seedDraft, setSeedDraft] = useState("1");
   const [scenarioDraft, setScenarioDraft] = useState<CloudArenaSessionScenarioId>(getScenarioDraftFromUrl);
-  const [deckDraft, setDeckDraft] = useState<CloudArenaDeckPresetId>(getDeckDraftFromUrl);
+  const [deckDraft, setDeckDraft] = useState<string>(getDeckDraftFromUrl);
+  const [deckSummaries, setDeckSummaries] = useState<CloudArenaDeckSummary[] | null>(null);
   const [lastSubmittedActionLabel, setLastSubmittedActionLabel] = useState<string | null>(null);
   const initialScenarioDraftRef = useRef(scenarioDraft);
   const initialDeckDraftRef = useRef(deckDraft);
   const isActionInFlightRef = useRef(false);
   const battleIsFinished = snapshot?.status === "finished";
+  const deckChooserGroups = useMemo(
+    () => buildCloudArenaDeckChooserGroups(deckSummaries, deckDraft),
+    [deckDraft, deckSummaries],
+  );
+  const selectedDeckOption = useMemo(
+    () => deckChooserGroups.flatMap((group) => group.options).find((option) => option.id === deckDraft) ?? null,
+    [deckChooserGroups, deckDraft],
+  );
 
   function didSessionAdvance(
     currentSnapshot: CloudArenaSessionSnapshot,
@@ -228,7 +323,7 @@ export function CloudArenaInteractivePage({
   async function createSession(
     seed?: number,
     scenarioId: CloudArenaSessionScenarioId = scenarioDraft,
-    deckId: CloudArenaDeckPresetId = deckDraft,
+    deckId: string = deckDraft,
   ): Promise<void> {
     const resolvedSeed = seed ?? createBattleSeed();
 
@@ -298,6 +393,24 @@ export function CloudArenaInteractivePage({
         }
 
         setIsCreatingSession(false);
+      });
+
+    return () => abortController.abort();
+  }, [api]);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+
+    void api.listCloudArenaDecks({}, { signal: abortController.signal })
+      .then((response) => {
+        if (!abortController.signal.aborted) {
+          setDeckSummaries(response.data);
+        }
+      })
+      .catch(() => {
+        if (!abortController.signal.aborted) {
+          setDeckSummaries(null);
+        }
       });
 
     return () => abortController.abort();
@@ -550,15 +663,24 @@ export function CloudArenaInteractivePage({
                 <span>Deck</span>
                 <select
                   value={deckDraft}
-                  onChange={(event) => setDeckDraft(event.target.value as CloudArenaDeckPresetId)}
+                  onChange={(event) => setDeckDraft(event.target.value)}
                 >
-                  {CLOUD_ARENA_DECK_OPTIONS.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.label} - {option.description}
-                    </option>
+                  {deckChooserGroups.map((group) => (
+                    <optgroup key={group.label} label={group.label}>
+                      {group.options.map((option) => (
+                        <option key={option.id} value={option.id} disabled={option.disabled}>
+                          {option.label} - {option.description}
+                        </option>
+                      ))}
+                    </optgroup>
                   ))}
                 </select>
               </label>
+              <p className="cloud-arena-game-admin-note">
+                {selectedDeckOption
+                  ? `Current deck: ${selectedDeckOption.label} (${selectedDeckOption.kind})`
+                  : `Current deck id: ${deckDraft}`}
+              </p>
               <label className="field">
                 <span>Seed</span>
                 <input

@@ -14,6 +14,9 @@ export const cloudArenaApiRoutes = {
   cloudArenaSessionDetail: "/api/cloud-arena/sessions/:sessionId",
   cloudArenaSessionActions: "/api/cloud-arena/sessions/:sessionId/actions",
   cloudArenaSessionReset: "/api/cloud-arena/sessions/:sessionId/reset",
+  cloudArenaCards: "/api/cloud-arena/cards",
+  cloudArenaDecks: "/api/cloud-arena/decks",
+  cloudArenaDeckDetail: "/api/cloud-arena/decks/:deckId",
 } as const;
 
 export type CloudArenaApiRouteName = keyof typeof cloudArenaApiRoutes;
@@ -24,9 +27,68 @@ export type CloudArenaSessionScenarioId =
   | "grunt_demon"
   | "imp_caller";
 
+export type CloudArenaDeckId = string;
+export type CloudArenaDeckKind = "preset" | "saved";
+
+export type CloudArenaCardListQuery = {
+  q?: string;
+  cardType?: string;
+};
+
+export type CloudArenaDeckListQuery = {
+  q?: string;
+  kind?: CloudArenaDeckKind;
+  containsCardId?: string;
+};
+
+export type CloudArenaDeckRouteParams = {
+  deckId: string;
+};
+
+export type CloudArenaCardSummary = {
+  id: CardDefinitionId;
+  name: string;
+  cost: number;
+  typeLine: string;
+  cardTypes: string[];
+  subtypes: string[];
+  effectSummary: string;
+};
+
+export type CloudArenaDeckCardEntry = {
+  cardId: CardDefinitionId;
+  quantity: number;
+};
+
+export type CloudArenaDeckSummary = {
+  id: CloudArenaDeckId;
+  kind: CloudArenaDeckKind;
+  name: string;
+  cardCount: number;
+  uniqueCardCount: number;
+  tags: string[];
+  notes: string | null;
+};
+
+export type CloudArenaDeckDetail = CloudArenaDeckSummary & {
+  cards: CloudArenaDeckCardEntry[];
+};
+
+export type CloudArenaDeckWriteRequest = {
+  name: string;
+  cards: CloudArenaDeckCardEntry[];
+  tags?: string[];
+  notes?: string | null;
+};
+
+export type CloudArenaDeckDeleteResponse = {
+  deckId: CloudArenaDeckId;
+  deleted: true;
+};
+
 export type CloudArenaCreateSessionRequest = {
   scenarioId?: CloudArenaSessionScenarioId;
-  deckId?: CloudArenaDeckPresetId;
+  deckId?: CloudArenaDeckId;
   seed?: number;
   shuffleDeck?: boolean;
 };
@@ -105,14 +167,14 @@ export type CloudArenaSessionActionRecord = {
 
 export type CloudArenaSessionResetSource = {
   scenarioId: CloudArenaSessionScenarioId;
-  deckId: CloudArenaDeckPresetId | null;
+  deckId: CloudArenaDeckId | null;
   seed: number;
 };
 
 export type CloudArenaSessionSnapshot = {
   sessionId: string;
   scenarioId: CloudArenaSessionScenarioId;
-  deckId: CloudArenaDeckPresetId | null;
+  deckId: CloudArenaDeckId | null;
   status: "active" | "finished";
   turnNumber: number;
   phase: BattlePhase;
@@ -178,6 +240,30 @@ export type CloudArenaApiContracts = {
     params: CloudArenaSessionRouteParams;
     response: CloudArenaApiSuccessResponse<CloudArenaSessionSnapshot>;
   };
+  cloudArenaCards: {
+    route: typeof cloudArenaApiRoutes.cloudArenaCards;
+    query: CloudArenaCardListQuery;
+    params: undefined;
+    response: CloudArenaApiSuccessResponse<CloudArenaCardSummary[]>;
+  };
+  cloudArenaDecks: {
+    route: typeof cloudArenaApiRoutes.cloudArenaDecks;
+    query: CloudArenaDeckListQuery;
+    params: undefined;
+    response: CloudArenaApiSuccessResponse<CloudArenaDeckSummary[]>;
+  };
+  cloudArenaDeckDetail: {
+    route: typeof cloudArenaApiRoutes.cloudArenaDeckDetail;
+    query: undefined;
+    params: CloudArenaDeckRouteParams;
+    response: CloudArenaApiSuccessResponse<CloudArenaDeckDetail>;
+  };
+  cloudArenaDeckDelete: {
+    route: typeof cloudArenaApiRoutes.cloudArenaDeckDetail;
+    query: undefined;
+    params: CloudArenaDeckRouteParams;
+    response: CloudArenaApiSuccessResponse<CloudArenaDeckDeleteResponse>;
+  };
 };
 
 export type CloudArenaApiContractName = keyof CloudArenaApiContracts;
@@ -199,4 +285,16 @@ export function buildCloudArenaSessionActionsPath(sessionId: string): string {
 
 export function buildCloudArenaSessionResetPath(sessionId: string): string {
   return `/api/cloud-arena/sessions/${sessionId}/reset`;
+}
+
+export function buildCloudArenaCardsPath(): string {
+  return "/api/cloud-arena/cards";
+}
+
+export function buildCloudArenaDecksPath(): string {
+  return "/api/cloud-arena/decks";
+}
+
+export function buildCloudArenaDeckPath(deckId: string): string {
+  return `/api/cloud-arena/decks/${deckId}`;
 }

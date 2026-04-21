@@ -1,0 +1,60 @@
+{
+  "id": "deck_594746959c68",
+  "name": "Equipment",
+  "cards": [
+    {
+      "cardId": "armory_seraph",
+      "quantity": 1
+    },
+    {
+      "cardId": "defend",
+      "quantity": 1
+    },
+    {
+      "cardId": "defending_strike",
+      "quantity": 1
+    },
+    {
+      "cardId": "garden_of_earthly_delights",
+      "quantity": 1
+    },
+    {
+      "cardId": "guardian",
+      "quantity": 1
+    },
+    {
+      "cardId": "holy_blade",
+      "quantity": 5
+    },
+    {
+      "cardId": "judgment_blade",
+      "quantity": 1
+    },
+    {
+      "cardId": "radiant_conduit",
+      "quantity": 1
+    },
+    {
+      "cardId": "token_imp",
+      "quantity": 1
+    },
+    {
+      "cardId": "token_angel",
+      "quantity": 4
+    },
+    {
+      "cardId": "anointed_banner",
+      "quantity": 1
+    },
+    {
+      "cardId": "armory_disciple",
+      "quantity": 1
+    },
+    {
+      "cardId": "forbidden_insight",
+      "quantity": 1
+    }
+  ],
+  "tags": [],
+  "notes": null
+}

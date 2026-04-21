@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 import { CloudArenaAppShell, ErrorState, PageLayout } from "../components/index.js";
+import { CloudArenaDeckBuilderPage } from "./deckbuilder-page.js";
 import { CloudArenaInteractivePage } from "./interactive-page.js";
 
 type CloudArenaRouteContext = {
@@ -68,6 +69,20 @@ export function createCloudArenaRouter(context: CloudArenaRouteContext) {
       path: "/",
       element: (
         <CloudArenaInteractivePage
+          apiBaseUrl={context.apiBaseUrl}
+          cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}
+        />
+      ),
+      errorElement: (
+        <CloudArenaAppShell cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}>
+          <CloudArenaRouteErrorBoundary cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl} />
+        </CloudArenaAppShell>
+      ),
+    },
+    {
+      path: "/decks",
+      element: (
+        <CloudArenaDeckBuilderPage
           apiBaseUrl={context.apiBaseUrl}
           cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}
         />

@@ -1,5 +1,6 @@
 import type { FastifyInstance, FastifyPluginAsync } from "fastify";
 
+import { registerCloudArenaContentRoutes } from "./cloud-arena-content.js";
 import { registerCloudArenaRoutes } from "./cloud-arena.js";
 import type { CloudArenaApiServices } from "../services/index.js";
 
@@ -10,6 +11,7 @@ export type CloudArenaApiRouteContext = {
 export type CloudArenaApiRouteModule = FastifyPluginAsync<CloudArenaApiRouteContext>;
 
 export const cloudArenaApiRouteModules: CloudArenaApiRouteModule[] = [
+  registerCloudArenaContentRoutes,
   registerCloudArenaRoutes,
 ];
 

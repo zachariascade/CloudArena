@@ -70,18 +70,12 @@ describe("shared display card mappers", () => {
       maxHealth: 30,
       block: 5,
       energy: 2,
-      hand: [],
-      drawPile: [],
-      drawPileCount: 10,
-      discardPile: [{ instanceId: "c1", definitionId: "attack", name: "Attack", cost: 1, effectSummary: "Deal 6 damage." }],
-      graveyard: [],
     });
     const enemy = mapArenaEnemyToDisplayCard({
       name: "Long Battle Demon",
       health: 44,
       maxHealth: 60,
       block: 3,
-      intent: { attackAmount: 10, attackTimes: 2 },
       intentLabel: "attack 10 x2",
       intentQueueLabels: ["attack 10 x2", "defend 4", "spawn token_imp"],
     });
@@ -240,7 +234,6 @@ describe("shared display card mappers", () => {
       maxHealth: 18,
       block: 0,
       leaderDefinitionId: "enemy_grunt_demon",
-      intent: { attackAmount: 5 },
       intentLabel: "attack 5",
     });
 
@@ -257,7 +250,6 @@ describe("shared display card mappers", () => {
       maxHealth: 20,
       block: 0,
       leaderDefinitionId: "enemy_imp_caller",
-      intent: { attackAmount: 3 },
       intentLabel: "attack 3",
       intentQueueLabels: ["attack 3", "spawn imp"],
     });
@@ -800,7 +792,6 @@ describe("shared display card mappers", () => {
                   health: 30,
                   maxHealth: 30,
                   block: 0,
-                  intent: { attackAmount: 12 },
                   intentLabel: "attack 12",
                 }),
           bindInspectorInteractions: () => ({
@@ -833,7 +824,6 @@ describe("shared display card mappers", () => {
                   health: 30,
                   maxHealth: 30,
                   block: 0,
-                  intent: { attackAmount: 12 },
                   intentLabel: "attack 12",
                 }),
           getPermanentMenuActions: () => [],
@@ -910,7 +900,6 @@ describe("shared display card mappers", () => {
                 health: 30,
                 maxHealth: 30,
                 block: 0,
-                intent: { attackAmount: 12 },
                 intentLabel: "attack 12",
               }),
         bindInspectorInteractions: () => ({
@@ -1133,7 +1122,6 @@ describe("shared display card component", () => {
           health: 50,
           maxHealth: 50,
           block: 0,
-          intent: { attackAmount: 12 },
           intentLabel: "attack 12",
           intentQueueLabels: ["attack 12", "defend 3"],
         }),
@@ -1185,11 +1173,6 @@ describe("shared display card component", () => {
           maxHealth: 30,
           block: 5,
           energy: 2,
-          hand: [],
-          drawPile: [],
-          drawPileCount: 10,
-          discardPile: [],
-          graveyard: [],
         }),
       }),
     );

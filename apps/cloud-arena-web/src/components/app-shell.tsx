@@ -10,6 +10,7 @@ type CloudArenaAppShellProps = {
 
 const navigationItems = [
   { to: "/", label: "Battle", end: true },
+  { to: "/decks", label: "Deck Builder", end: true },
 ];
 
 const headerRevealThresholdPx = 28;

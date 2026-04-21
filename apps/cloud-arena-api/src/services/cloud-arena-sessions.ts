@@ -3,7 +3,6 @@ import { randomUUID } from "node:crypto";
 import type {
   CloudArenaActionOption,
   CloudArenaCreateSessionRequest,
-  CloudArenaDeckPresetId,
   CloudArenaSessionActionRecord,
   CloudArenaSessionScenarioId,
   CloudArenaSessionSnapshot,
@@ -20,7 +19,6 @@ import {
   getLegalActions,
   getEnemyLeaderPermanent,
   getPrimaryEnemyPermanent,
-  getDeckPreset,
   getScenarioPreset,
   hasCardType,
   isPermanentCardDefinition,
@@ -32,17 +30,21 @@ import {
   type CloudArenaScenarioPreset,
 } from "../../../../src/cloud-arena/index.js";
 import { summarizeCardDefinition } from "../../../../src/cloud-arena/card-summary.js";
+import {
+  expandCloudArenaDeckSource,
+  resolveCloudArenaDeckSourceByIdSync,
+} from "./cloud-arena-decks.js";
 
 type CloudArenaSessionRecord = {
   id: string;
   scenarioId: CloudArenaSessionScenarioId;
-  deckId: CloudArenaDeckPresetId | null;
+  deckId: string | null;
   seed: number;
   shuffleDeck: boolean;
   createdAt: string;
   resetSource: {
     scenarioId: CloudArenaSessionScenarioId;
-    deckId: CloudArenaDeckPresetId | null;
+    deckId: string | null;
     seed: number;
   };
   actionHistory: CloudArenaSessionActionRecord[];
@@ -111,13 +113,17 @@ function resolveScenario(
 function resolvePlayerDeck(
   request: CloudArenaCreateSessionRequest,
   scenario: CloudArenaScenarioPreset,
-): { deckId: CloudArenaDeckPresetId | null; cards: string[] } {
+): { deckId: string | null; cards: string[] } {
   if (request.deckId) {
-    const deck = getDeckPreset(request.deckId);
+    const deck = resolveCloudArenaDeckSourceByIdSync(request.deckId);
+
+    if (!deck) {
+      throw new Error(`Cloud Arena deck "${request.deckId}" was not found.`);
+    }
 
     return {
-      deckId: deck.id,
-      cards: deck.cards,
+      deckId: deck.deckId,
+      cards: expandCloudArenaDeckSource(deck),
     };
   }
 
