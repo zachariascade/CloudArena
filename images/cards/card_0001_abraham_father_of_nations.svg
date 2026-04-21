@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 744 1039" role="img" aria-labelledby="title desc">
+  <title id="title">Abraham, Father of Nations placeholder card art</title>
+  <desc id="desc">A simple placeholder image for Cloud Arcanum sample content.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f2e7c9"/>
+      <stop offset="100%" stop-color="#c8a96b"/>
+    </linearGradient>
+  </defs>
+  <rect width="744" height="1039" fill="url(#bg)"/>
+  <rect x="48" y="48" width="648" height="943" rx="28" fill="none" stroke="#5e4724" stroke-width="10"/>
+  <circle cx="372" cy="360" r="132" fill="#fff5dc" stroke="#5e4724" stroke-width="8"/>
+  <path d="M372 256 L404 338 L492 346 L424 402 L446 488 L372 440 L298 488 L320 402 L252 346 L340 338 Z" fill="#b88a44"/>
+  <text x="372" y="650" text-anchor="middle" font-family="Georgia, serif" font-size="42" fill="#3b2c16">Cloud Arcanum</text>
+  <text x="372" y="708" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#3b2c16">Sample Placeholder Art</text>
+</svg>
