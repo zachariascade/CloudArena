@@ -40,7 +40,7 @@ function buildArenaImage(
 
   return {
     alt,
-    url: `/images/cards/${imagePath}`,
+    url: `./images/cards/${imagePath}`,
     fallbackLabel,
     credit,
   };

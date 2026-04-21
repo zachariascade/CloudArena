@@ -3,6 +3,19 @@ import { describe, expect, it } from "vitest";
 import { applyBattleAction, assault } from "../../src/cloud-arena/index.js";
 import { createTestBattle, formatBattleLog, requireCardInstanceId } from "./helpers.js";
 
+function chooseEnemyLeaderTarget(battle: ReturnType<typeof createTestBattle>): void {
+  const leaderTarget = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+
+  if (!leaderTarget) {
+    throw new Error("Expected enemy leader target.");
+  }
+
+  applyBattleAction(battle, {
+    type: "choose_target",
+    targetPermanentId: leaderTarget.instanceId,
+  });
+}
+
 describe("cloud arena combat engine basic flow", () => {
   it("handles the lean v1 non-permanent combat loop deterministically", () => {
     const battle = createTestBattle({
@@ -41,6 +54,7 @@ describe("cloud arena combat engine basic flow", () => {
       type: "play_card",
       cardInstanceId: firstAttack.instanceId,
     });
+    chooseEnemyLeaderTarget(battle);
 
     expect(battle.player.energy).toBe(2);
     expect(battle.enemy.health).toBe(24);
@@ -50,6 +64,7 @@ describe("cloud arena combat engine basic flow", () => {
       type: "play_card",
       cardInstanceId: secondAttack.instanceId,
     });
+    chooseEnemyLeaderTarget(battle);
 
     expect(battle.player.energy).toBe(1);
     expect(battle.enemy.health).toBe(18);
@@ -90,10 +105,12 @@ describe("cloud arena combat engine basic flow", () => {
       type: "play_card",
       cardInstanceId: turnTwoFirstAttack.instanceId,
     });
+    chooseEnemyLeaderTarget(battle);
     applyBattleAction(battle, {
       type: "play_card",
       cardInstanceId: turnTwoSecondAttack.instanceId,
     });
+    chooseEnemyLeaderTarget(battle);
     applyBattleAction(battle, {
       type: "play_card",
       cardInstanceId: turnTwoDefend.instanceId,
@@ -148,6 +165,7 @@ describe("cloud arena combat engine basic flow", () => {
       type: "play_card",
       cardInstanceId: attackCard.instanceId,
     });
+    chooseEnemyLeaderTarget(battle);
 
     expect(battle.enemy.block).toBe(2);
 
@@ -284,14 +302,16 @@ describe("cloud arena combat engine basic flow", () => {
       type: "play_card",
       cardInstanceId: defendingStrike.instanceId,
     });
+    chooseEnemyLeaderTarget(battle);
 
     expect(battle.player.energy).toBe(1);
     expect(battle.enemy.health).toBe(16);
     expect(battle.player.block).toBe(4);
-    expect(formatBattleLog(battle).slice(-3)).toEqual([
+    expect(formatBattleLog(battle).slice(-4)).toEqual([
       "turn 1: played defending_strike",
-      "turn 1: card dealt 4 damage to enemy",
+      "turn 1: cast defending_strike",
       "turn 1: player gained 4 block",
+      "turn 1: card dealt 4 damage to permanent enemy_leader_1_1",
     ]);
   });
 
@@ -316,11 +336,13 @@ describe("cloud arena combat engine basic flow", () => {
       type: "play_card",
       cardInstanceId: twinStrike.instanceId,
     });
+    chooseEnemyLeaderTarget(battle);
 
     expect(battle.enemy.health).toBe(14);
-    expect(formatBattleLog(battle).slice(-2)).toEqual([
+    expect(formatBattleLog(battle).slice(-3)).toEqual([
       "turn 1: played twin_strike",
-      "turn 1: card dealt 6 damage to enemy",
+      "turn 1: cast twin_strike",
+      "turn 1: card dealt 6 damage to permanent enemy_leader_1_1",
     ]);
   });
 });

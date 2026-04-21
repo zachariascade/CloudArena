@@ -1,15 +1,42 @@
 # Cloud Arena Web
 
-This app owns the Arena frontend.
+Cloud Arena can run as a fully static app with local content, local deck storage, and browser-local battle sessions.
 
-Use this app for:
+## Static Build
 
-- interactive battle UI
-- legacy replay and trace viewer UI
-- Arena-specific API clients and view models
-- Arena display models and battle presentation
+```bash
+npm run build:arena:static
+```
 
-Do not add new gameplay features to the replay surface; treat it as frozen
-support code that may eventually be removed.
+The static site is emitted to:
 
-Avoid depending on Arcanum implementation code. If you need a link back to Arcanum, keep it at the URL/config level.
+```text
+dist/apps/cloud-arena-web/static
+```
+
+The static build uses hash routing, so GitHub Pages routes look like:
+
+```text
+/#/
+/#/decks
+```
+
+Card art is copied into `images/cards` inside the static output and is loaded with relative URLs.
+
+## Preview
+
+```bash
+npm run preview:arena:static
+```
+
+The preview server defaults to:
+
+```text
+http://127.0.0.1:4322
+```
+
+## GitHub Pages
+
+The workflow at `.github/workflows/deploy-cloud-arena.yml` builds and deploys `dist/apps/cloud-arena-web/static`.
+
+Repository Pages settings should use GitHub Actions as the source.

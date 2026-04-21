@@ -1,0 +1,68 @@
+name: Deploy Cloud Arena
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/deploy-cloud-arena.yml"
+      - "apps/cloud-arena-web/**"
+      - "apps/cloud-arena-api/**"
+      - "src/cloud-arena/**"
+      - "src/presentation/**"
+      - "images/cards/**"
+      - "scripts/**"
+      - "package.json"
+      - "package-lock.json"
+      - "tsconfig.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: cloud-arena-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check
+        run: npm run check
+
+      - name: Test Cloud Arena
+        run: npm test -- tests/cloud-arena
+
+      - name: Build static Cloud Arena
+        run: npm run build:arena:static
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/apps/cloud-arena-web/static
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -69,6 +69,9 @@ export function applyBattleAction(state: BattleState, action: BattleAction): Bat
   switch (action.type) {
     case "play_card":
       playCard(state, action.cardInstanceId);
+      if (state.pendingTargetRequest) {
+        return state;
+      }
       cleanupDeadPermanents(state);
       processTriggeredAbilities(state);
       cleanupDeadPermanents(state);
@@ -87,6 +90,9 @@ export function applyBattleAction(state: BattleState, action: BattleAction): Bat
       return checkBattleFinished(state);
     case "use_permanent_action":
       usePermanentAction(state, action);
+      if (state.pendingTargetRequest) {
+        return state;
+      }
       cleanupDeadPermanents(state);
       processTriggeredAbilities(state);
       cleanupDeadPermanents(state);

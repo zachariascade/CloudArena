@@ -2,6 +2,27 @@ export {
   CloudArenaApiClient,
   createCloudArenaApiClient,
 } from "./cloud-arena-api-client.js";
+export {
+  createCloudArenaContentController,
+  type CloudArenaContentController,
+  type CloudArenaContentMode,
+} from "./cloud-arena-content-controller.js";
+export {
+  createCloudArenaSessionController,
+  type CloudArenaSessionController,
+  type CloudArenaSessionMode,
+} from "./cloud-arena-session-controller.js";
+export {
+  CloudArenaLocalDeckNotFoundError,
+  CloudArenaLocalDeckRepository,
+  CloudArenaLocalDeckValidationError,
+  createCloudArenaLocalDeckRepository,
+} from "./cloud-arena-local-decks.js";
+export {
+  CloudArenaLocalSessionNotFoundError,
+  CloudArenaLocalSessionService,
+  createCloudArenaLocalSessionService,
+} from "./cloud-arena-local-session.js";
 export { CloudArcanumApiClientError } from "./base-api-client.js";
 export {
   buildBattleViewModelFromSessionSnapshot,

@@ -19,12 +19,14 @@ import {
 import { DisplayCard } from "../components/display-card.js";
 import {
   CloudArcanumApiClientError,
-  createCloudArenaApiClient,
+  createCloudArenaContentController,
+  type CloudArenaContentMode,
 } from "../lib/cloud-arena-web-lib.js";
 import { mapArenaHandCardToDisplayCard } from "../lib/display-card.js";
 
 type CloudArenaDeckBuilderPageProps = {
   apiBaseUrl: string;
+  contentMode: CloudArenaContentMode;
   cloudArcanumWebBaseUrl: string;
 };
 
@@ -365,9 +367,13 @@ function getDeckActionLabel(sourceKind: DeckBuilderSourceKind): string {
 
 export function CloudArenaDeckBuilderPage({
   apiBaseUrl,
+  contentMode,
   cloudArcanumWebBaseUrl,
 }: CloudArenaDeckBuilderPageProps): ReactElement {
-  const api = useMemo(() => createCloudArenaApiClient({ baseUrl: apiBaseUrl }), [apiBaseUrl]);
+  const content = useMemo(
+    () => createCloudArenaContentController({ apiBaseUrl, mode: contentMode }),
+    [apiBaseUrl, contentMode],
+  );
   const [status, setStatus] = useState<DeckBuilderStatus>("loading");
   const [error, setError] = useState<Error | CloudArcanumApiClientError | null>(null);
   const [cards, setCards] = useState<CloudArenaCardSummary[]>([]);
@@ -406,8 +412,8 @@ export function CloudArenaDeckBuilderPage({
 
   async function refreshCatalog(): Promise<void> {
     const [cardsResult, decksResult] = await Promise.allSettled([
-      api.listCloudArenaCards(),
-      api.listCloudArenaDecks(),
+      content.listCloudArenaCards(),
+      content.listCloudArenaDecks(),
     ]);
 
     if (cardsResult.status === "rejected") {
@@ -428,7 +434,7 @@ export function CloudArenaDeckBuilderPage({
   }
 
   async function loadDeck(deckId: string): Promise<void> {
-    const response = await api.getCloudArenaDeck(deckId);
+    const response = await content.getCloudArenaDeck(deckId);
     const nextDraft = buildDraftFromDetail(response.data);
 
     setDraft(nextDraft);
@@ -452,8 +458,8 @@ export function CloudArenaDeckBuilderPage({
       const body = buildDeckWriteRequest(safeDraft);
       const response =
         safeDraft.sourceKind === "saved" && safeDraft.sourceId
-          ? await api.updateCloudArenaDeck(safeDraft.sourceId, body)
-          : await api.createCloudArenaDeck(body);
+          ? await content.updateCloudArenaDeck(safeDraft.sourceId, body)
+          : await content.createCloudArenaDeck(body);
 
       const nextDraft = buildDraftFromDetail(response.data);
       setDraft(nextDraft);
@@ -475,7 +481,7 @@ export function CloudArenaDeckBuilderPage({
     setError(null);
 
     try {
-      await api.deleteCloudArenaDeck(safeDraft.sourceId);
+      await content.deleteCloudArenaDeck(safeDraft.sourceId);
       await refreshCatalog();
       const nextDraft = createEmptyDraft();
       setDraft(nextDraft);
@@ -537,7 +543,7 @@ export function CloudArenaDeckBuilderPage({
     setError(null);
 
     try {
-      const response = await api.createCloudArenaDeck({
+      const response = await content.createCloudArenaDeck({
         name: createModalDraft.name.trim(),
         tags: createModalDraft.tagsText
           .split(/[\n,]/g)
@@ -589,7 +595,7 @@ export function CloudArenaDeckBuilderPage({
     return () => {
       isCancelled = true;
     };
-  }, [api]);
+  }, [content]);
 
   if (status === "loading") {
     return (

@@ -11,6 +11,8 @@
     "build:arcanum:web": "./scripts/node18.sh dist/scripts/build-web-client.js",
     "build:arena": "npm run build:types && npm run build:arena:web",
     "build:arena:web": "./scripts/node18.sh dist/scripts/build-arena-web-client.js",
+    "build:arena:static": "npm run build:types && CLOUD_ARENA_PUBLIC_PATH=./assets npm run build:arena:web && ./scripts/node18.sh dist/scripts/build-arena-static-site.js",
+    "preview:arena:static": "npm run build:arena:static && ./scripts/node18.sh dist/scripts/preview-arena-static-site.js",
     "benchmark:api": "npm run build && ./scripts/node18.sh dist/scripts/benchmark-api.js",
     "check": "./scripts/node18.sh ./node_modules/typescript/bin/tsc --noEmit -p tsconfig.json",
     "dev": "npm run build && ./scripts/node18.sh dist/scripts/dev.js",

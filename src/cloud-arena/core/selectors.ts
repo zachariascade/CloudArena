@@ -219,6 +219,17 @@ export function selectObjects(
   selector: Selector,
   context: SelectorContext = {},
 ): SelectedObject[] {
+  if (selector.zone === "battlefield" && selector.controller === "any") {
+    return [
+      ...selectObjects(state, { ...selector, controller: "you" }, context),
+      ...selectObjects(state, {
+        ...selector,
+        zone: "enemy_battlefield",
+        controller: "opponent",
+      }, context),
+    ];
+  }
+
   const zones: ZoneName[] = selector.zone
     ? [selector.zone]
     : ["battlefield", "enemy_battlefield", "hand", "graveyard", "discard"];

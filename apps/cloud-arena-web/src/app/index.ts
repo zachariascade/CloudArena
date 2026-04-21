@@ -1,14 +1,19 @@
+import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { renderCloudArenaWebHtml } from "./html.js";
+import type { CloudArenaContentMode, CloudArenaSessionMode } from "../lib/cloud-arena-web-lib.js";
 
 type CloudArenaWebServerOptions = {
   apiBaseUrl?: string;
   cloudArcanumApiBaseUrl?: string;
   cloudArcanumWebBaseUrl?: string;
+  contentMode?: CloudArenaContentMode;
+  sessionMode?: CloudArenaSessionMode;
+  routerMode?: "browser" | "hash";
   host?: string;
   port?: number;
 };
@@ -18,11 +23,50 @@ export function createCloudArenaWebApp(): string {
 }
 
 const distDirectory = path.dirname(fileURLToPath(import.meta.url));
+const projectRoot = findProjectRoot(distDirectory);
 const clientAssetsDirectory = path.resolve(distDirectory, "../../client");
+const cardImagesDirectory = path.resolve(projectRoot, "images/cards");
+
+function findProjectRoot(startDirectory: string): string {
+  let currentDirectory = startDirectory;
+
+  while (true) {
+    if (
+      existsSync(path.resolve(currentDirectory, "package.json")) &&
+      existsSync(path.resolve(currentDirectory, "images/cards"))
+    ) {
+      return currentDirectory;
+    }
+
+    const parentDirectory = path.dirname(currentDirectory);
+
+    if (parentDirectory === currentDirectory) {
+      throw new Error(`Could not find project root from ${startDirectory}.`);
+    }
+
+    currentDirectory = parentDirectory;
+  }
+}
 
 function getAssetContentType(assetPath: string): string {
   if (assetPath.endsWith(".svg")) {
     return "image/svg+xml";
+  }
+
+  if (assetPath.endsWith(".jpg") || assetPath.endsWith(".jpeg")) {
+    return "image/jpeg";
+  }
+
+  if (assetPath.endsWith(".png")) {
+    return "image/png";
+  }
+
+  if (assetPath.endsWith(".webp")) {
+    return "image/webp";
+  }
+
+  if (assetPath.endsWith(".avif")) {
+    return "image/avif";
   }
 
   if (assetPath.endsWith(".js")) {
@@ -42,6 +86,9 @@ export function startCloudArenaWebApp(
   apiBaseUrl: string;
   cloudArcanumApiBaseUrl: string;
   cloudArcanumWebBaseUrl: string;
+  contentMode: CloudArenaContentMode;
+  sessionMode: CloudArenaSessionMode;
+  routerMode: "browser" | "hash";
   host: string;
   port: number;
 }> {
@@ -57,6 +104,15 @@ export function startCloudArenaWebApp(
     options.cloudArcanumWebBaseUrl ??
     process.env.CLOUD_ARCANUM_WEB_BASE_URL ??
     "http://127.0.0.1:4320";
+  const contentMode = options.contentMode ?? (
+    process.env.CLOUD_ARENA_CONTENT_MODE === "local" ? "local" : "remote"
+  );
+  const sessionMode = options.sessionMode ?? (
+    process.env.CLOUD_ARENA_SESSION_MODE === "local" ? "local" : "remote"
+  );
+  const routerMode = options.routerMode ?? (
+    process.env.CLOUD_ARENA_ROUTER_MODE === "hash" ? "hash" : "browser"
+  );
 
   return new Promise((resolve, reject) => {
     const server = createServer(async (request, response) => {
@@ -81,6 +137,26 @@ export function startCloudArenaWebApp(
           return;
         }
 
+        if (request.url?.startsWith("/images/cards/")) {
+          const imageName = decodeURIComponent(request.url.slice("/images/cards/".length));
+
+          if (imageName.includes("..") || imageName.includes("\\") || imageName.startsWith("/")) {
+            response.writeHead(400, { "content-type": "text/plain; charset=utf-8" });
+            response.end("Invalid image path.");
+            return;
+          }
+
+          const imagePath = path.resolve(cardImagesDirectory, imageName);
+          const imageContents = await readFile(imagePath);
+
+          response.writeHead(200, {
+            "cache-control": "no-store",
+            "content-type": getAssetContentType(imagePath),
+          });
+          response.end(imageContents);
+          return;
+        }
+
         response.writeHead(200, {
           "cache-control": "no-store",
           "content-type": "text/html; charset=utf-8",
@@ -90,6 +166,9 @@ export function startCloudArenaWebApp(
             cloudArcanumApiBaseUrl,
             apiBaseUrl,
             cloudArcanumWebBaseUrl,
+            contentMode,
+            sessionMode,
+            routerMode,
           ),
         );
       } catch (error) {
@@ -106,6 +185,9 @@ export function startCloudArenaWebApp(
         apiBaseUrl,
         cloudArcanumApiBaseUrl,
         cloudArcanumWebBaseUrl,
+        contentMode,
+        sessionMode,
+        routerMode,
         host,
         port,
       });
