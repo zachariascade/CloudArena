@@ -9,7 +9,8 @@ type CloudArenaAppShellProps = {
 };
 
 const navigationItems = [
-  { to: "/", label: "Battle", end: true },
+  { to: "/", label: "Start", end: true },
+  { to: "/battle", label: "Battle", end: true },
   { to: "/decks", label: "Deck Builder", end: true },
 ];
 

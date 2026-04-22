@@ -4,7 +4,6 @@ import { createPortal } from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import type {
-  CloudArenaDeckKind,
   CloudArenaDeckSummary,
   CloudArenaSessionSnapshot,
   CloudArenaSessionScenarioId,
@@ -21,12 +20,20 @@ import {
 import {
   buildCloudArenaViewModelFromSessionSnapshot,
   CloudArcanumApiClientError,
+  buildCloudArenaDeckChooserGroups,
   createCloudArenaContentController,
   createCloudArenaSessionController,
+  CLOUD_ARENA_DECK_QUERY_PARAM,
+  CLOUD_ARENA_SCENARIO_OPTIONS,
+  CLOUD_ARENA_SCENARIO_QUERY_PARAM,
   formatTraceEvent,
+  getDeckDraftFromUrl,
+  getScenarioDraftFromUrl,
   type CloudArenaContentMode,
   type CloudArenaSessionMode,
 } from "../lib/cloud-arena-web-lib.js";
+
+export { buildCloudArenaDeckChooserGroups } from "../lib/cloud-arena-web-lib.js";
 
 type CloudArenaInteractivePageProps = {
   apiBaseUrl: string;
@@ -36,182 +43,6 @@ type CloudArenaInteractivePageProps = {
 };
 
 type InteractiveStatus = "loading" | "ready" | "error";
-type CloudArenaDeckChooserOption = {
-  id: string;
-  label: string;
-  description: string;
-  kind: CloudArenaDeckKind;
-  disabled?: boolean;
-};
-
-type CloudArenaDeckChooserGroup = {
-  label: string;
-  options: CloudArenaDeckChooserOption[];
-};
-
-const CLOUD_ARENA_SCENARIO_OPTIONS: Array<{
-  id: CloudArenaSessionScenarioId;
-  label: string;
-  description: string;
-}> = [
-  {
-    id: "demon_pack",
-    label: "Demon Pack",
-    description: "Leader plus two demon bodies",
-  },
-  {
-    id: "mixed_guardian",
-    label: "Mixed Guardian",
-    description: "Balanced baseline battle",
-  },
-  {
-    id: "grunt_demon",
-    label: "Grunt Demon",
-    description: "Simple low-tier attacker",
-  },
-  {
-    id: "imp_caller",
-    label: "Imp Caller",
-    description: "Token pressure test",
-  },
-];
-
-const CLOUD_ARENA_DECK_OPTIONS: Array<{
-  id: string;
-  label: string;
-  description: string;
-}> = [
-  {
-    id: "master_deck",
-    label: "Master Deck",
-    description: "All available player cards",
-  },
-  {
-    id: "wide_angels",
-    label: "Wide Angels",
-    description: "Token angels and blessing scale",
-  },
-  {
-    id: "tall_creatures",
-    label: "Tall Creatures",
-    description: "Grow one or two bigger bodies",
-  },
-];
-
-const CLOUD_ARENA_SCENARIO_QUERY_PARAM = "enemy";
-const CLOUD_ARENA_DECK_QUERY_PARAM = "deck";
-
-function isCloudArenaSessionScenarioId(value: string): value is CloudArenaSessionScenarioId {
-  return CLOUD_ARENA_SCENARIO_OPTIONS.some((option) => option.id === value);
-}
-
-function createPresetDeckChooserOption(option: (typeof CLOUD_ARENA_DECK_OPTIONS)[number]): CloudArenaDeckChooserOption {
-  return {
-    id: option.id,
-    label: option.label,
-    description: option.description,
-    kind: "preset",
-  };
-}
-
-function createSavedDeckChooserOption(deck: CloudArenaDeckSummary): CloudArenaDeckChooserOption {
-  return {
-    id: deck.id,
-    label: deck.name,
-    description: `${deck.cardCount} cards, ${deck.uniqueCardCount} unique`,
-    kind: "saved",
-  };
-}
-
-export function buildCloudArenaDeckChooserGroups(
-  deckSummaries: CloudArenaDeckSummary[] | null,
-  selectedDeckId: string,
-): CloudArenaDeckChooserGroup[] {
-  const availableDecks = deckSummaries ?? [];
-  const presetOptions = availableDecks
-    .filter((deck) => deck.kind === "preset")
-    .map((deck) => ({
-      id: deck.id,
-      label: deck.name,
-      description: `${deck.cardCount} cards, ${deck.uniqueCardCount} unique`,
-      kind: deck.kind,
-    }));
-  const fallbackPresetOptions = CLOUD_ARENA_DECK_OPTIONS.map(createPresetDeckChooserOption);
-  const savedDeckOptions = availableDecks
-    .filter((deck) => deck.kind === "saved")
-    .map(createSavedDeckChooserOption);
-  const shouldInjectSelectedDeck =
-    selectedDeckId.length > 0 &&
-    !presetOptions.some((option) => option.id === selectedDeckId) &&
-    !fallbackPresetOptions.some((option) => option.id === selectedDeckId) &&
-    !savedDeckOptions.some((option) => option.id === selectedDeckId);
-
-  const resolvedPresetOptions = presetOptions.length > 0 ? presetOptions : fallbackPresetOptions;
-  const resolvedSavedDeckOptions = shouldInjectSelectedDeck
-    ? [
-        {
-          id: selectedDeckId,
-          label: `Saved deck ${selectedDeckId}`,
-          description: "Selected from the battle setup URL",
-          kind: "saved" as const,
-        },
-        ...savedDeckOptions,
-      ]
-    : savedDeckOptions;
-
-  return [
-    {
-      label: "Built-in presets",
-      options: resolvedPresetOptions,
-    },
-    {
-      label: "Saved decks",
-      options:
-        resolvedSavedDeckOptions.length > 0
-          ? resolvedSavedDeckOptions
-          : [
-              {
-                id: "",
-                label: "No saved decks yet",
-                description: "Create a deck in the deck builder to use it here.",
-                kind: "saved" as const,
-                disabled: true,
-              },
-            ],
-    },
-  ];
-}
-
-function getScenarioDraftFromUrl(): CloudArenaSessionScenarioId {
-  if (typeof window === "undefined") {
-    return "mixed_guardian";
-  }
-
-  const searchParams = new URLSearchParams(window.location.search);
-  const queryValue = searchParams.get(CLOUD_ARENA_SCENARIO_QUERY_PARAM);
-
-  if (queryValue && isCloudArenaSessionScenarioId(queryValue)) {
-    return queryValue;
-  }
-
-  return "mixed_guardian";
-}
-
-function getDeckDraftFromUrl(): string {
-  if (typeof window === "undefined") {
-    return "master_deck";
-  }
-
-  const searchParams = new URLSearchParams(window.location.search);
-  const queryValue = searchParams.get(CLOUD_ARENA_DECK_QUERY_PARAM);
-
-  if (queryValue) {
-    return queryValue;
-  }
-
-  return "master_deck";
-}
-
 function formatApiErrorDetails(error: Error | CloudArcanumApiClientError): ReactElement {
   if (error instanceof CloudArcanumApiClientError) {
     return (

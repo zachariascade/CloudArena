@@ -521,6 +521,122 @@ export function renderCloudArcanumWebHtml(
         font-size: 0.92rem;
       }
 
+      .cloud-arena-start-layout {
+        display: grid;
+        gap: 1rem;
+      }
+
+      @media (min-width: 980px) {
+        .cloud-arena-start-layout {
+          grid-template-columns: minmax(0, 1.3fr) minmax(20rem, 0.8fr);
+          align-items: start;
+        }
+      }
+
+      .cloud-arena-start-hero,
+      .cloud-arena-start-summary {
+        display: grid;
+        gap: 1rem;
+        min-width: 0;
+        padding: 1.25rem;
+      }
+
+      .cloud-arena-start-hero {
+        position: relative;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at top right, rgba(217, 119, 6, 0.14), transparent 34%),
+          radial-gradient(circle at bottom left, rgba(251, 191, 36, 0.12), transparent 38%),
+          linear-gradient(160deg, rgba(255, 255, 255, 0.9), rgba(252, 244, 232, 0.86));
+      }
+
+      .cloud-arena-start-hero::after {
+        content: "";
+        position: absolute;
+        inset: auto -5rem -4rem auto;
+        width: 15rem;
+        height: 15rem;
+        border-radius: 999px;
+        background: radial-gradient(circle, rgba(154, 52, 18, 0.12), transparent 68%);
+        pointer-events: none;
+      }
+
+      .cloud-arena-start-copy {
+        display: grid;
+        gap: 0.35rem;
+        max-width: 44rem;
+      }
+
+      .cloud-arena-start-copy strong {
+        font-size: clamp(1.6rem, 3vw, 2.6rem);
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+      }
+
+      .cloud-arena-start-copy p,
+      .cloud-arena-start-summary-card p,
+      .cloud-arena-start-hint {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .cloud-arena-start-grid {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      @media (min-width: 760px) {
+        .cloud-arena-start-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      .cloud-arena-start-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        align-items: center;
+      }
+
+      .cloud-arena-start-actions .primary-button,
+      .cloud-arena-start-actions .ghost-button {
+        min-width: 10rem;
+      }
+
+      .cloud-arena-start-hint {
+        font-size: 0.92rem;
+        word-break: break-word;
+      }
+
+      .cloud-arena-start-summary {
+        align-content: start;
+        background:
+          radial-gradient(circle at top left, rgba(96, 165, 250, 0.12), transparent 32%),
+          linear-gradient(155deg, rgba(255, 255, 255, 0.9), rgba(246, 240, 229, 0.9));
+      }
+
+      .cloud-arena-start-summary-card {
+        display: grid;
+        gap: 0.35rem;
+        padding: 1rem;
+        border-radius: 18px;
+        border: 1px solid rgba(95, 84, 76, 0.12);
+        background: rgba(255, 255, 255, 0.72);
+      }
+
+      .cloud-arena-start-summary-card strong {
+        font-size: 1.05rem;
+      }
+
+      .cloud-arena-start-summary-kicker {
+        color: var(--accent);
+        font-size: 0.74rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
       .cloud-arena-game-finished {
         margin-top: 0.1rem;
       }

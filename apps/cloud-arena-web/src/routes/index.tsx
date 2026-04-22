@@ -11,6 +11,7 @@ import { CloudArenaAppShell, ErrorState, PageLayout } from "../components/index.
 import type { CloudArenaContentMode, CloudArenaSessionMode } from "../lib/cloud-arena-web-lib.js";
 import { CloudArenaDeckBuilderPage } from "./deckbuilder-page.js";
 import { CloudArenaInteractivePage } from "./interactive-page.js";
+import { CloudArenaStartPage } from "./start-page.js";
 
 type CloudArenaRouteContext = {
   apiBaseUrl: string;
@@ -39,7 +40,7 @@ function CloudArenaRouteErrorBoundary({
           description={error.statusText || "The router reported an unexpected failure."}
           details={
             <p>
-              Return to <Link className="text-link" to="/">battle</Link>, or{" "}
+              Return to the <Link className="text-link" to="/">start menu</Link>, or{" "}
               <a className="text-link" href={`${cloudArcanumWebBaseUrl.replace(/\/$/, "")}/cards`}>
                 card catalog
               </a>
@@ -72,6 +73,21 @@ export function createCloudArenaRouter(context: CloudArenaRouteContext) {
   const routes = [
     {
       path: "/",
+      element: (
+        <CloudArenaStartPage
+          apiBaseUrl={context.apiBaseUrl}
+          contentMode={context.contentMode}
+          cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}
+        />
+      ),
+      errorElement: (
+        <CloudArenaAppShell cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}>
+          <CloudArenaRouteErrorBoundary cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl} />
+        </CloudArenaAppShell>
+      ),
+    },
+    {
+      path: "/battle",
       element: (
         <CloudArenaInteractivePage
           apiBaseUrl={context.apiBaseUrl}

@@ -18,7 +18,8 @@ describe("cloud arena app shell", () => {
       ),
     );
 
-    expect(html).toContain('href="/decks"');
     expect(html).toContain('href="/"');
+    expect(html).toContain('href="/battle"');
+    expect(html).toContain('href="/decks"');
   });
 });

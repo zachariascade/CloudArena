@@ -1,4 +1,18 @@
 export {
+  buildCloudArenaBattleLocation,
+  buildCloudArenaDeckChooserGroups,
+  CLOUD_ARENA_BATTLE_PATH,
+  CLOUD_ARENA_DECK_QUERY_PARAM,
+  CLOUD_ARENA_SCENARIO_OPTIONS,
+  CLOUD_ARENA_SCENARIO_QUERY_PARAM,
+  createCloudArenaBattleLocation,
+  createCloudArenaBattleSearch,
+  getDeckDraftFromUrl,
+  getScenarioDraftFromUrl,
+  type CloudArenaDeckChooserGroup,
+  type CloudArenaDeckChooserOption,
+} from "./cloud-arena-battle-setup.js";
+export {
   CloudArenaApiClient,
   createCloudArenaApiClient,
 } from "./cloud-arena-api-client.js";
