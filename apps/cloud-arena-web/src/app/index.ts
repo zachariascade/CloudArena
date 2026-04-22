@@ -25,6 +25,7 @@ export function createCloudArenaWebApp(): string {
 const distDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = findProjectRoot(distDirectory);
 const clientAssetsDirectory = path.resolve(distDirectory, "../../client");
+const imagesDirectory = path.resolve(projectRoot, "images");
 const cardImagesDirectory = path.resolve(projectRoot, "images/cards");
 
 function findProjectRoot(startDirectory: string): string {
@@ -33,6 +34,7 @@ function findProjectRoot(startDirectory: string): string {
   while (true) {
     if (
       existsSync(path.resolve(currentDirectory, "package.json")) &&
+      existsSync(path.resolve(currentDirectory, "images")) &&
       existsSync(path.resolve(currentDirectory, "images/cards"))
     ) {
       return currentDirectory;
@@ -103,7 +105,7 @@ export function startCloudArenaWebApp(
   const cloudArcanumWebBaseUrl =
     options.cloudArcanumWebBaseUrl ??
     process.env.CLOUD_ARCANUM_WEB_BASE_URL ??
-    "http://127.0.0.1:4320";
+    "http://127.0.0.1:4321";
   const contentMode = options.contentMode ?? (
     process.env.CLOUD_ARENA_CONTENT_MODE === "local" ? "local" : "remote"
   );
@@ -113,6 +115,7 @@ export function startCloudArenaWebApp(
   const routerMode = options.routerMode ?? (
     process.env.CLOUD_ARENA_ROUTER_MODE === "hash" ? "hash" : "browser"
   );
+  const devVersion = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 
   return new Promise((resolve, reject) => {
     const server = createServer(async (request, response) => {
@@ -157,6 +160,35 @@ export function startCloudArenaWebApp(
           return;
         }
 
+        if (request.url?.startsWith("/images/")) {
+          const imageName = decodeURIComponent(request.url.slice("/images/".length));
+
+          if (imageName.includes("..") || imageName.includes("\\") || imageName.startsWith("/")) {
+            response.writeHead(400, { "content-type": "text/plain; charset=utf-8" });
+            response.end("Invalid image path.");
+            return;
+          }
+
+          const imagePath = path.resolve(imagesDirectory, imageName);
+          const imageContents = await readFile(imagePath);
+
+          response.writeHead(200, {
+            "cache-control": "no-store",
+            "content-type": getAssetContentType(imagePath),
+          });
+          response.end(imageContents);
+          return;
+        }
+
+        if (request.url === "/__cloud-arena-dev-version") {
+          response.writeHead(200, {
+            "cache-control": "no-store",
+            "content-type": "text/plain; charset=utf-8",
+          });
+          response.end(devVersion);
+          return;
+        }
+
         response.writeHead(200, {
           "cache-control": "no-store",
           "content-type": "text/html; charset=utf-8",
@@ -169,6 +201,8 @@ export function startCloudArenaWebApp(
             contentMode,
             sessionMode,
             routerMode,
+            undefined,
+            true,
           ),
         );
       } catch (error) {

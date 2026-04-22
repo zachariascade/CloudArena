@@ -12,6 +12,7 @@ import type { CloudArenaContentMode, CloudArenaSessionMode } from "../lib/cloud-
 import { CloudArenaDeckBuilderPage } from "./deckbuilder-page.js";
 import { CloudArenaInteractivePage } from "./interactive-page.js";
 import { CloudArenaStartPage } from "./start-page.js";
+import { CloudArenaSetupPage } from "./setup-page.js";
 
 type CloudArenaRouteContext = {
   apiBaseUrl: string;
@@ -93,6 +94,21 @@ export function createCloudArenaRouter(context: CloudArenaRouteContext) {
           apiBaseUrl={context.apiBaseUrl}
           contentMode={context.contentMode}
           sessionMode={context.sessionMode}
+          cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}
+        />
+      ),
+      errorElement: (
+        <CloudArenaAppShell cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}>
+          <CloudArenaRouteErrorBoundary cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl} />
+        </CloudArenaAppShell>
+      ),
+    },
+    {
+      path: "/run",
+      element: (
+        <CloudArenaSetupPage
+          apiBaseUrl={context.apiBaseUrl}
+          contentMode={context.contentMode}
           cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}
         />
       ),

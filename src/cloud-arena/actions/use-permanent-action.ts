@@ -169,9 +169,29 @@ export function usePermanentAction(
     permanent.isDefending = false;
   } else if (action.action === "defend") {
     permanent.isDefending = true;
+    permanent.blockingTargetPermanentId = null;
     if (!state.blockingQueue.includes(permanent.instanceId)) {
       state.blockingQueue.push(permanent.instanceId);
     }
+
+    state.pendingTargetRequest = {
+      id: `target_${state.turnNumber}_${state.nextTargetRequestIndex}`,
+      prompt: "Choose an enemy to block for",
+      optional: false,
+      targetKind: "permanent",
+      selector: {
+        zone: "enemy_battlefield",
+        controller: "opponent",
+        cardType: "permanent",
+      },
+      effects: [],
+      nextEffectIndex: 0,
+      context: {
+        defendingPermanentId: permanent.instanceId,
+      },
+    };
+    state.nextTargetRequestIndex += 1;
+
     emitRulesEvent(state, {
       type: "permanent_blocked",
       turnNumber: state.turnNumber,

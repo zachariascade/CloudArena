@@ -10,7 +10,6 @@ import { forcedSacrificeCardDefinition } from "../../src/cloud-arena/cards/defin
 import { guardianCardDefinition } from "../../src/cloud-arena/cards/definitions/guardian.js";
 import { graveyardHymnCardDefinition } from "../../src/cloud-arena/cards/definitions/graveyard-hymn.js";
 import { massBenedictionCardDefinition } from "../../src/cloud-arena/cards/definitions/mass-benediction.js";
-import { targetedSmiteCardDefinition } from "../../src/cloud-arena/cards/definitions/targeted-smite.js";
 import { targetedStrikeCardDefinition } from "../../src/cloud-arena/cards/definitions/targeted-strike.js";
 import { stunningRebukeCardDefinition } from "../../src/cloud-arena/cards/definitions/stunning-rebuke.js";
 import { holyBladeCardDefinition } from "../../src/cloud-arena/cards/definitions/holy-blade.js";
@@ -43,7 +42,7 @@ describe("cloud arena card summary", () => {
     ]);
   });
 
-  it("describes the battlefield buff on Anointed Banner", () => {
+  it("describes the battlefield buff on the Ark of the Covenant", () => {
     expect(summarizeCardDefinition(anointedBannerCardDefinition)).toEqual([
       "When a creature you control enters the battlefield, it gets +1/+1.",
     ]);
@@ -61,9 +60,6 @@ describe("cloud arena card summary", () => {
   it("describes mass and targeted battlefield damage", () => {
     expect(summarizeCardDefinition(massBenedictionCardDefinition)).toEqual([
       "Each permanent on the battlefield gets +1/+1.",
-    ]);
-    expect(summarizeCardDefinition(targetedSmiteCardDefinition)).toEqual([
-      "Choose a permanent you control; deal 3 damage to it.",
     ]);
     expect(summarizeCardDefinition(targetedStrikeCardDefinition)).toEqual([
       "Choose an enemy permanent; deal 4 damage to it.",

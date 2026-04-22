@@ -36,6 +36,7 @@ export function resetRound(state: BattleState): BattleState {
     permanent.hasActedThisTurn = false;
     permanent.isTapped = false;
     permanent.isDefending = false;
+    permanent.blockingTargetPermanentId = null;
   });
 
   state.enemyBattlefield.forEach((permanent) => {
@@ -52,6 +53,7 @@ export function resetRound(state: BattleState): BattleState {
     permanent.hasActedThisTurn = false;
     permanent.isTapped = false;
     permanent.isDefending = false;
+    permanent.blockingTargetPermanentId = null;
   });
   syncEnemyStateFromLeaderPermanent(state);
 

@@ -19,6 +19,7 @@
     "dev:api": "npm run build:types && ./scripts/node18.sh dist/scripts/dev-arena-api.js",
     "dev:api:once": "npm run dev:api",
     "dev:web": "npm run build:arena && ./scripts/node18.sh dist/scripts/dev-arena-web.js",
+    "dev:web:local": "CLOUD_ARENA_CONTENT_MODE=local CLOUD_ARENA_SESSION_MODE=local npm run dev:arena",
     "dev:web:once": "npm run dev:web",
     "dev:arena:api": "npm run dev:api",
     "dev:arena:web": "npm run dev:web",

@@ -85,6 +85,7 @@ export type PendingTargetRequest = {
     abilitySourcePermanentId?: string;
     triggerSubjectPermanentId?: string;
     sourceCardInstanceId?: string;
+    defendingPermanentId?: string;
     pendingCardPlay?: PendingHandCardContext;
     pendingCardPreview?: PendingHandCardContext;
   };
@@ -701,6 +702,7 @@ export type PermanentState = {
   hasActedThisTurn: boolean;
   isTapped: boolean;
   isDefending: boolean;
+  blockingTargetPermanentId: string | null;
   slotIndex: number;
 };
 

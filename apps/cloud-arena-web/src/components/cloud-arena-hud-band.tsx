@@ -1,4 +1,5 @@
 import type { FocusEvent, MouseEvent, ReactElement } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type CloudArenaHudBandProps = {
   player: {
@@ -32,11 +33,55 @@ export function CloudArenaHudBand({
   maxPlayerEnergy,
   onInspectPlayer,
 }: CloudArenaHudBandProps): ReactElement {
+  const previousPlayerHealthRef = useRef(player.health);
+  const playerHealthFlashTimerRef = useRef<number | null>(null);
+  const [playerHealthFlashDirection, setPlayerHealthFlashDirection] = useState<"increase" | "decrease" | null>(null);
+
+  useEffect(() => {
+    const previousHealth = previousPlayerHealthRef.current;
+    previousPlayerHealthRef.current = player.health;
+
+    if (player.health !== previousHealth) {
+      setPlayerHealthFlashDirection(player.health > previousHealth ? "increase" : "decrease");
+
+      if (playerHealthFlashTimerRef.current !== null) {
+        window.clearTimeout(playerHealthFlashTimerRef.current);
+      }
+
+      playerHealthFlashTimerRef.current = window.setTimeout(() => {
+        setPlayerHealthFlashDirection(null);
+        playerHealthFlashTimerRef.current = null;
+      }, 520);
+    }
+  }, [player.health]);
+
+  useEffect(() => () => {
+    if (playerHealthFlashTimerRef.current !== null) {
+      window.clearTimeout(playerHealthFlashTimerRef.current);
+      playerHealthFlashTimerRef.current = null;
+    }
+  }, []);
+
   return (
-    <div className="cloud-arena-hud-band">
+    <div
+      className={[
+        "cloud-arena-hud-band",
+        playerHealthFlashDirection === "decrease" ? "is-health-dropping" : null,
+        playerHealthFlashDirection === "increase" ? "is-health-rising" : null,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
       <button
         type="button"
-        className="cloud-arena-hud-card cloud-arena-hud-card-player"
+        className={[
+          "cloud-arena-hud-card",
+          "cloud-arena-hud-card-player",
+          playerHealthFlashDirection === "decrease" ? "is-health-dropping" : null,
+          playerHealthFlashDirection === "increase" ? "is-health-rising" : null,
+        ]
+          .filter(Boolean)
+          .join(" ")}
         {...onInspectPlayer}
       >
         <div className="cloud-arena-hud-card-header">
@@ -52,10 +97,16 @@ export function CloudArenaHudBand({
             <span className="cloud-arena-hud-block-value">{player.block}</span>
           </div>
           <div className="cloud-arena-hud-player-track">
-            <div
-              className="cloud-arena-hud-health-bar"
-              role="progressbar"
-              aria-label="Pilgrim Duelist health"
+          <div
+            className={[
+              "cloud-arena-hud-health-bar",
+              playerHealthFlashDirection === "decrease" ? "is-dropping" : null,
+              playerHealthFlashDirection === "increase" ? "is-rising" : null,
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            role="progressbar"
+            aria-label="Pilgrim Duelist health"
               aria-valuemin={0}
               aria-valuemax={player.maxHealth}
               aria-valuenow={player.health}
@@ -64,11 +115,18 @@ export function CloudArenaHudBand({
                 className="cloud-arena-hud-health-bar-fill"
                 style={{ width: `${getPercent(player.health, player.maxHealth)}%` }}
               />
-            </div>
-            <div className="cloud-arena-hud-stat-row">
-              <span>Health {player.health}/{player.maxHealth}</span>
-              <span>Energy {player.energy}/{maxPlayerEnergy}</span>
-            </div>
+          </div>
+          <div className={[
+            "cloud-arena-hud-stat-row",
+            playerHealthFlashDirection === "decrease" ? "is-dropping" : null,
+            playerHealthFlashDirection === "increase" ? "is-rising" : null,
+          ]
+            .filter(Boolean)
+            .join(" ")}
+          >
+            <span>Health {player.health}/{player.maxHealth}</span>
+            <span>Energy {player.energy}/{maxPlayerEnergy}</span>
+          </div>
           </div>
         </div>
       </button>

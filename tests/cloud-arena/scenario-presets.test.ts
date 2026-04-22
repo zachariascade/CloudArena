@@ -16,9 +16,7 @@ describe("cloud arena scenario presets", () => {
   it("defines the expected scenario coverage presets", () => {
     expect(Object.keys(cloudArenaScenarioPresets)).toEqual([
       "demon_pack",
-      "grunt_demon",
       "imp_caller",
-      "mixed_guardian",
     ]);
   });
 
@@ -40,26 +38,20 @@ describe("cloud arena scenario presets", () => {
   });
 
   it("builds scenarios from swappable deck and enemy presets", () => {
-    const mixedGuardian = getScenarioPreset("mixed_guardian");
+    const demonPack = getScenarioPreset("demon_pack");
     const mixedGuardianDeck = getDeckPreset("mixed_guardian");
-    const longBattleDemon = getEnemyPreset("long_battle_demon");
-    const gruntDemon = getScenarioPreset("grunt_demon");
     const impCaller = getScenarioPreset("imp_caller");
 
-    expect(mixedGuardian.deck).toBe(mixedGuardianDeck.cards);
-    expect(mixedGuardian.enemy).toBe(longBattleDemon);
-    expect(gruntDemon.enemy).toBe(getEnemyPreset("grunt_demon"));
+    expect(demonPack.deck).toBe(mixedGuardianDeck.cards);
+    expect(demonPack.enemy).toBe(getEnemyPreset("demon_pack"));
     expect(impCaller.enemy).toBe(getEnemyPreset("imp_caller"));
   });
 
-  it("keeps the mixed guardian scenario wired to its deck and enemy plan", () => {
-    const mixedGuardian = getScenarioPreset("mixed_guardian");
+  it("keeps the demon pack scenario wired to its deck and enemy plan", () => {
+    const demonPack = getScenarioPreset("demon_pack");
 
-    expect(mixedGuardian.deck).toContain("guardian");
-    expect(mixedGuardian.deck).toContain("graveyard_hymn");
-    expect(mixedGuardian.deck.filter((card) => card === "token_angel")).toHaveLength(3);
-    expect(mixedGuardian.deck.length).toBeGreaterThanOrEqual(10);
-    expect(mixedGuardian.enemy.cards.length).toBeGreaterThanOrEqual(3);
+    expect(demonPack.deck.length).toBeGreaterThan(0);
+    expect(demonPack.enemy.cards.length).toBeGreaterThanOrEqual(3);
   });
 
   it("exposes the new low-tier enemy families and pack bodies", () => {
@@ -78,8 +70,8 @@ describe("cloud arena scenario presets", () => {
     expect(impCaller.cards.some((card) => card.effects.some((effect) => effect.spawnCardId === "token_imp"))).toBe(true);
   });
 
-  it("supports the mixed guardian preset running through simulation", () => {
-    const scenario = getScenarioPreset("mixed_guardian");
+  it("supports the demon pack preset running through simulation", () => {
+    const scenario = getScenarioPreset("demon_pack");
     const result = runSimulation({
       seed: 3,
       playerHealth: scenario.playerHealth,

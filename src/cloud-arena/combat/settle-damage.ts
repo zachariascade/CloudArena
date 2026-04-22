@@ -66,6 +66,7 @@ function applyEnemyDamageToPlayerBlock(
 function applyEnemyDamageToDefenders(
   state: BattleState,
   damage: number,
+  sourcePermanentId: string,
 ): { remainingDamage: number; defended: boolean } {
   let remainingDamage = damage;
   let defended = false;
@@ -78,6 +79,10 @@ function applyEnemyDamageToDefenders(
     const permanent = findPermanentById(state, permanentId);
 
     if (!permanent) {
+      continue;
+    }
+
+    if (permanent.blockingTargetPermanentId !== sourcePermanentId) {
       continue;
     }
 
@@ -117,12 +122,13 @@ function applyEnemyDamageToPlayerHealth(
 export function settleEnemyAttackDamage(
   state: BattleState,
   damage: number,
+  sourcePermanentId: string,
   overflowPolicy: DamageOverflowPolicy = "stop_at_blocker",
 ): BattleState {
   let remainingDamage = damage;
 
   remainingDamage = applyEnemyDamageToPlayerBlock(state, remainingDamage);
-  const defenderResult = applyEnemyDamageToDefenders(state, remainingDamage);
+  const defenderResult = applyEnemyDamageToDefenders(state, remainingDamage, sourcePermanentId);
   remainingDamage = defenderResult.remainingDamage;
   if (defenderResult.defended && overflowPolicy === "stop_at_blocker") {
     remainingDamage = 0;

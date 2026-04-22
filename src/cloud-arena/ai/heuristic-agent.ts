@@ -34,6 +34,10 @@ function getRemainingIncomingDamageAfterCurrentDefense(state: BattleState): numb
       continue;
     }
 
+    if (permanent.blockingTargetPermanentId !== state.enemy.leaderPermanentId) {
+      continue;
+    }
+
     defended = true;
     remainingDamage = Math.max(0, remainingDamage - (permanent.block + permanent.health));
   }

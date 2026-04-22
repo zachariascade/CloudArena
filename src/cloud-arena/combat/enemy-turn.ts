@@ -46,7 +46,12 @@ function resolveEnemyCard(state: BattleState, card: EnemyCardDefinition): void {
       const attackAmount = baseAttackAmount * Math.max(1, effect.attackTimes ?? 1);
 
       if (attackAmount > 0) {
-        settleEnemyAttackDamage(state, attackAmount, effect.overflowPolicy);
+        settleEnemyAttackDamage(
+          state,
+          attackAmount,
+          state.enemy.leaderPermanentId ?? "enemy_intent",
+          effect.overflowPolicy,
+        );
       }
     }
 
@@ -126,7 +131,7 @@ function resolveEnemyBattlefieldCreatures(state: BattleState): void {
       slotIndex: permanent.slotIndex,
     });
 
-    settleEnemyAttackDamage(state, attackAmount, "stop_at_blocker");
+    settleEnemyAttackDamage(state, attackAmount, permanent.instanceId, "stop_at_blocker");
     permanent.hasActedThisTurn = true;
   }
 }
@@ -166,7 +171,12 @@ export function resolveEnemyTurn(state: BattleState): BattleState {
     const attackAmount = getEnemyIntentAttackAmount(state.enemy.intent);
 
     if (attackAmount > 0) {
-      settleEnemyAttackDamage(state, attackAmount, state.enemy.intent.overflowPolicy);
+      settleEnemyAttackDamage(
+        state,
+        attackAmount,
+        state.enemy.leaderPermanentId ?? "enemy_intent",
+        state.enemy.intent.overflowPolicy,
+      );
     }
 
     const blockAmount = getEnemyIntentBlockAmount(state.enemy.intent);

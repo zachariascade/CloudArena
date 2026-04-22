@@ -11,12 +11,16 @@ export type CloudArenaBattleMotionOverlay = {
 export type CloudArenaBattleMotionState = {
   attackIds: Record<string, true>;
   hitIds: Record<string, true>;
+  healthIncreaseIds: Record<string, true>;
+  healthDecreaseIds: Record<string, true>;
   deathOverlays: Record<string, CloudArenaBattleMotionOverlay>;
 };
 
 export type CloudArenaBattleMotionDiff = {
   attackIds: string[];
   hitIds: string[];
+  healthIncreaseIds: string[];
+  healthDecreaseIds: string[];
   deathOverlays: CloudArenaBattleMotionOverlay[];
 };
 
@@ -34,6 +38,8 @@ function getBattlefieldDiff(
   const maxSlotCount = Math.max(previous.length, current.length);
   const attackIds = new Set<string>();
   const hitIds = new Set<string>();
+  const healthIncreaseIds = new Set<string>();
+  const healthDecreaseIds = new Set<string>();
   const deathOverlays: CloudArenaBattleMotionOverlay[] = [];
 
   for (let slotIndex = 0; slotIndex < maxSlotCount; slotIndex += 1) {
@@ -70,11 +76,19 @@ function getBattlefieldDiff(
     ) {
       hitIds.add(currentPermanent.instanceId);
     }
+
+    if (currentPermanent.health > previousPermanent.health) {
+      healthIncreaseIds.add(currentPermanent.instanceId);
+    } else if (currentPermanent.health < previousPermanent.health) {
+      healthDecreaseIds.add(currentPermanent.instanceId);
+    }
   }
 
   return {
     attackIds: [...attackIds],
     hitIds: [...hitIds],
+    healthIncreaseIds: [...healthIncreaseIds],
+    healthDecreaseIds: [...healthDecreaseIds],
     deathOverlays,
   };
 }
@@ -97,6 +111,14 @@ export function getBattleMotionDiff(
   return {
     attackIds: [...battlefieldDiff.attackIds, ...enemyBattlefieldDiff.attackIds],
     hitIds: [...battlefieldDiff.hitIds, ...enemyBattlefieldDiff.hitIds],
+    healthIncreaseIds: [
+      ...battlefieldDiff.healthIncreaseIds,
+      ...enemyBattlefieldDiff.healthIncreaseIds,
+    ],
+    healthDecreaseIds: [
+      ...battlefieldDiff.healthDecreaseIds,
+      ...enemyBattlefieldDiff.healthDecreaseIds,
+    ],
     deathOverlays: [...battlefieldDiff.deathOverlays, ...enemyBattlefieldDiff.deathOverlays],
   };
 }

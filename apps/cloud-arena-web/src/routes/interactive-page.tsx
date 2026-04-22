@@ -446,6 +446,7 @@ export function CloudArenaInteractivePage({
       <CloudArenaAppShell
         cloudArcanumWebBaseUrl={cloudArcanumWebBaseUrl}
         sidebarContent={buildSidebarContent({})}
+        pageVariant="battle"
       >
         <ErrorState
           title="Battle session failed"
@@ -461,6 +462,7 @@ export function CloudArenaInteractivePage({
       <CloudArenaAppShell
         cloudArcanumWebBaseUrl={cloudArcanumWebBaseUrl}
         sidebarContent={buildSidebarContent({})}
+        pageVariant="battle"
       >
         <LoadingState
           title="Creating battle session"
@@ -623,6 +625,7 @@ export function CloudArenaInteractivePage({
           finishedEvent,
           hasFinished,
         })}
+        pageVariant="battle"
       >
         <section className="cloud-arena-game-frame">
           <section className="cloud-arena-game-screen">

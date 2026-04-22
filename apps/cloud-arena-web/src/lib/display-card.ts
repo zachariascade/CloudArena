@@ -40,7 +40,7 @@ function buildArenaImage(
 
   return {
     alt,
-    url: `./images/cards/${imagePath}`,
+    url: /^https?:\/\//.test(imagePath) ? imagePath : `./images/cards/${imagePath}`,
     fallbackLabel,
     credit,
   };
@@ -127,7 +127,12 @@ export function mapArenaPlayerToDisplayCard(
     maxHealth: number;
     block: number;
     energy: number;
+    isHealthDropping?: boolean;
+    isHealthRising?: boolean;
   },
+  options: {
+    stateFlags?: string[];
+  } = {},
 ): DisplayCardModel {
   return buildDisplayCardModel({
     variant: "player",
@@ -163,7 +168,11 @@ export function mapArenaPlayerToDisplayCard(
     textBlocks: [],
     badges: ["hero"],
     actions: [],
-    stateFlags: [],
+    stateFlags: [
+      ...(options.stateFlags ?? []),
+      player.isHealthDropping ? "health-dropping" : null,
+      player.isHealthRising ? "health-rising" : null,
+    ].filter((flag): flag is string => flag !== null),
   });
 }
 
@@ -176,7 +185,12 @@ export function mapArenaEnemyToDisplayCard(
     leaderDefinitionId?: string | null;
     intentLabel: string;
     intentQueueLabels?: string[];
+    isHealthRising?: boolean;
+    isHealthDropping?: boolean;
   },
+  options: {
+    stateFlags?: string[];
+  } = {},
 ): DisplayCardModel {
   const presentation = enemy.leaderDefinitionId
     ? getCardDisplay(getCardDefinition(enemy.leaderDefinitionId))
@@ -241,7 +255,11 @@ export function mapArenaEnemyToDisplayCard(
     ],
     badges: ["boss"],
     actions: [],
-    stateFlags: [],
+    stateFlags: [
+      ...(options.stateFlags ?? []),
+      enemy.isHealthDropping ? "health-dropping" : null,
+      enemy.isHealthRising ? "health-rising" : null,
+    ].filter((flag): flag is string => flag !== null),
   });
 }
 
@@ -250,6 +268,7 @@ export function mapArenaHandCardToDisplayCard(
   options: {
     isPlayable: boolean;
     disabled?: boolean;
+    isTargetable?: boolean;
     onPlay?: (cardInstanceId: string) => void;
     actionLabel?: string;
   },
@@ -299,7 +318,10 @@ export function mapArenaHandCardToDisplayCard(
             },
           ]
         : [],
-    stateFlags: options.isPlayable ? ["playable"] : ["disabled"],
+    stateFlags: [
+      options.isPlayable ? "playable" : "disabled",
+      options.isTargetable ? "targetable" : null,
+    ].filter((flag): flag is string => flag !== null),
   });
 }
 
@@ -307,6 +329,7 @@ export function mapArenaGraveyardCardToDisplayCard(
   card: CloudArenaCardSnapshot,
   options: {
     disabled?: boolean;
+    isTargetable?: boolean;
     onChoose?: (cardInstanceId: string) => void;
     actionLabel?: string;
   },
@@ -314,6 +337,7 @@ export function mapArenaGraveyardCardToDisplayCard(
   return mapArenaHandCardToDisplayCard(card, {
     isPlayable: true,
     disabled: options.disabled,
+    isTargetable: options.isTargetable,
     onPlay: options.onChoose,
     actionLabel: options.actionLabel ?? "Return to hand",
   });
@@ -323,6 +347,9 @@ export function mapArenaPermanentToDisplayCard(
   permanent: CloudArenaPermanentSnapshot,
   options: {
     disableActions?: boolean;
+    isTargetable?: boolean;
+    targetTone?: "player" | "enemy";
+    stateFlags?: string[];
     playableActions?: Array<{
       action: string;
       label: string;
@@ -432,9 +459,11 @@ export function mapArenaPermanentToDisplayCard(
     badges: [],
     actions: [...nativeActionButtons, ...activatedActionButtons],
     stateFlags: [
+      ...(options.stateFlags ?? []),
       permanent.hasActedThisTurn ? "spent" : permanentAvailabilityState,
       permanent.isTapped ? "tapped" : "untapped",
       permanent.isDefending ? "defending" : "open",
-    ],
+      options.isTargetable ? `targetable-${options.targetTone ?? "player"}` : null,
+    ].filter((flag): flag is string => flag !== null),
   });
 }

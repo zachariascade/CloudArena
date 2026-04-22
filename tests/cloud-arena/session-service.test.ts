@@ -37,18 +37,18 @@ describe("cloud arena session service", () => {
   it("creates sessions with packaged legal actions and session metadata", () => {
     const service = createCloudArenaSessionService();
     const snapshot = service.createSession({
-      scenarioId: "mixed_guardian",
+      scenarioId: "demon_pack",
       deckId: "wide_angels",
       seed: 9,
     });
 
     expect(snapshot.sessionId).toBeTypeOf("string");
-    expect(snapshot.scenarioId).toBe("mixed_guardian");
+    expect(snapshot.scenarioId).toBe("demon_pack");
     expect(snapshot.deckId).toBe("wide_angels");
     expect(snapshot.seed).toBe(9);
     expect(snapshot.createdAt).toBeTypeOf("string");
     expect(snapshot.resetSource).toEqual({
-      scenarioId: "mixed_guardian",
+      scenarioId: "demon_pack",
       deckId: "wide_angels",
       seed: 9,
     });
@@ -59,7 +59,7 @@ describe("cloud arena session service", () => {
   it("summarizes sacrifice costs on cards in the session snapshot", () => {
     const service = createCloudArenaSessionService();
     const snapshot = service.createSession({
-      scenarioId: "mixed_guardian",
+      scenarioId: "demon_pack",
       deckId: "tall_creatures",
       seed: 9,
     });
@@ -78,7 +78,7 @@ describe("cloud arena session service", () => {
   it("summarizes equipment bonuses on cards in the session snapshot", () => {
     const service = createCloudArenaSessionService();
     const snapshot = service.createSession({
-      scenarioId: "mixed_guardian",
+      scenarioId: "demon_pack",
       deckId: "tall_creatures",
       seed: 9,
     });
@@ -132,7 +132,7 @@ describe("cloud arena session service", () => {
   it("applies legal actions and records action history", () => {
     const service = createCloudArenaSessionService();
     const session = service.createSession({
-      scenarioId: "mixed_guardian",
+      scenarioId: "demon_pack",
       seed: 5,
     });
     const actionToApply =
@@ -153,7 +153,7 @@ describe("cloud arena session service", () => {
   it("accepts permanent actions that omit the source field", () => {
     const service = createCloudArenaSessionService();
     const session = service.createSession({
-      scenarioId: "mixed_guardian",
+      scenarioId: "demon_pack",
       seed: 5,
     });
     const guardianAction = findPlayableCardAction(
@@ -204,7 +204,7 @@ describe("cloud arena session service", () => {
   it("surfaces counter-based power buffs in the session snapshot", () => {
     const service = createCloudArenaSessionService();
     let snapshot = service.createSession({
-      scenarioId: "mixed_guardian",
+      scenarioId: "demon_pack",
       seed: 1,
     });
     let playedGuardian = false;
@@ -257,7 +257,7 @@ describe("cloud arena session service", () => {
   it("includes the pending spell play context while a target is being chosen", () => {
     const service = createCloudArenaSessionService();
     const session = service.createSession({
-      scenarioId: "mixed_guardian",
+      scenarioId: "demon_pack",
       seed: 5,
     });
     const tokenAngelAction = findPlayableCardAction(
@@ -295,7 +295,7 @@ describe("cloud arena session service", () => {
   it("resolves the full enemy turn when end turn is applied", () => {
     const service = createCloudArenaSessionService();
     const session = service.createSession({
-      scenarioId: "mixed_guardian",
+      scenarioId: "demon_pack",
       seed: 5,
     });
     const endTurnAction = session.legalActions.find(
@@ -317,7 +317,7 @@ describe("cloud arena session service", () => {
   it("resets a session back to its original seed and clears action history", () => {
     const service = createCloudArenaSessionService();
     const session = service.createSession({
-      scenarioId: "mixed_guardian",
+      scenarioId: "demon_pack",
       deckId: "tall_creatures",
       seed: 3,
     });
@@ -334,7 +334,7 @@ describe("cloud arena session service", () => {
 
     expect(reset.seed).toBe(3);
     expect(reset.resetSource).toEqual({
-      scenarioId: "mixed_guardian",
+      scenarioId: "demon_pack",
       deckId: "tall_creatures",
       seed: 3,
     });
@@ -358,7 +358,7 @@ describe("cloud arena session service", () => {
   it("rejects new actions after the battle is already finished", () => {
     const service = createCloudArenaSessionService();
     const session = service.createSession({
-      scenarioId: "mixed_guardian",
+      scenarioId: "demon_pack",
       seed: 1,
     });
 

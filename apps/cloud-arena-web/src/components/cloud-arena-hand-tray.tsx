@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, FocusEvent, MouseEvent, ReactElement } from "react";
 
 import type { CloudArenaBattleViewModel } from "../lib/cloud-arena-battle-view-model.js";
@@ -69,6 +69,9 @@ export function CloudArenaHandTray({
   onInspectPlayer,
 }: CloudArenaHandTrayProps): ReactElement {
   const [openPile, setOpenPile] = useState<PileKind | null>(null);
+  const previousPlayerHealthRef = useRef(player.health);
+  const playerHealthFlashTimerRef = useRef<number | null>(null);
+  const [playerHealthFlashDirection, setPlayerHealthFlashDirection] = useState<"increase" | "decrease" | null>(null);
   const pendingHandCardInstanceId = battle.pendingTargetRequest?.context?.pendingCardPlay?.instanceId ?? null;
   const isSelectingGraveyardCard =
     battle.pendingTargetRequest?.targetKind === "card" &&
@@ -88,6 +91,31 @@ export function CloudArenaHandTray({
         return player.graveyard;
     }
   }, [openPile, player.discardPile, player.drawPile, player.graveyard]);
+
+  useEffect(() => {
+    const previousHealth = previousPlayerHealthRef.current;
+    previousPlayerHealthRef.current = player.health;
+
+    if (player.health !== previousHealth) {
+      setPlayerHealthFlashDirection(player.health > previousHealth ? "increase" : "decrease");
+
+      if (playerHealthFlashTimerRef.current !== null) {
+        window.clearTimeout(playerHealthFlashTimerRef.current);
+      }
+
+      playerHealthFlashTimerRef.current = window.setTimeout(() => {
+        setPlayerHealthFlashDirection(null);
+        playerHealthFlashTimerRef.current = null;
+      }, 520);
+    }
+  }, [player.health]);
+
+  useEffect(() => () => {
+    if (playerHealthFlashTimerRef.current !== null) {
+      window.clearTimeout(playerHealthFlashTimerRef.current);
+      playerHealthFlashTimerRef.current = null;
+    }
+  }, []);
 
   useEffect(() => {
     if (isSelectingGraveyardCard) {
@@ -160,10 +188,11 @@ export function CloudArenaHandTray({
                   className="cloud-arena-pile-modal-card"
                   model={
                     openPile === "graveyard" && isSelectingGraveyardCard
-                      ? mapArenaGraveyardCardToDisplayCard(card, {
-                          disabled: !graveyardSelectionActions.has(card.instanceId),
-                          onChoose: (cardInstanceId) => {
-                            const action = graveyardSelectionActions.get(cardInstanceId)?.action;
+                    ? mapArenaGraveyardCardToDisplayCard(card, {
+                        disabled: !graveyardSelectionActions.has(card.instanceId),
+                        isTargetable: graveyardSelectionActions.has(card.instanceId),
+                        onChoose: (cardInstanceId) => {
+                          const action = graveyardSelectionActions.get(cardInstanceId)?.action;
 
                             if (action) {
                               onBattleAction?.(action);
@@ -192,7 +221,13 @@ export function CloudArenaHandTray({
     <section className="panel trace-viewer-panel trace-viewer-hand-bar cloud-arena-hand-tray">
       <div className="cloud-arena-hand-tray-layout">
         <div
-          className="cloud-arena-hand-hud"
+          className={[
+            "cloud-arena-hand-hud",
+            playerHealthFlashDirection === "decrease" ? "is-health-dropping" : null,
+            playerHealthFlashDirection === "increase" ? "is-health-rising" : null,
+          ]
+            .filter(Boolean)
+            .join(" ")}
           role="button"
           tabIndex={0}
           {...onInspectPlayer}
@@ -218,7 +253,13 @@ export function CloudArenaHandTray({
             </div>
             <div className="cloud-arena-hand-hud-track">
               <div
-                className="cloud-arena-hand-hud-health-bar"
+            className={[
+            "cloud-arena-hand-hud-health-bar",
+            playerHealthFlashDirection === "decrease" ? "is-dropping" : null,
+            playerHealthFlashDirection === "increase" ? "is-rising" : null,
+          ]
+            .filter(Boolean)
+            .join(" ")}
                 role="progressbar"
                 aria-label="Pilgrim Duelist health"
                 aria-valuemin={0}
@@ -230,7 +271,15 @@ export function CloudArenaHandTray({
                   style={{ width: `${getPercent(player.health, player.maxHealth)}%` }}
                 />
               </div>
-              <div className="cloud-arena-hand-hud-stats">
+              <div
+          className={[
+            "cloud-arena-hand-hud-stats",
+            playerHealthFlashDirection === "decrease" ? "is-dropping" : null,
+            playerHealthFlashDirection === "increase" ? "is-rising" : null,
+          ]
+            .filter(Boolean)
+            .join(" ")}
+              >
                 <span>Health {player.health}/{player.maxHealth}</span>
                 <span>Energy {player.energy}/{maxPlayerEnergy}</span>
               </div>

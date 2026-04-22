@@ -1056,6 +1056,16 @@ export function resolvePendingTargetRequest(
     pending.nextEffectIndex,
   );
 
+  if (pending.context.defendingPermanentId) {
+    const defendingPermanent = findPermanentById(state, pending.context.defendingPermanentId);
+
+    if (!defendingPermanent) {
+      throw new Error(`Permanent ${pending.context.defendingPermanentId} was not found on the battlefield.`);
+    }
+
+    defendingPermanent.blockingTargetPermanentId = chosenTarget.instanceId;
+  }
+
   if (!state.pendingTargetRequest && pending.context.pendingCardPlay) {
     summonPermanentFromCard(
       state,

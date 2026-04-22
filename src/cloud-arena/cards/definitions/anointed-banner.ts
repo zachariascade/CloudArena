@@ -2,17 +2,17 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const anointedBannerCardDefinition: CardDefinition = {
   id: "anointed_banner",
-  name: "Anointed Banner",
+  name: "Ark of the Covenant",
   cardTypes: ["artifact"],
   cost: 2,
   display: {
-    title: "Consecrated Standard",
+    title: "Ark of the Covenant",
     subtitle: "Artifact",
     frameTone: "white",
     manaCost: "{2}",
-    imagePath: "card_0057_garments_of_skin.jpg",
-    imageAlt: "A consecrated banner lifted before the faithful",
-    flavorText: "Raised high, it turns a gathered host into a sanctified advance.",
+    imagePath: "classics/card_0057_ark_of_the_covenant.jpg",
+    imageAlt: "Zanobi Strozzi's painting of King David dancing before the Ark of the Covenant",
+    flavorText: "The Ark turns procession into promise, and promise into holy momentum.",
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "005",

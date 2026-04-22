@@ -4,6 +4,7 @@ import type {
   CloudArenaSessionScenarioId,
 } from "../../../../src/cloud-arena/api-contract.js";
 
+export const CLOUD_ARENA_SETUP_PATH = "/run";
 export const CLOUD_ARENA_BATTLE_PATH = "/battle";
 export const CLOUD_ARENA_DECK_QUERY_PARAM = "deck";
 export const CLOUD_ARENA_SCENARIO_QUERY_PARAM = "enemy";
@@ -30,16 +31,6 @@ export const CLOUD_ARENA_SCENARIO_OPTIONS: Array<{
     id: "demon_pack",
     label: "Demon Pack",
     description: "Leader plus two demon bodies",
-  },
-  {
-    id: "mixed_guardian",
-    label: "Mixed Guardian",
-    description: "Balanced baseline battle",
-  },
-  {
-    id: "grunt_demon",
-    label: "Grunt Demon",
-    description: "Simple low-tier attacker",
   },
   {
     id: "imp_caller",
@@ -70,7 +61,9 @@ const CLOUD_ARENA_DECK_OPTIONS: Array<{
   },
 ];
 
-function isCloudArenaSessionScenarioId(value: string): value is CloudArenaSessionScenarioId {
+function isCloudArenaSessionScenarioId(
+  value: string,
+): value is CloudArenaSessionScenarioId {
   return CLOUD_ARENA_SCENARIO_OPTIONS.some((option) => option.id === value);
 }
 
@@ -85,7 +78,9 @@ function createPresetDeckChooserOption(
   };
 }
 
-function createSavedDeckChooserOption(deck: CloudArenaDeckSummary): CloudArenaDeckChooserOption {
+function createSavedDeckChooserOption(
+  deck: CloudArenaDeckSummary,
+): CloudArenaDeckChooserOption {
   return {
     id: deck.id,
     label: deck.name,
@@ -107,7 +102,9 @@ export function buildCloudArenaDeckChooserGroups(
       description: `${deck.cardCount} cards, ${deck.uniqueCardCount} unique`,
       kind: deck.kind,
     }));
-  const fallbackPresetOptions = CLOUD_ARENA_DECK_OPTIONS.map(createPresetDeckChooserOption);
+  const fallbackPresetOptions = CLOUD_ARENA_DECK_OPTIONS.map(
+    createPresetDeckChooserOption,
+  );
   const savedDeckOptions = availableDecks
     .filter((deck) => deck.kind === "saved")
     .map(createSavedDeckChooserOption);
@@ -117,7 +114,8 @@ export function buildCloudArenaDeckChooserGroups(
     !fallbackPresetOptions.some((option) => option.id === selectedDeckId) &&
     !savedDeckOptions.some((option) => option.id === selectedDeckId);
 
-  const resolvedPresetOptions = presetOptions.length > 0 ? presetOptions : fallbackPresetOptions;
+  const resolvedPresetOptions =
+    presetOptions.length > 0 ? presetOptions : fallbackPresetOptions;
   const resolvedSavedDeckOptions = shouldInjectSelectedDeck
     ? [
         {
@@ -144,7 +142,8 @@ export function buildCloudArenaDeckChooserGroups(
               {
                 id: "",
                 label: "No saved decks yet",
-                description: "Create a deck in the deck builder to use it here.",
+                description:
+                  "Create a deck in the deck builder to use it here.",
                 kind: "saved" as const,
                 disabled: true,
               },
@@ -153,7 +152,9 @@ export function buildCloudArenaDeckChooserGroups(
   ];
 }
 
-export function getScenarioDraftFromUrl(search = globalThis.location?.search ?? ""): CloudArenaSessionScenarioId {
+export function getScenarioDraftFromUrl(
+  search = globalThis.location?.search ?? "",
+): CloudArenaSessionScenarioId {
   const searchParams = new URLSearchParams(search);
   const queryValue = searchParams.get(CLOUD_ARENA_SCENARIO_QUERY_PARAM);
 
@@ -161,10 +162,12 @@ export function getScenarioDraftFromUrl(search = globalThis.location?.search ?? 
     return queryValue;
   }
 
-  return "mixed_guardian";
+  return "demon_pack";
 }
 
-export function getDeckDraftFromUrl(search = globalThis.location?.search ?? ""): string {
+export function getDeckDraftFromUrl(
+  search = globalThis.location?.search ?? "",
+): string {
   const searchParams = new URLSearchParams(search);
   const queryValue = searchParams.get(CLOUD_ARENA_DECK_QUERY_PARAM);
 
@@ -175,7 +178,10 @@ export function getDeckDraftFromUrl(search = globalThis.location?.search ?? ""):
   return "master_deck";
 }
 
-export function createCloudArenaBattleSearch(deckId: string, scenarioId: CloudArenaSessionScenarioId): string {
+export function createCloudArenaBattleSearch(
+  deckId: string,
+  scenarioId: CloudArenaSessionScenarioId,
+): string {
   const searchParams = new URLSearchParams();
   searchParams.set(CLOUD_ARENA_DECK_QUERY_PARAM, deckId);
   searchParams.set(CLOUD_ARENA_SCENARIO_QUERY_PARAM, scenarioId);
@@ -196,3 +202,18 @@ export function createCloudArenaBattleLocation(
 }
 
 export const buildCloudArenaBattleLocation = createCloudArenaBattleLocation;
+
+export function createCloudArenaRunLocation(
+  deckId: string,
+  scenarioId: CloudArenaSessionScenarioId,
+): {
+  pathname: string;
+  search: string;
+} {
+  return {
+    pathname: CLOUD_ARENA_SETUP_PATH,
+    search: createCloudArenaBattleSearch(deckId, scenarioId),
+  };
+}
+
+export const buildCloudArenaRunLocation = createCloudArenaRunLocation;

@@ -12,7 +12,42 @@ export function renderCloudArenaWebHtml(
   sessionMode: CloudArenaSessionMode = "remote",
   routerMode: "browser" | "hash" = "browser",
   clientScriptSrc = "/assets/app.js",
+  liveReload = false,
 ): string {
+  const liveReloadScript = liveReload
+    ? `<script>
+        (function () {
+          var endpoint = "/__cloud-arena-dev-version";
+          var currentVersion = null;
+          var isReloading = false;
+
+          function reloadWhenChanged() {
+            fetch(endpoint, { cache: "no-store" })
+              .then(function (response) {
+                return response.text();
+              })
+              .then(function (nextVersion) {
+                if (currentVersion === null) {
+                  currentVersion = nextVersion;
+                  return;
+                }
+
+                if (nextVersion !== currentVersion && !isReloading) {
+                  isReloading = true;
+                  window.location.reload();
+                }
+              })
+              .catch(function () {
+                /* ignore transient reload probe failures */
+              });
+          }
+
+          reloadWhenChanged();
+          window.setInterval(reloadWhenChanged, 1000);
+        })();
+      </script>`
+    : "";
+
   return renderCloudArcanumWebHtml(cloudArcanumApiBaseUrl, arenaApiBaseUrl)
     .replace("<title>Cloud Arcanum</title>", "<title>Cloud Arena</title>")
     .replace(
@@ -29,5 +64,6 @@ export function renderCloudArenaWebHtml(
         cloudArcanumWebBaseUrl: ${JSON.stringify(cloudArcanumWebBaseUrl)}
       };`,
     )
-    .replace('src="/assets/app.js"', `src=${JSON.stringify(clientScriptSrc)}`);
+    .replace('src="/assets/app.js"', `src=${JSON.stringify(clientScriptSrc)}`)
+    .replace("</body>", `${liveReloadScript}</body>`);
 }
