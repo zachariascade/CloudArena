@@ -15,10 +15,8 @@ export type CloudArenaEnemyPresetId =
   | "warder_demon";
 
 export type CloudArenaScenarioId =
-  | "grunt_demon"
   | "demon_pack"
-  | "imp_caller"
-  | "mixed_guardian";
+  | "imp_caller";
 
 export type CloudArenaDeckPreset = {
   id: CloudArenaDeckPresetId;

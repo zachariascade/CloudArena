@@ -25,6 +25,6 @@ export function getCloudArenaRuntimeConfig(): CloudArenaRuntimeConfig {
     cloudArcanumApiBaseUrl:
       window.__CLOUD_ARENA_CONFIG__?.cloudArcanumApiBaseUrl ?? "http://127.0.0.1:4310",
     cloudArcanumWebBaseUrl:
-      window.__CLOUD_ARENA_CONFIG__?.cloudArcanumWebBaseUrl ?? "http://127.0.0.1:4320",
+      window.__CLOUD_ARENA_CONFIG__?.cloudArcanumWebBaseUrl ?? "http://127.0.0.1:4321",
   };
 }

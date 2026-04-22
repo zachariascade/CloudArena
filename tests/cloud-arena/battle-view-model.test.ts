@@ -7,7 +7,7 @@ describe("cloud arena battle view model", () => {
   it("keeps a targeted spell visible in hand while target selection is pending", () => {
     const snapshot: CloudArenaSessionSnapshot = {
       sessionId: "session_1",
-      scenarioId: "mixed_guardian",
+      scenarioId: "demon_pack",
       deckId: null,
       status: "active",
       turnNumber: 1,
@@ -15,7 +15,7 @@ describe("cloud arena battle view model", () => {
       seed: 1,
       createdAt: "2026-04-20T00:00:00.000Z",
       resetSource: {
-        scenarioId: "mixed_guardian",
+        scenarioId: "demon_pack",
         deckId: null,
         seed: 1,
       },

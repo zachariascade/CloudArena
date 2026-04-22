@@ -64,12 +64,8 @@ function getScenarioLabel(scenarioId: string): string {
   switch (scenarioId) {
     case "demon_pack":
       return "Demon Pack";
-    case "grunt_demon":
-      return "Grunt Demon";
     case "imp_caller":
       return "Imp Caller";
-    case "mixed_guardian":
-      return "Mixed Guardian";
     default:
       return scenarioId;
   }
@@ -87,8 +83,6 @@ function getDeckLabel(deckId: string | null): string {
       return "Wide Angels";
     case "tall_creatures":
       return "Tall Creatures";
-    case "mixed_guardian":
-      return "Mixed Guardian";
     default:
       return deckId;
   }
@@ -108,7 +102,7 @@ export function buildCloudArenaViewModelFromTraceStep(input: {
     mode: "replay",
     battle,
     summary: [
-      { label: "Scenario", value: "Mixed Guardian" },
+      { label: "Scenario", value: "Scenario" },
       { label: "Seed", value: String(input.trace.config.seed) },
       { label: "Agent", value: input.trace.config.agent },
       { label: "Winner", value: input.trace.result.winner },

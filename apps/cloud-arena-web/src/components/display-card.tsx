@@ -195,9 +195,7 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
   const healthPercent = healthBar
     ? clampHealthPercent(healthBar.current, healthBar.max)
     : 0;
-  const energySegments = energyBar
-    ? clampMeterCount(energyBar.current, energyBar.max)
-    : 0;
+  const energyLabel = energyBar ? (energyBar.label ?? `${energyBar.current}/${energyBar.max}`) : null;
   const blockStat = healthBar
     ? stats.find((stat) => stat.label.toLowerCase() === "block") ?? null
     : null;
@@ -215,6 +213,10 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
   const isPermanentCard = model.variant === "permanent";
   const isExhaustedPermanent = isPermanentCard && stateFlags.includes("spent");
   const isDefendingPermanent = isPermanentCard && stateFlags.includes("defending");
+  const isTargetablePlayer = stateFlags.includes("targetable-player");
+  const isTargetableEnemy = stateFlags.includes("targetable-enemy");
+  const isHealthDropping = stateFlags.includes("health-dropping");
+  const isHealthRising = stateFlags.includes("health-rising");
   const cardFace = (
     <article className="card-face">
       <header className="card-face-header">
@@ -323,30 +325,18 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
       </div>
       {energyBar ? (
         <div className="display-card-energy-panel">
-          <div className="display-card-health-row">
-            <span>Energy</span>
-            <strong>{energyBar.label ?? `${energyBar.current}/${energyBar.max}`}</strong>
-          </div>
-          <div
-            className="display-card-energy-bar"
-            role="meter"
-            aria-label={`${model.name} energy`}
-            aria-valuemin={0}
-            aria-valuemax={energyBar.max}
-            aria-valuenow={energyBar.current}
-            style={{
-              gridTemplateColumns: `repeat(${Math.max(1, energyBar.max)}, minmax(0, 1fr))`,
-            }}
-          >
-            {Array.from({ length: Math.max(0, energyBar.max) }, (_, index) => (
-              <span
-                key={`energy-${index}`}
-                className={[
-                  "display-card-energy-segment",
-                  index < energySegments ? "is-filled" : "is-empty",
-                ].join(" ")}
-              />
-            ))}
+          <div className="display-card-energy-row">
+            <span className="display-card-energy-label">Energy</span>
+            <div
+              className="display-card-energy-orb"
+              role="meter"
+              aria-label={`${model.name} energy`}
+              aria-valuemin={0}
+              aria-valuemax={energyBar.max}
+              aria-valuenow={energyBar.current}
+            >
+              <strong>{energyLabel}</strong>
+            </div>
           </div>
         </div>
       ) : null}
@@ -414,6 +404,10 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
         `card-face-tile tone-${model.frameTone} display-card-shell display-card-${model.variant}`,
         isExhaustedPermanent ? "is-exhausted" : null,
         isTappedPermanent ? "is-tapped" : null,
+        isTargetablePlayer ? "is-targetable is-targetable-player" : null,
+        isTargetableEnemy ? "is-targetable is-targetable-enemy" : null,
+        isHealthDropping ? "is-health-dropping" : null,
+        isHealthRising ? "is-health-rising" : null,
         className ?? null,
       ]
         .filter(Boolean)

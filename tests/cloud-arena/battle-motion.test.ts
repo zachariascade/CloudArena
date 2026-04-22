@@ -32,9 +32,7 @@ function makePermanent(
   };
 }
 
-function makeBattle(
-  overrides: Partial<CloudArenaBattleViewModel>,
-): CloudArenaBattleViewModel {
+function makeBattle(overrides: Partial<CloudArenaBattleViewModel>): CloudArenaBattleViewModel {
   return {
     turnNumber: 1,
     phase: "player_action",
@@ -69,7 +67,7 @@ function makeBattle(
 }
 
 describe("cloud arena battle motion", () => {
-  it("detects attack, hit, and death transitions from battlefield diffs", () => {
+  it("detects attack, hit, health loss, and death transitions from battlefield diffs", () => {
     const previousBattle = makeBattle({
       battlefield: [
         makePermanent({
@@ -132,6 +130,8 @@ describe("cloud arena battle motion", () => {
 
     expect(diff.attackIds).toEqual(["ally_1"]);
     expect(diff.hitIds).toEqual(["enemy_1"]);
+    expect(diff.healthDecreaseIds).toEqual(["enemy_1"]);
+    expect(diff.healthIncreaseIds).toEqual([]);
     expect(diff.deathOverlays).toHaveLength(1);
     expect(diff.deathOverlays[0]).toMatchObject({
       zoneKeyPrefix: "battlefield",
@@ -141,5 +141,60 @@ describe("cloud arena battle motion", () => {
         name: "Token Angel",
       },
     });
+  });
+
+  it("detects health increases separately from damage", () => {
+    const previousBattle = makeBattle({
+      battlefield: [
+        makePermanent({
+          instanceId: "ally_1",
+          definitionId: "guardian",
+          name: "Guardian",
+          slotIndex: 0,
+          health: 3,
+          block: 0,
+        }),
+      ],
+      enemyBattlefield: [
+        makePermanent({
+          instanceId: "enemy_1",
+          definitionId: "enemy_husk",
+          name: "Enemy Husk",
+          slotIndex: 0,
+          controllerId: "enemy",
+          health: 2,
+          block: 0,
+        }),
+      ],
+    });
+
+    const currentBattle = makeBattle({
+      battlefield: [
+        makePermanent({
+          instanceId: "ally_1",
+          definitionId: "guardian",
+          name: "Guardian",
+          slotIndex: 0,
+          health: 5,
+          block: 0,
+        }),
+      ],
+      enemyBattlefield: [
+        makePermanent({
+          instanceId: "enemy_1",
+          definitionId: "enemy_husk",
+          name: "Enemy Husk",
+          slotIndex: 0,
+          controllerId: "enemy",
+          health: 1,
+          block: 0,
+        }),
+      ],
+    });
+
+    const diff = getBattleMotionDiff(previousBattle, currentBattle);
+
+    expect(diff.healthIncreaseIds).toEqual(["ally_1"]);
+    expect(diff.healthDecreaseIds).toEqual(["enemy_1"]);
   });
 });

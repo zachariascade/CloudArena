@@ -22,9 +22,7 @@ export const cloudArenaApiRoutes = {
 export type CloudArenaApiRouteName = keyof typeof cloudArenaApiRoutes;
 
 export type CloudArenaSessionScenarioId =
-  | "mixed_guardian"
   | "demon_pack"
-  | "grunt_demon"
   | "imp_caller";
 
 export type CloudArenaDeckId = string;
@@ -128,6 +126,7 @@ export type CloudArenaPermanentSnapshot = {
   hasActedThisTurn: boolean;
   isTapped: boolean;
   isDefending: boolean;
+  blockingTargetPermanentId?: string | null;
   slotIndex: number;
   actions: ActivatedAbility[];
 };
@@ -148,6 +147,7 @@ export type CloudArenaPendingTargetRequestSnapshot = {
   context?: {
     abilitySourcePermanentId?: string;
     sourceCardInstanceId?: string;
+    defendingPermanentId?: string;
     pendingCardPlay?: CloudArenaCardSnapshot;
     pendingCardPlayHandIndex?: number;
   };

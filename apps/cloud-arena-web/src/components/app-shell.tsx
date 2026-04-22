@@ -2,14 +2,21 @@ import type { ReactElement, ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 
+import { CloudArenaThemePanel } from "./cloud-arena-theme-panel.js";
+import { useCloudArenaTheme } from "../lib/cloud-arena-theme.js";
+
 type CloudArenaAppShellProps = {
   children: ReactNode;
   cloudArcanumWebBaseUrl: string;
   sidebarContent?: ReactNode;
+  fullBleed?: boolean;
+  pageVariant?: "default" | "battle";
 };
 
 const navigationItems = [
-  { to: "/", label: "Battle", end: true },
+  { to: "/", label: "Start", end: true },
+  { to: "/run", label: "Run Setup", end: true },
+  { to: "/battle", label: "Battle", end: true },
   { to: "/decks", label: "Deck Builder", end: true },
 ];
 
@@ -20,10 +27,14 @@ export function CloudArenaAppShell({
   children,
   cloudArcanumWebBaseUrl,
   sidebarContent,
+  fullBleed = false,
+  pageVariant = "default",
 }: CloudArenaAppShellProps): ReactElement {
   const cloudArcanumCardsUrl = `${cloudArcanumWebBaseUrl.replace(/\/$/, "")}/cards`;
+  const cloudArcanumHomeUrl = `${cloudArcanumWebBaseUrl.replace(/\/$/, "")}/`;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = useState(false);
+  const { resetTheme, theme, updateThemeColor } = useCloudArenaTheme();
   const hideHeaderTimeoutRef = useRef<number | null>(null);
   const pointerYRef = useRef(Number.POSITIVE_INFINITY);
   const isPointerOverHeaderRef = useRef(false);
@@ -113,7 +124,7 @@ export function CloudArenaAppShell({
   }, [isSidebarOpen]);
 
   return (
-    <main className="app-shell">
+    <main className={`app-shell${fullBleed ? " is-full-bleed" : ""}${pageVariant === "battle" ? " is-battle-page" : ""}`}>
       <header
         className={`panel app-header${isHeaderVisible || isSidebarOpen ? " is-visible" : ""}`}
         aria-hidden={!isHeaderVisible && !isSidebarOpen}
@@ -129,7 +140,13 @@ export function CloudArenaAppShell({
         }}
       >
         <section className="app-header-brand">
-          <h1>Cloud Arena</h1>
+          <a
+            className="app-header-brand-link"
+            href={cloudArcanumHomeUrl}
+            onClick={() => setIsSidebarOpen(false)}
+          >
+            <h1>Cloud Arena</h1>
+          </a>
         </section>
         <button
           type="button"
@@ -179,6 +196,14 @@ export function CloudArenaAppShell({
                 Card Catalog
               </a>
             </nav>
+          </div>
+
+          <div className="app-shell-sidebar-section">
+            <CloudArenaThemePanel
+              theme={theme}
+              onChange={updateThemeColor}
+              onReset={resetTheme}
+            />
           </div>
 
           {sidebarContent ? <div className="app-shell-sidebar-section">{sidebarContent}</div> : null}

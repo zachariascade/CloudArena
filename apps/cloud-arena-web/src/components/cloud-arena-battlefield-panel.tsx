@@ -3,6 +3,7 @@ import type { FocusEvent, MouseEvent } from "react";
 
 import type { CloudArenaBattleViewModel } from "../lib/cloud-arena-battle-view-model.js";
 import type { CloudArenaBattleMotionState } from "../lib/cloud-arena-battle-motion.js";
+import type { CloudArenaBattlefieldStackAttachment } from "../lib/cloud-arena-battle-attachments.js";
 import { mapArenaPermanentToDisplayCard } from "../lib/display-card.js";
 import { AbilityCostChip } from "./ability-cost-chip.js";
 import { DisplayCard } from "./display-card.js";
@@ -16,6 +17,8 @@ type CloudArenaBattlefieldPanelProps = {
   battlefield: CloudArenaBattleViewModel["battlefield"];
   legalActions: CloudArenaBattleViewModel["legalActions"];
   motionState: CloudArenaBattleMotionState;
+  hiddenPermanentIds?: string[];
+  stackedAttachmentsByTargetId?: Record<string, CloudArenaBattlefieldStackAttachment[]>;
   getInspectableModel: (key: string) => Parameters<typeof DisplayCard>[0]["model"];
   getPermanentMenuActions: (
     permanent: NonNullable<CloudArenaBattleViewModel["battlefield"][number]>,
@@ -160,15 +163,29 @@ function getPermanentIntentBubble(
 function getStackedAttachments(
   battlefield: CloudArenaBattleViewModel["battlefield"],
   permanent: NonNullable<CloudArenaBattleViewModel["battlefield"][number]>,
-): NonNullable<CloudArenaBattleViewModel["battlefield"][number]>[] {
-  return (permanent.attachments ?? [])
-    .map((attachmentId) => battlefield.find((entry) => entry?.instanceId === attachmentId) ?? null)
-    .filter((attachment): attachment is NonNullable<typeof attachment> => attachment !== null);
+  extraAttachments: CloudArenaBattlefieldStackAttachment[] = [],
+): CloudArenaBattlefieldStackAttachment[] {
+  const attachments = [
+    ...(permanent.attachments ?? [])
+      .map((attachmentId) => battlefield.find((entry) => entry?.instanceId === attachmentId) ?? null)
+      .filter((attachment): attachment is NonNullable<typeof attachment> => attachment !== null)
+      .map((attachment) => ({
+        permanent: attachment,
+        inspectableKey: `${attachment.controllerId === "enemy" ? "enemy_battlefield" : "battlefield"}:${attachment.instanceId}`,
+      })),
+    ...extraAttachments,
+  ];
+
+  return attachments.filter(
+    (attachment, index) =>
+      attachments.findIndex((entry) => entry.permanent.instanceId === attachment.permanent.instanceId) === index,
+  );
 }
 
 function getPermanentMenuActionList(
   permanent: NonNullable<CloudArenaBattleViewModel["battlefield"][number]>,
   getPermanentMenuActions: CloudArenaBattlefieldPanelProps["getPermanentMenuActions"],
+  motionState: CloudArenaBattleMotionState,
   openPermanentMenuId: string | null,
   onPermanentMenuToggle: CloudArenaBattlefieldPanelProps["onPermanentMenuToggle"],
   onPermanentMenuClose: CloudArenaBattlefieldPanelProps["onPermanentMenuClose"],
@@ -182,8 +199,8 @@ function getPermanentMenuActionList(
   const permanentCardModel = getInspectableModel(`${zoneKeyPrefix}:${permanent.instanceId}`);
   const targetAction = undefined;
   const isActionListOpen = menuActions.length > 0 && openPermanentMenuId === permanent.instanceId;
-  const isAttackAnimated = false;
-  const isHitAnimated = false;
+  const isAttackAnimated = Boolean(motionState.attackIds[permanent.instanceId]);
+  const isHitAnimated = Boolean(motionState.hitIds[permanent.instanceId]);
 
   return (
     <>
@@ -239,7 +256,7 @@ function getPermanentMenuActionList(
         </div>
       ) : (
         <div
-          className={`cloud-arena-permanent-button${targetAction ? " is-targetable" : ""}${isAttackAnimated ? " is-attacking" : ""}${isHitAnimated ? " is-hit" : ""}`}
+          className={`cloud-arena-permanent-button${isAttackAnimated ? " is-attacking" : ""}${isHitAnimated ? " is-hit" : ""}`}
           role="button"
           tabIndex={0}
           {...bindInspectorInteractions(`${zoneKeyPrefix}:${permanent.instanceId}`)}
@@ -294,6 +311,8 @@ export function CloudArenaBattlefieldPanel({
   battlefield,
   legalActions,
   motionState,
+  hiddenPermanentIds,
+  stackedAttachmentsByTargetId,
   getInspectableModel,
   getPermanentMenuActions,
   getPermanentCounterEntries,
@@ -304,8 +323,9 @@ export function CloudArenaBattlefieldPanel({
   onPermanentMenuClose,
   onTargetPermanentSelect,
 }: CloudArenaBattlefieldPanelProps): ReactElement {
+  const hiddenPermanentIdSet = new Set(hiddenPermanentIds ?? []);
   const renderedBattlefield = battlefield.flatMap((slot, index) =>
-    slot?.attachedTo
+    slot?.attachedTo || (slot ? hiddenPermanentIdSet.has(slot.instanceId) : false)
       ? []
       : [
           {
@@ -322,12 +342,20 @@ export function CloudArenaBattlefieldPanel({
           {renderedBattlefield.map(({ slot, index }) => {
             const slotKey = `${zoneKeyPrefix}:${index}`;
             const deathOverlay = motionState.deathOverlays[slotKey] ?? null;
-            const attachedPermanents = slot ? getStackedAttachments(battlefield, slot) : [];
+            const attachedPermanents = slot
+              ? getStackedAttachments(
+                  battlefield,
+                  slot,
+                  stackedAttachmentsByTargetId?.[slot.instanceId] ?? [],
+                )
+              : [];
             const activeAttachment = slot
-              ? attachedPermanents.find((attachment) => attachment.instanceId === openPermanentMenuId) ?? null
+              ? attachedPermanents.find((attachment) => attachment.permanent.instanceId === openPermanentMenuId) ?? null
               : null;
             const stackedAttachments = activeAttachment
-              ? attachedPermanents.filter((attachment) => attachment.instanceId !== activeAttachment.instanceId)
+              ? attachedPermanents.filter(
+                  (attachment) => attachment.permanent.instanceId !== activeAttachment.permanent.instanceId,
+                )
               : attachedPermanents;
 
             return (
@@ -353,6 +381,11 @@ export function CloudArenaBattlefieldPanel({
                         entry.action.type === "choose_target" &&
                         entry.action.targetPermanentId === slot.instanceId,
                     );
+                    const targetToneClass = targetAction
+                      ? slot.controllerId === "enemy"
+                        ? " is-targetable-enemy"
+                        : " is-targetable-player"
+                      : "";
                     const isActionListOpen =
                       !targetAction && menuActions.length > 0 && openPermanentMenuId === slot.instanceId;
                     const isAttackAnimated = Boolean(motionState.attackIds[slot.instanceId]);
@@ -458,7 +491,7 @@ export function CloudArenaBattlefieldPanel({
                             </div>
                           ) : (
                             <div
-                              className={`cloud-arena-permanent-button${targetAction ? " is-targetable" : ""}${isAttackAnimated ? " is-attacking" : ""}${isHitAnimated ? " is-hit" : ""}`}
+                              className={`cloud-arena-permanent-button${targetToneClass}${isAttackAnimated ? " is-attacking" : ""}${isHitAnimated ? " is-hit" : ""}`}
                               role="button"
                               tabIndex={0}
                               onClick={() => {
@@ -500,19 +533,22 @@ export function CloudArenaBattlefieldPanel({
                             <div className="cloud-arena-battlefield-attachment-stack">
                               {stackedAttachments.map((attachment, attachmentIndex) => (
                                 <div
-                                  key={attachment.instanceId}
+                                  key={attachment.permanent.instanceId}
                                   className="cloud-arena-battlefield-attachment-card-shell"
                                   style={{ zIndex: stackedAttachments.length - attachmentIndex }}
                                 >
                                   {getPermanentMenuActionList(
-                                    attachment,
+                                    attachment.permanent,
                                     getPermanentMenuActions,
+                                    motionState,
                                     openPermanentMenuId,
                                     onPermanentMenuToggle,
                                     onPermanentMenuClose,
                                     onTargetPermanentSelect,
                                     getInspectableModel,
-                                    zoneKeyPrefix,
+                                    attachment.inspectableKey.startsWith("enemy_battlefield:")
+                                      ? "enemy_battlefield"
+                                      : "battlefield",
                                     bindInspectorInteractions,
                                     onOpenDetails,
                                   )}
@@ -523,14 +559,17 @@ export function CloudArenaBattlefieldPanel({
                           {activeAttachment ? (
                             <div className="cloud-arena-battlefield-active-attachment-overlay">
                               {getPermanentMenuActionList(
-                                activeAttachment,
+                                activeAttachment.permanent,
                                 getPermanentMenuActions,
+                                motionState,
                                 openPermanentMenuId,
                                 onPermanentMenuToggle,
                                 onPermanentMenuClose,
                                 onTargetPermanentSelect,
                                 getInspectableModel,
-                                zoneKeyPrefix,
+                                activeAttachment.inspectableKey.startsWith("enemy_battlefield:")
+                                  ? "enemy_battlefield"
+                                  : "battlefield",
                                 bindInspectorInteractions,
                                 onOpenDetails,
                               )}

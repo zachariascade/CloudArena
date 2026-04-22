@@ -84,7 +84,7 @@ describe("cloud arena content routes", () => {
         method: "POST",
         url: "/api/cloud-arena/sessions",
         payload: {
-          scenarioId: "mixed_guardian",
+          scenarioId: "demon_pack",
           deckId: savedDeckId,
           seed: 17,
           shuffleDeck: false,

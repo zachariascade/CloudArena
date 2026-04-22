@@ -51,7 +51,7 @@ describe("cloud arena local session service", () => {
     });
 
     const created = await sessions.createCloudArenaSession({
-      scenarioId: "mixed_guardian",
+      scenarioId: "demon_pack",
       deckId: "deck_local_session",
       seed: 42,
       shuffleDeck: false,
@@ -96,7 +96,7 @@ describe("cloud arena local session service", () => {
     });
 
     const session = await controller.createCloudArenaSession({
-      scenarioId: "mixed_guardian",
+      scenarioId: "demon_pack",
       deckId: "master_deck",
       seed: 7,
       shuffleDeck: false,

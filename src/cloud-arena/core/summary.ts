@@ -64,6 +64,7 @@ export function buildBattleSummary(state: BattleState): BattleSummary {
         `acted=${permanent.hasActedThisTurn ? "yes" : "no"}`,
         `tapped=${permanent.isTapped ? "yes" : "no"}`,
         `defending=${permanent.isDefending ? "yes" : "no"}`,
+        `blockingFor=${permanent.blockingTargetPermanentId ?? "none"}`,
       ].join(", ");
     }),
     enemyBattlefield: state.enemyBattlefield.map((permanent, index) => {
@@ -78,6 +79,7 @@ export function buildBattleSummary(state: BattleState): BattleSummary {
         `acted=${permanent.hasActedThisTurn ? "yes" : "no"}`,
         `tapped=${permanent.isTapped ? "yes" : "no"}`,
         `defending=${permanent.isDefending ? "yes" : "no"}`,
+        `blockingFor=${permanent.blockingTargetPermanentId ?? "none"}`,
       ].join(", ");
     }),
     blockingQueue: [...state.blockingQueue],

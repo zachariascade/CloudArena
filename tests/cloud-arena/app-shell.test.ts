@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 import { CloudArenaAppShell } from "../../apps/cloud-arena-web/src/components/index.js";
 
 describe("cloud arena app shell", () => {
-  it("exposes battle and deck builder navigation", () => {
+  it("exposes start, setup, battle, and deck builder navigation", () => {
     const html = renderToStaticMarkup(
       createElement(
         MemoryRouter,
@@ -18,7 +18,11 @@ describe("cloud arena app shell", () => {
       ),
     );
 
-    expect(html).toContain('href="/decks"');
     expect(html).toContain('href="/"');
+    expect(html).toContain('href="/run"');
+    expect(html).toContain('href="/battle"');
+    expect(html).toContain('href="/decks"');
+    expect(html).toContain("Recolor the shell");
+    expect(html).toContain('type="color"');
   });
 });

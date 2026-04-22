@@ -77,6 +77,7 @@ function toSyntheticPermanentSelectedObject(
       hasActedThisTurn: false,
       isTapped: false,
       isDefending: false,
+      blockingTargetPermanentId: null,
       slotIndex: event.slotIndex,
     },
     definition,

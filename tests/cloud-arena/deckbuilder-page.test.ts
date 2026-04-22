@@ -8,6 +8,7 @@ import type {
 import {
   buildDeckWriteRequest,
   buildDeckSelectionGroups,
+  buildCreateModalDraftFromDeckDraft,
   buildDraftFromDetail,
   createEmptyDraft,
   decrementDeckCard,
@@ -87,6 +88,21 @@ describe("cloud arena deckbuilder helpers", () => {
       ],
       tags: ["control", "reactive"],
       notes: "keep it tight",
+    });
+  });
+
+  it("prefills the create modal from the current deck draft", () => {
+    expect(buildCreateModalDraftFromDeckDraft({
+      sourceId: "preset_1",
+      sourceKind: "preset",
+      name: "Wide Angels",
+      notes: "Aerial pressure",
+      tagsText: "angels, tokens",
+      cards: [{ cardId: "token_angel", quantity: 4 }],
+    })).toEqual({
+      name: "Wide Angels",
+      notes: "Aerial pressure",
+      tagsText: "angels, tokens",
     });
   });
 

@@ -26,7 +26,6 @@ import { resurrectCardDefinition } from "./definitions/resurrect.js";
 import { sacrificialSeraphCardDefinition } from "./definitions/sacrificial-seraph.js";
 import { radiantConduitCardDefinition } from "./definitions/radiant-conduit.js";
 import { sanctifiedGuideCardDefinition } from "./definitions/sanctified-guide.js";
-import { targetedSmiteCardDefinition } from "./definitions/targeted-smite.js";
 import { targetedStrikeCardDefinition } from "./definitions/targeted-strike.js";
 import { stunningRebukeCardDefinition } from "./definitions/stunning-rebuke.js";
 import { tokenImpCardDefinition } from "./definitions/token-imp.js";
@@ -78,7 +77,6 @@ export const cardDefinitions: CardDefinitionLibrary = {
   sacrificial_seraph: sacrificialSeraphCardDefinition,
   radiant_conduit: radiantConduitCardDefinition,
   sanctified_guide: sanctifiedGuideCardDefinition,
-  targeted_smite: targetedSmiteCardDefinition,
   targeted_strike: targetedStrikeCardDefinition,
   stunning_rebuke: stunningRebukeCardDefinition,
   token_imp: tokenImpCardDefinition,

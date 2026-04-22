@@ -181,6 +181,7 @@ export function summonPermanentFromCard(
     hasActedThisTurn: false,
     isTapped: false,
     isDefending: false,
+    blockingTargetPermanentId: null,
     slotIndex: openSlot,
   };
 
@@ -266,6 +267,7 @@ export function createEnemyLeaderPermanent(
     hasActedThisTurn: false,
     isTapped: false,
     isDefending: false,
+    blockingTargetPermanentId: null,
     slotIndex: openSlot,
   };
 

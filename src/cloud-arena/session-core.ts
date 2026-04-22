@@ -114,7 +114,7 @@ export function normalizeBattleAction(action: BattleAction): BattleAction {
 export function resolveCloudArenaSessionScenario(
   request: CloudArenaCreateSessionRequest = {},
 ): CloudArenaScenarioPreset {
-  return getScenarioPreset(request.scenarioId ?? "mixed_guardian");
+  return getScenarioPreset(request.scenarioId ?? "demon_pack");
 }
 
 export function createScenarioBattle(
@@ -343,6 +343,7 @@ export function buildCloudArenaSessionSnapshot(
             hasActedThisTurn: permanent.hasActedThisTurn,
             isTapped: permanent.isTapped,
             isDefending: permanent.isDefending,
+            blockingTargetPermanentId: permanent.blockingTargetPermanentId,
             slotIndex: permanent.slotIndex,
             intentLabel: permanent.intentLabel ?? null,
             intentQueueLabels: permanent.intentQueueLabels ?? null,
@@ -372,6 +373,7 @@ export function buildCloudArenaSessionSnapshot(
             hasActedThisTurn: permanent.hasActedThisTurn,
             isTapped: permanent.isTapped,
             isDefending: permanent.isDefending,
+            blockingTargetPermanentId: permanent.blockingTargetPermanentId,
             slotIndex: permanent.slotIndex,
             intentLabel: permanent.intentLabel ?? null,
             intentQueueLabels: permanent.intentQueueLabels ?? null,
@@ -389,6 +391,7 @@ export function buildCloudArenaSessionSnapshot(
           context: {
             abilitySourcePermanentId: state.pendingTargetRequest.context.abilitySourcePermanentId,
             sourceCardInstanceId: state.pendingTargetRequest.context.sourceCardInstanceId,
+            defendingPermanentId: state.pendingTargetRequest.context.defendingPermanentId,
             pendingCardPlay: pendingHandCard
               ? toCardSnapshot(state, {
                   instanceId: pendingHandCard.cardInstanceId,

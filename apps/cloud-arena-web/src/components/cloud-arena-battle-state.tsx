@@ -20,6 +20,7 @@ import {
   mapArenaPermanentToDisplayCard,
   mapArenaPlayerToDisplayCard,
 } from "../lib/display-card.js";
+import { buildBattlefieldAttachmentState } from "../lib/cloud-arena-battle-attachments.js";
 import type {
   BattleAction,
   ActivatedAbilityActionId,
@@ -57,11 +58,52 @@ export function CloudArenaBattleState({
   const battleWindowRef = useRef<HTMLDivElement | null>(null);
   const battleMainRef = useRef<HTMLDivElement | null>(null);
   const previousBattleRef = useRef<CloudArenaBattleViewModel | null>(null);
+  const playerHealthDropTimerRef = useRef<number | null>(null);
   const animationTimersRef = useRef<Record<string, number>>({});
+  const healthFlashTimersRef = useRef<Record<string, number>>({});
+  const [isPlayerHealthDropping, setIsPlayerHealthDropping] = useState(false);
+  const [healthFlashDirections, setHealthFlashDirections] = useState<Record<string, "increase" | "decrease">>({});
   const playableHandCards = new Set(playableHandCardInstanceIds);
   const enemyBattlefield = battle.enemyBattlefield ?? Array.from({ length: battle.battlefield.length }, () => null);
-  const playerCard = mapArenaPlayerToDisplayCard(battle.player);
-  const enemyCard = mapArenaEnemyToDisplayCard(battle.enemy);
+  const targetableBattlefieldPermanentIds = new Set(
+    battle.legalActions.flatMap((entry) =>
+      entry.action.type === "choose_target" ? [entry.action.targetPermanentId] : [],
+    ),
+  );
+  const playerHealthFlashDirection = healthFlashDirections.player ?? null;
+  const enemyHealthFlashDirection = healthFlashDirections.enemy ?? null;
+  const playerCard = useMemo(
+    () =>
+      mapArenaPlayerToDisplayCard(
+        {
+          ...battle.player,
+          isHealthDropping: isPlayerHealthDropping || playerHealthFlashDirection === "decrease",
+          isHealthRising: playerHealthFlashDirection === "increase",
+        },
+        {
+          stateFlags: playerHealthFlashDirection
+            ? [playerHealthFlashDirection === "increase" ? "health-rising" : "health-dropping"]
+            : [],
+        },
+      ),
+    [battle.player, isPlayerHealthDropping, playerHealthFlashDirection],
+  );
+  const enemyCard = useMemo(
+    () =>
+      mapArenaEnemyToDisplayCard(
+        {
+          ...battle.enemy,
+          isHealthDropping: enemyHealthFlashDirection === "decrease",
+          isHealthRising: enemyHealthFlashDirection === "increase",
+        },
+        {
+          stateFlags: enemyHealthFlashDirection
+            ? [enemyHealthFlashDirection === "increase" ? "health-rising" : "health-dropping"]
+            : [],
+        },
+      ),
+    [battle.enemy, enemyHealthFlashDirection],
+  );
   const [hoveredInspectorKey, setHoveredInspectorKey] = useState<string | null>(null);
   const [hoveredInspectorPosition, setHoveredInspectorPosition] = useState<{
     left: number;
@@ -71,6 +113,8 @@ export function CloudArenaBattleState({
   const [motionState, setMotionState] = useState<CloudArenaBattleMotionState>({
     attackIds: {},
     hitIds: {},
+    healthIncreaseIds: {},
+    healthDecreaseIds: {},
     deathOverlays: {},
   });
   const groupedTurnActions = turnActions.length > 0
@@ -79,6 +123,10 @@ export function CloudArenaBattleState({
         action: entry.action,
         label: entry.label,
       }));
+  const battlefieldAttachmentState = useMemo(
+    () => buildBattlefieldAttachmentState(battle),
+    [battle],
+  );
 
   function getDefinitionJson(definitionId: string): string | null {
     const definition = cardDefinitions[definitionId];
@@ -134,6 +182,39 @@ export function CloudArenaBattleState({
       window.clearTimeout(existingTimer);
       delete animationTimersRef.current[key];
     }
+  }
+
+  function clearHealthFlashTimer(key: string): void {
+    const existingTimer = healthFlashTimersRef.current[key];
+
+    if (existingTimer !== undefined) {
+      window.clearTimeout(existingTimer);
+      delete healthFlashTimersRef.current[key];
+    }
+  }
+
+  function playHealthFlash(targetId: string, direction: "increase" | "decrease", durationMs: number): void {
+    const key = `health:${targetId}`;
+    clearHealthFlashTimer(key);
+
+    setHealthFlashDirections((current) => ({
+      ...current,
+      [targetId]: direction,
+    }));
+
+    healthFlashTimersRef.current[key] = window.setTimeout(() => {
+      setHealthFlashDirections((current) => {
+        if (!(targetId in current)) {
+          return current;
+        }
+
+        const nextDirections = { ...current };
+        delete nextDirections[targetId];
+        return nextDirections;
+      });
+
+      delete healthFlashTimersRef.current[key];
+    }, durationMs);
   }
 
   function playAttackAnimation(attackId: string, durationMs: number): void {
@@ -246,6 +327,11 @@ export function CloudArenaBattleState({
 
       const battlefieldCardModel = mapArenaPermanentToDisplayCard(slot, {
         disableActions: disablePermanentActions,
+        isTargetable: targetableBattlefieldPermanentIds.has(slot.instanceId),
+        targetTone: slot.controllerId === "enemy" ? "enemy" : "player",
+        stateFlags: healthFlashDirections[slot.instanceId]
+          ? [`health-${healthFlashDirections[slot.instanceId] === "increase" ? "rising" : "dropping"}`]
+          : [],
       });
 
       models.set(
@@ -261,6 +347,11 @@ export function CloudArenaBattleState({
 
       const enemyBattlefieldCardModel = mapArenaPermanentToDisplayCard(slot, {
         disableActions: disablePermanentActions,
+        isTargetable: targetableBattlefieldPermanentIds.has(slot.instanceId),
+        targetTone: slot.controllerId === "enemy" ? "enemy" : "player",
+        stateFlags: healthFlashDirections[slot.instanceId]
+          ? [`health-${healthFlashDirections[slot.instanceId] === "increase" ? "rising" : "dropping"}`]
+          : [],
       });
 
       models.set(
@@ -280,6 +371,8 @@ export function CloudArenaBattleState({
     onPlayHandCard,
     onUsePermanentAction,
     playableHandCards,
+    healthFlashDirections,
+    targetableBattlefieldPermanentIds,
     playerCard,
   ]);
 
@@ -306,6 +399,20 @@ export function CloudArenaBattleState({
       playAttackAnimation(resolvedAttackSourceId, 560);
     }
 
+    const previousPlayerHealth = previousBattle.player.health;
+    if (battle.player.health < previousPlayerHealth) {
+      setIsPlayerHealthDropping(true);
+
+      if (playerHealthDropTimerRef.current !== null) {
+        window.clearTimeout(playerHealthDropTimerRef.current);
+      }
+
+      playerHealthDropTimerRef.current = window.setTimeout(() => {
+        setIsPlayerHealthDropping(false);
+        playerHealthDropTimerRef.current = null;
+      }, 520);
+    }
+
     const diff = getBattleMotionDiff(previousBattle, battle);
 
     if (!resolvedAttackSourceId) {
@@ -318,6 +425,26 @@ export function CloudArenaBattleState({
       playHitAnimation(hitId, 260);
     }
 
+    for (const healthIncreaseId of diff.healthIncreaseIds) {
+      playHealthFlash(healthIncreaseId, "increase", 520);
+    }
+
+    for (const healthDecreaseId of diff.healthDecreaseIds) {
+      playHealthFlash(healthDecreaseId, "decrease", 520);
+    }
+
+    if (battle.player.health > previousBattle.player.health) {
+      playHealthFlash("player", "increase", 520);
+    } else if (battle.player.health < previousBattle.player.health) {
+      playHealthFlash("player", "decrease", 520);
+    }
+
+    if (battle.enemy.health > previousBattle.enemy.health) {
+      playHealthFlash("enemy", "increase", 520);
+    } else if (battle.enemy.health < previousBattle.enemy.health) {
+      playHealthFlash("enemy", "decrease", 520);
+    }
+
     for (const overlay of diff.deathOverlays) {
       const overlayKey = getBattleMotionOverlayKey(overlay);
       playDeathAnimation(overlayKey, 760, overlay);
@@ -327,6 +454,14 @@ export function CloudArenaBattleState({
   }, [battle]);
 
   useEffect(() => () => {
+    if (playerHealthDropTimerRef.current !== null) {
+      window.clearTimeout(playerHealthDropTimerRef.current);
+      playerHealthDropTimerRef.current = null;
+    }
+    for (const timerId of Object.values(healthFlashTimersRef.current)) {
+      window.clearTimeout(timerId);
+    }
+    healthFlashTimersRef.current = {};
     for (const timerId of Object.values(animationTimersRef.current)) {
       window.clearTimeout(timerId);
     }
@@ -562,6 +697,7 @@ export function CloudArenaBattleState({
             battlefield={battle.battlefield}
             legalActions={battle.legalActions}
             motionState={motionState}
+            hiddenPermanentIds={battlefieldAttachmentState.hiddenPermanentIds}
             getInspectableModel={getInspectableModel}
             getPermanentMenuActions={getPermanentMenuActions}
             getPermanentCounterEntries={getPermanentCounterEntries}
@@ -579,6 +715,7 @@ export function CloudArenaBattleState({
             battlefield={enemyBattlefield}
             legalActions={battle.legalActions}
             motionState={motionState}
+            stackedAttachmentsByTargetId={battlefieldAttachmentState.stackedAttachmentsByTargetId}
             getInspectableModel={getInspectableModel}
             getPermanentMenuActions={() => []}
             getPermanentCounterEntries={getPermanentCounterEntries}

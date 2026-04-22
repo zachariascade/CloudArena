@@ -19,6 +19,8 @@ const EMPTY_BATTLE_MOTION_STATE: CloudArenaBattleMotionState = {
   attackIds: {},
   hitIds: {},
   deathOverlays: {},
+  healthIncreaseIds: {},
+  healthDecreaseIds: {},
 };
 
 describe("shared display card mappers", () => {
@@ -464,6 +466,24 @@ describe("shared display card mappers", () => {
     expect(panelHtml).toContain("aria-label=\"Cost Tap\"");
     expect(panelHtml).toContain("aria-label=\"Cost 0\"");
     expect(panelHtml).toContain("T.svg");
+  });
+
+  it("renders Tubal-Cain with his local classics art", () => {
+    const model = mapArenaHandCardToDisplayCard(
+      {
+        instanceId: "card_4",
+        definitionId: "armory_disciple",
+        name: "Tubal-Cain, Forger of Bronze and Iron",
+        cost: 2,
+        effectSummary: "A master forger who turns devotion into artifacts.",
+      },
+      {
+        isPlayable: true,
+      },
+    );
+
+    expect(model.image?.url).toContain("/images/cards/classics/card_0041_tubal_cain_forger_of_bronze_and_iron.jpg");
+    expect(model.image?.alt).toContain("Tubal-Cain forging bronze and iron");
   });
 
   it("stacks attached equipment under the permanent that carries it", () => {
@@ -945,12 +965,12 @@ describe("shared display card mappers", () => {
     expect(html).not.toContain("card-face");
   });
 
-  it("does not render anointed banner as a guardian fallback", () => {
+  it("does not render the Ark of the Covenant as a guardian fallback", () => {
     const bannerCard = mapArenaPermanentToDisplayCard({
       instanceId: "anointed_banner_2",
       sourceCardInstanceId: "card_2",
       definitionId: "anointed_banner",
-      name: "Anointed Banner",
+      name: "Ark of the Covenant",
       isCreature: false,
       power: 0,
       health: 6,
@@ -973,8 +993,8 @@ describe("shared display card mappers", () => {
       ],
     });
 
-    expect(bannerCard.name).toBe("Anointed Banner");
-    expect(bannerCard.title).toBe("Consecrated Standard");
+    expect(bannerCard.name).toBe("Ark of the Covenant");
+    expect(bannerCard.title).toBe("Ark of the Covenant");
     expect(bannerCard.subtitle).toBe("Artifact");
     expect(bannerCard.textBlocks.some((entry) => entry.text.length > 0)).toBe(true);
   });

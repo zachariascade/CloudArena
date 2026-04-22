@@ -48,6 +48,7 @@ type DeckBuilderCreateModalDraft = {
   tagsText: string;
   notes: string;
 };
+type DeckBuilderCreateModalMode = "create" | "save_as";
 
 type DeckBuilderDraft = {
   sourceId: string | null;
@@ -94,9 +95,19 @@ export function cloneEntries(entries: CloudArenaDeckCardEntry[]): CloudArenaDeck
 
 function createEmptyCreateModalDraft(): DeckBuilderCreateModalDraft {
   return {
-    name: "",
+    name: "New deck",
     tagsText: "",
     notes: "",
+  };
+}
+
+export function buildCreateModalDraftFromDeckDraft(
+  draft: DeckBuilderDraft,
+): DeckBuilderCreateModalDraft {
+  return {
+    name: draft.name,
+    tagsText: draft.tagsText,
+    notes: draft.notes,
   };
 }
 
@@ -383,6 +394,7 @@ export function CloudArenaDeckBuilderPage({
   const [showSelectedOnly, setShowSelectedOnly] = useState(false);
   const [isCreateDeckModalOpen, setIsCreateDeckModalOpen] = useState(false);
   const [createModalDraft, setCreateModalDraft] = useState<DeckBuilderCreateModalDraft>(createEmptyCreateModalDraft);
+  const [createModalMode, setCreateModalMode] = useState<DeckBuilderCreateModalMode>("create");
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deckCatalogWarning, setDeckCatalogWarning] = useState<string | null>(null);
@@ -408,7 +420,9 @@ export function CloudArenaDeckBuilderPage({
     () => buildDraftFingerprint(safeDraft) !== draftFingerprintRef.current,
     [safeDraft],
   );
-  const startBattleHref = safeDraft.sourceId ? `/?deck=${encodeURIComponent(safeDraft.sourceId)}` : null;
+  const startBattleHref = safeDraft.sourceId
+    ? `/run?deck=${encodeURIComponent(safeDraft.sourceId)}`
+    : "/run";
 
   async function refreshCatalog(): Promise<void> {
     const [cardsResult, decksResult] = await Promise.allSettled([
@@ -498,13 +512,17 @@ export function CloudArenaDeckBuilderPage({
     await loadDeck(deckId);
   }
 
-  function openCreateDeckModal(): void {
-    setCreateModalDraft(createEmptyCreateModalDraft());
+  function openCreateDeckModal(draft?: DeckBuilderDraft): void {
+    setCreateModalDraft(
+      draft ? buildCreateModalDraftFromDeckDraft(draft) : createEmptyCreateModalDraft(),
+    );
+    setCreateModalMode(draft ? "save_as" : "create");
     setIsCreateDeckModalOpen(true);
   }
 
   function closeCreateDeckModal(): void {
     setIsCreateDeckModalOpen(false);
+    setCreateModalMode("create");
   }
 
   function handleSelectCard(cardId: string): void {
@@ -660,11 +678,11 @@ export function CloudArenaDeckBuilderPage({
                   type="button"
                   className="primary-button"
                   onClick={() => void handleSaveDraft()}
-                  disabled={isSaving || deckStats.cardCount < 20}
+                  disabled={isSaving}
                 >
                   {isSaving ? "Saving..." : safeDraft.sourceKind === "saved" ? "Save changes" : "Save as deck"}
                 </button>
-                <button type="button" className="ghost-button" onClick={openCreateDeckModal}>
+                <button type="button" className="ghost-button" onClick={() => openCreateDeckModal()}>
                   Add new deck
                 </button>
                 <button
@@ -858,16 +876,22 @@ export function CloudArenaDeckBuilderPage({
                 className="panel deckbuilder-modal"
                 role="dialog"
                 aria-modal="true"
-                aria-label="Create new deck"
+                aria-label={createModalMode === "save_as" ? "Save as deck" : "Create new deck"}
                 onClick={(event) => event.stopPropagation()}
               >
                 <header className="deckbuilder-modal-header">
-                  <strong>Create new deck</strong>
+                  <strong>{createModalMode === "save_as" ? "Save as deck" : "Create new deck"}</strong>
                   <span>
-                    This will save the current selected card set as a new deck.
-                    {deckStats.cardCount < 20 ? " You need at least 20 cards to save." : ""}
+                    {createModalMode === "save_as"
+                      ? "This will save the current selected card set as a new deck."
+                      : "Start a new deck from the current card selection."}
                   </span>
                 </header>
+                {deckStats.cardCount < 20 ? (
+                  <p className="deckbuilder-modal-error">
+                    You need at least 20 cards selected before this deck can be saved.
+                  </p>
+                ) : null}
                 <div className="deckbuilder-modal-fields">
                   <label className="field">
                     <span>Deck name</span>
@@ -913,21 +937,22 @@ export function CloudArenaDeckBuilderPage({
                   </label>
                 </div>
                 <div className="deckbuilder-modal-actions">
-                  <button
-                    type="button"
-                    className="primary-button"
-                    disabled={isSaving || deckStats.cardCount < 20}
-                    onClick={() => void handleCreateDeckFromModal()}
-                  >
-                    {isSaving ? "Creating..." : "Create deck"}
-                  </button>
-                  <button type="button" className="ghost-button" onClick={closeCreateDeckModal}>
-                    Cancel
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  className="primary-button"
+                  disabled={isSaving || deckStats.cardCount < 20}
+                  onClick={() => void handleCreateDeckFromModal()}
+                >
+                  {isSaving ? (createModalMode === "save_as" ? "Saving..." : "Creating...") : createModalMode === "save_as" ? "Save deck" : "Create deck"}
+                </button>
+                <button type="button" className="ghost-button" onClick={closeCreateDeckModal}>
+                  Cancel
+                </button>
               </div>
+              {error ? <p className="deckbuilder-modal-error">{error.message}</p> : null}
             </div>
-          ) : null}
+          </div>
+        ) : null}
 
           {error ? (
             <section className="panel">
