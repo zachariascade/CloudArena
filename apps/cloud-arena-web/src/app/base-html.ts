@@ -595,7 +595,7 @@ export function renderCloudArcanumWebHtml(
 
       .cloud-arena-game-screen {
         display: grid;
-        grid-template-rows: auto minmax(0, 1fr);
+        grid-template-rows: minmax(0, 1fr);
         gap: 0.75rem;
         min-height: 0;
         height: 100%;
@@ -1407,14 +1407,15 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cloud-arena-battle-main {
-        display: grid;
-        grid-template-rows: minmax(0, 1fr) auto;
+        display: flex;
+        flex-direction: column;
         gap: 0.8rem;
         min-height: 0;
         height: 100%;
       }
 
       .cloud-arena-battlefield-stage {
+        flex: 1 1 auto;
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         gap: 0.8rem;
@@ -1563,7 +1564,7 @@ export function renderCloudArcanumWebHtml(
       .cloud-arena-hud-health-bar-fill {
         height: 100%;
         border-radius: inherit;
-        background: linear-gradient(90deg, #b91c1c, #ef4444);
+        background: linear-gradient(90deg, #16a34a, #4ade80);
         transition:
           width 180ms ease,
           filter 180ms ease,
@@ -1765,9 +1766,11 @@ export function renderCloudArcanumWebHtml(
         grid-auto-flow: column;
         grid-auto-columns: var(--display-card-width);
         gap: 0;
+        min-height: 0;
+        height: auto;
         overflow-x: auto;
         overflow-y: hidden;
-        padding: 1rem 0.35rem 0.95rem;
+        padding: 0.65rem 0.35rem 0.7rem;
         scroll-snap-type: x proximity;
         --hand-card-stack-x-scale: 1;
         --hand-card-stack-y-scale: 1;
@@ -2466,6 +2469,10 @@ export function renderCloudArcanumWebHtml(
       }
 
       @media (max-width: 959px) {
+        .cloud-arena-hand-tray {
+          height: auto;
+        }
+
         .cloud-arena-hand-tray-layout {
           grid-template-columns: minmax(0, 1fr);
         }
@@ -2493,6 +2500,10 @@ export function renderCloudArcanumWebHtml(
       }
 
       @media (max-width: 639px) {
+        .cloud-arena-hand-tray {
+          height: auto;
+        }
+
         .trace-viewer-hand-scroll {
           --hand-card-stack-x-scale: 0.55;
           --hand-card-stack-y-scale: 0.72;
@@ -2832,6 +2843,11 @@ export function renderCloudArcanumWebHtml(
         grid-template-columns: minmax(12rem, 1fr) minmax(0, var(--display-card-width));
       }
 
+      .display-card-enemy-stack {
+        display: grid;
+        gap: 0.55rem;
+      }
+
       .display-card-main-column {
         display: grid;
         gap: 0.4rem;
@@ -2875,6 +2891,10 @@ export function renderCloudArcanumWebHtml(
         align-self: stretch;
         min-height: 100%;
         align-content: end;
+      }
+
+      .display-card-enemy-stack > .display-card-health-panel {
+        width: 100%;
       }
 
       .display-card-energy-panel {
@@ -2923,7 +2943,6 @@ export function renderCloudArcanumWebHtml(
 
       .display-card-health-strip {
         display: grid;
-        grid-template-columns: auto minmax(0, 1fr);
         align-items: center;
         gap: 0.65rem;
       }
@@ -2934,15 +2953,16 @@ export function renderCloudArcanumWebHtml(
 
       .display-card-health-meter {
         display: grid;
-        gap: 0.3rem;
+        gap: 0;
+        width: 100%;
         min-width: 0;
       }
 
       .display-card-health-row {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        gap: 0.6rem;
+        gap: 0.45rem;
+        width: 100%;
         color: var(--muted);
         font-size: 0.78rem;
         font-weight: 700;
@@ -2951,10 +2971,17 @@ export function renderCloudArcanumWebHtml(
       }
 
       .display-card-health-row strong {
+        flex: 0 0 auto;
         color: var(--ink);
         font-size: 0.9rem;
         letter-spacing: 0;
         text-transform: none;
+      }
+
+      .display-card-health-row .trace-viewer-health-bar {
+        flex: 1 1 auto;
+        min-width: 0;
+        height: 0.65rem;
       }
 
       .display-card-block-pill {
@@ -3029,6 +3056,9 @@ export function renderCloudArcanumWebHtml(
 
       .cloud-arena-hand-tray {
         min-height: 0;
+        height: auto;
+        align-self: end;
+        margin-top: auto;
       }
 
       .cloud-arena-hand-tray-layout {
@@ -3036,6 +3066,7 @@ export function renderCloudArcanumWebHtml(
         grid-template-columns: minmax(15rem, 16.5rem) minmax(0, 1fr);
         gap: 0.9rem;
         min-height: 0;
+        height: auto;
         align-items: stretch;
       }
 
@@ -3044,7 +3075,8 @@ export function renderCloudArcanumWebHtml(
         gap: 0.7rem;
         align-self: stretch;
         align-content: start;
-        min-height: 100%;
+        min-height: 0;
+        height: auto;
         min-width: 0;
         padding: 1rem;
         border: 1px solid rgba(130, 153, 190, 0.22);
