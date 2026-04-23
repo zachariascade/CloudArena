@@ -1960,6 +1960,10 @@ export function renderCloudArcanumWebHtml(
         width: 100%;
       }
 
+      .cloud-arena-battlefield-piece-stack.is-action-menu-open {
+        z-index: 6;
+      }
+
       .cloud-arena-battlefield-blocker-stack {
         position: relative;
         z-index: 3;
@@ -1985,7 +1989,7 @@ export function renderCloudArcanumWebHtml(
         display: grid;
         justify-items: center;
         width: 100%;
-        margin-top: -35%;
+        margin-top: -70%;
         pointer-events: auto;
       }
 
@@ -2002,7 +2006,7 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cloud-arena-battlefield-attachment-card-shell + .cloud-arena-battlefield-attachment-card-shell {
-        margin-top: -35%;
+        margin-top: -42%;
       }
 
       .cloud-arena-battlefield-active-attachment-overlay {
@@ -2356,6 +2360,8 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cloud-arena-permanent-action-face {
+        position: relative;
+        z-index: 7;
         display: grid;
         grid-template-rows: auto minmax(0, 1fr) auto;
         gap: 0.8rem;

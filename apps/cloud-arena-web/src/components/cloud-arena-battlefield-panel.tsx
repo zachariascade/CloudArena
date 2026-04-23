@@ -399,7 +399,14 @@ export function CloudArenaBattlefieldPanel({
 
                     return (
                       <>
-                        <div className="cloud-arena-battlefield-piece-stack">
+                        <div
+                          className={[
+                            "cloud-arena-battlefield-piece-stack",
+                            isActionListOpen ? "is-action-menu-open" : null,
+                          ]
+                            .filter(Boolean)
+                            .join(" ")}
+                        >
                           {zoneKeyPrefix === "enemy_battlefield" ? (() => {
                             const intentBubble = getPermanentIntentBubble(slot);
 
