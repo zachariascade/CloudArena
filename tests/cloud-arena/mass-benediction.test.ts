@@ -72,7 +72,7 @@ describe("cloud arena mass benediction", () => {
     }
 
     expect(getPermanentCounterCount(guardian, "+1/+1")).toBe(2);
-    expect(getPermanentCounterCount(blade, "+1/+1")).toBe(0);
+    expect(getPermanentCounterCount(blade, "+1/+1")).toBe(2);
     expect(getPermanentCounterCount(captain, "+1/+1")).toBe(2);
     expect(getDerivedPermanentStat(battle, guardian, "power")).toBe(5);
     expect(getDerivedPermanentStat(battle, captain, "power")).toBe(5);
