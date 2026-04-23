@@ -1021,14 +1021,14 @@ describe("cloud arena combat engine edge cases", () => {
         intent: "attack 10",
       },
       battlefield: [
-        "slot 1: Guardian, hp=10/10, block=0, acted=no, tapped=no, defending=no",
+        "slot 1: Guardian, hp=10/10, block=0, acted=no, tapped=no, defending=no, blockingFor=none",
         "slot 2: empty",
         "slot 3: empty",
         "slot 4: empty",
         "slot 5: empty",
       ],
       enemyBattlefield: [
-        "slot 1: Ravaging Demon, hp=30/30, block=0, acted=no, tapped=no, defending=no",
+        "slot 1: Ravaging Demon, hp=30/30, block=0, acted=no, tapped=no, defending=no, blockingFor=none",
         "slot 2: empty",
         "slot 3: empty",
         "slot 4: empty",

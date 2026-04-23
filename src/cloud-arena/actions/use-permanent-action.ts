@@ -12,7 +12,7 @@ import {
 } from "../core/activated-abilities.js";
 import { evaluateCondition } from "../core/conditions.js";
 import { getDerivedPermanentActionAmount } from "../core/derived-stats.js";
-import { findPermanentById } from "../core/selectors.js";
+import { findPermanentById, selectPermanents } from "../core/selectors.js";
 import { permanentAttacksAllEnemyPermanents } from "../core/permanents.js";
 import { emitRulesEvent } from "../core/rules-events.js";
 import type {
@@ -174,23 +174,28 @@ export function usePermanentAction(
       state.blockingQueue.push(permanent.instanceId);
     }
 
-    state.pendingTargetRequest = {
-      id: `target_${state.turnNumber}_${state.nextTargetRequestIndex}`,
-      prompt: "Choose an enemy to block for",
-      optional: false,
-      targetKind: "permanent",
-      selector: {
-        zone: "enemy_battlefield",
-        controller: "opponent",
-        cardType: "permanent",
-      },
-      effects: [],
-      nextEffectIndex: 0,
-      context: {
-        defendingPermanentId: permanent.instanceId,
-      },
-    };
-    state.nextTargetRequestIndex += 1;
+    const selector = createEnemyBattlefieldAttackSelector();
+    const legalBlockTargets = selectPermanents(state, selector, {
+      defendingPermanentId: permanent.instanceId,
+    });
+
+    if (legalBlockTargets.length === 1) {
+      permanent.blockingTargetPermanentId = legalBlockTargets[0]?.instanceId ?? null;
+    } else if (legalBlockTargets.length > 1) {
+      state.pendingTargetRequest = {
+        id: `target_${state.turnNumber}_${state.nextTargetRequestIndex}`,
+        prompt: "Choose an enemy to block for",
+        optional: false,
+        targetKind: "permanent",
+        selector,
+        effects: [],
+        nextEffectIndex: 0,
+        context: {
+          defendingPermanentId: permanent.instanceId,
+        },
+      };
+      state.nextTargetRequestIndex += 1;
+    }
 
     emitRulesEvent(state, {
       type: "permanent_blocked",

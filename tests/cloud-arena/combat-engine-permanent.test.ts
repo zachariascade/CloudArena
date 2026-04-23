@@ -268,6 +268,47 @@ describe("cloud arena combat engine permanent flow", () => {
     );
   });
 
+  it("defend asks for a target only when multiple enemy permanents can be blocked", () => {
+    const battle = createTestBattle({
+      playerDeck: ["guardian", "attack", "defend", "attack", "defend"],
+      enemy: {
+        name: "Ravaging Demon",
+        health: 30,
+        basePower: 10,
+        behavior: [{ attackAmount: 10 }],
+        startingPermanents: ["enemy_husk"],
+      },
+    });
+
+    const guardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
+
+    if (!guardianCard) {
+      throw new Error("Expected guardian in opening hand.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: guardianCard.instanceId,
+    });
+    applyBattleAction(battle, { type: "end_turn" });
+
+    const guardianPermanent = battle.battlefield[0];
+
+    if (!guardianPermanent) {
+      throw new Error("Expected guardian on battlefield.");
+    }
+
+    applyBattleAction(battle, {
+      type: "use_permanent_action",
+      permanentId: guardianPermanent.instanceId,
+      action: "defend",
+    });
+
+    expect(battle.pendingTargetRequest).toBeTruthy();
+    expect(battle.pendingTargetRequest?.prompt).toBe("Choose an enemy to block for");
+    expect(guardianPermanent.blockingTargetPermanentId).toBeNull();
+  });
+
   it("sweeps every enemy permanent when Judgment Blade is equipped", () => {
     const cardDefinitions: CardDefinitionLibrary = {
       ...TEST_CARD_DEFINITIONS,
