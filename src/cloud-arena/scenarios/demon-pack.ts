@@ -6,7 +6,7 @@ export const demonPackScenarioPreset: CloudArenaScenarioPreset = {
   id: "demon_pack",
   label: "Demon Pack",
   notes: "A multi-enemy encounter with a leader and two distinct demon bodies on the field.",
-  playerHealth: 20,
+  playerHealth: 100,
   deck: mixedGuardianDeckPreset.cards,
   enemy: demonPackEnemyPreset,
   recommendedMaxSteps: 220,

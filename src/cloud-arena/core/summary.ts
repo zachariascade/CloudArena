@@ -27,6 +27,7 @@ export type BattleSummary = {
 };
 
 export function buildBattleSummary(state: BattleState): BattleSummary {
+  const compactSlots = 5;
   const primaryEnemyPermanent = getPrimaryEnemyPermanent(state);
   const enemyName = primaryEnemyPermanent?.name ?? state.enemy.name;
   const enemyHealth = primaryEnemyPermanent?.health ?? state.enemy.health;
@@ -52,7 +53,7 @@ export function buildBattleSummary(state: BattleState): BattleSummary {
       block: enemyBlock,
       intent: formatEnemyIntent(state.enemy.intent),
     },
-    battlefield: state.battlefield.map((permanent, index) => {
+    battlefield: state.battlefield.slice(0, compactSlots).map((permanent, index) => {
       if (!permanent) {
         return `slot ${index + 1}: empty`;
       }
@@ -67,7 +68,7 @@ export function buildBattleSummary(state: BattleState): BattleSummary {
         `blockingFor=${permanent.blockingTargetPermanentId ?? "none"}`,
       ].join(", ");
     }),
-    enemyBattlefield: state.enemyBattlefield.map((permanent, index) => {
+    enemyBattlefield: state.enemyBattlefield.slice(0, compactSlots).map((permanent, index) => {
       if (!permanent) {
         return `slot ${index + 1}: empty`;
       }

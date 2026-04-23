@@ -23,7 +23,7 @@ export const massBenedictionCardDefinition: CardDefinition = {
       type: "add_counter",
       target: {
         zone: "battlefield",
-        cardType: "creature",
+        cardType: "permanent",
       },
       powerDelta: 1,
       healthDelta: 1,
