@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
 import { Fragment } from "react";
+import type { MouseEvent } from "react";
 
 import mana1Symbol from "../assets/mtg-symbols/mana/1.svg";
 import mana2Symbol from "../assets/mtg-symbols/mana/2.svg";
@@ -19,6 +20,10 @@ import { AbilityCostChip } from "./ability-cost-chip.js";
 type DisplayCardProps = {
   model: DisplayCardModel;
   className?: string;
+  detailsAction?: {
+    ariaLabel?: string;
+    onClick: (event: MouseEvent<HTMLButtonElement>) => void;
+  };
 };
 
 function formatCardDisplayName(name: string, title: string | null | undefined): string {
@@ -180,7 +185,7 @@ function renderDisplayImage(model: DisplayCardModel): ReactElement {
   );
 }
 
-export function DisplayCard({ model, className }: DisplayCardProps): ReactElement {
+export function DisplayCard({ model, className, detailsAction }: DisplayCardProps): ReactElement {
   const displayName = formatCardDisplayName(model.name, model.title);
   const healthBar = model.healthBar ?? null;
   const energyBar = model.energyBar ?? null;
@@ -314,6 +319,19 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
                 style={{ width: `${healthPercent}%` }}
               />
             </div>
+            {detailsAction ? (
+              <button
+                type="button"
+                className="display-card-info-button"
+                aria-label={detailsAction.ariaLabel ?? `Details for ${model.name}`}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  detailsAction.onClick(event);
+                }}
+              >
+                <span aria-hidden="true">i</span>
+              </button>
+            ) : null}
           </div>
         </div>
       </div>

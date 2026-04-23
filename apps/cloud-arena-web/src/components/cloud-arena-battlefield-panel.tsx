@@ -292,16 +292,25 @@ function getPermanentMenuActionList(
           <DisplayCard
             className={`trace-viewer-battlefield-card cloud-arena-battlefield-card${isAttackAnimated ? " is-attacking" : ""}${isHitAnimated ? " is-hit" : ""}`}
             model={permanentCardModel}
+            detailsAction={
+              zoneKeyPrefix === "enemy_battlefield"
+                ? {
+                    onClick: (event) => onOpenDetails(`${zoneKeyPrefix}:${permanent.instanceId}`, event),
+                  }
+                : undefined
+            }
           />
         </div>
       )}
-      <button
-        type="button"
-        className="cloud-arena-card-details-button cloud-arena-battlefield-details-button"
-        onClick={(event) => onOpenDetails(`${zoneKeyPrefix}:${permanent.instanceId}`, event)}
-      >
-        details
-      </button>
+      {zoneKeyPrefix !== "enemy_battlefield" ? (
+        <button
+          type="button"
+          className="cloud-arena-card-details-button cloud-arena-battlefield-details-button"
+          onClick={(event) => onOpenDetails(`${zoneKeyPrefix}:${permanent.instanceId}`, event)}
+        >
+          details
+        </button>
+      ) : null}
     </>
   );
 }
@@ -539,6 +548,13 @@ export function CloudArenaBattlefieldPanel({
                               <DisplayCard
                                 className={`trace-viewer-battlefield-card cloud-arena-battlefield-card${isAttackAnimated ? " is-attacking" : ""}${isHitAnimated ? " is-hit" : ""}`}
                                 model={permanentCardModel}
+                                detailsAction={
+                                  slot.controllerId === "enemy"
+                                    ? {
+                                        onClick: (event) => onOpenDetails(`${zoneKeyPrefix}:${slot.instanceId}`, event),
+                                      }
+                                    : undefined
+                                }
                               />
                             </div>
                           )}
@@ -616,13 +632,15 @@ export function CloudArenaBattlefieldPanel({
                             </div>
                           ) : null}
                         </div>
-                        <button
-                          type="button"
-                          className="cloud-arena-card-details-button cloud-arena-battlefield-details-button"
-                          onClick={(event) => onOpenDetails(`${zoneKeyPrefix}:${slot.instanceId}`, event)}
-                        >
-                          details
-                        </button>
+                        {slot.controllerId !== "enemy" ? (
+                          <button
+                            type="button"
+                            className="cloud-arena-card-details-button cloud-arena-battlefield-details-button"
+                            onClick={(event) => onOpenDetails(`${zoneKeyPrefix}:${slot.instanceId}`, event)}
+                          >
+                            details
+                          </button>
+                        ) : null}
                       </>
                     );
                   })()

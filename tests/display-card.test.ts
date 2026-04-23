@@ -852,6 +852,44 @@ describe("shared display card mappers", () => {
     expect(html).toContain("details");
   });
 
+  it("renders an info control for enemy-controlled permanents", () => {
+    const enemyPermanent = mapArenaPermanentToDisplayCard({
+      instanceId: "enemy_permanent_1",
+      sourceCardInstanceId: "enemy_permanent_1",
+      definitionId: "enemy_grunt_demon",
+      name: "Grunt Demon",
+      controllerId: "enemy",
+      isCreature: true,
+      power: 5,
+      health: 18,
+      maxHealth: 18,
+      block: 0,
+      intentLabel: "attack 5",
+      intentQueueLabels: ["attack 5"],
+      hasActedThisTurn: false,
+      isTapped: false,
+      isDefending: false,
+      slotIndex: 0,
+      actions: [],
+    });
+
+    const html = renderToStaticMarkup(
+      createElement(DisplayCard, {
+        model: {
+          ...enemyPermanent,
+          stateFlags: [...enemyPermanent.stateFlags, "enemy-controlled"],
+        },
+        detailsAction: {
+          onClick: () => undefined,
+        },
+      }),
+    );
+
+    expect(html).toContain("display-card-info-button");
+    expect(html).toContain(">i<");
+    expect(html).not.toContain("details");
+  });
+
   it("renders details controls in the arena hand tray without playable text", () => {
     const battle: CloudArenaBattleViewModel = {
       turnNumber: 1,
