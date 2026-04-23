@@ -15,6 +15,7 @@ type PileKind = "draw" | "discard" | "graveyard";
 type CloudArenaHandTrayProps = {
   battle: CloudArenaBattleViewModel;
   player: CloudArenaBattleViewModel["player"];
+  battlefieldSlotCount: number;
   maxPlayerEnergy: number;
   getInspectableModel: (key: string) => Parameters<typeof DisplayCard>[0]["model"];
   bindInspectorInteractions: (key: string) => {
@@ -59,6 +60,7 @@ function getPileLabel(pile: PileKind): string {
 export function CloudArenaHandTray({
   battle,
   player,
+  battlefieldSlotCount,
   maxPlayerEnergy,
   getInspectableModel,
   bindInspectorInteractions,
@@ -242,6 +244,9 @@ export function CloudArenaHandTray({
         >
           <div className="cloud-arena-hand-hud-header">
             <strong>Pilgrim Duelist</strong>
+            <span className="cloud-arena-hand-hud-slot-count" aria-label={`Battlefield slots ${battle.battlefield.length} of ${battlefieldSlotCount}`}>
+              {battle.battlefield.length}/{battlefieldSlotCount}
+            </span>
           </div>
           <div className="cloud-arena-hand-hud-line">
             <div
@@ -343,7 +348,12 @@ export function CloudArenaHandTray({
               return (
                 <div
                   key={card.instanceId}
-                  className="cloud-arena-hand-card-shell"
+                  className={[
+                    "cloud-arena-hand-card-shell",
+                    card.instanceId === pendingHandCardInstanceId ? "is-selected" : null,
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
                   style={cardStyle}
                   {...bindInspectorInteractions(`hand:${card.instanceId}`)}
                 >

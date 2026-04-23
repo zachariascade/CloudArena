@@ -12,6 +12,17 @@ import type {
 
 import type { TraceViewerStepViewModel } from "./cloud-arena-view-model-helpers.js";
 
+function compactBattlefieldSlots(
+  battlefield: Array<CloudArenaPermanentSnapshot | null>,
+): Array<CloudArenaPermanentSnapshot | null> {
+  return battlefield
+    .filter((slot): slot is CloudArenaPermanentSnapshot => slot !== null)
+    .map((slot, index) => ({
+      ...slot,
+      slotIndex: index,
+    }));
+}
+
 export type CloudArenaBattleViewModel = {
   turnNumber: number;
   phase: BattlePhase;
@@ -42,6 +53,7 @@ export type CloudArenaBattleViewModel = {
     intentQueueLabels?: string[];
   };
   battlefield: Array<CloudArenaPermanentSnapshot | null>;
+  battlefieldSlotCount: number;
   enemyBattlefield?: Array<CloudArenaPermanentSnapshot | null>;
   pendingTargetRequest?: CloudArenaPendingTargetRequestSnapshot | null;
   blockingQueue: string[];
@@ -80,14 +92,17 @@ export function buildBattleViewModelFromTraceStep(
       intentLabel: step.enemy.intentLabel,
       intentQueueLabels: [],
     },
-    battlefield: step.battlefield.map((slot) =>
-      slot
-        ? {
-            ...slot,
-            actions: slot.actions.map((action) => ({ ...action })),
-          }
-        : null,
+    battlefield: compactBattlefieldSlots(
+      step.battlefield.map((slot) =>
+        slot
+          ? {
+              ...slot,
+              actions: slot.actions.map((action) => ({ ...action })),
+            }
+          : null,
+      ),
     ),
+    battlefieldSlotCount: step.battlefield.length,
     enemyBattlefield: Array.from({ length: step.battlefield.length }, () => null),
     pendingTargetRequest: null,
     blockingQueue: [...step.blockingQueue],
@@ -144,21 +159,26 @@ export function buildBattleViewModelFromSessionSnapshot(
       intentLabel: snapshot.enemy.intentLabel,
       intentQueueLabels: [...snapshot.enemy.intentQueueLabels],
     },
-    battlefield: snapshot.battlefield.map((slot) =>
-      slot
-        ? {
-            ...slot,
-            actions: slot.actions.map((action) => ({ ...action })),
-          }
-        : null,
+    battlefield: compactBattlefieldSlots(
+      snapshot.battlefield.map((slot) =>
+        slot
+          ? {
+              ...slot,
+              actions: slot.actions.map((action) => ({ ...action })),
+            }
+          : null,
+      ),
     ),
-    enemyBattlefield: snapshot.enemyBattlefield.map((slot) =>
-      slot
-        ? {
-            ...slot,
-            actions: slot.actions.map((action) => ({ ...action })),
-          }
-        : null,
+    battlefieldSlotCount: snapshot.battlefield.length,
+    enemyBattlefield: compactBattlefieldSlots(
+      snapshot.enemyBattlefield.map((slot) =>
+        slot
+          ? {
+              ...slot,
+              actions: slot.actions.map((action) => ({ ...action })),
+            }
+          : null,
+      ),
     ),
     pendingTargetRequest: snapshot.pendingTargetRequest
       ? {

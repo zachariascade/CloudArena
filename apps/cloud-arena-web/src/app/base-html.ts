@@ -1043,7 +1043,7 @@ export function renderCloudArcanumWebHtml(
         min-width: 0;
         min-height: 0;
         overflow-x: auto;
-        overflow-y: hidden;
+        overflow-y: visible;
         padding: 0.2rem 0.2rem 0.85rem;
         scroll-snap-type: x proximity;
       }
@@ -1769,12 +1769,19 @@ export function renderCloudArcanumWebHtml(
         min-height: 0;
         height: auto;
         overflow-x: auto;
-        overflow-y: hidden;
-        padding: 0.65rem 0.35rem 0.7rem;
+        overflow-y: visible;
+        padding: clamp(1.2rem, 3vh, 2.2rem) 0.35rem 0.7rem;
         scroll-snap-type: x proximity;
+        align-content: end;
+        min-height: calc(var(--display-card-width) * 2.15 + var(--hand-card-hover-rise, 0rem) + 2.4rem);
+        --hand-card-peek-offset: clamp(5.75rem, 12.5vh, 10rem);
+        --hand-card-hover-rise: clamp(0.55rem, 1vh, 1.25rem);
+        --hand-card-selected-rise: clamp(24rem, 42vh, 40rem);
         --hand-card-stack-x-scale: 1;
         --hand-card-stack-y-scale: 1;
         --hand-card-stack-tilt-scale: 1;
+        transform: translate3d(0, var(--hand-card-peek-offset), 0);
+        transform-origin: 50% 100%;
       }
 
       .trace-viewer-hand-card {
@@ -1953,13 +1960,32 @@ export function renderCloudArcanumWebHtml(
         width: 100%;
       }
 
+      .cloud-arena-battlefield-blocker-stack {
+        position: relative;
+        z-index: 3;
+        display: grid;
+        justify-items: center;
+        width: 100%;
+        margin-top: -35%;
+        pointer-events: auto;
+      }
+
+      .cloud-arena-battlefield-blocker-card-shell {
+        position: relative;
+        width: 100%;
+      }
+
+      .cloud-arena-battlefield-blocker-card-shell + .cloud-arena-battlefield-blocker-card-shell {
+        margin-top: -35%;
+      }
+
       .cloud-arena-battlefield-attachment-stack {
         position: relative;
         z-index: 1;
         display: grid;
         justify-items: center;
         width: 100%;
-        margin-top: -4.3rem;
+        margin-top: -35%;
         pointer-events: auto;
       }
 
@@ -1976,7 +2002,7 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cloud-arena-battlefield-attachment-card-shell + .cloud-arena-battlefield-attachment-card-shell {
-        margin-top: -4.55rem;
+        margin-top: -35%;
       }
 
       .cloud-arena-battlefield-active-attachment-overlay {
@@ -2478,9 +2504,13 @@ export function renderCloudArcanumWebHtml(
         }
 
         .trace-viewer-hand-scroll {
+          --hand-card-peek-offset: clamp(4rem, 9vh, 7.5rem);
+          --hand-card-hover-rise: clamp(0.4rem, 0.8vh, 1rem);
+          --hand-card-selected-rise: clamp(20rem, 36vh, 32rem);
           --hand-card-stack-x-scale: 0.7;
           --hand-card-stack-y-scale: 0.82;
           --hand-card-stack-tilt-scale: 0.8;
+          min-height: calc(var(--display-card-width) * 1.98 + var(--hand-card-hover-rise, 0rem) + 2.1rem);
         }
 
         .cloud-arena-hand-hud {
@@ -2505,9 +2535,13 @@ export function renderCloudArcanumWebHtml(
         }
 
         .trace-viewer-hand-scroll {
+          --hand-card-peek-offset: clamp(3rem, 7vh, 5.5rem);
+          --hand-card-hover-rise: clamp(0.3rem, 0.6vh, 0.85rem);
+          --hand-card-selected-rise: clamp(17rem, 32vh, 26rem);
           --hand-card-stack-x-scale: 0.55;
           --hand-card-stack-y-scale: 0.72;
           --hand-card-stack-tilt-scale: 0.68;
+          min-height: calc(var(--display-card-width) * 1.84 + var(--hand-card-hover-rise, 0rem) + 1.5rem);
         }
       }
 
@@ -3090,13 +3124,28 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cloud-arena-hand-hud-header {
-        display: grid;
-        gap: 0.14rem;
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 0.6rem;
       }
 
       .cloud-arena-hand-hud-header strong {
         font-size: 1.08rem;
         line-height: 1.15;
+      }
+
+      .cloud-arena-hand-hud-slot-count {
+        flex-shrink: 0;
+        padding: 0.22rem 0.48rem;
+        border-radius: 999px;
+        border: 1px solid rgba(30, 64, 175, 0.14);
+        background: rgba(255, 255, 255, 0.7);
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        white-space: nowrap;
       }
 
       .cloud-arena-hand-hud-line {
@@ -3295,10 +3344,53 @@ export function renderCloudArcanumWebHtml(
       .cloud-arena-hand-card-shell:hover,
       .cloud-arena-hand-card-shell:focus-within {
         z-index: 1000;
-        filter: saturate(1.03);
+        filter: saturate(1.05) brightness(1.02);
         transform:
-          translate3d(0, calc(var(--hand-card-stack-lift, 0rem) * -1.15), 0)
-          scale(1.03)
+          translate3d(
+            0,
+            calc(
+              var(--hand-card-stack-lift, 0rem) * -1.15
+              - var(--hand-card-peek-offset, 0rem)
+              - var(--hand-card-hover-rise, 24rem)
+            ),
+            0
+          )
+          scale(1.01)
+          rotate(0deg);
+      }
+
+      .cloud-arena-hand-card-shell.is-selected {
+        z-index: 1400;
+        filter: saturate(1.08) brightness(1.03);
+        transform:
+          translate3d(
+            0,
+            calc(
+              var(--hand-card-stack-lift, 0rem) * -1.15
+              - var(--hand-card-peek-offset, 0rem)
+              - var(--hand-card-selected-rise, 30rem)
+            ),
+            0
+          )
+          scale(1.05)
+          rotate(0deg);
+      }
+
+      .cloud-arena-hand-card-shell.is-selected:hover,
+      .cloud-arena-hand-card-shell.is-selected:focus-within {
+        z-index: 1500;
+        filter: saturate(1.1) brightness(1.05);
+        transform:
+          translate3d(
+            0,
+            calc(
+              var(--hand-card-stack-lift, 0rem) * -1.15
+              - var(--hand-card-peek-offset, 0rem)
+              - calc(var(--hand-card-selected-rise, 30rem) * 1.12)
+            ),
+            0
+          )
+          scale(1.08)
           rotate(0deg);
       }
 
