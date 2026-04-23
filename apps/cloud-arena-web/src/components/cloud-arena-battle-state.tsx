@@ -728,6 +728,7 @@ export function CloudArenaBattleState({
           <CloudArenaHandTray
             battle={battle}
             player={battle.player}
+            battlefieldSlotCount={battle.battlefieldSlotCount}
             maxPlayerEnergy={maxPlayerEnergy}
             getInspectableModel={getInspectableModel}
             bindInspectorInteractions={bindInspectorInteractions}

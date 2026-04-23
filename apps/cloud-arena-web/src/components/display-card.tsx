@@ -199,17 +199,12 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
   const blockStat = healthBar
     ? stats.find((stat) => stat.label.toLowerCase() === "block") ?? null
     : null;
-  const intentBlock =
-    model.variant === "enemy"
-      ? textBlocks.find((block) => block.kind === "intent") ?? null
-      : null;
-  const visibleTextBlocks = intentBlock
-    ? textBlocks.filter((block) => block !== intentBlock)
-    : textBlocks;
   const visibleStats = blockStat
     ? stats.filter((stat) => stat !== blockStat)
     : stats;
-  const usesSideCombatPanel = model.variant === "player" || model.variant === "enemy";
+  const usesSideCombatPanel = model.variant === "player";
+  const isTopCombatCard =
+    model.variant === "enemy" || (model.variant === "permanent" && stateFlags.includes("enemy-controlled"));
   const isPermanentCard = model.variant === "permanent";
   const isExhaustedPermanent = isPermanentCard && stateFlags.includes("spent");
   const isDefendingPermanent = isPermanentCard && stateFlags.includes("defending");
@@ -234,7 +229,7 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
       </div>
 
       <div className="card-face-rules">
-        {visibleTextBlocks.map((block, index) => (
+        {textBlocks.map((block, index) => (
           <p
             key={`${block.kind}-${index}`}
             className={[
@@ -305,21 +300,20 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
         ) : null}
         <div className="display-card-health-meter">
           <div className="display-card-health-row">
-            <span>Health</span>
             <strong>{healthBar.label ?? `${healthBar.current}/${healthBar.max}`}</strong>
-          </div>
-          <div
-            className="trace-viewer-health-bar"
-            role="progressbar"
-            aria-label={`${model.name} health`}
-            aria-valuemin={0}
-            aria-valuemax={healthBar.max}
-            aria-valuenow={healthBar.current}
-          >
             <div
-              className="trace-viewer-health-bar-fill"
-              style={{ width: `${healthPercent}%` }}
-            />
+              className="trace-viewer-health-bar"
+              role="progressbar"
+              aria-label={`${model.name} health`}
+              aria-valuemin={0}
+              aria-valuemax={healthBar.max}
+              aria-valuenow={healthBar.current}
+            >
+              <div
+                className="trace-viewer-health-bar-fill"
+                style={{ width: `${healthPercent}%` }}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -338,11 +332,6 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
               <strong>{energyLabel}</strong>
             </div>
           </div>
-        </div>
-      ) : null}
-      {intentBlock ? (
-        <div className="display-card-intent-banner" aria-label={`${model.name} intent`}>
-          {intentBlock.text}
         </div>
       ) : null}
     </div>
@@ -414,9 +403,14 @@ export function DisplayCard({ model, className }: DisplayCardProps): ReactElemen
         .join(" ")}
       data-variant={model.variant}
     >
-      {usesSideCombatPanel && combatPanel ? (
+      {isTopCombatCard && combatPanel ? (
+        <div className="display-card-enemy-stack">
+          {combatPanel}
+          {faceContent}
+          {lowerContent}
+        </div>
+      ) : usesSideCombatPanel && combatPanel ? (
         <div className={`display-card-character-layout display-card-character-layout-${model.variant}`}>
-          {model.variant === "enemy" ? combatPanel : null}
           <div className="display-card-main-column">
             {faceContent}
             {lowerContent}

@@ -33,6 +33,8 @@ function makePermanent(
 }
 
 function makeBattle(overrides: Partial<CloudArenaBattleViewModel>): CloudArenaBattleViewModel {
+  const battlefieldSlotCount = overrides.battlefieldSlotCount ?? 0;
+
   return {
     turnNumber: 1,
     phase: "player_action",
@@ -63,6 +65,7 @@ function makeBattle(overrides: Partial<CloudArenaBattleViewModel>): CloudArenaBa
     blockingQueue: [],
     legalActions: [],
     ...overrides,
+    battlefieldSlotCount,
   };
 }
 

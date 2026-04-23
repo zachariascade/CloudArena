@@ -380,6 +380,11 @@ describe("shared display card mappers", () => {
     expect(permanentCard.actions).toHaveLength(1);
     permanentCard.actions[0]?.onSelect?.();
     expect(onAttack).toHaveBeenCalledTimes(1);
+    expect(enemyLeaderCard.healthBar).toEqual({
+      current: 18,
+      max: 18,
+      label: "18/18",
+    });
     expect(enemyLeaderCard.textBlocks.every((entry) => entry.kind === "rules")).toBe(true);
   });
 
@@ -722,6 +727,7 @@ describe("shared display card mappers", () => {
         battlefield: [],
         turn: [],
       },
+      battlefieldSlotCount: 1,
       player: {
         health: 30,
         maxHealth: 30,
@@ -782,6 +788,7 @@ describe("shared display card mappers", () => {
         createElement(CloudArenaHandTray, {
           battle,
           player: battle.player,
+          battlefieldSlotCount: battle.battlefieldSlotCount,
           maxPlayerEnergy: 3,
           getInspectableModel: (key) =>
             key === "hand:card_1"
@@ -854,6 +861,7 @@ describe("shared display card mappers", () => {
         battlefield: [],
         turn: [],
       },
+      battlefieldSlotCount: 0,
       player: {
         health: 30,
         maxHealth: 30,
@@ -890,6 +898,7 @@ describe("shared display card mappers", () => {
       createElement(CloudArenaHandTray, {
         battle,
         player: battle.player,
+        battlefieldSlotCount: battle.battlefieldSlotCount,
         maxPlayerEnergy: 3,
         getInspectableModel: (key) =>
           key === "hand:card_1"
@@ -1150,8 +1159,7 @@ describe("shared display card component", () => {
     expect(arenaHandHtml).toContain(">4/4<");
     expect(playerHtml).toContain("aria-label=\"Player energy\"");
     expect(playerHtml).toContain(">2/3<");
-    expect(playerHtml).toContain("display-card-energy-segment is-filled");
-    expect(playerHtml).toContain("display-card-energy-segment is-empty");
+    expect(playerHtml).toContain("display-card-energy-orb");
     expect(playerHtml).toContain("display-card-character-layout display-card-character-layout-player");
     expect(playerHtml).not.toContain("<span>Energy</span><strong>2</strong>");
     expect(playerHtml).not.toContain("Hand ");
@@ -1159,14 +1167,14 @@ describe("shared display card component", () => {
     expect(enemyHtml).toContain("Long Battle Demon");
     expect(enemyHtml).toContain("Long Battle Demon is preparing attack 12.");
     expect(enemyHtml).toContain("/images/cards/card_0009_lucifer_fallen_angel_of_light.webp");
-    expect(enemyHtml).toContain("display-card-character-layout display-card-character-layout-enemy");
+    expect(enemyHtml).toContain("display-card-enemy-stack");
     expect(enemyHtml).toContain("aria-label=\"Long Battle Demon block 0\"");
     expect(enemyHtml).toContain("aria-label=\"Long Battle Demon health\"");
-    expect(enemyHtml).toContain("aria-label=\"Long Battle Demon intent\"");
-    expect(enemyHtml).toContain("display-card-intent-banner");
     expect(enemyHtml).toContain(">50/50<");
+    expect(enemyHtml).not.toContain(">Health<");
     expect(enemyHtml).not.toContain("<span>HP</span>");
     expect(enemyHtml).not.toContain("<span>Block</span>");
+    expect(enemyHtml).not.toContain("display-card-intent-banner");
     expect(permanentHtml).toContain("card-face-stats-box");
     expect(permanentHtml).toContain(">4/8<");
     expect(permanentHtml).not.toContain("aria-label=\"Guardian health\"");

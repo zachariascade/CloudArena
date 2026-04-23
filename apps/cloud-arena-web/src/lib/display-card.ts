@@ -418,6 +418,7 @@ export function mapArenaPermanentToDisplayCard(
   const hasAvailableActions =
     !permanent.hasActedThisTurn && (permanent.isCreature || permanent.actions.length > 0);
   const permanentAvailabilityState = hasAvailableActions ? "ready" : "spent";
+  const isEnemyControlled = permanent.controllerId === "enemy";
 
   return buildDisplayCardModel({
     variant: "permanent",
@@ -437,7 +438,13 @@ export function mapArenaPermanentToDisplayCard(
     footerCredit: presentation.footerCredit,
     collectorNumber: `${presentation.collectorNumber}-${permanent.slotIndex + 1}`,
     footerStat: `${permanent.power}/${permanent.health}`,
-    healthBar: null,
+    healthBar: isEnemyControlled
+      ? {
+          current: permanent.health,
+          max: permanent.maxHealth,
+          label: `${permanent.health}/${permanent.maxHealth}`,
+        }
+      : null,
     energyBar: null,
     statusLabel: permanent.isTapped
       ? "tapped"
@@ -463,6 +470,7 @@ export function mapArenaPermanentToDisplayCard(
       permanent.hasActedThisTurn ? "spent" : permanentAvailabilityState,
       permanent.isTapped ? "tapped" : "untapped",
       permanent.isDefending ? "defending" : "open",
+      isEnemyControlled ? "enemy-controlled" : null,
       options.isTargetable ? `targetable-${options.targetTone ?? "player"}` : null,
     ].filter((flag): flag is string => flag !== null),
   });
