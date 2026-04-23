@@ -23,8 +23,9 @@ export type ConditionOperator = "==" | "!=" | ">" | ">=" | "<" | "<=";
 export type CounterName = string;
 export type DerivedStatName = "power" | "health" | "block";
 export type ChoiceStrategy = "first_available" | "auto_yes" | "auto_no";
-export type DamageOverflowPolicy = "stop_at_blocker" | "trample";
+export type DamageOverflowPolicy = "overflow" | "stop_at_blocker" | "trample";
 export type DefenderRecoveryPolicy = "none" | "full_heal";
+export type PermanentKeyword = "refresh" | "halt";
 export type CounterStat = "power" | "health";
 export type CounterSourceKind = "card" | "permanent";
 export type ModifierSourceKind = "equipment" | "card" | "permanent";
@@ -224,6 +225,11 @@ export type Effect =
       type: "gain_block";
       target: "self" | "player" | Selector;
       amount: ValueExpression;
+      targeting?: Targeting;
+    }
+  | {
+      type: "restore_health";
+      target: "self" | Selector;
       targeting?: Targeting;
     }
   | {
@@ -607,6 +613,8 @@ export type PermanentCardDefinition = BaseCardDefinition & {
   power: number;
   health: number;
   recoveryPolicy?: DefenderRecoveryPolicy;
+  keywords?: PermanentKeyword[];
+  grantedKeywords?: PermanentKeyword[];
   preSummonEffects?: Effect[];
   attackAllEnemyPermanents?: boolean;
 };
@@ -692,8 +700,10 @@ export type PermanentState = {
   maxHealth: number;
   block: number;
   recoveryPolicy: DefenderRecoveryPolicy;
+  keywords: PermanentKeyword[];
   counters?: PermanentCounter[];
   modifiers?: PermanentModifier[];
+  keywordModifiers?: PermanentKeywordModifier[];
   attachments?: string[];
   attachedTo?: string | null;
   abilities?: Ability[];
@@ -723,6 +733,12 @@ export type PermanentModifier = {
   sourceId: string;
 };
 
+export type PermanentKeywordModifier = {
+  keyword: PermanentKeyword;
+  sourceKind: ModifierSourceKind;
+  sourceId: string;
+};
+
 export type BattleState = {
   turnNumber: number;
   phase: BattlePhase;
@@ -731,6 +747,10 @@ export type BattleState = {
   nextEnemyTokenIndex: number;
   nextTargetRequestIndex: number;
   cardDefinitions: CardDefinitionLibrary;
+  playerCreatureSlotCount: number;
+  playerNonCreatureSlotCount: number;
+  enemyCreatureSlotCount: number;
+  enemyNonCreatureSlotCount: number;
   player: PlayerState;
   enemy: EnemyState;
   battlefield: Array<PermanentState | null>;

@@ -1,5 +1,6 @@
 import { emitRulesEvent } from "../core/rules-events.js";
 import { findPermanentById } from "../core/selectors.js";
+import { permanentHasKeyword } from "../core/permanents.js";
 import type { BattleState, DamageOverflowPolicy } from "../core/types.js";
 
 function applyDamageToBlockAndHealth(
@@ -67,9 +68,10 @@ function applyEnemyDamageToDefenders(
   state: BattleState,
   damage: number,
   sourcePermanentId: string,
-): { remainingDamage: number; defended: boolean } {
+): { remainingDamage: number; defended: boolean; halted: boolean } {
   let remainingDamage = damage;
   let defended = false;
+  let halted = false;
 
   for (const permanentId of state.blockingQueue) {
     if (remainingDamage <= 0) {
@@ -87,6 +89,7 @@ function applyEnemyDamageToDefenders(
     }
 
     defended = true;
+    halted ||= permanentHasKeyword(permanent, "halt");
     const beforeCombined = permanent.block + permanent.health;
     remainingDamage = applyDamageToBlockAndHealth(remainingDamage, permanent);
     const absorbedByPermanent = beforeCombined - (permanent.block + permanent.health);
@@ -104,7 +107,7 @@ function applyEnemyDamageToDefenders(
     }
   }
 
-  return { remainingDamage, defended };
+  return { remainingDamage, defended, halted };
 }
 
 function applyEnemyDamageToPlayerHealth(
@@ -123,7 +126,7 @@ export function settleEnemyAttackDamage(
   state: BattleState,
   damage: number,
   sourcePermanentId: string,
-  overflowPolicy: DamageOverflowPolicy = "stop_at_blocker",
+  overflowPolicy: DamageOverflowPolicy = "overflow",
 ): BattleState {
   let remainingDamage = damage;
 
@@ -131,6 +134,9 @@ export function settleEnemyAttackDamage(
   const defenderResult = applyEnemyDamageToDefenders(state, remainingDamage, sourcePermanentId);
   remainingDamage = defenderResult.remainingDamage;
   if (defenderResult.defended && overflowPolicy === "stop_at_blocker") {
+    remainingDamage = 0;
+  }
+  if (defenderResult.halted && overflowPolicy !== "trample") {
     remainingDamage = 0;
   }
   applyEnemyDamageToPlayerHealth(state, remainingDamage);

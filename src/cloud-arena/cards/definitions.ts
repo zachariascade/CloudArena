@@ -12,6 +12,7 @@ import { forbiddenInsightCardDefinition } from "./definitions/forbidden-insight.
 import { gardenOfEarthlyDelightsCardDefinition } from "./definitions/garden-of-earthly-delights.js";
 import { graveyardHymnCardDefinition } from "./definitions/graveyard-hymn.js";
 import { guardianCardDefinition } from "./definitions/guardian.js";
+import { haltBucklerCardDefinition } from "./definitions/halt-buckler.js";
 import { holyBladeCardDefinition } from "./definitions/holy-blade.js";
 import { judgmentBladeCardDefinition } from "./definitions/judgment-blade.js";
 import { enemyBruteCardDefinition } from "./definitions/enemy-brute.js";
@@ -22,6 +23,7 @@ import { enemyHuskCardDefinition } from "./definitions/enemy-husk.js";
 import { enemyPackAlphaCardDefinition } from "./definitions/enemy-pack-alpha.js";
 import { massBenedictionCardDefinition } from "./definitions/mass-benediction.js";
 import { restorativeTouchCardDefinition } from "./definitions/restorative-touch.js";
+import { refreshSignetCardDefinition } from "./definitions/refresh-signet.js";
 import { resurrectCardDefinition } from "./definitions/resurrect.js";
 import { sacrificialSeraphCardDefinition } from "./definitions/sacrificial-seraph.js";
 import { radiantConduitCardDefinition } from "./definitions/radiant-conduit.js";
@@ -63,6 +65,7 @@ export const cardDefinitions: CardDefinitionLibrary = {
   garden_of_earthly_delights: gardenOfEarthlyDelightsCardDefinition,
   graveyard_hymn: graveyardHymnCardDefinition,
   guardian: guardianCardDefinition,
+  halt_buckler: haltBucklerCardDefinition,
   holy_blade: holyBladeCardDefinition,
   judgment_blade: judgmentBladeCardDefinition,
   enemy_leader: enemyLeaderCardDefinition,
@@ -72,6 +75,7 @@ export const cardDefinitions: CardDefinitionLibrary = {
   enemy_brute: enemyBruteCardDefinition,
   enemy_pack_alpha: enemyPackAlphaCardDefinition,
   mass_benediction: massBenedictionCardDefinition,
+  refresh_signet: refreshSignetCardDefinition,
   restorative_touch: restorativeTouchCardDefinition,
   resurrect: resurrectCardDefinition,
   sacrificial_seraph: sacrificialSeraphCardDefinition,

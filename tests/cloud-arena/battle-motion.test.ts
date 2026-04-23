@@ -34,6 +34,8 @@ function makePermanent(
 
 function makeBattle(overrides: Partial<CloudArenaBattleViewModel>): CloudArenaBattleViewModel {
   const battlefieldSlotCount = overrides.battlefieldSlotCount ?? 0;
+  const creatureBattlefieldSlotCount = overrides.creatureBattlefieldSlotCount ?? 0;
+  const nonCreatureBattlefieldSlotCount = overrides.nonCreatureBattlefieldSlotCount ?? 0;
 
   return {
     turnNumber: 1,
@@ -66,6 +68,8 @@ function makeBattle(overrides: Partial<CloudArenaBattleViewModel>): CloudArenaBa
     legalActions: [],
     ...overrides,
     battlefieldSlotCount,
+    creatureBattlefieldSlotCount,
+    nonCreatureBattlefieldSlotCount,
   };
 }
 

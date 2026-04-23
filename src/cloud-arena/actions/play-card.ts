@@ -1,7 +1,7 @@
 import { getCardDefinitionFromLibrary, isPermanentCardDefinition } from "../cards/definitions.js";
 import { resolveLegacyCardEffects, resolveSpellEffects } from "../core/effects.js";
 import { selectPermanents } from "../core/selectors.js";
-import { summonPermanentFromCard } from "../core/permanents.js";
+import { canSummonPermanentDefinition, summonPermanentFromCard } from "../core/permanents.js";
 import { emitRulesEvent } from "../core/rules-events.js";
 import type {
   BattleState,
@@ -47,7 +47,7 @@ export function playCard(state: BattleState, cardInstanceId: string): BattleStat
     throw new Error(`Not enough energy to play ${definition.name}.`);
   }
 
-  if (isPermanentCardDefinition(definition) && !state.battlefield.some((slot) => slot === null)) {
+  if (isPermanentCardDefinition(definition) && !canSummonPermanentDefinition(state, definition)) {
     throw new Error(`Cannot play ${definition.name} because there is no open battlefield slot.`);
   }
 

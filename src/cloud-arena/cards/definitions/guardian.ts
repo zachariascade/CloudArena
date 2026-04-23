@@ -22,6 +22,7 @@ export const guardianCardDefinition: CardDefinition = {
   onPlay: [],
   power: 4,
   health: 4,
+  keywords: ["halt"],
   abilities: [
     {
       id: "guardian_apply_block",

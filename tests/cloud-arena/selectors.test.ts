@@ -204,15 +204,15 @@ describe("cloud arena selector helpers", () => {
     expect(hasOpenBattlefieldSlot(battle)).toBe(true);
   });
 
-  it("does not expose permanent play actions when the battlefield is full", () => {
+  it("does not expose creature play actions when creature slots are full", () => {
     const battle = createTestBattle({
-      cardDefinitions: SELECTOR_TEST_CARD_DEFINITIONS,
       playerDeck: [
-        "angel_guardian",
-        "human_soldier",
-        "angel_guardian",
-        "human_soldier",
-        "holy_blade",
+        "guardian",
+        "guardian",
+        "guardian",
+        "guardian",
+        "guardian",
+        "guardian",
       ],
       enemy: {
         name: "Selector Dummy",
@@ -228,7 +228,68 @@ describe("cloud arena selector helpers", () => {
       applyBattleAction(battle, { type: "play_card", cardInstanceId: card.instanceId });
     }
 
-    expect(hasOpenBattlefieldSlot(battle)).toBe(false);
+    expect(hasOpenBattlefieldSlot(battle)).toBe(true);
+    applyBattleAction(battle, { type: "end_turn" });
     expect(getLegalActions(battle).some((action) => action.type === "play_card")).toBe(false);
+  });
+
+  it("still exposes noncreature play actions when creature slots are full", () => {
+    const battle = createTestBattle({
+      cardDefinitions: SELECTOR_TEST_CARD_DEFINITIONS,
+      playerDeck: [
+        "angel_guardian",
+        "angel_guardian",
+        "angel_guardian",
+        "angel_guardian",
+        "angel_guardian",
+        "holy_blade",
+      ],
+      enemy: {
+        name: "Selector Dummy",
+        health: 30,
+        basePower: 12,
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+
+    battle.player.energy = 20;
+
+    for (const card of [...battle.player.hand]) {
+      applyBattleAction(battle, { type: "play_card", cardInstanceId: card.instanceId });
+    }
+
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(getLegalActions(battle).some((action) => action.type === "play_card")).toBe(true);
+  });
+
+  it("still exposes creature play actions when noncreature slots are full", () => {
+    const battle = createTestBattle({
+      cardDefinitions: SELECTOR_TEST_CARD_DEFINITIONS,
+      playerDeck: [
+        "holy_blade",
+        "holy_blade",
+        "holy_blade",
+        "holy_blade",
+        "holy_blade",
+        "angel_guardian",
+      ],
+      enemy: {
+        name: "Selector Dummy",
+        health: 30,
+        basePower: 12,
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+
+    battle.player.energy = 20;
+
+    for (const card of [...battle.player.hand]) {
+      applyBattleAction(battle, { type: "play_card", cardInstanceId: card.instanceId });
+    }
+
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(getLegalActions(battle).some((action) => action.type === "play_card")).toBe(true);
   });
 });

@@ -156,6 +156,7 @@ export const TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
     onPlay: [],
     power: 4,
     health: 10,
+    keywords: ["halt"],
     abilities: [
       {
         id: "guardian_apply_block",

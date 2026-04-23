@@ -1,8 +1,8 @@
 import {
   asPermanentCardDefinition,
   getCardDefinitionFromLibrary,
-  isEquipmentCardDefinition,
   hasCardType,
+  isEquipmentCardDefinition,
 } from "../cards/definitions.js";
 import { LEAN_V1_DEFAULT_RECOVERY_POLICY } from "./constants.js";
 import { emitRulesEvent } from "./rules-events.js";
@@ -13,6 +13,8 @@ import type {
   CardInstance,
   CardDefinitionId,
   EnemyState,
+  PermanentKeyword,
+  PermanentKeywordModifier,
   PermanentState,
 } from "./types.js";
 
@@ -74,6 +76,25 @@ function getEquipmentModifiersForAttachment(
   ];
 }
 
+function getEquipmentKeywordModifiersForAttachment(
+  state: BattleState,
+  attachmentPermanent: PermanentState,
+): PermanentKeywordModifier[] {
+  const definition = asPermanentCardDefinition(
+    getCardDefinitionFromLibrary(state.cardDefinitions, attachmentPermanent.definitionId),
+  );
+
+  if (!isEquipmentCardDefinition(definition)) {
+    return [];
+  }
+
+  return (definition.grantedKeywords ?? []).map((keyword) => ({
+    keyword,
+    sourceKind: "equipment",
+    sourceId: attachmentPermanent.instanceId,
+  }));
+}
+
 function removeSourceModifiers(
   permanent: PermanentState,
   sourceKind: "equipment",
@@ -98,13 +119,34 @@ function removeSourceModifiers(
   return removedModifiers;
 }
 
+function removeSourceKeywordModifiers(
+  permanent: PermanentState,
+  sourceKind: "equipment",
+  sourceId: string,
+): PermanentKeywordModifier[] {
+  const retainedModifiers: NonNullable<PermanentState["keywordModifiers"]> = [];
+  const removedModifiers: PermanentKeywordModifier[] = [];
+
+  for (const modifier of permanent.keywordModifiers ?? []) {
+    if (modifier.sourceKind === sourceKind && modifier.sourceId === sourceId) {
+      removedModifiers.push(modifier);
+      continue;
+    }
+
+    retainedModifiers.push(modifier);
+  }
+
+  permanent.keywordModifiers = retainedModifiers;
+  return removedModifiers;
+}
+
 function createDefaultEquipmentAbility(): ActivatedAbility {
   return {
     id: "equip",
     kind: "activated",
     activation: { type: "action", actionId: "equip" },
     targeting: {
-      prompt: "Choose a permanent to equip",
+      prompt: "Choose a creature to equip",
       allowSelfTarget: false,
     },
     effects: [
@@ -113,11 +155,23 @@ function createDefaultEquipmentAbility(): ActivatedAbility {
         target: {
           zone: "battlefield",
           controller: "you",
-          cardType: "permanent",
+          cardType: "creature",
         },
       },
     ],
   };
+}
+
+function getPermanentKeywordsForDefinition(
+  definition: ReturnType<typeof asPermanentCardDefinition>,
+): PermanentKeyword[] {
+  const keywords = [...(definition.keywords ?? [])];
+
+  if (definition.recoveryPolicy === "full_heal" && !keywords.includes("refresh")) {
+    keywords.push("refresh");
+  }
+
+  return keywords;
 }
 
 function getInitialAbilitiesForDefinition(
@@ -137,6 +191,61 @@ function getInitialAbilitiesForDefinition(
   return abilities;
 }
 
+function getBattlefieldForController(
+  state: BattleState,
+  controllerId: "player" | "enemy",
+): Array<PermanentState | null> {
+  return controllerId === "enemy" ? state.enemyBattlefield : state.battlefield;
+}
+
+function getSlotRangeForPermanentDefinition(
+  state: BattleState,
+  definition: ReturnType<typeof asPermanentCardDefinition>,
+  controllerId: "player" | "enemy",
+): { start: number; end: number } {
+  const creatureSlotCount =
+    controllerId === "enemy" ? state.enemyCreatureSlotCount : state.playerCreatureSlotCount;
+  const nonCreatureSlotCount =
+    controllerId === "enemy" ? state.enemyNonCreatureSlotCount : state.playerNonCreatureSlotCount;
+
+  if (hasCardType(definition, "creature")) {
+    return {
+      start: 0,
+      end: creatureSlotCount,
+    };
+  }
+
+  return {
+    start: creatureSlotCount,
+    end: creatureSlotCount + nonCreatureSlotCount,
+  };
+}
+
+function findOpenBattlefieldSlotForDefinition(
+  state: BattleState,
+  definition: ReturnType<typeof asPermanentCardDefinition>,
+  controllerId: "player" | "enemy",
+): number {
+  const battlefield = getBattlefieldForController(state, controllerId);
+  const { start, end } = getSlotRangeForPermanentDefinition(state, definition, controllerId);
+
+  for (let slotIndex = start; slotIndex < end; slotIndex += 1) {
+    if (battlefield[slotIndex] === null) {
+      return slotIndex;
+    }
+  }
+
+  return -1;
+}
+
+export function canSummonPermanentDefinition(
+  state: BattleState,
+  definition: ReturnType<typeof asPermanentCardDefinition>,
+  controllerId: "player" | "enemy" = "player",
+): boolean {
+  return findOpenBattlefieldSlotForDefinition(state, definition, controllerId) !== -1;
+}
+
 export function toPermanentInstanceId(card: CardInstance): string {
   const cardNumber = card.instanceId.replace(/^card_/, "");
   return `${card.definitionId}_${cardNumber}`;
@@ -147,17 +256,16 @@ export function summonPermanentFromCard(
   card: CardInstance,
   controllerId: "player" | "enemy" = "player",
 ): PermanentState {
-  const battlefield =
-    controllerId === "enemy" ? state.enemyBattlefield : state.battlefield;
-  const openSlot = battlefield.findIndex((slot) => slot === null);
+  const battlefield = getBattlefieldForController(state, controllerId);
+  const definition = asPermanentCardDefinition(
+    getCardDefinitionFromLibrary(state.cardDefinitions, card.definitionId),
+  );
+  const openSlot = findOpenBattlefieldSlotForDefinition(state, definition, controllerId);
 
   if (openSlot === -1) {
     throw new Error(`Cannot summon ${card.definitionId} without an open battlefield slot.`);
   }
 
-  const definition = asPermanentCardDefinition(
-    getCardDefinitionFromLibrary(state.cardDefinitions, card.definitionId),
-  );
   const permanentId = toPermanentInstanceId(card);
 
   const permanent: PermanentState = {
@@ -171,8 +279,10 @@ export function summonPermanentFromCard(
     maxHealth: definition.health,
     block: 0,
     recoveryPolicy: definition.recoveryPolicy ?? LEAN_V1_DEFAULT_RECOVERY_POLICY,
+    keywords: getPermanentKeywordsForDefinition(definition),
     counters: [],
     modifiers: [],
+    keywordModifiers: [],
     attachments: [],
     attachedTo: null,
     abilities: getInitialAbilitiesForDefinition(definition),
@@ -211,12 +321,14 @@ export function summonPermanentFromCard(
 
 export function canSummonPermanentFromCard(
   state: BattleState,
+  card: CardInstance,
   controllerId: "player" | "enemy" = "player",
 ): boolean {
-  const battlefield =
-    controllerId === "enemy" ? state.enemyBattlefield : state.battlefield;
+  const definition = asPermanentCardDefinition(
+    getCardDefinitionFromLibrary(state.cardDefinitions, card.definitionId),
+  );
 
-  return battlefield.some((slot) => slot === null);
+  return canSummonPermanentDefinition(state, definition, controllerId);
 }
 
 export function trySummonPermanentFromCard(
@@ -224,7 +336,7 @@ export function trySummonPermanentFromCard(
   card: CardInstance,
   controllerId: "player" | "enemy" = "player",
 ): PermanentState | null {
-  if (!canSummonPermanentFromCard(state, controllerId)) {
+  if (!canSummonPermanentFromCard(state, card, controllerId)) {
     return null;
   }
 
@@ -237,7 +349,9 @@ export function createEnemyLeaderPermanent(
     definitionId?: CardDefinitionId;
   },
 ): PermanentState {
-  const openSlot = state.enemyBattlefield.findIndex((slot) => slot === null);
+  const openSlot = state.enemyBattlefield.findIndex(
+    (slot, index) => index < state.enemyCreatureSlotCount && slot === null,
+  );
 
   if (openSlot === -1) {
     throw new Error(`Cannot create enemy leader ${enemy.name} without an open battlefield slot.`);
@@ -257,8 +371,10 @@ export function createEnemyLeaderPermanent(
     maxHealth: enemy.health,
     block: 0,
     recoveryPolicy: "none",
+    keywords: [],
     counters: [],
     modifiers: [],
+    keywordModifiers: [],
     attachments: [],
     attachedTo: null,
     abilities: [],
@@ -322,6 +438,16 @@ export function getPrimaryEnemyPermanent(state: BattleState): PermanentState | n
       const definition = getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId);
       return hasCardType(definition, "creature");
     }) ?? null
+  );
+}
+
+export function permanentHasKeyword(
+  permanent: PermanentState,
+  keyword: PermanentKeyword,
+): boolean {
+  return (
+    permanent.keywords.includes(keyword) ||
+    (permanent.keywordModifiers ?? []).some((modifier) => modifier.keyword === keyword)
   );
 }
 
@@ -425,6 +551,12 @@ export function canAttachPermanentToTarget(
     return false;
   }
 
+  const targetDefinition = getCardDefinitionFromLibrary(state.cardDefinitions, targetPermanent.definitionId);
+
+  if (!hasCardType(targetDefinition, "creature")) {
+    return false;
+  }
+
   return true;
 }
 
@@ -446,6 +578,7 @@ export function detachPermanent(
 
   if (attachedTarget) {
     const removedModifiers = removeSourceModifiers(attachedTarget, "equipment", attachmentPermanent.instanceId);
+    removeSourceKeywordModifiers(attachedTarget, "equipment", attachmentPermanent.instanceId);
 
     for (const removedModifier of removedModifiers) {
       if (removedModifier.stat === "health") {
@@ -478,7 +611,9 @@ export function attachPermanentToTarget(
   attachmentPermanent.attachedTo = targetPermanent.instanceId;
 
   const modifiers = getEquipmentModifiersForAttachment(state, attachmentPermanent);
+  const keywordModifiers = getEquipmentKeywordModifiersForAttachment(state, attachmentPermanent);
   targetPermanent.modifiers = [...(targetPermanent.modifiers ?? []), ...modifiers];
+  targetPermanent.keywordModifiers = [...(targetPermanent.keywordModifiers ?? []), ...keywordModifiers];
 
   for (const modifier of modifiers) {
     if (modifier.stat === "health") {

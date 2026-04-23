@@ -15,6 +15,7 @@ describe("cloud arena mass benediction", () => {
       cardDefinitions,
       playerDeck: [
         "guardian",
+        "holy_blade",
         "choir_captain",
         "mass_benediction",
         "attack",
@@ -31,18 +32,25 @@ describe("cloud arena mass benediction", () => {
     battle.player.energy = 10;
 
     const guardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
+    const bladeCard = battle.player.hand.find((card) => card.definitionId === "holy_blade");
     const captainCard = battle.player.hand.find((card) => card.definitionId === "choir_captain");
     const benedictionCard = battle.player.hand.find(
       (card) => card.definitionId === "mass_benediction",
     );
 
-    if (!guardianCard || !captainCard || !benedictionCard) {
-      throw new Error("Expected guardian, choir_captain, and mass_benediction in opening hand.");
+    if (!guardianCard || !bladeCard || !captainCard || !benedictionCard) {
+      throw new Error(
+        "Expected guardian, holy_blade, choir_captain, and mass_benediction in opening hand.",
+      );
     }
 
     applyBattleAction(battle, {
       type: "play_card",
       cardInstanceId: guardianCard.instanceId,
+    });
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: bladeCard.instanceId,
     });
     applyBattleAction(battle, {
       type: "play_card",
@@ -54,15 +62,17 @@ describe("cloud arena mass benediction", () => {
     });
 
     const guardian = battle.battlefield.find((permanent) => permanent?.definitionId === "guardian");
+    const blade = battle.battlefield.find((permanent) => permanent?.definitionId === "holy_blade");
     const captain = battle.battlefield.find(
       (permanent) => permanent?.definitionId === "choir_captain",
     );
 
-    if (!guardian || !captain) {
-      throw new Error("Expected guardian and choir_captain on battlefield.");
+    if (!guardian || !blade || !captain) {
+      throw new Error("Expected guardian, holy_blade, and choir_captain on battlefield.");
     }
 
     expect(getPermanentCounterCount(guardian, "+1/+1")).toBe(2);
+    expect(getPermanentCounterCount(blade, "+1/+1")).toBe(0);
     expect(getPermanentCounterCount(captain, "+1/+1")).toBe(2);
     expect(getDerivedPermanentStat(battle, guardian, "power")).toBe(5);
     expect(getDerivedPermanentStat(battle, captain, "power")).toBe(5);

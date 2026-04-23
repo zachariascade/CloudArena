@@ -86,6 +86,7 @@ export {
   getEnemyLeaderPermanent,
   getPrimaryEnemyPermanent,
   isEquipmentPermanent,
+  permanentHasKeyword,
   permanentAttacksAllEnemyPermanents,
   summonPermanentFromCard,
   toPermanentInstanceId,

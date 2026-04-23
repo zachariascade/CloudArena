@@ -10,7 +10,7 @@ import {
   usePermanentAction,
   type CardDefinitionLibrary,
 } from "../../src/cloud-arena/index.js";
-import { createTestBattle, formatBattleLog } from "./helpers.js";
+import { createTestBattle, formatBattleLog, TEST_CARD_DEFINITIONS } from "./helpers.js";
 
 const RESURRECT_TEST_DEFINITIONS: CardDefinitionLibrary = {
   resurrect: {
@@ -301,11 +301,11 @@ describe("cloud arena combat engine edge cases", () => {
     applyBattleAction(battle, { type: "end_turn" });
 
     expect(battle.player.health).toBe(startingHealth - 8);
-    expect(battle.battlefield[0]?.health).toBe(10);
+    expect(battle.battlefield[0]?.health).toBe(2);
     expect(battle.battlefield[0]?.block).toBe(0);
   });
 
-  it("enemy damage stops at a defending permanent by default", () => {
+  it("enemy damage stops at a defending permanent with halt", () => {
     const battle = createTestBattle({
       playerDeck: ["guardian", "defend", "attack", "attack", "defend"],
       enemy: {
@@ -349,6 +349,65 @@ describe("cloud arena combat engine edge cases", () => {
     expect(battle.battlefield[0]).toBeNull();
     expect(battle.player.graveyard.map((card) => card.definitionId)).toEqual(["guardian"]);
     expect(battle.player.health).toBe(startingHealth - 3);
+  });
+
+  it("enemy damage flows through a defending creature without halt by default", () => {
+    const battle = createTestBattle({
+      cardDefinitions: {
+        ...TEST_CARD_DEFINITIONS,
+        trainee: {
+          id: "trainee",
+          name: "Trainee",
+          cardTypes: ["creature"],
+          cost: 2,
+          onPlay: [],
+          power: 2,
+          health: 10,
+          abilities: [],
+        },
+      },
+      playerDeck: ["trainee", "defend", "attack", "attack", "defend"],
+      enemy: {
+        name: "Ravaging Demon",
+        health: 30,
+        basePower: 25,
+        behavior: [
+          { attackAmount: 10 },
+          { attackAmount: 25 },
+        ],
+      },
+    });
+    const startingHealth = battle.player.health;
+
+    const traineeCard = battle.player.hand[0];
+    const defendCard = battle.player.hand[1];
+
+    if (!traineeCard || !defendCard) {
+      throw new Error("Expected round one cards were missing.");
+    }
+
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: traineeCard.instanceId });
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: defendCard.instanceId });
+    applyBattleAction(battle, { type: "end_turn" });
+
+    const traineePermanent = battle.battlefield[0];
+    const roundTwoDefend = battle.player.hand.find((card) => card.definitionId === "defend");
+
+    if (!traineePermanent || !roundTwoDefend) {
+      throw new Error("Expected round two state was missing.");
+    }
+
+    applyBattleAction(battle, {
+      type: "use_permanent_action",
+      permanentId: traineePermanent.instanceId,
+      action: "defend",
+    });
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: roundTwoDefend.instanceId });
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(battle.battlefield[0]).toBeNull();
+    expect(battle.player.graveyard.map((card) => card.definitionId)).toEqual(["trainee"]);
+    expect(battle.player.health).toBe(startingHealth - 11);
   });
 
   it("enemy damage with trample spills through a defending permanent into player health", () => {

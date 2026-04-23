@@ -19,6 +19,7 @@ export const choirCaptainCardDefinition: CardDefinition = {
     footerStat: "2/3",
   },
   subtypes: ["Angel"],
+  keywords: ["refresh"],
   onPlay: [],
   power: 2,
   health: 3,

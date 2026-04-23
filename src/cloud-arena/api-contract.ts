@@ -202,6 +202,8 @@ export type CloudArenaSessionSnapshot = {
     intentLabel: string;
     intentQueueLabels: string[];
   };
+  creatureBattlefieldSlotCount: number;
+  nonCreatureBattlefieldSlotCount: number;
   battlefield: Array<CloudArenaPermanentSnapshot | null>;
   enemyBattlefield: Array<CloudArenaPermanentSnapshot | null>;
   pendingTargetRequest: CloudArenaPendingTargetRequestSnapshot | null;

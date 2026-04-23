@@ -139,7 +139,7 @@ describe("cloud arena combat engine permanent flow", () => {
     expect(battle.player.block).toBe(0);
     expect(battle.enemy.health).toBe(18);
     expect(battle.enemy.intent).toEqual({ attackAmount: 12 });
-    expect(battle.battlefield[0]?.health).toBe(10);
+    expect(battle.battlefield[0]?.health).toBe(2);
     expect(battle.battlefield[0]?.block).toBe(0);
     expect(battle.blockingQueue).toEqual([]);
     expect(battle.player.graveyard).toHaveLength(0);
@@ -216,6 +216,7 @@ describe("cloud arena combat engine permanent flow", () => {
         onPlay: [],
         power: 2,
         health: 8,
+        keywords: ["refresh"],
       },
     };
     const battle = createBattle({
@@ -392,5 +393,57 @@ describe("cloud arena combat engine permanent flow", () => {
     expect(formatBattleLog(battle)).toContain(
       `turn 1: permanent_action ${guardianPermanent.instanceId} dealt 5 damage to permanent ${enemyPermanents[1]?.instanceId}`,
     );
+  });
+
+  it("rejects defend on non-creature permanents", () => {
+    const cardDefinitions: CardDefinitionLibrary = {
+      ...TEST_CARD_DEFINITIONS,
+      judgment_blade: judgmentBladeCardDefinition,
+    };
+    const battle = createTestBattle({
+      cardDefinitions,
+      playerDeck: [
+        "judgment_blade",
+        "attack",
+        "defend",
+        "attack",
+        "defend",
+      ],
+      enemy: {
+        name: "Ravaging Demon",
+        health: 30,
+        basePower: 10,
+        behavior: [
+          { attackAmount: 10 },
+        ],
+      },
+    });
+    battle.player.energy = 10;
+
+    const bladeCard = battle.player.hand.find((card) => card.definitionId === "judgment_blade");
+
+    if (!bladeCard) {
+      throw new Error("Expected Judgment Blade in opening hand.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: bladeCard.instanceId,
+    });
+
+    const bladePermanent = battle.battlefield.find((permanent) => permanent?.definitionId === "judgment_blade");
+
+    if (!bladePermanent) {
+      throw new Error("Expected Judgment Blade on the battlefield.");
+    }
+
+    expect(() =>
+      applyBattleAction(battle, {
+        type: "use_permanent_action",
+        permanentId: bladePermanent.instanceId,
+        source: "rules",
+        action: "defend",
+      })
+    ).toThrow(/not a creature/);
   });
 });

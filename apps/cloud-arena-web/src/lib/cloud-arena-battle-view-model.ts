@@ -9,6 +9,10 @@ import type {
   BattlePhase,
   EnemyIntent,
 } from "../../../../src/cloud-arena/index.js";
+import {
+  LEAN_V1_CREATURE_SLOT_COUNT,
+  LEAN_V1_NON_CREATURE_SLOT_COUNT,
+} from "../../../../src/cloud-arena/core/constants.js";
 
 import type { TraceViewerStepViewModel } from "./cloud-arena-view-model-helpers.js";
 
@@ -54,6 +58,8 @@ export type CloudArenaBattleViewModel = {
   };
   battlefield: Array<CloudArenaPermanentSnapshot | null>;
   battlefieldSlotCount: number;
+  creatureBattlefieldSlotCount: number;
+  nonCreatureBattlefieldSlotCount: number;
   enemyBattlefield?: Array<CloudArenaPermanentSnapshot | null>;
   pendingTargetRequest?: CloudArenaPendingTargetRequestSnapshot | null;
   blockingQueue: string[];
@@ -103,6 +109,8 @@ export function buildBattleViewModelFromTraceStep(
       ),
     ),
     battlefieldSlotCount: step.battlefield.length,
+    creatureBattlefieldSlotCount: LEAN_V1_CREATURE_SLOT_COUNT,
+    nonCreatureBattlefieldSlotCount: LEAN_V1_NON_CREATURE_SLOT_COUNT,
     enemyBattlefield: Array.from({ length: step.battlefield.length }, () => null),
     pendingTargetRequest: null,
     blockingQueue: [...step.blockingQueue],
@@ -170,6 +178,8 @@ export function buildBattleViewModelFromSessionSnapshot(
       ),
     ),
     battlefieldSlotCount: snapshot.battlefield.length,
+    creatureBattlefieldSlotCount: snapshot.creatureBattlefieldSlotCount,
+    nonCreatureBattlefieldSlotCount: snapshot.nonCreatureBattlefieldSlotCount,
     enemyBattlefield: compactBattlefieldSlots(
       snapshot.enemyBattlefield.map((slot) =>
         slot

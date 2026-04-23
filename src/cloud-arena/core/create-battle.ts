@@ -1,7 +1,8 @@
 import {
-  LEAN_V1_BOARD_SLOT_COUNT,
+  LEAN_V1_CREATURE_SLOT_COUNT,
   LEAN_V1_DEFAULT_TURN_ENERGY,
   LEAN_V1_HAND_SIZE,
+  LEAN_V1_NON_CREATURE_SLOT_COUNT,
   LEAN_V1_STARTING_PLAYER_HEALTH,
 } from "./constants.js";
 import { cardDefinitions } from "../cards/definitions.js";
@@ -50,6 +51,10 @@ export function createBattle(input: CreateBattleInput): BattleState {
   const initialEnemyPlan = getEnemyPlanStepAtIndexFromInput(input.enemy, 0);
   const enemyBehavior = "behavior" in input.enemy && input.enemy.behavior ? input.enemy.behavior : [];
   const enemyCards = "cards" in input.enemy && input.enemy.cards ? input.enemy.cards : [];
+  const playerCreatureSlotCount = LEAN_V1_CREATURE_SLOT_COUNT;
+  const playerNonCreatureSlotCount = LEAN_V1_NON_CREATURE_SLOT_COUNT;
+  const enemyCreatureSlotCount = LEAN_V1_CREATURE_SLOT_COUNT;
+  const enemyNonCreatureSlotCount = LEAN_V1_NON_CREATURE_SLOT_COUNT;
 
   if (!initialEnemyPlan) {
     throw new Error("Enemy must include at least one behavior step or enemy card.");
@@ -63,6 +68,10 @@ export function createBattle(input: CreateBattleInput): BattleState {
     nextEnemyTokenIndex: 1,
     nextTargetRequestIndex: 1,
     cardDefinitions: resolvedCardDefinitions,
+    playerCreatureSlotCount,
+    playerNonCreatureSlotCount,
+    enemyCreatureSlotCount,
+    enemyNonCreatureSlotCount,
     player: {
       health: playerHealth,
       maxHealth: playerHealth,
@@ -89,8 +98,8 @@ export function createBattle(input: CreateBattleInput): BattleState {
       leaderPermanentId: null,
       stunnedThisTurn: false,
     },
-    battlefield: Array.from({ length: LEAN_V1_BOARD_SLOT_COUNT }, () => null),
-    enemyBattlefield: Array.from({ length: LEAN_V1_BOARD_SLOT_COUNT }, () => null),
+    battlefield: Array.from({ length: playerCreatureSlotCount + playerNonCreatureSlotCount }, () => null),
+    enemyBattlefield: Array.from({ length: enemyCreatureSlotCount + enemyNonCreatureSlotCount }, () => null),
     pendingTargetRequest: null,
     blockingQueue: [],
     log: [

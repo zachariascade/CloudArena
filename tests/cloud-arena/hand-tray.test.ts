@@ -33,6 +33,8 @@ function makeBattle(): CloudArenaBattleViewModel {
     },
     battlefield: [],
     battlefieldSlotCount: 4,
+    creatureBattlefieldSlotCount: 4,
+    nonCreatureBattlefieldSlotCount: 2,
     enemyBattlefield: [],
     pendingTargetRequest: null,
     blockingQueue: [],
@@ -72,7 +74,8 @@ describe("cloud arena hand tray", () => {
           ],
         },
         player: makeBattle().player,
-        battlefieldSlotCount: 4,
+        creatureBattlefieldSlotCount: 4,
+        nonCreatureBattlefieldSlotCount: 2,
         maxPlayerEnergy: 3,
         getInspectableModel: (() => ({
           variant: "player" as const,
@@ -117,6 +120,12 @@ describe("cloud arena hand tray", () => {
       }),
     );
 
-    expect(html).toContain("1/4");
+    expect(html).toContain("C 1/4");
+    expect(html).toContain("|");
+    expect(html).toContain("P 0/2");
+    expect(html).not.toContain("Details for draw pile");
+    expect(html).not.toContain("Details for discard pile");
+    expect(html).not.toContain("Details for graveyard pile");
+    expect(html).not.toContain(">details<");
   });
 });

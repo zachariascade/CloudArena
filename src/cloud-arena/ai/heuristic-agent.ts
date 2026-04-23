@@ -2,6 +2,7 @@ import { getCardDefinitionFromLibrary, isPermanentCardDefinition } from "../card
 import { getAbilityActionAmount, getActivatedAbilities } from "../core/activated-abilities.js";
 import { getDerivedPermanentActionAmount } from "../core/derived-stats.js";
 import { getEnemyIntentAttackAmount } from "../core/enemy-intent.js";
+import { permanentHasKeyword } from "../core/permanents.js";
 import { findPermanentById, hasOpenBattlefieldSlot } from "../core/selectors.js";
 import type {
   BattleAction,
@@ -26,6 +27,7 @@ function getRemainingIncomingDamageAfterCurrentDefense(state: BattleState): numb
 
   remainingDamage = Math.max(0, remainingDamage - state.player.block);
   let defended = false;
+  let halted = false;
 
   for (const permanentId of state.blockingQueue) {
     const permanent = findPermanentById(state, permanentId);
@@ -39,10 +41,15 @@ function getRemainingIncomingDamageAfterCurrentDefense(state: BattleState): numb
     }
 
     defended = true;
+    halted ||= permanentHasKeyword(permanent, "halt");
     remainingDamage = Math.max(0, remainingDamage - (permanent.block + permanent.health));
   }
 
-  if (defended && state.enemy.intent.overflowPolicy !== "trample") {
+  if (defended && state.enemy.intent.overflowPolicy === "stop_at_blocker") {
+    return 0;
+  }
+
+  if (halted && state.enemy.intent.overflowPolicy !== "trample") {
     return 0;
   }
 

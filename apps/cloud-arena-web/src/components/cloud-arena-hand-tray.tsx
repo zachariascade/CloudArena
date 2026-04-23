@@ -15,7 +15,8 @@ type PileKind = "draw" | "discard" | "graveyard";
 type CloudArenaHandTrayProps = {
   battle: CloudArenaBattleViewModel;
   player: CloudArenaBattleViewModel["player"];
-  battlefieldSlotCount: number;
+  creatureBattlefieldSlotCount: number;
+  nonCreatureBattlefieldSlotCount: number;
   maxPlayerEnergy: number;
   getInspectableModel: (key: string) => Parameters<typeof DisplayCard>[0]["model"];
   bindInspectorInteractions: (key: string) => {
@@ -57,10 +58,20 @@ function getPileLabel(pile: PileKind): string {
   }
 }
 
+function openPileModal(
+  pile: PileKind,
+  event: MouseEvent<HTMLElement>,
+  setOpenPile: (pile: PileKind | null) => void,
+): void {
+  event.stopPropagation();
+  setOpenPile(pile);
+}
+
 export function CloudArenaHandTray({
   battle,
   player,
-  battlefieldSlotCount,
+  creatureBattlefieldSlotCount,
+  nonCreatureBattlefieldSlotCount,
   maxPlayerEnergy,
   getInspectableModel,
   bindInspectorInteractions,
@@ -93,6 +104,8 @@ export function CloudArenaHandTray({
         return player.graveyard;
     }
   }, [openPile, player.discardPile, player.drawPile, player.graveyard]);
+  const occupiedCreatureSlots = battle.battlefield.filter((permanent) => permanent?.isCreature).length;
+  const occupiedNonCreatureSlots = battle.battlefield.filter((permanent) => permanent && !permanent.isCreature).length;
 
   useEffect(() => {
     const previousHealth = previousPlayerHealthRef.current;
@@ -185,27 +198,31 @@ export function CloudArenaHandTray({
           <div className="cloud-arena-pile-modal-grid">
             {openPileCards.length > 0 ? (
               openPileCards.map((card) => (
-                        <DisplayCard
+                <DisplayCard
                   key={card.instanceId}
                   className="cloud-arena-pile-modal-card"
                   model={
                     openPile === "graveyard" && isSelectingGraveyardCard
-                    ? mapArenaGraveyardCardToDisplayCard(card, {
+                      ? mapArenaGraveyardCardToDisplayCard(card, {
                         disabled: !graveyardSelectionActions.has(card.instanceId),
                         isTargetable: graveyardSelectionActions.has(card.instanceId),
                         onChoose: (cardInstanceId) => {
                           const action = graveyardSelectionActions.get(cardInstanceId)?.action;
 
-                            if (action) {
-                              onBattleAction?.(action);
-                            }
-                          },
-                        })
+                          if (action) {
+                            onBattleAction?.(action);
+                          }
+                        },
+                      })
                       : mapArenaHandCardToDisplayCard(card, {
                           isPlayable: false,
                           disabled: true,
                         })
                   }
+                  detailsAction={{
+                    ariaLabel: `Details for ${card.name}`,
+                    onClick: (event) => onOpenDetails(`${openPile}:${card.instanceId}`, event),
+                  }}
                 />
               ))
             ) : (
@@ -244,8 +261,11 @@ export function CloudArenaHandTray({
         >
           <div className="cloud-arena-hand-hud-header">
             <strong>Pilgrim Duelist</strong>
-            <span className="cloud-arena-hand-hud-slot-count" aria-label={`Battlefield slots ${battle.battlefield.length} of ${battlefieldSlotCount}`}>
-              {battle.battlefield.length}/{battlefieldSlotCount}
+            <span
+              className="cloud-arena-hand-hud-slot-count"
+              aria-label={`Creature slots ${occupiedCreatureSlots} of ${creatureBattlefieldSlotCount}; non-creature permanent slots ${occupiedNonCreatureSlots} of ${nonCreatureBattlefieldSlotCount}`}
+            >
+              C {occupiedCreatureSlots}/{creatureBattlefieldSlotCount} | P {occupiedNonCreatureSlots}/{nonCreatureBattlefieldSlotCount}
             </span>
           </div>
           <div className="cloud-arena-hand-hud-line">
@@ -296,10 +316,7 @@ export function CloudArenaHandTray({
               className="cloud-arena-hand-hud-pile-button"
               aria-haspopup="dialog"
               aria-label={`Draw pile ${player.drawPileCount} cards`}
-              onClick={(event) => {
-                event.stopPropagation();
-                setOpenPile("draw");
-              }}
+              onClick={(event) => openPileModal("draw", event, setOpenPile)}
             >
               <span>Draw Pile</span>
               <strong>{player.drawPileCount}</strong>
@@ -309,10 +326,7 @@ export function CloudArenaHandTray({
               className="cloud-arena-hand-hud-pile-button"
               aria-haspopup="dialog"
               aria-label={`Discard pile ${player.discardPile.length} cards`}
-              onClick={(event) => {
-                event.stopPropagation();
-                setOpenPile("discard");
-              }}
+              onClick={(event) => openPileModal("discard", event, setOpenPile)}
             >
               <span>Discard Pile</span>
               <strong>{player.discardPile.length}</strong>
@@ -322,10 +336,7 @@ export function CloudArenaHandTray({
               className="cloud-arena-hand-hud-pile-button"
               aria-haspopup="dialog"
               aria-label={`Graveyard pile ${player.graveyard.length} cards`}
-              onClick={(event) => {
-                event.stopPropagation();
-                setOpenPile("graveyard");
-              }}
+              onClick={(event) => openPileModal("graveyard", event, setOpenPile)}
             >
               <span>Graveyard Pile</span>
               <strong>{player.graveyard.length}</strong>
@@ -370,13 +381,6 @@ export function CloudArenaHandTray({
                       .join(" ")}
                     model={getInspectableModel(`hand:${card.instanceId}`)}
                   />
-                  <button
-                    type="button"
-                    className="cloud-arena-card-details-button"
-                    onClick={(event) => onOpenDetails(`hand:${card.instanceId}`, event)}
-                  >
-                    details
-                  </button>
                 </div>
               );
             })

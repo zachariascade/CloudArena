@@ -5,6 +5,10 @@ import {
   resolveEffects,
 } from "../core/effects.js";
 import {
+  getCardDefinitionFromLibrary,
+  hasCardType,
+} from "../cards/definitions.js";
+import {
   getAbilityActionAmount,
   getActivatedAbilities,
   getActivatedAbilityById,
@@ -168,6 +172,12 @@ export function usePermanentAction(
     dealDamageToEnemy(state, attackAmount, "permanent_action", permanent.instanceId);
     permanent.isDefending = false;
   } else if (action.action === "defend") {
+    const definition = getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId);
+
+    if (!hasCardType(definition, "creature")) {
+      throw new Error(`Permanent ${action.permanentId} cannot use defend because it is not a creature.`);
+    }
+
     permanent.isDefending = true;
     permanent.blockingTargetPermanentId = null;
     if (!state.blockingQueue.includes(permanent.instanceId)) {
@@ -175,9 +185,7 @@ export function usePermanentAction(
     }
 
     const selector = createEnemyBattlefieldAttackSelector();
-    const legalBlockTargets = selectPermanents(state, selector, {
-      defendingPermanentId: permanent.instanceId,
-    });
+    const legalBlockTargets = selectPermanents(state, selector);
 
     if (legalBlockTargets.length === 1) {
       permanent.blockingTargetPermanentId = legalBlockTargets[0]?.instanceId ?? null;

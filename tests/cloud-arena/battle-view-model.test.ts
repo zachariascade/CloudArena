@@ -47,6 +47,8 @@ describe("cloud arena battle view model", () => {
         intentLabel: "attack 3",
         intentQueueLabels: [],
       },
+      creatureBattlefieldSlotCount: 5,
+      nonCreatureBattlefieldSlotCount: 5,
       battlefield: [],
       enemyBattlefield: [],
       pendingTargetRequest: {
@@ -122,6 +124,8 @@ describe("cloud arena battle view model", () => {
         intentLabel: "attack 3",
         intentQueueLabels: [],
       },
+      creatureBattlefieldSlotCount: 5,
+      nonCreatureBattlefieldSlotCount: 5,
       battlefield: [
         null,
         {
@@ -187,6 +191,8 @@ describe("cloud arena battle view model", () => {
       slotIndex: 0,
     });
     expect(battle.battlefieldSlotCount).toBe(2);
+    expect(battle.creatureBattlefieldSlotCount).toBe(5);
+    expect(battle.nonCreatureBattlefieldSlotCount).toBe(5);
     expect(battle.enemyBattlefield).toHaveLength(1);
     expect(battle.enemyBattlefield?.[0]).toMatchObject({
       instanceId: "enemy_2",

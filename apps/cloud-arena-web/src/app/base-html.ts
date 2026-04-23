@@ -1968,7 +1968,7 @@ export function renderCloudArcanumWebHtml(
         display: grid;
         justify-items: center;
         width: 100%;
-        margin-top: -35%;
+        margin-top: -50%;
         pointer-events: auto;
       }
 
@@ -1987,7 +1987,7 @@ export function renderCloudArcanumWebHtml(
         display: grid;
         justify-items: center;
         width: 100%;
-        margin-top: -70%;
+        margin-top: -100%;
         pointer-events: auto;
       }
 
@@ -2004,7 +2004,7 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cloud-arena-battlefield-attachment-card-shell + .cloud-arena-battlefield-attachment-card-shell {
-        margin-top: -42%;
+        margin-top: -100%;
       }
 
       .cloud-arena-battlefield-active-attachment-overlay {
@@ -2892,8 +2892,77 @@ export function renderCloudArcanumWebHtml(
         min-width: 0;
       }
 
+      .display-card-shell {
+        position: relative;
+        overflow: visible;
+      }
+
       .display-card-static-face {
         display: block;
+      }
+
+      .card-face-keyword-trigger {
+        display: inline-flex;
+        align-items: baseline;
+        border-radius: 0.2rem;
+        cursor: help;
+      }
+
+      .card-face-keyword-trigger:focus-visible {
+        outline: 2px solid rgba(154, 52, 18, 0.36);
+        outline-offset: 2px;
+      }
+
+      .display-card-keyword-tooltip {
+        position: absolute;
+        top: 0.5rem;
+        left: calc(100% + 0.65rem);
+        z-index: 40;
+        display: grid;
+        gap: 0.45rem;
+        width: min(15rem, 72vw);
+        padding: 0.65rem 0.75rem;
+        border: 1px solid rgba(95, 74, 36, 0.24);
+        border-radius: 8px;
+        background: rgba(255, 252, 246, 0.97);
+        box-shadow: 0 12px 28px rgba(55, 31, 8, 0.18);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateX(-0.2rem);
+        transition: opacity 120ms ease, transform 120ms ease;
+      }
+
+      .display-card-keyword-tooltip.is-visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .display-card-keyword-tooltip-title {
+        color: var(--muted);
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      .display-card-keyword-tooltip-list {
+        display: grid;
+        gap: 0.45rem;
+      }
+
+      .display-card-keyword-tooltip-entry {
+        display: grid;
+        gap: 0.14rem;
+        color: #3d2d17;
+        font-size: 0.76rem;
+        line-height: 1.2;
+      }
+
+      .display-card-keyword-tooltip-entry.is-active strong {
+        color: var(--accent);
+      }
+
+      .display-card-keyword-tooltip-entry strong {
+        font-size: 0.78rem;
       }
 
       .display-card-actions-inline,
@@ -3498,8 +3567,9 @@ export function renderCloudArcanumWebHtml(
         left: 50%;
         top: 50%;
         z-index: 30;
-        display: grid;
-        gap: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
         width: min(72rem, calc(100vw - 2rem));
         height: min(88dvh, calc(100dvh - 2rem));
         max-height: none;
@@ -3511,6 +3581,53 @@ export function renderCloudArcanumWebHtml(
         border-color: rgba(95, 84, 76, 0.24);
         background: rgba(255, 251, 246, 0.96);
         backdrop-filter: blur(16px);
+      }
+
+      .cloud-arena-inspector-tabs {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.3rem;
+        border-radius: 999px;
+        border: 1px solid rgba(95, 84, 76, 0.14);
+        background: rgba(255, 255, 255, 0.64);
+        width: fit-content;
+        flex: 0 0 auto;
+        align-self: flex-start;
+      }
+
+      .cloud-arena-inspector-tab {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 2rem;
+        padding: 0.3rem 0.8rem;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--muted);
+        font: inherit;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        cursor: pointer;
+      }
+
+      .cloud-arena-inspector-tab.is-active {
+        background: linear-gradient(135deg, rgba(255, 241, 230, 0.98), rgba(248, 226, 203, 0.9));
+        color: var(--accent);
+        box-shadow: inset 0 0 0 1px rgba(154, 52, 18, 0.16);
+      }
+
+      .cloud-arena-inspector-tab:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      .cloud-arena-inspector-body {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow: auto;
       }
 
       .cloud-arena-inspector-definition {
@@ -3541,6 +3658,30 @@ export function renderCloudArcanumWebHtml(
         white-space: pre-wrap;
         overflow-wrap: anywhere;
         word-break: break-word;
+      }
+
+      .cloud-arena-inspector-cards {
+        display: grid;
+        gap: 0.9rem;
+        grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+        align-items: start;
+        --display-card-width: clamp(12rem, 18vw, 15rem);
+      }
+
+      .cloud-arena-inspector-card {
+        max-width: none;
+      }
+
+      .cloud-arena-inspector-empty {
+        display: grid;
+        place-items: center;
+        min-height: 12rem;
+        padding: 1rem;
+        border-radius: 18px;
+        border: 1px dashed rgba(95, 84, 76, 0.24);
+        background: rgba(255, 255, 255, 0.65);
+        color: var(--muted);
+        font-weight: 700;
       }
 
       .cloud-arena-battle-sidepanel {

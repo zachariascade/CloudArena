@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { Fragment } from "react";
+import { Fragment, useMemo, useState } from "react";
 import type { MouseEvent } from "react";
 
 import mana1Symbol from "../assets/mtg-symbols/mana/1.svg";
@@ -25,6 +25,19 @@ type DisplayCardProps = {
     onClick: (event: MouseEvent<HTMLButtonElement>) => void;
   };
 };
+
+const DISPLAY_CARD_KEYWORD_GLOSSARY = {
+  halt: {
+    label: "Halt",
+    description: "While defending, this stops damage from passing through unless the attack has trample.",
+  },
+  refresh: {
+    label: "Refresh",
+    description: "Restore this to full health at the start of each round if it survived damage.",
+  },
+} as const;
+
+type DisplayCardKeywordId = keyof typeof DISPLAY_CARD_KEYWORD_GLOSSARY;
 
 function formatCardDisplayName(name: string, title: string | null | undefined): string {
   if (!title || title === name) {
@@ -105,11 +118,72 @@ function renderManaCost(manaCost: string | null | undefined): ReactElement | nul
   );
 }
 
-function renderRulesText(line: string): ReactElement[] {
+function getKeywordIdFromText(text: string): DisplayCardKeywordId | null {
+  const normalized = text.trim().toLowerCase();
+
+  return normalized in DISPLAY_CARD_KEYWORD_GLOSSARY
+    ? (normalized as DisplayCardKeywordId)
+    : null;
+}
+
+function collectKeywordsFromTextBlocks(textBlocks: DisplayCardModel["textBlocks"]): DisplayCardKeywordId[] {
+  const keywords: DisplayCardKeywordId[] = [];
+
+  for (const block of textBlocks) {
+    const matches = block.text.match(/\*\*([^*]+)\*\*/g) ?? [];
+
+    for (const match of matches) {
+      const keywordId = getKeywordIdFromText(match.replace(/\*\*/g, ""));
+
+      if (keywordId && !keywords.includes(keywordId)) {
+        keywords.push(keywordId);
+      }
+    }
+  }
+
+  return keywords;
+}
+
+function renderRulesText(
+  line: string,
+  options: {
+    onKeywordEnter: (keywordId: DisplayCardKeywordId) => void;
+    onKeywordLeave: () => void;
+  },
+): ReactElement[] {
   return line
-    .split(/(\{[^}]+\}|\([^)]*\))/g)
+    .split(/(\*\*[^*]+\*\*|\{[^}]+\}|\([^)]*\))/g)
     .filter(Boolean)
     .map((segment, index) => {
+      const boldMatch = segment.match(/^\*\*([^*]+)\*\*$/);
+      if (boldMatch) {
+        const keywordId = getKeywordIdFromText(boldMatch[1] ?? "");
+
+        if (keywordId) {
+          return (
+            <span
+              key={`${line}-${index}`}
+              className="card-face-keyword-trigger"
+              tabIndex={0}
+              role="button"
+              aria-label={`Show keyword help for ${DISPLAY_CARD_KEYWORD_GLOSSARY[keywordId].label}`}
+              onMouseEnter={() => options.onKeywordEnter(keywordId)}
+              onMouseLeave={() => options.onKeywordLeave()}
+              onFocus={() => options.onKeywordEnter(keywordId)}
+              onBlur={() => options.onKeywordLeave()}
+            >
+              <strong>{boldMatch[1]}</strong>
+            </span>
+          );
+        }
+
+        return (
+          <strong key={`${line}-${index}`}>
+            {boldMatch[1]}
+          </strong>
+        );
+      }
+
       const tokenMatch = segment.match(/^\{([^}]+)\}$/);
       if (tokenMatch) {
         return (
@@ -186,6 +260,7 @@ function renderDisplayImage(model: DisplayCardModel): ReactElement {
 }
 
 export function DisplayCard({ model, className, detailsAction }: DisplayCardProps): ReactElement {
+  const [activeKeywordId, setActiveKeywordId] = useState<DisplayCardKeywordId | null>(null);
   const displayName = formatCardDisplayName(model.name, model.title);
   const healthBar = model.healthBar ?? null;
   const energyBar = model.energyBar ?? null;
@@ -197,6 +272,7 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
   const badges = model.badges;
   const stateFlags = model.stateFlags;
   const actions = model.actions;
+  const glossaryKeywordIds = useMemo(() => collectKeywordsFromTextBlocks(textBlocks), [textBlocks]);
   const healthPercent = healthBar
     ? clampHealthPercent(healthBar.current, healthBar.max)
     : 0;
@@ -208,15 +284,27 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
     ? stats.filter((stat) => stat !== blockStat)
     : stats;
   const usesSideCombatPanel = model.variant === "player";
-  const isTopCombatCard =
-    model.variant === "enemy" || (model.variant === "permanent" && stateFlags.includes("enemy-controlled"));
   const isPermanentCard = model.variant === "permanent";
+  const isTopCombatCard = model.variant === "enemy" || isPermanentCard;
   const isExhaustedPermanent = isPermanentCard && stateFlags.includes("spent");
   const isDefendingPermanent = isPermanentCard && stateFlags.includes("defending");
   const isTargetablePlayer = stateFlags.includes("targetable-player");
   const isTargetableEnemy = stateFlags.includes("targetable-enemy");
   const isHealthDropping = stateFlags.includes("health-dropping");
   const isHealthRising = stateFlags.includes("health-rising");
+  const detailsButton = detailsAction ? (
+    <button
+      type="button"
+      className="display-card-info-button"
+      aria-label={detailsAction.ariaLabel ?? `Details for ${model.name}`}
+      onClick={(event) => {
+        event.stopPropagation();
+        detailsAction.onClick(event);
+      }}
+    >
+      <span aria-hidden="true">i</span>
+    </button>
+  ) : null;
   const cardFace = (
     <article className="card-face">
       <header className="card-face-header">
@@ -244,7 +332,10 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
               .filter(Boolean)
               .join(" ")}
           >
-            {renderRulesText(block.text)}
+            {renderRulesText(block.text, {
+              onKeywordEnter: setActiveKeywordId,
+              onKeywordLeave: () => setActiveKeywordId(null),
+            })}
           </p>
         ))}
       </div>
@@ -319,19 +410,7 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
                 style={{ width: `${healthPercent}%` }}
               />
             </div>
-            {detailsAction ? (
-              <button
-                type="button"
-                className="display-card-info-button"
-                aria-label={detailsAction.ariaLabel ?? `Details for ${model.name}`}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  detailsAction.onClick(event);
-                }}
-              >
-                <span aria-hidden="true">i</span>
-              </button>
-            ) : null}
+            {detailsButton}
           </div>
         </div>
       </div>
@@ -356,7 +435,7 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
   ) : null;
   const lowerContent = (
     <>
-      {statusLabel || actions.length > 0 || badges.length > 0 ? (
+      {statusLabel || actions.length > 0 || badges.length > 0 || (!healthBar && detailsButton) ? (
         <div className="card-face-meta-row">
           {statusLabel ? (
             <span className={`card-face-status ${statusTone ?? ""}`.trim()}>
@@ -379,6 +458,10 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
                   <AbilityCostChip costs={action.costs ?? [{ type: "free" }]} className="card-face-preview-button-cost" />
                 </button>
               ))}
+            </div>
+          ) : !healthBar && detailsButton ? (
+            <div className="display-card-actions-inline">
+              {detailsButton}
             </div>
           ) : badges.length > 0 ? (
             <div className="display-card-badges-inline">
@@ -442,6 +525,26 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
           {combatPanel}
         </>
       )}
+      {glossaryKeywordIds.length > 0 ? (
+        <aside
+          className={`display-card-keyword-tooltip${activeKeywordId ? " is-visible" : ""}`}
+          role="note"
+          aria-label="Keyword abilities"
+        >
+          <div className="display-card-keyword-tooltip-title">Keywords</div>
+          <div className="display-card-keyword-tooltip-list">
+            {glossaryKeywordIds.map((keywordId) => (
+              <div
+                key={keywordId}
+                className={`display-card-keyword-tooltip-entry${keywordId === activeKeywordId ? " is-active" : ""}`}
+              >
+                <strong>{DISPLAY_CARD_KEYWORD_GLOSSARY[keywordId].label}</strong>
+                <span>{DISPLAY_CARD_KEYWORD_GLOSSARY[keywordId].description}</span>
+              </div>
+            ))}
+          </div>
+        </aside>
+      ) : null}
     </div>
   );
 }

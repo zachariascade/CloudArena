@@ -8,6 +8,7 @@ import { focusedBlessingCardDefinition } from "../../src/cloud-arena/cards/defin
 import { choirCaptainCardDefinition } from "../../src/cloud-arena/cards/definitions/choir-captain.js";
 import { forcedSacrificeCardDefinition } from "../../src/cloud-arena/cards/definitions/forced-sacrifice.js";
 import { guardianCardDefinition } from "../../src/cloud-arena/cards/definitions/guardian.js";
+import { haltBucklerCardDefinition } from "../../src/cloud-arena/cards/definitions/halt-buckler.js";
 import { graveyardHymnCardDefinition } from "../../src/cloud-arena/cards/definitions/graveyard-hymn.js";
 import { massBenedictionCardDefinition } from "../../src/cloud-arena/cards/definitions/mass-benediction.js";
 import { targetedStrikeCardDefinition } from "../../src/cloud-arena/cards/definitions/targeted-strike.js";
@@ -16,6 +17,7 @@ import { holyBladeCardDefinition } from "../../src/cloud-arena/cards/definitions
 import { judgmentBladeCardDefinition } from "../../src/cloud-arena/cards/definitions/judgment-blade.js";
 import { restorativeTouchCardDefinition } from "../../src/cloud-arena/cards/definitions/restorative-touch.js";
 import { radiantConduitCardDefinition } from "../../src/cloud-arena/cards/definitions/radiant-conduit.js";
+import { refreshSignetCardDefinition } from "../../src/cloud-arena/cards/definitions/refresh-signet.js";
 import { resurrectCardDefinition } from "../../src/cloud-arena/cards/definitions/resurrect.js";
 import { sanctifiedGuideCardDefinition } from "../../src/cloud-arena/cards/definitions/sanctified-guide.js";
 import { summarizeCardDefinition } from "../../src/cloud-arena/card-summary.js";
@@ -31,6 +33,19 @@ describe("cloud arena card summary", () => {
     expect(summarizeCardDefinition(holyBladeCardDefinition)).toEqual([
       "Equip a permanent.",
       "Equipped permanent gets +1/+1.",
+    ]);
+  });
+
+  it("describes equipment-granted keyword abilities", () => {
+    expect(summarizeCardDefinition(refreshSignetCardDefinition)).toEqual([
+      "Equip a permanent.",
+      "Equipped permanent gets +0/+1.",
+      "Equipped creature has **Refresh**.",
+    ]);
+    expect(summarizeCardDefinition(haltBucklerCardDefinition)).toEqual([
+      "Equip a permanent.",
+      "Equipped permanent gets +0/+1.",
+      "Equipped creature has **Halt**.",
     ]);
   });
 
@@ -68,11 +83,15 @@ describe("cloud arena card summary", () => {
 
   it("describes the static angel bonus on Choir Captain", () => {
     expect(summarizeCardDefinition(choirCaptainCardDefinition)).toEqual([
+      "**Refresh**",
       "This gets +1 power for each Angel on the battlefield.",
     ]);
   });
 
   it("describes the guardian block ability", () => {
+    expect(summarizeCardDefinition(guardianCardDefinition)).toContain(
+      "**Halt**",
+    );
     expect(summarizeCardDefinition(guardianCardDefinition)).toContain(
       "Pay 1 energy: Gain 5 block.",
     );

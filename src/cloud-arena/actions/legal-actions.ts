@@ -5,7 +5,11 @@ import {
   getAbilityEnergyCost,
 } from "../core/activated-abilities.js";
 import { evaluateCondition } from "../core/conditions.js";
-import { hasOpenBattlefieldSlot, selectObjects, selectPermanents } from "../core/selectors.js";
+import {
+  hasOpenBattlefieldSlotForCardDefinition,
+  selectObjects,
+  selectPermanents,
+} from "../core/selectors.js";
 import type { BattleAction, BattleState, Effect, Selector } from "../core/types.js";
 import type { SelectedObject } from "../core/selectors.js";
 
@@ -97,7 +101,7 @@ export function getLegalActions(state: BattleState): BattleAction[] {
         return true;
       }
 
-      return hasOpenBattlefieldSlot(state);
+      return hasOpenBattlefieldSlotForCardDefinition(state, definition);
     })
     .map((card) => ({
       type: "play_card" as const,

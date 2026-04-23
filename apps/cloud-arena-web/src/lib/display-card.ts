@@ -437,8 +437,8 @@ export function mapArenaPermanentToDisplayCard(
     footerCode: presentation.footerCode,
     footerCredit: presentation.footerCredit,
     collectorNumber: `${presentation.collectorNumber}-${permanent.slotIndex + 1}`,
-    footerStat: `${permanent.power}/${permanent.health}`,
-    healthBar: isEnemyControlled
+    footerStat: permanent.isCreature ? `${permanent.power}/${permanent.health}` : null,
+    healthBar: permanent.isCreature
       ? {
           current: permanent.health,
           max: permanent.maxHealth,

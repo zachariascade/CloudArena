@@ -327,6 +327,7 @@ function getTargetSelectorForEffect(effect: Effect): Selector | null {
     case "remove_counter":
     case "deal_damage":
     case "gain_block":
+    case "restore_health":
     case "draw_card":
     case "attach_from_battlefield":
       return typeof effect.target === "string" ? null : effect.target;
@@ -603,6 +604,22 @@ function resolveGainBlockEffect(
   }
 }
 
+function resolveRestoreHealthEffect(
+  state: BattleState,
+  effect: Extract<Effect, { type: "restore_health" }>,
+  context: EffectResolutionContext,
+): void {
+  const targets = resolvePermanentTargets(state, effect.target, context);
+
+  for (const permanent of targets) {
+    permanent.health = permanent.maxHealth;
+
+    if (permanent.isEnemyLeader) {
+      syncEnemyStateFromLeaderPermanent(state);
+    }
+  }
+}
+
 function resolveDrawCardEffect(
   state: BattleState,
   effect: Extract<Effect, { type: "draw_card" }>,
@@ -733,7 +750,7 @@ function resolveAttachFromHandEffect(
     throw new Error(`Card ${definition.id} cannot be attached because it is not a permanent.`);
   }
 
-  if (!canSummonPermanentFromCard(state)) {
+  if (!canSummonPermanentFromCard(state, attachmentCard.card)) {
     return;
   }
 
@@ -919,6 +936,9 @@ export function resolveEffect(
       return;
     case "gain_block":
       resolveGainBlockEffect(state, effect, context);
+      return;
+    case "restore_health":
+      resolveRestoreHealthEffect(state, effect, context);
       return;
     case "draw_card":
       resolveDrawCardEffect(state, effect, context);

@@ -11,15 +11,19 @@ import { CloudArenaBattlefieldPanel } from "./cloud-arena-battlefield-panel.js";
 import { CloudArenaHandTray } from "./cloud-arena-hand-tray.js";
 import { CloudArenaInspectorPanel } from "./cloud-arena-inspector-panel.js";
 import {
+  cloudArenaEnemyPresets,
   cardDefinitions,
   getAbilityCostDisplayParts,
 } from "../../../../src/cloud-arena/index.js";
 import {
   mapArenaEnemyToDisplayCard,
+  mapArenaGraveyardCardToDisplayCard,
   mapArenaHandCardToDisplayCard,
   mapArenaPermanentToDisplayCard,
   mapArenaPlayerToDisplayCard,
+  type DisplayCardModel,
 } from "../lib/display-card.js";
+import { buildEnemyPreviewCards } from "../lib/cloud-arena-enemy-card-preview.js";
 import { buildBattlefieldAttachmentState } from "../lib/cloud-arena-battle-attachments.js";
 import type {
   BattleAction,
@@ -105,6 +109,7 @@ export function CloudArenaBattleState({
     [battle.enemy, enemyHealthFlashDirection],
   );
   const [hoveredInspectorKey, setHoveredInspectorKey] = useState<string | null>(null);
+  const [hoveredInspectorTab, setHoveredInspectorTab] = useState<"info" | "cards" | "sequence">("info");
   const [hoveredInspectorPosition, setHoveredInspectorPosition] = useState<{
     left: number;
     top: number;
@@ -320,6 +325,35 @@ export function CloudArenaBattleState({
       );
     }
 
+    for (const card of battle.player.drawPile) {
+      models.set(
+        `draw:${card.instanceId}`,
+        mapArenaHandCardToDisplayCard(card, {
+          isPlayable: false,
+          disabled: true,
+        }),
+      );
+    }
+
+    for (const card of battle.player.discardPile) {
+      models.set(
+        `discard:${card.instanceId}`,
+        mapArenaHandCardToDisplayCard(card, {
+          isPlayable: false,
+          disabled: true,
+        }),
+      );
+    }
+
+    for (const card of battle.player.graveyard) {
+      models.set(
+        `graveyard:${card.instanceId}`,
+        mapArenaGraveyardCardToDisplayCard(card, {
+          disabled: true,
+        }),
+      );
+    }
+
     for (const slot of battle.battlefield) {
       if (!slot) {
         continue;
@@ -481,6 +515,24 @@ export function CloudArenaBattleState({
           return card ? getDefinitionJson(card.definitionId) : null;
         }
 
+        if (hoveredInspectorKey.startsWith("draw:")) {
+          const cardInstanceId = hoveredInspectorKey.slice("draw:".length);
+          const card = battle.player.drawPile.find((entry) => entry.instanceId === cardInstanceId);
+          return card ? getDefinitionJson(card.definitionId) : null;
+        }
+
+        if (hoveredInspectorKey.startsWith("discard:")) {
+          const cardInstanceId = hoveredInspectorKey.slice("discard:".length);
+          const card = battle.player.discardPile.find((entry) => entry.instanceId === cardInstanceId);
+          return card ? getDefinitionJson(card.definitionId) : null;
+        }
+
+        if (hoveredInspectorKey.startsWith("graveyard:")) {
+          const cardInstanceId = hoveredInspectorKey.slice("graveyard:".length);
+          const card = battle.player.graveyard.find((entry) => entry.instanceId === cardInstanceId);
+          return card ? getDefinitionJson(card.definitionId) : null;
+        }
+
         if (hoveredInspectorKey.startsWith("battlefield:")) {
           const permanentId = hoveredInspectorKey.slice("battlefield:".length);
           const permanent = battle.battlefield.find((entry) => entry?.instanceId === permanentId) ?? null;
@@ -496,6 +548,60 @@ export function CloudArenaBattleState({
         return null;
       })()
     : null;
+  const hoveredInspectorEnemyPermanent = useMemo(
+    () => {
+      if (!hoveredInspectorKey?.startsWith("enemy_battlefield:")) {
+        return null;
+      }
+
+      const permanentId = hoveredInspectorKey.slice("enemy_battlefield:".length);
+      return enemyBattlefield.find((entry) => entry?.instanceId === permanentId) ?? null;
+    },
+    [enemyBattlefield, hoveredInspectorKey],
+  );
+  const hoveredInspectorSequenceCards = useMemo<Array<{ key: string; model: DisplayCardModel }>>(() => {
+    if (!hoveredInspectorEnemyPermanent) {
+      return [];
+    }
+
+    const enemyPreset = Object.values(cloudArenaEnemyPresets).find(
+      (preset) => preset.leaderDefinitionId === hoveredInspectorEnemyPermanent.definitionId,
+    );
+
+    if (!enemyPreset) {
+      return [];
+    }
+
+    return buildEnemyPreviewCards(enemyPreset.cards).map((model, index) => ({
+      key: `${hoveredInspectorEnemyPermanent.instanceId}:enemy-sequence:${index}`,
+      model,
+    }));
+  }, [hoveredInspectorEnemyPermanent]);
+  const hoveredInspectorCards = useMemo<Array<{ key: string; model: DisplayCardModel }>>(() => {
+    if (!hoveredInspectorKey?.startsWith("enemy_battlefield:")) {
+      return [];
+    }
+
+    if (!hoveredInspectorEnemyPermanent) {
+      return [];
+    }
+
+    const attachedCards = [...battle.battlefield, ...enemyBattlefield]
+      .flatMap((slot) => {
+        if (!slot?.attachedTo || slot.controllerId !== "enemy") {
+          return [];
+        }
+
+        return [{
+          key: `${slot.controllerId === "enemy" ? "enemy_battlefield" : "battlefield"}:${slot.instanceId}`,
+          model: getInspectableModel(`${slot.controllerId === "enemy" ? "enemy_battlefield" : "battlefield"}:${slot.instanceId}`),
+        }];
+      });
+
+    return attachedCards;
+  }, [battle.battlefield, enemyBattlefield, getInspectableModel, hoveredInspectorEnemyPermanent]);
+  const hoveredInspectorHasCardsTab = hoveredInspectorCards.length > 0;
+  const hoveredInspectorHasSequenceTab = hoveredInspectorSequenceCards.length > 0;
 
   function getAnchoredInspectorPosition(
     targetRect: DOMRect,
@@ -532,6 +638,19 @@ export function CloudArenaBattleState({
 
   function openInspector(key: string, event: MouseEvent<HTMLElement>): void {
     setHoveredInspectorKey(key);
+    if (key.startsWith("enemy_battlefield:")) {
+      const permanentId = key.slice("enemy_battlefield:".length);
+      const selectedPermanent = enemyBattlefield.find((entry) => entry?.instanceId === permanentId) ?? null;
+      const enemyPreset = selectedPermanent
+        ? Object.values(cloudArenaEnemyPresets).find(
+            (preset) => preset.leaderDefinitionId === selectedPermanent.definitionId,
+          )
+        : null;
+
+      setHoveredInspectorTab(enemyPreset?.cards.length ? "sequence" : "info");
+    } else {
+      setHoveredInspectorTab("info");
+    }
     setHoveredInspectorPosition(
       getAnchoredInspectorPosition(event.currentTarget.getBoundingClientRect()),
     );
@@ -607,7 +726,7 @@ export function CloudArenaBattleState({
       }];
     });
 
-    const defendAction = true
+    const defendAction = permanent.isCreature
       ? [{
           action: "defend" as const,
           label: "Defend",
@@ -728,7 +847,8 @@ export function CloudArenaBattleState({
           <CloudArenaHandTray
             battle={battle}
             player={battle.player}
-            battlefieldSlotCount={battle.battlefieldSlotCount}
+            creatureBattlefieldSlotCount={battle.creatureBattlefieldSlotCount}
+            nonCreatureBattlefieldSlotCount={battle.nonCreatureBattlefieldSlotCount}
             maxPlayerEnergy={maxPlayerEnergy}
             getInspectableModel={getInspectableModel}
             bindInspectorInteractions={bindInspectorInteractions}
@@ -743,6 +863,12 @@ export function CloudArenaBattleState({
         {hoveredInspectorKey ? (
           <CloudArenaInspectorPanel
             definitionJson={hoveredInspectorDefinitionJson}
+            activeTab={hoveredInspectorTab}
+            cards={hoveredInspectorCards}
+            showCardsTab={hoveredInspectorHasCardsTab}
+            sequenceCards={hoveredInspectorSequenceCards}
+            showSequenceTab={hoveredInspectorHasSequenceTab}
+            onTabChange={setHoveredInspectorTab}
             position={hoveredInspectorPosition}
           />
         ) : null}

@@ -1,4 +1,5 @@
 import {
+  asPermanentCardDefinition,
   getCardDefinitionFromLibrary,
   hasCardType,
   isEquipmentCardDefinition,
@@ -281,5 +282,29 @@ export function findPermanentById(
 }
 
 export function hasOpenBattlefieldSlot(state: BattleState): boolean {
-  return state.battlefield.some((slot) => slot === null);
+  return (
+    state.battlefield
+      .slice(0, state.playerCreatureSlotCount)
+      .some((slot) => slot === null) ||
+    state.battlefield
+      .slice(state.playerCreatureSlotCount, state.playerCreatureSlotCount + state.playerNonCreatureSlotCount)
+      .some((slot) => slot === null)
+  );
+}
+
+export function hasOpenBattlefieldSlotForCardDefinition(
+  state: BattleState,
+  definition: CardDefinition,
+): boolean {
+  const permanentDefinition = asPermanentCardDefinition(definition);
+
+  if (hasCardType(permanentDefinition, "creature")) {
+    return state.battlefield
+      .slice(0, state.playerCreatureSlotCount)
+      .some((slot) => slot === null);
+  }
+
+  return state.battlefield
+    .slice(state.playerCreatureSlotCount, state.playerCreatureSlotCount + state.playerNonCreatureSlotCount)
+    .some((slot) => slot === null);
 }

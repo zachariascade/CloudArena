@@ -10,6 +10,7 @@ import {
 } from "./enemy-plan.js";
 import {
   cleanupDefeatedPermanents,
+  permanentHasKeyword,
   syncEnemyStateFromLeaderPermanent,
   syncEnemyLeaderPermanentFromState,
 } from "./permanents.js";
@@ -30,7 +31,7 @@ export function resetRound(state: BattleState): BattleState {
     }
 
     permanent.block = 0;
-    if (permanent.recoveryPolicy === "full_heal") {
+    if (permanent.recoveryPolicy === "full_heal" || permanentHasKeyword(permanent, "refresh")) {
       permanent.health = permanent.maxHealth;
     }
     permanent.hasActedThisTurn = false;
@@ -47,7 +48,7 @@ export function resetRound(state: BattleState): BattleState {
     if (!permanent.isEnemyLeader) {
       permanent.block = 0;
     }
-    if (permanent.recoveryPolicy === "full_heal") {
+    if (permanent.recoveryPolicy === "full_heal" || permanentHasKeyword(permanent, "refresh")) {
       permanent.health = permanent.maxHealth;
     }
     permanent.hasActedThisTurn = false;

@@ -45,7 +45,7 @@ export const sacrificialSeraphCardDefinition: CardDefinition = {
         event: "permanent_died",
         selector: {
           controller: "you",
-          cardType: "permanent",
+          cardType: "creature",
           relation: "another",
         },
       },
@@ -55,6 +55,10 @@ export const sacrificialSeraphCardDefinition: CardDefinition = {
           target: "self",
           powerDelta: 1,
           healthDelta: 1,
+        },
+        {
+          type: "restore_health",
+          target: "self",
         },
       ],
     },

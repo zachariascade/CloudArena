@@ -569,6 +569,10 @@ function describeEffect(effect: CardEffect | Effect, preSummon = false): string 
         return describeDealDamageEffect(effect);
       case "gain_block":
         return describeBlockEffect(effect);
+      case "restore_health":
+        return effect.target === "self"
+          ? "This fully heals."
+          : `Choose ${describeSelectorTarget(effect.target)}; fully heal it.`;
       case "stun":
         return "Stun the enemy.";
       case "draw_card":
@@ -690,8 +694,25 @@ export function summarizeCardDefinition(definition: CardDefinition): string[] {
       if (definition.attackAllEnemyPermanents) {
         summaryLines.push("Equipped creature attacks all enemy permanents.");
       }
+      for (const keyword of definition.grantedKeywords ?? []) {
+        if (keyword === "refresh") {
+          summaryLines.push("Equipped creature has **Refresh**.");
+        }
+
+        if (keyword === "halt") {
+          summaryLines.push("Equipped creature has **Halt**.");
+        }
+      }
     } else if (!hasCardType(definition, "creature") && !(definition.abilities?.length ?? 0)) {
       summaryLines.push(`Summon ${definition.name}.`);
+    }
+
+    if (definition.keywords?.includes("refresh") || definition.recoveryPolicy === "full_heal") {
+      summaryLines.push("**Refresh**");
+    }
+
+    if (definition.keywords?.includes("halt")) {
+      summaryLines.push("**Halt**");
     }
 
     summaryLines.push(...summarizeEffects(definition.preSummonEffects, true));

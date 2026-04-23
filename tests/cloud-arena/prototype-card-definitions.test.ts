@@ -10,18 +10,46 @@ import {
   getPermanentCounterCount,
 } from "../../src/cloud-arena/index.js";
 
+const SACRIFICIAL_SERAPH_TEST_DEFINITIONS: CardDefinitionLibrary = {
+  sacrificial_bolt: {
+    id: "sacrificial_bolt",
+    name: "Sacrificial Bolt",
+    cardTypes: ["instant"],
+    cost: 0,
+    onPlay: [],
+    spellEffects: [
+      {
+        type: "deal_damage",
+        target: {
+          zone: "battlefield",
+          controller: "you",
+          cardType: "creature",
+        },
+        targeting: {
+          prompt: "Choose a creature to strike",
+        },
+        amount: { type: "constant", value: 12 },
+      },
+    ],
+  },
+};
+
 describe("cloud arena prototype card definitions", () => {
   it("supports sacrificial_seraph in the default card library", () => {
     const battle = createBattle({
       seed: 1,
       playerHealth: 100,
-      cardDefinitions,
+      cardDefinitions: {
+        ...cardDefinitions,
+        ...SACRIFICIAL_SERAPH_TEST_DEFINITIONS,
+      },
       playerDeck: [
         "guardian",
         "sacrificial_seraph",
+        "guardian",
+        "sacrificial_bolt",
         "attack",
         "defend",
-        "attack",
       ],
       enemy: {
         name: "Prototype Dummy",
@@ -35,8 +63,9 @@ describe("cloud arena prototype card definitions", () => {
 
     const guardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
     const seraphCard = battle.player.hand.find((card) => card.definitionId === "sacrificial_seraph");
+    const boltCard = battle.player.hand.find((card) => card.definitionId === "sacrificial_bolt");
 
-    if (!guardianCard || !seraphCard) {
+    if (!guardianCard || !seraphCard || !boltCard) {
       throw new Error("Expected prototype cards in opening hand.");
     }
 
@@ -74,6 +103,47 @@ describe("cloud arena prototype card definitions", () => {
     expect(getPermanentCounterCount(seraph, "+1/+1")).toBe(2);
     expect(getDerivedPermanentStat(battle, seraph, "power")).toBe(4);
     expect(battle.player.graveyard.map((card) => card.definitionId)).toContain("guardian");
+
+    const secondGuardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
+
+    if (!secondGuardianCard) {
+      throw new Error("Expected a second guardian in hand.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: secondGuardianCard.instanceId,
+    });
+
+    const secondGuardian = battle.battlefield.find(
+      (permanent) => permanent?.sourceCardInstanceId === secondGuardianCard.instanceId,
+    );
+
+    if (!secondGuardian) {
+      throw new Error("Expected a second guardian on battlefield.");
+    }
+
+    seraph.health = 2;
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: boltCard.instanceId,
+    });
+
+    const boltTargetAction = getLegalActions(battle).find(
+      (action) =>
+        action.type === "choose_target" &&
+        action.targetPermanentId === secondGuardian.instanceId,
+    );
+
+    if (!boltTargetAction || boltTargetAction.type !== "choose_target") {
+      throw new Error("Expected a legal target for sacrificial_bolt.");
+    }
+
+    applyBattleAction(battle, boltTargetAction);
+
+    expect(getPermanentCounterCount(seraph, "+1/+1")).toBe(4);
+    expect(seraph.health).toBe(seraph.maxHealth);
   });
 
   it("supports card_played and spell_cast triggers", () => {

@@ -12,8 +12,10 @@ import {
   mapArenaPermanentToDisplayCard,
   mapArenaPlayerToDisplayCard,
 } from "../apps/cloud-arena-web/src/lib/display-card.js";
+import { buildEnemyPreviewCards } from "../apps/cloud-arena-web/src/lib/cloud-arena-enemy-card-preview.js";
 import type { CloudArenaBattleViewModel } from "../apps/cloud-arena-web/src/lib/cloud-arena-battle-view-model.js";
 import type { CloudArenaBattleMotionState } from "../apps/cloud-arena-web/src/lib/cloud-arena-battle-motion.js";
+import { getEnemyPreset } from "../src/cloud-arena/index.js";
 
 const EMPTY_BATTLE_MOTION_STATE: CloudArenaBattleMotionState = {
   attackIds: {},
@@ -369,11 +371,15 @@ describe("shared display card mappers", () => {
 
     expect(permanentCard.variant).toBe("permanent");
     expect(permanentCard.footerStat).toBe("4/10");
-    expect(permanentCard.healthBar).toBeNull();
+    expect(permanentCard.healthBar).toEqual({
+      current: 10,
+      max: 10,
+      label: "10/10",
+    });
     expect(permanentCard.statusLabel).toBe("defending");
     expect(permanentCard.stats).toHaveLength(0);
-    expect(permanentCard.textBlocks.map((entry) => entry.text)).toEqual(
-      handCard.textBlocks.map((entry) => entry.text),
+    expect(permanentCard.textBlocks.map((entry) => entry.text).join(" ")).toContain(
+      handCard.textBlocks[0]?.text ?? "",
     );
     expect(permanentCard.image?.url).toContain("/images/cards/card_0036_watcher_at_edens_gate.jpg");
     expect(permanentCard.badges).toHaveLength(0);
@@ -386,6 +392,33 @@ describe("shared display card mappers", () => {
       label: "18/18",
     });
     expect(enemyLeaderCard.textBlocks.every((entry) => entry.kind === "rules")).toBe(true);
+  });
+
+  it("renders keyword abilities in bold in card text", () => {
+    const guardianCard = mapArenaPermanentToDisplayCard({
+      instanceId: "guardian_1",
+      sourceCardInstanceId: "card_1",
+      definitionId: "guardian",
+      name: "Guardian",
+      controllerId: "player",
+      isCreature: true,
+      power: 4,
+      health: 10,
+      maxHealth: 10,
+      block: 0,
+      hasActedThisTurn: false,
+      isTapped: false,
+      isDefending: false,
+      slotIndex: 0,
+      actions: [],
+    });
+
+    const html = renderToStaticMarkup(createElement(DisplayCard, { model: guardianCard }));
+
+    expect(html).toContain("<strong>Halt</strong>");
+    expect(html).toContain("card-face-keyword-trigger");
+    expect(html).toContain("display-card-keyword-tooltip");
+    expect(html).toContain("While defending, this stops damage from passing through unless the attack has trample.");
   });
 
   it("renders cost chips in the Cloud Arena battlefield action face", () => {
@@ -581,6 +614,32 @@ describe("shared display card mappers", () => {
     expect(html).toContain("Re-equip");
   });
 
+  it("does not show power and toughness for noncreature artifacts", () => {
+    const equipmentCard = mapArenaPermanentToDisplayCard({
+      instanceId: "holy_blade_1",
+      sourceCardInstanceId: "card_2",
+      definitionId: "holy_blade",
+      name: "Holy Blade",
+      controllerId: "player",
+      isCreature: false,
+      power: 1,
+      health: 1,
+      maxHealth: 1,
+      block: 0,
+      counters: {},
+      attachments: [],
+      attachedTo: null,
+      hasActedThisTurn: false,
+      isTapped: false,
+      isDefending: false,
+      slotIndex: 1,
+      actions: [],
+    });
+
+    expect(equipmentCard.footerStat).toBeNull();
+    expect(equipmentCard.healthBar).toBeNull();
+  });
+
   it("only renders permanent intent bubbles for enemy battlefield permanents", () => {
     const attackingPermanent = {
       instanceId: "guardian_1",
@@ -728,6 +787,8 @@ describe("shared display card mappers", () => {
         turn: [],
       },
       battlefieldSlotCount: 1,
+      creatureBattlefieldSlotCount: 1,
+      nonCreatureBattlefieldSlotCount: 1,
       player: {
         health: 30,
         maxHealth: 30,
@@ -788,7 +849,8 @@ describe("shared display card mappers", () => {
         createElement(CloudArenaHandTray, {
           battle,
           player: battle.player,
-          battlefieldSlotCount: battle.battlefieldSlotCount,
+          creatureBattlefieldSlotCount: battle.creatureBattlefieldSlotCount,
+          nonCreatureBattlefieldSlotCount: battle.nonCreatureBattlefieldSlotCount,
           maxPlayerEnergy: 3,
           getInspectableModel: (key) =>
             key === "hand:card_1"
@@ -849,7 +911,8 @@ describe("shared display card mappers", () => {
       ),
     );
 
-    expect(html).toContain("details");
+    expect(html).toContain("display-card-info-button");
+    expect(html).toContain("aria-label=\"Graveyard Hymn health\"");
   });
 
   it("renders an info control for enemy-controlled permanents", () => {
@@ -890,6 +953,32 @@ describe("shared display card mappers", () => {
     expect(html).not.toContain("details");
   });
 
+  it("renders an info control for non-combat cards with details actions", () => {
+    const html = renderToStaticMarkup(
+      createElement(DisplayCard, {
+        model: mapArenaHandCardToDisplayCard(
+          {
+            instanceId: "card_1",
+            definitionId: "graveyard_hymn",
+            name: "Graveyard Hymn",
+            cost: 2,
+            effectSummary: "Bless the battlefield on death.",
+          },
+          {
+            isPlayable: false,
+          },
+        ),
+        detailsAction: {
+          onClick: () => undefined,
+        },
+      }),
+    );
+
+    expect(html).toContain("display-card-info-button");
+    expect(html).toContain("Details for Graveyard Hymn");
+    expect(html).toContain(">i<");
+  });
+
   it("renders details controls in the arena hand tray without playable text", () => {
     const battle: CloudArenaBattleViewModel = {
       turnNumber: 1,
@@ -900,6 +989,8 @@ describe("shared display card mappers", () => {
         turn: [],
       },
       battlefieldSlotCount: 0,
+      creatureBattlefieldSlotCount: 0,
+      nonCreatureBattlefieldSlotCount: 0,
       player: {
         health: 30,
         maxHealth: 30,
@@ -936,7 +1027,8 @@ describe("shared display card mappers", () => {
       createElement(CloudArenaHandTray, {
         battle,
         player: battle.player,
-        battlefieldSlotCount: battle.battlefieldSlotCount,
+        creatureBattlefieldSlotCount: battle.creatureBattlefieldSlotCount,
+        nonCreatureBattlefieldSlotCount: battle.nonCreatureBattlefieldSlotCount,
         maxPlayerEnergy: 3,
         getInspectableModel: (key) =>
           key === "hand:card_1"
@@ -970,7 +1062,9 @@ describe("shared display card mappers", () => {
       }),
     );
 
-    expect(html).toContain("details");
+    expect(html).not.toContain("Details for draw pile");
+    expect(html).not.toContain("Details for discard pile");
+    expect(html).not.toContain("Details for graveyard pile");
     expect(html).not.toContain(">playable<");
   });
 
@@ -1003,6 +1097,8 @@ describe("shared display card mappers", () => {
           null,
           2,
         ),
+        activeTab: "info",
+        onTabChange: () => undefined,
       }),
     );
 
@@ -1010,6 +1106,28 @@ describe("shared display card mappers", () => {
     expect(html).toContain("&quot;id&quot;: &quot;guardian&quot;");
     expect(html).toContain("&quot;abilities&quot;: [");
     expect(html).not.toContain("card-face");
+  });
+
+  it("renders a sequence tab with real enemy card faces", () => {
+    const impCallerCards = buildEnemyPreviewCards(getEnemyPreset("imp_caller").cards);
+
+    const html = renderToStaticMarkup(
+      createElement(CloudArenaInspectorPanel, {
+        definitionJson: "{}",
+        activeTab: "sequence",
+        showSequenceTab: true,
+        sequenceCards: impCallerCards.map((model, index) => ({
+          key: `enemy_battlefield:enemy_1:enemy-sequence:${index}`,
+          model,
+        })),
+        onTabChange: () => undefined,
+      }),
+    );
+
+    expect(html).toContain("Sequence");
+    expect(html).toContain("Attack Once With Base Power");
+    expect(html).toContain("Spawn token imp");
+    expect(html).toContain("display-card-shell");
   });
 
   it("does not render the Ark of the Covenant as a guardian fallback", () => {
@@ -1044,6 +1162,7 @@ describe("shared display card mappers", () => {
     expect(bannerCard.title).toBe("Ark of the Covenant");
     expect(bannerCard.subtitle).toBe("Artifact");
     expect(bannerCard.textBlocks.some((entry) => entry.text.length > 0)).toBe(true);
+    expect(bannerCard.actions.map((action) => action.label)).not.toContain("Defend");
   });
 });
 
@@ -1215,7 +1334,7 @@ describe("shared display card component", () => {
     expect(enemyHtml).not.toContain("display-card-intent-banner");
     expect(permanentHtml).toContain("card-face-stats-box");
     expect(permanentHtml).toContain(">4/8<");
-    expect(permanentHtml).not.toContain("aria-label=\"Guardian health\"");
+    expect(permanentHtml).toContain("aria-label=\"Guardian health\"");
     expect(permanentHtml).not.toContain("display-card-block-icon");
     expect(permanentHtml).not.toContain("ready");
     expect(permanentHtml).not.toContain("spent");

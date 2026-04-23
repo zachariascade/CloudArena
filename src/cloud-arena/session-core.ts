@@ -321,6 +321,8 @@ export function buildCloudArenaSessionSnapshot(
       intentLabel: primaryEnemyPermanent?.intentLabel ?? (state.enemy.stunnedThisTurn ? "Stunned" : formatEnemyIntent(state.enemy.intent)),
       intentQueueLabels: primaryEnemyPermanent?.intentQueueLabels ?? [...state.enemy.intentQueueLabels],
     },
+    creatureBattlefieldSlotCount: state.playerCreatureSlotCount,
+    nonCreatureBattlefieldSlotCount: state.playerNonCreatureSlotCount,
     battlefield: state.battlefield.map((permanent) =>
       permanent
         ? {
