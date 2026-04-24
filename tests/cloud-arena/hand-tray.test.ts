@@ -31,6 +31,7 @@ function makeBattle(): CloudArenaBattleViewModel {
       intentLabel: "attack 3",
       intentQueueLabels: [],
     },
+    enemies: [],
     battlefield: [],
     battlefieldSlotCount: 4,
     creatureBattlefieldSlotCount: 4,

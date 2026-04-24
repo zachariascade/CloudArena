@@ -356,6 +356,24 @@ export function buildCloudArenaSessionSnapshot(
       intentLabel: primaryEnemyPermanent?.intentLabel ?? (state.enemy.stunnedThisTurn ? "Stunned" : formatEnemyIntent(state.enemy.intent)),
       intentQueueLabels: primaryEnemyPermanent?.intentQueueLabels ?? [...state.enemy.intentQueueLabels],
     },
+    enemies: state.enemies.map((actor) => {
+      const actorPermanent = actor.permanentId
+        ? (state.enemyBattlefield.find((p) => p?.instanceId === actor.permanentId) ?? null)
+        : null;
+      return {
+        id: actor.id,
+        definitionId: actor.definitionId,
+        name: actor.name,
+        health: actorPermanent?.health ?? actor.health,
+        maxHealth: actorPermanent?.maxHealth ?? actor.maxHealth,
+        block: actorPermanent?.block ?? actor.block,
+        intent: { ...actor.intent },
+        intentLabel: actorPermanent?.intentLabel ?? (actor.stunnedThisTurn ? "Stunned" : formatEnemyIntent(actor.intent)),
+        intentQueueLabels: actorPermanent?.intentQueueLabels ?? [...actor.intentQueueLabels],
+        currentCardId: actor.currentCardId,
+        permanentId: actor.permanentId,
+      };
+    }),
     creatureBattlefieldSlotCount: state.playerCreatureSlotCount,
     nonCreatureBattlefieldSlotCount: state.playerNonCreatureSlotCount,
     battlefield: state.battlefield.map((permanent) =>

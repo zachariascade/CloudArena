@@ -67,6 +67,7 @@ function makeBattle(overrides: Partial<CloudArenaBattleViewModel>): CloudArenaBa
     blockingQueue: [],
     legalActions: [],
     ...overrides,
+    enemies: overrides.enemies ?? [],
     battlefieldSlotCount,
     creatureBattlefieldSlotCount,
     nonCreatureBattlefieldSlotCount,

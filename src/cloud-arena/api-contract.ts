@@ -109,6 +109,20 @@ export type CloudArenaCardSnapshot = {
   effectSummary: string;
 };
 
+export type CloudArenaEnemyActorSnapshot = {
+  id: string;
+  definitionId: CardDefinitionId | null;
+  name: string;
+  health: number;
+  maxHealth: number;
+  block: number;
+  intent: EnemyIntent;
+  intentLabel: string;
+  intentQueueLabels: string[];
+  currentCardId: string | null;
+  permanentId: string | null;
+};
+
 export type CloudArenaPermanentSnapshot = {
   instanceId: string;
   sourceCardInstanceId: string;
@@ -206,6 +220,7 @@ export type CloudArenaSessionSnapshot = {
     intentLabel: string;
     intentQueueLabels: string[];
   };
+  enemies: CloudArenaEnemyActorSnapshot[];
   creatureBattlefieldSlotCount: number;
   nonCreatureBattlefieldSlotCount: number;
   battlefield: Array<CloudArenaPermanentSnapshot | null>;

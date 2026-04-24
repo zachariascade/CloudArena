@@ -48,6 +48,7 @@ describe("cloud arena battle view model", () => {
         intentLabel: "attack 3",
         intentQueueLabels: [],
       },
+      enemies: [],
       creatureBattlefieldSlotCount: 5,
       nonCreatureBattlefieldSlotCount: 5,
       battlefield: [],
@@ -125,6 +126,7 @@ describe("cloud arena battle view model", () => {
         intentLabel: "attack 3",
         intentQueueLabels: [],
       },
+      enemies: [],
       creatureBattlefieldSlotCount: 5,
       nonCreatureBattlefieldSlotCount: 5,
       battlefield: [
@@ -236,6 +238,7 @@ describe("cloud arena battle view model", () => {
         intentLabel: "attack 4",
         intentQueueLabels: [],
       },
+      enemies: [],
       creatureBattlefieldSlotCount: 5,
       nonCreatureBattlefieldSlotCount: 5,
       battlefield: [],

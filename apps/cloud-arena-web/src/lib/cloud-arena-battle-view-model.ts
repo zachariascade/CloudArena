@@ -1,6 +1,7 @@
 import type {
   CloudArenaActionOption,
   CloudArenaCardSnapshot,
+  CloudArenaEnemyActorSnapshot,
   CloudArenaPermanentSnapshot,
   CloudArenaPendingTargetRequestSnapshot,
   CloudArenaSessionSnapshot,
@@ -61,6 +62,7 @@ export type CloudArenaBattleViewModel = {
   battlefieldSlotCount: number;
   creatureBattlefieldSlotCount: number;
   nonCreatureBattlefieldSlotCount: number;
+  enemies: CloudArenaEnemyActorSnapshot[];
   enemyBattlefield?: Array<CloudArenaPermanentSnapshot | null>;
   pendingTargetRequest?: CloudArenaPendingTargetRequestSnapshot | null;
   blockingQueue: string[];
@@ -113,6 +115,7 @@ export function buildBattleViewModelFromTraceStep(
     battlefieldSlotCount: step.battlefield.length,
     creatureBattlefieldSlotCount: LEAN_V1_CREATURE_SLOT_COUNT,
     nonCreatureBattlefieldSlotCount: LEAN_V1_NON_CREATURE_SLOT_COUNT,
+    enemies: [],
     enemyBattlefield: Array.from({ length: step.battlefield.length }, () => null),
     pendingTargetRequest: null,
     blockingQueue: [...step.blockingQueue],
@@ -183,6 +186,7 @@ export function buildBattleViewModelFromSessionSnapshot(
     battlefieldSlotCount: snapshot.battlefield.length,
     creatureBattlefieldSlotCount: snapshot.creatureBattlefieldSlotCount,
     nonCreatureBattlefieldSlotCount: snapshot.nonCreatureBattlefieldSlotCount,
+    enemies: (snapshot.enemies ?? []).map((actor) => ({ ...actor, intent: { ...actor.intent } })),
     enemyBattlefield: compactBattlefieldSlots(
       snapshot.enemyBattlefield.map((slot) =>
         slot

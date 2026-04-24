@@ -136,5 +136,14 @@ export function resolveEnemyTurn(state: BattleState): BattleState {
   resolveEnemyBattlefieldCreatures(state);
   syncEnemyStateFromLeaderPermanent(state);
 
+  const primaryActor = state.enemies[0];
+  if (primaryActor) {
+    primaryActor.health = state.enemy.health;
+    primaryActor.maxHealth = state.enemy.maxHealth;
+    primaryActor.block = state.enemy.block;
+    primaryActor.basePower = state.enemy.basePower;
+    primaryActor.stunnedThisTurn = state.enemy.stunnedThisTurn;
+  }
+
   return state;
 }

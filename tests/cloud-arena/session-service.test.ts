@@ -125,7 +125,7 @@ describe("cloud arena session service", () => {
     expect(snapshot.enemy.name).toBe("Demon Pack");
     expect(enemyBodies.length).toBeGreaterThanOrEqual(3);
     expect(enemyBodies.some((entry) => entry.definitionId === "enemy_pack_alpha")).toBe(true);
-    expect(enemyBodies.filter((entry) => entry.definitionId === "enemy_husk")).toHaveLength(1);
+    expect(enemyBodies.filter((entry) => entry.definitionId === "enemy_cocytus")).toHaveLength(1);
     expect(enemyBodies.filter((entry) => entry.definitionId === "enemy_brute")).toHaveLength(1);
   });
 

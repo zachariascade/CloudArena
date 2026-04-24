@@ -126,19 +126,21 @@ export function createBattle(input: CreateBattleInput): BattleState {
   }
 
   const enemyActors: EnemyActorState[] = battleEnemies.map((enemyEntry, index) => {
-        const isPrimaryEnemy = index === 0;
-        return createEnemyActorState({
-          id: `enemy_actor_${index + 1}`,
-          definitionId: enemyEntry.definitionId ?? enemyEntry.leaderDefinitionId ?? null,
-          name: enemyEntry.name,
-          health: enemyEntry.health,
-          basePower: enemyEntry.basePower,
-          behavior: isPrimaryEnemy ? enemyBehavior : [],
-          cards: isPrimaryEnemy ? enemyCards : [],
-          intent: isPrimaryEnemy ? initialEnemyPlan.intent : {},
-          currentCard: isPrimaryEnemy ? initialEnemyPlan.card : null,
-        });
-      });
+    const actorBehavior = "behavior" in enemyEntry && enemyEntry.behavior ? enemyEntry.behavior : [];
+    const actorCards = "cards" in enemyEntry && enemyEntry.cards ? enemyEntry.cards : [];
+    const actorFirstPlan = index === 0 ? initialEnemyPlan : (getEnemyPlanStepAtIndexFromInput(enemyEntry, 0) ?? null);
+    return createEnemyActorState({
+      id: `enemy_actor_${index + 1}`,
+      definitionId: enemyEntry.definitionId ?? enemyEntry.leaderDefinitionId ?? null,
+      name: enemyEntry.name,
+      health: enemyEntry.health,
+      basePower: enemyEntry.basePower,
+      behavior: actorBehavior,
+      cards: actorCards,
+      intent: actorFirstPlan?.intent ?? {},
+      currentCard: actorFirstPlan?.card ?? null,
+    });
+  });
 
   const primaryEnemyActor = enemyActors[0];
 
@@ -232,6 +234,9 @@ export function createBattle(input: CreateBattleInput): BattleState {
       isLeader: false,
     });
     actor.permanentId = permanent.instanceId;
+    actor.intentQueueLabels = getEnemyIntentQueueLabels(actor, 2);
+    permanent.intentLabel = formatEnemyIntent(actor.intent);
+    permanent.intentQueueLabels = [...actor.intentQueueLabels];
 
     state.nextEnemyTokenIndex += 1;
   }

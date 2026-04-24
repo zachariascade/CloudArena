@@ -223,7 +223,7 @@ describe("cloud arena low-tier enemies", () => {
     const preset = getEnemyPreset("lake_of_ice");
     const battle = createTestBattle({
       playerDeck: ["guardian", "defend", "attack", "defend", "attack"],
-      playerHealth: 50,
+      playerHealth: 100,
       enemy: {
         name: preset.name,
         health: preset.health,

@@ -19,12 +19,15 @@ Status: done in `src/cloud-arena/core/permanents.ts` and `src/cloud-arena/core/c
 5. Keep one primary enemy for behavior, expose all enemies in state.
 Phase 1 bridge:
 Only the first enemy drives actual enemy-turn logic, but every enemy gets durable actor state, snapshot presence, and frontend identity.
+Status: done — non-primary actors get their own cards/behavior at creation; `reset-round.ts` advances all actors; `enemy-turn.ts` syncs primary actor health/block after the turn.
 
 6. Replace singleton snapshot fields with multi-enemy snapshots.
 Update `src/cloud-arena/api-contract.ts` and `src/cloud-arena/session-core.ts` to expose enemy actors instead of a single top-level enemy summary.
+Status: done — `CloudArenaEnemyActorSnapshot` added; `CloudArenaSessionSnapshot.enemies` array added; `buildCloudArenaSessionSnapshot` populates it from `state.enemies`.
 
 7. Update frontend view models for multiple enemies.
 Refactor `apps/cloud-arena-web/src/lib/cloud-arena-battle-view-model.ts` and related helpers so UI reads enemy actor data per battlefield enemy.
+Status: done — `CloudArenaBattleViewModel.enemies: CloudArenaEnemyActorSnapshot[]` added; `buildBattleViewModelFromSessionSnapshot` and trace-step builder both populate it.
 
 8. Render per-enemy telegraphs and inspector state from actor data.
 Make overlays, intent labels, and sequence previews follow each enemy actor rather than relying on one global enemy card/intent.
