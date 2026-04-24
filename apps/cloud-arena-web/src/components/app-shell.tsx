@@ -1,6 +1,6 @@
 import type { ReactElement, ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 import { CloudArenaThemePanel } from "./cloud-arena-theme-panel.js";
 import { useCloudArenaTheme } from "../lib/cloud-arena-theme.js";
@@ -31,7 +31,6 @@ export function CloudArenaAppShell({
   pageVariant = "default",
 }: CloudArenaAppShellProps): ReactElement {
   const cloudArcanumCardsUrl = `${cloudArcanumWebBaseUrl.replace(/\/$/, "")}/cards`;
-  const cloudArcanumHomeUrl = `${cloudArcanumWebBaseUrl.replace(/\/$/, "")}/`;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = useState(false);
   const { resetTheme, theme, updateThemeColor } = useCloudArenaTheme();
@@ -140,13 +139,13 @@ export function CloudArenaAppShell({
         }}
       >
         <section className="app-header-brand">
-          <a
+          <Link
             className="app-header-brand-link"
-            href={cloudArcanumHomeUrl}
+            to="/"
             onClick={() => setIsSidebarOpen(false)}
           >
             <h1>Cloud Arena</h1>
-          </a>
+          </Link>
         </section>
         <button
           type="button"
