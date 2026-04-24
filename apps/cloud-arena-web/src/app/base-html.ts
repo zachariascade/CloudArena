@@ -79,7 +79,7 @@ export function renderCloudArcanumWebHtml(
         z-index: 0;
         background:
           linear-gradient(180deg, rgba(6, 18, 56, 0.26), rgba(6, 18, 56, 0.7)),
-          url("/images/BackgroundParadiso.png") center center / cover no-repeat,
+          url("https://cdn.prod.website-files.com/639281d335ff5f86b30762e7/68e3855912fe821b006210b2_new-Paradiso%20Artwork_Website%20Banner.png") center center / cover no-repeat,
           radial-gradient(circle at 50% 12%, rgba(247, 200, 84, 0.18), transparent 22%),
           linear-gradient(135deg, #10284f 0%, #0a1432 48%, #081028 100%);
         pointer-events: none;
@@ -731,7 +731,7 @@ export function renderCloudArcanumWebHtml(
         overflow: hidden;
         background:
           linear-gradient(180deg, rgba(6, 18, 56, 0.2), rgba(6, 18, 56, 0.76)),
-          url("/images/BackgroundParadiso.png") center center / cover no-repeat,
+          url("https://cdn.prod.website-files.com/639281d335ff5f86b30762e7/68e3855912fe821b006210b2_new-Paradiso%20Artwork_Website%20Banner.png") center center / cover no-repeat,
           radial-gradient(circle at 50% 12%, rgba(247, 200, 84, 0.4), transparent 22%),
           linear-gradient(135deg, #10284f 0%, #0a1432 48%, #081028 100%);
       }
