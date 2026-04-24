@@ -1,16 +1,25 @@
 import { demonPackScenarioPreset } from "./demon-pack.js";
 import { impCallerScenarioPreset } from "./imp-caller.js";
+import { lakeOfIceScenarioPreset } from "./lake-of-ice.js";
+import { malchiorBinderOfWillsScenarioPreset } from "./malchior-binder-of-wills.js";
 
 export { cloudArenaDeckPresets, getDeckPreset } from "./decks.js";
 export {
   assault,
   attackOnceWithBasePower,
   attackTwiceWithBasePower,
+  crossSlash,
+  doubleSlash,
   guard,
   gainBlockEqualToBasePower,
+  gainBlockEqualToHealth,
   gainPower,
+  multiSlash,
+  singleSlash,
   spawnSimpleToken,
+  tripleSlash,
   strike,
+  weakenAllPermanents,
 } from "./enemy-cards.js";
 export { cloudArenaEnemyPresets, getEnemyPreset } from "./enemies.js";
 export type {
@@ -31,7 +40,9 @@ export const cloudArenaScenarioPresets: Record<
   CloudArenaScenarioPreset
 > = {
   demon_pack: demonPackScenarioPreset,
+  lake_of_ice: lakeOfIceScenarioPreset,
   imp_caller: impCallerScenarioPreset,
+  malchior_binder_of_wills: malchiorBinderOfWillsScenarioPreset,
 };
 
 export function getScenarioPreset(

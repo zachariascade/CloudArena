@@ -9,14 +9,18 @@ export type CloudArenaDeckPresetId =
 export type CloudArenaEnemyPresetId =
   | "bruiser_demon"
   | "demon_pack"
+  | "lake_of_ice"
   | "grunt_demon"
   | "imp_caller"
+  | "malchior_binder_of_wills"
   | "long_battle_demon"
   | "warder_demon";
 
 export type CloudArenaScenarioId =
   | "demon_pack"
-  | "imp_caller";
+  | "lake_of_ice"
+  | "imp_caller"
+  | "malchior_binder_of_wills";
 
 export type CloudArenaDeckPreset = {
   id: CloudArenaDeckPresetId;

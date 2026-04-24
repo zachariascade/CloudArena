@@ -1,4 +1,4 @@
-import { attackOnceWithBasePower, gainBlockEqualToBasePower } from "../enemy-cards.js";
+import { gainBlockEqualToBasePower, singleSlash } from "../enemy-cards.js";
 import type { CloudArenaEnemyPreset } from "../types.js";
 
 export const warderDemonEnemyPreset: CloudArenaEnemyPreset = {
@@ -8,7 +8,7 @@ export const warderDemonEnemyPreset: CloudArenaEnemyPreset = {
   basePower: 4,
   cards: [
     gainBlockEqualToBasePower(),
-    attackOnceWithBasePower(),
+    singleSlash(),
     gainBlockEqualToBasePower(),
   ],
 };

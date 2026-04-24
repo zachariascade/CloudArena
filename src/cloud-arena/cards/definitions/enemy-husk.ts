@@ -17,6 +17,7 @@ export const enemyHuskCardDefinition: CardDefinition = {
     collectorNumber: "E03",
   },
   onPlay: [],
+  playableInPlayerDecks: false,
   power: 2,
   health: 6,
   recoveryPolicy: "none",

@@ -1,20 +1,20 @@
 import type { CardDefinition } from "../../core/types.js";
 
-export const enemyPackAlphaCardDefinition: CardDefinition = {
-  id: "enemy_pack_alpha",
-  name: "Legion",
+export const enemyCocytusCardDefinition: CardDefinition = {
+  id: "enemy_cocytus",
+  name: "Cocytus, Lake of Ice",
   cardTypes: ["creature"],
   cost: 0,
   display: {
-    title: "Legion",
+    title: "Cocytus, Lake of Ice",
     subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",
-    imagePath: "Christ_healing_the_man_possessed_with_devils.jpg",
-    imageAlt: "Jesus healing the man possessed by demons",
+    imagePath: "dante-cocytus.jpg",
+    imageAlt: "A frozen infernal scene inspired by Dante's ninth circle",
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
-    collectorNumber: "E05",
+    collectorNumber: "E11",
   },
   onPlay: [],
   playableInPlayerDecks: false,

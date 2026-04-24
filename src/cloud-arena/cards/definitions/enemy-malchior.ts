@@ -1,20 +1,20 @@
 import type { CardDefinition } from "../../core/types.js";
 
-export const enemyPackAlphaCardDefinition: CardDefinition = {
-  id: "enemy_pack_alpha",
-  name: "Legion",
+export const enemyMalchiorCardDefinition: CardDefinition = {
+  id: "enemy_malchior",
+  name: "Malchior, Binder of Wills",
   cardTypes: ["creature"],
   cost: 0,
   display: {
-    title: "Legion",
+    title: "Malchior, Binder of Wills",
     subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",
-    imagePath: "Christ_healing_the_man_possessed_with_devils.jpg",
-    imageAlt: "Jesus healing the man possessed by demons",
+    imagePath: "dante-eagle.jpg",
+    imageAlt: "A dark sovereign presiding over a scene of domination and judgment",
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
-    collectorNumber: "E05",
+    collectorNumber: "E06",
   },
   onPlay: [],
   playableInPlayerDecks: false,
