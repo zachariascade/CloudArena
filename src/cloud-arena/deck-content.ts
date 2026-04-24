@@ -117,10 +117,6 @@ export function createCloudArenaDeckValidationIssue(
   };
 }
 
-function isCloudArenaPlayerCardId(cardId: string): boolean {
-  return !cardId.startsWith("enemy_");
-}
-
 export function cloneCloudArenaSavedDeck(data: CloudArenaSavedDeck): CloudArenaSavedDeck {
   return {
     id: data.id,
@@ -150,7 +146,7 @@ function createCardTypeLine(definition: CardDefinition): string {
 }
 
 function isPlayableCloudArenaCardDefinition(definition: CardDefinition): boolean {
-  return !definition.id.startsWith("enemy_");
+  return definition.playableInPlayerDecks !== false;
 }
 
 function toCardSummary(definition: CardDefinition): CloudArenaCardSummary {
@@ -303,7 +299,7 @@ function validateDeckCardEntries(
 
     if (!definition) {
       issues.push(createCloudArenaDeckValidationIssue(entryPath, `Card "${entry.cardId}" was not found.`));
-    } else if (!isCloudArenaPlayerCardId(entry.cardId)) {
+    } else if (definition && !isPlayableCloudArenaCardDefinition(definition)) {
       issues.push(createCloudArenaDeckValidationIssue(entryPath, `Card "${entry.cardId}" is not a Cloud Arena player card.`));
     }
 
