@@ -28,15 +28,18 @@ export type CloudArenaDeckPreset = {
   cards: CardDefinitionId[];
 };
 
-export type CloudArenaEnemyPreset = {
-  id: CloudArenaEnemyPresetId;
+export type CloudArenaScenarioEnemy = {
+  definitionId: CardDefinitionId;
   name: string;
   health: number;
   basePower: number;
-  cards: CardEnemyConfig["cards"];
-  leaderDefinitionId?: CardDefinitionId;
+  cards?: CardEnemyConfig["cards"];
   startingTokens?: CardDefinitionId[];
-  startingPermanents?: CardDefinitionId[];
+};
+
+export type CloudArenaEnemyPreset = CloudArenaScenarioEnemy & {
+  id: CloudArenaEnemyPresetId;
+  cards: CardEnemyConfig["cards"];
 };
 
 export type CloudArenaScenarioPreset = {
@@ -45,6 +48,6 @@ export type CloudArenaScenarioPreset = {
   notes: string;
   playerHealth: number;
   deck: CloudArenaDeckPreset["cards"];
-  enemy: CardEnemyConfig;
+  enemies: CloudArenaScenarioEnemy[];
   recommendedMaxSteps: number;
 };

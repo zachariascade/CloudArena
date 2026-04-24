@@ -8,6 +8,6 @@ export const impCallerScenarioPreset: CloudArenaScenarioPreset = {
   notes: "A token-pressure test battle that starts with an imp and can spawn more.",
   playerHealth: 20,
   deck: mixedGuardianDeckPreset.cards,
-  enemy: impCallerEnemyPreset,
+  enemies: [impCallerEnemyPreset],
   recommendedMaxSteps: 180,
 };

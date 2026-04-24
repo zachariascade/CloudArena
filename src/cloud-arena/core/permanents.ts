@@ -32,6 +32,10 @@ export function adjustPermanentHealth(
   permanent.health = nextHealth;
 }
 
+export function scaleEquipmentBonusAmount(amount: number): number {
+  return amount;
+}
+
 function createEquipmentModifierId(attachmentPermanentId: string, stat: "power" | "health"): string {
   return `modifier_${attachmentPermanentId}_${stat}`;
 }
@@ -378,6 +382,78 @@ export function createEnemyLeaderPermanent(
     attachments: [],
     attachedTo: null,
     abilities: [],
+    disabledAbilityIds: [],
+    disabledRulesActions: [],
+    hasActedThisTurn: false,
+    isTapped: false,
+    isDefending: false,
+    blockingTargetPermanentId: null,
+    slotIndex: openSlot,
+  };
+
+  state.enemyBattlefield[openSlot] = permanent;
+
+  emitRulesEvent(state, {
+    type: "permanent_entered",
+    turnNumber: state.turnNumber,
+    permanentId: permanent.instanceId,
+    sourceCardInstanceId: permanent.sourceCardInstanceId,
+    definitionId: permanent.definitionId,
+    controllerId: "enemy",
+    slotIndex: openSlot,
+  });
+
+  state.log.push({
+    type: "permanent_summoned",
+    turnNumber: state.turnNumber,
+    permanentId: permanent.instanceId,
+    definitionId: permanent.definitionId,
+    slotIndex: openSlot,
+    controllerId: "enemy",
+  });
+
+  return permanent;
+}
+
+export function createEnemyPermanent(
+  state: BattleState,
+  enemy: {
+    definitionId: CardDefinitionId;
+    name: string;
+    health: number;
+    basePower: number;
+  },
+): PermanentState {
+  const definition = asPermanentCardDefinition(
+    getCardDefinitionFromLibrary(state.cardDefinitions, enemy.definitionId),
+  );
+  const openSlot = findOpenBattlefieldSlotForDefinition(state, definition, "enemy");
+
+  if (openSlot === -1) {
+    throw new Error(`Cannot create enemy ${enemy.name} without an open battlefield slot.`);
+  }
+
+  const permanent: PermanentState = {
+    instanceId: `${enemy.definitionId}_${state.turnNumber}_${state.nextEnemyTokenIndex}`,
+    sourceCardInstanceId: `${enemy.definitionId}_${state.turnNumber}_${state.nextEnemyTokenIndex}`,
+    name: enemy.name,
+    definitionId: enemy.definitionId,
+    controllerId: "enemy",
+    isEnemyLeader: false,
+    intentLabel: null,
+    intentQueueLabels: [],
+    power: enemy.basePower,
+    health: enemy.health,
+    maxHealth: enemy.health,
+    block: 0,
+    recoveryPolicy: definition.recoveryPolicy ?? LEAN_V1_DEFAULT_RECOVERY_POLICY,
+    keywords: getPermanentKeywordsForDefinition(definition),
+    counters: [],
+    modifiers: [],
+    keywordModifiers: [],
+    attachments: [],
+    attachedTo: null,
+    abilities: getInitialAbilitiesForDefinition(definition),
     disabledAbilityIds: [],
     disabledRulesActions: [],
     hasActedThisTurn: false,

@@ -13,11 +13,10 @@ demonPackImmediateBlockCard.effects = demonPackImmediateBlockCard.effects.map((e
 
 export const demonPackEnemyPreset: CloudArenaEnemyPreset = {
   id: "demon_pack",
+  definitionId: "enemy_pack_alpha",
   name: "Demon Pack",
   health: 24,
   basePower: 3,
-  leaderDefinitionId: "enemy_pack_alpha",
-  startingPermanents: ["enemy_husk", "enemy_brute"],
   cards: [
     singleSlash(),
     demonPackImmediateBlockCard,

@@ -60,17 +60,22 @@ describe("cloud arena scenario presets", () => {
     const malchior = getScenarioPreset("malchior_binder_of_wills");
 
     expect(demonPack.deck).toBe(mixedGuardianDeck.cards);
-    expect(demonPack.enemy).toBe(getEnemyPreset("demon_pack"));
-    expect(lakeOfIce.enemy).toBe(getEnemyPreset("lake_of_ice"));
-    expect(impCaller.enemy).toBe(getEnemyPreset("imp_caller"));
-    expect(malchior.enemy).toBe(getEnemyPreset("malchior_binder_of_wills"));
+    expect(demonPack.enemies[0]).toBe(getEnemyPreset("demon_pack"));
+    expect(lakeOfIce.enemies[0]).toBe(getEnemyPreset("lake_of_ice"));
+    expect(impCaller.enemies[0]).toBe(getEnemyPreset("imp_caller"));
+    expect(malchior.enemies[0]).toBe(getEnemyPreset("malchior_binder_of_wills"));
   });
 
   it("keeps the demon pack scenario wired to its deck and enemy plan", () => {
     const demonPack = getScenarioPreset("demon_pack");
 
     expect(demonPack.deck.length).toBeGreaterThan(0);
-    expect(demonPack.enemy.cards.length).toBe(3);
+    expect(demonPack.enemies[0]?.cards?.length).toBe(3);
+    expect(demonPack.enemies.map((enemy) => enemy.definitionId)).toEqual([
+      "enemy_pack_alpha",
+      "enemy_cocytus",
+      "enemy_brute",
+    ]);
   });
 
   it("exposes the new low-tier enemy families and pack bodies", () => {
@@ -84,19 +89,20 @@ describe("cloud arena scenario presets", () => {
     const longBattleDemon = getEnemyPreset("long_battle_demon");
 
     expect(grunt.basePower).toBe(5);
-    expect(pack.leaderDefinitionId).toBe("enemy_pack_alpha");
-    expect(pack.startingPermanents).toEqual(["enemy_husk", "enemy_brute"]);
-    expect(lakeOfIce.leaderDefinitionId).toBe("enemy_cocytus");
+    expect(pack.definitionId).toBe("enemy_pack_alpha");
+    expect(lakeOfIce.definitionId).toBe("enemy_cocytus");
     expect(lakeOfIce.cards).toHaveLength(4);
     expect(lakeOfIce.cards.some((card) => card.effects.some((effect) => effect.powerDeltaAllPermanents === -1))).toBe(true);
+    expect(bruiser.definitionId).toBe("enemy_brute");
     expect(bruiser.basePower).toBe(6);
+    expect(warder.definitionId).toBe("enemy_husk");
     expect(warder.basePower).toBe(4);
     expect(impCaller.startingTokens).toEqual(["token_imp"]);
     expect(impCaller.cards.some((card) => card.effects.some((effect) => effect.spawnCardId === "token_imp"))).toBe(true);
-    expect(malchior.leaderDefinitionId).toBe("enemy_malchior");
+    expect(malchior.definitionId).toBe("enemy_malchior");
     expect(malchior.basePower).toBe(4);
     expect(malchior.cards).toHaveLength(5);
-    expect(longBattleDemon.leaderDefinitionId).toBe("enemy_long_battle_demon");
+    expect(longBattleDemon.definitionId).toBe("enemy_long_battle_demon");
     expect(longBattleDemon.cards).toHaveLength(3);
     expect(malchior.cards[0]).toMatchObject({
       id: "malchior_eldritch_aegis",
@@ -130,7 +136,13 @@ describe("cloud arena scenario presets", () => {
       playerHealth: scenario.playerHealth,
       cardDefinitions,
       playerDeck: scenario.deck,
-      enemy: scenario.enemy,
+      enemy: {
+        name: scenario.enemies[0]!.name,
+        health: scenario.enemies[0]!.health,
+        basePower: scenario.enemies[0]!.basePower,
+        cards: scenario.enemies[0]!.cards!,
+        leaderDefinitionId: scenario.enemies[0]!.definitionId,
+      },
       maxSteps: scenario.recommendedMaxSteps,
       agentName: "heuristic_baseline",
       agent: chooseHeuristicAction,

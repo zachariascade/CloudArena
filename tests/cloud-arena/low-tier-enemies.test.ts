@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import {
   applyBattleAction,
+  getDerivedPermanentStat,
+  getEnemyPlanStepAtIndexFromInput,
+  formatEnemyIntent,
   getEnemyPreset,
 } from "../../src/cloud-arena/index.js";
 import { createTestBattle, formatBattleLog } from "./helpers.js";
@@ -160,9 +163,10 @@ describe("cloud arena low-tier enemies", () => {
         health: 24,
         basePower: 3,
         cards: [
-          { id: "attack_once", name: "Attack Once", effects: [{ target: "player", attackAmount: 3 }] },
-          { id: "gain_block", name: "Gain Block", effects: [{ target: "enemy", blockPowerMultiplier: 1 }] },
-          { id: "attack_twice", name: "Attack Twice", effects: [{ target: "player", attackAmount: 3, attackTimes: 2 }] },
+          { id: "attack_once_1", name: "Attack Once 1", effects: [{ target: "player", attackAmount: 3 }] },
+          { id: "attack_once_2", name: "Attack Once 2", effects: [{ target: "player", attackAmount: 3 }] },
+          { id: "attack_once_3", name: "Attack Once 3", effects: [{ target: "player", attackAmount: 3 }] },
+          { id: "weaken_all_permanents", name: "Weaken All Permanents", effects: [{ target: "enemy", powerDeltaAllPermanents: -1 }] },
         ],
         startingPermanents: ["enemy_husk", "enemy_brute"],
       },
@@ -190,5 +194,98 @@ describe("cloud arena low-tier enemies", () => {
       "enemy_husk_1_2",
     ]);
     expect(battle.player.health).toBeLessThan(startHealth);
+  });
+
+  it("resolves demon pack block card immediately when it becomes active", () => {
+    const preset = getEnemyPreset("demon_pack");
+    const battle = createTestBattle({
+      playerDeck: ["attack", "defend", "attack", "defend", "attack"],
+      enemy: {
+        name: preset.name,
+        health: preset.health,
+        basePower: preset.basePower,
+        cards: preset.cards,
+        startingPermanents: ["enemy_husk", "enemy_brute"],
+      },
+    });
+
+    expect(battle.enemy.intent).toEqual({ attackAmount: 3 });
+    expect(battle.enemy.block).toBe(0);
+
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(battle.turnNumber).toBe(2);
+    expect(battle.enemy.block).toBe(24);
+    expect(battle.enemy.intent).toEqual({});
+  });
+
+  it("applies the lake of ice weakening card to all permanents for a turn", () => {
+    const preset = getEnemyPreset("lake_of_ice");
+    const battle = createTestBattle({
+      playerDeck: ["guardian", "defend", "attack", "defend", "attack"],
+      playerHealth: 50,
+      enemy: {
+        name: preset.name,
+        health: preset.health,
+        basePower: preset.basePower,
+        cards: preset.cards,
+        startingPermanents: ["enemy_husk", "enemy_brute"],
+      },
+    });
+
+    const guardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
+
+    if (!guardianCard) {
+      throw new Error("Expected guardian in the opening hand.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: guardianCard.instanceId,
+    });
+
+    const guardian = battle.battlefield.find((entry) => entry?.definitionId === "guardian");
+
+    if (!guardian) {
+      throw new Error("Expected guardian on the battlefield.");
+    }
+
+    expect(getDerivedPermanentStat(battle, guardian, "power")).toBe(4);
+
+    applyBattleAction(battle, { type: "end_turn" });
+    applyBattleAction(battle, { type: "end_turn" });
+    applyBattleAction(battle, { type: "end_turn" });
+
+    const enemyLeader = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+
+    expect(enemyLeader?.intentLabel).toBe("Debuff");
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(battle.turnNumber).toBe(5);
+    expect(getDerivedPermanentStat(battle, guardian, "power")).toBe(3);
+
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(battle.turnNumber).toBe(6);
+    expect(getDerivedPermanentStat(battle, guardian, "power")).toBe(4);
+  });
+
+  it("formats the lake of ice battlefield-wide debuff as Debuff", () => {
+    const preset = getEnemyPreset("lake_of_ice");
+    const step = getEnemyPlanStepAtIndexFromInput(
+      {
+        name: preset.name,
+        health: preset.health,
+        basePower: preset.basePower,
+        cards: preset.cards,
+      },
+      3,
+    );
+
+    if (!step) {
+      throw new Error("Expected the lake of ice debuff step.");
+    }
+
+    expect(formatEnemyIntent(step.intent)).toBe("Debuff");
   });
 });

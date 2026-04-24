@@ -18,6 +18,15 @@ function formatCount(amount: number): string {
   return amount === 1 ? "1" : String(amount);
 }
 
+function scaleEquipmentBonusAmount(amount: number): number {
+  if (amount === 0) {
+    return 0;
+  }
+
+  const scaledAmount = amount * 1.3;
+  return amount > 0 ? Math.ceil(scaledAmount) : Math.floor(scaledAmount);
+}
+
 function lowercaseFirst(text: string): string {
   return text ? `${text[0].toLowerCase()}${text.slice(1)}` : text;
 }
@@ -290,6 +299,7 @@ function describeAddCounterEffect(effect: Extract<Effect, { type: "add_counter" 
     (targetSelector.zone === "battlefield" || targetSelector.zone === "enemy_battlefield");
   const powerDelta = effect.powerDelta ?? 0;
   const healthDelta = effect.healthDelta ?? 0;
+  const durationSuffix = effect.duration === "end_of_turn" ? " until end of turn" : "";
 
   if (
     typeof effect.powerDelta === "number" &&
@@ -298,15 +308,34 @@ function describeAddCounterEffect(effect: Extract<Effect, { type: "add_counter" 
     effect.powerDelta > 0
   ) {
     if (isTriggeredSubject) {
-      return `It gets +${effect.powerDelta}/+${effect.healthDelta}.`;
+      return `It gets +${effect.powerDelta}/+${effect.healthDelta}${durationSuffix}.`;
     }
 
     if (isMassTarget && targetSelector) {
       const label = describeCollectionTarget(targetSelector);
-      return `${label[0].toUpperCase()}${label.slice(1)} gets +${effect.powerDelta}/+${effect.healthDelta}.`;
+      return `${label[0].toUpperCase()}${label.slice(1)} gets +${effect.powerDelta}/+${effect.healthDelta}${durationSuffix}.`;
     }
 
-    return `${target === "this" ? "This" : `Choose ${target}; it`} gets +${effect.powerDelta}/+${effect.healthDelta}.`;
+    return `${target === "this" ? "This" : `Choose ${target}; it`} gets +${effect.powerDelta}/+${effect.healthDelta}${durationSuffix}.`;
+  }
+
+  if (
+    typeof effect.powerDelta === "number" &&
+    effect.powerDelta !== 0 &&
+    (effect.healthDelta === undefined || effect.healthDelta === 0)
+  ) {
+    const powerLabel = effect.powerDelta > 0 ? `+${effect.powerDelta}` : `${effect.powerDelta}`;
+
+    if (isTriggeredSubject) {
+      return `It gets ${powerLabel} power${durationSuffix}.`;
+    }
+
+    if (isMassTarget && targetSelector) {
+      const label = describeCollectionTarget(targetSelector);
+      return `${label[0].toUpperCase()}${label.slice(1)} gets ${powerLabel} power${durationSuffix}.`;
+    }
+
+    return `${target === "this" ? "This" : `Choose ${target}; it`} gets ${powerLabel} power${durationSuffix}.`;
   }
 
   if (
@@ -315,10 +344,10 @@ function describeAddCounterEffect(effect: Extract<Effect, { type: "add_counter" 
     effect.healthDelta > 0
   ) {
     if (isTriggeredSubject) {
-      return `It gets +0/+${effect.healthDelta}.`;
+      return `It gets +0/+${effect.healthDelta}${durationSuffix}.`;
     }
 
-    return `${target === "this" ? "This" : `Choose ${target}; it`} gets +0/+${effect.healthDelta}.`;
+    return `${target === "this" ? "This" : `Choose ${target}; it`} gets +0/+${effect.healthDelta}${durationSuffix}.`;
   }
 
   const amount =
@@ -331,19 +360,19 @@ function describeAddCounterEffect(effect: Extract<Effect, { type: "add_counter" 
   const counterLabel = effect.counter ?? `${powerDelta >= 0 ? "+" : ""}${powerDelta}/${healthDelta >= 0 ? "+" : ""}${healthDelta}`;
 
   if (isTriggeredSubject) {
-    return `It gains ${formatCount(amount)} ${counterLabel} counter${amount === 1 ? "" : "s"}.`;
+    return `It gains ${formatCount(amount)} ${counterLabel} counter${amount === 1 ? "" : "s"}${durationSuffix}.`;
   }
 
   if (isMassTarget && targetSelector) {
     const label = describeCollectionTarget(targetSelector);
-    return `${label[0].toUpperCase()}${label.slice(1)} gains ${formatCount(amount)} ${counterLabel} counter${amount === 1 ? "" : "s"}.`;
+    return `${label[0].toUpperCase()}${label.slice(1)} gains ${formatCount(amount)} ${counterLabel} counter${amount === 1 ? "" : "s"}${durationSuffix}.`;
   }
 
   if (target.startsWith("each ")) {
-    return `${target[0].toUpperCase()}${target.slice(1)} gains ${formatCount(amount)} ${counterLabel} counter${amount === 1 ? "" : "s"}.`;
+    return `${target[0].toUpperCase()}${target.slice(1)} gains ${formatCount(amount)} ${counterLabel} counter${amount === 1 ? "" : "s"}${durationSuffix}.`;
   }
 
-  return `${target === "this" ? "This" : `Choose ${target}; it`} gains ${formatCount(amount)} ${counterLabel} counter${amount === 1 ? "" : "s"}.`;
+  return `${target === "this" ? "This" : `Choose ${target}; it`} gains ${formatCount(amount)} ${counterLabel} counter${amount === 1 ? "" : "s"}${durationSuffix}.`;
 }
 
 function describeRemoveCounterEffect(effect: Extract<Effect, { type: "remove_counter" }>): string {
@@ -686,8 +715,8 @@ export function summarizeCardDefinition(definition: CardDefinition): string[] {
     if (definition.subtypes?.includes("Equipment")) {
       summaryLines.push("Equip a permanent.");
 
-      const powerBonus = definition.power;
-      const healthBonus = definition.health;
+      const powerBonus = scaleEquipmentBonusAmount(definition.power);
+      const healthBonus = scaleEquipmentBonusAmount(definition.health);
       const powerLabel = `${powerBonus >= 0 ? "+" : ""}${powerBonus}`;
       const healthLabel = `${healthBonus >= 0 ? "+" : ""}${healthBonus}`;
       summaryLines.push(`Equipped permanent gets ${powerLabel}/${healthLabel}.`);

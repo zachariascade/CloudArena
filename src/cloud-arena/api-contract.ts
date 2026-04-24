@@ -23,7 +23,9 @@ export type CloudArenaApiRouteName = keyof typeof cloudArenaApiRoutes;
 
 export type CloudArenaSessionScenarioId =
   | "demon_pack"
-  | "imp_caller";
+  | "lake_of_ice"
+  | "imp_caller"
+  | "malchior_binder_of_wills";
 
 export type CloudArenaDeckId = string;
 export type CloudArenaDeckKind = "preset" | "saved";
@@ -115,6 +117,7 @@ export type CloudArenaPermanentSnapshot = {
   controllerId?: string;
   intentLabel?: string | null;
   intentQueueLabels?: string[] | null;
+  isEnemyLeader?: boolean;
   isCreature: boolean;
   power: number;
   health: number;
@@ -198,6 +201,7 @@ export type CloudArenaSessionSnapshot = {
     maxHealth: number;
     block: number;
     leaderDefinitionId?: CardDefinitionId | null;
+    currentCardId?: string | null;
     intent: EnemyIntent;
     intentLabel: string;
     intentQueueLabels: string[];

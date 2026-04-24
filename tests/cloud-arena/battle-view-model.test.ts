@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { CloudArenaSessionSnapshot } from "../../src/cloud-arena/api-contract.js";
 import { buildBattleViewModelFromSessionSnapshot } from "../../apps/cloud-arena-web/src/lib/cloud-arena-battle-view-model.js";
+import { buildCloudArenaViewModelFromSessionSnapshot } from "../../apps/cloud-arena-web/src/lib/cloud-arena-view-model.js";
 
 describe("cloud arena battle view model", () => {
   it("keeps a targeted spell visible in hand while target selection is pending", () => {
@@ -197,6 +198,60 @@ describe("cloud arena battle view model", () => {
     expect(battle.enemyBattlefield?.[0]).toMatchObject({
       instanceId: "enemy_2",
       slotIndex: 0,
+    });
+  });
+
+  it("labels the lake of ice scenario in the interactive summary", () => {
+    const snapshot: CloudArenaSessionSnapshot = {
+      sessionId: "session_3",
+      scenarioId: "lake_of_ice",
+      deckId: null,
+      status: "active",
+      turnNumber: 1,
+      phase: "player_action",
+      seed: 1,
+      createdAt: "2026-04-20T00:00:00.000Z",
+      resetSource: {
+        scenarioId: "lake_of_ice",
+        deckId: null,
+        seed: 1,
+      },
+      player: {
+        health: 30,
+        maxHealth: 30,
+        block: 0,
+        energy: 3,
+        hand: [],
+        drawPile: [],
+        drawPileCount: 0,
+        discardPile: [],
+        graveyard: [],
+      },
+      enemy: {
+        name: "Cocytus, Lake of Ice",
+        health: 28,
+        maxHealth: 28,
+        block: 0,
+        intent: { attackAmount: 4 },
+        intentLabel: "attack 4",
+        intentQueueLabels: [],
+      },
+      creatureBattlefieldSlotCount: 5,
+      nonCreatureBattlefieldSlotCount: 5,
+      battlefield: [],
+      enemyBattlefield: [],
+      pendingTargetRequest: null,
+      blockingQueue: [],
+      legalActions: [],
+      actionHistory: [],
+      log: [],
+    };
+
+    const viewModel = buildCloudArenaViewModelFromSessionSnapshot(snapshot);
+
+    expect(viewModel.summary[0]).toMatchObject({
+      label: "Scenario",
+      value: "Cocytus, Lake of Ice",
     });
   });
 });

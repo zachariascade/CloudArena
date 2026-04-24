@@ -52,6 +52,7 @@ export type CloudArenaBattleViewModel = {
     maxHealth: number;
     block: number;
     leaderDefinitionId?: string | null;
+    currentCardId?: string | null;
     intent: EnemyIntent;
     intentLabel: string;
     intentQueueLabels?: string[];
@@ -94,6 +95,7 @@ export function buildBattleViewModelFromTraceStep(
       maxHealth: step.enemy.maxHealth,
       block: step.enemy.block,
       leaderDefinitionId: null,
+      currentCardId: null,
       intent: { ...step.enemy.intent },
       intentLabel: step.enemy.intentLabel,
       intentQueueLabels: [],
@@ -163,6 +165,7 @@ export function buildBattleViewModelFromSessionSnapshot(
       maxHealth: snapshot.enemy.maxHealth,
       block: snapshot.enemy.block,
       leaderDefinitionId: snapshot.enemy.leaderDefinitionId ?? null,
+      currentCardId: snapshot.enemy.currentCardId ?? null,
       intent: { ...snapshot.enemy.intent },
       intentLabel: snapshot.enemy.intentLabel,
       intentQueueLabels: [...snapshot.enemy.intentQueueLabels],

@@ -27,6 +27,7 @@ export type {
   CloudArenaDeckPresetId,
   CloudArenaEnemyPreset,
   CloudArenaEnemyPresetId,
+  CloudArenaScenarioEnemy,
   CloudArenaScenarioId,
   CloudArenaScenarioPreset,
 } from "./types.js";

@@ -5,6 +5,7 @@ import type { CloudArenaEnemyPreset } from "../types.js";
 
 export const longBattleDemonEnemyPreset: CloudArenaEnemyPreset = {
   id: "long_battle_demon",
+  definitionId: "enemy_long_battle_demon",
   name: "Long Battle Demon",
   health: 60,
   basePower: 4,

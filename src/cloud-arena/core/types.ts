@@ -29,6 +29,7 @@ export type PermanentKeyword = "refresh" | "halt";
 export type CounterStat = "power" | "health";
 export type CounterSourceKind = "card" | "permanent";
 export type ModifierSourceKind = "equipment" | "card" | "permanent";
+export type EnemyEffectResolveTiming = "immediate" | "end_of_player_turn" | "start_of_next_turn";
 export type Targeting = {
   prompt?: string;
   optional?: boolean;
@@ -202,6 +203,7 @@ export type Effect =
       counter?: CounterName;
       stat?: CounterStat;
       amount?: ValueExpression;
+      duration?: "end_of_turn";
       targeting?: Targeting;
     }
   | {
@@ -602,6 +604,7 @@ export type BaseCardDefinition = {
   onPlay: CardEffect[];
   spellEffects?: Effect[];
   abilities?: Ability[];
+  playableInPlayerDecks?: boolean;
 };
 
 export type SpellCardDefinition = BaseCardDefinition & {
@@ -623,22 +626,29 @@ export type CardDefinition = SpellCardDefinition | PermanentCardDefinition;
 
 export type CardDefinitionLibrary = Record<CardDefinitionId, CardDefinition>;
 
+export type EnemyCardEffect = {
+  attackAmount?: number;
+  attackTimes?: number;
+  attackPowerMultiplier?: number;
+  blockAmount?: number;
+  blockPowerMultiplier?: number;
+  blockHealthMultiplier?: number;
+  energyDelta?: number;
+  powerDelta?: number;
+  powerDeltaTargetPermanents?: number;
+  powerDeltaAllPermanents?: number;
+  overflowPolicy?: DamageOverflowPolicy;
+  spawnCardId?: CardDefinitionId;
+  spawnCount?: number;
+  controllerId?: "player" | "enemy";
+  target: EffectTarget;
+  resolveTiming?: EnemyEffectResolveTiming;
+};
+
 export type EnemyCardDefinition = {
   id: string;
   name: string;
-  effects: Array<{
-    attackAmount?: number;
-    attackTimes?: number;
-    attackPowerMultiplier?: number;
-    blockAmount?: number;
-    blockPowerMultiplier?: number;
-    powerDelta?: number;
-    overflowPolicy?: DamageOverflowPolicy;
-    spawnCardId?: CardDefinitionId;
-    spawnCount?: number;
-    controllerId?: "player" | "enemy";
-    target: EffectTarget;
-  }>;
+  effects: EnemyCardEffect[];
 };
 
 export type CardInstance = {
@@ -650,7 +660,11 @@ export type EnemyIntent = {
   attackAmount?: number;
   attackTimes?: number;
   blockAmount?: number;
+  blockHealthMultiplier?: number;
+  energyDelta?: number;
   powerDelta?: number;
+  powerDeltaTargetPermanents?: number;
+  powerDeltaAllPermanents?: number;
   overflowPolicy?: DamageOverflowPolicy;
   spawnCardId?: CardDefinitionId;
   spawnCount?: number;
@@ -670,9 +684,16 @@ export type EnemyState = {
   behavior: EnemyBehaviorStep[];
   cards: EnemyCardDefinition[];
   behaviorIndex: number;
+  currentCardId: string | null;
   currentCard: EnemyCardDefinition | null;
   leaderPermanentId: string | null;
   stunnedThisTurn: boolean;
+};
+
+export type ScheduledEnemyCardEffect = {
+  sourceCardId: string;
+  sourceCardName: string;
+  effect: EnemyCardEffect;
 };
 
 export type PlayerState = {
@@ -761,6 +782,11 @@ export type BattleState = {
   rules: RulesEvent[];
   rulesCursor: number;
   choices: ChoiceRecord[];
+  temporaryCounters: Array<{
+    id: string;
+    expiresAtTurnNumber: number;
+  }>;
+  scheduledEnemyCardEffects: ScheduledEnemyCardEffect[];
 };
 
 export type PlayCardAction = {
@@ -817,6 +843,14 @@ export type CardEnemyConfig = {
 
 export type CreateBattleEnemyConfig = BehaviorEnemyConfig | CardEnemyConfig;
 
+export type EnemyLineupEntry = {
+  definitionId: CardDefinitionId;
+  name: string;
+  health: number;
+  basePower: number;
+  startingTokens?: CardDefinitionId[];
+};
+
 export type CreateBattleInput = {
   seed?: number;
   playerHealth?: number;
@@ -824,4 +858,5 @@ export type CreateBattleInput = {
   playerDeck: CardDefinitionId[];
   shuffleDeck?: boolean;
   enemy: CreateBattleEnemyConfig;
+  enemyLineup?: EnemyLineupEntry[];
 };

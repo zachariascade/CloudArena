@@ -631,6 +631,7 @@ export function CloudArenaInteractivePage({
           <section className="cloud-arena-game-screen">
             <CloudArenaBattleState
               battle={viewModel.battle}
+              recentEvents={viewModel.recentEvents}
               disableHandCardActions={isSubmitting}
               disablePermanentActions={isSubmitting}
               disableTurnActions={isSubmitting}

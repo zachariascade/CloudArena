@@ -8,6 +8,6 @@ export const lakeOfIceScenarioPreset: CloudArenaScenarioPreset = {
   notes: "A frozen demon leader with a steady rhythm of base-power attacks and a field-wide chill.",
   playerHealth: 90,
   deck: mixedGuardianDeckPreset.cards,
-  enemy: lakeOfIceEnemyPreset,
+  enemies: [lakeOfIceEnemyPreset],
   recommendedMaxSteps: 200,
 };

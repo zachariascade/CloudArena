@@ -123,12 +123,31 @@ export function createScenarioBattle(
   seed: number,
   shuffleDeck: boolean,
 ): BattleState {
+  const [primaryEnemy] = scenario.enemies;
+
+  if (!primaryEnemy || !primaryEnemy.cards) {
+    throw new Error(`Scenario "${scenario.id}" must define at least one enemy preset with cards.`);
+  }
+
   return createBattle({
     seed,
     playerHealth: scenario.playerHealth,
     playerDeck,
     shuffleDeck,
-    enemy: scenario.enemy,
+    enemy: {
+      name: primaryEnemy.name,
+      health: primaryEnemy.health,
+      basePower: primaryEnemy.basePower,
+      cards: primaryEnemy.cards,
+      leaderDefinitionId: primaryEnemy.definitionId,
+    },
+    enemyLineup: scenario.enemies.map((enemy) => ({
+      definitionId: enemy.definitionId,
+      name: enemy.name,
+      health: enemy.health,
+      basePower: enemy.basePower,
+      startingTokens: enemy.startingTokens,
+    })),
   });
 }
 
@@ -317,6 +336,7 @@ export function buildCloudArenaSessionSnapshot(
       maxHealth: primaryEnemyPermanent?.maxHealth ?? state.enemy.maxHealth,
       block: primaryEnemyPermanent?.block ?? state.enemy.block,
       leaderDefinitionId: state.enemy.leaderDefinitionId,
+      currentCardId: state.enemy.currentCardId ?? state.enemy.currentCard?.id ?? null,
       intent: { ...state.enemy.intent },
       intentLabel: primaryEnemyPermanent?.intentLabel ?? (state.enemy.stunnedThisTurn ? "Stunned" : formatEnemyIntent(state.enemy.intent)),
       intentQueueLabels: primaryEnemyPermanent?.intentQueueLabels ?? [...state.enemy.intentQueueLabels],

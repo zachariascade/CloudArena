@@ -273,6 +273,103 @@ describe("cloud arena combat engine basic flow", () => {
     expect(formatBattleLog(battle)).toContain("turn 1: enemy played assault_12_x2_block_5");
   });
 
+  it("can resolve enemy card block immediately while keeping attack for end of turn", () => {
+    const battle = createTestBattle({
+      playerDeck: ["attack", "attack", "defend", "attack", "defend"],
+      enemy: {
+        name: "Patient Warden",
+        health: 30,
+        basePower: 8,
+        cards: [
+          {
+            id: "brace_then_strike",
+            name: "Brace Then Strike",
+            effects: [
+              {
+                blockAmount: 6,
+                target: "enemy",
+                resolveTiming: "immediate",
+              },
+              {
+                attackPowerMultiplier: 1,
+                target: "player",
+              },
+            ],
+          },
+        ],
+      },
+    });
+    const startingHealth = battle.player.health;
+
+    expect(battle.enemy.block).toBe(6);
+    expect(battle.enemy.intent).toEqual({ attackAmount: 8 });
+
+    const firstAttack = battle.player.hand.find((card) => card.definitionId === "attack");
+
+    if (!firstAttack) {
+      throw new Error("Expected Attack in opening hand.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: firstAttack.instanceId,
+    });
+    chooseEnemyLeaderTarget(battle);
+
+    expect(battle.enemy.block).toBe(0);
+    expect(battle.enemy.health).toBe(30);
+
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(battle.player.health).toBe(startingHealth - 8);
+    expect(battle.turnNumber).toBe(2);
+    expect(battle.enemy.block).toBe(6);
+    expect(battle.enemy.intent).toEqual({ attackAmount: 8 });
+  });
+
+  it("can defer enemy energy drain to the start of the next turn", () => {
+    const battle = createTestBattle({
+      playerDeck: ["attack", "attack", "defend", "attack", "defend"],
+      enemy: {
+        name: "Taxing Shade",
+        health: 30,
+        basePower: 0,
+        cards: [
+          {
+            id: "delayed_tithe",
+            name: "Delayed Tithe",
+            effects: [
+              {
+                energyDelta: -1,
+                target: "player",
+                resolveTiming: "start_of_next_turn",
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    expect(battle.player.energy).toBe(3);
+    expect(battle.enemy.intent).toEqual({});
+
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(battle.turnNumber).toBe(2);
+    expect(battle.player.energy).toBe(2);
+    expect(
+      battle.log.find(
+        (event) => event.type === "turn_started" && event.turnNumber === 2,
+      ),
+    ).toEqual({
+      type: "turn_started",
+      turnNumber: 2,
+      cardsDrawn: 5,
+      energy: 2,
+      enemyIntent: {},
+    });
+  });
+
   it("Defending Strike deals damage and grants block in one play", () => {
     const battle = createTestBattle({
       playerDeck: [

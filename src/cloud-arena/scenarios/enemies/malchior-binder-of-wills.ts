@@ -63,10 +63,10 @@ const twinSubjugation: EnemyCardDefinition = {
 
 export const malchiorBinderOfWillsEnemyPreset: CloudArenaEnemyPreset = {
   id: "malchior_binder_of_wills",
+  definitionId: "enemy_malchior",
   name: "Malchior, Binder of Wills",
   health: 24,
   basePower: 4,
-  leaderDefinitionId: "enemy_malchior",
   cards: [
     eldritchAegis,
     siphonResolve,

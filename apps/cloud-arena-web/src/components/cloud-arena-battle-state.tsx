@@ -14,6 +14,7 @@ import {
   cloudArenaEnemyPresets,
   cardDefinitions,
   getAbilityCostDisplayParts,
+  singleSlash,
 } from "../../../../src/cloud-arena/index.js";
 import {
   mapArenaEnemyToDisplayCard,
@@ -23,8 +24,12 @@ import {
   mapArenaPlayerToDisplayCard,
   type DisplayCardModel,
 } from "../lib/display-card.js";
-import { buildEnemyPreviewCards } from "../lib/cloud-arena-enemy-card-preview.js";
+import {
+  buildEnemyPreviewCards,
+  buildEnemyTelegraphPreviewCardModel,
+} from "../lib/cloud-arena-enemy-card-preview.js";
 import { buildBattlefieldAttachmentState } from "../lib/cloud-arena-battle-attachments.js";
+import type { BattleEvent } from "../../../../src/cloud-arena/index.js";
 import type {
   BattleAction,
   ActivatedAbilityActionId,
@@ -33,6 +38,7 @@ import type {
 
 type CloudArenaBattleStateProps = {
   battle: CloudArenaBattleViewModel;
+  recentEvents?: BattleEvent[];
   disableHandCardActions?: boolean;
   disablePermanentActions?: boolean;
   disableTurnActions?: boolean;
@@ -47,8 +53,134 @@ type CloudArenaBattleStateProps = {
   }>;
 };
 
+function isEnemyPermanentActedEvent(event: BattleEvent): event is Extract<BattleEvent, { type: "permanent_acted" }> {
+  return event.type === "permanent_acted";
+}
+
+function getEnemyActionOverlayTargetPermanentId(battle: CloudArenaBattleViewModel): string | null {
+  const enemyLeaderPermanent =
+    battle.enemyBattlefield?.find((permanent): permanent is NonNullable<typeof permanent> =>
+      Boolean(permanent?.isEnemyLeader),
+    ) ?? null;
+
+  if (enemyLeaderPermanent) {
+    return enemyLeaderPermanent.instanceId;
+  }
+
+  const firstEnemyPermanent = battle.enemyBattlefield?.find(
+    (permanent): permanent is NonNullable<typeof permanent> => permanent !== null,
+  ) ?? null;
+
+  return firstEnemyPermanent?.instanceId ?? null;
+}
+
+function getEnemyPreviewCardByCardId(cardId: string): DisplayCardModel | null {
+  const enemyPreset = Object.values(cloudArenaEnemyPresets).find(
+    (preset) => preset.cards.some((card) => card.id === cardId),
+  );
+  const enemyCard = enemyPreset?.cards.find((card) => card.id === cardId);
+
+  return enemyCard ? buildEnemyPreviewCards([enemyCard])[0] ?? null : null;
+}
+
+function getEnemyActionOverlayFromEvent(
+  battle: CloudArenaBattleViewModel,
+  event: BattleEvent | null,
+): { card: DisplayCardModel; permanentId: string; key: string; isFading: boolean } | null {
+  if (!event) {
+    return null;
+  }
+
+  if (event.type === "enemy_card_played") {
+    const previewCard = getEnemyPreviewCardByCardId(event.cardId);
+    const permanentId = getEnemyActionOverlayTargetPermanentId(battle);
+
+    if (!previewCard || !permanentId) {
+      return null;
+    }
+
+    return {
+      card: previewCard,
+      permanentId,
+      key: `${event.turnNumber}:enemy_card_played:${event.cardId}`,
+      isFading: false,
+    };
+  }
+
+  if (event.type === "permanent_acted") {
+    const permanent = battle.enemyBattlefield?.find((entry) => entry?.instanceId === event.permanentId) ?? null;
+
+    if (!permanent || permanent.controllerId !== "enemy") {
+      return null;
+    }
+
+    if (event.action !== "attack") {
+      return null;
+    }
+
+    return {
+      card: buildEnemyPreviewCards([singleSlash()])[0],
+      permanentId: permanent.instanceId,
+      key: `${event.turnNumber}:permanent_acted:${event.permanentId}:${event.action}`,
+      isFading: false,
+    };
+  }
+
+  return null;
+}
+
+function getLatestEnemyActionOverlayEvent(
+  events: BattleEvent[],
+  enemyBattlefield: CloudArenaBattleViewModel["enemyBattlefield"],
+): BattleEvent | null {
+  for (let index = events.length - 1; index >= 0; index -= 1) {
+    const event = events[index];
+
+    if (!event) {
+      continue;
+    }
+
+    if (event.type === "enemy_card_played") {
+      return event;
+    }
+
+    if (isEnemyPermanentActedEvent(event)) {
+      const permanent = enemyBattlefield?.find((entry) => entry?.instanceId === event.permanentId) ?? null;
+
+      if (permanent && permanent.controllerId === "enemy") {
+        return event;
+      }
+    }
+  }
+
+  return null;
+}
+
+function summarizeEnemyBattlefield(
+  enemyBattlefield: CloudArenaBattleViewModel["enemyBattlefield"],
+): Array<{
+  instanceId: string;
+  definitionId: string;
+  name: string;
+  isEnemyLeader: boolean;
+  slotIndex: number;
+  controllerId?: string | null;
+}> {
+  return (enemyBattlefield ?? [])
+    .filter((entry): entry is NonNullable<typeof entry> => entry !== null)
+    .map((entry) => ({
+      instanceId: entry.instanceId,
+      definitionId: entry.definitionId,
+      name: entry.name,
+      isEnemyLeader: Boolean(entry.isEnemyLeader),
+      slotIndex: entry.slotIndex,
+      controllerId: entry.controllerId ?? null,
+    }));
+}
+
 export function CloudArenaBattleState({
   battle,
+  recentEvents = [],
   disableHandCardActions = false,
   disablePermanentActions = false,
   disableTurnActions = false,
@@ -65,10 +197,76 @@ export function CloudArenaBattleState({
   const playerHealthDropTimerRef = useRef<number | null>(null);
   const animationTimersRef = useRef<Record<string, number>>({});
   const healthFlashTimersRef = useRef<Record<string, number>>({});
+  const enemyActionOverlayTimersRef = useRef<{ fade: number | null; clear: number | null }>({
+    fade: null,
+    clear: null,
+  });
+  const enemyActionOverlayCooldownTimerRef = useRef<number | null>(null);
+  const pendingEnemyActionOverlayRef = useRef<{
+    card: DisplayCardModel;
+    permanentId: string;
+    key: string;
+    isFading: boolean;
+  } | null>(null);
+  const enemyActionOverlayBlockedUntilRef = useRef<number>(0);
+  const enemyActionOverlayKeyRef = useRef<string | null>(null);
   const [isPlayerHealthDropping, setIsPlayerHealthDropping] = useState(false);
   const [healthFlashDirections, setHealthFlashDirections] = useState<Record<string, "increase" | "decrease">>({});
+  const [enemyBattlefieldStackOrder, setEnemyBattlefieldStackOrder] = useState<string[]>([]);
+  const [enemyActionOverlay, setEnemyActionOverlay] = useState<{
+    card: DisplayCardModel;
+    permanentId: string;
+    key: string;
+    isFading: boolean;
+  } | null>(() => {
+    const latestOverlayEvent = getLatestEnemyActionOverlayEvent(recentEvents, battle.enemyBattlefield);
+
+    if (!latestOverlayEvent) {
+      return null;
+    }
+
+    if (latestOverlayEvent.type === "enemy_card_played") {
+      const previewCard = getEnemyPreviewCardByCardId(latestOverlayEvent.cardId);
+      const targetPermanentId = getEnemyActionOverlayTargetPermanentId(battle);
+
+      if (!previewCard || !targetPermanentId) {
+        return null;
+      }
+
+      return {
+        card: previewCard,
+        permanentId: targetPermanentId,
+        key: `${latestOverlayEvent.turnNumber}:enemy_card_played:${latestOverlayEvent.cardId}`,
+        isFading: false,
+      };
+    }
+
+    if (!isEnemyPermanentActedEvent(latestOverlayEvent)) {
+      return null;
+    }
+
+    const permanent = battle.enemyBattlefield?.find((entry) => entry?.instanceId === latestOverlayEvent.permanentId) ?? null;
+
+    if (!permanent || permanent.controllerId !== "enemy") {
+      return null;
+    }
+
+    return {
+      card: mapArenaPermanentToDisplayCard(permanent, {
+        disableActions: true,
+      }),
+      permanentId: permanent.instanceId,
+      key: `${latestOverlayEvent.turnNumber}:permanent_acted:${latestOverlayEvent.permanentId}:${latestOverlayEvent.action}`,
+      isFading: false,
+    };
+  });
   const playableHandCards = new Set(playableHandCardInstanceIds);
-  const enemyBattlefield = battle.enemyBattlefield ?? Array.from({ length: battle.battlefield.length }, () => null);
+  const fallbackEnemyBattlefield = useMemo(
+    () => Array.from({ length: battle.battlefield.length }, () => null),
+    [battle.battlefield.length],
+  );
+  const enemyBattlefield = battle.enemyBattlefield ?? fallbackEnemyBattlefield;
+  const isTargeting = battle.pendingTargetRequest !== null;
   const targetableBattlefieldPermanentIds = new Set(
     battle.legalActions.flatMap((entry) =>
       entry.action.type === "choose_target" ? [entry.action.targetPermanentId] : [],
@@ -220,6 +418,104 @@ export function CloudArenaBattleState({
 
       delete healthFlashTimersRef.current[key];
     }, durationMs);
+  }
+
+  function clearEnemyActionOverlayTimers(): void {
+    if (enemyActionOverlayTimersRef.current.fade !== null) {
+      window.clearTimeout(enemyActionOverlayTimersRef.current.fade);
+      enemyActionOverlayTimersRef.current.fade = null;
+    }
+
+    if (enemyActionOverlayTimersRef.current.clear !== null) {
+      window.clearTimeout(enemyActionOverlayTimersRef.current.clear);
+      enemyActionOverlayTimersRef.current.clear = null;
+    }
+  }
+
+  function clearEnemyActionOverlayCooldownTimer(): void {
+    if (enemyActionOverlayCooldownTimerRef.current !== null) {
+      window.clearTimeout(enemyActionOverlayCooldownTimerRef.current);
+      enemyActionOverlayCooldownTimerRef.current = null;
+    }
+  }
+
+  function showEnemyActionOverlay(card: DisplayCardModel, permanentId: string, key: string): void {
+    clearEnemyActionOverlayTimers();
+    enemyActionOverlayKeyRef.current = key;
+    setEnemyActionOverlay({
+      card,
+      permanentId,
+      key,
+      isFading: false,
+    });
+  }
+
+  function scheduleEnemyActionOverlay(card: DisplayCardModel, permanentId: string, key: string): void {
+    const now = Date.now();
+    const delayMs = Math.max(0, enemyActionOverlayBlockedUntilRef.current - now);
+
+    if (delayMs === 0) {
+      showEnemyActionOverlay(card, permanentId, key);
+      return;
+    }
+
+    pendingEnemyActionOverlayRef.current = { card, permanentId, key, isFading: false };
+    clearEnemyActionOverlayCooldownTimer();
+    enemyActionOverlayCooldownTimerRef.current = window.setTimeout(() => {
+      enemyActionOverlayCooldownTimerRef.current = null;
+      const pending = pendingEnemyActionOverlayRef.current;
+      pendingEnemyActionOverlayRef.current = null;
+
+      if (!pending) {
+        return;
+      }
+
+      showEnemyActionOverlay(pending.card, pending.permanentId, pending.key);
+    }, delayMs);
+  }
+
+  function fadeEnemyActionOverlay(key: string): void {
+    if (!enemyActionOverlay || enemyActionOverlay.key !== key || enemyActionOverlay.isFading) {
+      return;
+    }
+
+    if (enemyActionOverlayTimersRef.current.fade !== null) {
+      window.clearTimeout(enemyActionOverlayTimersRef.current.fade);
+      enemyActionOverlayTimersRef.current.fade = null;
+    }
+    if (enemyActionOverlayTimersRef.current.clear !== null) {
+      window.clearTimeout(enemyActionOverlayTimersRef.current.clear);
+      enemyActionOverlayTimersRef.current.clear = null;
+    }
+
+    enemyActionOverlayTimersRef.current.fade = window.setTimeout(() => {
+      setEnemyActionOverlay((current) => {
+        if (!current || current.key !== key) {
+          return current;
+        }
+
+        return {
+          ...current,
+          isFading: true,
+        };
+      });
+
+      enemyActionOverlayTimersRef.current.fade = null;
+    }, 10);
+
+    enemyActionOverlayTimersRef.current.clear = window.setTimeout(() => {
+      setEnemyActionOverlay((current) => {
+        if (!current || current.key !== key) {
+          return current;
+        }
+
+        enemyActionOverlayBlockedUntilRef.current = Date.now() + 1000;
+
+        return null;
+      });
+
+      enemyActionOverlayTimersRef.current.clear = null;
+    }, 320);
   }
 
   function playAttackAnimation(attackId: string, durationMs: number): void {
@@ -484,8 +780,83 @@ export function CloudArenaBattleState({
       playDeathAnimation(overlayKey, 760, overlay);
     }
 
+    const latestOverlayEvent = getLatestEnemyActionOverlayEvent(recentEvents, battle.enemyBattlefield);
+
+    if (latestOverlayEvent) {
+      const latestOverlay = getEnemyActionOverlayFromEvent(battle, latestOverlayEvent);
+
+      if (latestOverlay && latestOverlay.key !== enemyActionOverlayKeyRef.current) {
+        scheduleEnemyActionOverlay(latestOverlay.card, latestOverlay.permanentId, latestOverlay.key);
+      }
+
+      if (latestOverlay && latestOverlay.key === enemyActionOverlayKeyRef.current) {
+        fadeEnemyActionOverlay(latestOverlay.key);
+      }
+    }
+
     return () => undefined;
-  }, [battle]);
+  }, [battle, recentEvents]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof console === "undefined") {
+      return;
+    }
+
+    const latestOverlayEvent = getLatestEnemyActionOverlayEvent(recentEvents, battle.enemyBattlefield);
+    const latestOverlay = getEnemyActionOverlayFromEvent(battle, latestOverlayEvent);
+    const latestOverlayEventSummary = latestOverlayEvent
+      ? latestOverlayEvent.type === "enemy_card_played"
+        ? {
+            type: latestOverlayEvent.type,
+            turnNumber: latestOverlayEvent.turnNumber,
+            cardId: latestOverlayEvent.cardId,
+          }
+        : (() => {
+            const actedEvent = latestOverlayEvent as Extract<BattleEvent, { type: "permanent_acted" }>;
+
+            return {
+              type: actedEvent.type,
+              turnNumber: actedEvent.turnNumber,
+              permanentId: actedEvent.permanentId,
+              action: actedEvent.action,
+              source: actedEvent.source,
+            };
+          })()
+      : null;
+
+    console.info("[CloudArena] enemy overlay state", {
+      turnNumber: battle.turnNumber,
+      phase: battle.phase,
+      latestOverlayEvent: latestOverlayEventSummary,
+      enemyBattlefield: summarizeEnemyBattlefield(battle.enemyBattlefield),
+      enemyActionOverlay: enemyActionOverlay
+        ? {
+            key: enemyActionOverlay.key,
+            permanentId: enemyActionOverlay.permanentId,
+            isFading: enemyActionOverlay.isFading,
+            card: {
+              variant: enemyActionOverlay.card.variant,
+              name: enemyActionOverlay.card.name,
+              title: enemyActionOverlay.card.title,
+              subtitle: enemyActionOverlay.card.subtitle,
+            },
+          }
+        : null,
+      resolvedOverlay: latestOverlay
+        ? {
+            key: latestOverlay.key,
+            permanentId: latestOverlay.permanentId,
+            isFading: latestOverlay.isFading,
+            card: {
+              variant: latestOverlay.card.variant,
+              name: latestOverlay.card.name,
+              title: latestOverlay.card.title,
+              subtitle: latestOverlay.card.subtitle,
+            },
+          }
+        : null,
+    });
+  }, [battle, enemyActionOverlay, recentEvents]);
 
   useEffect(() => () => {
     if (playerHealthDropTimerRef.current !== null) {
@@ -500,7 +871,46 @@ export function CloudArenaBattleState({
       window.clearTimeout(timerId);
     }
     animationTimersRef.current = {};
+    clearEnemyActionOverlayTimers();
+    clearEnemyActionOverlayCooldownTimer();
   }, []);
+
+  useEffect(() => {
+    const battlefieldIds = enemyBattlefield.flatMap((slot) => (slot ? [slot.instanceId] : []));
+
+    setEnemyBattlefieldStackOrder((current) => {
+      const preservedIds = current.filter((instanceId) => battlefieldIds.includes(instanceId));
+      const preservedSet = new Set(preservedIds);
+      const missingIds = battlefieldIds.filter((instanceId) => !preservedSet.has(instanceId));
+
+      return [...preservedIds, ...missingIds];
+    });
+  }, [enemyBattlefield]);
+
+  function toggleEnemyBattlefieldStackOrder(permanentId: string): void {
+    if (isTargeting) {
+      return;
+    }
+
+    setEnemyBattlefieldStackOrder((current) => {
+      const currentIndex = current.indexOf(permanentId);
+
+      if (currentIndex === -1) {
+        return current;
+      }
+
+      const next = current.slice();
+      next.splice(currentIndex, 1);
+
+      if (currentIndex === current.length - 1) {
+        next.unshift(permanentId);
+      } else {
+        next.push(permanentId);
+      }
+
+      return next;
+    });
+  }
 
   const getInspectableModel = (key: string) => inspectableModels.get(key) ?? enemyCard;
   const hoveredInspectorDefinitionJson = hoveredInspectorKey
@@ -559,24 +969,63 @@ export function CloudArenaBattleState({
     },
     [enemyBattlefield, hoveredInspectorKey],
   );
+  const hoveredInspectorEnemyTelegraphCard = useMemo(() => {
+    if (!hoveredInspectorEnemyPermanent) {
+      return null;
+    }
+
+    return buildEnemyTelegraphPreviewCardModel({
+      currentCardId:
+        hoveredInspectorEnemyPermanent.definitionId === battle.enemy.leaderDefinitionId
+          ? battle.enemy.currentCardId
+          : null,
+      intentLabel: hoveredInspectorEnemyPermanent.intentLabel,
+      intentQueueLabels: hoveredInspectorEnemyPermanent.intentQueueLabels,
+      power: hoveredInspectorEnemyPermanent.power,
+    });
+  }, [
+    battle.enemy.currentCardId,
+    battle.enemy.leaderDefinitionId,
+    hoveredInspectorEnemyPermanent,
+  ]);
   const hoveredInspectorSequenceCards = useMemo<Array<{ key: string; model: DisplayCardModel }>>(() => {
     if (!hoveredInspectorEnemyPermanent) {
       return [];
     }
 
     const enemyPreset = Object.values(cloudArenaEnemyPresets).find(
-      (preset) => preset.leaderDefinitionId === hoveredInspectorEnemyPermanent.definitionId,
+      (preset) => preset.definitionId === hoveredInspectorEnemyPermanent.definitionId,
     );
 
     if (!enemyPreset) {
-      return [];
+      return hoveredInspectorEnemyTelegraphCard
+        ? [
+            {
+              key: `${hoveredInspectorEnemyPermanent.instanceId}:enemy-sequence:current`,
+              model: hoveredInspectorEnemyTelegraphCard,
+            },
+          ]
+        : [];
     }
 
-    return buildEnemyPreviewCards(enemyPreset.cards).map((model, index) => ({
-      key: `${hoveredInspectorEnemyPermanent.instanceId}:enemy-sequence:${index}`,
-      model,
-    }));
-  }, [hoveredInspectorEnemyPermanent]);
+    const sequenceCards: Array<{ key: string; model: DisplayCardModel }> = [];
+
+    if (hoveredInspectorEnemyTelegraphCard) {
+      sequenceCards.push({
+        key: `${hoveredInspectorEnemyPermanent.instanceId}:enemy-sequence:current`,
+        model: hoveredInspectorEnemyTelegraphCard,
+      });
+    }
+
+    sequenceCards.push(
+      ...buildEnemyPreviewCards(enemyPreset.cards).map((model, index) => ({
+        key: `${hoveredInspectorEnemyPermanent.instanceId}:enemy-sequence:${index}`,
+        model,
+      })),
+    );
+
+    return sequenceCards;
+  }, [hoveredInspectorEnemyPermanent, hoveredInspectorEnemyTelegraphCard]);
   const hoveredInspectorCards = useMemo<Array<{ key: string; model: DisplayCardModel }>>(() => {
     if (!hoveredInspectorKey?.startsWith("enemy_battlefield:")) {
       return [];
@@ -598,9 +1047,16 @@ export function CloudArenaBattleState({
         }];
       });
 
-    return attachedCards;
-  }, [battle.battlefield, enemyBattlefield, getInspectableModel, hoveredInspectorEnemyPermanent]);
-  const hoveredInspectorHasCardsTab = hoveredInspectorCards.length > 0;
+    const enemyCard = hoveredInspectorEnemyTelegraphCard
+      ? [{
+          key: `${hoveredInspectorEnemyPermanent.instanceId}:enemy-card`,
+          model: hoveredInspectorEnemyTelegraphCard,
+        }]
+      : [];
+
+    return [...enemyCard, ...attachedCards];
+  }, [battle.battlefield, enemyBattlefield, hoveredInspectorEnemyPermanent, hoveredInspectorEnemyTelegraphCard]);
+  const hoveredInspectorHasCardsTab = hoveredInspectorCards.length > 0 || hoveredInspectorEnemyPermanent !== null;
   const hoveredInspectorHasSequenceTab = hoveredInspectorSequenceCards.length > 0;
 
   function getAnchoredInspectorPosition(
@@ -643,7 +1099,7 @@ export function CloudArenaBattleState({
       const selectedPermanent = enemyBattlefield.find((entry) => entry?.instanceId === permanentId) ?? null;
       const enemyPreset = selectedPermanent
         ? Object.values(cloudArenaEnemyPresets).find(
-            (preset) => preset.leaderDefinitionId === selectedPermanent.definitionId,
+            (preset) => preset.definitionId === selectedPermanent.definitionId,
           )
         : null;
 
@@ -811,17 +1267,18 @@ export function CloudArenaBattleState({
       <div ref={battleWindowRef} className="cloud-arena-battle-window">
         <div ref={battleMainRef} className="cloud-arena-battle-main">
           <div className="cloud-arena-battlefield-stage">
-          <CloudArenaBattlefieldPanel
-            zoneKeyPrefix="battlefield"
-            battlefield={battle.battlefield}
-            legalActions={battle.legalActions}
-            motionState={motionState}
-            hiddenPermanentIds={battlefieldAttachmentState.hiddenPermanentIds}
-            getInspectableModel={getInspectableModel}
-            getPermanentMenuActions={getPermanentMenuActions}
-            getPermanentCounterEntries={getPermanentCounterEntries}
-            bindInspectorInteractions={bindInspectorInteractions}
-            onOpenDetails={handleDetailsClick}
+            <CloudArenaBattlefieldPanel
+              zoneKeyPrefix="battlefield"
+              battlefield={battle.battlefield}
+              legalActions={battle.legalActions}
+              motionState={motionState}
+              isTargeting={isTargeting}
+              hiddenPermanentIds={battlefieldAttachmentState.hiddenPermanentIds}
+              getInspectableModel={getInspectableModel}
+              getPermanentMenuActions={getPermanentMenuActions}
+              getPermanentCounterEntries={getPermanentCounterEntries}
+              bindInspectorInteractions={bindInspectorInteractions}
+              onOpenDetails={handleDetailsClick}
               openPermanentMenuId={openPermanentMenuId}
               onPermanentMenuToggle={(permanentId) =>
                 setOpenPermanentMenuId((current) => (current === permanentId ? null : permanentId))}
@@ -829,18 +1286,23 @@ export function CloudArenaBattleState({
               onTargetPermanentSelect={onTurnAction}
             />
 
-          <CloudArenaBattlefieldPanel
-            zoneKeyPrefix="enemy_battlefield"
-            battlefield={enemyBattlefield}
-            legalActions={battle.legalActions}
-            motionState={motionState}
-            stackedAttachmentsByTargetId={battlefieldAttachmentState.stackedAttachmentsByTargetId}
-            getInspectableModel={getInspectableModel}
-            getPermanentMenuActions={() => []}
-            getPermanentCounterEntries={getPermanentCounterEntries}
-            bindInspectorInteractions={bindInspectorInteractions}
+            <CloudArenaBattlefieldPanel
+              zoneKeyPrefix="enemy_battlefield"
+              battlefield={enemyBattlefield}
+              legalActions={battle.legalActions}
+              motionState={motionState}
+              isTargeting={isTargeting}
+              enemyBattlefieldStackOrder={enemyBattlefieldStackOrder}
+              enemyCurrentCardId={battle.enemy.currentCardId}
+              enemyLeaderDefinitionId={battle.enemy.leaderDefinitionId}
+              stackedAttachmentsByTargetId={battlefieldAttachmentState.stackedAttachmentsByTargetId}
+              getInspectableModel={getInspectableModel}
+              getPermanentMenuActions={() => []}
+              getPermanentCounterEntries={getPermanentCounterEntries}
+              bindInspectorInteractions={bindInspectorInteractions}
               onOpenDetails={handleDetailsClick}
               onTargetPermanentSelect={onTurnAction}
+              onToggleEnemyBattlefieldStackOrder={toggleEnemyBattlefieldStackOrder}
             />
           </div>
 

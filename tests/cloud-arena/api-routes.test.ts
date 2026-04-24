@@ -79,6 +79,26 @@ describe("cloud arena api routes", () => {
     await app.close();
   });
 
+  it("accepts the lake of ice scenario on session creation", async () => {
+    const app = createArenaTestApp();
+
+    const createResponse = await app.inject({
+      method: "POST",
+      url: "/api/cloud-arena/sessions",
+      payload: {
+        scenarioId: "lake_of_ice",
+        seed: 11,
+      },
+    });
+
+    expect(createResponse.statusCode).toBe(200);
+    expect(createResponse.json().data.scenarioId).toBe("lake_of_ice");
+    expect(createResponse.json().data.enemy.name).toBe("Cocytus, Lake of Ice");
+    expect(createResponse.json().data.enemy.intentLabel).toContain("attack");
+
+    await app.close();
+  });
+
   it("returns Cloud Arena session route errors for missing sessions and invalid actions", async () => {
     const app = createArenaTestApp();
 

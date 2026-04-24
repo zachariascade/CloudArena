@@ -8,6 +8,6 @@ export const malchiorBinderOfWillsScenarioPreset: CloudArenaScenarioPreset = {
   notes: "A straightforward duel against a controlling demon lord testing single and double base-power strikes.",
   playerHealth: 20,
   deck: mixedGuardianDeckPreset.cards,
-  enemy: malchiorBinderOfWillsEnemyPreset,
+  enemies: [malchiorBinderOfWillsEnemyPreset],
   recommendedMaxSteps: 180,
 };

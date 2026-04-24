@@ -4,6 +4,10 @@ import {
 } from "./constants.js";
 import { discardHand, drawUpToHandSize } from "./draw.js";
 import {
+  primeEnemyCardForTurn,
+  resolveScheduledEnemyCardEffects,
+} from "./enemy-card-effects.js";
+import {
   getEnemyIntentQueueLabels,
   getEnemyPlanLength,
   getEnemyPlanStepAtIndexFromState,
@@ -14,12 +18,14 @@ import {
   syncEnemyStateFromLeaderPermanent,
   syncEnemyLeaderPermanentFromState,
 } from "./permanents.js";
+import { expireTemporaryCounters } from "./effects.js";
 import { formatEnemyIntent } from "./enemy-intent.js";
 import { processTriggeredAbilities } from "./triggers.js";
 import type { BattleState } from "./types.js";
 
 export function resetRound(state: BattleState): BattleState {
   state.turnNumber += 1;
+  expireTemporaryCounters(state);
   state.phase = "player_action";
   state.player.block = 0;
   state.player.energy = LEAN_V1_DEFAULT_TURN_ENERGY;
@@ -58,6 +64,8 @@ export function resetRound(state: BattleState): BattleState {
   });
   syncEnemyStateFromLeaderPermanent(state);
 
+  resolveScheduledEnemyCardEffects(state);
+
   const enemyPlanLength = getEnemyPlanLength(state.enemy);
 
   state.enemy.behaviorIndex = (state.enemy.behaviorIndex + 1) % enemyPlanLength;
@@ -73,7 +81,9 @@ export function resetRound(state: BattleState): BattleState {
   }
 
   state.enemy.intent = nextEnemyPlan.intent;
+  state.enemy.currentCardId = nextEnemyPlan.card?.id ?? null;
   state.enemy.currentCard = nextEnemyPlan.card;
+  state.enemy.currentCard = primeEnemyCardForTurn(state, state.enemy.currentCard);
   state.enemy.intentQueueLabels = getEnemyIntentQueueLabels(state.enemy, 2);
   syncEnemyLeaderPermanentFromState(
     state,

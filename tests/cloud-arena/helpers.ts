@@ -76,6 +76,16 @@ export const TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
     recoveryPolicy: "full_heal",
     abilities: [],
   },
+  enemy_cocytus: {
+    id: "enemy_cocytus",
+    name: "Cocytus, Lake of Ice",
+    cardTypes: ["creature"],
+    cost: 0,
+    onPlay: [],
+    power: 0,
+    health: 0,
+    abilities: [],
+  },
   enemy_brute: {
     id: "enemy_brute",
     name: "Demon Brute",
@@ -193,6 +203,7 @@ type CreateTestBattleInput = {
     name?: string;
     health?: number;
     basePower?: number;
+    leaderDefinitionId?: CardDefinitionId;
     behavior?: EnemyBehaviorStep[];
     cards?: EnemyCardDefinition[];
     startingTokens?: CardDefinitionId[];
