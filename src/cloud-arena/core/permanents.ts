@@ -12,6 +12,7 @@ import type {
   BattleState,
   CardInstance,
   CardDefinitionId,
+  EnemyActorState,
   EnemyState,
   PermanentKeyword,
   PermanentKeywordModifier,
@@ -351,6 +352,7 @@ export function createEnemyLeaderPermanent(
   state: BattleState,
   enemy: Pick<EnemyState, "name" | "health" | "basePower" | "intent"> & {
     definitionId?: CardDefinitionId;
+    enemyActorId?: string | null;
   },
 ): PermanentState {
   const openSlot = state.enemyBattlefield.findIndex(
@@ -367,6 +369,7 @@ export function createEnemyLeaderPermanent(
     name: enemy.name,
     definitionId: enemy.definitionId ?? "enemy_leader",
     controllerId: "enemy",
+    enemyActorId: enemy.enemyActorId ?? null,
     isEnemyLeader: true,
     intentLabel: null,
     intentQueueLabels: [],
@@ -422,6 +425,7 @@ export function createEnemyPermanent(
     name: string;
     health: number;
     basePower: number;
+    enemyActorId?: string | null;
   },
 ): PermanentState {
   const definition = asPermanentCardDefinition(
@@ -439,6 +443,7 @@ export function createEnemyPermanent(
     name: enemy.name,
     definitionId: enemy.definitionId,
     controllerId: "enemy",
+    enemyActorId: enemy.enemyActorId ?? null,
     isEnemyLeader: false,
     intentLabel: null,
     intentQueueLabels: [],
@@ -485,6 +490,37 @@ export function createEnemyPermanent(
   });
 
   return permanent;
+}
+
+export function createPermanentForEnemyActor(
+  state: BattleState,
+  enemyActor: Pick<EnemyActorState, "id" | "definitionId" | "name" | "health" | "basePower" | "intent">,
+  options: {
+    isLeader: boolean;
+  },
+): PermanentState {
+  if (options.isLeader) {
+    return createEnemyLeaderPermanent(state, {
+      name: enemyActor.name,
+      health: enemyActor.health,
+      basePower: enemyActor.basePower,
+      intent: enemyActor.intent,
+      definitionId: enemyActor.definitionId ?? undefined,
+      enemyActorId: enemyActor.id,
+    });
+  }
+
+  if (!enemyActor.definitionId) {
+    throw new Error(`Enemy actor "${enemyActor.name}" must define a definitionId.`);
+  }
+
+  return createEnemyPermanent(state, {
+    definitionId: enemyActor.definitionId,
+    name: enemyActor.name,
+    health: enemyActor.health,
+    basePower: enemyActor.basePower,
+    enemyActorId: enemyActor.id,
+  });
 }
 
 export function getEnemyLeaderPermanent(state: BattleState): PermanentState | null {
@@ -775,6 +811,17 @@ export function destroyPermanent(
     state.enemy.block = 0;
     state.enemy.intentQueueLabels = [];
     state.enemy.leaderPermanentId = null;
+  }
+
+  if (permanent.enemyActorId) {
+    const enemyActor = state.enemies.find((actor) => actor.id === permanent.enemyActorId) ?? null;
+
+    if (enemyActor) {
+      enemyActor.health = 0;
+      enemyActor.block = 0;
+      enemyActor.permanentId = null;
+      enemyActor.intentQueueLabels = [];
+    }
   }
 
   emitRulesEvent(state, {

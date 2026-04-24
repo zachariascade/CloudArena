@@ -173,7 +173,13 @@ function toCardSnapshot(
 }
 
 function createInitialReplayState(trace: SimulationTrace): TraceViewerReplayState {
-  const initialEnemyPlan = getEnemyPlanStepAtIndexFromInput(trace.config.enemy, 0);
+  const traceEnemy = trace.config.enemy;
+
+  if (!traceEnemy) {
+    throw new Error("Trace config must include a primary enemy.");
+  }
+
+  const initialEnemyPlan = getEnemyPlanStepAtIndexFromInput(traceEnemy, 0);
   const boardSize = Math.max(1, trace.finalSummary.battlefield.length);
 
   if (!initialEnemyPlan) {
@@ -194,9 +200,9 @@ function createInitialReplayState(trace: SimulationTrace): TraceViewerReplayStat
       graveyard: [],
     },
     enemy: {
-      name: trace.config.enemy.name,
-      health: trace.config.enemy.health,
-      maxHealth: trace.config.enemy.health,
+      name: traceEnemy.name,
+      health: traceEnemy.health,
+      maxHealth: traceEnemy.health,
       block: 0,
       intent: initialEnemyPlan.intent,
       intentLabel: formatEnemyIntent(initialEnemyPlan.intent),

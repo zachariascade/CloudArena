@@ -672,6 +672,25 @@ export type EnemyIntent = {
 
 export type EnemyBehaviorStep = EnemyIntent;
 
+export type EnemyActorState = {
+  id: string;
+  definitionId: CardDefinitionId | null;
+  name: string;
+  health: number;
+  maxHealth: number;
+  block: number;
+  basePower: number;
+  intent: EnemyIntent;
+  intentQueueLabels: string[];
+  behavior: EnemyBehaviorStep[];
+  cards: EnemyCardDefinition[];
+  behaviorIndex: number;
+  currentCardId: string | null;
+  currentCard: EnemyCardDefinition | null;
+  permanentId: string | null;
+  stunnedThisTurn: boolean;
+};
+
 export type EnemyState = {
   name: string;
   health: number;
@@ -713,6 +732,7 @@ export type PermanentState = {
   name: string;
   definitionId: CardDefinitionId;
   controllerId?: "player" | "enemy";
+  enemyActorId?: string | null;
   isEnemyLeader?: boolean;
   intentLabel?: string | null;
   intentQueueLabels?: string[] | null;
@@ -774,6 +794,7 @@ export type BattleState = {
   enemyNonCreatureSlotCount: number;
   player: PlayerState;
   enemy: EnemyState;
+  enemies: EnemyActorState[];
   battlefield: Array<PermanentState | null>;
   enemyBattlefield: Array<PermanentState | null>;
   pendingTargetRequest?: PendingTargetRequest | null;
@@ -843,12 +864,8 @@ export type CardEnemyConfig = {
 
 export type CreateBattleEnemyConfig = BehaviorEnemyConfig | CardEnemyConfig;
 
-export type EnemyLineupEntry = {
-  definitionId: CardDefinitionId;
-  name: string;
-  health: number;
-  basePower: number;
-  startingTokens?: CardDefinitionId[];
+export type CreateBattleEnemyInput = CreateBattleEnemyConfig & {
+  definitionId?: CardDefinitionId;
 };
 
 export type CreateBattleInput = {
@@ -857,6 +874,6 @@ export type CreateBattleInput = {
   cardDefinitions?: CardDefinitionLibrary;
   playerDeck: CardDefinitionId[];
   shuffleDeck?: boolean;
-  enemy: CreateBattleEnemyConfig;
-  enemyLineup?: EnemyLineupEntry[];
+  enemies?: CreateBattleEnemyInput[];
+  enemy?: CreateBattleEnemyConfig;
 };

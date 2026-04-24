@@ -108,6 +108,12 @@ function normalizeAgentSelection(
 
 export function runSimulation(input: SimulationInput): SimulationResult {
   const state = createBattle(input);
+  const traceEnemy = input.enemies?.[0] ?? input.enemy;
+
+  if (!traceEnemy) {
+    throw new Error("Simulation input must include at least one enemy definition.");
+  }
+
   const startingDeck = [
     ...state.player.hand,
     ...state.player.drawPile,
@@ -125,7 +131,7 @@ export function runSimulation(input: SimulationInput): SimulationResult {
           playerHealth: state.player.maxHealth,
           cardDefinitions: state.cardDefinitions,
           playerDeck: startingDeck,
-          enemy: cloneEnemyConfig(input.enemy),
+          enemy: cloneEnemyConfig(traceEnemy),
           maxSteps,
           agent: input.agentName ?? "anonymous_agent",
         },

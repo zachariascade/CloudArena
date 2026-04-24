@@ -2,15 +2,19 @@
 
 1. Define the multi-enemy rules model.
 Decide turn order, whether all enemies act every enemy turn, how intents queue, and what `"enemy"` means for effects and targeting.
+Status: done in `docs/multi-enemy-rules-model.md`
 
 2. Introduce an `EnemyActorState` type.
 Refactor `src/cloud-arena/core/types.ts` so battle state can hold multiple enemy actors instead of one singleton `EnemyState`.
+Status: done in `src/cloud-arena/core/types.ts`, with initial creation wired through `src/cloud-arena/core/create-battle.ts`
 
 3. Add scenario lineup as first-class battle input.
 Make `createBattle()` accept the full scenario enemy lineup directly and keep each listed enemy as a distinct actor from battle creation onward.
+Status: done in `src/cloud-arena/core/types.ts`, `src/cloud-arena/core/create-battle.ts`, and `src/cloud-arena/session-core.ts`
 
 4. Create battlefield permanents for every enemy actor.
 Give each enemy actor its own permanent link and instantiate all scenario enemies from preset stats and card definitions.
+Status: done in `src/cloud-arena/core/permanents.ts` and `src/cloud-arena/core/create-battle.ts`
 
 5. Keep one primary enemy for behavior, expose all enemies in state.
 Phase 1 bridge:

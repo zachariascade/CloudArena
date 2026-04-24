@@ -1,4 +1,8 @@
-import type { CardDefinitionId, CardEnemyConfig } from "../core/types.js";
+import type {
+  BehaviorEnemyConfig,
+  CardDefinitionId,
+  CardEnemyConfig,
+} from "../core/types.js";
 
 export type CloudArenaDeckPresetId =
   | "master_deck"
@@ -34,6 +38,7 @@ export type CloudArenaScenarioEnemy = {
   health: number;
   basePower: number;
   cards?: CardEnemyConfig["cards"];
+  behavior?: BehaviorEnemyConfig["behavior"];
   startingTokens?: CardDefinitionId[];
 };
 

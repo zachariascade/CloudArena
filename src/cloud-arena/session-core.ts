@@ -42,6 +42,7 @@ import {
 import type {
   BattleAction,
   BattleState,
+  CreateBattleEnemyInput,
 } from "./core/types.js";
 
 export type CloudArenaSessionRecord = {
@@ -129,25 +130,39 @@ export function createScenarioBattle(
     throw new Error(`Scenario "${scenario.id}" must define at least one enemy preset with cards.`);
   }
 
+  const battleEnemies: CreateBattleEnemyInput[] = scenario.enemies.map((enemy) => {
+    const baseEnemy = {
+      definitionId: enemy.definitionId,
+      name: enemy.name,
+      health: enemy.health,
+      basePower: enemy.basePower,
+      leaderDefinitionId: enemy.definitionId,
+      startingTokens: enemy.startingTokens,
+    };
+
+    if (enemy.cards) {
+      return {
+        ...baseEnemy,
+        cards: enemy.cards,
+      };
+    }
+
+    if (enemy.behavior) {
+      return {
+        ...baseEnemy,
+        behavior: enemy.behavior,
+      };
+    }
+
+    throw new Error(`Scenario "${scenario.id}" enemy "${enemy.name}" must define cards or behavior.`);
+  });
+
   return createBattle({
     seed,
     playerHealth: scenario.playerHealth,
     playerDeck,
     shuffleDeck,
-    enemy: {
-      name: primaryEnemy.name,
-      health: primaryEnemy.health,
-      basePower: primaryEnemy.basePower,
-      cards: primaryEnemy.cards,
-      leaderDefinitionId: primaryEnemy.definitionId,
-    },
-    enemyLineup: scenario.enemies.map((enemy) => ({
-      definitionId: enemy.definitionId,
-      name: enemy.name,
-      health: enemy.health,
-      basePower: enemy.basePower,
-      startingTokens: enemy.startingTokens,
-    })),
+    enemies: battleEnemies,
   });
 }
 

@@ -1,4 +1,5 @@
 import type {
+  CreateBattleEnemyInput,
   CreateBattleInput,
   EnemyCardDefinition,
   EnemyCardEffect,
@@ -139,7 +140,7 @@ type EnemyPlanStateSource = Pick<
 >;
 
 function buildEnemyPlanStepFromInput(
-  enemy: CreateBattleInput["enemy"],
+  enemy: CreateBattleEnemyInput,
   index: number,
 ): EnemyPlanStep | null {
   if ("behavior" in enemy && Array.isArray(enemy.behavior)) {
@@ -152,7 +153,7 @@ function buildEnemyPlanStepFromInput(
 }
 
 export function getEnemyPlanLength(
-  enemy: Pick<EnemyState, "behavior" | "cards"> | CreateBattleInput["enemy"] | EnemyPlanStateSource,
+  enemy: Pick<EnemyState, "behavior" | "cards"> | CreateBattleEnemyInput | EnemyPlanStateSource,
 ): number {
   if ("cards" in enemy && Array.isArray(enemy.cards) && enemy.cards.length > 0) {
     return enemy.cards.length;
@@ -162,7 +163,7 @@ export function getEnemyPlanLength(
 }
 
 export function getEnemyPlanStepAtIndexFromInput(
-  enemy: CreateBattleInput["enemy"],
+  enemy: CreateBattleEnemyInput,
   index: number,
 ): EnemyPlanStep | null {
   return buildEnemyPlanStepFromInput(enemy, index);
@@ -211,8 +212,8 @@ export function getEnemyIntentQueueLabels(
 }
 
 export function cloneEnemyConfig(
-  enemy: CreateBattleInput["enemy"],
-): CreateBattleInput["enemy"] {
+  enemy: CreateBattleEnemyInput,
+): CreateBattleEnemyInput {
   if ("behavior" in enemy && Array.isArray(enemy.behavior)) {
     return {
       name: enemy.name,
