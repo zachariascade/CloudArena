@@ -213,6 +213,7 @@ export function CloudArenaBattleState({
   const [isPlayerHealthDropping, setIsPlayerHealthDropping] = useState(false);
   const [healthFlashDirections, setHealthFlashDirections] = useState<Record<string, "increase" | "decrease">>({});
   const [enemyBattlefieldStackOrder, setEnemyBattlefieldStackOrder] = useState<string[]>([]);
+  const [raisedEnemyPermanentId, setRaisedEnemyPermanentId] = useState<string | null>(null);
   const [enemyActionOverlay, setEnemyActionOverlay] = useState<{
     card: DisplayCardModel;
     permanentId: string;
@@ -877,6 +878,7 @@ export function CloudArenaBattleState({
 
   useEffect(() => {
     const battlefieldIds = enemyBattlefield.flatMap((slot) => (slot ? [slot.instanceId] : []));
+    const battlefieldIdSet = new Set(battlefieldIds);
 
     setEnemyBattlefieldStackOrder((current) => {
       const preservedIds = current.filter((instanceId) => battlefieldIds.includes(instanceId));
@@ -885,6 +887,7 @@ export function CloudArenaBattleState({
 
       return [...preservedIds, ...missingIds];
     });
+    setRaisedEnemyPermanentId((current) => (current && battlefieldIdSet.has(current) ? current : null));
   }, [enemyBattlefield]);
 
   function toggleEnemyBattlefieldStackOrder(permanentId: string): void {
@@ -892,24 +895,29 @@ export function CloudArenaBattleState({
       return;
     }
 
-    setEnemyBattlefieldStackOrder((current) => {
-      const currentIndex = current.indexOf(permanentId);
+    const isCurrentlyRaised = raisedEnemyPermanentId === permanentId;
 
-      if (currentIndex === -1) {
-        return current;
-      }
-
-      const next = current.slice();
-      next.splice(currentIndex, 1);
-
-      if (currentIndex === current.length - 1) {
-        next.unshift(permanentId);
-      } else {
+    if (isCurrentlyRaised) {
+      setRaisedEnemyPermanentId(null);
+      setEnemyBattlefieldStackOrder((current) => {
+        const idx = current.indexOf(permanentId);
+        if (idx === -1) return current;
+        const next = current.slice();
+        next.splice(idx, 1);
         next.push(permanentId);
-      }
-
-      return next;
-    });
+        return next;
+      });
+    } else {
+      setRaisedEnemyPermanentId(permanentId);
+      setEnemyBattlefieldStackOrder((current) => {
+        const idx = current.indexOf(permanentId);
+        if (idx === -1) return current;
+        const next = current.slice();
+        next.splice(idx, 1);
+        next.unshift(permanentId);
+        return next;
+      });
+    }
   }
 
   const getInspectableModel = (key: string) => inspectableModels.get(key) ?? enemyCard;
@@ -1293,6 +1301,7 @@ export function CloudArenaBattleState({
               motionState={motionState}
               isTargeting={isTargeting}
               enemyBattlefieldStackOrder={enemyBattlefieldStackOrder}
+              raisedEnemyPermanentId={raisedEnemyPermanentId}
               enemyCurrentCardId={battle.enemy.currentCardId}
               enemyLeaderDefinitionId={battle.enemy.leaderDefinitionId}
               stackedAttachmentsByTargetId={battlefieldAttachmentState.stackedAttachmentsByTargetId}

@@ -17,6 +17,7 @@ type CloudArenaBattlefieldPanelProps = {
   motionState: CloudArenaBattleMotionState;
   isTargeting?: boolean;
   enemyBattlefieldStackOrder?: string[];
+  raisedEnemyPermanentId?: string | null;
   hiddenPermanentIds?: string[];
   stackedAttachmentsByTargetId?: Record<string, CloudArenaBattlefieldStackAttachment[]>;
   enemyCurrentCardId?: string | null;
@@ -312,6 +313,7 @@ export function CloudArenaBattlefieldPanel({
   battlefield,
   legalActions,
   motionState,
+  raisedEnemyPermanentId = null,
   hiddenPermanentIds,
   stackedAttachmentsByTargetId,
   enemyCurrentCardId = null,
@@ -434,12 +436,15 @@ export function CloudArenaBattlefieldPanel({
                     const isAttackAnimated = Boolean(motionState.attackIds[slot.instanceId]);
                     const isHitAnimated = Boolean(motionState.hitIds[slot.instanceId]);
 
+                    const isRaised = raisedEnemyPermanentId === slot.instanceId;
+
                     return (
                       <>
                         <div
                               className={[
                                 "cloud-arena-battlefield-piece-stack",
                                 isActionListOpen ? "is-action-menu-open" : null,
+                                isRaised ? "is-raised" : null,
                               ]
                                 .filter(Boolean)
                                 .join(" ")}
@@ -491,8 +496,18 @@ export function CloudArenaBattlefieldPanel({
                     ) : null}
                     {telegraphOverlayCard ? (
                       <div
-                        className="cloud-arena-battlefield-action-play-overlay"
-                        aria-hidden="true"
+                        className={`cloud-arena-battlefield-action-play-overlay${isRaised ? " is-interactive" : ""}`}
+                        aria-hidden={!isRaised}
+                        role={isRaised ? "button" : undefined}
+                        tabIndex={isRaised ? 0 : undefined}
+                        aria-label={isRaised ? `${slot.name} attack card — click to bring to front` : undefined}
+                        onClick={isRaised ? () => onToggleEnemyBattlefieldStackOrder?.(slot.instanceId) : undefined}
+                        onKeyDown={isRaised ? (event) => {
+                          if (event.key === "Enter" || event.key === " ") {
+                            event.preventDefault();
+                            onToggleEnemyBattlefieldStackOrder?.(slot.instanceId);
+                          }
+                        } : undefined}
                       >
                         <DisplayCard
                           className="trace-viewer-battlefield-card cloud-arena-battlefield-card cloud-arena-battlefield-action-play-overlay-card"

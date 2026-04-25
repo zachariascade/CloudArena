@@ -1989,6 +1989,10 @@ export function renderCloudArcanumWebHtml(
         z-index: 6;
       }
 
+      .cloud-arena-battlefield-piece-stack.is-raised .cloud-arena-permanent-button {
+        z-index: 8;
+      }
+
       .cloud-arena-battlefield-blocker-stack {
         position: relative;
         z-index: 3;
@@ -2056,6 +2060,11 @@ export function renderCloudArcanumWebHtml(
         transition:
           opacity 320ms ease,
           transform 320ms ease;
+      }
+
+      .cloud-arena-battlefield-action-play-overlay.is-interactive {
+        pointer-events: auto;
+        cursor: pointer;
       }
 
       .cloud-arena-battlefield-action-play-overlay.is-fading {
