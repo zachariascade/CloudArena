@@ -456,7 +456,7 @@ export function mapArenaPermanentToDisplayCard(
       : permanent.isDefending
         ? "approved"
         : undefined,
-    stats: [],
+    stats: isEnemyControlled ? [{ label: "Block", value: String(permanent.block) }] : [],
     textBlocks: [
       {
         kind: "rules",

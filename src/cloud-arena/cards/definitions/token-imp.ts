@@ -20,6 +20,7 @@ export const tokenImpCardDefinition: CardDefinition = {
   },
   subtypes: ["Demon", "Imp"],
   onPlay: [],
+  playableInPlayerDecks: false,
   power: 2,
   health: 4,
   recoveryPolicy: "none",

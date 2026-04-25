@@ -1,4 +1,8 @@
-import type { CardDefinitionId, CardEnemyConfig } from "../core/types.js";
+import type {
+  BehaviorEnemyConfig,
+  CardDefinitionId,
+  CardEnemyConfig,
+} from "../core/types.js";
 
 export type CloudArenaDeckPresetId =
   | "master_deck"
@@ -9,14 +13,18 @@ export type CloudArenaDeckPresetId =
 export type CloudArenaEnemyPresetId =
   | "bruiser_demon"
   | "demon_pack"
+  | "lake_of_ice"
   | "grunt_demon"
   | "imp_caller"
+  | "malchior_binder_of_wills"
   | "long_battle_demon"
   | "warder_demon";
 
 export type CloudArenaScenarioId =
   | "demon_pack"
-  | "imp_caller";
+  | "lake_of_ice"
+  | "imp_caller"
+  | "malchior_binder_of_wills";
 
 export type CloudArenaDeckPreset = {
   id: CloudArenaDeckPresetId;
@@ -24,15 +32,19 @@ export type CloudArenaDeckPreset = {
   cards: CardDefinitionId[];
 };
 
-export type CloudArenaEnemyPreset = {
-  id: CloudArenaEnemyPresetId;
+export type CloudArenaScenarioEnemy = {
+  definitionId: CardDefinitionId;
   name: string;
   health: number;
   basePower: number;
-  cards: CardEnemyConfig["cards"];
-  leaderDefinitionId?: CardDefinitionId;
+  cards?: CardEnemyConfig["cards"];
+  behavior?: BehaviorEnemyConfig["behavior"];
   startingTokens?: CardDefinitionId[];
-  startingPermanents?: CardDefinitionId[];
+};
+
+export type CloudArenaEnemyPreset = CloudArenaScenarioEnemy & {
+  id: CloudArenaEnemyPresetId;
+  cards: CardEnemyConfig["cards"];
 };
 
 export type CloudArenaScenarioPreset = {
@@ -41,6 +53,6 @@ export type CloudArenaScenarioPreset = {
   notes: string;
   playerHealth: number;
   deck: CloudArenaDeckPreset["cards"];
-  enemy: CardEnemyConfig;
+  enemies: CloudArenaScenarioEnemy[];
   recommendedMaxSteps: number;
 };

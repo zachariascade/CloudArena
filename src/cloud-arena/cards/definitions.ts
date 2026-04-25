@@ -16,11 +16,20 @@ import { haltBucklerCardDefinition } from "./definitions/halt-buckler.js";
 import { holyBladeCardDefinition } from "./definitions/holy-blade.js";
 import { judgmentBladeCardDefinition } from "./definitions/judgment-blade.js";
 import { enemyBruteCardDefinition } from "./definitions/enemy-brute.js";
+import { enemyCocytusCardDefinition } from "./definitions/enemy-cocytus.js";
 import { enemyGruntDemonCardDefinition } from "./definitions/enemy-grunt-demon.js";
 import { enemyImpCallerCardDefinition } from "./definitions/enemy-imp-caller.js";
+import { enemyMalchiorCardDefinition } from "./definitions/enemy-malchior.js";
 import { enemyLeaderCardDefinition } from "./definitions/enemy-leader.js";
 import { enemyHuskCardDefinition } from "./definitions/enemy-husk.js";
 import { enemyPackAlphaCardDefinition } from "./definitions/enemy-pack-alpha.js";
+import {
+  enemyCrossSlashCardDefinition,
+  enemyDoubleSlashCardDefinition,
+  enemyMultiSlashCardDefinition,
+  enemySingleSlashCardDefinition,
+  enemyTripleSlashCardDefinition,
+} from "./definitions/enemy-slash-cards.js";
 import { massBenedictionCardDefinition } from "./definitions/mass-benediction.js";
 import { restorativeTouchCardDefinition } from "./definitions/restorative-touch.js";
 import { refreshSignetCardDefinition } from "./definitions/refresh-signet.js";
@@ -28,6 +37,7 @@ import { resurrectCardDefinition } from "./definitions/resurrect.js";
 import { sacrificialSeraphCardDefinition } from "./definitions/sacrificial-seraph.js";
 import { radiantConduitCardDefinition } from "./definitions/radiant-conduit.js";
 import { sanctifiedGuideCardDefinition } from "./definitions/sanctified-guide.js";
+import { sappingCurseCardDefinition } from "./definitions/sapping-curse.js";
 import { targetedStrikeCardDefinition } from "./definitions/targeted-strike.js";
 import { stunningRebukeCardDefinition } from "./definitions/stunning-rebuke.js";
 import { tokenImpCardDefinition } from "./definitions/token-imp.js";
@@ -70,10 +80,17 @@ export const cardDefinitions: CardDefinitionLibrary = {
   judgment_blade: judgmentBladeCardDefinition,
   enemy_leader: enemyLeaderCardDefinition,
   enemy_grunt_demon: enemyGruntDemonCardDefinition,
+  enemy_cocytus: enemyCocytusCardDefinition,
   enemy_imp_caller: enemyImpCallerCardDefinition,
+  enemy_malchior: enemyMalchiorCardDefinition,
   enemy_husk: enemyHuskCardDefinition,
   enemy_brute: enemyBruteCardDefinition,
   enemy_pack_alpha: enemyPackAlphaCardDefinition,
+  single_slash: enemySingleSlashCardDefinition,
+  double_slash: enemyDoubleSlashCardDefinition,
+  triple_slash: enemyTripleSlashCardDefinition,
+  cross_slash: enemyCrossSlashCardDefinition,
+  multi_slash: enemyMultiSlashCardDefinition,
   mass_benediction: massBenedictionCardDefinition,
   refresh_signet: refreshSignetCardDefinition,
   restorative_touch: restorativeTouchCardDefinition,
@@ -81,6 +98,7 @@ export const cardDefinitions: CardDefinitionLibrary = {
   sacrificial_seraph: sacrificialSeraphCardDefinition,
   radiant_conduit: radiantConduitCardDefinition,
   sanctified_guide: sanctifiedGuideCardDefinition,
+  sapping_curse: sappingCurseCardDefinition,
   targeted_strike: targetedStrikeCardDefinition,
   stunning_rebuke: stunningRebukeCardDefinition,
   token_imp: tokenImpCardDefinition,

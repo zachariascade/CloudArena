@@ -17,6 +17,7 @@ export const enemyLeaderCardDefinition: CardDefinition = {
     collectorNumber: "E00",
   },
   onPlay: [],
+  playableInPlayerDecks: false,
   power: 0,
   health: 0,
   abilities: [],

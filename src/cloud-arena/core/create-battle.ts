@@ -7,6 +7,7 @@ import {
 } from "./constants.js";
 import { cardDefinitions } from "../cards/definitions.js";
 import { drawUpToHandSize, shuffleCards } from "./draw.js";
+import { primeEnemyCardForTurn } from "./enemy-card-effects.js";
 import {
   getEnemyIntentQueueLabels,
   getEnemyPlanStepAtIndexFromInput,
@@ -14,7 +15,7 @@ import {
 import { formatEnemyIntent } from "./enemy-intent.js";
 import {
   cleanupDefeatedPermanents,
-  createEnemyLeaderPermanent,
+  createPermanentForEnemyActor,
   syncEnemyLeaderPermanentFromState,
   summonPermanentFromCard,
 } from "./permanents.js";
@@ -24,6 +25,8 @@ import type {
   CardDefinitionId,
   CardInstance,
   CreateBattleInput,
+  CreateBattleEnemyInput,
+  EnemyActorState,
 } from "./types.js";
 
 function toCardInstances(deck: CardDefinitionId[]): CardInstance[] {
@@ -31,6 +34,59 @@ function toCardInstances(deck: CardDefinitionId[]): CardInstance[] {
     instanceId: `card_${index + 1}`,
     definitionId,
   }));
+}
+
+function createEnemyActorState(input: {
+  id: string;
+  definitionId: CardDefinitionId | null;
+  name: string;
+  health: number;
+  basePower: number;
+  behavior: EnemyActorState["behavior"];
+  cards: EnemyActorState["cards"];
+  intent: EnemyActorState["intent"];
+  currentCard: EnemyActorState["currentCard"];
+}): EnemyActorState {
+  return {
+    id: input.id,
+    definitionId: input.definitionId,
+    name: input.name,
+    health: input.health,
+    maxHealth: input.health,
+    block: 0,
+    basePower: input.basePower,
+    intent: input.intent,
+    intentQueueLabels: [],
+    behavior: input.behavior,
+    cards: input.cards,
+    behaviorIndex: 0,
+    currentCardId: input.currentCard?.id ?? null,
+    currentCard: input.currentCard,
+    permanentId: null,
+    stunnedThisTurn: false,
+  };
+}
+
+function toCreateBattleEnemies(input: CreateBattleInput): CreateBattleEnemyInput[] {
+  if (input.enemies && input.enemies.length > 0) {
+    return input.enemies;
+  }
+
+  if (input.enemy) {
+    return [input.enemy];
+  }
+
+  throw new Error("Battle must include at least one enemy definition.");
+}
+
+function getRequiredEnemyDefinitionId(enemy: CreateBattleEnemyInput): CardDefinitionId {
+  const definitionId = enemy.definitionId ?? enemy.leaderDefinitionId;
+
+  if (!definitionId) {
+    throw new Error(`Enemy "${enemy.name}" must define a definitionId or leaderDefinitionId.`);
+  }
+
+  return definitionId;
 }
 
 export function createBattle(input: CreateBattleInput): BattleState {
@@ -48,16 +104,48 @@ export function createBattle(input: CreateBattleInput): BattleState {
         instanceId: `card_${index + 1}`,
       }))
     : toCardInstances(input.playerDeck);
-  const initialEnemyPlan = getEnemyPlanStepAtIndexFromInput(input.enemy, 0);
-  const enemyBehavior = "behavior" in input.enemy && input.enemy.behavior ? input.enemy.behavior : [];
-  const enemyCards = "cards" in input.enemy && input.enemy.cards ? input.enemy.cards : [];
+  const battleEnemies = toCreateBattleEnemies(input);
+  const primaryBattleEnemy = battleEnemies[0];
   const playerCreatureSlotCount = LEAN_V1_CREATURE_SLOT_COUNT;
   const playerNonCreatureSlotCount = LEAN_V1_NON_CREATURE_SLOT_COUNT;
   const enemyCreatureSlotCount = LEAN_V1_CREATURE_SLOT_COUNT;
   const enemyNonCreatureSlotCount = LEAN_V1_NON_CREATURE_SLOT_COUNT;
 
+  if (!primaryBattleEnemy) {
+    throw new Error("Battle must include at least one enemy definition.");
+  }
+
+  const initialEnemyPlan = getEnemyPlanStepAtIndexFromInput(primaryBattleEnemy, 0);
+  const enemyBehavior =
+    "behavior" in primaryBattleEnemy && primaryBattleEnemy.behavior ? primaryBattleEnemy.behavior : [];
+  const enemyCards =
+    "cards" in primaryBattleEnemy && primaryBattleEnemy.cards ? primaryBattleEnemy.cards : [];
+
   if (!initialEnemyPlan) {
     throw new Error("Enemy must include at least one behavior step or enemy card.");
+  }
+
+  const enemyActors: EnemyActorState[] = battleEnemies.map((enemyEntry, index) => {
+    const actorBehavior = "behavior" in enemyEntry && enemyEntry.behavior ? enemyEntry.behavior : [];
+    const actorCards = "cards" in enemyEntry && enemyEntry.cards ? enemyEntry.cards : [];
+    const actorFirstPlan = index === 0 ? initialEnemyPlan : (getEnemyPlanStepAtIndexFromInput(enemyEntry, 0) ?? null);
+    return createEnemyActorState({
+      id: `enemy_actor_${index + 1}`,
+      definitionId: enemyEntry.definitionId ?? enemyEntry.leaderDefinitionId ?? null,
+      name: enemyEntry.name,
+      health: enemyEntry.health,
+      basePower: enemyEntry.basePower,
+      behavior: actorBehavior,
+      cards: actorCards,
+      intent: actorFirstPlan?.intent ?? {},
+      currentCard: actorFirstPlan?.card ?? null,
+    });
+  });
+
+  const primaryEnemyActor = enemyActors[0];
+
+  if (!primaryEnemyActor) {
+    throw new Error("Battle must include at least one enemy actor.");
   }
 
   const state: BattleState = {
@@ -83,21 +171,23 @@ export function createBattle(input: CreateBattleInput): BattleState {
       graveyard: [],
     },
     enemy: {
-      name: input.enemy.name,
-      health: input.enemy.health,
-      maxHealth: input.enemy.health,
+      name: primaryEnemyActor.name,
+      health: primaryEnemyActor.health,
+      maxHealth: primaryEnemyActor.maxHealth,
       block: 0,
-      basePower: input.enemy.basePower,
-      leaderDefinitionId: input.enemy.leaderDefinitionId ?? null,
-      intent: initialEnemyPlan.intent,
+      basePower: primaryEnemyActor.basePower,
+      leaderDefinitionId: primaryEnemyActor.definitionId,
+      intent: primaryEnemyActor.intent,
       intentQueueLabels: [],
       behavior: enemyBehavior,
       cards: enemyCards,
       behaviorIndex: 0,
-      currentCard: initialEnemyPlan.card,
+      currentCardId: primaryEnemyActor.currentCardId,
+      currentCard: primaryEnemyActor.currentCard,
       leaderPermanentId: null,
       stunnedThisTurn: false,
     },
+    enemies: enemyActors,
     battlefield: Array.from({ length: playerCreatureSlotCount + playerNonCreatureSlotCount }, () => null),
     enemyBattlefield: Array.from({ length: enemyCreatureSlotCount + enemyNonCreatureSlotCount }, () => null),
     pendingTargetRequest: null,
@@ -111,42 +201,68 @@ export function createBattle(input: CreateBattleInput): BattleState {
     rules: [],
     rulesCursor: 0,
     choices: [],
+    temporaryCounters: [],
+    scheduledEnemyCardEffects: [],
   };
 
-  const enemyLeaderPermanent = createEnemyLeaderPermanent(state, {
-    name: input.enemy.name,
-    health: input.enemy.health,
-    basePower: input.enemy.basePower,
-    intent: initialEnemyPlan.intent,
-    definitionId: input.enemy.leaderDefinitionId,
+  const enemyLeaderPermanent = createPermanentForEnemyActor(state, primaryEnemyActor, {
+    isLeader: true,
   });
   state.enemy.leaderPermanentId = enemyLeaderPermanent.instanceId;
+  primaryEnemyActor.permanentId = enemyLeaderPermanent.instanceId;
   state.nextEnemyTokenIndex += 1;
+  state.enemy.currentCard = primeEnemyCardForTurn(state, state.enemy.currentCard);
   state.enemy.intentQueueLabels = getEnemyIntentQueueLabels(state.enemy, 2);
+  primaryEnemyActor.currentCard = state.enemy.currentCard;
+  primaryEnemyActor.currentCardId = state.enemy.currentCardId ?? state.enemy.currentCard?.id ?? null;
+  primaryEnemyActor.intentQueueLabels = [...state.enemy.intentQueueLabels];
   syncEnemyLeaderPermanentFromState(
     state,
-    formatEnemyIntent(initialEnemyPlan.intent),
+    formatEnemyIntent(state.enemy.intent),
     state.enemy.intentQueueLabels,
   );
 
-  for (const tokenCardId of input.enemy.startingTokens ?? []) {
+  for (const [index, enemyEntry] of battleEnemies.slice(1).entries()) {
+    const actor = enemyActors[index + 1];
+
+    if (!actor) {
+      continue;
+    }
+
+    actor.definitionId = getRequiredEnemyDefinitionId(enemyEntry);
+    const permanent = createPermanentForEnemyActor(state, actor, {
+      isLeader: false,
+    });
+    actor.permanentId = permanent.instanceId;
+    actor.intentQueueLabels = getEnemyIntentQueueLabels(actor, 2);
+    permanent.intentLabel = formatEnemyIntent(actor.intent);
+    permanent.intentQueueLabels = [...actor.intentQueueLabels];
+
+    state.nextEnemyTokenIndex += 1;
+  }
+
+  const startingEnemyPermanents = battleEnemies.flatMap((enemyEntry) => enemyEntry.startingPermanents ?? []);
+
+  for (const permanentCardId of startingEnemyPermanents) {
     summonPermanentFromCard(
       state,
       {
         instanceId: `card_${state.turnNumber}_${state.nextEnemyTokenIndex}`,
-        definitionId: tokenCardId,
+        definitionId: permanentCardId,
       },
       "enemy",
     );
     state.nextEnemyTokenIndex += 1;
   }
 
-  for (const permanentCardId of input.enemy.startingPermanents ?? []) {
+  const startingEnemyTokens = battleEnemies.flatMap((enemyEntry) => enemyEntry.startingTokens ?? []);
+
+  for (const tokenCardId of startingEnemyTokens) {
     summonPermanentFromCard(
       state,
       {
         instanceId: `card_${state.turnNumber}_${state.nextEnemyTokenIndex}`,
-        definitionId: permanentCardId,
+        definitionId: tokenCardId,
       },
       "enemy",
     );
@@ -161,8 +277,8 @@ export function createBattle(input: CreateBattleInput): BattleState {
     type: "turn_started",
     turnNumber: 1,
     cardsDrawn: openingDraw.count,
-    energy: LEAN_V1_DEFAULT_TURN_ENERGY,
-    enemyIntent: initialEnemyPlan.intent,
+    energy: state.player.energy,
+    enemyIntent: state.enemy.intent,
   });
   for (const card of openingDraw.cards) {
     state.log.push({

@@ -19,6 +19,7 @@ import { restorativeTouchCardDefinition } from "../../src/cloud-arena/cards/defi
 import { radiantConduitCardDefinition } from "../../src/cloud-arena/cards/definitions/radiant-conduit.js";
 import { refreshSignetCardDefinition } from "../../src/cloud-arena/cards/definitions/refresh-signet.js";
 import { resurrectCardDefinition } from "../../src/cloud-arena/cards/definitions/resurrect.js";
+import { sappingCurseCardDefinition } from "../../src/cloud-arena/cards/definitions/sapping-curse.js";
 import { sanctifiedGuideCardDefinition } from "../../src/cloud-arena/cards/definitions/sanctified-guide.js";
 import { summarizeCardDefinition } from "../../src/cloud-arena/card-summary.js";
 
@@ -32,19 +33,19 @@ describe("cloud arena card summary", () => {
   it("describes the equipment benefit on Holy Blade", () => {
     expect(summarizeCardDefinition(holyBladeCardDefinition)).toEqual([
       "Equip a permanent.",
-      "Equipped permanent gets +1/+1.",
+      "Equipped permanent gets +2/+2.",
     ]);
   });
 
   it("describes equipment-granted keyword abilities", () => {
     expect(summarizeCardDefinition(refreshSignetCardDefinition)).toEqual([
       "Equip a permanent.",
-      "Equipped permanent gets +0/+1.",
+      "Equipped permanent gets +0/+2.",
       "Equipped creature has **Refresh**.",
     ]);
     expect(summarizeCardDefinition(haltBucklerCardDefinition)).toEqual([
       "Equip a permanent.",
-      "Equipped permanent gets +0/+1.",
+      "Equipped permanent gets +0/+2.",
       "Equipped creature has **Halt**.",
     ]);
   });
@@ -52,8 +53,14 @@ describe("cloud arena card summary", () => {
   it("describes the sweeping attack on Judgment Blade", () => {
     expect(summarizeCardDefinition(judgmentBladeCardDefinition)).toEqual([
       "Equip a permanent.",
-      "Equipped permanent gets +1/+1.",
+      "Equipped permanent gets +2/+2.",
       "Equipped creature attacks all enemy permanents.",
+    ]);
+  });
+
+  it("describes the temporary power reduction on Sapping Curse", () => {
+    expect(summarizeCardDefinition(sappingCurseCardDefinition)).toEqual([
+      "Choose an enemy creature; it gets -3 power until end of turn.",
     ]);
   });
 

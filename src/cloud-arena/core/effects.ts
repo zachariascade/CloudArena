@@ -98,7 +98,8 @@ function addCounterInstance(
     sourceKind: "card" | "permanent";
     sourceId: string;
   },
-): void {
+  expiresAtTurnNumber?: number,
+): string {
   permanent.counters = [...(permanent.counters ?? []), counter];
 
   if (counter.stat === "health") {
@@ -116,6 +117,15 @@ function addCounterInstance(
     sourceKind: counter.sourceKind,
     sourceId: counter.sourceId,
   });
+
+  if (expiresAtTurnNumber !== undefined) {
+    state.temporaryCounters.push({
+      id: counter.id,
+      expiresAtTurnNumber,
+    });
+  }
+
+  return counter.id;
 }
 
 function removeCounterInstance(
@@ -438,7 +448,7 @@ function resolveAddCounterEffect(
           amount: powerDelta,
           sourceKind: source.sourceKind,
           sourceId: source.sourceId,
-        });
+        }, effect.duration === "end_of_turn" ? state.turnNumber + 1 : undefined);
       }
 
       if (healthDelta !== 0) {
@@ -449,7 +459,7 @@ function resolveAddCounterEffect(
           amount: healthDelta,
           sourceKind: source.sourceKind,
           sourceId: source.sourceId,
-        });
+        }, effect.duration === "end_of_turn" ? state.turnNumber + 1 : undefined);
       }
     }
 
@@ -470,7 +480,107 @@ function resolveAddCounterEffect(
       amount,
       sourceKind: source.sourceKind,
       sourceId: source.sourceId,
-    });
+    }, effect.duration === "end_of_turn" ? state.turnNumber + 1 : undefined);
+  }
+}
+
+export function applyTemporaryPowerDeltaToAllPermanents(
+  state: BattleState,
+  amount: number,
+  sourceKind: "card" | "permanent",
+  sourceId: string,
+  expiresAtTurnNumber: number,
+): void {
+  if (amount === 0) {
+    return;
+  }
+
+  const battlefields = [state.battlefield, state.enemyBattlefield];
+
+  for (const battlefield of battlefields) {
+    for (const permanent of battlefield) {
+      if (!permanent) {
+        continue;
+      }
+
+      const counterId = createCounterId(state);
+      addCounterInstance(state, permanent, {
+        id: counterId,
+        counter: "power",
+        stat: "power",
+        amount,
+        sourceKind,
+        sourceId,
+      }, expiresAtTurnNumber);
+    }
+  }
+}
+
+export function applyTemporaryPowerDeltaToControlledPermanents(
+  state: BattleState,
+  amount: number,
+  sourceKind: "card" | "permanent",
+  sourceId: string,
+  expiresAtTurnNumber: number,
+  controller: "player" | "enemy",
+): void {
+  if (amount === 0) {
+    return;
+  }
+
+  const battlefield = controller === "player" ? state.battlefield : state.enemyBattlefield;
+
+  for (const permanent of battlefield) {
+    if (!permanent) {
+      continue;
+    }
+
+    const counterId = createCounterId(state);
+    addCounterInstance(state, permanent, {
+      id: counterId,
+      counter: "power",
+      stat: "power",
+      amount,
+      sourceKind,
+      sourceId,
+    }, expiresAtTurnNumber);
+  }
+}
+
+export function expireTemporaryCounters(state: BattleState): void {
+  if (state.temporaryCounters.length === 0) {
+    return;
+  }
+
+  const countersToExpire = new Set(
+    state.temporaryCounters
+      .filter((entry) => entry.expiresAtTurnNumber <= state.turnNumber)
+      .map((entry) => entry.id),
+  );
+  state.temporaryCounters = state.temporaryCounters.filter(
+    (entry) => entry.expiresAtTurnNumber > state.turnNumber,
+  );
+
+  if (countersToExpire.size === 0) {
+    return;
+  }
+
+  const battlefield = [...state.battlefield, ...state.enemyBattlefield];
+
+  for (const permanent of battlefield) {
+    if (!permanent) {
+      continue;
+    }
+
+    const removableIndexes = (permanent.counters ?? [])
+      .map((counter, index) => ({ counter, index }))
+      .filter(({ counter }) => countersToExpire.has(counter.id))
+      .map(({ index }) => index)
+      .sort((left, right) => right - left);
+
+    for (const index of removableIndexes) {
+      removeCounterInstance(state, permanent, index);
+    }
   }
 }
 

@@ -17,6 +17,7 @@ export const enemyBruteCardDefinition: CardDefinition = {
     collectorNumber: "E04",
   },
   onPlay: [],
+  playableInPlayerDecks: false,
   power: 4,
   health: 8,
   recoveryPolicy: "none",

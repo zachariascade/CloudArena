@@ -29,6 +29,8 @@ describe("cloud arena battle setup", () => {
   it("reads the draft setup from the current query string", () => {
     expect(getDeckDraftFromUrl("?deck=tall_creatures")).toBe("tall_creatures");
     expect(getScenarioDraftFromUrl("?enemy=imp_caller")).toBe("imp_caller");
+    expect(getScenarioDraftFromUrl("?enemy=lake_of_ice")).toBe("lake_of_ice");
+    expect(getScenarioDraftFromUrl("?enemy=malchior_binder_of_wills")).toBe("malchior_binder_of_wills");
     expect(getScenarioDraftFromUrl("?enemy=not_real")).toBe("demon_pack");
   });
 });

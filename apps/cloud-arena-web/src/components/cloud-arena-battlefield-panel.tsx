@@ -5,20 +5,23 @@ import type { CloudArenaBattleViewModel } from "../lib/cloud-arena-battle-view-m
 import type { CloudArenaBattleMotionState } from "../lib/cloud-arena-battle-motion.js";
 import type { CloudArenaBattlefieldStackAttachment } from "../lib/cloud-arena-battle-attachments.js";
 import { mapArenaPermanentToDisplayCard } from "../lib/display-card.js";
+import { buildEnemyTelegraphPreviewCardModel } from "../lib/cloud-arena-enemy-card-preview.js";
 import { AbilityCostChip } from "./ability-cost-chip.js";
 import { DisplayCard } from "./display-card.js";
-import {
-  cardDefinitions,
-  type BattleAction,
-} from "../../../../src/cloud-arena/index.js";
+import { cardDefinitions, type BattleAction } from "../../../../src/cloud-arena/index.js";
 
 type CloudArenaBattlefieldPanelProps = {
   zoneKeyPrefix?: "battlefield" | "enemy_battlefield";
   battlefield: CloudArenaBattleViewModel["battlefield"];
   legalActions: CloudArenaBattleViewModel["legalActions"];
   motionState: CloudArenaBattleMotionState;
+  isTargeting?: boolean;
+  enemyBattlefieldStackOrder?: string[];
+  raisedEnemyPermanentId?: string | null;
   hiddenPermanentIds?: string[];
   stackedAttachmentsByTargetId?: Record<string, CloudArenaBattlefieldStackAttachment[]>;
+  enemyCurrentCardId?: string | null;
+  enemyLeaderDefinitionId?: string | null;
   getInspectableModel: (key: string) => Parameters<typeof DisplayCard>[0]["model"];
   getPermanentMenuActions: (
     permanent: NonNullable<CloudArenaBattleViewModel["battlefield"][number]>,
@@ -44,6 +47,7 @@ type CloudArenaBattlefieldPanelProps = {
   onPermanentMenuToggle?: (permanentId: string) => void;
   onPermanentMenuClose?: () => void;
   onTargetPermanentSelect?: (action: BattleAction) => void;
+  onToggleEnemyBattlefieldStackOrder?: (permanentId: string) => void;
 };
 
 type PermanentIntentBubble =
@@ -309,8 +313,11 @@ export function CloudArenaBattlefieldPanel({
   battlefield,
   legalActions,
   motionState,
+  raisedEnemyPermanentId = null,
   hiddenPermanentIds,
   stackedAttachmentsByTargetId,
+  enemyCurrentCardId = null,
+  enemyLeaderDefinitionId = null,
   getInspectableModel,
   getPermanentMenuActions,
   getPermanentCounterEntries,
@@ -320,6 +327,9 @@ export function CloudArenaBattlefieldPanel({
   onPermanentMenuToggle,
   onPermanentMenuClose,
   onTargetPermanentSelect,
+  onToggleEnemyBattlefieldStackOrder,
+  isTargeting = false,
+  enemyBattlefieldStackOrder,
 }: CloudArenaBattlefieldPanelProps): ReactElement {
   const hiddenPermanentIdSet = new Set(hiddenPermanentIds ?? []);
   const renderedBattlefield = battlefield.flatMap((slot, index) =>
@@ -361,10 +371,41 @@ export function CloudArenaBattlefieldPanel({
                   (attachment) => attachment.permanent.instanceId !== activeAttachment.permanent.instanceId,
                 )
               : blockerAttachments;
+            const telegraphOverlayCard =
+              zoneKeyPrefix === "enemy_battlefield" &&
+              slot &&
+              slot.controllerId === "enemy" &&
+              slot.isCreature &&
+              slot.power > 0 &&
+              !slot.hasActedThisTurn
+                ? buildEnemyTelegraphPreviewCardModel({
+                    currentCardId:
+                      slot.definitionId === enemyLeaderDefinitionId ? enemyCurrentCardId : null,
+                    intentLabel: slot.intentLabel,
+                    intentQueueLabels: slot.intentQueueLabels,
+                    power: slot.power,
+                  })
+                : null;
 
             return (
               <div
                 key={`slot-${index + 1}`}
+                style={
+                  zoneKeyPrefix === "enemy_battlefield" && slot
+                    ? {
+                        zIndex: (() => {
+                          const stackOrder = enemyBattlefieldStackOrder ?? [];
+                          const stackIndex = stackOrder.indexOf(slot.instanceId);
+
+                          if (stackIndex >= 0) {
+                            return stackOrder.length - stackIndex;
+                          }
+
+                          return renderedBattlefield.length - index;
+                        })(),
+                      }
+                    : undefined
+                }
                 className={[
                   "trace-viewer-battlefield-slot",
                   zoneKeyPrefix === "battlefield" ? "is-player-side" : "is-enemy-side",
@@ -395,15 +436,18 @@ export function CloudArenaBattlefieldPanel({
                     const isAttackAnimated = Boolean(motionState.attackIds[slot.instanceId]);
                     const isHitAnimated = Boolean(motionState.hitIds[slot.instanceId]);
 
+                    const isRaised = raisedEnemyPermanentId === slot.instanceId;
+
                     return (
                       <>
                         <div
-                          className={[
-                            "cloud-arena-battlefield-piece-stack",
-                            isActionListOpen ? "is-action-menu-open" : null,
-                          ]
-                            .filter(Boolean)
-                            .join(" ")}
+                              className={[
+                                "cloud-arena-battlefield-piece-stack",
+                                isActionListOpen ? "is-action-menu-open" : null,
+                                isRaised ? "is-raised" : null,
+                              ]
+                                .filter(Boolean)
+                                .join(" ")}
                         >
                           {zoneKeyPrefix === "enemy_battlefield" ? (() => {
                             const intentBubble = getPermanentIntentBubble(slot);
@@ -448,11 +492,32 @@ export function CloudArenaBattlefieldPanel({
                                   {entry.counter} x{entry.amount}
                                 </span>
                               ))}
-                            </div>
-                          ) : null}
-                          {isActionListOpen ? (
-                            <div
-                              className={[
+                      </div>
+                    ) : null}
+                    {telegraphOverlayCard ? (
+                      <div
+                        className={`cloud-arena-battlefield-action-play-overlay${isRaised ? " is-interactive" : ""}`}
+                        aria-hidden={!isRaised}
+                        role={isRaised ? "button" : undefined}
+                        tabIndex={isRaised ? 0 : undefined}
+                        aria-label={isRaised ? `${slot.name} attack card — click to bring to front` : undefined}
+                        onClick={isRaised ? () => onToggleEnemyBattlefieldStackOrder?.(slot.instanceId) : undefined}
+                        onKeyDown={isRaised ? (event) => {
+                          if (event.key === "Enter" || event.key === " ") {
+                            event.preventDefault();
+                            onToggleEnemyBattlefieldStackOrder?.(slot.instanceId);
+                          }
+                        } : undefined}
+                      >
+                        <DisplayCard
+                          className="trace-viewer-battlefield-card cloud-arena-battlefield-card cloud-arena-battlefield-action-play-overlay-card"
+                          model={telegraphOverlayCard}
+                        />
+                      </div>
+                    ) : null}
+                    {isActionListOpen ? (
+                      <div
+                        className={[
                                 "trace-viewer-battlefield-card",
                                 "cloud-arena-battlefield-card",
                                 "cloud-arena-permanent-action-face",
@@ -511,6 +576,15 @@ export function CloudArenaBattlefieldPanel({
                                   return;
                                 }
 
+                                if (
+                                  zoneKeyPrefix === "enemy_battlefield" &&
+                                  !isTargeting &&
+                                  onToggleEnemyBattlefieldStackOrder
+                                ) {
+                                  onToggleEnemyBattlefieldStackOrder(slot.instanceId);
+                                  return;
+                                }
+
                                 if (menuActions.length > 0) {
                                   onPermanentMenuToggle?.(slot.instanceId);
                                 }
@@ -524,6 +598,15 @@ export function CloudArenaBattlefieldPanel({
 
                                 if (targetAction && onTargetPermanentSelect) {
                                   onTargetPermanentSelect(targetAction.action);
+                                  return;
+                                }
+
+                                if (
+                                  zoneKeyPrefix === "enemy_battlefield" &&
+                                  !isTargeting &&
+                                  onToggleEnemyBattlefieldStackOrder
+                                ) {
+                                  onToggleEnemyBattlefieldStackOrder(slot.instanceId);
                                   return;
                                 }
 

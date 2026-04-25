@@ -27,6 +27,10 @@ type DisplayCardProps = {
 };
 
 const DISPLAY_CARD_KEYWORD_GLOSSARY = {
+  immediate: {
+    label: "Immediate",
+    description: "This effect resolves right away when the enemy card is played, before the normal end-of-turn timing.",
+  },
   halt: {
     label: "Halt",
     description: "While defending, this stops damage from passing through unless the attack has trample.",
@@ -261,6 +265,7 @@ function renderDisplayImage(model: DisplayCardModel): ReactElement {
 
 export function DisplayCard({ model, className, detailsAction }: DisplayCardProps): ReactElement {
   const [activeKeywordId, setActiveKeywordId] = useState<DisplayCardKeywordId | null>(null);
+  const [isCardHovered, setIsCardHovered] = useState(false);
   const displayName = formatCardDisplayName(model.name, model.title);
   const healthBar = model.healthBar ?? null;
   const energyBar = model.energyBar ?? null;
@@ -273,6 +278,8 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
   const stateFlags = model.stateFlags;
   const actions = model.actions;
   const glossaryKeywordIds = useMemo(() => collectKeywordsFromTextBlocks(textBlocks), [textBlocks]);
+  const defaultKeywordId = glossaryKeywordIds[0] ?? null;
+  const visibleKeywordId = activeKeywordId ?? (isCardHovered ? defaultKeywordId : null);
   const healthPercent = healthBar
     ? clampHealthPercent(healthBar.current, healthBar.max)
     : 0;
@@ -285,6 +292,9 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
     : stats;
   const usesSideCombatPanel = model.variant === "player";
   const isPermanentCard = model.variant === "permanent";
+  const isEnemyCard = model.variant === "enemy";
+  const isEnemyControlledCard = isPermanentCard && stateFlags.includes("enemy-controlled");
+  const showsEnemyBlockInline = Boolean(blockStat) && (isEnemyCard || isEnemyControlledCard);
   const isTopCombatCard = model.variant === "enemy" || isPermanentCard;
   const isExhaustedPermanent = isPermanentCard && stateFlags.includes("spent");
   const isDefendingPermanent = isPermanentCard && stateFlags.includes("defending");
@@ -292,6 +302,7 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
   const isTargetableEnemy = stateFlags.includes("targetable-enemy");
   const isHealthDropping = stateFlags.includes("health-dropping");
   const isHealthRising = stateFlags.includes("health-rising");
+  const blockValue = blockStat?.value ?? "0";
   const detailsButton = detailsAction ? (
     <button
       type="button"
@@ -387,16 +398,29 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
         .join(" ")}
     >
       <div className="display-card-health-strip">
-        {blockStat ? (
-          <div className="display-card-block-pill" aria-label={`${model.name} block ${blockStat.value}`}>
-            <span className="display-card-block-icon" aria-hidden="true">
-              <span className="display-card-block-value">{blockStat.value}</span>
+        {blockStat && !showsEnemyBlockInline ? (
+          <div className="display-card-block-pill" aria-label={`${model.name} block ${blockValue}`}>
+            <span
+              className={`display-card-block-icon${isEnemyCard || isEnemyControlledCard ? " is-enemy" : ""}`}
+              aria-hidden="true"
+            >
+              <span className="display-card-block-value">{blockValue}</span>
             </span>
           </div>
         ) : null}
         <div className="display-card-health-meter">
           <div className="display-card-health-row">
             <strong>{healthBar.label ?? `${healthBar.current}/${healthBar.max}`}</strong>
+            {showsEnemyBlockInline ? (
+              <div className="display-card-block-inline" aria-label={`${model.name} block ${blockValue}`}>
+                <span
+                  className={`display-card-block-icon${isEnemyCard || isEnemyControlledCard ? " is-enemy is-inline" : ""}`}
+                  aria-hidden="true"
+                >
+                  <span className="display-card-block-value">{blockValue}</span>
+                </span>
+              </div>
+            ) : null}
             <div
               className="trace-viewer-health-bar"
               role="progressbar"
@@ -503,6 +527,11 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
         .filter(Boolean)
         .join(" ")}
       data-variant={model.variant}
+      onMouseEnter={() => setIsCardHovered(true)}
+      onMouseLeave={() => {
+        setIsCardHovered(false);
+        setActiveKeywordId(null);
+      }}
     >
       {isTopCombatCard && combatPanel ? (
         <div className="display-card-enemy-stack">
@@ -527,16 +556,15 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
       )}
       {glossaryKeywordIds.length > 0 ? (
         <aside
-          className={`display-card-keyword-tooltip${activeKeywordId ? " is-visible" : ""}`}
+          className={`display-card-keyword-tooltip${visibleKeywordId ? " is-visible" : ""}`}
           role="note"
           aria-label="Keyword abilities"
         >
-          <div className="display-card-keyword-tooltip-title">Keywords</div>
           <div className="display-card-keyword-tooltip-list">
             {glossaryKeywordIds.map((keywordId) => (
               <div
                 key={keywordId}
-                className={`display-card-keyword-tooltip-entry${keywordId === activeKeywordId ? " is-active" : ""}`}
+                className={`display-card-keyword-tooltip-entry${keywordId === visibleKeywordId ? " is-active" : ""}`}
               >
                 <strong>{DISPLAY_CARD_KEYWORD_GLOSSARY[keywordId].label}</strong>
                 <span>{DISPLAY_CARD_KEYWORD_GLOSSARY[keywordId].description}</span>

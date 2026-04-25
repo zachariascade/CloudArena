@@ -543,7 +543,7 @@ describe("cloud arena combat engine edge cases", () => {
     const battle = createTestBattle({
       playerDeck: ["attack", "attack", "defend", "defend", "attack"],
       enemy: {
-        name: "Imp Caller",
+        name: "Belzaphor, Swarm of the Pit",
         health: 6,
         basePower: 3,
         startingTokens: ["token_imp"],

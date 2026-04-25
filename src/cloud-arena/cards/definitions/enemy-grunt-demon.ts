@@ -17,6 +17,7 @@ export const enemyGruntDemonCardDefinition: CardDefinition = {
     collectorNumber: "E02",
   },
   onPlay: [],
+  playableInPlayerDecks: false,
   power: 0,
   health: 0,
   abilities: [],

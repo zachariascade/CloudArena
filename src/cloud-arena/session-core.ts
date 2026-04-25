@@ -42,6 +42,7 @@ import {
 import type {
   BattleAction,
   BattleState,
+  CreateBattleEnemyInput,
 } from "./core/types.js";
 
 export type CloudArenaSessionRecord = {
@@ -123,12 +124,45 @@ export function createScenarioBattle(
   seed: number,
   shuffleDeck: boolean,
 ): BattleState {
+  const [primaryEnemy] = scenario.enemies;
+
+  if (!primaryEnemy || !primaryEnemy.cards) {
+    throw new Error(`Scenario "${scenario.id}" must define at least one enemy preset with cards.`);
+  }
+
+  const battleEnemies: CreateBattleEnemyInput[] = scenario.enemies.map((enemy) => {
+    const baseEnemy = {
+      definitionId: enemy.definitionId,
+      name: enemy.name,
+      health: enemy.health,
+      basePower: enemy.basePower,
+      leaderDefinitionId: enemy.definitionId,
+      startingTokens: enemy.startingTokens,
+    };
+
+    if (enemy.cards) {
+      return {
+        ...baseEnemy,
+        cards: enemy.cards,
+      };
+    }
+
+    if (enemy.behavior) {
+      return {
+        ...baseEnemy,
+        behavior: enemy.behavior,
+      };
+    }
+
+    throw new Error(`Scenario "${scenario.id}" enemy "${enemy.name}" must define cards or behavior.`);
+  });
+
   return createBattle({
     seed,
     playerHealth: scenario.playerHealth,
     playerDeck,
     shuffleDeck,
-    enemy: scenario.enemy,
+    enemies: battleEnemies,
   });
 }
 
@@ -317,10 +351,29 @@ export function buildCloudArenaSessionSnapshot(
       maxHealth: primaryEnemyPermanent?.maxHealth ?? state.enemy.maxHealth,
       block: primaryEnemyPermanent?.block ?? state.enemy.block,
       leaderDefinitionId: state.enemy.leaderDefinitionId,
+      currentCardId: state.enemy.currentCardId ?? state.enemy.currentCard?.id ?? null,
       intent: { ...state.enemy.intent },
       intentLabel: primaryEnemyPermanent?.intentLabel ?? (state.enemy.stunnedThisTurn ? "Stunned" : formatEnemyIntent(state.enemy.intent)),
       intentQueueLabels: primaryEnemyPermanent?.intentQueueLabels ?? [...state.enemy.intentQueueLabels],
     },
+    enemies: state.enemies.map((actor) => {
+      const actorPermanent = actor.permanentId
+        ? (state.enemyBattlefield.find((p) => p?.instanceId === actor.permanentId) ?? null)
+        : null;
+      return {
+        id: actor.id,
+        definitionId: actor.definitionId,
+        name: actor.name,
+        health: actorPermanent?.health ?? actor.health,
+        maxHealth: actorPermanent?.maxHealth ?? actor.maxHealth,
+        block: actorPermanent?.block ?? actor.block,
+        intent: { ...actor.intent },
+        intentLabel: actorPermanent?.intentLabel ?? (actor.stunnedThisTurn ? "Stunned" : formatEnemyIntent(actor.intent)),
+        intentQueueLabels: actorPermanent?.intentQueueLabels ?? [...actor.intentQueueLabels],
+        currentCardId: actor.currentCardId,
+        permanentId: actor.permanentId,
+      };
+    }),
     creatureBattlefieldSlotCount: state.playerCreatureSlotCount,
     nonCreatureBattlefieldSlotCount: state.playerNonCreatureSlotCount,
     battlefield: state.battlefield.map((permanent) =>

@@ -1,16 +1,16 @@
-import { attackOnceWithBasePower, spawnSimpleToken } from "../enemy-cards.js";
+import { singleSlash, spawnSimpleToken } from "../enemy-cards.js";
 import type { CloudArenaEnemyPreset } from "../types.js";
 
 export const impCallerEnemyPreset: CloudArenaEnemyPreset = {
   id: "imp_caller",
-  name: "Imp Caller",
+  definitionId: "enemy_imp_caller",
+  name: "Belzaphor, Swarm of the Pit",
   health: 20,
   basePower: 3,
-  leaderDefinitionId: "enemy_imp_caller",
   startingTokens: ["token_imp"],
   cards: [
     spawnSimpleToken("token_imp"),
-    attackOnceWithBasePower(),
+    singleSlash(),
     spawnSimpleToken("token_imp", 2),
   ],
 };

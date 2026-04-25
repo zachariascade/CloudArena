@@ -85,6 +85,9 @@ export function CloudArenaHandTray({
   const previousPlayerHealthRef = useRef(player.health);
   const playerHealthFlashTimerRef = useRef<number | null>(null);
   const [playerHealthFlashDirection, setPlayerHealthFlashDirection] = useState<"increase" | "decrease" | null>(null);
+  const previousPlayerBlockRef = useRef(player.block);
+  const playerBlockFlashTimerRef = useRef<number | null>(null);
+  const [playerBlockFlashDirection, setPlayerBlockFlashDirection] = useState<"increase" | "decrease" | null>(null);
   const pendingHandCardInstanceId = battle.pendingTargetRequest?.context?.pendingCardPlay?.instanceId ?? null;
   const isSelectingGraveyardCard =
     battle.pendingTargetRequest?.targetKind === "card" &&
@@ -125,10 +128,33 @@ export function CloudArenaHandTray({
     }
   }, [player.health]);
 
+  useEffect(() => {
+    const previousBlock = previousPlayerBlockRef.current;
+    previousPlayerBlockRef.current = player.block;
+
+    if (player.block !== previousBlock) {
+      setPlayerBlockFlashDirection(player.block > previousBlock ? "increase" : "decrease");
+
+      if (playerBlockFlashTimerRef.current !== null) {
+        window.clearTimeout(playerBlockFlashTimerRef.current);
+      }
+
+      playerBlockFlashTimerRef.current = window.setTimeout(() => {
+        setPlayerBlockFlashDirection(null);
+        playerBlockFlashTimerRef.current = null;
+      }, 520);
+    }
+  }, [player.block]);
+
   useEffect(() => () => {
     if (playerHealthFlashTimerRef.current !== null) {
       window.clearTimeout(playerHealthFlashTimerRef.current);
       playerHealthFlashTimerRef.current = null;
+    }
+
+    if (playerBlockFlashTimerRef.current !== null) {
+      window.clearTimeout(playerBlockFlashTimerRef.current);
+      playerBlockFlashTimerRef.current = null;
     }
   }, []);
 
@@ -270,7 +296,13 @@ export function CloudArenaHandTray({
           </div>
           <div className="cloud-arena-hand-hud-line">
             <div
-              className="cloud-arena-hand-hud-block"
+              className={[
+                "cloud-arena-hand-hud-block",
+                playerBlockFlashDirection === "decrease" ? "is-dropping" : null,
+                playerBlockFlashDirection === "increase" ? "is-rising" : null,
+              ]
+                .filter(Boolean)
+                .join(" ")}
               aria-label={`Player block ${player.block}`}
               title={`Player block ${player.block}`}
             >

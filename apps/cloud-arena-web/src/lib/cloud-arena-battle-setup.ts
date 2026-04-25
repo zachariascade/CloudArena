@@ -33,9 +33,19 @@ export const CLOUD_ARENA_SCENARIO_OPTIONS: Array<{
     description: "Leader plus two demon bodies",
   },
   {
+    id: "lake_of_ice",
+    label: "Cocytus, Lake of Ice",
+    description: "Icy leader with a battlefield chill",
+  },
+  {
     id: "imp_caller",
-    label: "Imp Caller",
+    label: "Belzaphor, Swarm of the Pit",
     description: "Token pressure test",
+  },
+  {
+    id: "malchior_binder_of_wills",
+    label: "Malchior, Binder of Wills",
+    description: "Base-power control duel",
   },
 ];
 

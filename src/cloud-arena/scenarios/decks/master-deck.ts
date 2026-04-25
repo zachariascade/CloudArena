@@ -3,7 +3,7 @@ import type { CardDefinitionId } from "../../core/types.js";
 import type { CloudArenaDeckPreset } from "../types.js";
 
 const masterDeckCards = Object.keys(cardDefinitions).filter(
-  (cardId) => !cardId.startsWith("enemy_"),
+  (cardId) => cardDefinitions[cardId]?.playableInPlayerDecks !== false,
 ) as CardDefinitionId[];
 
 export const masterDeckPreset: CloudArenaDeckPreset = {

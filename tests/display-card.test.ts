@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { DisplayCard } from "../apps/cloud-arena-web/src/components/display-card.js";
 import { CloudArenaBattlefieldPanel } from "../apps/cloud-arena-web/src/components/cloud-arena-battlefield-panel.js";
+import { CloudArenaBattleState } from "../apps/cloud-arena-web/src/components/cloud-arena-battle-state.js";
 import { CloudArenaHandTray } from "../apps/cloud-arena-web/src/components/cloud-arena-hand-tray.js";
 import { CloudArenaInspectorPanel } from "../apps/cloud-arena-web/src/components/cloud-arena-inspector-panel.js";
 import {
@@ -228,9 +229,9 @@ describe("shared display card mappers", () => {
     expect(grunt.image?.alt).toContain("horned demon soldier");
   });
 
-  it("uses the provided JPEG for Imp Caller art", () => {
+  it("uses the provided JPEG for Belzaphor art", () => {
     const impCaller = mapArenaEnemyToDisplayCard({
-      name: "Imp Caller",
+      name: "Belzaphor, Swarm of the Pit",
       health: 20,
       maxHealth: 20,
       block: 0,
@@ -240,16 +241,16 @@ describe("shared display card mappers", () => {
     });
 
     expect(impCaller.image?.url).toContain("/images/cards/0AF7C779-AF9B-4662-82E4-F481882E7788.jpeg");
-    expect(impCaller.image?.alt).toContain("Imp Caller");
-    expect(impCaller.title).toBe("Caller of Unclean Spirits");
+    expect(impCaller.image?.alt).toContain("Belzaphor");
+    expect(impCaller.title).toBe("Belzaphor, Swarm of the Pit");
   });
 
-  it("uses the provided JPEG for the Imp Caller battlefield leader", () => {
+  it("uses the provided JPEG for the Belzaphor battlefield leader", () => {
     const impCallerLeader = mapArenaPermanentToDisplayCard({
       instanceId: "enemy_leader_1",
       sourceCardInstanceId: "enemy_leader_1",
       definitionId: "enemy_imp_caller",
-      name: "Imp Caller",
+      name: "Belzaphor, Swarm of the Pit",
       controllerId: "enemy",
       isCreature: true,
       power: 3,
@@ -266,7 +267,7 @@ describe("shared display card mappers", () => {
     });
 
     expect(impCallerLeader.image?.url).toContain("/images/cards/0AF7C779-AF9B-4662-82E4-F481882E7788.jpeg");
-    expect(impCallerLeader.image?.alt).toContain("Imp Caller");
+    expect(impCallerLeader.image?.alt).toContain("Belzaphor");
   });
 
   it("uses the suggested image for Garden of Earthly Delights", () => {
@@ -816,6 +817,7 @@ describe("shared display card mappers", () => {
         intent: { attackAmount: 12 },
         intentLabel: "attack 12",
       },
+      enemies: [],
       battlefield: [
         {
           instanceId: "graveyard_hymn_1",
@@ -950,6 +952,8 @@ describe("shared display card mappers", () => {
 
     expect(html).toContain("display-card-info-button");
     expect(html).toContain(">i<");
+    expect(html).toContain("display-card-block-inline");
+    expect(html).toContain("display-card-block-icon is-enemy is-inline");
     expect(html).not.toContain("details");
   });
 
@@ -1018,6 +1022,7 @@ describe("shared display card mappers", () => {
         intent: { attackAmount: 12 },
         intentLabel: "attack 12",
       },
+      enemies: [],
       battlefield: [],
       blockingQueue: [],
       legalActions: [],
@@ -1125,9 +1130,42 @@ describe("shared display card mappers", () => {
     );
 
     expect(html).toContain("Sequence");
-    expect(html).toContain("Attack Once With Base Power");
+    expect(html).toContain("Single Slash");
     expect(html).toContain("Spawn token imp");
     expect(html).toContain("display-card-shell");
+  });
+
+  it("describes slash attack multipliers and repeat counts distinctly", () => {
+    const previewCards = buildEnemyPreviewCards(getEnemyPreset("lake_of_ice").cards);
+
+    expect(previewCards[0]?.textBlocks[0]?.text).toBe("Attack with base power");
+    expect(previewCards[1]?.textBlocks[0]?.text).toBe("Attack with 2x base power");
+    expect(previewCards[2]?.textBlocks[0]?.text).toBe("Attack with 3x base power");
+    expect(previewCards[3]?.textBlocks[0]?.text).toBe("Reduce all permanents Power by 1");
+  });
+
+  it("renders immediate enemy cards with a hoverable Immediate keyword", () => {
+    const html = renderToStaticMarkup(
+      createElement(DisplayCard, {
+        model: buildEnemyPreviewCards([
+          {
+            id: "enemy_immediate_test",
+            name: "Immediate Test",
+            effects: [
+              {
+                attackPowerMultiplier: 1,
+                target: "player",
+                resolveTiming: "immediate",
+              },
+            ],
+          },
+        ])[0]!,
+      }),
+    );
+
+    expect(html).toContain("card-face-keyword-trigger");
+    expect(html).toContain("Show keyword help for Immediate");
+    expect(html).toContain("Immediate");
   });
 
   it("does not render the Ark of the Covenant as a guardian fallback", () => {
@@ -1327,6 +1365,7 @@ describe("shared display card component", () => {
     expect(enemyHtml).toContain("display-card-enemy-stack");
     expect(enemyHtml).toContain("aria-label=\"Long Battle Demon block 0\"");
     expect(enemyHtml).toContain("aria-label=\"Long Battle Demon health\"");
+    expect(enemyHtml).toContain("display-card-block-icon is-enemy");
     expect(enemyHtml).toContain(">50/50<");
     expect(enemyHtml).not.toContain(">Health<");
     expect(enemyHtml).not.toContain("<span>HP</span>");
@@ -1339,5 +1378,239 @@ describe("shared display card component", () => {
     expect(permanentHtml).not.toContain("ready");
     expect(permanentHtml).not.toContain("spent");
     expect(permanentHtml).not.toContain("acted");
+  });
+
+  it("renders enemy block as a blue shield badge next to the health bar", () => {
+    const enemyCard = mapArenaEnemyToDisplayCard({
+      name: "Long Battle Demon",
+      health: 44,
+      maxHealth: 60,
+      block: 7,
+      intentLabel: "attack 10 x2",
+      intentQueueLabels: ["attack 10 x2", "defend 4"],
+    });
+
+    const html = renderToStaticMarkup(createElement(DisplayCard, { model: enemyCard }));
+
+    expect(html).toContain("display-card-block-icon is-enemy");
+    expect(html).toContain("aria-label=\"Long Battle Demon block 7\"");
+    expect(html).toContain(">7<");
+  });
+
+  it("shows the telegraphed enemy card over the battlefield from the current intent", () => {
+    const battle: CloudArenaBattleViewModel = {
+      turnNumber: 1,
+      phase: "player_action",
+      actionGroups: {
+        hand: [],
+        battlefield: [],
+        turn: [],
+      },
+      player: {
+        health: 30,
+        maxHealth: 30,
+        block: 0,
+        energy: 3,
+        hand: [],
+        drawPile: [],
+        drawPileCount: 0,
+        discardPile: [],
+        graveyard: [],
+      },
+      enemy: {
+        name: "Demon Pack",
+        health: 24,
+        maxHealth: 24,
+        block: 0,
+        leaderDefinitionId: "enemy_pack_alpha",
+        currentCardId: "cross_slash",
+        intent: { attackAmount: 6, attackTimes: 2 },
+        intentLabel: "attack 6 x2",
+        intentQueueLabels: ["attack 6 x2"],
+      },
+      enemies: [],
+      battlefield: [],
+      battlefieldSlotCount: 0,
+      creatureBattlefieldSlotCount: 5,
+      nonCreatureBattlefieldSlotCount: 5,
+      enemyBattlefield: [
+        {
+          instanceId: "enemy_leader",
+          sourceCardInstanceId: "enemy_card_1",
+          definitionId: "enemy_pack_alpha",
+          name: "Demon Pack, Legion",
+          isCreature: true,
+          power: 3,
+          health: 24,
+          maxHealth: 24,
+          block: 0,
+          controllerId: "enemy",
+          hasActedThisTurn: false,
+          isTapped: false,
+          isDefending: false,
+          isEnemyLeader: true,
+          slotIndex: 0,
+          actions: [],
+        },
+      ],
+      pendingTargetRequest: null,
+      blockingQueue: [],
+      legalActions: [],
+    };
+
+    const html = renderToStaticMarkup(
+      createElement(CloudArenaBattleState, {
+        battle,
+      }),
+    );
+
+    expect(html).toContain("cloud-arena-battlefield-action-play-overlay");
+    expect(html).toContain("Cross Slash");
+    expect(html).toContain("aria-hidden=\"true\"");
+  });
+
+  it("shows each enemy permanent's telegraphed card over its battlefield slot", () => {
+    const battle: CloudArenaBattleViewModel = {
+      turnNumber: 1,
+      phase: "player_action",
+      actionGroups: {
+        hand: [],
+        battlefield: [],
+        turn: [],
+      },
+      player: {
+        health: 30,
+        maxHealth: 30,
+        block: 0,
+        energy: 3,
+        hand: [],
+        drawPile: [],
+        drawPileCount: 0,
+        discardPile: [],
+        graveyard: [],
+      },
+      enemy: {
+        name: "Demon Pack",
+        health: 24,
+        maxHealth: 24,
+        block: 0,
+        leaderDefinitionId: "enemy_pack_alpha",
+        currentCardId: "double_slash",
+        intent: { attackAmount: 8 },
+        intentLabel: "attack 8",
+        intentQueueLabels: ["attack 8"],
+      },
+      enemies: [],
+      battlefield: [],
+      battlefieldSlotCount: 0,
+      creatureBattlefieldSlotCount: 5,
+      nonCreatureBattlefieldSlotCount: 5,
+      enemyBattlefield: [
+        {
+          instanceId: "enemy_leader",
+          sourceCardInstanceId: "enemy_card_1",
+          definitionId: "enemy_pack_alpha",
+          name: "Demon Pack, Legion",
+          isCreature: true,
+          power: 4,
+          health: 24,
+          maxHealth: 24,
+          block: 0,
+          controllerId: "enemy",
+          hasActedThisTurn: false,
+          isTapped: false,
+          isDefending: false,
+          isEnemyLeader: true,
+          slotIndex: 0,
+          actions: [],
+        },
+      ],
+      pendingTargetRequest: null,
+      blockingQueue: [],
+      legalActions: [],
+    };
+
+    const html = renderToStaticMarkup(
+      createElement(CloudArenaBattleState, {
+        battle,
+      }),
+    );
+
+    expect(html).toContain("cloud-arena-battlefield-action-play-overlay");
+    expect(html).toContain("Double Slash");
+    expect(html).toContain("aria-hidden=\"true\"");
+  });
+
+  it("shows the current telegraphed card even when the enemy intent is idle", () => {
+    const battle: CloudArenaBattleViewModel = {
+      turnNumber: 2,
+      phase: "player_action",
+      actionGroups: {
+        hand: [],
+        battlefield: [],
+        turn: [],
+      },
+      player: {
+        health: 30,
+        maxHealth: 30,
+        block: 0,
+        energy: 3,
+        hand: [],
+        drawPile: [],
+        drawPileCount: 0,
+        discardPile: [],
+        graveyard: [],
+      },
+      enemy: {
+        name: "Demon Pack",
+        health: 24,
+        maxHealth: 24,
+        block: 24,
+        leaderDefinitionId: "enemy_pack_alpha",
+        currentCardId: "gain_block_equal_health",
+        intent: {},
+        intentLabel: "idle",
+        intentQueueLabels: ["attack 6 x2"],
+      },
+      enemies: [],
+      battlefield: [],
+      battlefieldSlotCount: 0,
+      creatureBattlefieldSlotCount: 5,
+      nonCreatureBattlefieldSlotCount: 5,
+      enemyBattlefield: [
+        {
+          instanceId: "enemy_leader",
+          sourceCardInstanceId: "enemy_card_1",
+          definitionId: "enemy_pack_alpha",
+          name: "Demon Pack, Legion",
+          isCreature: true,
+          power: 3,
+          health: 24,
+          maxHealth: 24,
+          block: 24,
+          controllerId: "enemy",
+          hasActedThisTurn: false,
+          isTapped: false,
+          isDefending: false,
+          isEnemyLeader: true,
+          slotIndex: 0,
+          actions: [],
+          intentLabel: "idle",
+          intentQueueLabels: ["attack 6 x2"],
+        },
+      ],
+      pendingTargetRequest: null,
+      blockingQueue: [],
+      legalActions: [],
+    };
+
+    const html = renderToStaticMarkup(
+      createElement(CloudArenaBattleState, {
+        battle,
+      }),
+    );
+
+    expect(html).toContain("cloud-arena-battlefield-action-play-overlay");
+    expect(html).toContain("Gain Block Equal To Health");
   });
 });

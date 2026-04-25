@@ -8,7 +8,6 @@ import { getCardDefinition } from "../../../../src/cloud-arena/index.js";
 import { getScenarioPreset } from "../../../../src/cloud-arena/scenarios/index.js";
 import { CloudArenaAppShell, LoadingState } from "../components/index.js";
 import { DisplayCard } from "../components/display-card.js";
-import { buildEnemyPreviewCards as buildEnemyScenarioPreviewCards } from "../lib/cloud-arena-enemy-card-preview.js";
 import {
   buildCloudArenaDeckChooserGroups,
   createCloudArenaBattleLocation,
@@ -78,21 +77,17 @@ function buildEnemySetupCardModel(
 type CloudArenaScenarioPreset = ReturnType<typeof getScenarioPreset>;
 
 function buildEnemyPreviewCards(scenario: CloudArenaScenarioPreset): DisplayCardModel[] {
-  const cards: DisplayCardModel[] = [];
+  const battlefieldCards: DisplayCardModel[] = [];
 
-  if (scenario.enemy.leaderDefinitionId) {
-    cards.push(buildEnemySetupCardModel(scenario.enemy.leaderDefinitionId, cards.length));
+  for (const enemy of scenario.enemies) {
+    battlefieldCards.push(buildEnemySetupCardModel(enemy.definitionId, battlefieldCards.length));
   }
 
-  for (const cardId of scenario.enemy.startingPermanents ?? []) {
-    cards.push(buildEnemySetupCardModel(cardId, cards.length));
+  for (const cardId of scenario.enemies.flatMap((enemy) => enemy.startingTokens ?? [])) {
+    battlefieldCards.push(buildEnemySetupCardModel(cardId, battlefieldCards.length));
   }
 
-  for (const cardId of scenario.enemy.startingTokens ?? []) {
-    cards.push(buildEnemySetupCardModel(cardId, cards.length));
-  }
-
-  return cards.length > 0 ? cards : buildEnemyScenarioPreviewCards(scenario.enemy.cards);
+  return battlefieldCards;
 }
 
 export function CloudArenaSetupPage({

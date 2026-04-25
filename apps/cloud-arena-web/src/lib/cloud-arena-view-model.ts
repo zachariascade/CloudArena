@@ -64,8 +64,12 @@ function getScenarioLabel(scenarioId: string): string {
   switch (scenarioId) {
     case "demon_pack":
       return "Demon Pack";
+    case "lake_of_ice":
+      return "Cocytus, Lake of Ice";
     case "imp_caller":
-      return "Imp Caller";
+      return "Belzaphor, Swarm of the Pit";
+    case "malchior_binder_of_wills":
+      return "Malchior, Binder of Wills";
     default:
       return scenarioId;
   }
