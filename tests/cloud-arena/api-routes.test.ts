@@ -15,7 +15,7 @@ describe("cloud arena api routes", () => {
       url: "/api/cloud-arena/sessions",
       payload: {
         scenarioId: "demon_pack",
-        deckId: "wide_angels",
+        deckId: "starter_deck",
         seed: 7,
         shuffleDeck: true,
       },
@@ -24,12 +24,12 @@ describe("cloud arena api routes", () => {
     expect(createResponse.statusCode).toBe(200);
     expect(createResponse.json().data.sessionId).toBeTypeOf("string");
     expect(createResponse.json().data.scenarioId).toBe("demon_pack");
-    expect(createResponse.json().data.deckId).toBe("wide_angels");
+    expect(createResponse.json().data.deckId).toBe("starter_deck");
     expect(createResponse.json().data.seed).toBe(7);
     expect(createResponse.json().data.createdAt).toBeTypeOf("string");
     expect(createResponse.json().data.resetSource).toEqual({
       scenarioId: "demon_pack",
-      deckId: "wide_angels",
+      deckId: "starter_deck",
       seed: 7,
     });
     expect(createResponse.json().data.actionHistory).toEqual([]);

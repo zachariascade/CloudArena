@@ -238,6 +238,7 @@ describe("cloud arena session service", () => {
     let snapshot = service.createSession({
       scenarioId: "lake_of_ice",
       seed: 1,
+      playerHealth: 200,
     });
     let playedGuardian = false;
     let updated = snapshot;

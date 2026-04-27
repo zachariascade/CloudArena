@@ -433,11 +433,13 @@ export function chooseHeuristicDecision(
   state: BattleState,
   legalActions: BattleAction[],
 ): SimulationDecision {
-  const scoredActions: ScoredAction[] = legalActions.map((action) => ({
-    action,
-    score: scoreAction(state, action),
-    reason: getReasonForAction(state, action),
-  }));
+  const scoredActions: ScoredAction[] = legalActions
+    .filter((action) => action.type !== "debug_end_battle")
+    .map((action) => ({
+      action,
+      score: scoreAction(state, action),
+      reason: getReasonForAction(state, action),
+    }));
 
   scoredActions.sort((left, right) => {
     if (right.score !== left.score) {

@@ -113,7 +113,7 @@ describe("cloud arena deck storage", () => {
         "defend",
       ]);
 
-      const presetSource = await resolveCloudArenaDeckSourceById("wide_angels", { workspaceRoot });
+      const presetSource = await resolveCloudArenaDeckSourceById("starter_deck", { workspaceRoot });
       expect(presetSource?.kind).toBe("preset");
       expect(expandCloudArenaDeckSource(presetSource!)).toContain("token_angel");
 

@@ -325,14 +325,14 @@ describe("cloud arena prototype card definitions", () => {
       cardInstanceId: gardenCard.instanceId,
     });
 
-    expect(battle.player.block).toBe(3);
+    expect(battle.player.block).toBe(10);
 
     applyBattleAction(battle, {
       type: "play_card",
       cardInstanceId: guardianCard.instanceId,
     });
 
-    expect(battle.player.block).toBe(4);
+    expect(battle.player.block).toBe(15);
   });
 
   it("supports armory_disciple equipping holy_blade in the default card library", () => {

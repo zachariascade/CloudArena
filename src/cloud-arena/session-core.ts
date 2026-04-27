@@ -123,6 +123,7 @@ export function createScenarioBattle(
   playerDeck: string[],
   seed: number,
   shuffleDeck: boolean,
+  playerHealthOverride?: number,
 ): BattleState {
   const [primaryEnemy] = scenario.enemies;
 
@@ -159,7 +160,7 @@ export function createScenarioBattle(
 
   return createBattle({
     seed,
-    playerHealth: scenario.playerHealth,
+    playerHealth: playerHealthOverride ?? scenario.playerHealth,
     playerDeck,
     shuffleDeck,
     enemies: battleEnemies,
@@ -190,7 +191,7 @@ export function createCloudArenaSessionRecord(input: {
       seed,
     },
     actionHistory: [],
-    state: createScenarioBattle(input.scenario, input.playerDeck.cards, seed, shuffleDeck),
+    state: createScenarioBattle(input.scenario, input.playerDeck.cards, seed, shuffleDeck, request.playerHealth),
     playerDeck: [...input.playerDeck.cards],
   };
 }

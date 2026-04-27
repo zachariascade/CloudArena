@@ -92,6 +92,7 @@ export type CloudArenaCreateSessionRequest = {
   deckId?: CloudArenaDeckId;
   seed?: number;
   shuffleDeck?: boolean;
+  playerHealth?: number;
 };
 
 export type CloudArenaActionRequest = {
