@@ -1,5 +1,4 @@
 import type { CardDefinitionId } from "../../../../src/cloud-arena/index.js";
-import { cloudArenaDeckPresets } from "../../../../src/cloud-arena/index.js";
 import type { CloudArenaSessionScenarioId, CloudArenaDeckCardEntry } from "../../../../src/cloud-arena/api-contract.js";
 import { createCloudArenaLocalDeckRepository } from "./cloud-arena-local-decks.js";
 
@@ -57,6 +56,8 @@ export const CAMPAIGN_REWARD_POOL: CardDefinitionId[] = [
   "targeted_strike",
   "stunning_rebuke",
   "token_angel",
+  "tubal_cains_forge",
+  "scroll_of_the_covenant",
 ];
 
 const CAMPAIGN_RUN_KEY = "cloud-arena-campaign-run";
@@ -109,9 +110,24 @@ export function drawRewardOptions(): CardDefinitionId[] {
   return result;
 }
 
+function drawRandomStarterDeck(): CardDefinitionId[] {
+  const result: CardDefinitionId[] = [];
+  for (let i = 0; i < 15; i++) {
+    const index = Math.floor(Math.random() * CAMPAIGN_REWARD_POOL.length);
+    result.push(CAMPAIGN_REWARD_POOL[index]!);
+  }
+  return result;
+}
+
 export async function createNewCampaignRun(): Promise<CampaignRun> {
-  const starterCards = cloudArenaDeckPresets.starter_deck.cards as CardDefinitionId[];
+  const starterCards = drawRandomStarterDeck();
   const repo = createCloudArenaLocalDeckRepository();
+
+  const allDecks = await repo.listCloudArenaDecks();
+  const campaignDecks = allDecks.data.filter((d) => d.tags.includes("campaign"));
+  await Promise.all(campaignDecks.map((d) => repo.deleteCloudArenaDeck(d.id)));
+  localStorage.removeItem(CAMPAIGN_DECK_ID_KEY);
+
   const deckPayload = {
     name: "Campaign Deck",
     cards: cardsToEntries(starterCards),
@@ -119,16 +135,9 @@ export async function createNewCampaignRun(): Promise<CampaignRun> {
     notes: null,
   };
 
-  const existingDeckId = localStorage.getItem(CAMPAIGN_DECK_ID_KEY);
-  let deckId: string;
-  if (existingDeckId) {
-    await repo.updateCloudArenaDeck(existingDeckId, deckPayload);
-    deckId = existingDeckId;
-  } else {
-    const deck = await repo.createCloudArenaDeck(deckPayload);
-    deckId = deck.data.id;
-    localStorage.setItem(CAMPAIGN_DECK_ID_KEY, deckId);
-  }
+  const deck = await repo.createCloudArenaDeck(deckPayload);
+  const deckId = deck.data.id;
+  localStorage.setItem(CAMPAIGN_DECK_ID_KEY, deckId);
 
   const run: CampaignRun = {
     id: `campaign_${Date.now()}`,

@@ -46,6 +46,9 @@ import { targetedStrikeCardDefinition } from "./definitions/targeted-strike.js";
 import { stunningRebukeCardDefinition } from "./definitions/stunning-rebuke.js";
 import { tokenImpCardDefinition } from "./definitions/token-imp.js";
 import { tokenAngelCardDefinition } from "./definitions/token-angel.js";
+import { tubalCainsForgeCardDefinition } from "./definitions/tubal-cains-forge.js";
+import { scrollOfTheCovenanCardDefinition } from "./definitions/scroll-of-the-covenant.js";
+import { enemyViperShadeCardDefinition } from "./definitions/enemy-viper-shade.js";
 import type {
   CardDefinition,
   CardDefinitionLibrary,
@@ -111,6 +114,9 @@ export const cardDefinitions: CardDefinitionLibrary = {
   stunning_rebuke: stunningRebukeCardDefinition,
   token_imp: tokenImpCardDefinition,
   token_angel: tokenAngelCardDefinition,
+  tubal_cains_forge: tubalCainsForgeCardDefinition,
+  scroll_of_the_covenant: scrollOfTheCovenanCardDefinition,
+  enemy_viper_shade: enemyViperShadeCardDefinition,
 };
 
 export function getCardDefinitionFromLibrary(

@@ -17,7 +17,7 @@ import {
 import { evaluateCondition } from "../core/conditions.js";
 import { getDerivedPermanentActionAmount } from "../core/derived-stats.js";
 import { findPermanentById, selectPermanents } from "../core/selectors.js";
-import { permanentAttacksAllEnemyPermanents } from "../core/permanents.js";
+import { destroyPermanent, permanentAttacksAllEnemyPermanents, permanentHasKeyword } from "../core/permanents.js";
 import { emitRulesEvent } from "../core/rules-events.js";
 import type {
   ActivatedAbility,
@@ -130,12 +130,17 @@ export function usePermanentAction(
 
     if (state.enemyBattlefield.some((slot) => slot !== null)) {
       if (attackAllEnemyPermanents) {
+        let killedByDeathtouch = false;
         for (const target of state.enemyBattlefield) {
           if (!target) {
             continue;
           }
 
-          dealDamageToPermanent(state, target, attackAmount, "permanent_action", permanent.instanceId);
+          const damageDealt = dealDamageToPermanent(state, target, attackAmount, "permanent_action", permanent.instanceId);
+          if (damageDealt > 0 && permanentHasKeyword(target, "deathtouch") && !killedByDeathtouch) {
+            destroyPermanent(state, permanent.instanceId);
+            killedByDeathtouch = true;
+          }
         }
 
         permanent.isDefending = false;
