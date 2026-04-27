@@ -1,6 +1,6 @@
 import { emitRulesEvent } from "../core/rules-events.js";
 import { findPermanentById } from "../core/selectors.js";
-import { permanentHasKeyword } from "../core/permanents.js";
+import { destroyPermanent, permanentHasKeyword } from "../core/permanents.js";
 import type { BattleState, DamageOverflowPolicy } from "../core/types.js";
 
 function applyDamageToBlockAndHealth(
@@ -104,6 +104,11 @@ function applyEnemyDamageToDefenders(
         controllerId: permanent.controllerId ?? "player",
         slotIndex: permanent.slotIndex,
       });
+
+      const sourceEnemy = findPermanentById(state, sourcePermanentId);
+      if (sourceEnemy && permanentHasKeyword(sourceEnemy, "deathtouch")) {
+        destroyPermanent(state, permanent.instanceId);
+      }
     }
   }
 

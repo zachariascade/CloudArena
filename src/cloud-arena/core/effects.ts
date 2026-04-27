@@ -13,6 +13,7 @@ import {
   trySummonPermanentFromCard,
   destroyPermanent,
   isEquipmentPermanent,
+  permanentHasKeyword,
   syncEnemyStateFromLeaderPermanent,
   syncEnemyLeaderPermanentFromState,
 } from "./permanents.js";
@@ -689,7 +690,18 @@ function resolveDealDamageEffect(
   }
 
   for (const permanent of resolvePermanentTargets(state, effect.target, context)) {
-    dealDamageToPermanent(state, permanent, amount);
+    const damageDealt = dealDamageToPermanent(state, permanent, amount);
+    if (
+      damageDealt > 0 &&
+      permanent.controllerId === "enemy" &&
+      permanentHasKeyword(permanent, "deathtouch") &&
+      context.abilitySourcePermanentId
+    ) {
+      const attacker = findPermanentById(state, context.abilitySourcePermanentId);
+      if (attacker && (attacker.controllerId ?? "player") !== "enemy") {
+        destroyPermanent(state, context.abilitySourcePermanentId);
+      }
+    }
   }
 }
 

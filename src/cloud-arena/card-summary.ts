@@ -748,6 +748,10 @@ export function summarizeCardDefinition(definition: CardDefinition): string[] {
       summaryLines.push("**Menace**");
     }
 
+    if (definition.keywords?.includes("deathtouch")) {
+      summaryLines.push("**Deathtouch** — Any creature that deals or receives damage from this creature is destroyed.");
+    }
+
     summaryLines.push(...summarizeEffects(definition.preSummonEffects, true));
     summaryLines.push(...(definition.abilities ?? []).flatMap(describeAbility));
   } else {
