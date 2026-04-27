@@ -1,3 +1,6 @@
+// @deprecated — the heuristic agent is no longer in active use. Tests covering it are excluded from the
+// test suite. This file is kept for reference but does not need to be updated as the game evolves.
+
 import { getCardDefinitionFromLibrary, isPermanentCardDefinition } from "../cards/definitions.js";
 import { getAbilityActionAmount, getActivatedAbilities } from "../core/activated-abilities.js";
 import { getDerivedPermanentActionAmount } from "../core/derived-stats.js";
