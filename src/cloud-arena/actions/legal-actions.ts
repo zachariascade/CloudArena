@@ -195,5 +195,11 @@ export function getLegalActions(state: BattleState): BattleAction[] {
       return [...creatureRulesActions, ...activatedAbilityActions];
     });
 
-  return [...playCardActions, ...permanentActions, { type: "end_turn" }];
+  return [
+    ...playCardActions,
+    ...permanentActions,
+    { type: "end_turn" },
+    { type: "debug_end_battle", winner: "player" as const },
+    { type: "debug_end_battle", winner: "enemy" as const },
+  ];
 }

@@ -83,7 +83,7 @@ function getDeckLabel(deckId: string | null): string {
   switch (deckId) {
     case "master_deck":
       return "Master Deck";
-    case "wide_angels":
+    case "starter_deck":
       return "Wide Angels";
     case "tall_creatures":
       return "Tall Creatures";

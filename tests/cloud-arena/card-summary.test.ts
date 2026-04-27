@@ -6,7 +6,6 @@ import { battlefieldInsightCardDefinition } from "../../src/cloud-arena/cards/de
 import { forbiddenInsightCardDefinition } from "../../src/cloud-arena/cards/definitions/forbidden-insight.js";
 import { focusedBlessingCardDefinition } from "../../src/cloud-arena/cards/definitions/focused-blessing.js";
 import { choirCaptainCardDefinition } from "../../src/cloud-arena/cards/definitions/choir-captain.js";
-import { forcedSacrificeCardDefinition } from "../../src/cloud-arena/cards/definitions/forced-sacrifice.js";
 import { guardianCardDefinition } from "../../src/cloud-arena/cards/definitions/guardian.js";
 import { haltBucklerCardDefinition } from "../../src/cloud-arena/cards/definitions/halt-buckler.js";
 import { graveyardHymnCardDefinition } from "../../src/cloud-arena/cards/definitions/graveyard-hymn.js";
@@ -73,9 +72,6 @@ describe("cloud arena card summary", () => {
   it("describes the targeted blessing and sacrifice effects", () => {
     expect(summarizeCardDefinition(focusedBlessingCardDefinition)).toEqual([
       "Choose a creature you control; it gets +1/+1.",
-    ]);
-    expect(summarizeCardDefinition(forcedSacrificeCardDefinition)).toEqual([
-      "Choose a permanent you control; sacrifice it.",
     ]);
   });
 

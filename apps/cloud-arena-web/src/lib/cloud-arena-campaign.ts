@@ -22,10 +22,10 @@ export type CampaignRun = {
 };
 
 export const CAMPAIGN_LEVELS: CampaignLevel[] = [
-  { index: 0, scenarioId: "demon_pack", label: "Demon Pack" },
-  { index: 1, scenarioId: "lake_of_ice", label: "Cocytus, Lake of Ice" },
-  { index: 2, scenarioId: "imp_caller", label: "Belzaphor's Swarm" },
-  { index: 3, scenarioId: "malchior_binder_of_wills", label: "Malchior, Binder of Wills" },
+  { index: 0, scenarioId: "lake_of_ice", label: "Cocytus, Lake of Ice" },
+  { index: 1, scenarioId: "imp_caller", label: "Belzaphor's Swarm" },
+  { index: 2, scenarioId: "malchior_binder_of_wills", label: "Malchior, Binder of Wills" },
+  { index: 3, scenarioId: "demon_pack", label: "Demon Pack" },
 ];
 
 export const CAMPAIGN_REWARD_POOL: CardDefinitionId[] = [
@@ -60,6 +60,7 @@ export const CAMPAIGN_REWARD_POOL: CardDefinitionId[] = [
 ];
 
 const CAMPAIGN_RUN_KEY = "cloud-arena-campaign-run";
+const CAMPAIGN_DECK_ID_KEY = "cloud-arena-campaign-deck-id";
 
 function cardsToEntries(cardIds: CardDefinitionId[]): CloudArenaDeckCardEntry[] {
   const counts = new Map<string, number>();
@@ -94,6 +95,7 @@ export function saveCampaignRun(run: CampaignRun): void {
 
 export function clearCampaignRun(): void {
   localStorage.removeItem(CAMPAIGN_RUN_KEY);
+  localStorage.removeItem(CAMPAIGN_DECK_ID_KEY);
 }
 
 export function drawRewardOptions(): CardDefinitionId[] {
@@ -108,21 +110,33 @@ export function drawRewardOptions(): CardDefinitionId[] {
 }
 
 export async function createNewCampaignRun(): Promise<CampaignRun> {
-  const starterCards = cloudArenaDeckPresets.wide_angels.cards as CardDefinitionId[];
+  const starterCards = cloudArenaDeckPresets.starter_deck.cards as CardDefinitionId[];
   const repo = createCloudArenaLocalDeckRepository();
-  const deck = await repo.createCloudArenaDeck({
+  const deckPayload = {
     name: "Campaign Deck",
     cards: cardsToEntries(starterCards),
     tags: ["campaign"],
     notes: null,
-  });
+  };
+
+  const existingDeckId = localStorage.getItem(CAMPAIGN_DECK_ID_KEY);
+  let deckId: string;
+  if (existingDeckId) {
+    await repo.updateCloudArenaDeck(existingDeckId, deckPayload);
+    deckId = existingDeckId;
+  } else {
+    const deck = await repo.createCloudArenaDeck(deckPayload);
+    deckId = deck.data.id;
+    localStorage.setItem(CAMPAIGN_DECK_ID_KEY, deckId);
+  }
+
   const run: CampaignRun = {
     id: `campaign_${Date.now()}`,
     status: "in_progress",
     currentLevelIndex: 0,
     completedLevelIndices: [],
     deckCardIds: starterCards,
-    savedDeckId: deck.data.id,
+    savedDeckId: deckId,
     pendingRewardOptions: null,
   };
   saveCampaignRun(run);

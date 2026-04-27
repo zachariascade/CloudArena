@@ -6,7 +6,7 @@ import type {
 
 export type CloudArenaDeckPresetId =
   | "master_deck"
-  | "wide_angels"
+  | "starter_deck"
   | "tall_creatures"
   | "mixed_guardian";
 

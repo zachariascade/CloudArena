@@ -73,7 +73,7 @@ export type CloudArenaResolvedDeckSource =
       deck: CloudArenaSavedDeck;
     };
 
-const CLOUD_ARENA_MINIMUM_DECK_CARD_COUNT = 20;
+const CLOUD_ARENA_MINIMUM_DECK_CARD_COUNT = 10;
 const CLOUD_ARENA_DECK_CARD_ID_PATTERN = /^[a-z0-9]+(?:_[a-z0-9]+)*$/;
 
 const cloudArenaSavedDeckEntrySchema = z.object({

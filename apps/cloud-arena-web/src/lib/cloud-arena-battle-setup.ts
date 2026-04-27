@@ -60,7 +60,7 @@ const CLOUD_ARENA_DECK_OPTIONS: Array<{
     description: "All available player cards",
   },
   {
-    id: "wide_angels",
+    id: "starter_deck",
     label: "Wide Angels",
     description: "Token angels and blessing scale",
   },

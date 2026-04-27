@@ -7,7 +7,6 @@ import { defendCardDefinition } from "./definitions/defend.js";
 import { defendingStrikeCardDefinition } from "./definitions/defending-strike.js";
 import { battlefieldInsightCardDefinition } from "./definitions/battlefield-insight.js";
 import { focusedBlessingCardDefinition } from "./definitions/focused-blessing.js";
-import { forcedSacrificeCardDefinition } from "./definitions/forced-sacrifice.js";
 import { forbiddenInsightCardDefinition } from "./definitions/forbidden-insight.js";
 import { gardenOfEarthlyDelightsCardDefinition } from "./definitions/garden-of-earthly-delights.js";
 import { graveyardHymnCardDefinition } from "./definitions/graveyard-hymn.js";
@@ -75,7 +74,6 @@ export const cardDefinitions: CardDefinitionLibrary = {
   defending_strike: defendingStrikeCardDefinition,
   battlefield_insight: battlefieldInsightCardDefinition,
   focused_blessing: focusedBlessingCardDefinition,
-  forced_sacrifice: forcedSacrificeCardDefinition,
   forbidden_insight: forbiddenInsightCardDefinition,
   garden_of_earthly_delights: gardenOfEarthlyDelightsCardDefinition,
   graveyard_hymn: graveyardHymnCardDefinition,
@@ -146,7 +144,9 @@ export function isEquipmentCardDefinition(definition: CardDefinition): boolean {
 export function isPermanentCardDefinition(
   definition: CardDefinition,
 ): definition is PermanentCardDefinition {
-  return definition.cardTypes.some((cardType) => permanentCardTypes.has(cardType as PermanentCardType));
+  return definition.cardTypes.some((cardType) =>
+    permanentCardTypes.has(cardType as PermanentCardType),
+  );
 }
 
 export function asPermanentCardDefinition(

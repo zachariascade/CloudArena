@@ -522,3 +522,38 @@ export function mapArenaPermanentToDisplayCard(
     ].filter((flag): flag is string => flag !== null),
   });
 }
+
+export function mapCardDefinitionIdToDisplayCard(definitionId: string): DisplayCardModel {
+  const definition = getCardDefinition(definitionId);
+  const presentation = getCardDisplay(definition);
+  const summary = summarizeCardDefinition(definition);
+
+  return buildDisplayCardModel({
+    variant: "mtg",
+    name: definition.name,
+    title: presentation.title,
+    subtitle: presentation.subtitle,
+    frameTone: presentation.frameTone,
+    manaCost: presentation.manaCost,
+    image: buildArenaImage(
+      presentation.imagePath,
+      presentation.imageAlt,
+      definition.name,
+      presentation.footerCredit,
+    ),
+    metaLine: null,
+    footerCode: presentation.footerCode,
+    footerCredit: presentation.footerCredit,
+    collectorNumber: presentation.collectorNumber,
+    footerStat: presentation.footerStat ?? null,
+    healthBar: null,
+    energyBar: null,
+    statusLabel: null,
+    statusTone: undefined,
+    stats: [],
+    textBlocks: summary.map((line) => ({ kind: "rules" as const, text: line })),
+    badges: [],
+    actions: [],
+    stateFlags: [],
+  });
+}

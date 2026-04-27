@@ -61,6 +61,7 @@ export {
   mapArenaHandCardToDisplayCard,
   mapArenaPermanentToDisplayCard,
   mapArenaPlayerToDisplayCard,
+  mapCardDefinitionIdToDisplayCard,
 } from "./display-card.js";
 export type {
   DisplayCardAction,

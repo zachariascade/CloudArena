@@ -1583,7 +1583,7 @@ export function renderCloudArcanumWebHtml(
       /* ── Reward modal ──────────────────────────────────────────── */
 
       .cloud-arena-reward-modal {
-        width: min(94vw, 42rem);
+        width: min(94vw, 64rem);
         display: grid;
         gap: 1.25rem;
         padding: 1.5rem 1.25rem;
@@ -1591,35 +1591,33 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cloud-arena-reward-choices {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.75rem;
-      }
-
-      @media (max-width: 560px) {
-        .cloud-arena-reward-choices {
-          grid-template-columns: 1fr;
-        }
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
       }
 
       .cloud-arena-reward-choice {
-        display: grid;
-        gap: 0.35rem;
-        padding: 1rem 0.75rem;
-        border-radius: 0.6rem;
-        border: 1px solid rgba(239, 246, 255, 0.1);
-        background: rgba(239, 246, 255, 0.04);
+        display: block;
+        width: var(--display-card-width);
+        padding: 0;
+        border-radius: 18px;
+        border: 2px solid transparent;
+        background: transparent;
         color: inherit;
         font: inherit;
         cursor: pointer;
-        text-align: center;
-        transition: border-color 0.15s, background 0.15s, transform 0.1s;
+        text-align: left;
+        transition:
+          border-color 160ms ease,
+          transform 160ms ease,
+          box-shadow 160ms ease;
       }
 
       .cloud-arena-reward-choice:hover:enabled {
         border-color: var(--accent);
-        background: rgba(217, 119, 6, 0.1);
-        transform: translateY(-2px);
+        transform: translateY(-4px);
+        box-shadow: 0 16px 36px rgba(154, 52, 18, 0.18);
       }
 
       .cloud-arena-reward-choice:disabled {
@@ -1627,27 +1625,9 @@ export function renderCloudArcanumWebHtml(
         cursor: default;
       }
 
-      .cloud-arena-reward-choice-cost {
-        font-size: 0.8rem;
-        color: var(--muted);
-        font-variant-numeric: tabular-nums;
-      }
-
-      .cloud-arena-reward-choice-cost::before {
-        content: "Cost ";
-      }
-
-      .cloud-arena-reward-choice-name {
-        font-size: 0.95rem;
-        font-weight: 700;
-        color: rgba(239, 246, 255, 0.95);
-      }
-
-      .cloud-arena-reward-choice-type {
-        font-size: 0.75rem;
-        color: var(--muted);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+      .cloud-arena-reward-choice .display-card,
+      .cloud-arena-reward-choice .card-face {
+        pointer-events: none;
       }
 
       .cloud-arena-reward-processing {
@@ -3815,8 +3795,119 @@ export function renderCloudArcanumWebHtml(
 
       .cloud-arena-hand-hud-actions {
         display: flex;
+        align-items: center;
         justify-content: flex-end;
+        gap: 0.5rem;
         margin-top: 0.2rem;
+      }
+
+      .cloud-arena-debug-end-wrap {
+        position: relative;
+      }
+
+      .cloud-arena-debug-end-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 2.45rem;
+        padding: 0.46rem 0.72rem;
+        border-radius: 14px;
+        border: 1px solid rgba(120, 113, 108, 0.28);
+        background: rgba(255, 255, 255, 0.62);
+        color: var(--muted);
+        font: inherit;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        cursor: pointer;
+        transition:
+          background 140ms ease,
+          border-color 140ms ease,
+          color 140ms ease;
+      }
+
+      .cloud-arena-debug-end-button:hover {
+        background: rgba(255, 255, 255, 0.86);
+        border-color: rgba(120, 113, 108, 0.44);
+        color: var(--ink);
+      }
+
+      .cloud-arena-debug-end-button:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+      }
+
+      .cloud-arena-debug-end-popup {
+        position: absolute;
+        bottom: calc(100% + 0.45rem);
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        min-width: 7.5rem;
+        padding: 0.55rem 0.55rem;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: var(--panel);
+        box-shadow:
+          0 8px 24px rgba(28, 23, 19, 0.12),
+          0 2px 6px rgba(28, 23, 19, 0.06);
+        z-index: 2000;
+      }
+
+      .cloud-arena-debug-end-popup-label {
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 0 0.2rem 0.1rem;
+      }
+
+      .cloud-arena-debug-end-popup-victory,
+      .cloud-arena-debug-end-popup-defeat {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 2rem;
+        padding: 0.3rem 0.6rem;
+        border-radius: 10px;
+        font: inherit;
+        font-size: 0.85rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition:
+          background 120ms ease,
+          border-color 120ms ease;
+      }
+
+      .cloud-arena-debug-end-popup-victory {
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        background: rgba(34, 197, 94, 0.1);
+        color: #15803d;
+      }
+
+      .cloud-arena-debug-end-popup-victory:hover {
+        background: rgba(34, 197, 94, 0.18);
+        border-color: rgba(34, 197, 94, 0.5);
+      }
+
+      .cloud-arena-debug-end-popup-defeat {
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        background: rgba(239, 68, 68, 0.1);
+        color: #b91c1c;
+      }
+
+      .cloud-arena-debug-end-popup-defeat:hover {
+        background: rgba(239, 68, 68, 0.18);
+        border-color: rgba(239, 68, 68, 0.5);
+      }
+
+      .cloud-arena-debug-end-popup-victory:focus-visible,
+      .cloud-arena-debug-end-popup-defeat:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
       }
 
       .cloud-arena-hand-hud-pile-button {

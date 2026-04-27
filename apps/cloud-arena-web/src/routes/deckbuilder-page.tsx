@@ -281,7 +281,7 @@ export function buildDeckSelectionGroups(
           kind: "preset",
         },
         {
-          id: "wide_angels",
+          id: "starter_deck",
           label: "Wide Angels",
           description: "Token angels and blessing scale",
           kind: "preset",
@@ -460,8 +460,8 @@ export function CloudArenaDeckBuilderPage({
       return;
     }
 
-    if (deckStats.cardCount < 20) {
-      setError(new Error("A deck needs at least 20 selected cards."));
+    if (deckStats.cardCount < 10) {
+      setError(new Error("A deck needs at least 10 selected cards."));
       return;
     }
 
@@ -552,8 +552,8 @@ export function CloudArenaDeckBuilderPage({
       return;
     }
 
-    if (deckStats.cardCount < 20) {
-      setError(new Error("A new deck needs at least 20 selected cards."));
+    if (deckStats.cardCount < 10) {
+      setError(new Error("A new deck needs at least 10 selected cards."));
       return;
     }
 
@@ -751,7 +751,7 @@ export function CloudArenaDeckBuilderPage({
               <span className="card-face-status">Cards: {deckStats.cardCount}</span>
               <span className="card-face-status">Unique: {deckStats.uniqueCardCount}</span>
               <span className="card-face-status">{getDeckSourceLabel(safeDraft.sourceKind)}</span>
-              {deckStats.cardCount < 20 ? <span className="card-face-status">Need 20 cards to save</span> : null}
+              {deckStats.cardCount < 10 ? <span className="card-face-status">Need 10 cards to save</span> : null}
               {isDirty ? <span className="card-face-status">Unsaved changes</span> : null}
             </div>
           </section>
@@ -887,9 +887,9 @@ export function CloudArenaDeckBuilderPage({
                       : "Start a new deck from the current card selection."}
                   </span>
                 </header>
-                {deckStats.cardCount < 20 ? (
+                {deckStats.cardCount < 10 ? (
                   <p className="deckbuilder-modal-error">
-                    You need at least 20 cards selected before this deck can be saved.
+                    You need at least 10 cards selected before this deck can be saved.
                   </p>
                 ) : null}
                 <div className="deckbuilder-modal-fields">
@@ -940,7 +940,7 @@ export function CloudArenaDeckBuilderPage({
                 <button
                   type="button"
                   className="primary-button"
-                  disabled={isSaving || deckStats.cardCount < 20}
+                  disabled={isSaving || deckStats.cardCount < 10}
                   onClick={() => void handleCreateDeckFromModal()}
                 >
                   {isSaving ? (createModalMode === "save_as" ? "Saving..." : "Creating...") : createModalMode === "save_as" ? "Save deck" : "Create deck"}

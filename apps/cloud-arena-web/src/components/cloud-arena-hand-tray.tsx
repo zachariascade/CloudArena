@@ -84,6 +84,7 @@ export function CloudArenaHandTray({
   onInspectPlayer,
 }: CloudArenaHandTrayProps): ReactElement {
   const [openPile, setOpenPile] = useState<PileKind | null>(null);
+  const [showDebugEnd, setShowDebugEnd] = useState(false);
   const previousPlayerHealthRef = useRef(player.health);
   const playerHealthFlashTimerRef = useRef<number | null>(null);
   const [playerHealthFlashDirection, setPlayerHealthFlashDirection] = useState<"increase" | "decrease" | null>(null);
@@ -388,6 +389,42 @@ export function CloudArenaHandTray({
               <span>End Turn</span>
               <strong>(E)</strong>
             </button>
+            <div className="cloud-arena-debug-end-wrap">
+              <button
+                type="button"
+                className="cloud-arena-debug-end-button"
+                onClick={() => setShowDebugEnd((v) => !v)}
+                aria-label="Debug: end battle"
+                title="Debug: end battle"
+              >
+                End Battle
+              </button>
+              {showDebugEnd && (
+                <div className="cloud-arena-debug-end-popup" role="dialog" aria-label="End battle outcome">
+                  <span className="cloud-arena-debug-end-popup-label">End as…</span>
+                  <button
+                    type="button"
+                    className="cloud-arena-debug-end-popup-victory"
+                    onClick={() => {
+                      setShowDebugEnd(false);
+                      onBattleAction?.({ type: "debug_end_battle", winner: "player" });
+                    }}
+                  >
+                    Victory
+                  </button>
+                  <button
+                    type="button"
+                    className="cloud-arena-debug-end-popup-defeat"
+                    onClick={() => {
+                      setShowDebugEnd(false);
+                      onBattleAction?.({ type: "debug_end_battle", winner: "enemy" });
+                    }}
+                  >
+                    Defeat
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div className="trace-viewer-hand-scroll" aria-label="Player hand">

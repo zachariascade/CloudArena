@@ -9,9 +9,10 @@ export const battlefieldInsightCardDefinition: CardDefinition = {
     title: "Watchman on the Wall",
     subtitle: "Instant",
     frameTone: "white",
-    manaCost: "{2}",
+    manaCost: "{1}",
     imagePath: "card_0037_builder_of_the_tower.jpg",
-    imageAlt: "A high vantage over the battlefield revealing the shape of the fight",
+    imageAlt:
+      "A high vantage over the battlefield revealing the shape of the fight",
     flavorText: "Clarity grows where the field can be seen in full.",
     footerCode: "ARE",
     footerCredit: "Cloud Arena",

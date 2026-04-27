@@ -9,7 +9,7 @@ import type {
   CloudArenaSessionScenarioId,
 } from "../../../../src/cloud-arena/api-contract.js";
 import type { BattleAction, BattleEvent } from "../../../../src/cloud-arena/index.js";
-import { LEAN_V1_DEFAULT_TURN_ENERGY, getCardDefinition } from "../../../../src/cloud-arena/index.js";
+import { LEAN_V1_DEFAULT_TURN_ENERGY } from "../../../../src/cloud-arena/index.js";
 import type { CardDefinitionId } from "../../../../src/cloud-arena/index.js";
 import {
   CAMPAIGN_LEVELS,
@@ -21,6 +21,7 @@ import {
   CloudArenaAppShell,
   CloudArenaBattleState,
   CloudArenaLogPanel,
+  DisplayCard,
   ErrorState,
   LoadingState,
 } from "../components/index.js";
@@ -30,6 +31,7 @@ import {
   buildCloudArenaDeckChooserGroups,
   createCloudArenaContentController,
   createCloudArenaSessionController,
+  mapCardDefinitionIdToDisplayCard,
   CLOUD_ARENA_DECK_QUERY_PARAM,
   CLOUD_ARENA_SCENARIO_OPTIONS,
   CLOUD_ARENA_SCENARIO_QUERY_PARAM,
@@ -703,17 +705,13 @@ export function CloudArenaInteractivePage({
         </div>
         <div className="cloud-arena-reward-choices">
           {rewardOptions.map((cardId) => {
-            let cardName = cardId;
-            let cardCost = 0;
-            let cardTypes = "";
+            let cardModel = null;
             try {
-              const def = getCardDefinition(cardId);
-              cardName = def.name;
-              cardCost = def.cost;
-              cardTypes = def.cardTypes.join(" · ");
+              cardModel = mapCardDefinitionIdToDisplayCard(cardId);
             } catch {
-              // unknown card, use id
+              // unknown card — skip render
             }
+            if (!cardModel) return null;
             return (
               <button
                 key={cardId}
@@ -722,9 +720,7 @@ export function CloudArenaInteractivePage({
                 onClick={() => void handleRewardChoice(cardId)}
                 disabled={isProcessingReward}
               >
-                <span className="cloud-arena-reward-choice-cost">{cardCost}</span>
-                <strong className="cloud-arena-reward-choice-name">{cardName}</strong>
-                <span className="cloud-arena-reward-choice-type">{cardTypes}</span>
+                <DisplayCard model={cardModel} />
               </button>
             );
           })}

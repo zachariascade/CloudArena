@@ -12,7 +12,8 @@ export const gardenOfEarthlyDelightsCardDefinition: CardDefinition = {
     manaCost: "{3}",
     imagePath: "669F9BF4-F0AF-4A1B-9CB5-9A083E3EEEF9.jpeg",
     imageAlt: "Hieronymus Bosch's Garden of Earthly Delights",
-    flavorText: "A landscape of wonder, temptation, and overwhelming abundance.",
+    flavorText:
+      "A landscape of wonder, temptation, and overwhelming abundance.",
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "026",
@@ -28,7 +29,7 @@ export const gardenOfEarthlyDelightsCardDefinition: CardDefinition = {
         {
           type: "gain_block",
           target: "player",
-          amount: { type: "constant", value: 3 },
+          amount: { type: "constant", value: 10 },
         },
       ],
     },
@@ -47,7 +48,7 @@ export const gardenOfEarthlyDelightsCardDefinition: CardDefinition = {
         {
           type: "gain_block",
           target: "player",
-          amount: { type: "constant", value: 1 },
+          amount: { type: "constant", value: 5 },
         },
       ],
     },
