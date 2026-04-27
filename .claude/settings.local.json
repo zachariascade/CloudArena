@@ -29,7 +29,9 @@
       "Bash(./scripts/node18.sh ./node_modules/vitest/vitest.mjs run tests/cloud-arena/session-service.test.ts)",
       "Bash(./scripts/node18.sh ./node_modules/vitest/vitest.mjs run)",
       "Bash(./scripts/node18.sh ./node_modules/vitest/vitest.mjs run tests/cloud-arena/scenario-presets.test.ts tests/cloud-arena/content-routes.test.ts)",
-      "Bash(./scripts/node18.sh ./node_modules/vitest/vitest.mjs run tests/cloud-arena/session-service.test.ts tests/cloud-arena/scenario-presets.test.ts)"
+      "Bash(./scripts/node18.sh ./node_modules/vitest/vitest.mjs run tests/cloud-arena/session-service.test.ts tests/cloud-arena/scenario-presets.test.ts)",
+      "Bash(node --experimental-vm-modules node_modules/.bin/vitest run tests/cloud-arena/targeted-effects.test.ts tests/cloud-arena/session-service.test.ts)",
+      "Bash(./scripts/node18.sh ./node_modules/vitest/vitest.mjs run --pool forks tests/cloud-arena/targeted-effects.test.ts tests/cloud-arena/session-service.test.ts)"
     ]
   }
 }

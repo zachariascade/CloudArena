@@ -63,7 +63,9 @@ describe("cloud arena scenario presets", () => {
     expect(demonPack.enemies[0]).toBe(getEnemyPreset("demon_pack"));
     expect(lakeOfIce.enemies[0]).toBe(getEnemyPreset("lake_of_ice"));
     expect(impCaller.enemies[0]).toBe(getEnemyPreset("imp_caller"));
-    expect(malchior.enemies[0]).toBe(getEnemyPreset("malchior_binder_of_wills"));
+    expect(malchior.enemies[0]).toBe(
+      getEnemyPreset("malchior_binder_of_wills"),
+    );
   });
 
   it("keeps the demon pack scenario wired to its deck and enemy plan", () => {
@@ -92,43 +94,47 @@ describe("cloud arena scenario presets", () => {
     expect(pack.definitionId).toBe("enemy_pack_alpha");
     expect(lakeOfIce.definitionId).toBe("enemy_cocytus");
     expect(lakeOfIce.cards).toHaveLength(4);
-    expect(lakeOfIce.cards.some((card) => card.effects.some((effect) => effect.powerDeltaAllPermanents === -1))).toBe(true);
+    expect(
+      lakeOfIce.cards.some((card) =>
+        card.effects.some((effect) => effect.powerDeltaAllPermanents === -1),
+      ),
+    ).toBe(true);
     expect(bruiser.definitionId).toBe("enemy_brute");
     expect(bruiser.basePower).toBe(6);
     expect(warder.definitionId).toBe("enemy_husk");
     expect(warder.basePower).toBe(4);
     expect(impCaller.startingTokens).toEqual(["token_imp"]);
-    expect(impCaller.cards.some((card) => card.effects.some((effect) => effect.spawnCardId === "token_imp"))).toBe(true);
+    expect(
+      impCaller.cards.some((card) =>
+        card.effects.some((effect) => effect.spawnCardId === "token_imp"),
+      ),
+    ).toBe(true);
     expect(malchior.definitionId).toBe("enemy_malchior");
     expect(malchior.basePower).toBe(4);
     expect(malchior.cards).toHaveLength(6);
     expect(longBattleDemon.definitionId).toBe("enemy_long_battle_demon");
     expect(longBattleDemon.cards).toHaveLength(3);
+
     expect(malchior.cards[0]).toMatchObject({
-      id: "multi_slash",
-    });
-    expect(malchior.cards[1]).toMatchObject({
       id: "malchior_eldritch_aegis",
       effects: [
         { attackPowerMultiplier: 1, target: "player" },
         { blockAmount: 10, target: "enemy" },
       ],
     });
-    expect(malchior.cards[2]).toMatchObject({
+    expect(malchior.cards[1]).toMatchObject({
       id: "malchior_siphon_resolve",
       effects: [{ energyDelta: -1, target: "player" }],
     });
-    expect(malchior.cards[3]).toMatchObject({
-      id: "malchior_crushing_edict",
-      effects: [{ attackPowerMultiplier: 2, target: "player" }],
+    expect(malchior.cards[2]).toMatchObject({
+      id: "double_slash",
     });
-    expect(malchior.cards[4]).toMatchObject({
+    expect(malchior.cards[3]).toMatchObject({
       id: "malchior_chain_of_command",
       effects: [{ powerDeltaTargetPermanents: -1, target: "player" }],
     });
-    expect(malchior.cards[5]).toMatchObject({
-      id: "malchior_twin_subjugation",
-      effects: [{ attackPowerMultiplier: 2, attackTimes: 2, target: "player" }],
+    expect(malchior.cards[4]).toMatchObject({
+      id: "multi_slash",
     });
   });
 
@@ -151,9 +157,9 @@ describe("cloud arena scenario presets", () => {
       agent: chooseHeuristicAction,
     });
 
-    const totalDrawn = result.log
-      .filter((event) => event.type === "card_drawn")
-      .length;
+    const totalDrawn = result.log.filter(
+      (event) => event.type === "card_drawn",
+    ).length;
 
     expect(result.trace.config.playerDeck).toEqual(scenario.deck);
     expect(totalDrawn).toBeGreaterThan(0);

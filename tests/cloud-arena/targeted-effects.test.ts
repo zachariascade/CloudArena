@@ -131,28 +131,6 @@ const TARGETED_EFFECT_TEST_DEFINITIONS: CardDefinitionLibrary = {
       },
     ],
   },
-  forced_sacrifice: {
-    id: "forced_sacrifice",
-    name: "Forced Sacrifice",
-    cardTypes: ["instant"],
-    cost: 1,
-    onPlay: [],
-    spellEffects: [
-      {
-        type: "sacrifice",
-        selector: {
-          zone: "battlefield",
-          controller: "you",
-          cardType: "permanent",
-        },
-        targeting: {
-          prompt: "Choose a permanent to sacrifice",
-        },
-        amount: 1,
-        choice: "controller",
-      },
-    ],
-  },
   restorative_touch: {
     id: "restorative_touch",
     name: "Restorative Touch",
@@ -188,7 +166,6 @@ function createTargetedEffectsBattle() {
       "sentinel",
       "sanctified_guide",
       "targeted_smite",
-      "forced_sacrifice",
       "attack",
     ],
     enemy: {
@@ -219,7 +196,9 @@ describe("cloud arena targeted effects", () => {
 
     battle.player.energy = 10;
 
-    const smiteCard = battle.player.hand.find((card) => card.definitionId === "targeted_smite");
+    const smiteCard = battle.player.hand.find(
+      (card) => card.definitionId === "targeted_smite",
+    );
 
     if (!smiteCard) {
       throw new Error("Expected targeted_smite in opening hand.");
@@ -231,22 +210,29 @@ describe("cloud arena targeted effects", () => {
     });
 
     expect(battle.pendingTargetRequest).toBeNull();
-    expect(battle.player.discardPile.map((card) => card.definitionId)).toContain("targeted_smite");
-    expect(getLegalActions(battle).some((action) => action.type === "end_turn")).toBe(true);
+    expect(
+      battle.player.discardPile.map((card) => card.definitionId),
+    ).toContain("targeted_smite");
+    expect(
+      getLegalActions(battle).some((action) => action.type === "end_turn"),
+    ).toBe(true);
   });
 
-  it("deals damage to the clicked creature and sacrifices the clicked permanent", () => {
+  it("deals damage to the clicked creature", () => {
     const battle = createTargetedEffectsBattle();
     battle.player.energy = 10;
 
-    const guardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
-    const sentinelCard = battle.player.hand.find((card) => card.definitionId === "sentinel");
-    const smiteCard = battle.player.hand.find((card) => card.definitionId === "targeted_smite");
-    const sacrificeCard = battle.player.hand.find(
-      (card) => card.definitionId === "forced_sacrifice",
+    const guardianCard = battle.player.hand.find(
+      (card) => card.definitionId === "guardian",
+    );
+    const sentinelCard = battle.player.hand.find(
+      (card) => card.definitionId === "sentinel",
+    );
+    const smiteCard = battle.player.hand.find(
+      (card) => card.definitionId === "targeted_smite",
     );
 
-    if (!guardianCard || !sentinelCard || !smiteCard || !sacrificeCard) {
+    if (!guardianCard || !sentinelCard || !smiteCard) {
       throw new Error("Expected targeted effect cards in opening hand.");
     }
 
@@ -276,7 +262,9 @@ describe("cloud arena targeted effects", () => {
 
     const smiteTargets = getLegalActions(battle);
     const sentinelTarget = smiteTargets.find(
-      (action) => action.type === "choose_target" && action.targetPermanentId === sentinelPermanent.instanceId,
+      (action) =>
+        action.type === "choose_target" &&
+        action.targetPermanentId === sentinelPermanent.instanceId,
     );
 
     if (!sentinelTarget || sentinelTarget.type !== "choose_target") {
@@ -286,31 +274,14 @@ describe("cloud arena targeted effects", () => {
     applyBattleAction(battle, sentinelTarget);
 
     expect(
-      battle.battlefield.find((permanent) => permanent?.instanceId === sentinelPermanent.instanceId)?.health,
+      battle.battlefield.find(
+        (permanent) => permanent?.instanceId === sentinelPermanent.instanceId,
+      )?.health,
     ).toBe(1);
-    expect(battle.player.discardPile.map((card) => card.definitionId)).toContain("targeted_smite");
-
-    applyBattleAction(battle, {
-      type: "play_card",
-      cardInstanceId: sacrificeCard.instanceId,
-    });
-
-    const sacrificeTargets = getLegalActions(battle);
-    const guardianTarget = sacrificeTargets.find(
-      (action) => action.type === "choose_target" && action.targetPermanentId === guardianPermanent.instanceId,
-    );
-
-    if (!guardianTarget || guardianTarget.type !== "choose_target") {
-      throw new Error("Expected guardian to be a legal sacrifice target.");
-    }
-
-    applyBattleAction(battle, guardianTarget);
-
     expect(
-      battle.battlefield.find((permanent) => permanent?.instanceId === guardianCard.instanceId),
-    ).toBeUndefined();
-    expect(battle.player.graveyard.map((card) => card.definitionId)).toContain("guardian");
-    expect(battle.player.discardPile.map((card) => card.definitionId)).toContain("forced_sacrifice");
+      battle.player.discardPile.map((card) => card.definitionId),
+    ).toContain("targeted_smite");
+
   });
 
   it("lets an attack target a specific enemy permanent", () => {
@@ -332,13 +303,18 @@ describe("cloud arena targeted effects", () => {
 
     battle.player.energy = 10;
 
-    const strikeCard = battle.player.hand.find((card) => card.definitionId === "targeted_strike");
+    const strikeCard = battle.player.hand.find(
+      (card) => card.definitionId === "targeted_strike",
+    );
     const targetToken = battle.enemyBattlefield.find(
-      (entry): entry is NonNullable<typeof entry> => entry !== null && entry.definitionId === "token_imp",
+      (entry): entry is NonNullable<typeof entry> =>
+        entry !== null && entry.definitionId === "token_imp",
     );
 
     if (!strikeCard || !targetToken) {
-      throw new Error("Expected targeted_strike and an enemy token in the opening state.");
+      throw new Error(
+        "Expected targeted_strike and an enemy token in the opening state.",
+      );
     }
 
     applyBattleAction(battle, {
@@ -347,7 +323,9 @@ describe("cloud arena targeted effects", () => {
     });
 
     expect(battle.pendingTargetRequest).toBeTruthy();
-    expect(battle.pendingTargetRequest?.selector.zone).toBe("enemy_battlefield");
+    expect(battle.pendingTargetRequest?.selector.zone).toBe(
+      "enemy_battlefield",
+    );
 
     applyBattleAction(battle, {
       type: "choose_target",
@@ -377,14 +355,21 @@ describe("cloud arena targeted effects", () => {
 
     battle.player.energy = 10;
 
-    const healCard = battle.player.hand.find((card) => card.definitionId === "restorative_touch");
-    const guardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
+    const healCard = battle.player.hand.find(
+      (card) => card.definitionId === "restorative_touch",
+    );
+    const guardianCard = battle.player.hand.find(
+      (card) => card.definitionId === "guardian",
+    );
     const targetToken = battle.enemyBattlefield.find(
-      (entry): entry is NonNullable<typeof entry> => entry !== null && entry.definitionId === "token_imp",
+      (entry): entry is NonNullable<typeof entry> =>
+        entry !== null && entry.definitionId === "token_imp",
     );
 
     if (!healCard || !guardianCard || !targetToken) {
-      throw new Error("Expected guardian, restorative_touch, and an enemy token in the opening state.");
+      throw new Error(
+        "Expected guardian, restorative_touch, and an enemy token in the opening state.",
+      );
     }
 
     applyBattleAction(battle, {
@@ -407,19 +392,29 @@ describe("cloud arena targeted effects", () => {
     expect(targetToken.maxHealth).toBe(7);
     expect(targetToken.health).toBe(7);
     expect(battle.pendingTargetRequest).toBeNull();
-    expect(battle.player.discardPile.map((card) => card.definitionId)).toContain("restorative_touch");
+    expect(
+      battle.player.discardPile.map((card) => card.definitionId),
+    ).toContain("restorative_touch");
   });
 
   it("pauses a targeted permanent ability and resolves it onto the clicked creature", () => {
     const battle = createTargetedEffectsBattle();
     battle.player.energy = 10;
 
-    const guardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
-    const sentinelCard = battle.player.hand.find((card) => card.definitionId === "sentinel");
-    const guideCard = battle.player.hand.find((card) => card.definitionId === "sanctified_guide");
+    const guardianCard = battle.player.hand.find(
+      (card) => card.definitionId === "guardian",
+    );
+    const sentinelCard = battle.player.hand.find(
+      (card) => card.definitionId === "sentinel",
+    );
+    const guideCard = battle.player.hand.find(
+      (card) => card.definitionId === "sanctified_guide",
+    );
 
     if (!guardianCard || !sentinelCard || !guideCard) {
-      throw new Error("Expected guardian, sentinel, and sanctified_guide in opening hand.");
+      throw new Error(
+        "Expected guardian, sentinel, and sanctified_guide in opening hand.",
+      );
     }
 
     applyBattleAction(battle, {
@@ -458,14 +453,20 @@ describe("cloud arena targeted effects", () => {
 
     const targetChoices = getLegalActions(battle);
     const sentinelTarget = targetChoices.find(
-      (action) => action.type === "choose_target" && action.targetPermanentId === sentinelPermanent.instanceId,
+      (action) =>
+        action.type === "choose_target" &&
+        action.targetPermanentId === sentinelPermanent.instanceId,
     );
     const selfTarget = targetChoices.find(
-      (action) => action.type === "choose_target" && action.targetPermanentId === guidePermanent.instanceId,
+      (action) =>
+        action.type === "choose_target" &&
+        action.targetPermanentId === guidePermanent.instanceId,
     );
 
     if (!sentinelTarget || sentinelTarget.type !== "choose_target") {
-      throw new Error("Expected sentinel to be a legal target for the permanent ability.");
+      throw new Error(
+        "Expected sentinel to be a legal target for the permanent ability.",
+      );
     }
 
     applyBattleAction(battle, sentinelTarget);
@@ -477,9 +478,9 @@ describe("cloud arena targeted effects", () => {
     expect(selfTarget).toBeUndefined();
     expect(getDerivedPermanentStat(battle, sentinelPermanent, "power")).toBe(5);
     expect(guidePermanent.hasActedThisTurn).toBe(true);
-    expect(battle.player.discardPile.map((card) => card.definitionId)).not.toContain(
-      "sanctified_guide",
-    );
+    expect(
+      battle.player.discardPile.map((card) => card.definitionId),
+    ).not.toContain("sanctified_guide");
   });
 
   it("allows a permanent to target itself when its ability opts in", () => {
@@ -500,7 +501,9 @@ describe("cloud arena targeted effects", () => {
 
     battle.player.energy = 10;
 
-    const mirrorBlesserCard = battle.player.hand.find((card) => card.definitionId === "mirror_blesser");
+    const mirrorBlesserCard = battle.player.hand.find(
+      (card) => card.definitionId === "mirror_blesser",
+    );
 
     if (!mirrorBlesserCard) {
       throw new Error("Expected mirror_blesser in opening hand.");
@@ -529,17 +532,23 @@ describe("cloud arena targeted effects", () => {
 
     const targetChoices = getLegalActions(battle);
     const selfTarget = targetChoices.find(
-      (action) => action.type === "choose_target" && action.targetPermanentId === mirrorBlesserPermanent.instanceId,
+      (action) =>
+        action.type === "choose_target" &&
+        action.targetPermanentId === mirrorBlesserPermanent.instanceId,
     );
 
     if (!selfTarget || selfTarget.type !== "choose_target") {
-      throw new Error("Expected mirror_blesser to be allowed to target itself.");
+      throw new Error(
+        "Expected mirror_blesser to be allowed to target itself.",
+      );
     }
 
     applyBattleAction(battle, selfTarget);
 
     expect(battle.pendingTargetRequest).toBeNull();
     expect(getPermanentCounterCount(mirrorBlesserPermanent, "+1/+1")).toBe(2);
-    expect(getDerivedPermanentStat(battle, mirrorBlesserPermanent, "power")).toBe(3);
+    expect(
+      getDerivedPermanentStat(battle, mirrorBlesserPermanent, "power"),
+    ).toBe(3);
   });
 });

@@ -13,7 +13,9 @@ function findPlayableCardAction(
   hand: { instanceId: string; definitionId: string }[],
   legalActions: CloudArenaActionOption[],
   definitionId: string,
-): Extract<CloudArenaActionOption["action"], { type: "play_card" }> | undefined {
+):
+  | Extract<CloudArenaActionOption["action"], { type: "play_card" }>
+  | undefined {
   for (const entry of legalActions) {
     const action = entry.action;
 
@@ -21,11 +23,13 @@ function findPlayableCardAction(
       continue;
     }
 
-    if (hand.some(
-      (card) =>
-        card.instanceId === action.cardInstanceId &&
-        card.definitionId === definitionId,
-    )) {
+    if (
+      hand.some(
+        (card) =>
+          card.instanceId === action.cardInstanceId &&
+          card.definitionId === definitionId,
+      )
+    ) {
       return action;
     }
   }
@@ -38,18 +42,18 @@ describe("cloud arena session service", () => {
     const service = createCloudArenaSessionService();
     const snapshot = service.createSession({
       scenarioId: "demon_pack",
-      deckId: "wide_angels",
+      deckId: "starter_deck",
       seed: 9,
     });
 
     expect(snapshot.sessionId).toBeTypeOf("string");
     expect(snapshot.scenarioId).toBe("demon_pack");
-    expect(snapshot.deckId).toBe("wide_angels");
+    expect(snapshot.deckId).toBe("starter_deck");
     expect(snapshot.seed).toBe(9);
     expect(snapshot.createdAt).toBeTypeOf("string");
     expect(snapshot.resetSource).toEqual({
       scenarioId: "demon_pack",
-      deckId: "wide_angels",
+      deckId: "starter_deck",
       seed: 9,
     });
     expect(snapshot.legalActions.length).toBeGreaterThan(0);
@@ -63,7 +67,9 @@ describe("cloud arena session service", () => {
       deckId: "tall_creatures",
       seed: 9,
     });
-    const seraph = snapshot.player.hand.find((card) => card.definitionId === "sacrificial_seraph");
+    const seraph = snapshot.player.hand.find(
+      (card) => card.definitionId === "sacrificial_seraph",
+    );
 
     if (!seraph) {
       throw new Error("Expected sacrificial_seraph in the opening hand.");
@@ -72,7 +78,9 @@ describe("cloud arena session service", () => {
     expect(seraph.effectSummary).not.toContain("Summon");
     expect(seraph.effectSummary).not.toContain("Attack");
     expect(seraph.effectSummary).not.toContain("Defend");
-    expect(seraph.effectSummary).toContain("As an additional cost, sacrifice another creature you control.");
+    expect(seraph.effectSummary).toContain(
+      "As an additional cost, sacrifice another creature you control.",
+    );
   });
 
   it("summarizes equipment bonuses on cards in the session snapshot", () => {
@@ -82,7 +90,9 @@ describe("cloud arena session service", () => {
       deckId: "tall_creatures",
       seed: 9,
     });
-    const blade = snapshot.player.hand.find((card) => card.definitionId === "holy_blade");
+    const blade = snapshot.player.hand.find(
+      (card) => card.definitionId === "holy_blade",
+    );
 
     if (!blade) {
       throw new Error("Expected holy_blade in the opening hand.");
@@ -101,11 +111,18 @@ describe("cloud arena session service", () => {
 
     expect(snapshot.enemy.intentLabel).toBeTruthy();
     expect(snapshot.enemy.intentQueueLabels.length).toBeGreaterThanOrEqual(2);
-    expect(snapshot.enemy.intentQueueLabels[0]).toBe(snapshot.enemy.intentLabel);
-    expect(snapshot.enemy.intentQueueLabels.some((label) => label.includes("spawn"))).toBe(true);
+    expect(snapshot.enemy.intentQueueLabels[0]).toBe(
+      snapshot.enemy.intentLabel,
+    );
+    expect(
+      snapshot.enemy.intentQueueLabels.some((label) => label.includes("spawn")),
+    ).toBe(true);
     expect(
       snapshot.enemyBattlefield.every(
-        (slot) => !slot || slot.intentQueueLabels === null || Array.isArray(slot.intentQueueLabels),
+        (slot) =>
+          !slot ||
+          slot.intentQueueLabels === null ||
+          Array.isArray(slot.intentQueueLabels),
       ),
     ).toBe(true);
   });
@@ -124,9 +141,15 @@ describe("cloud arena session service", () => {
     expect(snapshot.scenarioId).toBe("demon_pack");
     expect(snapshot.enemy.name).toBe("Demon Pack");
     expect(enemyBodies.length).toBeGreaterThanOrEqual(3);
-    expect(enemyBodies.some((entry) => entry.definitionId === "enemy_pack_alpha")).toBe(true);
-    expect(enemyBodies.filter((entry) => entry.definitionId === "enemy_cocytus")).toHaveLength(1);
-    expect(enemyBodies.filter((entry) => entry.definitionId === "enemy_brute")).toHaveLength(1);
+    expect(
+      enemyBodies.some((entry) => entry.definitionId === "enemy_pack_alpha"),
+    ).toBe(true);
+    expect(
+      enemyBodies.filter((entry) => entry.definitionId === "enemy_cocytus"),
+    ).toHaveLength(1);
+    expect(
+      enemyBodies.filter((entry) => entry.definitionId === "enemy_brute"),
+    ).toHaveLength(1);
   });
 
   it("applies legal actions and records action history", () => {
@@ -136,8 +159,8 @@ describe("cloud arena session service", () => {
       seed: 5,
     });
     const actionToApply =
-      session.legalActions.find((entry) => entry.action.type !== "end_turn")?.action ??
-      session.legalActions[0]?.action;
+      session.legalActions.find((entry) => entry.action.type !== "end_turn")
+        ?.action ?? session.legalActions[0]?.action;
 
     if (!actionToApply) {
       throw new Error("Expected at least one legal action.");
@@ -166,24 +189,33 @@ describe("cloud arena session service", () => {
       throw new Error("Expected to find a playable guardian card.");
     }
 
-    const afterGuardian = service.applyAction(session.sessionId, guardianAction);
+    const afterGuardian = service.applyAction(
+      session.sessionId,
+      guardianAction,
+    );
     const permanentAction = afterGuardian.legalActions.find(
       (
         entry,
-      ): entry is (typeof entry & {
+      ): entry is typeof entry & {
         action: Extract<BattleAction, { type: "use_permanent_action" }>;
-      }) => entry.action.type === "use_permanent_action",
-    )?.action as Extract<BattleAction, { type: "use_permanent_action" }> | undefined;
+      } => entry.action.type === "use_permanent_action",
+    )?.action as
+      | Extract<BattleAction, { type: "use_permanent_action" }>
+      | undefined;
 
     if (!permanentAction) {
       throw new Error("Expected to find a playable permanent action.");
     }
 
-    const { source: _source, ...actionWithoutSource } = permanentAction as Extract<BattleAction, {
-      type: "use_permanent_action";
-    }> & {
-      source?: unknown;
-    };
+    const { source: _source, ...actionWithoutSource } =
+      permanentAction as Extract<
+        BattleAction,
+        {
+          type: "use_permanent_action";
+        }
+      > & {
+        source?: unknown;
+      };
     const updated = service.applyAction(
       afterGuardian.sessionId,
       actionWithoutSource as BattleAction,
@@ -222,7 +254,11 @@ describe("cloud arena session service", () => {
       }
 
       const guardianAction = !playedGuardian
-        ? findPlayableCardAction(updated.player.hand, updated.legalActions, "guardian")
+        ? findPlayableCardAction(
+            updated.player.hand,
+            updated.legalActions,
+            "guardian",
+          )
         : undefined;
 
       if (guardianAction) {
@@ -232,7 +268,11 @@ describe("cloud arena session service", () => {
       }
 
       const bannerAction = playedGuardian
-        ? findPlayableCardAction(updated.player.hand, updated.legalActions, "mass_benediction")
+        ? findPlayableCardAction(
+            updated.player.hand,
+            updated.legalActions,
+            "mass_benediction",
+          )
         : undefined;
 
       if (bannerAction) {
@@ -241,16 +281,16 @@ describe("cloud arena session service", () => {
       }
 
       // Play other cards to cycle through the deck so mass_benediction eventually appears.
-      // Skip forced_sacrifice — it destroys our permanents and would kill guardian.
-      const UNSAFE_CYCLE_CARDS = new Set(["forced_sacrifice"]);
       const cycleAction = updated.legalActions.find((entry) => {
         if (entry.action.type !== "play_card") return false;
         const card = updated.player.hand.find(
-          (c) => c.instanceId === (entry.action as { cardInstanceId: string }).cardInstanceId,
+          (c) =>
+            c.instanceId ===
+            (entry.action as { cardInstanceId: string }).cardInstanceId,
         );
         if (!card) return false;
-        if (!playedGuardian && card.definitionId === "mass_benediction") return false;
-        if (UNSAFE_CYCLE_CARDS.has(card.definitionId)) return false;
+        if (!playedGuardian && card.definitionId === "mass_benediction")
+          return false;
         return true;
       })?.action;
 
@@ -264,7 +304,9 @@ describe("cloud arena session service", () => {
       )?.action;
 
       if (!endTurnAction) {
-        throw new Error("Expected an end turn action while searching for the mass benediction combo.");
+        throw new Error(
+          "Expected an end turn action while searching for the mass benediction combo.",
+        );
       }
 
       updated = service.applyAction(updated.sessionId, endTurnAction);
@@ -300,7 +342,10 @@ describe("cloud arena session service", () => {
       throw new Error("Expected to find a playable token angel card.");
     }
 
-    const afterTokenAngel = service.applyAction(session.sessionId, tokenAngelAction);
+    const afterTokenAngel = service.applyAction(
+      session.sessionId,
+      tokenAngelAction,
+    );
     const focusedBlessingAction = findPlayableCardAction(
       afterTokenAngel.player.hand,
       afterTokenAngel.legalActions,
@@ -311,15 +356,22 @@ describe("cloud arena session service", () => {
       throw new Error("Expected to find a playable focused blessing card.");
     }
 
-    const updated = service.applyAction(afterTokenAngel.sessionId, focusedBlessingAction);
+    const updated = service.applyAction(
+      afterTokenAngel.sessionId,
+      focusedBlessingAction,
+    );
 
     expect(updated.pendingTargetRequest).toBeTruthy();
-    expect(updated.pendingTargetRequest?.context?.pendingCardPlay).toMatchObject({
+    expect(
+      updated.pendingTargetRequest?.context?.pendingCardPlay,
+    ).toMatchObject({
       instanceId: focusedBlessingAction.cardInstanceId,
       definitionId: "focused_blessing",
       name: "Aaronic Blessing",
     });
-    expect(updated.pendingTargetRequest?.context?.pendingCardPlayHandIndex).toBe(1);
+    expect(
+      updated.pendingTargetRequest?.context?.pendingCardPlayHandIndex,
+    ).toBe(1);
   });
 
   it("resolves the full enemy turn when end turn is applied", () => {
@@ -352,8 +404,8 @@ describe("cloud arena session service", () => {
       seed: 3,
     });
     const actionToApply =
-      session.legalActions.find((entry) => entry.action.type !== "end_turn")?.action ??
-      session.legalActions[0]?.action;
+      session.legalActions.find((entry) => entry.action.type !== "end_turn")
+        ?.action ?? session.legalActions[0]?.action;
 
     if (!actionToApply) {
       throw new Error("Expected at least one legal action.");
@@ -376,7 +428,9 @@ describe("cloud arena session service", () => {
     const service = createCloudArenaSessionService();
     const session = service.createSession();
 
-    expect(() => service.getSession("missing-session")).toThrow(CloudArenaSessionNotFoundError);
+    expect(() => service.getSession("missing-session")).toThrow(
+      CloudArenaSessionNotFoundError,
+    );
     expect(() =>
       service.applyAction(session.sessionId, {
         type: "play_card",
@@ -394,13 +448,19 @@ describe("cloud arena session service", () => {
 
     let snapshot = session;
 
-    for (let guard = 0; guard < 100 && snapshot.status !== "finished"; guard += 1) {
+    for (
+      let guard = 0;
+      guard < 100 && snapshot.status !== "finished";
+      guard += 1
+    ) {
       const nextAction =
-        snapshot.legalActions.find((entry) => entry.action.type === "end_turn")?.action ??
-        snapshot.legalActions[0]?.action;
+        snapshot.legalActions.find((entry) => entry.action.type === "end_turn")
+          ?.action ?? snapshot.legalActions[0]?.action;
 
       if (!nextAction) {
-        throw new Error("Expected at least one legal action before the battle finished.");
+        throw new Error(
+          "Expected at least one legal action before the battle finished.",
+        );
       }
 
       snapshot = service.applyAction(snapshot.sessionId, nextAction);

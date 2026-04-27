@@ -1,5 +1,5 @@
 import type { EnemyCardDefinition } from "../../core/types.js";
-import { multiSlash } from "../enemy-cards.js";
+import { doubleSlash, multiSlash } from "../enemy-cards.js";
 import type { CloudArenaEnemyPreset } from "../types.js";
 
 const eldritchAegis: EnemyCardDefinition = {
@@ -28,35 +28,12 @@ const siphonResolve: EnemyCardDefinition = {
   ],
 };
 
-const crushingEdict: EnemyCardDefinition = {
-  id: "malchior_crushing_edict",
-  name: "Crushing Edict",
-  effects: [
-    {
-      attackPowerMultiplier: 2,
-      target: "player",
-    },
-  ],
-};
-
 const chainOfCommand: EnemyCardDefinition = {
   id: "malchior_chain_of_command",
   name: "Chain of Command",
   effects: [
     {
       powerDeltaTargetPermanents: -1,
-      target: "player",
-    },
-  ],
-};
-
-const twinSubjugation: EnemyCardDefinition = {
-  id: "malchior_twin_subjugation",
-  name: "Twin Subjugation",
-  effects: [
-    {
-      attackPowerMultiplier: 2,
-      attackTimes: 2,
       target: "player",
     },
   ],
@@ -69,11 +46,10 @@ export const malchiorBinderOfWillsEnemyPreset: CloudArenaEnemyPreset = {
   health: 24,
   basePower: 4,
   cards: [
-    multiSlash(),
     eldritchAegis,
     siphonResolve,
-    crushingEdict,
+    doubleSlash(),
     chainOfCommand,
-    twinSubjugation,
+    multiSlash(),
   ],
 };
