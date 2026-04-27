@@ -1,5 +1,4 @@
 import type { CardDefinitionId } from "../../../../src/cloud-arena/index.js";
-import { cloudArenaDeckPresets } from "../../../../src/cloud-arena/index.js";
 import type { CloudArenaSessionScenarioId, CloudArenaDeckCardEntry } from "../../../../src/cloud-arena/api-contract.js";
 import { createCloudArenaLocalDeckRepository } from "./cloud-arena-local-decks.js";
 
@@ -109,8 +108,17 @@ export function drawRewardOptions(): CardDefinitionId[] {
   return result;
 }
 
+function drawRandomStarterDeck(): CardDefinitionId[] {
+  const result: CardDefinitionId[] = [];
+  for (let i = 0; i < 15; i++) {
+    const index = Math.floor(Math.random() * CAMPAIGN_REWARD_POOL.length);
+    result.push(CAMPAIGN_REWARD_POOL[index]!);
+  }
+  return result;
+}
+
 export async function createNewCampaignRun(): Promise<CampaignRun> {
-  const starterCards = cloudArenaDeckPresets.starter_deck.cards as CardDefinitionId[];
+  const starterCards = drawRandomStarterDeck();
   const repo = createCloudArenaLocalDeckRepository();
   const deckPayload = {
     name: "Campaign Deck",
