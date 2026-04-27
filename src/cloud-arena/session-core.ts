@@ -291,6 +291,12 @@ function createActionOption(
         label: "End turn",
         source: "turn",
       };
+    case "debug_end_battle":
+      return {
+        action,
+        label: `Debug: end in ${action.winner} victory`,
+        source: "turn",
+      };
   }
 }
 

@@ -1,20 +1,12 @@
-import { Fragment, useEffect, useId, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import type { ReactElement } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 
 import type { CardStatus } from "../../../../src/domain/index.js";
-import mana1Symbol from "../assets/mtg-symbols/mana/1.svg";
-import mana2Symbol from "../assets/mtg-symbols/mana/2.svg";
-import mana3Symbol from "../assets/mtg-symbols/mana/3.svg";
-import manaBSymbol from "../assets/mtg-symbols/mana/B.svg";
-import manaCSymbol from "../assets/mtg-symbols/mana/C.svg";
-import manaGSymbol from "../assets/mtg-symbols/mana/G.svg";
-import manaRSymbol from "../assets/mtg-symbols/mana/R.svg";
-import manaTSymbol from "../assets/mtg-symbols/mana/T.svg";
-import manaUSymbol from "../assets/mtg-symbols/mana/U.svg";
-import manaWSymbol from "../assets/mtg-symbols/mana/W.svg";
-import rarityExpansionSymbol from "../assets/mtg-symbols/rarity/expansion.svg";
+
+import { DisplayCard } from "./display-card.js";
+import { buildDisplayCardModel, type DisplayCardModel } from "../lib/display-card.js";
 
 export type RulesPreviewLine = {
   kind: "oracle" | "flavor";
@@ -58,19 +50,6 @@ type CardFaceTileCard = {
   };
 };
 
-const MANA_SYMBOLS: Readonly<Record<string, string>> = {
-  "1": mana1Symbol,
-  "2": mana2Symbol,
-  "3": mana3Symbol,
-  B: manaBSymbol,
-  C: manaCSymbol,
-  G: manaGSymbol,
-  R: manaRSymbol,
-  T: manaTSymbol,
-  U: manaUSymbol,
-  W: manaWSymbol,
-};
-
 function toStatusTone(status: CardStatus): string {
   switch (status) {
     case "approved":
@@ -85,203 +64,9 @@ function toStatusTone(status: CardStatus): string {
   }
 }
 
-function formatCardDisplayName(
-  name: string,
-  title: string | null | undefined,
-): string {
-  return title ? `${name}, ${title}` : name;
-}
-
-function buildImagePreview(card: CardFaceTileCard): ReactElement {
-  if (card.image.isRenderable && card.image.publicUrl) {
-    return (
-      <img
-        alt={card.image.alt}
-        className="card-face-art-image"
-        src={card.image.publicUrl}
-      />
-    );
-  }
-
-  const fallbackLabel =
-    card.image.kind === "missing" || card.image.kind === "placeholder"
-      ? "Preview pending"
-      : "Image unavailable";
-
-  return (
-    <div className="card-face-art-fallback" aria-label={fallbackLabel}>
-      <strong>{fallbackLabel}</strong>
-      <span>{card.typeLine}</span>
-    </div>
-  );
-}
-
-export function buildRulesPreview(
-  card: Pick<CardFaceTileCard, "oracleText" | "flavorText">,
-): RulesPreviewLine[] {
-  const oracleLines = card.oracleText
-    ? card.oracleText
-        .split("\n")
-        .map((line) => line.trim())
-        .filter((line) => line.length > 0)
-    : [];
-
-  if (oracleLines.length > 0) {
-    const previewLines: RulesPreviewLine[] = oracleLines
-      .slice(0, card.flavorText ? 3 : 4)
-      .map((line) => ({
-        kind: "oracle" as const,
-        text: line,
-      }));
-
-    if (card.flavorText) {
-      previewLines.push({
-        kind: "flavor",
-        text: card.flavorText,
-      });
-    }
-
-    return previewLines;
-  }
-
-  if (card.flavorText) {
-    return [
-      {
-        kind: "flavor",
-        text: card.flavorText,
-      },
-    ];
-  }
-
-  return [
-    {
-      kind: "oracle",
-      text: "Rules text pending",
-    },
-  ];
-}
-
-function buildCardFaceStats(card: CardFaceTileCard): { value: string } | null {
-  if (card.power !== null && card.toughness !== null) {
-    return {
-      value: `${card.power}/${card.toughness}`,
-    };
-  }
-
-  if (card.loyalty !== null) {
-    return {
-      value: card.loyalty,
-    };
-  }
-
-  if (card.defense !== null) {
-    return {
-      value: card.defense,
-    };
-  }
-
-  return null;
-}
-
-function formatCardRarity(rarity: CardFaceTileCard["rarity"]): string {
-  return rarity ? rarity[0].toUpperCase() + rarity.slice(1) : "N/A";
-}
-
-function toRarityClassName(rarity: CardFaceTileCard["rarity"]): string {
-  switch (rarity) {
-    case "common":
-      return "is-common";
-    case "uncommon":
-      return "is-uncommon";
-    case "rare":
-      return "is-rare";
-    case "mythic":
-      return "is-mythic";
-    default:
-      return "is-na";
-  }
-}
-
 function formatCollectorNumber(cardId: string): string {
   const match = cardId.match(/^card_(\d+)/);
   return match ? match[1] : cardId.replace(/^card_/, "");
-}
-
-function parseManaCostTokens(manaCost: string | null): string[] {
-  if (!manaCost) {
-    return [];
-  }
-
-  const matches = manaCost.match(/\{([^}]+)\}/g);
-  if (!matches) {
-    return [manaCost];
-  }
-
-  return matches.map((token) => token.slice(1, -1));
-}
-
-function normalizeManaToken(token: string): string {
-  return token.trim().toUpperCase();
-}
-
-function getManaSymbolSrc(token: string): string | null {
-  return MANA_SYMBOLS[normalizeManaToken(token)] ?? null;
-}
-
-function renderManaSymbol(token: string, className: string): ReactElement {
-  const normalizedToken = normalizeManaToken(token);
-  const symbolSrc = getManaSymbolSrc(normalizedToken);
-
-  if (!symbolSrc) {
-    return <span className={className}>{normalizedToken}</span>;
-  }
-
-  return (
-    <span aria-hidden="true" className={className}>
-      <img alt="" draggable="false" src={symbolSrc} />
-    </span>
-  );
-}
-
-function renderManaCost(manaCost: string | null): ReactElement {
-  const tokens = parseManaCostTokens(manaCost);
-
-  if (tokens.length === 0) {
-    return <span className="card-face-mana">TBD</span>;
-  }
-
-  return (
-    <span className="card-face-mana-group" aria-label={manaCost ?? "Mana cost pending"}>
-      {tokens.map((token, index) => (
-        <Fragment key={`${token}-${index}`}>
-          {renderManaSymbol(token, "card-face-mana card-face-mana-token")}
-        </Fragment>
-      ))}
-    </span>
-  );
-}
-
-function renderRulesText(line: string): ReactElement[] {
-  return line
-    .split(/(\{[^}]+\}|\([^)]*\))/g)
-    .filter(Boolean)
-    .map((segment, index) => {
-      const tokenMatch = segment.match(/^\{([^}]+)\}$/);
-      if (tokenMatch) {
-        const token = tokenMatch[1];
-        return <Fragment key={`${line}-${index}`}>{renderManaSymbol(token, "card-face-inline-mana")}</Fragment>;
-      }
-
-      if (segment.startsWith("(") && segment.endsWith(")")) {
-        return (
-          <span key={`${line}-${index}`} className="card-face-reminder-text">
-            {segment}
-          </span>
-        );
-      }
-
-      return <Fragment key={`${line}-${index}`}>{segment}</Fragment>;
-    });
 }
 
 function buildFrameTone(card: CardFaceTileCard): string {
@@ -331,6 +116,99 @@ function buildFrameTone(card: CardFaceTileCard): string {
   }
 }
 
+function buildCardFaceStats(card: CardFaceTileCard): string | null {
+  if (card.power !== null && card.toughness !== null) {
+    return `${card.power}/${card.toughness}`;
+  }
+  if (card.loyalty !== null) return card.loyalty;
+  if (card.defense !== null) return card.defense;
+  return null;
+}
+
+export function buildRulesPreview(
+  card: Pick<CardFaceTileCard, "oracleText" | "flavorText">,
+): RulesPreviewLine[] {
+  const oracleLines = card.oracleText
+    ? card.oracleText
+        .split("\n")
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0)
+    : [];
+
+  if (oracleLines.length > 0) {
+    const previewLines: RulesPreviewLine[] = oracleLines
+      .slice(0, card.flavorText ? 3 : 4)
+      .map((line) => ({
+        kind: "oracle" as const,
+        text: line,
+      }));
+
+    if (card.flavorText) {
+      previewLines.push({
+        kind: "flavor",
+        text: card.flavorText,
+      });
+    }
+
+    return previewLines;
+  }
+
+  if (card.flavorText) {
+    return [{ kind: "flavor", text: card.flavorText }];
+  }
+
+  return [{ kind: "oracle", text: "Rules text pending" }];
+}
+
+function mapCardFaceTileCardToDisplayCard(card: CardFaceTileCard): DisplayCardModel {
+  const rulesPreview = buildRulesPreview(card);
+  const footerStat = buildCardFaceStats(card);
+
+  return buildDisplayCardModel({
+    variant: "mtg",
+    name: card.name,
+    title: card.title,
+    subtitle: card.typeLine,
+    frameTone: buildFrameTone(card),
+    manaCost: card.manaCost,
+    rarity: card.rarity,
+    image:
+      card.image.isRenderable && card.image.publicUrl
+        ? {
+            alt: card.image.alt,
+            url: card.image.publicUrl,
+            fallbackLabel: card.typeLine,
+            credit: card.image.artist ?? card.artist,
+          }
+        : {
+            alt: card.image.alt,
+            url: null,
+            fallbackLabel:
+              card.image.kind === "missing" || card.image.kind === "placeholder"
+                ? "Preview pending"
+                : "Image unavailable",
+            credit: card.image.artist ?? card.artist,
+          },
+    metaLine: null,
+    footerCode: card.setCode ?? card.set.name,
+    footerCredit: card.image.artist ?? card.artist ?? "TBD",
+    collectorNumber: formatCollectorNumber(card.id),
+    footerStat,
+    healthBar: null,
+    energyBar: null,
+    statusLabel: null,
+    statusTone: undefined,
+    stats: [],
+    textBlocks: rulesPreview.map((line) => ({
+      kind: line.kind === "flavor" ? ("flavor" as const) : ("rules" as const),
+      text: line.text,
+    })),
+    badges: [],
+    actions: [],
+    stateFlags: [],
+  });
+}
+
 type CardFaceTileProps = {
   card: CardFaceTileCard;
   detailPath?: string;
@@ -358,13 +236,8 @@ export function CardFaceTile({
   const previewButtonRef = useRef<HTMLButtonElement | null>(null);
   const wasPreviewOpenRef = useRef(false);
   const dialogId = useId();
-  const rulesPreview = buildRulesPreview(card);
-  const stats = buildCardFaceStats(card);
-  const hasFlavorDivider =
-    rulesPreview.some((line) => line.kind === "oracle") &&
-    rulesPreview.some((line) => line.kind === "flavor");
-  const displayName = formatCardDisplayName(card.name, card.title);
-  const frameTone = buildFrameTone(card);
+
+  const cardModel = mapCardFaceTileCardToDisplayCard(card);
   const stateClasses = [
     card.draft.hasUnresolvedMechanics ? "is-incomplete" : null,
     card.draft.isDraftLike ? "is-draftlike" : null,
@@ -413,92 +286,15 @@ export function CardFaceTile({
     }
   }, [isPreviewOpen]);
 
-  const cardFace = (
-    <article className="card-face">
-      <header className="card-face-header">
-        <div className="card-face-title-wrap">
-          <h3>{displayName}</h3>
-        </div>
-        <div className="card-face-mana-wrap">
-          {renderManaCost(card.manaCost)}
-        </div>
-      </header>
-
-      <div className="card-face-art">
-        {buildImagePreview(card)}
-      </div>
-
-        <div className="card-face-typeline">
-          <span>{card.typeLine}</span>
-          <span
-            aria-label={`Rarity: ${formatCardRarity(card.rarity)}`}
-            className={`card-face-rarity-badge ${toRarityClassName(card.rarity)}`}
-            title={formatCardRarity(card.rarity)}
-          >
-            {card.rarity ? (
-              <span
-                aria-hidden="true"
-                className="card-face-rarity-badge-mark"
-                style={{
-                  WebkitMaskImage: `url(${rarityExpansionSymbol})`,
-                  maskImage: `url(${rarityExpansionSymbol})`,
-                }}
-              />
-            ) : (
-              "N/A"
-            )}
-          </span>
-        </div>
-
-      <div className="card-face-rules">
-        {rulesPreview.map((line) => (
-          <p
-            key={`${line.kind}:${line.text}`}
-            className={[
-              "card-face-rules-line",
-              line.kind === "flavor" ? "is-flavor" : null,
-              line.kind === "flavor" && hasFlavorDivider ? "has-flavor-divider" : null,
-            ]
-              .filter(Boolean)
-              .join(" ")}
-          >
-            {renderRulesText(line.text)}
-          </p>
-        ))}
-      </div>
-
-      <footer className="card-face-footer">
-        <div className="card-face-footer-top">
-          <div className="card-face-footer-printline">
-            <span>{card.setCode ?? card.set.name}</span>
-          </div>
-          {stats ? (
-            <div className="card-face-footer-stats">
-              <div className="card-face-stats-box">
-                <strong>{stats.value}</strong>
-              </div>
-            </div>
-          ) : null}
-        </div>
-        <div className="card-face-footer-bottom">
-          <div className="card-face-footer-artist">
-            {card.image.artist ?? card.artist ?? "TBD"}
-          </div>
-          <div className="card-face-collector-number">{formatCollectorNumber(card.id)}</div>
-        </div>
-      </footer>
-    </article>
-  );
-
   const previewModal = isPreviewOpen ? (
-      <div
-        className="card-preview-modal-backdrop"
-        onClick={onClosePreview}
-        role="presentation"
-      >
+    <div
+      className="card-preview-modal-backdrop"
+      onClick={onClosePreview}
+      role="presentation"
+    >
       <div
         id={dialogId}
-        aria-label={`${displayName} preview`}
+        aria-label={`${card.name} preview`}
         aria-modal="true"
         className="card-preview-modal"
         onClick={(event) => event.stopPropagation()}
@@ -525,10 +321,8 @@ export function CardFaceTile({
           >
             ←
           </button>
-          <div className={`card-preview-shell tone-${frameTone}`}>
-            <div className="card-face card-face-preview">
-              {cardFace.props.children}
-            </div>
+          <div className="card-preview-shell">
+            <DisplayCard model={cardModel} />
           </div>
           <button
             aria-label="Next card"
@@ -546,9 +340,9 @@ export function CardFaceTile({
 
   return (
     <>
-      <div className={`card-face-tile tone-${frameTone} ${stateClasses}`.trim()}>
+      <div className={`card-face-tile ${stateClasses}`.trim()}>
         <button
-          aria-label={`Open ${displayName}`}
+          aria-label={`Open ${card.name}`}
           aria-controls={dialogId}
           aria-expanded={isPreviewOpen}
           aria-haspopup="dialog"
@@ -557,7 +351,7 @@ export function CardFaceTile({
           ref={previewButtonRef}
           type="button"
         >
-          {cardFace}
+          <DisplayCard model={cardModel} className={stateClasses} />
         </button>
 
         <div className="card-face-meta-row">

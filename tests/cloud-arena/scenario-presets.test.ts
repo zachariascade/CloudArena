@@ -101,29 +101,32 @@ describe("cloud arena scenario presets", () => {
     expect(impCaller.cards.some((card) => card.effects.some((effect) => effect.spawnCardId === "token_imp"))).toBe(true);
     expect(malchior.definitionId).toBe("enemy_malchior");
     expect(malchior.basePower).toBe(4);
-    expect(malchior.cards).toHaveLength(5);
+    expect(malchior.cards).toHaveLength(6);
     expect(longBattleDemon.definitionId).toBe("enemy_long_battle_demon");
     expect(longBattleDemon.cards).toHaveLength(3);
     expect(malchior.cards[0]).toMatchObject({
+      id: "multi_slash",
+    });
+    expect(malchior.cards[1]).toMatchObject({
       id: "malchior_eldritch_aegis",
       effects: [
         { attackPowerMultiplier: 1, target: "player" },
         { blockAmount: 10, target: "enemy" },
       ],
     });
-    expect(malchior.cards[1]).toMatchObject({
+    expect(malchior.cards[2]).toMatchObject({
       id: "malchior_siphon_resolve",
       effects: [{ energyDelta: -1, target: "player" }],
     });
-    expect(malchior.cards[2]).toMatchObject({
+    expect(malchior.cards[3]).toMatchObject({
       id: "malchior_crushing_edict",
       effects: [{ attackPowerMultiplier: 2, target: "player" }],
     });
-    expect(malchior.cards[3]).toMatchObject({
+    expect(malchior.cards[4]).toMatchObject({
       id: "malchior_chain_of_command",
       effects: [{ powerDeltaTargetPermanents: -1, target: "player" }],
     });
-    expect(malchior.cards[4]).toMatchObject({
+    expect(malchior.cards[5]).toMatchObject({
       id: "malchior_twin_subjugation",
       effects: [{ attackPowerMultiplier: 2, attackTimes: 2, target: "player" }],
     });

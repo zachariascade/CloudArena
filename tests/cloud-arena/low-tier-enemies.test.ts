@@ -49,7 +49,7 @@ describe("cloud arena low-tier enemies", () => {
 
     const startingHealth = battle.player.health;
 
-    expect(battle.enemy.intent).toEqual({ attackAmount: 12, attackTimes: 2 });
+    expect(battle.enemy.intent).toEqual({ attackAmount: 6, attackTimes: 2 });
 
     applyBattleAction(battle, { type: "end_turn" });
     applyBattleAction(battle, { type: "end_turn" });

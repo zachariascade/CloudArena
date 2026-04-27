@@ -9,7 +9,14 @@ import type {
   CloudArenaSessionScenarioId,
 } from "../../../../src/cloud-arena/api-contract.js";
 import type { BattleAction, BattleEvent } from "../../../../src/cloud-arena/index.js";
-import { LEAN_V1_DEFAULT_TURN_ENERGY } from "../../../../src/cloud-arena/index.js";
+import { LEAN_V1_DEFAULT_TURN_ENERGY, getCardDefinition } from "../../../../src/cloud-arena/index.js";
+import type { CardDefinitionId } from "../../../../src/cloud-arena/index.js";
+import {
+  CAMPAIGN_LEVELS,
+  applyRewardChoice,
+  drawRewardOptions,
+  loadCampaignRun,
+} from "../lib/cloud-arena-campaign.js";
 import {
   CloudArenaAppShell,
   CloudArenaBattleState,
@@ -109,16 +116,29 @@ export function CloudArenaInteractivePage({
   );
   const location = useLocation();
   const navigate = useNavigate();
+
+  const locationState = location.state as { campaignRunId?: string; levelIndex?: number } | null;
+  const campaignRun = locationState?.campaignRunId ? loadCampaignRun() : null;
+  const campaignLevel = campaignRun ? (CAMPAIGN_LEVELS[campaignRun.currentLevelIndex] ?? null) : null;
+  const isCampaignBattle = campaignRun !== null && campaignLevel !== null;
+
   const [snapshot, setSnapshot] = useState<CloudArenaSessionSnapshot | null>(null);
   const [status, setStatus] = useState<InteractiveStatus>("loading");
   const [error, setError] = useState<Error | CloudArcanumApiClientError | null>(null);
   const [isCreatingSession, setIsCreatingSession] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [seedDraft, setSeedDraft] = useState("1");
-  const [scenarioDraft, setScenarioDraft] = useState<CloudArenaSessionScenarioId>(getScenarioDraftFromUrl);
-  const [deckDraft, setDeckDraft] = useState<string>(getDeckDraftFromUrl);
+  const [scenarioDraft, setScenarioDraft] = useState<CloudArenaSessionScenarioId>(
+    isCampaignBattle ? campaignLevel.scenarioId : getScenarioDraftFromUrl(),
+  );
+  const [deckDraft, setDeckDraft] = useState<string>(
+    isCampaignBattle ? campaignRun.savedDeckId : getDeckDraftFromUrl(),
+  );
   const [deckSummaries, setDeckSummaries] = useState<CloudArenaDeckSummary[] | null>(null);
   const [lastSubmittedActionLabel, setLastSubmittedActionLabel] = useState<string | null>(null);
+  const [showRewardModal, setShowRewardModal] = useState(false);
+  const [rewardOptions, setRewardOptions] = useState<CardDefinitionId[]>([]);
+  const [isProcessingReward, setIsProcessingReward] = useState(false);
   const initialScenarioDraftRef = useRef(scenarioDraft);
   const initialDeckDraftRef = useRef(deckDraft);
   const isActionInFlightRef = useRef(false);
@@ -146,6 +166,8 @@ export function CloudArenaInteractivePage({
   }
 
   useEffect(() => {
+    if (isCampaignBattle) return;
+
     const searchParams = new URLSearchParams(location.search);
     const currentQueryScenario = searchParams.get(CLOUD_ARENA_SCENARIO_QUERY_PARAM);
     const currentQueryDeck = searchParams.get(CLOUD_ARENA_DECK_QUERY_PARAM);
@@ -163,7 +185,7 @@ export function CloudArenaInteractivePage({
       },
       { replace: true },
     );
-  }, [deckDraft, location.pathname, location.search, navigate, scenarioDraft]);
+  }, [deckDraft, isCampaignBattle, location.pathname, location.search, navigate, scenarioDraft]);
 
   async function createSession(
     seed?: number,
@@ -260,6 +282,25 @@ export function CloudArenaInteractivePage({
 
     return () => abortController.abort();
   }, [content]);
+
+  useEffect(() => {
+    if (!isCampaignBattle || !battleIsFinished || !snapshot) return;
+    const finishedEvt = findBattleFinishedEvent(snapshot.log);
+    if (finishedEvt?.winner === "player") {
+      setRewardOptions(drawRewardOptions());
+    }
+  }, [battleIsFinished, isCampaignBattle, snapshot]);
+
+  async function handleRewardChoice(chosenCardId: CardDefinitionId): Promise<void> {
+    if (!campaignRun || isProcessingReward) return;
+    setIsProcessingReward(true);
+    try {
+      await applyRewardChoice(campaignRun, chosenCardId);
+      navigate("/campaign", { replace: true });
+    } catch {
+      setIsProcessingReward(false);
+    }
+  }
 
   async function handleApplyAction(action: BattleAction): Promise<void> {
     if (!snapshot || battleIsFinished || isActionInFlightRef.current) {
@@ -550,6 +591,24 @@ export function CloudArenaInteractivePage({
                 {isSubmitting ? "Resetting..." : "Reset battle"}
               </button>
             </div>
+            {!battleIsFinished && (
+              <div className="button-row cloud-arena-game-admin-actions">
+                <button
+                  type="button"
+                  onClick={() => void handleApplyAction({ type: "debug_end_battle", winner: "player" })}
+                  disabled={isCreatingSession || isSubmitting}
+                >
+                  End in Victory
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void handleApplyAction({ type: "debug_end_battle", winner: "enemy" })}
+                  disabled={isCreatingSession || isSubmitting}
+                >
+                  End in Defeat
+                </button>
+              </div>
+            )}
             <p className="cloud-arena-game-admin-note">
               {lastSubmittedActionLabel
                 ? `Last action: ${lastSubmittedActionLabel}`
@@ -582,9 +641,13 @@ export function CloudArenaInteractivePage({
     const winner = finishedEvent?.winner ?? "unknown";
     const didPlayerWin = winner === "player";
     const title = didPlayerWin ? "You Win!" : "You Lose!";
-    const subtitle = didPlayerWin
-      ? "The battle is yours. Try another run to see a different outcome."
-      : "The enemy won the arena. Retry to launch a fresh battle.";
+    const subtitle = isCampaignBattle && didPlayerWin
+      ? "Victory! Choose a card to add to your campaign deck."
+      : didPlayerWin
+        ? "The battle is yours. Try another run to see a different outcome."
+        : isCampaignBattle
+          ? "Defeated. Your campaign progress is kept — retry when ready."
+          : "The enemy won the arena. Retry to launch a fresh battle.";
 
     return (
       <div
@@ -602,19 +665,78 @@ export function CloudArenaInteractivePage({
             <span>{subtitle}</span>
           </div>
           <div className="button-row cloud-arena-finish-modal-actions">
-            <button
-              type="button"
-              className="cloud-arena-finish-modal-retry"
-              onClick={() => void handleReset()}
-              disabled={isCreatingSession || isSubmitting}
-            >
-              Retry
-            </button>
+            {isCampaignBattle && didPlayerWin ? (
+              <button
+                type="button"
+                className="cloud-arena-finish-modal-retry"
+                onClick={() => setShowRewardModal(true)}
+              >
+                Choose Reward
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="cloud-arena-finish-modal-retry"
+                onClick={() => isCampaignBattle ? navigate("/campaign") : void handleReset()}
+                disabled={isCreatingSession || isSubmitting}
+              >
+                {isCampaignBattle ? "Back to Campaign" : "Retry"}
+              </button>
+            )}
           </div>
         </div>
       </div>
     );
   })() : null;
+
+  const rewardModal = showRewardModal && rewardOptions.length > 0 ? (
+    <div className="cloud-arena-finish-modal-backdrop" role="presentation">
+      <div
+        className="panel cloud-arena-reward-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Choose a Reward"
+      >
+        <div className="cloud-arena-finish-modal-header">
+          <strong>Choose a Reward</strong>
+          <span>Pick 1 card to add to your campaign deck</span>
+        </div>
+        <div className="cloud-arena-reward-choices">
+          {rewardOptions.map((cardId) => {
+            let cardName = cardId;
+            let cardCost = 0;
+            let cardTypes = "";
+            try {
+              const def = getCardDefinition(cardId);
+              cardName = def.name;
+              cardCost = def.cost;
+              cardTypes = def.cardTypes.join(" · ");
+            } catch {
+              // unknown card, use id
+            }
+            return (
+              <button
+                key={cardId}
+                type="button"
+                className="cloud-arena-reward-choice"
+                onClick={() => void handleRewardChoice(cardId)}
+                disabled={isProcessingReward}
+              >
+                <span className="cloud-arena-reward-choice-cost">{cardCost}</span>
+                <strong className="cloud-arena-reward-choice-name">{cardName}</strong>
+                <span className="cloud-arena-reward-choice-type">{cardTypes}</span>
+              </button>
+            );
+          })}
+        </div>
+        {isProcessingReward && (
+          <p className="cloud-arena-reward-processing">Adding to deck…</p>
+        )}
+      </div>
+    </div>
+  ) : null;
+
+  const activeModal = showRewardModal ? rewardModal : finishModal;
 
   return (
     <>
@@ -651,7 +773,7 @@ export function CloudArenaInteractivePage({
           </section>
         </section>
       </CloudArenaAppShell>
-      {typeof document !== "undefined" && finishModal ? createPortal(finishModal, document.body) : finishModal}
+      {typeof document !== "undefined" && activeModal ? createPortal(activeModal, document.body) : activeModal}
     </>
   );
 }

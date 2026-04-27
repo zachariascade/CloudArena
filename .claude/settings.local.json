@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout *)",
+      "Bash(git add *)",
+      "Bash(npx tsc *)",
+      "Bash(./scripts/node18.sh ./node_modules/typescript/bin/tsc --noEmit -p tsconfig.json)",
+      "Bash(./scripts/node18.sh ./node_modules/.bin/vitest run)",
+      "Bash(git stash *)",
+      "Bash(./scripts/node18.sh ./node_modules/.bin/vitest run tests/cloud-arena/low-tier-enemies.test.ts tests/cloud-arena/session-service.test.ts)",
+      "Bash(./scripts/node18.sh ./node_modules/.bin/vitest run tests/cloud-arena/low-tier-enemies.test.ts)",
+      "Bash(./scripts/node18.sh ./node_modules/.bin/vitest run tests/cloud-arena/multi-enemy-actors.test.ts)",
+      "Bash(git commit -m ' *)",
+      "Bash(./scripts/node18.sh ./node_modules/.bin/vitest run --reporter=verbose)",
+      "Bash(./scripts/node18.sh ./node_modules/.bin/vitest run tests/cloud-arena/menace.test.ts)",
+      "Bash(npx vitest *)",
+      "Bash(npm test *)",
+      "Bash(grep -r \"halt\" /Users/cadezacharias/Documents/MTG/CloudArena --include=\"*.ts\" --include=\"*.tsx\" ! -path \"*/node_modules/*\")",
+      "Bash(awk 'NR>=960 && NR<=980' /Users/cadezacharias/Documents/MTG/CloudArena/apps/cloud-arena-web/src/app/base-html.ts)",
+      "Bash(awk 'NR>=900 && NR<=910' /Users/cadezacharias/Documents/MTG/CloudArena/apps/cloud-arena-web/src/app/base-html.ts)",
+      "Bash(awk -F: '$2~/^@media/ || $2~/^\\\\s*}$/')",
+      "Bash(awk 'NR>=30 && NR<=60')",
+      "Bash(node_modules/.bin/tsc --noEmit --project apps/cloud-arena-web/tsconfig.json)",
+      "Bash(node_modules/.bin/tsc --noEmit)",
+      "Bash(npm run *)",
+      "Bash(echo \"exit: $?\")",
+      "Read(//tmp/**)",
+      "Bash(./scripts/node18.sh ./node_modules/vitest/vitest.mjs run tests/cloud-arena/combat-engine-edge-cases.test.ts -u)",
+      "Bash(./scripts/node18.sh ./node_modules/vitest/vitest.mjs run tests/cloud-arena/session-service.test.ts)",
+      "Bash(./scripts/node18.sh ./node_modules/vitest/vitest.mjs run)",
+      "Bash(./scripts/node18.sh ./node_modules/vitest/vitest.mjs run tests/cloud-arena/scenario-presets.test.ts tests/cloud-arena/content-routes.test.ts)",
+      "Bash(./scripts/node18.sh ./node_modules/vitest/vitest.mjs run tests/cloud-arena/session-service.test.ts tests/cloud-arena/scenario-presets.test.ts)"
+    ]
+  }
+}

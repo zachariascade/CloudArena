@@ -16,13 +16,18 @@ import { haltBucklerCardDefinition } from "./definitions/halt-buckler.js";
 import { holyBladeCardDefinition } from "./definitions/holy-blade.js";
 import { judgmentBladeCardDefinition } from "./definitions/judgment-blade.js";
 import { enemyBruteCardDefinition } from "./definitions/enemy-brute.js";
+import { enemyDemonicBoostCardDefinition } from "./definitions/enemy-demonic-boost.js";
+import { enemyDemonicCurseCardDefinition } from "./definitions/enemy-demonic-curse.js";
 import { enemyCocytusCardDefinition } from "./definitions/enemy-cocytus.js";
+import { enemyDemonicShieldCardDefinition } from "./definitions/enemy-demonic-shield.js";
 import { enemyGruntDemonCardDefinition } from "./definitions/enemy-grunt-demon.js";
 import { enemyImpCallerCardDefinition } from "./definitions/enemy-imp-caller.js";
 import { enemyMalchiorCardDefinition } from "./definitions/enemy-malchior.js";
 import { enemyLeaderCardDefinition } from "./definitions/enemy-leader.js";
 import { enemyHuskCardDefinition } from "./definitions/enemy-husk.js";
+import { enemyLongBattleDemonCardDefinition } from "./definitions/enemy-long-battle-demon.js";
 import { enemyPackAlphaCardDefinition } from "./definitions/enemy-pack-alpha.js";
+import { enemyShieldedSlashCardDefinition } from "./definitions/enemy-shielded-slash.js";
 import {
   enemyCrossSlashCardDefinition,
   enemyDoubleSlashCardDefinition,
@@ -81,11 +86,16 @@ export const cardDefinitions: CardDefinitionLibrary = {
   enemy_leader: enemyLeaderCardDefinition,
   enemy_grunt_demon: enemyGruntDemonCardDefinition,
   enemy_cocytus: enemyCocytusCardDefinition,
+  enemy_demonic_shield: enemyDemonicShieldCardDefinition,
+  enemy_demonic_curse: enemyDemonicCurseCardDefinition,
+  enemy_demonic_boost: enemyDemonicBoostCardDefinition,
   enemy_imp_caller: enemyImpCallerCardDefinition,
   enemy_malchior: enemyMalchiorCardDefinition,
   enemy_husk: enemyHuskCardDefinition,
+  enemy_long_battle_demon: enemyLongBattleDemonCardDefinition,
   enemy_brute: enemyBruteCardDefinition,
   enemy_pack_alpha: enemyPackAlphaCardDefinition,
+  enemy_shielded_slash: enemyShieldedSlashCardDefinition,
   single_slash: enemySingleSlashCardDefinition,
   double_slash: enemyDoubleSlashCardDefinition,
   triple_slash: enemyTripleSlashCardDefinition,

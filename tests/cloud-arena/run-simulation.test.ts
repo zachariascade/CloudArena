@@ -150,7 +150,7 @@ describe("cloud arena simulation runner", () => {
     });
   });
 
-  it("discards unplayed hand cards and reshuffles discard into draw when needed", () => {
+  it("draws to hand size each turn and reshuffles discard into draw when needed", () => {
     const result = runSimulation({
       seed: 1,
       maxSteps: 20,
@@ -217,7 +217,7 @@ describe("cloud arena simulation runner", () => {
     expect(secondTurnStart).toEqual({
       type: "turn_started",
       turnNumber: 2,
-      cardsDrawn: 5,
+      cardsDrawn: 2,
       energy: 3,
       enemyIntent: { attackAmount: 8 },
     });

@@ -43,8 +43,14 @@ export function CloudArenaStartPage({
               >
                 <strong>New Run</strong>
               </button>
+              <Link className="cloud-arena-start-menu-item" to="/campaign">
+                <strong>Campaign</strong>
+              </Link>
               <Link className="cloud-arena-start-menu-item" to="/decks">
                 <strong>Deck Builder</strong>
+              </Link>
+              <Link className="cloud-arena-start-menu-item" to="/bestiary">
+                <strong>Bestiary</strong>
               </Link>
             </div>
           </div>

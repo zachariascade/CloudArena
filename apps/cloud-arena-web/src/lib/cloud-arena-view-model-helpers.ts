@@ -792,10 +792,16 @@ export function formatTraceEvent(event: BattleEvent): string {
       return `Turn ${event.turnNumber}: permanent ${event.permanentId} used ${event.action}`;
     case "enemy_intent_resolved":
       return `Turn ${event.turnNumber}: enemy resolved ${formatEnemyIntent(event.intent)}`;
+    case "enemy_power_gained":
+      return `Turn ${event.turnNumber}: enemy gained ${event.amount} power (now ${event.newBasePower})`;
     case "enemy_stunned":
       return `Turn ${event.turnNumber}: enemy action was stunned and cancelled`;
     case "permanent_destroyed":
       return `Turn ${event.turnNumber}: permanent ${event.permanentId} (${event.definitionId}) was destroyed`;
+    case "counter_added":
+      return `Turn ${event.turnNumber}: permanent ${event.permanentId} gained ${event.amount} ${event.counter} counter`;
+    case "counter_removed":
+      return `Turn ${event.turnNumber}: permanent ${event.permanentId} lost ${event.amount} ${event.counter} counter`;
     case "turn_ended":
       return `Turn ${event.turnNumber}: end turn`;
     case "battle_finished":

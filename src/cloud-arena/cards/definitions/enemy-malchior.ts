@@ -20,5 +20,6 @@ export const enemyMalchiorCardDefinition: CardDefinition = {
   playableInPlayerDecks: false,
   power: 0,
   health: 0,
+  keywords: ["menace"],
   abilities: [],
 };

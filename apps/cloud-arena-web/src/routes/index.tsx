@@ -9,6 +9,8 @@ import {
 
 import { CloudArenaAppShell, ErrorState, PageLayout } from "../components/index.js";
 import type { CloudArenaContentMode, CloudArenaSessionMode } from "../lib/cloud-arena-web-lib.js";
+import { CloudArenaBestiaryPage } from "./bestiary-page.js";
+import { CloudArenaCampaignPage } from "./campaign-page.js";
 import { CloudArenaDeckBuilderPage } from "./deckbuilder-page.js";
 import { CloudArenaInteractivePage } from "./interactive-page.js";
 import { CloudArenaStartPage } from "./start-page.js";
@@ -122,6 +124,34 @@ export function createCloudArenaRouter(context: CloudArenaRouteContext) {
       path: "/decks",
       element: (
         <CloudArenaDeckBuilderPage
+          apiBaseUrl={context.apiBaseUrl}
+          contentMode={context.contentMode}
+          cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}
+        />
+      ),
+      errorElement: (
+        <CloudArenaAppShell cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}>
+          <CloudArenaRouteErrorBoundary cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl} />
+        </CloudArenaAppShell>
+      ),
+    },
+    {
+      path: "/bestiary",
+      element: (
+        <CloudArenaBestiaryPage
+          cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}
+        />
+      ),
+      errorElement: (
+        <CloudArenaAppShell cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}>
+          <CloudArenaRouteErrorBoundary cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl} />
+        </CloudArenaAppShell>
+      ),
+    },
+    {
+      path: "/campaign",
+      element: (
+        <CloudArenaCampaignPage
           apiBaseUrl={context.apiBaseUrl}
           contentMode={context.contentMode}
           cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}
