@@ -25,7 +25,8 @@ export type CloudArenaSessionScenarioId =
   | "demon_pack"
   | "lake_of_ice"
   | "imp_caller"
-  | "malchior_binder_of_wills";
+  | "malchior_binder_of_wills"
+  | "viper_shade";
 
 export type CloudArenaDeckId = string;
 export type CloudArenaDeckKind = "preset" | "saved";

@@ -23,8 +23,9 @@ export type CampaignRun = {
 export const CAMPAIGN_LEVELS: CampaignLevel[] = [
   { index: 0, scenarioId: "lake_of_ice", label: "Cocytus, Lake of Ice" },
   { index: 1, scenarioId: "imp_caller", label: "Belzaphor's Swarm" },
-  { index: 2, scenarioId: "malchior_binder_of_wills", label: "Malchior, Binder of Wills" },
-  { index: 3, scenarioId: "demon_pack", label: "Demon Pack" },
+  { index: 2, scenarioId: "viper_shade", label: "Viper Shade" },
+  { index: 3, scenarioId: "malchior_binder_of_wills", label: "Malchior, Binder of Wills" },
+  { index: 4, scenarioId: "demon_pack", label: "Demon Pack" },
 ];
 
 export const CAMPAIGN_REWARD_POOL: CardDefinitionId[] = [
@@ -37,7 +38,6 @@ export const CAMPAIGN_REWARD_POOL: CardDefinitionId[] = [
   "defending_strike",
   "battlefield_insight",
   "focused_blessing",
-  "forced_sacrifice",
   "forbidden_insight",
   "garden_of_earthly_delights",
   "graveyard_hymn",

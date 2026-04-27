@@ -6,6 +6,7 @@ import { impCallerEnemyPreset } from "./enemies/imp-caller.js";
 import { malchiorBinderOfWillsEnemyPreset } from "./enemies/malchior-binder-of-wills.js";
 import { longBattleDemonEnemyPreset } from "./enemies/long-battle-demon.js";
 import { warderDemonEnemyPreset } from "./enemies/warder-demon.js";
+import { viperShadeEnemyPreset } from "./enemies/viper-shade.js";
 
 import type { CloudArenaEnemyPreset, CloudArenaEnemyPresetId } from "./types.js";
 
@@ -18,6 +19,7 @@ export const cloudArenaEnemyPresets: Record<CloudArenaEnemyPresetId, CloudArenaE
   imp_caller: impCallerEnemyPreset,
   malchior_binder_of_wills: malchiorBinderOfWillsEnemyPreset,
   long_battle_demon: longBattleDemonEnemyPreset,
+  viper_shade: viperShadeEnemyPreset,
 };
 
 export function getEnemyPreset(enemyId: CloudArenaEnemyPresetId): CloudArenaEnemyPreset {

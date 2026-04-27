@@ -2,6 +2,7 @@ import { demonPackScenarioPreset } from "./demon-pack.js";
 import { impCallerScenarioPreset } from "./imp-caller.js";
 import { lakeOfIceScenarioPreset } from "./lake-of-ice.js";
 import { malchiorBinderOfWillsScenarioPreset } from "./malchior-binder-of-wills.js";
+import { viperShadeScenarioPreset } from "./viper-shade.js";
 
 export { cloudArenaDeckPresets, getDeckPreset } from "./decks.js";
 export {
@@ -44,6 +45,7 @@ export const cloudArenaScenarioPresets: Record<
   lake_of_ice: lakeOfIceScenarioPreset,
   imp_caller: impCallerScenarioPreset,
   malchior_binder_of_wills: malchiorBinderOfWillsScenarioPreset,
+  viper_shade: viperShadeScenarioPreset,
 };
 
 export function getScenarioPreset(

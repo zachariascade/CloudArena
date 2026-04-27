@@ -6,7 +6,7 @@ export const impCallerScenarioPreset: CloudArenaScenarioPreset = {
   id: "imp_caller",
   label: "Belzaphor, Swarm of the Pit",
   notes: "A token-pressure test battle that starts with an imp and can spawn more.",
-  playerHealth: 20,
+  playerHealth: 25,
   deck: mixedGuardianDeckPreset.cards,
   enemies: [impCallerEnemyPreset],
   recommendedMaxSteps: 180,

@@ -6,7 +6,7 @@ export const malchiorBinderOfWillsScenarioPreset: CloudArenaScenarioPreset = {
   id: "malchior_binder_of_wills",
   label: "Malchior, Binder of Wills",
   notes: "A straightforward duel against a controlling demon lord testing single and double base-power strikes.",
-  playerHealth: 20,
+  playerHealth: 25,
   deck: mixedGuardianDeckPreset.cards,
   enemies: [malchiorBinderOfWillsEnemyPreset],
   recommendedMaxSteps: 180,

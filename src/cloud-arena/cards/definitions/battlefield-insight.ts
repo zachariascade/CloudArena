@@ -4,7 +4,7 @@ export const battlefieldInsightCardDefinition: CardDefinition = {
   id: "battlefield_insight",
   name: "Watchman on the Wall",
   cardTypes: ["instant"],
-  cost: 2,
+  cost: 1,
   display: {
     title: "Watchman on the Wall",
     subtitle: "Instant",

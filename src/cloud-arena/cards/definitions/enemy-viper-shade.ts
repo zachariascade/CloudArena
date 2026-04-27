@@ -10,7 +10,7 @@ export const enemyViperShadeCardDefinition: CardDefinition = {
     subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",
-    imagePath: "card_0048_the_serpent_whisperer_in_the_garden.png",
+    imagePath: "classics/card_0048_the_serpent_whisperer_in_the_garden.png",
     imageAlt: "A shadowy serpentine demon coiled in the dark, its touch bringing instant death",
     flavorText: "It does not need strength. A single touch is enough.",
     footerCode: "ARE",
