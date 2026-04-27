@@ -263,7 +263,7 @@ describe("cloud arena combat engine basic flow", () => {
     });
     const startingHealth = battle.player.health;
 
-    expect(battle.enemy.intent).toEqual({ attackAmount: 24, attackTimes: 2, blockAmount: 5 });
+    expect(battle.enemy.intent).toEqual({ attackAmount: 12, attackTimes: 2, blockAmount: 5 });
 
     applyBattleAction(battle, { type: "end_turn" });
 
@@ -364,7 +364,7 @@ describe("cloud arena combat engine basic flow", () => {
     ).toEqual({
       type: "turn_started",
       turnNumber: 2,
-      cardsDrawn: 5,
+      cardsDrawn: 0,
       energy: 2,
       enemyIntent: {},
     });

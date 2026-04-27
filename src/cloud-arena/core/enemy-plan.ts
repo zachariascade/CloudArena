@@ -47,7 +47,7 @@ function getEnemyIntentFromCard(
           : typeof effect.attackPowerMultiplier === "number"
             ? Math.max(0, Math.floor(basePower * effect.attackPowerMultiplier))
             : 0;
-      attackAmount += baseAttackAmount * Math.max(1, effect.attackTimes ?? 1);
+      attackAmount += baseAttackAmount;
       attackTimes = effect.attackTimes;
       overflowPolicy = effect.overflowPolicy ?? overflowPolicy;
     }

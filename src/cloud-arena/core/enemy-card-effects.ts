@@ -11,6 +11,7 @@ import { settleEnemyAttackDamage } from "../combat/settle-damage.js";
 import type {
   BattleState,
   CardInstance,
+  EnemyActorState,
   EnemyCardDefinition,
   EnemyCardEffect,
   EnemyEffectResolveTiming,
@@ -56,23 +57,30 @@ export function applyEnemyCardEffect(
   state: BattleState,
   sourceCardId: string,
   effect: EnemyCardEffect,
+  actor?: EnemyActorState,
 ): void {
+  const actorBasePower = actor ? actor.basePower : state.enemy.basePower;
+  const actorHealth = actor ? actor.health : state.enemy.health;
+  const attackSourceId = actor?.permanentId ?? state.enemy.leaderPermanentId ?? "enemy_intent";
+
   if (effect.target === "player") {
     const baseAttackAmount =
       typeof effect.attackAmount === "number"
         ? effect.attackAmount
         : typeof effect.attackPowerMultiplier === "number"
-          ? Math.max(0, Math.floor(state.enemy.basePower * effect.attackPowerMultiplier))
+          ? Math.max(0, Math.floor(actorBasePower * effect.attackPowerMultiplier))
           : 0;
-    const attackAmount = baseAttackAmount * Math.max(1, effect.attackTimes ?? 1);
+    const hitCount = Math.max(1, effect.attackTimes ?? 1);
 
-    if (attackAmount > 0) {
-      settleEnemyAttackDamage(
-        state,
-        attackAmount,
-        state.enemy.leaderPermanentId ?? "enemy_intent",
-        effect.overflowPolicy,
-      );
+    if (baseAttackAmount > 0) {
+      for (let hit = 0; hit < hitCount; hit++) {
+        settleEnemyAttackDamage(
+          state,
+          baseAttackAmount,
+          attackSourceId,
+          effect.overflowPolicy,
+        );
+      }
     }
   }
 
@@ -86,11 +94,20 @@ export function applyEnemyCardEffect(
       typeof effect.blockAmount === "number"
         ? effect.blockAmount
         : typeof effect.blockPowerMultiplier === "number"
-          ? Math.max(0, Math.floor(state.enemy.basePower * effect.blockPowerMultiplier))
+          ? Math.max(0, Math.floor(actorBasePower * effect.blockPowerMultiplier))
           : typeof effect.blockHealthMultiplier === "number"
-            ? Math.max(0, Math.floor(state.enemy.health * effect.blockHealthMultiplier))
+            ? Math.max(0, Math.floor(actorHealth * effect.blockHealthMultiplier))
             : 0;
-    state.enemy.block += blockAmount;
+
+    if (actor?.permanentId) {
+      const actorPermanent = state.enemyBattlefield.find((p) => p?.instanceId === actor.permanentId);
+      if (actorPermanent) {
+        actorPermanent.block += blockAmount;
+      }
+    } else {
+      state.enemy.block += blockAmount;
+    }
+
     state.log.push({
       type: "block_gained",
       turnNumber: state.turnNumber,
@@ -100,12 +117,22 @@ export function applyEnemyCardEffect(
   }
 
   if (effect.target === "enemy" && typeof effect.powerDelta === "number") {
-    state.enemy.basePower += effect.powerDelta;
+    if (actor) {
+      actor.basePower += effect.powerDelta;
+      if (actor.permanentId) {
+        const actorPermanent = state.enemyBattlefield.find((p) => p?.instanceId === actor.permanentId);
+        if (actorPermanent) {
+          actorPermanent.power += effect.powerDelta;
+        }
+      }
+    } else {
+      state.enemy.basePower += effect.powerDelta;
+    }
     state.log.push({
       type: "enemy_power_gained",
       turnNumber: state.turnNumber,
       amount: effect.powerDelta,
-      newBasePower: state.enemy.basePower,
+      newBasePower: actor ? actor.basePower : state.enemy.basePower,
     });
   }
 

@@ -208,6 +208,7 @@ type CreateTestBattleInput = {
     cards?: EnemyCardDefinition[];
     startingTokens?: CardDefinitionId[];
     startingPermanents?: CardDefinitionId[];
+    keywords?: string[];
   };
   seed?: number;
 };
@@ -222,6 +223,7 @@ export function createTestBattle(input: CreateTestBattleInput): BattleState {
       name: input.enemy?.name ?? "Test Enemy",
       health: input.enemy?.health ?? 30,
       basePower: input.enemy?.basePower ?? 12,
+      leaderDefinitionId: input.enemy?.leaderDefinitionId,
       ...(input.enemy?.cards
         ? { cards: input.enemy.cards }
         : { behavior: input.enemy?.behavior ?? [{ attackAmount: 12 }] }),

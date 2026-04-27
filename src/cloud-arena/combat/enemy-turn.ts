@@ -8,7 +8,7 @@ import {
 import { formatEnemyIntent } from "../core/enemy-intent.js";
 import { emitRulesEvent } from "../core/rules-events.js";
 import { settleEnemyAttackDamage } from "./settle-damage.js";
-import type { BattleState, EnemyCardDefinition } from "../core/types.js";
+import type { BattleState, EnemyActorState, EnemyCardDefinition } from "../core/types.js";
 import {
   getEnemyIntentAttackAmount,
   getEnemyIntentBlockAmount,
@@ -23,6 +23,53 @@ function resolveEnemyCard(state: BattleState, card: EnemyCardDefinition): void {
 
   for (const effect of card.effects) {
     applyEnemyCardEffect(state, card.id, effect);
+  }
+}
+
+function resolveSecondaryActorCard(state: BattleState, actor: EnemyActorState): void {
+  const actorPermanent = actor.permanentId
+    ? state.enemyBattlefield.find((p) => p?.instanceId === actor.permanentId) ?? null
+    : null;
+
+  if (actorPermanent && actorPermanent.health <= 0) {
+    return;
+  }
+
+  if (actor.currentCard) {
+    state.log.push({
+      type: "enemy_card_played",
+      turnNumber: state.turnNumber,
+      cardId: actor.currentCard.id,
+    });
+
+    for (const effect of actor.currentCard.effects) {
+      applyEnemyCardEffect(state, actor.currentCard.id, effect, actor);
+    }
+  } else {
+    const attackAmount = getEnemyIntentAttackAmount(actor.intent);
+    if (attackAmount > 0) {
+      settleEnemyAttackDamage(
+        state,
+        attackAmount,
+        actor.permanentId ?? "enemy_intent",
+        actor.intent.overflowPolicy,
+      );
+    }
+
+    const blockAmount = getEnemyIntentBlockAmount(actor.intent);
+    if (blockAmount > 0 && actorPermanent) {
+      actorPermanent.block += blockAmount;
+      state.log.push({
+        type: "block_gained",
+        turnNumber: state.turnNumber,
+        target: "enemy",
+        amount: blockAmount,
+      });
+    }
+  }
+
+  if (actorPermanent) {
+    actorPermanent.hasActedThisTurn = true;
   }
 }
 
@@ -132,6 +179,12 @@ export function resolveEnemyTurn(state: BattleState): BattleState {
     formatEnemyIntent(state.enemy.intent),
     state.enemy.intentQueueLabels,
   );
+
+  for (const actor of state.enemies.slice(1)) {
+    if (!actor.stunnedThisTurn) {
+      resolveSecondaryActorCard(state, actor);
+    }
+  }
 
   resolveEnemyBattlefieldCreatures(state);
   syncEnemyStateFromLeaderPermanent(state);

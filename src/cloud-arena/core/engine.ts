@@ -110,5 +110,9 @@ export function applyBattleAction(state: BattleState, action: BattleAction): Bat
         }
       }
       return state;
+    case "debug_end_battle":
+      state.phase = "finished";
+      state.log.push(createBattleFinishedEvent(state, action.winner));
+      return state;
   }
 }

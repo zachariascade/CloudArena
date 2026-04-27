@@ -28,7 +28,8 @@ type CloudArenaHandTrayProps = {
   };
   onOpenDetails: (key: string, event: MouseEvent<HTMLElement>) => void;
   isPlayableHandCard: (cardInstanceId: string) => boolean;
-  groupedTurnActionsCount: number;
+  groupedTurnActionsCount?: number;
+  endTurnAction?: Extract<BattleAction, { type: "end_turn" }> | null;
   onBattleAction?: (action: BattleAction) => void;
   onInspectPlayer: {
     onMouseEnter: (event: MouseEvent<HTMLElement>) => void;
@@ -78,6 +79,7 @@ export function CloudArenaHandTray({
   onOpenDetails,
   isPlayableHandCard,
   groupedTurnActionsCount: _groupedTurnActionsCount,
+  endTurnAction = null,
   onBattleAction,
   onInspectPlayer,
 }: CloudArenaHandTrayProps): ReactElement {
@@ -372,6 +374,19 @@ export function CloudArenaHandTray({
             >
               <span>Graveyard Pile</span>
               <strong>{player.graveyard.length}</strong>
+            </button>
+          </div>
+          <div className="cloud-arena-hand-hud-actions">
+            <button
+              type="button"
+              className="cloud-arena-hand-hud-end-turn-button"
+              onClick={() => endTurnAction && onBattleAction?.(endTurnAction)}
+              disabled={!endTurnAction || !onBattleAction}
+              aria-label="End turn. Shortcut E."
+              title="End turn (E)"
+            >
+              <span>End Turn</span>
+              <strong>(E)</strong>
             </button>
           </div>
         </div>

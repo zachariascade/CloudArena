@@ -177,23 +177,51 @@ function getEnemyPreviewCardDefinition(card: EnemyCardDefinition) {
   try {
     return getCardDefinition(card.id);
   } catch {
+    const hasAttackEffect = card.effects.some(
+      (effect) =>
+        typeof effect.attackAmount === "number" ||
+        typeof effect.attackPowerMultiplier === "number",
+    );
+    const hasBlockEffect = card.effects.some(
+      (effect) =>
+        typeof effect.blockAmount === "number" ||
+        typeof effect.blockPowerMultiplier === "number" ||
+        typeof effect.blockHealthMultiplier === "number",
+    );
+
     if (card.effects.some((effect) => effect.spawnCardId)) {
       return getCardDefinition("enemy_imp_caller");
+    }
+
+    if (hasAttackEffect && hasBlockEffect) {
+      return getCardDefinition("enemy_shielded_slash");
+    }
+
+    if (hasBlockEffect) {
+      return getCardDefinition("enemy_demonic_shield");
     }
 
     if (
       card.effects.some(
         (effect) =>
-          typeof effect.blockPowerMultiplier === "number" ||
-          typeof effect.blockAmount === "number" ||
-          typeof effect.blockHealthMultiplier === "number",
+          typeof effect.powerDeltaTargetPermanents === "number" &&
+          effect.powerDeltaTargetPermanents < 0,
+      ) ||
+      card.effects.some(
+        (effect) =>
+          typeof effect.powerDeltaAllPermanents === "number" &&
+          effect.powerDeltaAllPermanents < 0,
       )
     ) {
-      return getCardDefinition("enemy_husk");
+      return getCardDefinition("enemy_demonic_curse");
     }
 
-    if (card.effects.some((effect) => typeof effect.powerDeltaAllPermanents === "number")) {
-      return getCardDefinition("enemy_husk");
+    if (
+      card.effects.some(
+        (effect) => typeof effect.powerDelta === "number" && effect.powerDelta > 0,
+      )
+    ) {
+      return getCardDefinition("enemy_demonic_boost");
     }
 
     if (card.effects.some((effect) => typeof effect.attackPowerMultiplier === "number" || typeof effect.attackAmount === "number")) {
@@ -267,6 +295,9 @@ export function buildEnemyTelegraphPreviewCardModel(input: {
 export function buildEnemyPreviewCardModel(
   card: EnemyCardDefinition,
   index: number,
+  options: {
+    stateFlags?: string[];
+  } = {},
 ): DisplayCardModel {
   const summary = card.effects.map(summarizeEnemyCardEffect).filter((part) => part.length > 0);
   const definition = getEnemyPreviewCardDefinition(card);
@@ -300,7 +331,7 @@ export function buildEnemyPreviewCardModel(
     textBlocks: summary.length > 0 ? summary.map((text) => ({ kind: "rules" as const, text })) : [],
     badges: [],
     actions: [],
-    stateFlags: [],
+    stateFlags: [...(options.stateFlags ?? [])],
   });
 }
 

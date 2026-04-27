@@ -25,6 +25,7 @@ import {
   type DisplayCardModel,
 } from "../lib/display-card.js";
 import {
+  buildEnemyPreviewCardModel,
   buildEnemyPreviewCards,
   buildEnemyTelegraphPreviewCardModel,
 } from "../lib/cloud-arena-enemy-card-preview.js";
@@ -327,6 +328,12 @@ export function CloudArenaBattleState({
         action: entry.action,
         label: entry.label,
       }));
+  const endTurnAction =
+    groupedTurnActions.find(
+      (entry): entry is (typeof groupedTurnActions)[number] & {
+        action: Extract<BattleAction, { type: "end_turn" }>;
+      } => entry.action.type === "end_turn",
+    )?.action ?? null;
   const battlefieldAttachmentState = useMemo(
     () => buildBattlefieldAttachmentState(battle),
     [battle],
@@ -982,16 +989,18 @@ export function CloudArenaBattleState({
       return null;
     }
 
+    const actorCurrentCardId =
+      hoveredInspectorEnemyPermanent.definitionId === battle.enemy.leaderDefinitionId
+        ? battle.enemy.currentCardId
+        : (battle.enemies.find((a) => a.permanentId === hoveredInspectorEnemyPermanent.instanceId)?.currentCardId ?? null);
     return buildEnemyTelegraphPreviewCardModel({
-      currentCardId:
-        hoveredInspectorEnemyPermanent.definitionId === battle.enemy.leaderDefinitionId
-          ? battle.enemy.currentCardId
-          : null,
+      currentCardId: actorCurrentCardId,
       intentLabel: hoveredInspectorEnemyPermanent.intentLabel,
       intentQueueLabels: hoveredInspectorEnemyPermanent.intentQueueLabels,
       power: hoveredInspectorEnemyPermanent.power,
     });
   }, [
+    battle.enemies,
     battle.enemy.currentCardId,
     battle.enemy.leaderDefinitionId,
     hoveredInspectorEnemyPermanent,
@@ -1016,55 +1025,33 @@ export function CloudArenaBattleState({
         : [];
     }
 
-    const sequenceCards: Array<{ key: string; model: DisplayCardModel }> = [];
+    const currentCardId =
+      hoveredInspectorEnemyPermanent.definitionId === battle.enemy.leaderDefinitionId
+        ? battle.enemy.currentCardId
+        : (battle.enemies.find((a) => a.permanentId === hoveredInspectorEnemyPermanent.instanceId)?.currentCardId ?? null);
+    const matchedCurrentIndex =
+      currentCardId !== null
+        ? enemyPreset.cards.findIndex((card) => card.id === currentCardId)
+        : -1;
+    const sequenceCards: Array<{ key: string; model: DisplayCardModel }> = enemyPreset.cards.map((card, index) => ({
+      key: `${hoveredInspectorEnemyPermanent.instanceId}:enemy-sequence:${index}`,
+      model: buildEnemyPreviewCardModel(card, index, {
+        stateFlags: matchedCurrentIndex === index ? ["inspector-current"] : [],
+      }),
+    }));
 
-    if (hoveredInspectorEnemyTelegraphCard) {
-      sequenceCards.push({
+    if (matchedCurrentIndex === -1 && hoveredInspectorEnemyTelegraphCard) {
+      sequenceCards.unshift({
         key: `${hoveredInspectorEnemyPermanent.instanceId}:enemy-sequence:current`,
-        model: hoveredInspectorEnemyTelegraphCard,
+        model: {
+          ...hoveredInspectorEnemyTelegraphCard,
+          stateFlags: [...hoveredInspectorEnemyTelegraphCard.stateFlags, "inspector-current"],
+        },
       });
     }
-
-    sequenceCards.push(
-      ...buildEnemyPreviewCards(enemyPreset.cards).map((model, index) => ({
-        key: `${hoveredInspectorEnemyPermanent.instanceId}:enemy-sequence:${index}`,
-        model,
-      })),
-    );
 
     return sequenceCards;
-  }, [hoveredInspectorEnemyPermanent, hoveredInspectorEnemyTelegraphCard]);
-  const hoveredInspectorCards = useMemo<Array<{ key: string; model: DisplayCardModel }>>(() => {
-    if (!hoveredInspectorKey?.startsWith("enemy_battlefield:")) {
-      return [];
-    }
-
-    if (!hoveredInspectorEnemyPermanent) {
-      return [];
-    }
-
-    const attachedCards = [...battle.battlefield, ...enemyBattlefield]
-      .flatMap((slot) => {
-        if (!slot?.attachedTo || slot.controllerId !== "enemy") {
-          return [];
-        }
-
-        return [{
-          key: `${slot.controllerId === "enemy" ? "enemy_battlefield" : "battlefield"}:${slot.instanceId}`,
-          model: getInspectableModel(`${slot.controllerId === "enemy" ? "enemy_battlefield" : "battlefield"}:${slot.instanceId}`),
-        }];
-      });
-
-    const enemyCard = hoveredInspectorEnemyTelegraphCard
-      ? [{
-          key: `${hoveredInspectorEnemyPermanent.instanceId}:enemy-card`,
-          model: hoveredInspectorEnemyTelegraphCard,
-        }]
-      : [];
-
-    return [...enemyCard, ...attachedCards];
-  }, [battle.battlefield, enemyBattlefield, hoveredInspectorEnemyPermanent, hoveredInspectorEnemyTelegraphCard]);
-  const hoveredInspectorHasCardsTab = hoveredInspectorCards.length > 0 || hoveredInspectorEnemyPermanent !== null;
+  }, [battle.enemies, battle.enemy.currentCardId, battle.enemy.leaderDefinitionId, hoveredInspectorEnemyPermanent, hoveredInspectorEnemyTelegraphCard]);
   const hoveredInspectorHasSequenceTab = hoveredInspectorSequenceCards.length > 0;
 
   function getAnchoredInspectorPosition(
@@ -1325,7 +1312,7 @@ export function CloudArenaBattleState({
             bindInspectorInteractions={bindInspectorInteractions}
             onOpenDetails={handleDetailsClick}
             isPlayableHandCard={(cardInstanceId) => playableHandCards.has(cardInstanceId)}
-            groupedTurnActionsCount={groupedTurnActions.length}
+            endTurnAction={endTurnAction}
             onBattleAction={onTurnAction}
             onInspectPlayer={bindInspectorInteractions("player")}
           />
@@ -1335,8 +1322,6 @@ export function CloudArenaBattleState({
           <CloudArenaInspectorPanel
             definitionJson={hoveredInspectorDefinitionJson}
             activeTab={hoveredInspectorTab}
-            cards={hoveredInspectorCards}
-            showCardsTab={hoveredInspectorHasCardsTab}
             sequenceCards={hoveredInspectorSequenceCards}
             showSequenceTab={hoveredInspectorHasSequenceTab}
             onTabChange={setHoveredInspectorTab}

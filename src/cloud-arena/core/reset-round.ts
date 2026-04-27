@@ -1,8 +1,7 @@
 import {
   LEAN_V1_DEFAULT_TURN_ENERGY,
-  LEAN_V1_HAND_SIZE,
 } from "./constants.js";
-import { discardHand, drawUpToHandSize } from "./draw.js";
+import { applyDrawPolicy } from "./draw.js";
 import {
   primeEnemyCardForTurn,
   resolveScheduledEnemyCardEffects,
@@ -137,13 +136,13 @@ export function resetRound(state: BattleState): BattleState {
     actor.intentQueueLabels = getEnemyIntentQueueLabels(actor, 2);
 
     if (actorPermanent) {
-      actorPermanent.intentLabel = formatEnemyIntent(actor.intent);
+      const actorIntentLabel = formatEnemyIntent(actor.intent);
+      actorPermanent.intentLabel = actorIntentLabel.length > 0 ? actorIntentLabel : null;
       actorPermanent.intentQueueLabels = [...actor.intentQueueLabels];
     }
   }
 
-  discardHand(state);
-  const drawResult = drawUpToHandSize(state, LEAN_V1_HAND_SIZE);
+  const drawResult = applyDrawPolicy(state);
   cleanupDefeatedPermanents(state);
   processTriggeredAbilities(state);
   cleanupDefeatedPermanents(state);

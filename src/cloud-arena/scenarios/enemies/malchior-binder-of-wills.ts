@@ -1,4 +1,5 @@
 import type { EnemyCardDefinition } from "../../core/types.js";
+import { multiSlash } from "../enemy-cards.js";
 import type { CloudArenaEnemyPreset } from "../types.js";
 
 const eldritchAegis: EnemyCardDefinition = {
@@ -68,6 +69,7 @@ export const malchiorBinderOfWillsEnemyPreset: CloudArenaEnemyPreset = {
   health: 24,
   basePower: 4,
   cards: [
+    multiSlash(),
     eldritchAegis,
     siphonResolve,
     crushingEdict,

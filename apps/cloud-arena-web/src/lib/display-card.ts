@@ -13,6 +13,7 @@ import {
   buildDisplayCardModel,
   type DisplayCardImage,
   type DisplayCardModel,
+  type DisplayCardTextBlock,
 } from "../../../../src/presentation/display-card.js";
 
 export { buildDisplayCardModel } from "../../../../src/presentation/display-card.js";
@@ -183,17 +184,21 @@ export function mapArenaEnemyToDisplayCard(
     maxHealth: number;
     block: number;
     leaderDefinitionId?: string | null;
-    intentLabel: string;
+    intentLabel?: string | null;
     intentQueueLabels?: string[];
     isHealthRising?: boolean;
     isHealthDropping?: boolean;
   },
   options: {
     stateFlags?: string[];
+    context?: "battle" | "catalog";
   } = {},
 ): DisplayCardModel {
-  const presentation = enemy.leaderDefinitionId
-    ? getCardDisplay(getCardDefinition(enemy.leaderDefinitionId))
+  const leaderDefinition = enemy.leaderDefinitionId
+    ? getCardDefinition(enemy.leaderDefinitionId)
+    : null;
+  const presentation = leaderDefinition
+    ? getCardDisplay(leaderDefinition)
     : {
         frameTone: "split-black-red",
         imagePath: "card_0009_lucifer_fallen_angel_of_light.webp",
@@ -207,6 +212,65 @@ export function mapArenaEnemyToDisplayCard(
         flavorText: null,
         footerStat: null,
       };
+  const leaderKeywordBlocks: DisplayCardTextBlock[] =
+    leaderDefinition && "keywords" in leaderDefinition && leaderDefinition.keywords?.length
+      ? [
+          {
+            kind: "rules",
+            text: leaderDefinition.keywords.map((kw) => `**${kw.charAt(0).toUpperCase() + kw.slice(1)}**`).join(", "),
+          },
+        ]
+      : [];
+
+  const isCatalog = options.context === "catalog";
+
+  const catalogTextBlocks: DisplayCardTextBlock[] = (() => {
+    if (!leaderDefinition) {
+      return [
+        {
+          kind: "flavor" as const,
+          text: "The demon does not rush. It wins by making every exchange cost too much.",
+        },
+      ];
+    }
+
+    const rulesLines = summarizeCardDefinition(leaderDefinition)
+      .filter((line) => !/^\*\*\w/.test(line));
+
+    return [
+      ...leaderKeywordBlocks,
+      ...(rulesLines.length > 0
+        ? [{ kind: "rules" as const, text: rulesLines.join(" ") }]
+        : []),
+      ...(presentation.flavorText
+        ? [{ kind: "flavor" as const, text: presentation.flavorText }]
+        : []),
+    ];
+  })();
+
+  const battleTextBlocks: DisplayCardTextBlock[] = [
+    ...(enemy.intentLabel
+      ? [
+          {
+            kind: "intent" as const,
+            text: `${enemy.name} is preparing ${enemy.intentLabel}.`,
+          },
+          ...getEnemyTelegraphTextBlocks({
+            intentLabel: enemy.intentLabel,
+            intentQueueLabels: enemy.intentQueueLabels,
+          }),
+        ]
+      : []),
+    ...leaderKeywordBlocks,
+    {
+      kind: "rules" as const,
+      text: `Current block ${enemy.block}. If left unanswered, the next enemy resolution will hit in full.`,
+    },
+    {
+      kind: "flavor" as const,
+      text: "The demon does not rush. It wins by making every exchange cost too much.",
+    },
+  ];
 
   return buildDisplayCardModel({
     variant: "enemy",
@@ -235,24 +299,7 @@ export function mapArenaEnemyToDisplayCard(
     statusLabel: "enemy",
     statusTone: "draft",
     stats: [{ label: "Block", value: String(enemy.block) }],
-    textBlocks: [
-      {
-        kind: "intent",
-        text: `${enemy.name} is preparing ${enemy.intentLabel}.`,
-      },
-      ...getEnemyTelegraphTextBlocks({
-        intentLabel: enemy.intentLabel,
-        intentQueueLabels: enemy.intentQueueLabels,
-      }),
-      {
-        kind: "rules",
-        text: `Current block ${enemy.block}. If left unanswered, the next enemy resolution will hit in full.`,
-      },
-      {
-        kind: "flavor",
-        text: "The demon does not rush. It wins by making every exchange cost too much.",
-      },
-    ],
+    textBlocks: isCatalog ? catalogTextBlocks : battleTextBlocks,
     badges: ["boss"],
     actions: [],
     stateFlags: [

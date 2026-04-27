@@ -131,7 +131,19 @@ export function settleEnemyAttackDamage(
   let remainingDamage = damage;
 
   remainingDamage = applyEnemyDamageToPlayerBlock(state, remainingDamage);
-  const defenderResult = applyEnemyDamageToDefenders(state, remainingDamage, sourcePermanentId);
+
+  const sourcePermanent = findPermanentById(state, sourcePermanentId);
+  const hasMenace = sourcePermanent ? permanentHasKeyword(sourcePermanent, "menace") : false;
+  const blockerCount = hasMenace
+    ? state.blockingQueue.filter(
+        (id) => findPermanentById(state, id)?.blockingTargetPermanentId === sourcePermanentId,
+      ).length
+    : Infinity;
+  const canBeBlocked = !hasMenace || blockerCount >= 2;
+
+  const defenderResult = canBeBlocked
+    ? applyEnemyDamageToDefenders(state, remainingDamage, sourcePermanentId)
+    : { remainingDamage, defended: false, halted: false };
   remainingDamage = defenderResult.remainingDamage;
   if (defenderResult.defended && overflowPolicy === "stop_at_blocker") {
     remainingDamage = 0;

@@ -12,6 +12,7 @@ import manaRSymbol from "../assets/mtg-symbols/mana/R.svg";
 import manaTSymbol from "../assets/mtg-symbols/mana/T.svg";
 import manaUSymbol from "../assets/mtg-symbols/mana/U.svg";
 import manaWSymbol from "../assets/mtg-symbols/mana/W.svg";
+import rarityExpansionSymbol from "../assets/mtg-symbols/rarity/expansion.svg";
 import { getCloudArenaRuntimeConfig } from "../lib/runtime-config.js";
 
 import type { DisplayCardModel } from "../lib/display-card.js";
@@ -38,6 +39,10 @@ const DISPLAY_CARD_KEYWORD_GLOSSARY = {
   refresh: {
     label: "Refresh",
     description: "Restore this to full health at the start of each round if it survived damage.",
+  },
+  menace: {
+    label: "Menace",
+    description: "Can only be blocked by two or more defenders. A single blocker is bypassed entirely.",
   },
 } as const;
 
@@ -302,6 +307,7 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
   const isTargetableEnemy = stateFlags.includes("targetable-enemy");
   const isHealthDropping = stateFlags.includes("health-dropping");
   const isHealthRising = stateFlags.includes("health-rising");
+  const isInspectorCurrent = stateFlags.includes("inspector-current");
   const blockValue = blockStat?.value ?? "0";
   const detailsButton = detailsAction ? (
     <button
@@ -329,7 +335,24 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
 
       <div className="card-face-typeline">
         <span>{model.subtitle ?? "Card"}</span>
-        <span className="card-face-rarity-badge is-na">{model.variant.toUpperCase()}</span>
+        {model.rarity ? (
+          <span
+            aria-label={`Rarity: ${model.rarity}`}
+            className={`card-face-rarity-badge is-${model.rarity}`}
+            title={model.rarity}
+          >
+            <span
+              aria-hidden="true"
+              className="card-face-rarity-badge-mark"
+              style={{
+                WebkitMaskImage: `url(${rarityExpansionSymbol})`,
+                maskImage: `url(${rarityExpansionSymbol})`,
+              }}
+            />
+          </span>
+        ) : (
+          <span className="card-face-rarity-badge is-na">{model.variant.toUpperCase()}</span>
+        )}
       </div>
 
       <div className="card-face-rules">
@@ -522,6 +545,7 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
         isTargetableEnemy ? "is-targetable is-targetable-enemy" : null,
         isHealthDropping ? "is-health-dropping" : null,
         isHealthRising ? "is-health-rising" : null,
+        isInspectorCurrent ? "is-inspector-current" : null,
         className ?? null,
       ]
         .filter(Boolean)

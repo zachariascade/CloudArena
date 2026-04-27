@@ -107,3 +107,16 @@ export function drawUpToHandSize(state: BattleState, targetHandSize: number): Dr
     count: result.count,
   };
 }
+
+export function applyDrawPolicy(state: BattleState): DrawResult {
+  switch (state.drawPolicy) {
+    case "draw_to_full":
+      return drawUpToHandSize(state, state.handSize);
+    case "draw_one":
+      return drawCards(state, 1);
+    case "full_refresh":
+    default:
+      discardHand(state);
+      return drawUpToHandSize(state, state.handSize);
+  }
+}

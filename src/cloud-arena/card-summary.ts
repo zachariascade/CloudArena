@@ -744,6 +744,10 @@ export function summarizeCardDefinition(definition: CardDefinition): string[] {
       summaryLines.push("**Halt**");
     }
 
+    if (definition.keywords?.includes("menace")) {
+      summaryLines.push("**Menace**");
+    }
+
     summaryLines.push(...summarizeEffects(definition.preSummonEffects, true));
     summaryLines.push(...(definition.abilities ?? []).flatMap(describeAbility));
   } else {

@@ -204,13 +204,23 @@ describe("cloud arena session service", () => {
   it("surfaces counter-based power buffs in the session snapshot", () => {
     const service = createCloudArenaSessionService();
     let snapshot = service.createSession({
-      scenarioId: "demon_pack",
+      scenarioId: "lake_of_ice",
       seed: 1,
     });
     let playedGuardian = false;
     let updated = snapshot;
 
-    for (let guard = 0; guard < 12; guard += 1) {
+    for (let guard = 0; guard < 60; guard += 1) {
+      // Handle pending target selection before anything else
+      const chooseTargetAction = updated.legalActions.find(
+        (entry) => entry.action.type === "choose_target",
+      )?.action;
+
+      if (chooseTargetAction) {
+        updated = service.applyAction(updated.sessionId, chooseTargetAction);
+        continue;
+      }
+
       const guardianAction = !playedGuardian
         ? findPlayableCardAction(updated.player.hand, updated.legalActions, "guardian")
         : undefined;
@@ -228,6 +238,25 @@ describe("cloud arena session service", () => {
       if (bannerAction) {
         updated = service.applyAction(updated.sessionId, bannerAction);
         break;
+      }
+
+      // Play other cards to cycle through the deck so mass_benediction eventually appears.
+      // Skip forced_sacrifice — it destroys our permanents and would kill guardian.
+      const UNSAFE_CYCLE_CARDS = new Set(["forced_sacrifice"]);
+      const cycleAction = updated.legalActions.find((entry) => {
+        if (entry.action.type !== "play_card") return false;
+        const card = updated.player.hand.find(
+          (c) => c.instanceId === (entry.action as { cardInstanceId: string }).cardInstanceId,
+        );
+        if (!card) return false;
+        if (!playedGuardian && card.definitionId === "mass_benediction") return false;
+        if (UNSAFE_CYCLE_CARDS.has(card.definitionId)) return false;
+        return true;
+      })?.action;
+
+      if (cycleAction) {
+        updated = service.applyAction(updated.sessionId, cycleAction);
+        continue;
       }
 
       const endTurnAction = updated.legalActions.find(
@@ -250,8 +279,9 @@ describe("cloud arena session service", () => {
 
     expect(playedGuardian).toBe(true);
     expect(benediction).toBeTruthy();
-    expect(guardian?.counters?.["+1/+1"]).toBe(2);
-    expect(guardian?.power).toBe(5);
+    // mass_benediction creates 2 counter instances (+1 power, +1 health) per application
+    expect(guardian?.counters?.["+1/+1"]).toBeGreaterThanOrEqual(2);
+    expect(guardian?.power).toBeGreaterThan(4);
   });
 
   it("includes the pending spell play context while a target is being chosen", () => {

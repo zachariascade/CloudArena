@@ -363,11 +363,18 @@ export function createEnemyLeaderPermanent(
     throw new Error(`Cannot create enemy leader ${enemy.name} without an open battlefield slot.`);
   }
 
+  const leaderDefinitionId = enemy.definitionId ?? "enemy_leader";
+  const leaderDefinition = state.cardDefinitions[leaderDefinitionId];
+  const leaderKeywords =
+    leaderDefinition && "keywords" in leaderDefinition
+      ? getPermanentKeywordsForDefinition(asPermanentCardDefinition(leaderDefinition))
+      : [];
+
   const permanent: PermanentState = {
     instanceId: `enemy_leader_${state.turnNumber}_${state.nextEnemyTokenIndex}`,
     sourceCardInstanceId: `enemy_leader_${state.turnNumber}_${state.nextEnemyTokenIndex}`,
     name: enemy.name,
-    definitionId: enemy.definitionId ?? "enemy_leader",
+    definitionId: leaderDefinitionId,
     controllerId: "enemy",
     enemyActorId: enemy.enemyActorId ?? null,
     isEnemyLeader: true,
@@ -378,7 +385,7 @@ export function createEnemyLeaderPermanent(
     maxHealth: enemy.health,
     block: 0,
     recoveryPolicy: "none",
-    keywords: [],
+    keywords: leaderKeywords,
     counters: [],
     modifiers: [],
     keywordModifiers: [],

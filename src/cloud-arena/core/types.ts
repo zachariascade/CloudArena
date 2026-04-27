@@ -25,7 +25,8 @@ export type DerivedStatName = "power" | "health" | "block";
 export type ChoiceStrategy = "first_available" | "auto_yes" | "auto_no";
 export type DamageOverflowPolicy = "overflow" | "stop_at_blocker" | "trample";
 export type DefenderRecoveryPolicy = "none" | "full_heal";
-export type PermanentKeyword = "refresh" | "halt";
+export type DrawPolicy = "full_refresh" | "draw_to_full" | "draw_one";
+export type PermanentKeyword = "refresh" | "halt" | "menace";
 export type CounterStat = "power" | "health";
 export type CounterSourceKind = "card" | "permanent";
 export type ModifierSourceKind = "equipment" | "card" | "permanent";
@@ -788,6 +789,8 @@ export type BattleState = {
   nextEnemyTokenIndex: number;
   nextTargetRequestIndex: number;
   cardDefinitions: CardDefinitionLibrary;
+  handSize: number;
+  drawPolicy: DrawPolicy;
   playerCreatureSlotCount: number;
   playerNonCreatureSlotCount: number;
   enemyCreatureSlotCount: number;
@@ -838,7 +841,11 @@ export type BattleAction =
       targetCardInstanceId: string;
     }
   | UsePermanentAction
-  | EndTurnAction;
+  | EndTurnAction
+  | {
+      type: "debug_end_battle";
+      winner: "player" | "enemy";
+    };
 
 export type BehaviorEnemyConfig = {
   name: string;
@@ -871,6 +878,8 @@ export type CreateBattleEnemyInput = CreateBattleEnemyConfig & {
 export type CreateBattleInput = {
   seed?: number;
   playerHealth?: number;
+  handSize?: number;
+  drawPolicy?: DrawPolicy;
   cardDefinitions?: CardDefinitionLibrary;
   playerDeck: CardDefinitionId[];
   shuffleDeck?: boolean;

@@ -1,5 +1,6 @@
 import {
   LEAN_V1_CREATURE_SLOT_COUNT,
+  LEAN_V1_DEFAULT_DRAW_POLICY,
   LEAN_V1_DEFAULT_TURN_ENERGY,
   LEAN_V1_HAND_SIZE,
   LEAN_V1_NON_CREATURE_SLOT_COUNT,
@@ -92,6 +93,8 @@ function getRequiredEnemyDefinitionId(enemy: CreateBattleEnemyInput): CardDefini
 export function createBattle(input: CreateBattleInput): BattleState {
   const seed = input.seed ?? 1;
   const playerHealth = input.playerHealth ?? LEAN_V1_STARTING_PLAYER_HEALTH;
+  const handSize = input.handSize ?? LEAN_V1_HAND_SIZE;
+  const drawPolicy = input.drawPolicy ?? LEAN_V1_DEFAULT_DRAW_POLICY;
   const resolvedCardDefinitions = input.cardDefinitions
     ? {
         enemy_leader: cardDefinitions.enemy_leader,
@@ -156,6 +159,8 @@ export function createBattle(input: CreateBattleInput): BattleState {
     nextEnemyTokenIndex: 1,
     nextTargetRequestIndex: 1,
     cardDefinitions: resolvedCardDefinitions,
+    handSize,
+    drawPolicy,
     playerCreatureSlotCount,
     playerNonCreatureSlotCount,
     enemyCreatureSlotCount,
@@ -235,7 +240,8 @@ export function createBattle(input: CreateBattleInput): BattleState {
     });
     actor.permanentId = permanent.instanceId;
     actor.intentQueueLabels = getEnemyIntentQueueLabels(actor, 2);
-    permanent.intentLabel = formatEnemyIntent(actor.intent);
+    const actorIntentLabel = formatEnemyIntent(actor.intent);
+    permanent.intentLabel = actorIntentLabel.length > 0 ? actorIntentLabel : null;
     permanent.intentQueueLabels = [...actor.intentQueueLabels];
 
     state.nextEnemyTokenIndex += 1;
@@ -269,7 +275,7 @@ export function createBattle(input: CreateBattleInput): BattleState {
     state.nextEnemyTokenIndex += 1;
   }
 
-  const openingDraw = drawUpToHandSize(state, LEAN_V1_HAND_SIZE);
+  const openingDraw = drawUpToHandSize(state, handSize);
   cleanupDefeatedPermanents(state);
   processTriggeredAbilities(state);
   cleanupDefeatedPermanents(state);

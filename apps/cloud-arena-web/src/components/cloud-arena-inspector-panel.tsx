@@ -13,8 +13,6 @@ type CloudArenaInspectorCard = {
 type CloudArenaInspectorPanelProps = {
   definitionJson: string | null;
   activeTab: CloudArenaInspectorTabId;
-  cards?: CloudArenaInspectorCard[];
-  showCardsTab?: boolean;
   sequenceCards?: CloudArenaInspectorCard[];
   showSequenceTab?: boolean;
   onTabChange: (tab: CloudArenaInspectorTabId) => void;
@@ -29,8 +27,6 @@ type CloudArenaInspectorPanelProps = {
 export function CloudArenaInspectorPanel({
   definitionJson,
   activeTab,
-  cards = [],
-  showCardsTab = false,
   sequenceCards = [],
   showSequenceTab = false,
   onTabChange,
@@ -42,7 +38,6 @@ export function CloudArenaInspectorPanel({
     return <></>;
   }
 
-  const hasCardsTab = showCardsTab;
   const hasSequenceTab = showSequenceTab;
 
   return (
@@ -62,17 +57,6 @@ export function CloudArenaInspectorPanel({
         >
           Info
         </button>
-        {hasCardsTab ? (
-          <button
-            type="button"
-            role="tab"
-            className={`cloud-arena-inspector-tab${activeTab === "cards" ? " is-active" : ""}`}
-            aria-selected={activeTab === "cards"}
-            onClick={() => onTabChange("cards")}
-          >
-            Cards
-          </button>
-        ) : null}
         {hasSequenceTab ? (
           <button
             type="button"
@@ -87,23 +71,7 @@ export function CloudArenaInspectorPanel({
       </div>
 
       <div className="cloud-arena-inspector-body">
-        {activeTab === "cards" && hasCardsTab ? (
-          <div className="cloud-arena-inspector-cards" aria-label="Enemy cards">
-            {cards.length > 0 ? (
-              cards.map((card) => (
-                <DisplayCard
-                  key={card.key}
-                  className="cloud-arena-inspector-card"
-                  model={card.model}
-                />
-              ))
-            ) : (
-              <div className="cloud-arena-inspector-empty">
-                No enemy cards attached.
-              </div>
-            )}
-          </div>
-        ) : activeTab === "sequence" && hasSequenceTab ? (
+        {activeTab === "sequence" && hasSequenceTab ? (
           <div className="cloud-arena-inspector-cards" aria-label="Enemy sequence">
             {sequenceCards.length > 0 ? (
               sequenceCards.map((card) => (
