@@ -4,9 +4,90 @@ export type GalleryEntry = {
   year: string;
   wikiUrl: string;
   imageUrl: string;
+  createdAt: string;
+  cardUsed: string[];
 };
 
-export const GALLERY: GalleryEntry[] = [
+type GalleryEntryBase = Omit<GalleryEntry, "createdAt" | "cardUsed">;
+
+function createCommonsFilePageUrl(fileName: string): string {
+  return `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(fileName)}`;
+}
+
+function createCommonsFilePathUrl(fileName: string): string {
+  return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(fileName)}`;
+}
+
+function getGalleryCreatedAt(index: number): string {
+  if (index < 10) {
+    return "2026-04-27T22:20:25-05:00";
+  }
+
+  if (index < 20) {
+    return "2026-04-27T22:26:33-05:00";
+  }
+
+  if (index < 32) {
+    return "2026-04-27T22:45:30-05:00";
+  }
+
+  return "2026-04-28T00:00:00-05:00";
+}
+
+function getGalleryCardUsed(index: number): string[] {
+  switch (index) {
+    case 0:
+      return ["/cards/gallery_ancient_of_days"];
+    case 1:
+      return ["/cards/gallery_angel_stopping_abraham"];
+    case 2:
+      return ["/cards/gallery_annunciation"];
+    case 3:
+      return ["/cards/gallery_belshazzars_feast"];
+    case 4:
+      return ["/cards/gallery_christ_and_mary_magdalen"];
+    case 5:
+      return ["/cards/gallery_creation_of_adam"];
+    case 6:
+      return ["/cards/gallery_deluge"];
+    case 7:
+      return ["/cards/gallery_great_day_of_his_wrath"];
+    case 8:
+      return ["/cards/gallery_great_red_dragon"];
+    case 9:
+      return ["/cards/gallery_jacob_wrestles_with_the_angel"];
+    case 10:
+      return ["/cards/gallery_joshua_commanding_the_sun_to_stand_still_upon_gibeon"];
+    case 11:
+      return ["/cards/gallery_last_judgment"];
+    case 12:
+      return ["/cards/gallery_last_supper"];
+    case 13:
+      return ["/cards/gallery_opening_of_the_fifth_seal"];
+    case 14:
+      return ["/cards/gallery_plains_of_heaven"];
+    case 15:
+      return ["/cards/gallery_sacrifice_of_isaac"];
+    case 16:
+      return ["/cards/gallery_saint_michael_vanquishing_satan"];
+    case 17:
+      return ["/cards/gallery_satan_in_cocytus"];
+    case 18:
+      return ["/cards/gallery_sodom_and_gomorrah"];
+    case 19:
+      return ["/cards/gallery_tower_of_babel"];
+    case 20:
+      return ["/cards/gallery_transfiguration"];
+    case 21:
+      return ["/cards/gallery_triumph_of_christianity_over_paganism"];
+    case 22:
+      return ["/cards/gallery_woman_taken_in_adultery"];
+    default:
+      return [];
+  }
+}
+
+const GALLERY_BASE: GalleryEntryBase[] = [
   {
     title: "The Ancient of Days",
     artist: "William Blake",
@@ -168,4 +249,504 @@ export const GALLERY: GalleryEntry[] = [
     wikiUrl: "https://commons.wikimedia.org/wiki/File:Rembrandt_Christ_and_the_Woman_Taken_in_Adultery.jpg",
     imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Rembrandt_Christ_and_the_Woman_Taken_in_Adultery.jpg/960px-Rembrandt_Christ_and_the_Woman_Taken_in_Adultery.jpg",
   },
+  {
+    title: "Christ in the Storm on the Sea of Galilee",
+    artist: "Rembrandt van Rijn",
+    year: "1633",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg",
+  },
+  {
+    title: "Christ Driving the Money Changers from the Temple",
+    artist: "Rembrandt van Rijn",
+    year: "1626",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Rembrandt_Christ_Driving_the_Money_Changers_from_the_Temple.jpg",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Rembrandt_Christ_Driving_the_Money_Changers_from_the_Temple.jpg",
+  },
+  {
+    title: "The Baptism of Jesus",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Baptism_of_Jesus_(Bapt%C3%AAme_de_J%C3%A9sus)_-_James_Tissot_-_overall.jpg",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Baptism_of_Jesus_(Bapt%C3%AAme_de_J%C3%A9sus)_-_James_Tissot_-_overall.jpg",
+  },
+  {
+    title: "The Good Samaritan",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Good_Samaritan_(Le_bon_samaritain)_-_James_Tissot.jpg",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Good_Samaritan_(Le_bon_samaritain)_-_James_Tissot.jpg",
+  },
+  {
+    title: "The Flight into Egypt",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Flight_into_Egypt_(La_fuite_en_%C3%89gypte)_-_James_Tissot_-_overall.jpg",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Flight_into_Egypt_(La_fuite_en_%C3%89gypte)_-_James_Tissot_-_overall.jpg",
+  },
+  {
+    title: "The Visitation",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Visitation_(La_visitation)_-_James_Tissot_-_overall.jpg",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Visitation_(La_visitation)_-_James_Tissot_-_overall.jpg",
+  },
+  {
+    title: "Jesus Appears to Mary Magdalene",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_Jesus_Appears_to_Mary_Magdalene_(Apparition_de_J%C3%A9sus_%C3%A0_Madeleine)_-_James_Tissot.jpg",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_Jesus_Appears_to_Mary_Magdalene_(Apparition_de_J%C3%A9sus_%C3%A0_Madeleine)_-_James_Tissot.jpg",
+  },
+  {
+    title: "The Resurrection of Lazarus",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Resurrection_of_Lazarus_(La_r%C3%A9surrection_de_Lazare)_-_James_Tissot.jpg",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Resurrection_of_Lazarus_(La_r%C3%A9surrection_de_Lazare)_-_James_Tissot.jpg",
+  },
+  {
+    title: "The Incredulity of Saint Thomas",
+    artist: "Caravaggio",
+    year: "1601–1602",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:The_Incredulity_of_Saint_Thomas.jpg",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/The_Incredulity_of_Saint_Thomas.jpg",
+  },
+  {
+    title: "Jesus Looking through a Lattice",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - Jesus Looking through a Lattice (Jésus regardant à travers le treillis) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - Jesus Looking through a Lattice (Jésus regardant à travers le treillis) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "Portrait of Zacharias and Elizabeth",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - Portrait of Zacharias and Elizabeth (Portrait de Zacharie et d'Elisabeth) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - Portrait of Zacharias and Elizabeth (Portrait de Zacharie et d'Elisabeth) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "The Vision of Zacharias",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Vision of Zacharias (Vision de Zacharie) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Vision of Zacharias (Vision de Zacharie) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "The Testing of the Suitors of the Holy Virgin",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Testing of the Suitors of the Holy Virgin (L'épreuve des prétendants au mariage de la sainte Vierge) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Testing of the Suitors of the Holy Virgin (L'épreuve des prétendants au mariage de la sainte Vierge) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "The Betrothal of the Holy Virgin and Saint Joseph",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Betrothal of the Holy Virgin and Saint Joseph (Fiançailles de la sainte vierge et de saint Joseph) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Betrothal of the Holy Virgin and Saint Joseph (Fiançailles de la sainte vierge et de saint Joseph) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "The Holy Virgin in Her Youth",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Holy Virgin in Her Youth (La sainte vierge jeune) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Holy Virgin in Her Youth (La sainte vierge jeune) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "The Magnificat",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Magnificat (Le magnificat) - James Tissot - overall .jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Magnificat (Le magnificat) - James Tissot - overall .jpg",
+    ),
+  },
+  {
+    title: "The Anxiety of Saint Joseph",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Anxiety of Saint Joseph (L'anxiété de Saint Joseph) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Anxiety of Saint Joseph (L'anxiété de Saint Joseph) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "Saint Joseph",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl("Brooklyn Museum - Saint Joseph - James Tissot - overall.jpg"),
+    imageUrl: createCommonsFilePathUrl("Brooklyn Museum - Saint Joseph - James Tissot - overall.jpg"),
+  },
+  {
+    title: "The Childhood of Saint John the Baptist",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Childhood of Saint John the Baptist (L'enfance de saint Jean-Baptiste) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Childhood of Saint John the Baptist (L'enfance de saint Jean-Baptiste) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "Saint Joseph Seeks a Lodging in Bethlehem",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - Saint Joseph Seeks a Lodging in Bethlehem (Saint Joseph cherche un gîte à Bethléem) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - Saint Joseph Seeks a Lodging in Bethlehem (Saint Joseph cherche un gîte à Bethléem) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "The Birth of Our Lord Jesus Christ",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Birth of Our Lord Jesus Christ (La nativité de Notre-Seigneur Jésus-Christ) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Birth of Our Lord Jesus Christ (La nativité de Notre-Seigneur Jésus-Christ) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "The Angel and the Shepherds",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Angel and the Shepherds (L'ange et les bergers) - James Tissot.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Angel and the Shepherds (L'ange et les bergers) - James Tissot.jpg",
+    ),
+  },
+  {
+    title: "The Adoration of the Shepherds",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Adoration of the Shepherds (L'adoration des bergers) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Adoration of the Shepherds (L'adoration des bergers) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "The Aged Simeon",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Aged Simeon (Le vieux Siméon) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Aged Simeon (Le vieux Siméon) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "The Presentation of Jesus in the Temple",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Presentation of Jesus in the Temple (La présentation de Jésus au Temple) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Presentation of Jesus in the Temple (La présentation de Jésus au Temple) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "The Adoration of the Magi",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Adoration of the Magi (L'adoration des mages) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Adoration of the Magi (L'adoration des mages) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "Jesus and his Mother at the Fountain",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - Jesus and his Mother at the Fountain (Jésus et sa mère à la fontaine) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - Jesus and his Mother at the Fountain (Jésus et sa mère à la fontaine) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "Jesus Found in the Temple",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - Jesus Found in the Temple (Jesus retrouvé dans le temple) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - Jesus Found in the Temple (Jesus retrouvé dans le temple) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "Jesus Among the Doctors",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - Jesus Among the Doctors (Jésus parmi les docteurs) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - Jesus Among the Doctors (Jésus parmi les docteurs) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "The Return from Egypt",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Return from Egypt (Retour d'Égypte) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Return from Egypt (Retour d'Égypte) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "The Sojourn in Egypt",
+    artist: "James Tissot",
+    year: "1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Sojourn in Egypt (Le séjour en Égypte) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Sojourn in Egypt (Le séjour en Égypte) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "Jesus Transported by a Spirit onto a High Mountain",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - Jesus Transported by a Spirit onto a High Mountain (Jésus transporté par l'esprit sur une haute montagne) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - Jesus Transported by a Spirit onto a High Mountain (Jésus transporté par l'esprit sur une haute montagne) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "Jesus Tempted in the Wilderness",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - Jesus Tempted in the Wilderness (Jésus tenté dans le désert) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - Jesus Tempted in the Wilderness (Jésus tenté dans le désert) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "The Voice in the Desert",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Voice in the Desert (La voix dans le désert) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Voice in the Desert (La voix dans le désert) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "Jesus Carried up to a Pinnacle of the Temple",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - Jesus Carried up to a Pinnacle of the Temple (Jésus porté sur le pinacle du Temple) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - Jesus Carried up to a Pinnacle of the Temple (Jésus porté sur le pinacle du Temple) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "Jesus Ministered to by Angels",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - Jesus Ministered to by Angels (Jésus assisté par les anges) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - Jesus Ministered to by Angels (Jésus assisté par les anges) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "The Calling of Saint Peter and Saint Andrew",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Calling of Saint Peter and Saint Andrew (Vocation de Saint Pierre et Saint André) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Calling of Saint Peter and Saint Andrew (Vocation de Saint Pierre et Saint André) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "The Calling of Saint John and Saint Andrew",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Calling of Saint John and Saint Andrew (Vocation de Saint Jean et de Saint André) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Calling of Saint John and Saint Andrew (Vocation de Saint Jean et de Saint André) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "The Calling of Saint James and Saint John",
+    artist: "James Tissot",
+    year: "c. 1886–1894",
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - The Calling of Saint James and Saint John (Vocation de Saint Jacques et de Saint Jean) - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - The Calling of Saint James and Saint John (Vocation de Saint Jacques et de Saint Jean) - James Tissot - overall.jpg",
+    ),
+  },
+  {
+    title: "Pietà",
+    artist: "Michelangelo",
+    year: "c. 1498–1499",
+    wikiUrl: createCommonsFilePageUrl("La Pietà.jpg"),
+    imageUrl: createCommonsFilePathUrl("La Pietà.jpg"),
+  },
+  {
+    title: "David",
+    artist: "Michelangelo",
+    year: "1501–1504",
+    wikiUrl: createCommonsFilePageUrl("Statue of David - Michelangelo.JPG"),
+    imageUrl: createCommonsFilePathUrl("Statue of David - Michelangelo.JPG"),
+  },
+  {
+    title: "Moses",
+    artist: "Michelangelo",
+    year: "c. 1513–1515",
+    wikiUrl: createCommonsFilePageUrl("Moses-by-Michelangelo.jpg"),
+    imageUrl: createCommonsFilePathUrl("Moses-by-Michelangelo.jpg"),
+  },
+  {
+    title: "Rebellious Slave",
+    artist: "Michelangelo",
+    year: "c. 1513–1516",
+    wikiUrl: createCommonsFilePageUrl("Rebellious Slave (Michelangelo).jpg"),
+    imageUrl: createCommonsFilePathUrl("Rebellious Slave (Michelangelo).jpg"),
+  },
+  {
+    title: "Dying Slave",
+    artist: "Michelangelo",
+    year: "c. 1513–1516",
+    wikiUrl: createCommonsFilePageUrl("Dying Slave Michelangelo JBU067.jpg"),
+    imageUrl: createCommonsFilePathUrl("Dying Slave Michelangelo JBU067.jpg"),
+  },
+  {
+    title: "The Last Judgment (Michelangelo)",
+    artist: "Michelangelo",
+    year: "1536–1541",
+    wikiUrl: createCommonsFilePageUrl("Last Judgement by Michelangelo.jpg"),
+    imageUrl: createCommonsFilePathUrl("Last Judgement by Michelangelo.jpg"),
+  },
+  {
+    title: "Separation of Light from Darkness",
+    artist: "Michelangelo",
+    year: "c. 1511–1512",
+    wikiUrl: createCommonsFilePageUrl("Michelangelo, Separation of Light from Darkness 00.jpg"),
+    imageUrl: createCommonsFilePathUrl("Michelangelo, Separation of Light from Darkness 00.jpg"),
+  },
+  {
+    title: "The Creation of Eve",
+    artist: "Michelangelo",
+    year: "1511",
+    wikiUrl: createCommonsFilePageUrl("Creation of Eve, michelangelo.jpg"),
+    imageUrl: createCommonsFilePathUrl("Creation of Eve, michelangelo.jpg"),
+  },
+  {
+    title: "The Fall and Expulsion from Paradise",
+    artist: "Michelangelo",
+    year: "c. 1510–1511",
+    wikiUrl: createCommonsFilePageUrl("Michelangelo, Fall and Expulsion from Garden of Eden 04.jpg"),
+    imageUrl: createCommonsFilePathUrl("Michelangelo, Fall and Expulsion from Garden of Eden 04.jpg"),
+  },
+  {
+    title: "Cumaean Sibyl",
+    artist: "Michelangelo",
+    year: "c. 1511",
+    wikiUrl: createCommonsFilePageUrl("CumaeanSibylByMichelangelo.jpg"),
+    imageUrl: createCommonsFilePathUrl("CumaeanSibylByMichelangelo.jpg"),
+  },
+  {
+    title: "Libyan Sibyl",
+    artist: "Michelangelo",
+    year: "c. 1511",
+    wikiUrl: createCommonsFilePageUrl("Michelangelo the libyan.jpg"),
+    imageUrl: createCommonsFilePathUrl("Michelangelo the libyan.jpg"),
+  },
+  {
+    title: "The Prophet Jonah",
+    artist: "Michelangelo",
+    year: "c. 1508–1512",
+    wikiUrl: createCommonsFilePageUrl("Sistine jonah.jpg"),
+    imageUrl: createCommonsFilePathUrl("Sistine jonah.jpg"),
+  },
+  {
+    title: "Prophet Ezekiel",
+    artist: "Michelangelo",
+    year: "c. 1511",
+    wikiUrl: createCommonsFilePageUrl("Michelangelo - Prophet Ezekiel.jpg"),
+    imageUrl: createCommonsFilePathUrl("Michelangelo - Prophet Ezekiel.jpg"),
+  },
+  {
+    title: "The Prophet Jeremiah",
+    artist: "Michelangelo",
+    year: "c. 1511",
+    wikiUrl: createCommonsFilePageUrl("Michelangelo, profeti, Jeremiah 01.jpg"),
+    imageUrl: createCommonsFilePathUrl("Michelangelo, profeti, Jeremiah 01.jpg"),
+  },
+  {
+    title: "The Prophet Isaiah",
+    artist: "Michelangelo",
+    year: "c. 1511–1512",
+    wikiUrl: createCommonsFilePageUrl("'Isaiah Sistine Chapel ceiling' by Michelangelo JBU36FXD.jpg"),
+    imageUrl: createCommonsFilePathUrl("'Isaiah Sistine Chapel ceiling' by Michelangelo JBU36FXD.jpg"),
+  },
 ];
+
+export const GALLERY: GalleryEntry[] = GALLERY_BASE.map((entry, index) => ({
+  ...entry,
+  createdAt: getGalleryCreatedAt(index),
+  cardUsed: getGalleryCardUsed(index),
+}));

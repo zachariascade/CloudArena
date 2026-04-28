@@ -1105,14 +1105,16 @@ export function renderCloudArcanumWebHtml(
         border-color: rgba(180, 140, 255, 0.55);
       }
 
-      .cloud-arena-gallery-sort-group {
+      .cloud-arena-gallery-sort-group,
+      .cloud-arena-gallery-filter-group {
         display: flex;
         align-items: center;
         gap: 0.4rem;
         flex-shrink: 0;
       }
 
-      .cloud-arena-gallery-sort-label {
+      .cloud-arena-gallery-sort-label,
+      .cloud-arena-gallery-filter-label {
         font-size: 0.78rem;
         color: rgba(255, 255, 255, 0.45);
         text-transform: uppercase;
@@ -1249,6 +1251,7 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cloud-arena-gallery-thumb-wrap {
+        position: relative;
         width: 100%;
         aspect-ratio: 4 / 3;
         overflow: hidden;
@@ -1261,6 +1264,33 @@ export function renderCloudArcanumWebHtml(
         height: 100%;
         object-fit: cover;
         display: block;
+      }
+
+      .cloud-arena-gallery-thumb-badge {
+        position: absolute;
+        right: 0.45rem;
+        bottom: 0.45rem;
+        width: 1.25rem;
+        height: 1.25rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        background: rgba(6, 10, 24, 0.78);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: rgba(255, 244, 212, 0.96);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+        pointer-events: none;
+      }
+
+      .cloud-arena-gallery-thumb-badge-icon {
+        width: 0.8rem;
+        height: 0.8rem;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
       }
 
       .cloud-arena-gallery-caption {
@@ -1297,10 +1327,10 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cloud-arena-gallery-lightbox {
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
         gap: 1rem;
-        max-width: 700px;
+        max-width: 980px;
         width: 100%;
         background: rgba(20, 24, 52, 0.96);
         border: 1px solid rgba(255, 255, 255, 0.14);
@@ -1312,24 +1342,28 @@ export function renderCloudArcanumWebHtml(
 
       .cloud-arena-gallery-lightbox-img {
         width: 100%;
-        max-height: 55vh;
+        max-height: 72vh;
         object-fit: contain;
         border-radius: 10px;
         background: rgba(0, 0, 0, 0.4);
+        align-self: start;
       }
 
       .cloud-arena-gallery-lightbox-info {
         display: flex;
-        align-items: flex-end;
+        flex-direction: column;
         justify-content: space-between;
         gap: 1rem;
-        flex-wrap: wrap;
+        min-width: 0;
+        min-height: 0;
       }
 
       .cloud-arena-gallery-lightbox-text {
         display: flex;
         flex-direction: column;
         gap: 0.2rem;
+        min-height: 0;
+        min-width: 0;
       }
 
       .cloud-arena-gallery-lightbox-title {
@@ -1345,14 +1379,110 @@ export function renderCloudArcanumWebHtml(
         font-size: 0.85rem;
       }
 
-      .cloud-arena-gallery-lightbox-link {
+      .cloud-arena-gallery-lightbox-tabs {
+        display: flex;
+        gap: 0.45rem;
+        flex-wrap: wrap;
+        margin-top: 0.45rem;
+      }
+
+      .cloud-arena-gallery-lightbox-tab {
+        padding: 0.4rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.8rem;
+        cursor: pointer;
+      }
+
+      .cloud-arena-gallery-lightbox-tab:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.12);
+        color: rgba(255, 255, 255, 0.94);
+      }
+
+      .cloud-arena-gallery-lightbox-tab.is-active {
+        background: rgba(180, 140, 255, 0.22);
+        border-color: rgba(180, 140, 255, 0.48);
+        color: rgba(233, 223, 255, 0.98);
+      }
+
+      .cloud-arena-gallery-lightbox-tab:disabled {
+        opacity: 0.35;
+        cursor: default;
+      }
+
+      .cloud-arena-gallery-lightbox-tab-panel {
+        min-height: 0;
+      }
+
+      .cloud-arena-gallery-lightbox-used-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        min-height: 0;
+      }
+
+      .cloud-arena-gallery-lightbox-used-label {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      .cloud-arena-gallery-lightbox-used-links {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.85rem;
+        max-height: 48vh;
+        overflow-y: auto;
+        padding-right: 0.2rem;
+        --display-card-width: clamp(11rem, 13vw, 13rem);
+      }
+
+      .cloud-arena-gallery-lightbox-card-link {
+        display: block;
+        width: 100%;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .cloud-arena-gallery-lightbox-card-link:hover {
+        transform: translateY(-1px);
+      }
+
+      .cloud-arena-gallery-lightbox-card-link .display-card-shell {
+        width: 100%;
+      }
+
+      .cloud-arena-gallery-lightbox-card-link .display-card-static-face,
+      .cloud-arena-gallery-lightbox-card-link .card-face-link {
+        width: 100%;
+      }
+
+      .cloud-arena-gallery-lightbox-card-face {
+        width: 100%;
+      }
+
+      .cloud-arena-gallery-lightbox-card-link .card-face {
+        width: 100%;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.26);
+      }
+
+      .cloud-arena-gallery-lightbox-card-link:focus-visible {
+        outline: 2px solid rgba(180, 140, 255, 0.65);
+        outline-offset: 4px;
+      }
+
+      .cloud-arena-gallery-lightbox-source-link {
         margin-top: 0.25rem;
         color: rgba(180, 200, 255, 0.8);
         font-size: 0.8rem;
         text-decoration: none;
       }
 
-      .cloud-arena-gallery-lightbox-link:hover {
+      .cloud-arena-gallery-lightbox-source-link:hover {
         color: rgba(180, 200, 255, 1);
         text-decoration: underline;
       }
@@ -1361,6 +1491,17 @@ export function renderCloudArcanumWebHtml(
         display: flex;
         gap: 0.6rem;
         flex-shrink: 0;
+      }
+
+      @media (max-width: 860px) {
+        .cloud-arena-gallery-lightbox {
+          grid-template-columns: minmax(0, 1fr);
+          max-width: 760px;
+        }
+
+        .cloud-arena-gallery-lightbox-used-links {
+          max-height: 34vh;
+        }
       }
 
       .cloud-arena-gallery-copy-btn,

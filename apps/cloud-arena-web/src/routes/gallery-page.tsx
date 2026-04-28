@@ -2,11 +2,26 @@ import { useState, useMemo, type ReactElement } from "react";
 import { Link } from "react-router-dom";
 
 import { CloudArenaAppShell } from "../components/index.js";
+import { DisplayCard } from "../components/display-card.js";
+import { mapCardDefinitionIdToDisplayCard } from "../lib/display-card.js";
 import { GALLERY, type GalleryEntry } from "./gallery-data.js";
 
-const PAGE_SIZE = 12;
-type SortKey = "title" | "artist" | "year";
+const PAGE_SIZE = 20;
+type SortKey = "title" | "artist" | "year" | "createdAt";
 type SortDir = "asc" | "desc";
+type UsageFilter = "all" | "used" | "unused";
+type LightboxTab = "art" | "cards";
+
+const SORT_LABELS: Record<SortKey, string> = {
+  title: "Title",
+  artist: "Artist",
+  year: "Year",
+  createdAt: "Created",
+};
+
+function getGalleryCardDefinitionId(cardPath: string): string {
+  return cardPath.replace(/^\/cards\//, "");
+}
 
 type CloudArenaGalleryPageProps = {
   cloudArcanumWebBaseUrl: string;
@@ -17,26 +32,39 @@ export function CloudArenaGalleryPage({
 }: CloudArenaGalleryPageProps): ReactElement {
   const [active, setActive] = useState<GalleryEntry | null>(null);
   const [copied, setCopied] = useState(false);
+  const [lightboxTab, setLightboxTab] = useState<LightboxTab>("art");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("title");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
+  const [usageFilter, setUsageFilter] = useState<UsageFilter>("all");
   const [page, setPage] = useState(0);
 
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    if (!q) return GALLERY;
-    return GALLERY.filter(
-      (e) =>
-        e.title.toLowerCase().includes(q) ||
-        e.artist.toLowerCase().includes(q),
-    );
-  }, [searchQuery]);
+    return GALLERY.filter((entry) => {
+      const matchesQuery =
+        !q ||
+        entry.title.toLowerCase().includes(q) ||
+        entry.artist.toLowerCase().includes(q);
+      const matchesUsage =
+        usageFilter === "all" ||
+        (usageFilter === "used" && entry.cardUsed.length > 0) ||
+        (usageFilter === "unused" && entry.cardUsed.length === 0);
+
+      return matchesQuery && matchesUsage;
+    });
+  }, [searchQuery, usageFilter]);
 
   const sorted = useMemo(() => {
     return [...filtered].sort((a, b) => {
-      const av = a[sortKey].toLowerCase();
-      const bv = b[sortKey].toLowerCase();
-      const cmp = av < bv ? -1 : av > bv ? 1 : 0;
+      const cmp =
+        sortKey === "createdAt"
+          ? Date.parse(a.createdAt) - Date.parse(b.createdAt)
+          : a[sortKey].toLowerCase() < b[sortKey].toLowerCase()
+            ? -1
+            : a[sortKey].toLowerCase() > b[sortKey].toLowerCase()
+              ? 1
+              : 0;
       return sortDir === "asc" ? cmp : -cmp;
     });
   }, [filtered, sortKey, sortDir]);
@@ -63,6 +91,7 @@ export function CloudArenaGalleryPage({
   function openLightbox(entry: GalleryEntry): void {
     setActive(entry);
     setCopied(false);
+    setLightboxTab("art");
   }
 
   function closeLightbox(): void {
@@ -79,8 +108,14 @@ export function CloudArenaGalleryPage({
   }
 
   function sortLabel(key: SortKey): string {
-    if (key !== sortKey) return key.charAt(0).toUpperCase() + key.slice(1);
-    return `${key.charAt(0).toUpperCase() + key.slice(1)} ${sortDir === "asc" ? "↑" : "↓"}`;
+    const label = SORT_LABELS[key];
+    if (key !== sortKey) return label;
+    return `${label} ${sortDir === "asc" ? "↑" : "↓"}`;
+  }
+
+  function describeUsedCardCount(entry: GalleryEntry): string {
+    const count = entry.cardUsed.length;
+    return `${count} card${count === 1 ? "" : "s"}`;
   }
 
   return (
@@ -112,7 +147,7 @@ export function CloudArenaGalleryPage({
             />
             <div className="cloud-arena-gallery-sort-group">
               <span className="cloud-arena-gallery-sort-label">Sort:</span>
-              {(["title", "artist", "year"] as SortKey[]).map((k) => (
+              {(["title", "artist", "year", "createdAt"] as SortKey[]).map((k) => (
                 <button
                   key={k}
                   type="button"
@@ -120,6 +155,26 @@ export function CloudArenaGalleryPage({
                   onClick={() => handleSort(k)}
                 >
                   {sortLabel(k)}
+                </button>
+              ))}
+            </div>
+            <div className="cloud-arena-gallery-filter-group">
+              <span className="cloud-arena-gallery-filter-label">Cards:</span>
+              {[
+                { key: "all" as const, label: "All" },
+                { key: "used" as const, label: "Used" },
+                { key: "unused" as const, label: "Unused" },
+              ].map((option) => (
+                <button
+                  key={option.key}
+                  type="button"
+                  className={`cloud-arena-gallery-sort-btn${usageFilter === option.key ? " is-active" : ""}`}
+                  onClick={() => {
+                    setUsageFilter(option.key);
+                    setPage(0);
+                  }}
+                >
+                  {option.label}
                 </button>
               ))}
             </div>
@@ -139,7 +194,11 @@ export function CloudArenaGalleryPage({
                           type="button"
                           className="cloud-arena-gallery-entry"
                           onClick={() => openLightbox(entry)}
-                          aria-label={`View ${entry.title} by ${entry.artist}`}
+                          aria-label={
+                            entry.cardUsed.length > 0
+                              ? `View ${entry.title} by ${entry.artist}. This artwork is used on ${describeUsedCardCount(entry)}.`
+                              : `View ${entry.title} by ${entry.artist}.`
+                          }
                         >
                           <div className="cloud-arena-gallery-thumb-wrap">
                             <img
@@ -148,6 +207,25 @@ export function CloudArenaGalleryPage({
                               className="cloud-arena-gallery-thumb"
                               loading="lazy"
                             />
+                            {entry.cardUsed.length > 0 ? (
+                              <span
+                                className="cloud-arena-gallery-thumb-badge"
+                                aria-hidden="true"
+                                title={`Used on ${describeUsedCardCount(entry)}`}
+                              >
+                                <svg
+                                  className="cloud-arena-gallery-thumb-badge-icon"
+                                  viewBox="0 0 24 24"
+                                  focusable="false"
+                                  role="presentation"
+                                >
+                                  <path d="M6.5 4.5h8.4l3.6 3.6v11.4H6.5z" />
+                                  <path d="M14.9 4.5V8h3.6" />
+                                  <path d="M9 12h6" />
+                                  <path d="M9 15h4" />
+                                </svg>
+                              </span>
+                            ) : null}
                           </div>
                           <div className="cloud-arena-gallery-caption">
                             <span className="cloud-arena-gallery-entry-title">{entry.title}</span>
@@ -210,15 +288,60 @@ export function CloudArenaGalleryPage({
                 <div className="cloud-arena-gallery-lightbox-text">
                   <p className="cloud-arena-gallery-lightbox-title">{active.title}</p>
                   <p className="cloud-arena-gallery-lightbox-artist">{active.artist}, {active.year}</p>
-                  <a
-                    href={active.wikiUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="cloud-arena-gallery-lightbox-link"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    View on Wikimedia Commons ↗
-                  </a>
+                  <div className="cloud-arena-gallery-lightbox-tabs" role="tablist" aria-label="Gallery lightbox tabs">
+                    <button
+                      type="button"
+                      className={`cloud-arena-gallery-lightbox-tab${lightboxTab === "art" ? " is-active" : ""}`}
+                      onClick={() => setLightboxTab("art")}
+                      role="tab"
+                      aria-selected={lightboxTab === "art"}
+                    >
+                      Art
+                    </button>
+                    <button
+                      type="button"
+                      className={`cloud-arena-gallery-lightbox-tab${lightboxTab === "cards" ? " is-active" : ""}`}
+                      onClick={() => setLightboxTab("cards")}
+                      role="tab"
+                      aria-selected={lightboxTab === "cards"}
+                      disabled={active.cardUsed.length === 0}
+                    >
+                      Cards {active.cardUsed.length > 0 ? `(${active.cardUsed.length})` : ""}
+                    </button>
+                  </div>
+                  <div className="cloud-arena-gallery-lightbox-tab-panel">
+                    {lightboxTab === "art" ? (
+                      <a
+                        href={active.wikiUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cloud-arena-gallery-lightbox-source-link"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        View on Wikimedia Commons ↗
+                        </a>
+                      ) : active.cardUsed.length > 0 ? (
+                      <div className="cloud-arena-gallery-lightbox-used-cards" role="tabpanel">
+                        <p className="cloud-arena-gallery-lightbox-used-label">
+                          Used on {describeUsedCardCount(active)}
+                        </p>
+                        <div className="cloud-arena-gallery-lightbox-used-links">
+                          {active.cardUsed.map((cardPath) => (
+                            <Link
+                              key={cardPath}
+                              className="cloud-arena-gallery-lightbox-card-link"
+                              to={cardPath}
+                            >
+                              <DisplayCard
+                                className="cloud-arena-gallery-lightbox-card-face"
+                                model={mapCardDefinitionIdToDisplayCard(getGalleryCardDefinitionId(cardPath))}
+                              />
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
                 <div className="cloud-arena-gallery-lightbox-actions">
                   <button
