@@ -64,6 +64,7 @@ function getFallbackCardDisplay(definition: CardDefinition): CardDisplayDefiniti
     subtitle: typeLine || null,
     frameTone: "colorless",
     manaCost: definition.cost > 0 ? `{${definition.cost}}` : "{0}",
+    artist: null,
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: definition.id.toUpperCase().replace(/[^A-Z0-9]+/g, "_").slice(0, 12) || "CARD",
@@ -140,6 +141,7 @@ export function mapArenaPlayerToDisplayCard(
     name: "Player",
     title: "Vanguard of the Arena",
     subtitle: "Legendary Hero",
+    artist: null,
     frameTone: ARENA_PLAYER_PRESENTATION.frameTone,
     manaCost: null,
     image: buildArenaImage(
@@ -277,6 +279,7 @@ export function mapArenaEnemyToDisplayCard(
     name: enemy.name,
     title: presentation.title,
     subtitle: presentation.subtitle,
+    artist: presentation.artist ?? null,
     frameTone: presentation.frameTone,
     manaCost: presentation.manaCost,
     image: buildArenaImage(
@@ -328,6 +331,7 @@ export function mapArenaHandCardToDisplayCard(
     name: card.name,
     title: presentation.title,
     subtitle: presentation.subtitle,
+    artist: presentation.artist ?? null,
     frameTone: presentation.frameTone,
     manaCost: presentation.manaCost,
     image: buildArenaImage(
@@ -472,6 +476,7 @@ export function mapArenaPermanentToDisplayCard(
     name: permanent.name,
     title: presentation.title,
     subtitle: presentation.subtitle,
+    artist: presentation.artist ?? null,
     frameTone: presentation.frameTone,
     manaCost: presentation.manaCost,
     image: buildArenaImage(

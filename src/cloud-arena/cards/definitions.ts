@@ -2,6 +2,16 @@ import { attackCardDefinition } from "./definitions/attack.js";
 import { armoryDiscipleCardDefinition } from "./definitions/armory-disciple.js";
 import { anointedBannerCardDefinition } from "./definitions/anointed-banner.js";
 import { armorySeraphCardDefinition } from "./definitions/armory-seraph.js";
+import { galleryCreationOfAdamCardDefinition } from "./definitions/gallery-creation-of-adam.js";
+import { galleryDelugeCardDefinition } from "./definitions/gallery-deluge.js";
+import { galleryGreatDayOfHisWrathCardDefinition } from "./definitions/gallery-great-day-of-his-wrath.js";
+import { galleryGreatRedDragonCardDefinition } from "./definitions/gallery-great-red-dragon.js";
+import { galleryJacobWrestlesWithTheAngelCardDefinition } from "./definitions/gallery-jacob-wrestles-with-the-angel.js";
+import { galleryAncientOfDaysCardDefinition } from "./definitions/gallery-ancient-of-days.js";
+import { galleryAngelStoppingAbrahamCardDefinition } from "./definitions/gallery-angel-stopping-abraham.js";
+import { galleryAnnunciationCardDefinition } from "./definitions/gallery-annunciation.js";
+import { galleryBelshazzarsFeastCardDefinition } from "./definitions/gallery-belshazzars-feast.js";
+import { galleryChristAndMaryMagdalenCardDefinition } from "./definitions/gallery-christ-and-mary-magdalen.js";
 import { choirCaptainCardDefinition } from "./definitions/choir-captain.js";
 import { defendCardDefinition } from "./definitions/defend.js";
 import { defendingStrikeCardDefinition } from "./definitions/defending-strike.js";
@@ -72,6 +82,16 @@ export const cardDefinitions: CardDefinitionLibrary = {
   armory_disciple: armoryDiscipleCardDefinition,
   armory_seraph: armorySeraphCardDefinition,
   anointed_banner: anointedBannerCardDefinition,
+  gallery_creation_of_adam: galleryCreationOfAdamCardDefinition,
+  gallery_deluge: galleryDelugeCardDefinition,
+  gallery_great_day_of_his_wrath: galleryGreatDayOfHisWrathCardDefinition,
+  gallery_great_red_dragon: galleryGreatRedDragonCardDefinition,
+  gallery_jacob_wrestles_with_the_angel: galleryJacobWrestlesWithTheAngelCardDefinition,
+  gallery_ancient_of_days: galleryAncientOfDaysCardDefinition,
+  gallery_angel_stopping_abraham: galleryAngelStoppingAbrahamCardDefinition,
+  gallery_annunciation: galleryAnnunciationCardDefinition,
+  gallery_belshazzars_feast: galleryBelshazzarsFeastCardDefinition,
+  gallery_christ_and_mary_magdalen: galleryChristAndMaryMagdalenCardDefinition,
   choir_captain: choirCaptainCardDefinition,
   defend: defendCardDefinition,
   defending_strike: defendingStrikeCardDefinition,

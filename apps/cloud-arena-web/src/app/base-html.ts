@@ -1429,6 +1429,324 @@ export function renderCloudArcanumWebHtml(
         cursor: pointer;
       }
 
+      /* ── Deck Builder ─────────────────────────────────────────── */
+
+      .cloud-arena-deckbuilder {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-height: 100%;
+        overflow: hidden;
+      }
+
+      .cloud-arena-deckbuilder-layout {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1.15rem;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        padding: clamp(1.5rem, 4vw, 3rem);
+        padding-bottom: 0;
+        overflow: hidden;
+      }
+
+      .cloud-arena-deckbuilder-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 1.25rem;
+        max-width: none;
+        padding-inline: clamp(1.5rem, 4vw, 3rem);
+      }
+
+      .cloud-arena-deckbuilder-heading {
+        display: grid;
+        gap: 0.35rem;
+      }
+
+      .cloud-arena-deckbuilder-back {
+        flex: 0 0 auto;
+        width: auto;
+      }
+
+      .cloud-arena-deckbuilder-title {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.92);
+        font-size: clamp(1.4rem, 3vw, 2rem);
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      .cloud-arena-deckbuilder-subtitle {
+        margin: 0;
+        max-width: 42rem;
+        color: rgba(255, 255, 255, 0.68);
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      .cloud-arena-deckbuilder-stage {
+        grid-template-columns: minmax(0, 1fr);
+        width: 100%;
+        min-height: 0;
+        height: 100%;
+        overflow: hidden;
+        padding-inline: 0.75rem;
+      }
+
+      .cloud-arena-deckbuilder-column {
+        grid-template-rows: minmax(0, 1fr);
+        width: 100%;
+        max-width: none;
+      }
+
+      .cloud-arena-deckbuilder-scroll-pane {
+        width: 100%;
+        padding-bottom: 1.5rem;
+      }
+
+      .deckbuilder-shell {
+        display: grid;
+        gap: 1rem;
+        min-height: 0;
+      }
+
+      .deckbuilder-top-panel,
+      .deckbuilder-catalog-panel,
+      .deckbuilder-warning-panel,
+      .deckbuilder-error-panel,
+      .deckbuilder-modal {
+        width: 100%;
+        max-width: none;
+        box-sizing: border-box;
+        padding: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 24px;
+        background: rgba(255, 251, 246, 0.08);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 20px 60px rgba(6, 12, 40, 0.32);
+      }
+
+      .deckbuilder-top-panel,
+      .deckbuilder-catalog-panel {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .deckbuilder-warning-panel,
+      .deckbuilder-error-panel {
+        display: grid;
+        gap: 0.5rem;
+      }
+
+      .deckbuilder-top-row,
+      .deckbuilder-catalog-header {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .deckbuilder-top-row {
+        align-items: start;
+      }
+
+      .deckbuilder-catalog-panel {
+        --display-card-width: clamp(11rem, 13vw, 14rem);
+      }
+
+      @media (min-width: 900px) {
+        .deckbuilder-top-row {
+          grid-template-columns: minmax(18rem, 1fr) auto;
+        }
+
+        .deckbuilder-catalog-header {
+          grid-template-columns: minmax(0, 1fr) minmax(20rem, 28rem);
+          align-items: end;
+        }
+      }
+
+      .deckbuilder-top-actions,
+      .deckbuilder-catalog-controls,
+      .deckbuilder-modal-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+      }
+
+      .deckbuilder-metadata-grid {
+        display: grid;
+        gap: 0.85rem;
+      }
+
+      @media (min-width: 760px) {
+        .deckbuilder-metadata-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      .deckbuilder-status-row {
+        align-items: center;
+      }
+
+      .deckbuilder-card-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(var(--display-card-width), 1fr));
+        justify-content: center;
+        align-items: start;
+      }
+
+      .deckbuilder-card-button {
+        position: relative;
+        display: grid;
+        justify-items: center;
+        gap: 0.55rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+        transition: transform 140ms ease;
+      }
+
+      .deckbuilder-card-button:hover {
+        transform: translateY(-2px);
+      }
+
+      .deckbuilder-card-button:focus-visible {
+        outline: 3px solid rgba(180, 140, 255, 0.32);
+        outline-offset: 0.45rem;
+        border-radius: 28px;
+      }
+
+      .deckbuilder-card-button,
+      .deckbuilder-card-button.is-selected {
+        opacity: 1 !important;
+        filter: none !important;
+      }
+
+      .deckbuilder-card-button .display-card-shell,
+      .deckbuilder-card-button .card-face-tile,
+      .deckbuilder-card-button .card-face {
+        opacity: 1 !important;
+        filter: none !important;
+      }
+
+      .deckbuilder-card-selection-chip {
+        display: inline-flex;
+        align-items: center;
+        min-width: 2.15rem;
+        min-height: 2.15rem;
+        justify-content: center;
+        padding: 0.35rem 0.5rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 251, 246, 0.92);
+        color: #7c4a0b;
+        font-size: 0.82rem;
+        font-weight: 700;
+        box-shadow: 0 8px 20px rgba(6, 12, 40, 0.14);
+      }
+
+      .deckbuilder-card-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.65rem;
+        width: var(--display-card-width);
+      }
+
+      .deckbuilder-card-copy-controls {
+        display: inline-flex;
+        gap: 0.45rem;
+      }
+
+      .deckbuilder-card-copy-button {
+        width: 2.15rem;
+        height: 2.15rem;
+        padding: 0;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 251, 246, 0.94);
+        color: #7c4a0b;
+        font: inherit;
+        font-size: 1.2rem;
+        font-weight: 800;
+        line-height: 1;
+        box-shadow: 0 8px 20px rgba(6, 12, 40, 0.14);
+        cursor: pointer;
+        transition:
+          transform 140ms ease,
+          border-color 140ms ease,
+          background 140ms ease;
+      }
+
+      .deckbuilder-card-copy-button:hover {
+        transform: translateY(-1px);
+        border-color: rgba(180, 140, 255, 0.34);
+        background: rgba(255, 255, 255, 1);
+      }
+
+      .deckbuilder-card-copy-button:focus-visible {
+        outline: 3px solid rgba(180, 140, 255, 0.24);
+        outline-offset: 2px;
+      }
+
+      .deckbuilder-card-face {
+        width: var(--display-card-width);
+      }
+
+      .deckbuilder-empty-state {
+        width: var(--display-card-width);
+        min-height: 18rem;
+      }
+
+      .deckbuilder-modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        display: grid;
+        place-items: center;
+        padding: 1.25rem;
+        background: rgba(4, 8, 28, 0.82);
+        backdrop-filter: blur(6px);
+      }
+
+      .deckbuilder-modal {
+        display: grid;
+        gap: 1rem;
+        width: min(44rem, 100%);
+      }
+
+      .deckbuilder-modal-header {
+        display: grid;
+        gap: 0.35rem;
+      }
+
+      .deckbuilder-modal-header strong {
+        font-size: 1.3rem;
+      }
+
+      .deckbuilder-modal-fields {
+        display: grid;
+        gap: 0.85rem;
+      }
+
+      .deckbuilder-modal-fields .field input {
+        width: 100%;
+      }
+
+      .deckbuilder-modal-error {
+        margin: 0;
+        padding: 0.8rem 0.9rem;
+        border-radius: 16px;
+        border: 1px solid rgba(185, 28, 28, 0.2);
+        background: rgba(254, 242, 242, 0.92);
+        color: #991b1b;
+        font-weight: 600;
+      }
+
       /* ─────────────────────────────────────────────────────────── */
 
       .cloud-arena-run-hero {
@@ -5879,6 +6197,23 @@ export function renderCloudArcanumWebHtml(
         color: rgba(236, 228, 216, 0.78);
       }
 
+      .card-face-footer-credit {
+        display: grid;
+        gap: 0.02rem;
+        min-width: 0;
+        flex: 1 1 auto;
+      }
+
+      .card-face-footer-credit-line {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: clamp(0.44rem, 2.15cqw, 0.54rem);
+        letter-spacing: 0.02em;
+        color: rgba(236, 228, 216, 0.78);
+      }
+
       .card-face-footer-bottom {
         display: flex;
         justify-content: space-between;
@@ -6048,341 +6383,6 @@ export function renderCloudArcanumWebHtml(
 
       .featured-card-grid {
         grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-      }
-
-      .deckbuilder-shell {
-        display: grid;
-        gap: 1rem;
-        min-height: 0;
-      }
-
-      .deckbuilder-overview {
-        display: grid;
-        gap: 1rem;
-      }
-
-      .deckbuilder-overview-header,
-      .deckbuilder-deck-item-header,
-      .deckbuilder-entry-header {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: start;
-        gap: 0.75rem;
-      }
-
-      .deckbuilder-overview-header strong,
-      .deckbuilder-deck-item strong,
-      .deckbuilder-entry-header strong {
-        display: block;
-        margin-bottom: 0.3rem;
-        font-size: 1.15rem;
-      }
-
-      .deckbuilder-overview-actions,
-      .deckbuilder-card-actions,
-      .deckbuilder-footer-links {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.65rem;
-      }
-
-      .deckbuilder-grid {
-        display: grid;
-        gap: 1rem;
-        min-height: 0;
-      }
-
-      @media (min-width: 1200px) {
-        .deckbuilder-grid {
-          grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-        }
-      }
-
-      .deckbuilder-column {
-        display: grid;
-        gap: 1rem;
-        min-height: 0;
-      }
-
-      .deckbuilder-toolbar {
-        display: grid;
-        gap: 0.85rem;
-      }
-
-      @media (min-width: 760px) {
-        .deckbuilder-toolbar {
-          grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-        }
-      }
-
-      .deckbuilder-list,
-      .deckbuilder-deck-entries {
-        display: grid;
-        gap: 0.85rem;
-        min-height: 0;
-      }
-
-      .deckbuilder-list {
-        max-height: 30rem;
-        overflow: auto;
-        padding-right: 0.2rem;
-      }
-
-      .deckbuilder-deck-entries {
-        max-height: 24rem;
-        overflow: auto;
-        padding-right: 0.2rem;
-      }
-
-      .deckbuilder-card-result,
-      .deckbuilder-deck-item,
-      .deckbuilder-deck-entry {
-        display: grid;
-        gap: 0.9rem;
-        padding: 1rem;
-        border-radius: 24px;
-        border: 1px solid var(--border);
-        background: rgba(255, 255, 255, 0.72);
-      }
-
-      .deckbuilder-deck-item {
-        text-align: left;
-        cursor: pointer;
-        transition:
-          transform 140ms ease,
-          border-color 140ms ease,
-          background 140ms ease;
-      }
-
-      .deckbuilder-deck-item:hover {
-        transform: translateY(-1px);
-        border-color: rgba(154, 52, 18, 0.28);
-        background: rgba(255, 255, 255, 0.92);
-      }
-
-      .deckbuilder-deck-item.is-active {
-        border-color: rgba(154, 52, 18, 0.42);
-        background: rgba(154, 52, 18, 0.1);
-      }
-
-      .deckbuilder-deck-item p,
-      .deckbuilder-entry-header p {
-        margin: 0;
-      }
-
-      .deckbuilder-footer {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-      }
-
-      .deckbuilder-top-panel,
-      .deckbuilder-catalog-panel {
-        display: grid;
-        gap: 1rem;
-      }
-
-      .deckbuilder-top-row,
-      .deckbuilder-catalog-header {
-        display: grid;
-        gap: 1rem;
-      }
-
-      .deckbuilder-top-row {
-        align-items: start;
-      }
-
-      @media (min-width: 900px) {
-        .deckbuilder-top-row {
-          grid-template-columns: minmax(18rem, 1fr) auto;
-        }
-
-        .deckbuilder-catalog-header {
-          grid-template-columns: minmax(0, 1fr) minmax(20rem, 28rem);
-          align-items: end;
-        }
-      }
-
-      .deckbuilder-top-actions,
-      .deckbuilder-catalog-controls,
-      .deckbuilder-modal-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.65rem;
-      }
-
-      .deckbuilder-metadata-grid {
-        display: grid;
-        gap: 0.85rem;
-      }
-
-      @media (min-width: 760px) {
-        .deckbuilder-metadata-grid {
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-        }
-      }
-
-      .deckbuilder-status-row {
-        align-items: center;
-      }
-
-      .deckbuilder-card-grid {
-        display: grid;
-        gap: 1rem;
-        grid-template-columns: repeat(auto-fill, minmax(var(--display-card-width), var(--display-card-width)));
-        justify-content: center;
-        align-items: start;
-      }
-
-      .deckbuilder-card-button {
-        position: relative;
-        display: grid;
-        justify-items: center;
-        gap: 0.55rem;
-        padding: 0;
-        border: 0;
-        background: transparent;
-        cursor: pointer;
-        transition:
-          transform 140ms ease,
-          filter 140ms ease,
-          opacity 140ms ease;
-      }
-
-      .deckbuilder-card-button:hover {
-        transform: translateY(-2px);
-      }
-
-      .deckbuilder-card-button:focus-visible {
-        outline: 3px solid rgba(154, 52, 18, 0.32);
-        outline-offset: 0.45rem;
-        border-radius: 28px;
-      }
-
-      .deckbuilder-card-button.is-unselected {
-        filter: grayscale(1) saturate(0.65);
-        opacity: 0.58;
-      }
-
-      .deckbuilder-card-button.is-selected {
-        filter: none;
-        opacity: 1;
-      }
-
-      .deckbuilder-card-selection-chip {
-        display: inline-flex;
-        align-items: center;
-        min-width: 2.15rem;
-        min-height: 2.15rem;
-        justify-content: center;
-        padding: 0.35rem 0.5rem;
-        border-radius: 999px;
-        border: 1px solid rgba(154, 52, 18, 0.28);
-        background: rgba(255, 252, 247, 0.92);
-        color: var(--accent);
-        font-size: 0.82rem;
-        font-weight: 700;
-        box-shadow: 0 8px 20px rgba(28, 23, 19, 0.1);
-      }
-
-      .deckbuilder-card-controls {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 0.65rem;
-        width: var(--display-card-width);
-      }
-
-      .deckbuilder-card-copy-controls {
-        display: inline-flex;
-        gap: 0.45rem;
-      }
-
-      .deckbuilder-card-copy-button {
-        width: 2.15rem;
-        height: 2.15rem;
-        padding: 0;
-        border-radius: 999px;
-        border: 1px solid rgba(154, 52, 18, 0.22);
-        background: rgba(255, 252, 247, 0.94);
-        color: var(--accent);
-        font: inherit;
-        font-size: 1.2rem;
-        font-weight: 800;
-        line-height: 1;
-        box-shadow: 0 8px 20px rgba(28, 23, 19, 0.1);
-        cursor: pointer;
-        transition:
-          transform 140ms ease,
-          border-color 140ms ease,
-          background 140ms ease;
-      }
-
-      .deckbuilder-card-copy-button:hover {
-        transform: translateY(-1px);
-        border-color: rgba(154, 52, 18, 0.34);
-        background: rgba(255, 255, 255, 1);
-      }
-
-      .deckbuilder-card-copy-button:focus-visible {
-        outline: 3px solid rgba(154, 52, 18, 0.22);
-        outline-offset: 2px;
-      }
-
-      .deckbuilder-card-face {
-        width: var(--display-card-width);
-      }
-
-      .deckbuilder-empty-state {
-        width: var(--display-card-width);
-        min-height: 18rem;
-      }
-
-      .deckbuilder-modal-backdrop {
-        position: fixed;
-        inset: 0;
-        z-index: 80;
-        display: grid;
-        place-items: center;
-        padding: 1rem;
-        background: rgba(20, 15, 12, 0.42);
-      }
-
-      .deckbuilder-modal {
-        display: grid;
-        gap: 1rem;
-        width: min(42rem, 100%);
-      }
-
-      .deckbuilder-modal-header {
-        display: grid;
-        gap: 0.35rem;
-      }
-
-      .deckbuilder-modal-header strong {
-        font-size: 1.3rem;
-      }
-
-      .deckbuilder-modal-fields {
-        display: grid;
-        gap: 0.85rem;
-      }
-
-      .deckbuilder-modal-fields .field input {
-        width: 100%;
-      }
-
-      .deckbuilder-modal-error {
-        margin: 0;
-        padding: 0.8rem 0.9rem;
-        border-radius: 16px;
-        border: 1px solid rgba(185, 28, 28, 0.2);
-        background: rgba(254, 242, 242, 0.92);
-        color: #991b1b;
-        font-weight: 600;
       }
 
       @media (min-width: 880px) {

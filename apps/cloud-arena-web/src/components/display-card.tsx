@@ -388,7 +388,7 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
           ) : null}
         </div>
         <div className="card-face-footer-bottom">
-          <div className="card-face-footer-artist">{model.footerCredit}</div>
+          <div className="card-face-footer-artist">{model.artist ?? model.footerCredit}</div>
           <div className="card-face-collector-number">{model.collectorNumber}</div>
         </div>
       </footer>

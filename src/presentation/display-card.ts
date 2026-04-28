@@ -45,6 +45,7 @@ export type DisplayCardModelBase = {
   name: string;
   title?: string | null;
   subtitle?: string | null;
+  artist?: string | null;
   frameTone: string;
   manaCost?: string | null;
   rarity?: "common" | "uncommon" | "rare" | "mythic" | null;

@@ -588,6 +588,7 @@ export type CardDisplayDefinition = {
   manaCost: string | null;
   imagePath?: string;
   imageAlt?: string;
+  artist?: string | null;
   flavorText?: string | null;
   footerCode: string;
   footerCredit: string;
