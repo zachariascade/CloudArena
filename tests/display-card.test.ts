@@ -1141,7 +1141,8 @@ describe("shared display card mappers", () => {
     expect(previewCards[0]?.textBlocks[0]?.text).toBe("Attack with base power");
     expect(previewCards[1]?.textBlocks[0]?.text).toBe("Attack with 2x base power");
     expect(previewCards[2]?.textBlocks[0]?.text).toBe("Attack with 3x base power");
-    expect(previewCards[3]?.textBlocks[0]?.text).toBe("Reduce all permanents Power by 1");
+    expect(previewCards[3]?.textBlocks[0]?.text).toBe("**Pierce** • Attack with base power");
+    expect(previewCards[4]?.textBlocks[0]?.text).toBe("Reduce all permanents Power by 1");
   });
 
   it("renders immediate enemy cards with a hoverable Immediate keyword", () => {
