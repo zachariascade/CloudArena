@@ -2,21 +2,85 @@ import { describe, expect, it } from "vitest";
 
 import {
   applyBattleAction,
-  cardDefinitions,
   createBattle,
   getDerivedPermanentActionAmount,
   getDerivedPermanentStat,
   getPermanentCounterCount,
+  type CardDefinitionLibrary,
 } from "../../src/cloud-arena/index.js";
+
+const BANNER_TEST_DEFINITIONS: CardDefinitionLibrary = {
+  test_creature: {
+    id: "test_creature",
+    name: "Test Creature",
+    cardTypes: ["creature"],
+    cost: 2,
+    onPlay: [],
+    power: 4,
+    health: 4,
+    keywords: ["halt"],
+    abilities: [],
+  },
+  test_banner: {
+    id: "test_banner",
+    name: "Test Banner",
+    cardTypes: ["artifact"],
+    cost: 2,
+    onPlay: [],
+    power: 0,
+    health: 6,
+    abilities: [
+      {
+        kind: "triggered",
+        trigger: {
+          event: "permanent_enters_battlefield",
+          selector: {
+            zone: "battlefield",
+            controller: "you",
+            cardType: "creature",
+          },
+        },
+        effects: [
+          {
+            type: "add_counter",
+            target: {
+              zone: "battlefield",
+              controller: "you",
+              cardType: "creature",
+              source: "trigger_subject",
+              relation: "self",
+            },
+            powerDelta: 1,
+            healthDelta: 1,
+          },
+        ],
+      },
+    ],
+  },
+  attack: {
+    id: "attack",
+    name: "Attack",
+    cardTypes: ["instant"],
+    cost: 1,
+    onPlay: [{ attackAmount: 6, target: "enemy" }],
+  },
+  defend: {
+    id: "defend",
+    name: "Defend",
+    cardTypes: ["instant"],
+    cost: 1,
+    onPlay: [{ blockAmount: 7, target: "player" }],
+  },
+};
 
 describe("cloud arena anointed banner", () => {
   it("adds a +1/+1 counter to a creature when it enters the battlefield", () => {
     const battle = createBattle({
       seed: 1,
-      cardDefinitions,
+      cardDefinitions: BANNER_TEST_DEFINITIONS,
       playerDeck: [
-        "guardian",
-        "anointed_banner",
+        "test_creature",
+        "test_banner",
         "attack",
         "defend",
         "attack",
@@ -31,11 +95,11 @@ describe("cloud arena anointed banner", () => {
 
     battle.player.energy = 10;
 
-    const guardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
-    const bannerCard = battle.player.hand.find((card) => card.definitionId === "anointed_banner");
+    const creatureCard = battle.player.hand.find((card) => card.definitionId === "test_creature");
+    const bannerCard = battle.player.hand.find((card) => card.definitionId === "test_banner");
 
-    if (!guardianCard || !bannerCard) {
-      throw new Error("Expected guardian and anointed_banner in opening hand.");
+    if (!creatureCard || !bannerCard) {
+      throw new Error("Expected test_creature and test_banner in opening hand.");
     }
 
     applyBattleAction(battle, {
@@ -44,22 +108,22 @@ describe("cloud arena anointed banner", () => {
     });
     applyBattleAction(battle, {
       type: "play_card",
-      cardInstanceId: guardianCard.instanceId,
+      cardInstanceId: creatureCard.instanceId,
     });
 
-    const guardian = battle.battlefield.find((permanent) => permanent?.definitionId === "guardian");
-    const banner = battle.battlefield.find((permanent) => permanent?.definitionId === "anointed_banner");
+    const creature = battle.battlefield.find((permanent) => permanent?.definitionId === "test_creature");
+    const banner = battle.battlefield.find((permanent) => permanent?.definitionId === "test_banner");
 
-    if (!guardian || !banner) {
-      throw new Error("Expected guardian and anointed_banner on battlefield.");
+    if (!creature || !banner) {
+      throw new Error("Expected test_creature and test_banner on battlefield.");
     }
 
-    expect(getPermanentCounterCount(guardian, "+1/+1")).toBe(2);
+    expect(getPermanentCounterCount(creature, "+1/+1")).toBe(2);
     expect(getPermanentCounterCount(banner, "+1/+1")).toBe(0);
-    expect(getDerivedPermanentStat(battle, guardian, "power")).toBe(5);
-    expect(getDerivedPermanentActionAmount(battle, guardian, "attack")).toBe(5);
+    expect(getDerivedPermanentStat(battle, creature, "power")).toBe(5);
+    expect(getDerivedPermanentActionAmount(battle, creature, "attack")).toBe(5);
     expect(battle.rules.filter((event) => event.type === "counter_added").length).toBe(2);
-    expect(guardian.health).toBe(5);
+    expect(creature.health).toBe(5);
     expect(banner.health).toBe(6);
   });
 });

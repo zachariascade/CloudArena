@@ -8,9 +8,6 @@ import {
   resolveEffects,
   type CardDefinitionLibrary,
 } from "../../src/cloud-arena/index.js";
-import { armorySeraphCardDefinition } from "../../src/cloud-arena/cards/definitions/armory-seraph.js";
-import { battlefieldInsightCardDefinition } from "../../src/cloud-arena/cards/definitions/battlefield-insight.js";
-import { forbiddenInsightCardDefinition } from "../../src/cloud-arena/cards/definitions/forbidden-insight.js";
 import { createTestBattle } from "./helpers.js";
 
 const EFFECT_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
@@ -151,6 +148,70 @@ const EFFECT_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
         counter: "+1/+1",
         stat: "health",
         amount: { type: "constant", value: 1 },
+      },
+    ],
+  },
+  forbidden_insight: {
+    id: "forbidden_insight",
+    name: "Forbidden Insight",
+    cardTypes: ["instant"],
+    cost: 2,
+    onPlay: [],
+    spellEffects: [
+      {
+        type: "draw_card",
+        target: "self",
+        amount: { type: "constant", value: 3 },
+      },
+    ],
+  },
+  battlefield_insight: {
+    id: "battlefield_insight",
+    name: "Battlefield Insight",
+    cardTypes: ["instant"],
+    cost: 1,
+    onPlay: [],
+    spellEffects: [
+      {
+        type: "draw_card",
+        target: "self",
+        amount: {
+          type: "count",
+          selector: {
+            zone: "battlefield",
+            cardType: "creature",
+          },
+        },
+      },
+    ],
+  },
+  armory_seraph: {
+    id: "armory_seraph",
+    name: "Armory Seraph",
+    cardTypes: ["creature"],
+    subtypes: ["Angel"],
+    cost: 3,
+    onPlay: [],
+    power: 2,
+    health: 4,
+    abilities: [
+      {
+        kind: "triggered",
+        trigger: {
+          event: "permanent_enters_battlefield",
+          selector: {
+            zone: "battlefield",
+            controller: "you",
+            cardType: "equipment",
+          },
+        },
+        effects: [
+          {
+            type: "draw_card",
+            target: "self",
+            amount: { type: "constant", value: 1 },
+          },
+        ],
       },
     ],
   },
@@ -404,10 +465,7 @@ describe("cloud arena effect primitives", () => {
 
   it("draws three cards from Forbidden Insight", () => {
     const battle = createTestBattle({
-      cardDefinitions: {
-        ...EFFECT_TEST_CARD_DEFINITIONS,
-        forbidden_insight: forbiddenInsightCardDefinition,
-      },
+      cardDefinitions: EFFECT_TEST_CARD_DEFINITIONS,
       playerDeck: [
         "forbidden_insight",
         "angel_host",
@@ -447,10 +505,7 @@ describe("cloud arena effect primitives", () => {
 
   it("draws cards equal to the number of creatures on the battlefield", () => {
     const battle = createTestBattle({
-      cardDefinitions: {
-        ...EFFECT_TEST_CARD_DEFINITIONS,
-        battlefield_insight: battlefieldInsightCardDefinition,
-      },
+      cardDefinitions: EFFECT_TEST_CARD_DEFINITIONS,
       playerDeck: [
         "angel_host",
         "altar_keeper",
@@ -498,10 +553,7 @@ describe("cloud arena effect primitives", () => {
 
   it("draws a card when an equipment you control enters the battlefield", () => {
     const battle = createTestBattle({
-      cardDefinitions: {
-        ...EFFECT_TEST_CARD_DEFINITIONS,
-        armory_seraph: armorySeraphCardDefinition,
-      },
+      cardDefinitions: EFFECT_TEST_CARD_DEFINITIONS,
       playerDeck: [
         "armory_seraph",
         "holy_blade",

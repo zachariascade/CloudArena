@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 
 import {
   applyBattleAction,
-  cardDefinitions,
   destroyPermanent,
   getDerivedPermanentStat,
   getPermanentCounterCount,
@@ -419,17 +418,14 @@ describe("cloud arena trigger resolution", () => {
 
   it("draws cards from an enter-the-battlefield trigger", () => {
     const battle = createTestBattle({
-      cardDefinitions: {
-        ...cardDefinitions,
-        ...TRIGGER_TEST_CARD_DEFINITIONS,
-      },
+      cardDefinitions: TRIGGER_TEST_CARD_DEFINITIONS,
       playerDeck: [
         "archive_sage",
         "attack",
         "defend",
         "attack",
         "defend",
-        "holy_blade",
+        "offering_thrall",
       ],
       enemy: {
         name: "Draw Trigger Dummy",
@@ -454,7 +450,7 @@ describe("cloud arena trigger resolution", () => {
 
     expect(
       battle.player.hand.map((card) => card.definitionId),
-    ).toContain("holy_blade");
+    ).toContain("offering_thrall");
     expect(
       battle.rules.filter((event) => event.type === "card_drawn").length,
     ).toBe(6);

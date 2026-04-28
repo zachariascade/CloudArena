@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 
 import {
   applyBattleAction,
-  cardDefinitions,
   createBattle,
   getDerivedPermanentStat,
   getLegalActions,
@@ -11,6 +10,16 @@ import {
 } from "../../src/cloud-arena/index.js";
 
 const TARGETING_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
+  guardian: {
+    id: "guardian",
+    name: "Guardian",
+    cardTypes: ["creature"],
+    cost: 2,
+    onPlay: [],
+    power: 4,
+    health: 4,
+    abilities: [],
+  },
   curious_stag: {
     id: "curious_stag",
     name: "Curious Stag",
@@ -43,15 +52,26 @@ const TARGETING_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
       },
     ],
   },
+  attack: {
+    id: "attack",
+    name: "Attack",
+    cardTypes: ["instant"],
+    cost: 1,
+    onPlay: [{ attackAmount: 6, target: "enemy" }],
+  },
+  defend: {
+    id: "defend",
+    name: "Defend",
+    cardTypes: ["instant"],
+    cost: 1,
+    onPlay: [{ blockAmount: 7, target: "player" }],
+  },
 };
 
 function createTargetingBattle() {
   return createBattle({
     seed: 1,
-    cardDefinitions: {
-      ...cardDefinitions,
-      ...TARGETING_TEST_CARD_DEFINITIONS,
-    },
+    cardDefinitions: TARGETING_TEST_CARD_DEFINITIONS,
     playerDeck: [
       "guardian",
       "curious_stag",

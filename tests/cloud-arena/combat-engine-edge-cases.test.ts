@@ -3,7 +3,6 @@ import { describe, expect, it } from "vitest";
 import {
   applyBattleAction,
   buildBattleSummary,
-  cardDefinitions,
   destroyPermanent,
   getLegalActions,
   playCard,
@@ -752,7 +751,7 @@ describe("cloud arena combat engine edge cases", () => {
   it("returns a chosen graveyard card to hand with resurrect", () => {
     const battle = createTestBattle({
       cardDefinitions: {
-        ...cardDefinitions,
+        ...TEST_CARD_DEFINITIONS,
         ...RESURRECT_TEST_DEFINITIONS,
       },
       playerDeck: ["guardian", "resurrect", "attack", "defend", "attack"],

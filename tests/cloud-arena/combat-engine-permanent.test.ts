@@ -1,8 +1,19 @@
 import { describe, expect, it } from "vitest";
 
 import { applyBattleAction, createBattle, type CardDefinitionLibrary } from "../../src/cloud-arena/index.js";
-import { judgmentBladeCardDefinition } from "../../src/cloud-arena/cards/definitions/judgment-blade.js";
 import { createTestBattle, formatBattleLog, TEST_CARD_DEFINITIONS } from "./helpers.js";
+
+const judgmentBladeCardDefinition: CardDefinitionLibrary["judgment_blade"] = {
+  id: "judgment_blade",
+  name: "Judgment Blade",
+  cardTypes: ["artifact"],
+  subtypes: ["Equipment"],
+  cost: 3,
+  onPlay: [],
+  power: 1,
+  health: 1,
+  attackAllEnemyPermanents: true,
+};
 
 describe("cloud arena combat engine permanent flow", () => {
   it("handles playing Guardian and defending with it across rounds", () => {

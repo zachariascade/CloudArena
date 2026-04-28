@@ -5,20 +5,22 @@ import {
   getDerivedPermanentStat,
   getEnemyPlanStepAtIndexFromInput,
   formatEnemyIntent,
-  getEnemyPreset,
 } from "../../src/cloud-arena/index.js";
 import { createTestBattle, formatBattleLog } from "./helpers.js";
 
 describe("cloud arena low-tier enemies", () => {
   it("resolves grunt demon attacks from base power", () => {
-    const preset = getEnemyPreset("grunt_demon");
     const battle = createTestBattle({
       playerDeck: ["attack", "attack", "defend", "attack", "defend"],
       enemy: {
-        name: preset.name,
-        health: preset.health,
-        basePower: preset.basePower,
-        cards: preset.cards,
+        name: "Test Attacker",
+        health: 18,
+        basePower: 5,
+        cards: [
+          { id: "single_slash", name: "Single Slash", effects: [{ attackPowerMultiplier: 1, target: "player" }] },
+          { id: "single_slash_2", name: "Single Slash", effects: [{ attackPowerMultiplier: 1, target: "player" }] },
+          { id: "single_slash_3", name: "Single Slash", effects: [{ attackPowerMultiplier: 1, target: "player" }] },
+        ],
       },
     });
 
@@ -26,7 +28,7 @@ describe("cloud arena low-tier enemies", () => {
     const leader = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
 
     expect(battle.enemy.intent).toEqual({ attackAmount: 5 });
-    expect(leader?.name).toBe("Grunt Demon");
+    expect(leader?.name).toBe("Test Attacker");
     expect(leader?.definitionId).toBe("enemy_leader");
 
     applyBattleAction(battle, { type: "end_turn" });
@@ -35,15 +37,18 @@ describe("cloud arena low-tier enemies", () => {
     expect(formatBattleLog(battle)).toContain("turn 1: enemy resolved attack 5");
   });
 
-  it("lets bruiser demon gain power and scale later attacks", () => {
-    const preset = getEnemyPreset("bruiser_demon");
+  it("lets a power-scaling enemy gain power and scale later attacks", () => {
     const battle = createTestBattle({
       playerDeck: ["defend", "attack", "attack", "defend", "attack"],
       enemy: {
-        name: preset.name,
-        health: preset.health,
-        basePower: preset.basePower,
-        cards: preset.cards,
+        name: "Test Bruiser",
+        health: 24,
+        basePower: 6,
+        cards: [
+          { id: "cross_slash", name: "Cross Slash", effects: [{ attackPowerMultiplier: 1, attackTimes: 2, target: "player" }] },
+          { id: "gain_power_1", name: "Gain Power", effects: [{ powerDelta: 1, target: "enemy" }] },
+          { id: "cross_slash_2", name: "Cross Slash", effects: [{ attackPowerMultiplier: 1, attackTimes: 2, target: "player" }] },
+        ],
       },
     });
 
@@ -59,16 +64,19 @@ describe("cloud arena low-tier enemies", () => {
     expect(formatBattleLog(battle)).toContain("turn 2: enemy gained 1 power, base power now 7");
   });
 
-  it("starts imp caller with tokens and spawns more during combat", () => {
-    const preset = getEnemyPreset("imp_caller");
+  it("starts a token-spawning enemy with tokens and spawns more during combat", () => {
     const battle = createTestBattle({
       playerDeck: ["defend", "attack", "attack", "defend", "attack"],
       enemy: {
-        name: preset.name,
-        health: preset.health,
-        basePower: preset.basePower,
-        cards: preset.cards,
-        startingTokens: preset.startingTokens,
+        name: "Test Spawner",
+        health: 20,
+        basePower: 3,
+        startingTokens: ["token_imp"],
+        cards: [
+          { id: "token_imp_spawn_1", name: "Spawn token_imp", effects: [{ spawnCardId: "token_imp", spawnCount: 1, target: "enemy" }] },
+          { id: "single_slash", name: "Single Slash", effects: [{ attackPowerMultiplier: 1, target: "player" }] },
+          { id: "token_imp_spawn_2", name: "Spawn 2 token_imps", effects: [{ spawnCardId: "token_imp", spawnCount: 2, target: "enemy" }] },
+        ],
       },
     });
 
@@ -92,15 +100,18 @@ describe("cloud arena low-tier enemies", () => {
   });
 
   it("lets the player target an enemy token directly", () => {
-    const preset = getEnemyPreset("imp_caller");
     const battle = createTestBattle({
       playerDeck: ["enemy_targeted_smite", "attack", "defend", "attack", "defend"],
       enemy: {
-        name: preset.name,
-        health: preset.health,
-        basePower: preset.basePower,
-        cards: preset.cards,
-        startingTokens: preset.startingTokens,
+        name: "Test Spawner",
+        health: 20,
+        basePower: 3,
+        startingTokens: ["token_imp"],
+        cards: [
+          { id: "token_imp_spawn_1", name: "Spawn token_imp", effects: [{ spawnCardId: "token_imp", spawnCount: 1, target: "enemy" }] },
+          { id: "single_slash", name: "Single Slash", effects: [{ attackPowerMultiplier: 1, target: "player" }] },
+          { id: "token_imp_spawn_2", name: "Spawn 2 token_imps", effects: [{ spawnCardId: "token_imp", spawnCount: 2, target: "enemy" }] },
+        ],
       },
     });
 
@@ -130,16 +141,19 @@ describe("cloud arena low-tier enemies", () => {
     expect(battle.pendingTargetRequest).toBeNull();
   });
 
-  it("does not let a spawned imp attack on the same resolution step", () => {
-    const preset = getEnemyPreset("imp_caller");
+  it("does not let a spawned token attack on the same resolution step", () => {
     const battle = createTestBattle({
       playerDeck: ["defend", "attack", "attack", "defend", "attack"],
       enemy: {
-        name: preset.name,
-        health: preset.health,
-        basePower: preset.basePower,
-        cards: preset.cards,
-        startingTokens: preset.startingTokens,
+        name: "Test Spawner",
+        health: 20,
+        basePower: 3,
+        startingTokens: ["token_imp"],
+        cards: [
+          { id: "token_imp_spawn_1", name: "Spawn token_imp", effects: [{ spawnCardId: "token_imp", spawnCount: 1, target: "enemy" }] },
+          { id: "single_slash", name: "Single Slash", effects: [{ attackPowerMultiplier: 1, target: "player" }] },
+          { id: "token_imp_spawn_2", name: "Spawn 2 token_imps", effects: [{ spawnCardId: "token_imp", spawnCount: 2, target: "enemy" }] },
+        ],
       },
     });
 
@@ -196,15 +210,24 @@ describe("cloud arena low-tier enemies", () => {
     expect(battle.player.health).toBeLessThan(startHealth);
   });
 
-  it("resolves demon pack block card immediately when it becomes active", () => {
-    const preset = getEnemyPreset("demon_pack");
+  it("resolves an immediate block card when it becomes active", () => {
+    const immediateBlockCard = {
+      id: "gain_block_equal_health",
+      name: "Gain Block Equal To Health",
+      effects: [{ blockHealthMultiplier: 1, target: "enemy" as const, resolveTiming: "immediate" as const }],
+    };
+
     const battle = createTestBattle({
       playerDeck: ["attack", "defend", "attack", "defend", "attack"],
       enemy: {
-        name: preset.name,
-        health: preset.health,
-        basePower: preset.basePower,
-        cards: preset.cards,
+        name: "Test Blocker",
+        health: 24,
+        basePower: 3,
+        cards: [
+          { id: "single_slash", name: "Single Slash", effects: [{ attackPowerMultiplier: 1, target: "player" as const }] },
+          immediateBlockCard,
+          { id: "cross_slash", name: "Cross Slash", effects: [{ attackPowerMultiplier: 1, attackTimes: 2, target: "player" as const }] },
+        ],
         startingPermanents: ["enemy_husk", "enemy_brute"],
       },
     });
@@ -219,16 +242,20 @@ describe("cloud arena low-tier enemies", () => {
     expect(battle.enemy.intent).toEqual({});
   });
 
-  it("applies the lake of ice weakening card to all permanents for a turn", () => {
-    const preset = getEnemyPreset("lake_of_ice");
+  it("applies a battlefield-wide debuff to permanents for a turn", () => {
     const battle = createTestBattle({
       playerDeck: ["guardian", "defend", "attack", "defend", "attack"],
       playerHealth: 100,
       enemy: {
-        name: preset.name,
-        health: preset.health,
-        basePower: preset.basePower,
-        cards: preset.cards,
+        name: "Test Debuffer",
+        health: 28,
+        basePower: 4,
+        cards: [
+          { id: "single_slash", name: "Single Slash", effects: [{ attackPowerMultiplier: 1, target: "player" as const }] },
+          { id: "double_slash", name: "Double Slash", effects: [{ attackPowerMultiplier: 2, target: "player" as const }] },
+          { id: "triple_slash", name: "Triple Slash", effects: [{ attackPowerMultiplier: 3, target: "player" as const }] },
+          { id: "weaken_all_permanents_1", name: "Weaken All Permanents", effects: [{ target: "enemy" as const, powerDeltaAllPermanents: -1 }] },
+        ],
         startingPermanents: ["enemy_husk", "enemy_brute"],
       },
     });
@@ -270,20 +297,23 @@ describe("cloud arena low-tier enemies", () => {
     expect(getDerivedPermanentStat(battle, guardian, "power")).toBe(4);
   });
 
-  it("formats the lake of ice battlefield-wide debuff as Debuff", () => {
-    const preset = getEnemyPreset("lake_of_ice");
-    const step = getEnemyPlanStepAtIndexFromInput(
-      {
-        name: preset.name,
-        health: preset.health,
-        basePower: preset.basePower,
-        cards: preset.cards,
-      },
-      3,
-    );
+  it("formats the battlefield-wide debuff intent as Debuff", () => {
+    const enemyInput = {
+      name: "Test Debuffer",
+      health: 28,
+      basePower: 4,
+      cards: [
+        { id: "single_slash", name: "Single Slash", effects: [{ attackPowerMultiplier: 1, target: "player" as const }] },
+        { id: "double_slash", name: "Double Slash", effects: [{ attackPowerMultiplier: 2, target: "player" as const }] },
+        { id: "triple_slash", name: "Triple Slash", effects: [{ attackPowerMultiplier: 3, target: "player" as const }] },
+        { id: "weaken_all_permanents_1", name: "Weaken All Permanents", effects: [{ target: "enemy" as const, powerDeltaAllPermanents: -1 }] },
+      ],
+    };
+
+    const step = getEnemyPlanStepAtIndexFromInput(enemyInput, 3);
 
     if (!step) {
-      throw new Error("Expected the lake of ice debuff step.");
+      throw new Error("Expected the debuff step.");
     }
 
     expect(formatEnemyIntent(step.intent)).toBe("Debuff");

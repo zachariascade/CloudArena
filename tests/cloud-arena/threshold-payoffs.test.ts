@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 
 import {
   applyBattleAction,
-  cardDefinitions,
   destroyPermanent,
   getLegalActions,
   type CardDefinitionLibrary,
@@ -116,10 +115,7 @@ const THRESHOLD_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
 describe("cloud arena threshold payoffs", () => {
   it("hides activated threshold payoffs until the battlefield count is met", () => {
     const battle = createTestBattle({
-      cardDefinitions: {
-        ...cardDefinitions,
-        ...THRESHOLD_TEST_CARD_DEFINITIONS,
-      },
+      cardDefinitions: THRESHOLD_TEST_CARD_DEFINITIONS,
       playerDeck: [
         "threshold_marshal",
         "threshold_follower",
@@ -197,10 +193,7 @@ describe("cloud arena threshold payoffs", () => {
 
   it("resolves graveyard threshold payoffs when a card enters the battlefield", () => {
     const battle = createTestBattle({
-      cardDefinitions: {
-        ...cardDefinitions,
-        ...THRESHOLD_TEST_CARD_DEFINITIONS,
-      },
+      cardDefinitions: THRESHOLD_TEST_CARD_DEFINITIONS,
       playerDeck: [
         "fodder",
         "graveyard_choir",

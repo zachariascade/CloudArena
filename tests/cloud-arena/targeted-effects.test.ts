@@ -2,13 +2,13 @@ import { describe, expect, it } from "vitest";
 
 import {
   applyBattleAction,
-  cardDefinitions,
   createBattle,
   getDerivedPermanentStat,
   getLegalActions,
   getPermanentCounterCount,
   type CardDefinitionLibrary,
 } from "../../src/cloud-arena/index.js";
+import { TEST_CARD_DEFINITIONS } from "./helpers.js";
 
 const TARGETED_EFFECT_TEST_DEFINITIONS: CardDefinitionLibrary = {
   sentinel: {
@@ -158,7 +158,7 @@ function createTargetedEffectsBattle() {
   return createBattle({
     seed: 1,
     cardDefinitions: {
-      ...cardDefinitions,
+      ...TEST_CARD_DEFINITIONS,
       ...TARGETED_EFFECT_TEST_DEFINITIONS,
     },
     playerDeck: [
@@ -182,7 +182,7 @@ describe("cloud arena targeted effects", () => {
     const battle = createBattle({
       seed: 1,
       cardDefinitions: {
-        ...cardDefinitions,
+        ...TEST_CARD_DEFINITIONS,
         ...TARGETED_EFFECT_TEST_DEFINITIONS,
       },
       playerDeck: ["targeted_smite"],
@@ -288,7 +288,7 @@ describe("cloud arena targeted effects", () => {
     const battle = createBattle({
       seed: 1,
       cardDefinitions: {
-        ...cardDefinitions,
+        ...TEST_CARD_DEFINITIONS,
         ...TARGETED_EFFECT_TEST_DEFINITIONS,
       },
       playerDeck: ["targeted_strike", "attack"],
@@ -340,7 +340,7 @@ describe("cloud arena targeted effects", () => {
     const battle = createBattle({
       seed: 1,
       cardDefinitions: {
-        ...cardDefinitions,
+        ...TEST_CARD_DEFINITIONS,
         ...TARGETED_EFFECT_TEST_DEFINITIONS,
       },
       playerDeck: ["guardian", "restorative_touch"],
@@ -487,7 +487,7 @@ describe("cloud arena targeted effects", () => {
     const battle = createBattle({
       seed: 1,
       cardDefinitions: {
-        ...cardDefinitions,
+        ...TEST_CARD_DEFINITIONS,
         ...TARGETED_EFFECT_TEST_DEFINITIONS,
       },
       playerDeck: ["mirror_blesser"],

@@ -2,11 +2,11 @@ import { describe, expect, it } from "vitest";
 
 import {
   applyBattleAction,
-  cardDefinitions,
   createBattle,
   getPermanentCounterCount,
   type CardDefinitionLibrary,
 } from "../../src/cloud-arena/index.js";
+import { TEST_CARD_DEFINITIONS } from "./helpers.js";
 
 const COMBAT_TRIGGER_TEST_DEFINITIONS: CardDefinitionLibrary = {
   battle_chorus: {
@@ -74,7 +74,7 @@ function createCombatTriggerBattle() {
   return createBattle({
     seed: 1,
     cardDefinitions: {
-      ...cardDefinitions,
+      ...TEST_CARD_DEFINITIONS,
       ...COMBAT_TRIGGER_TEST_DEFINITIONS,
     },
     playerDeck: [
