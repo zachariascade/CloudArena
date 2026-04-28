@@ -24,6 +24,15 @@ function applyDamageToBlockAndHealth(
   return spilloverDamage;
 }
 
+function applyDamageToHealthOnly(
+  damage: number,
+  target: { health: number },
+): number {
+  const damageDealt = Math.min(damage, Math.max(0, target.health));
+  target.health = Math.max(0, target.health - damageDealt);
+  return damageDealt;
+}
+
 function logEnemyDamage(
   state: BattleState,
   amount: number,
@@ -68,6 +77,7 @@ function applyEnemyDamageToDefenders(
   state: BattleState,
   damage: number,
   sourcePermanentId: string,
+  sourceHasPierce: boolean,
 ): { remainingDamage: number; defended: boolean; halted: boolean } {
   let remainingDamage = damage;
   let defended = false;
@@ -91,7 +101,9 @@ function applyEnemyDamageToDefenders(
     defended = true;
     halted ||= permanentHasKeyword(permanent, "halt");
     const beforeCombined = permanent.block + permanent.health;
-    remainingDamage = applyDamageToBlockAndHealth(remainingDamage, permanent);
+    remainingDamage = sourceHasPierce
+      ? Math.max(0, remainingDamage - applyDamageToHealthOnly(remainingDamage, permanent))
+      : applyDamageToBlockAndHealth(remainingDamage, permanent);
     const absorbedByPermanent = beforeCombined - (permanent.block + permanent.health);
     logEnemyDamage(state, absorbedByPermanent, "permanent", permanent.instanceId);
     if (absorbedByPermanent > 0) {
@@ -132,13 +144,16 @@ export function settleEnemyAttackDamage(
   damage: number,
   sourcePermanentId: string,
   overflowPolicy: DamageOverflowPolicy = "overflow",
+  bypassBlock = false,
 ): BattleState {
   let remainingDamage = damage;
 
-  remainingDamage = applyEnemyDamageToPlayerBlock(state, remainingDamage);
-
   const sourcePermanent = findPermanentById(state, sourcePermanentId);
   const hasMenace = sourcePermanent ? permanentHasKeyword(sourcePermanent, "menace") : false;
+  const hasPierce = bypassBlock || (sourcePermanent ? permanentHasKeyword(sourcePermanent, "pierce") : false);
+  if (!hasPierce) {
+    remainingDamage = applyEnemyDamageToPlayerBlock(state, remainingDamage);
+  }
   const blockerCount = hasMenace
     ? state.blockingQueue.filter(
         (id) => findPermanentById(state, id)?.blockingTargetPermanentId === sourcePermanentId,
@@ -147,7 +162,7 @@ export function settleEnemyAttackDamage(
   const canBeBlocked = !hasMenace || blockerCount >= 2;
 
   const defenderResult = canBeBlocked
-    ? applyEnemyDamageToDefenders(state, remainingDamage, sourcePermanentId)
+    ? applyEnemyDamageToDefenders(state, remainingDamage, sourcePermanentId, hasPierce)
     : { remainingDamage, defended: false, halted: false };
   remainingDamage = defenderResult.remainingDamage;
   if (defenderResult.defended && overflowPolicy === "stop_at_blocker") {

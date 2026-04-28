@@ -136,7 +136,16 @@ export function usePermanentAction(
             continue;
           }
 
-          const damageDealt = dealDamageToPermanent(state, target, attackAmount, "permanent_action", permanent.instanceId);
+          const attackBypassesBlock = permanentHasKeyword(permanent, "pierce");
+          const damageDealt = dealDamageToPermanent(
+            state,
+            target,
+            attackAmount,
+            "permanent_action",
+            permanent.instanceId,
+            permanent.instanceId,
+            attackBypassesBlock,
+          );
           if (damageDealt > 0 && permanentHasKeyword(target, "deathtouch") && !killedByDeathtouch) {
             destroyPermanent(state, permanent.instanceId);
             killedByDeathtouch = true;
@@ -166,6 +175,7 @@ export function usePermanentAction(
         context: {
           abilitySourcePermanentId: permanent.instanceId,
           sourceCardInstanceId: permanent.sourceCardInstanceId,
+          attackBypassesBlock: permanentHasKeyword(permanent, "pierce"),
         },
       };
       state.nextTargetRequestIndex += 1;

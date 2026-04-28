@@ -58,6 +58,10 @@ function summarizeEnemyCardEffect(card: EnemyCardDefinition["effects"][number]):
     );
   }
 
+  if (card.bypassBlock) {
+    parts.unshift("**Pierce**");
+  }
+
   if (typeof card.blockAmount === "number") {
     parts.push(`Gain ${card.blockAmount} Block`);
   }

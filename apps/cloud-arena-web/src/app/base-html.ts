@@ -236,6 +236,59 @@ export function renderCloudArcanumWebHtml(
         overflow-y: auto;
       }
 
+      .cloud-arena-feedback-button {
+        position: fixed;
+        left: max(1rem, env(safe-area-inset-left));
+        bottom: max(1rem, env(safe-area-inset-bottom));
+        z-index: 50;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.9rem;
+        height: 2.9rem;
+        border-radius: 999px;
+        border: 1px solid rgba(154, 52, 18, 0.24);
+        background: rgba(255, 255, 255, 0.88);
+        color: var(--accent);
+        box-shadow: 0 12px 30px rgba(28, 23, 19, 0.18);
+        text-decoration: none;
+        transition:
+          transform 140ms ease,
+          background 140ms ease,
+          border-color 140ms ease,
+          box-shadow 140ms ease;
+      }
+
+      .cloud-arena-feedback-button:hover {
+        transform: translateY(-1px);
+        border-color: rgba(154, 52, 18, 0.36);
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 14px 34px rgba(28, 23, 19, 0.2);
+      }
+
+      .cloud-arena-feedback-button:focus-visible {
+        outline: 2px solid rgba(154, 52, 18, 0.45);
+        outline-offset: 3px;
+      }
+
+      .cloud-arena-feedback-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        fill: currentColor;
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
       .app-shell-backdrop {
         position: absolute;
         inset: 0;
@@ -423,6 +476,11 @@ export function renderCloudArcanumWebHtml(
 
         .app-shell-sidebar {
           width: min(92vw, 23rem);
+        }
+
+        .cloud-arena-feedback-button {
+          left: 0.75rem;
+          bottom: 0.75rem;
         }
       }
 

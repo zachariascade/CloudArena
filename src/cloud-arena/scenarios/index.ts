@@ -17,6 +17,7 @@ export {
   gainPower,
   multiSlash,
   singleSlash,
+  demonPierce,
   spawnSimpleToken,
   tripleSlash,
   strike,

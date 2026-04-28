@@ -11,6 +11,7 @@ export {
   multiSlash,
   singleSlash,
   spawnSimpleToken,
+  demonPierce,
   tripleSlash,
   weakenAllPermanents,
 } from "./enemy-cards/low-tier.js";

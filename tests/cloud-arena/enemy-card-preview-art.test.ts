@@ -60,4 +60,27 @@ describe("enemy card preview art", () => {
 
     expect(model.image?.url).toContain("demonic-boost.png");
   });
+
+  it("shows pierce on enemy attacks that bypass block", () => {
+    const model = buildEnemyPreviewCardModel(
+      {
+        id: "enemy_demon_pierce",
+        name: "Pierce",
+        effects: [
+          {
+            attackPowerMultiplier: 1,
+            bypassBlock: true,
+            target: "player",
+          },
+        ],
+      },
+      0,
+    );
+
+    expect(
+      model.textBlocks.some(
+        (block) => block.text.includes("**Pierce**") && block.text.includes("Attack with base power"),
+      ),
+    ).toBe(true);
+  });
 });

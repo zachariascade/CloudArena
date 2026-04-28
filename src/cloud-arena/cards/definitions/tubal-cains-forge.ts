@@ -10,7 +10,7 @@ export const tubalCainsForgeCardDefinition: CardDefinition = {
     subtitle: "Artifact",
     frameTone: "colorless",
     manaCost: "{2}",
-    imagePath: "card_0041_tubal_cain_forger_of_bronze_and_iron.jpg",
+    imagePath: "classics/card_0041_tubal_cain_forger_of_bronze_and_iron.jpg",
     imageAlt: "An ancient forge blazing with sacred fire, hammering raw ore into power",
     flavorText: "He was the forger of every cutting instrument. From his hands came the fuel of war.",
     footerCode: "ARE",

@@ -44,6 +44,10 @@ const DISPLAY_CARD_KEYWORD_GLOSSARY = {
     label: "Menace",
     description: "Can only be blocked by two or more defenders. A single blocker is bypassed entirely.",
   },
+  pierce: {
+    label: "Pierce",
+    description: "Damage from this creature ignores block and is dealt directly to health.",
+  },
 } as const;
 
 type DisplayCardKeywordId = keyof typeof DISPLAY_CARD_KEYWORD_GLOSSARY;

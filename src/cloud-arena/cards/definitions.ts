@@ -12,6 +12,19 @@ import { galleryAngelStoppingAbrahamCardDefinition } from "./definitions/gallery
 import { galleryAnnunciationCardDefinition } from "./definitions/gallery-annunciation.js";
 import { galleryBelshazzarsFeastCardDefinition } from "./definitions/gallery-belshazzars-feast.js";
 import { galleryChristAndMaryMagdalenCardDefinition } from "./definitions/gallery-christ-and-mary-magdalen.js";
+import { galleryJoshuaCommandingTheSunToStandStillUponGibeonCardDefinition } from "./definitions/gallery-joshua-commanding-the-sun-to-stand-still-upon-gibeon.js";
+import { galleryLastJudgmentCardDefinition } from "./definitions/gallery-last-judgment.js";
+import { galleryLastSupperCardDefinition } from "./definitions/gallery-last-supper.js";
+import { galleryOpeningOfTheFifthSealCardDefinition } from "./definitions/gallery-opening-of-the-fifth-seal.js";
+import { galleryPlainsOfHeavenCardDefinition } from "./definitions/gallery-plains-of-heaven.js";
+import { gallerySacrificeOfIsaacCardDefinition } from "./definitions/gallery-sacrifice-of-isaac.js";
+import { gallerySaintMichaelVanquishingSatanCardDefinition } from "./definitions/gallery-saint-michael-vanquishing-satan.js";
+import { gallerySatanInCocytusCardDefinition } from "./definitions/gallery-satan-in-cocytus.js";
+import { gallerySodomAndGomorrahCardDefinition } from "./definitions/gallery-sodom-and-gomorrah.js";
+import { galleryTowerOfBabelCardDefinition } from "./definitions/gallery-tower-of-babel.js";
+import { galleryTransfigurationCardDefinition } from "./definitions/gallery-transfiguration.js";
+import { galleryTriumphOfChristianityOverPaganismCardDefinition } from "./definitions/gallery-triumph-of-christianity-over-paganism.js";
+import { galleryWomanTakenInAdulteryCardDefinition } from "./definitions/gallery-woman-taken-in-adultery.js";
 import { choirCaptainCardDefinition } from "./definitions/choir-captain.js";
 import { defendCardDefinition } from "./definitions/defend.js";
 import { defendingStrikeCardDefinition } from "./definitions/defending-strike.js";
@@ -27,6 +40,7 @@ import { judgmentBladeCardDefinition } from "./definitions/judgment-blade.js";
 import { enemyBruteCardDefinition } from "./definitions/enemy-brute.js";
 import { enemyDemonicBoostCardDefinition } from "./definitions/enemy-demonic-boost.js";
 import { enemyDemonicCurseCardDefinition } from "./definitions/enemy-demonic-curse.js";
+import { enemyDemonPierceCardDefinition } from "./definitions/enemy-demon-pierce.js";
 import { enemyCocytusCardDefinition } from "./definitions/enemy-cocytus.js";
 import { enemyDemonicShieldCardDefinition } from "./definitions/enemy-demonic-shield.js";
 import { enemyGruntDemonCardDefinition } from "./definitions/enemy-grunt-demon.js";
@@ -92,6 +106,20 @@ export const cardDefinitions: CardDefinitionLibrary = {
   gallery_annunciation: galleryAnnunciationCardDefinition,
   gallery_belshazzars_feast: galleryBelshazzarsFeastCardDefinition,
   gallery_christ_and_mary_magdalen: galleryChristAndMaryMagdalenCardDefinition,
+  gallery_joshua_commanding_the_sun_to_stand_still_upon_gibeon:
+    galleryJoshuaCommandingTheSunToStandStillUponGibeonCardDefinition,
+  gallery_last_judgment: galleryLastJudgmentCardDefinition,
+  gallery_last_supper: galleryLastSupperCardDefinition,
+  gallery_opening_of_the_fifth_seal: galleryOpeningOfTheFifthSealCardDefinition,
+  gallery_plains_of_heaven: galleryPlainsOfHeavenCardDefinition,
+  gallery_sacrifice_of_isaac: gallerySacrificeOfIsaacCardDefinition,
+  gallery_saint_michael_vanquishing_satan: gallerySaintMichaelVanquishingSatanCardDefinition,
+  gallery_satan_in_cocytus: gallerySatanInCocytusCardDefinition,
+  gallery_sodom_and_gomorrah: gallerySodomAndGomorrahCardDefinition,
+  gallery_tower_of_babel: galleryTowerOfBabelCardDefinition,
+  gallery_transfiguration: galleryTransfigurationCardDefinition,
+  gallery_triumph_of_christianity_over_paganism: galleryTriumphOfChristianityOverPaganismCardDefinition,
+  gallery_woman_taken_in_adultery: galleryWomanTakenInAdulteryCardDefinition,
   choir_captain: choirCaptainCardDefinition,
   defend: defendCardDefinition,
   defending_strike: defendingStrikeCardDefinition,
@@ -109,6 +137,7 @@ export const cardDefinitions: CardDefinitionLibrary = {
   enemy_cocytus: enemyCocytusCardDefinition,
   enemy_demonic_shield: enemyDemonicShieldCardDefinition,
   enemy_demonic_curse: enemyDemonicCurseCardDefinition,
+  enemy_demon_pierce: enemyDemonPierceCardDefinition,
   enemy_demonic_boost: enemyDemonicBoostCardDefinition,
   enemy_imp_caller: enemyImpCallerCardDefinition,
   enemy_malchior: enemyMalchiorCardDefinition,

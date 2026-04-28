@@ -26,7 +26,7 @@ export type ChoiceStrategy = "first_available" | "auto_yes" | "auto_no";
 export type DamageOverflowPolicy = "overflow" | "stop_at_blocker" | "trample";
 export type DefenderRecoveryPolicy = "none" | "full_heal";
 export type DrawPolicy = "full_refresh" | "draw_to_full" | "draw_one";
-export type PermanentKeyword = "refresh" | "halt" | "menace" | "deathtouch";
+export type PermanentKeyword = "refresh" | "halt" | "menace" | "deathtouch" | "pierce";
 export type CounterStat = "power" | "health";
 export type CounterSourceKind = "card" | "permanent";
 export type ModifierSourceKind = "equipment" | "card" | "permanent";
@@ -88,6 +88,7 @@ export type PendingTargetRequest = {
     abilitySourcePermanentId?: string;
     triggerSubjectPermanentId?: string;
     sourceCardInstanceId?: string;
+    attackBypassesBlock?: boolean;
     defendingPermanentId?: string;
     pendingCardPlay?: PendingHandCardContext;
     pendingCardPreview?: PendingHandCardContext;
@@ -632,6 +633,7 @@ export type EnemyCardEffect = {
   attackAmount?: number;
   attackTimes?: number;
   attackPowerMultiplier?: number;
+  bypassBlock?: boolean;
   blockAmount?: number;
   blockPowerMultiplier?: number;
   blockHealthMultiplier?: number;

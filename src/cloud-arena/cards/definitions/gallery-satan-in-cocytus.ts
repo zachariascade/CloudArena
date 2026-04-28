@@ -1,29 +1,29 @@
 import type { CardDefinition } from "../../core/types.js";
 
-export const galleryGreatRedDragonCardDefinition: CardDefinition = {
-  id: "gallery_great_red_dragon",
-  name: "Great Red Dragon",
+export const gallerySatanInCocytusCardDefinition: CardDefinition = {
+  id: "gallery_satan_in_cocytus",
+  name: "Satan in Cocytus",
   cardTypes: ["creature"],
   cost: 6,
   display: {
-    title: "Dragon of the Sun",
-    subtitle: "Legendary Creature - Dragon",
+    title: "The Frozen Betrayer",
+    subtitle: "Legendary Creature - Demon",
     frameTone: "split-black-red",
     manaCost: "{6}",
-    artist: "William Blake",
-    imagePath: "https://commons.wikimedia.org/wiki/Special:FilePath/The%20Great%20Red%20Dragon%20and%20the%20Woman%20Clothed%20with%20the%20Sun.jpg",
-    imageAlt: "William Blake's Great Red Dragon",
-    flavorText: "Its wings darken the light before the flame even speaks.",
+    artist: "Gustave Doré",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Gustave_Dore_Inferno34.jpg/960px-Gustave_Dore_Inferno34.jpg",
+    imageAlt: "Gustave Doré's Satan in Cocytus",
+    flavorText: "The deepest cold is a punishment for a will that never bent.",
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
-    collectorNumber: "039",
-    footerStat: "6/6",
+    collectorNumber: "048",
+    footerStat: "6/7",
   },
-  subtypes: ["Dragon"],
+  subtypes: ["Demon"],
   onPlay: [],
   power: 6,
-  health: 6,
-  keywords: ["menace", "deathtouch"],
+  health: 7,
+  keywords: ["menace"],
   abilities: [
     {
       kind: "triggered",
@@ -37,9 +37,9 @@ export const galleryGreatRedDragonCardDefinition: CardDefinition = {
       ],
     },
     {
-      id: "gallery_great_red_dragon_scorch",
+      id: "gallery_satan_in_cocytus_freeze",
       kind: "activated",
-      activation: { type: "action", actionId: "scorch" },
+      activation: { type: "action", actionId: "freeze_blood" },
       costs: [
         { type: "energy", amount: 2 },
         { type: "tap" },

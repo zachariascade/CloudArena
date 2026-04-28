@@ -21,6 +21,31 @@ import { resurrectCardDefinition } from "../../src/cloud-arena/cards/definitions
 import { sappingCurseCardDefinition } from "../../src/cloud-arena/cards/definitions/sapping-curse.js";
 import { sanctifiedGuideCardDefinition } from "../../src/cloud-arena/cards/definitions/sanctified-guide.js";
 import { summarizeCardDefinition } from "../../src/cloud-arena/card-summary.js";
+import type { CardDefinition } from "../../src/cloud-arena/core/types.js";
+
+const PIERCE_CREATURE_DEFINITION: CardDefinition = {
+  id: "pierce_creature",
+  name: "Pierce Creature",
+  cardTypes: ["creature"],
+  cost: 2,
+  onPlay: [],
+  power: 3,
+  health: 4,
+  keywords: ["pierce"],
+  abilities: [],
+};
+
+const PIERCE_SABER_DEFINITION: CardDefinition = {
+  id: "pierce_saber",
+  name: "Pierce Saber",
+  cardTypes: ["artifact"],
+  subtypes: ["Equipment"],
+  cost: 2,
+  onPlay: [],
+  power: 0,
+  health: 2,
+  grantedKeywords: ["pierce"],
+};
 
 describe("cloud arena card summary", () => {
   it("describes the stun effect on Stunning Rebuke", () => {
@@ -98,6 +123,17 @@ describe("cloud arena card summary", () => {
     expect(summarizeCardDefinition(guardianCardDefinition)).toContain(
       "Pay 1 energy: Gain 5 block.",
     );
+  });
+
+  it("describes the pierce keyword", () => {
+    expect(summarizeCardDefinition(PIERCE_CREATURE_DEFINITION)).toEqual([
+      "**Pierce** — This creature's damage ignores block and is dealt directly to health.",
+    ]);
+    expect(summarizeCardDefinition(PIERCE_SABER_DEFINITION)).toEqual([
+      "Equip a permanent.",
+      "Equipped permanent gets +0/+3.",
+      "Equipped creature has **Pierce**.",
+    ]);
   });
 
   it("describes the guided blessing tap ability", () => {

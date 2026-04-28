@@ -731,6 +731,10 @@ export function summarizeCardDefinition(definition: CardDefinition): string[] {
         if (keyword === "halt") {
           summaryLines.push("Equipped creature has **Halt**.");
         }
+
+        if (keyword === "pierce") {
+          summaryLines.push("Equipped creature has **Pierce**.");
+        }
       }
     } else if (!hasCardType(definition, "creature") && !(definition.abilities?.length ?? 0)) {
       summaryLines.push(`Summon ${definition.name}.`);
@@ -750,6 +754,10 @@ export function summarizeCardDefinition(definition: CardDefinition): string[] {
 
     if (definition.keywords?.includes("deathtouch")) {
       summaryLines.push("**Deathtouch** — Any creature that deals or receives damage from this creature is destroyed.");
+    }
+
+    if (definition.keywords?.includes("pierce")) {
+      summaryLines.push("**Pierce** — This creature's damage ignores block and is dealt directly to health.");
     }
 
     summaryLines.push(...summarizeEffects(definition.preSummonEffects, true));

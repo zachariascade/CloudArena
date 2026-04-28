@@ -1,5 +1,6 @@
 import {
   doubleSlash,
+  demonPierce,
   singleSlash,
   tripleSlash,
   weakenAllPermanents,
@@ -16,6 +17,7 @@ export const lakeOfIceEnemyPreset: CloudArenaEnemyPreset = {
     singleSlash(),
     doubleSlash(),
     tripleSlash(),
+    demonPierce(),
     weakenAllPermanents(),
   ],
 };

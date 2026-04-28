@@ -265,10 +265,18 @@ export function dealDamageToPermanent(
   amount: number,
   source: "card" | "permanent_action" = "card",
   sourceId?: string,
+  sourcePermanentId?: string,
+  bypassBlock = false,
 ): number {
-  const damageDealt = Math.max(0, Math.min(amount, permanent.block + permanent.health));
+  const sourcePermanent = sourcePermanentId ? findPermanentById(state, sourcePermanentId) : null;
+  const shouldBypassBlock = bypassBlock || (sourcePermanent ? permanentHasKeyword(sourcePermanent, "pierce") : false);
+  const damageDealt = shouldBypassBlock
+    ? Math.max(0, Math.min(amount, permanent.health))
+    : Math.max(0, Math.min(amount, permanent.block + permanent.health));
 
-  if (permanent.block >= amount) {
+  if (shouldBypassBlock) {
+    permanent.health -= damageDealt;
+  } else if (permanent.block >= amount) {
     permanent.block -= amount;
   } else {
     const remainingDamage = amount - permanent.block;
@@ -690,7 +698,48 @@ function resolveDealDamageEffect(
   }
 
   for (const permanent of resolvePermanentTargets(state, effect.target, context)) {
-    const damageDealt = dealDamageToPermanent(state, permanent, amount);
+    const shouldBypassBlock = context.attackBypassesBlock ?? false;
+    if (shouldBypassBlock) {
+      const damageDealt = Math.max(0, Math.min(amount, permanent.health));
+      permanent.health -= damageDealt;
+      if (permanent.isEnemyLeader) {
+        syncEnemyStateFromLeaderPermanent(state);
+      }
+      if (damageDealt > 0) {
+        state.log.push({
+          type: "damage_dealt",
+          turnNumber: state.turnNumber,
+          source: "card",
+          sourceId: context.sourceCardInstanceId ?? context.abilitySourcePermanentId,
+          target: "permanent",
+          targetId: permanent.instanceId,
+          amount: damageDealt,
+        });
+      }
+
+      if (
+        damageDealt > 0 &&
+        permanent.controllerId === "enemy" &&
+        permanentHasKeyword(permanent, "deathtouch") &&
+        context.abilitySourcePermanentId
+      ) {
+        const attacker = findPermanentById(state, context.abilitySourcePermanentId);
+        if (attacker && (attacker.controllerId ?? "player") !== "enemy") {
+          destroyPermanent(state, context.abilitySourcePermanentId);
+        }
+      }
+      continue;
+    }
+
+    const damageDealt = dealDamageToPermanent(
+      state,
+      permanent,
+      amount,
+      "card",
+      undefined,
+      context.abilitySourcePermanentId,
+      context.attackBypassesBlock ?? false,
+    );
     if (
       damageDealt > 0 &&
       permanent.controllerId === "enemy" &&

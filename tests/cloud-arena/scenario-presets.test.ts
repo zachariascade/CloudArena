@@ -93,6 +93,7 @@ describe("cloud arena scenario presets", () => {
     expect(pack.definitionId).toBe("enemy_pack_alpha");
     expect(lakeOfIce.definitionId).toBe("enemy_cocytus");
     expect(lakeOfIce.cards?.length).toBeGreaterThan(0);
+    expect(lakeOfIce.cards?.some((card) => card.id === "enemy_demon_pierce")).toBe(true);
     expect(bruiser.definitionId).toBe("enemy_brute");
     expect(bruiser.basePower).toBeGreaterThan(0);
     expect(warder.definitionId).toBe("enemy_husk");

@@ -21,6 +21,7 @@ export type SelectorContext = {
   triggerSubjectPermanentId?: string;
   triggerSubjectCardInstanceId?: string;
   sourceCardInstanceId?: string;
+  attackBypassesBlock?: boolean;
   chosenTargetPermanentId?: string;
   chosenTargetCardInstanceId?: string;
   pendingCardPlay?: PendingHandCardContext;

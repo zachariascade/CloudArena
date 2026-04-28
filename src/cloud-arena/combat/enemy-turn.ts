@@ -2,6 +2,8 @@ import { getCardDefinitionFromLibrary, hasCardType } from "../cards/definitions.
 import { getDerivedPermanentActionAmount } from "../core/derived-stats.js";
 import { applyEnemyCardEffect } from "../core/enemy-card-effects.js";
 import {
+  getEnemyLeaderPermanent,
+  permanentHasKeyword,
   syncEnemyLeaderPermanentFromState,
   syncEnemyStateFromLeaderPermanent,
 } from "../core/permanents.js";
@@ -48,11 +50,13 @@ function resolveSecondaryActorCard(state: BattleState, actor: EnemyActorState): 
   } else {
     const attackAmount = getEnemyIntentAttackAmount(actor.intent);
     if (attackAmount > 0) {
+      const attackBypassesBlock = actorPermanent ? permanentHasKeyword(actorPermanent, "pierce") : false;
       settleEnemyAttackDamage(
         state,
         attackAmount,
         actor.permanentId ?? "enemy_intent",
         actor.intent.overflowPolicy,
+        attackBypassesBlock,
       );
     }
 
@@ -113,7 +117,13 @@ function resolveEnemyBattlefieldCreatures(state: BattleState): void {
       slotIndex: permanent.slotIndex,
     });
 
-    settleEnemyAttackDamage(state, attackAmount, permanent.instanceId, "stop_at_blocker");
+    settleEnemyAttackDamage(
+      state,
+      attackAmount,
+      permanent.instanceId,
+      "stop_at_blocker",
+      permanentHasKeyword(permanent, "pierce"),
+    );
     permanent.hasActedThisTurn = true;
   }
 }
@@ -153,11 +163,19 @@ export function resolveEnemyTurn(state: BattleState): BattleState {
     const attackAmount = getEnemyIntentAttackAmount(state.enemy.intent);
 
     if (attackAmount > 0) {
+      const attackSourcePermanent = getEnemyLeaderPermanent(state);
+      const attackSourceDefinition = state.enemy.leaderDefinitionId
+        ? getCardDefinitionFromLibrary(state.cardDefinitions, state.enemy.leaderDefinitionId)
+        : null;
+      const attackBypassesBlock =
+        (attackSourcePermanent ? permanentHasKeyword(attackSourcePermanent, "pierce") : false) ||
+        !!(attackSourceDefinition && "keywords" in attackSourceDefinition && attackSourceDefinition.keywords?.includes("pierce"));
       settleEnemyAttackDamage(
         state,
         attackAmount,
         state.enemy.leaderPermanentId ?? "enemy_intent",
         state.enemy.intent.overflowPolicy,
+        attackBypassesBlock,
       );
     }
 

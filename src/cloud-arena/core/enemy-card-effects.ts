@@ -2,8 +2,11 @@ import {
   applyTemporaryPowerDeltaToAllPermanents,
   applyTemporaryPowerDeltaToControlledPermanents,
 } from "./effects.js";
+import { getCardDefinitionFromLibrary } from "../cards/definitions.js";
 import {
+  permanentHasKeyword,
   syncEnemyLeaderPermanentFromState,
+  getEnemyLeaderPermanent,
   trySummonPermanentFromCard,
 } from "./permanents.js";
 import { formatEnemyIntent } from "./enemy-intent.js";
@@ -73,12 +76,25 @@ export function applyEnemyCardEffect(
     const hitCount = Math.max(1, effect.attackTimes ?? 1);
 
     if (baseAttackAmount > 0) {
+      const attackSourcePermanent = actor?.permanentId
+        ? state.enemyBattlefield.find((p) => p?.instanceId === actor.permanentId) ?? null
+        : getEnemyLeaderPermanent(state);
+      const attackSourceDefinition = actor?.definitionId
+        ? getCardDefinitionFromLibrary(state.cardDefinitions, actor.definitionId)
+        : state.enemy.leaderDefinitionId
+          ? getCardDefinitionFromLibrary(state.cardDefinitions, state.enemy.leaderDefinitionId)
+          : null;
+      const attackBypassesBlock =
+        !!effect.bypassBlock ||
+        (attackSourcePermanent ? permanentHasKeyword(attackSourcePermanent, "pierce") : false) ||
+        !!(attackSourceDefinition && "keywords" in attackSourceDefinition && attackSourceDefinition.keywords?.includes("pierce"));
       for (let hit = 0; hit < hitCount; hit++) {
         settleEnemyAttackDamage(
           state,
           baseAttackAmount,
           attackSourceId,
           effect.overflowPolicy,
+          attackBypassesBlock,
         );
       }
     }

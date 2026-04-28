@@ -105,6 +105,20 @@ export function spawnSimpleToken(tokenCardId = "token_imp", count = 1): EnemyCar
   };
 }
 
+export function demonPierce(): EnemyCardDefinition {
+  return {
+    id: "enemy_demon_pierce",
+    name: "Pierce",
+    effects: [
+      {
+        attackPowerMultiplier: 1,
+        bypassBlock: true,
+        target: "player",
+      },
+    ],
+  };
+}
+
 export function attackOnceWithBasePower(): EnemyCardDefinition {
   return singleSlash();
 }
