@@ -12,6 +12,7 @@ import type { CloudArenaContentMode, CloudArenaSessionMode } from "../lib/cloud-
 import { CloudArenaBestiaryPage } from "./bestiary-page.js";
 import { CloudArenaCampaignPage } from "./campaign-page.js";
 import { CloudArenaDeckBuilderPage } from "./deckbuilder-page.js";
+import { CloudArenaGalleryPage } from "./gallery-page.js";
 import { CloudArenaInteractivePage } from "./interactive-page.js";
 import { CloudArenaStartPage } from "./start-page.js";
 import { CloudArenaSetupPage } from "./setup-page.js";
@@ -139,6 +140,19 @@ export function createCloudArenaRouter(context: CloudArenaRouteContext) {
       path: "/bestiary",
       element: (
         <CloudArenaBestiaryPage
+          cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}
+        />
+      ),
+      errorElement: (
+        <CloudArenaAppShell cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}>
+          <CloudArenaRouteErrorBoundary cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl} />
+        </CloudArenaAppShell>
+      ),
+    },
+    {
+      path: "/gallery",
+      element: (
+        <CloudArenaGalleryPage
           cloudArcanumWebBaseUrl={context.cloudArcanumWebBaseUrl}
         />
       ),

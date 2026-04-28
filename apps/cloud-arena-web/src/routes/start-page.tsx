@@ -52,6 +52,9 @@ export function CloudArenaStartPage({
               <Link className="cloud-arena-start-menu-item" to="/bestiary">
                 <strong>Bestiary</strong>
               </Link>
+              <Link className="cloud-arena-start-menu-item" to="/gallery">
+                <strong>Gallery</strong>
+              </Link>
             </div>
           </div>
         </div>

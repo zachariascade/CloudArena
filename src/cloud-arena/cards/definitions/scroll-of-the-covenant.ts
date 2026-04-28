@@ -10,7 +10,7 @@ export const scrollOfTheCovenanCardDefinition: CardDefinition = {
     subtitle: "Artifact",
     frameTone: "colorless",
     manaCost: "{3}",
-    imagePath: "card_0052_tower_of_babel.jpg",
+    imagePath: "classics/card_0052_tower_of_babel.jpg",
     imageAlt: "An ancient scroll unrolling to reveal the full weight of binding words",
     flavorText: "Every word written in covenant opens the mind to what must come next.",
     footerCode: "ARE",
