@@ -1,0 +1,171 @@
+export type GalleryEntry = {
+  title: string;
+  artist: string;
+  year: string;
+  wikiUrl: string;
+  imageUrl: string;
+};
+
+export const GALLERY: GalleryEntry[] = [
+  {
+    title: "The Ancient of Days",
+    artist: "William Blake",
+    year: "1794",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:The_Ancient_of_Days_(Blake,_Research_Issues).jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg/960px-The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg",
+  },
+  {
+    title: "The Angel Stopping Abraham",
+    artist: "Rembrandt van Rijn",
+    year: "1635",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Rembrandt_The_Angel_Preventing_Abraham_from_Sacrificing_his_Son,_Isaac.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/9/96/Rembrandt_The_Angel_Preventing_Abraham_from_Sacrificing_his_Son%2C_Isaac.jpg",
+  },
+  {
+    title: "The Annunciation",
+    artist: "Fra Angelico",
+    year: "c. 1440–1445",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Angelico_-_Annunciation_-_San_Marco_north_corridor.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Angelico_-_Annunciation_-_San_Marco_north_corridor.jpg",
+  },
+  {
+    title: "Belshazzar's Feast",
+    artist: "John Martin",
+    year: "1820",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:John_Martin_-_Belshazzar%27s_Feast_-_Google_Art_Project.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/John_Martin_-_Belshazzar%27s_Feast_-_Google_Art_Project.jpg/960px-John_Martin_-_Belshazzar%27s_Feast_-_Google_Art_Project.jpg",
+  },
+  {
+    title: "Christ and St Mary Magdalen at the Tomb",
+    artist: "Rembrandt van Rijn",
+    year: "1638",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Rembrandt_van_Rijn_-_Christ_and_St_Mary_Magdalen_at_the_Tomb_-_Google_Art_Project.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Rembrandt_van_Rijn_-_Christ_and_St_Mary_Magdalen_at_the_Tomb_-_Google_Art_Project.jpg/960px-Rembrandt_van_Rijn_-_Christ_and_St_Mary_Magdalen_at_the_Tomb_-_Google_Art_Project.jpg",
+  },
+  {
+    title: "The Creation of Adam",
+    artist: "Michelangelo",
+    year: "c. 1508–1512",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Michelangelo_-_Creation_of_Adam_(cropped).jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg/960px-Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg",
+  },
+  {
+    title: "The Deluge",
+    artist: "Gustave Doré",
+    year: "1866",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Gustave_Dor%C3%A9_-_The_Holy_Bible_-_Plate_I,_The_Deluge.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Gustave_Dor%C3%A9_-_The_Holy_Bible_-_Plate_I%2C_The_Deluge.jpg/960px-Gustave_Dor%C3%A9_-_The_Holy_Bible_-_Plate_I%2C_The_Deluge.jpg",
+  },
+  {
+    title: "The Great Day of His Wrath",
+    artist: "John Martin",
+    year: "1853",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:John_Martin_-_The_Great_Day_of_His_Wrath_-_Google_Art_Project.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/John_Martin_-_The_Great_Day_of_His_Wrath_-_Google_Art_Project.jpg/960px-John_Martin_-_The_Great_Day_of_His_Wrath_-_Google_Art_Project.jpg",
+  },
+  {
+    title: "The Great Red Dragon",
+    artist: "William Blake",
+    year: "c. 1805",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:William_Blake_-_The_Great_Red_Dragon_and_the_Woman_Clothed_with_the_Sun_-_Google_Art_Project.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/William_Blake_-_The_Great_Red_Dragon_and_the_Woman_Clothed_with_the_Sun_-_Google_Art_Project.jpg/960px-William_Blake_-_The_Great_Red_Dragon_and_the_Woman_Clothed_with_the_Sun_-_Google_Art_Project.jpg",
+  },
+  {
+    title: "Jacob Wrestles with the Angel",
+    artist: "Gustave Doré",
+    year: "1866",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:024.Jacob_Wrestles_with_the_Angel.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/024.Jacob_Wrestles_with_the_Angel.jpg/960px-024.Jacob_Wrestles_with_the_Angel.jpg",
+  },
+  {
+    title: "Joshua Commanding the Sun to Stand Still upon Gibeon",
+    artist: "John Martin",
+    year: "1816",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Joshua_Commanding_the_Sun_to_Stand_Still_upon_Gibeon_(1816)_John_Martin_-_NGA_2004.64.1.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Joshua_Commanding_the_Sun_to_Stand_Still_upon_Gibeon_%281816%29_John_Martin_-_NGA_2004.64.1.jpg/960px-Joshua_Commanding_the_Sun_to_Stand_Still_upon_Gibeon_%281816%29_John_Martin_-_NGA_2004.64.1.jpg",
+  },
+  {
+    title: "The Last Judgment",
+    artist: "Hieronymus Bosch",
+    year: "c. 1482",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Hieronymus_Bosch_-_The_Last_Judgement.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Hieronymus_Bosch_-_The_Last_Judgement.jpg/960px-Hieronymus_Bosch_-_The_Last_Judgement.jpg",
+  },
+  {
+    title: "The Last Supper",
+    artist: "Jacopo Tintoretto",
+    year: "1592–1594",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Jacopo_Tintoretto_-_The_Last_Supper_-_WGA22649.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Jacopo_Tintoretto_-_The_Last_Supper_-_WGA22649.jpg/960px-Jacopo_Tintoretto_-_The_Last_Supper_-_WGA22649.jpg",
+  },
+  {
+    title: "The Opening of the Fifth Seal",
+    artist: "El Greco",
+    year: "c. 1608–1614",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:El_Greco_-_The_Opening_of_the_Fifth_Seal_(The_Vision_of_St_John)_-_WGA10637.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/El_Greco_-_The_Opening_of_the_Fifth_Seal_%28The_Vision_of_St_John%29_-_WGA10637.jpg/960px-El_Greco_-_The_Opening_of_the_Fifth_Seal_%28The_Vision_of_St_John%29_-_WGA10637.jpg",
+  },
+  {
+    title: "The Plains of Heaven",
+    artist: "John Martin",
+    year: "1851",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:John_Martin_-_The_Plains_of_Heaven_-_Google_Art_Project.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/John_Martin_-_The_Plains_of_Heaven_-_Google_Art_Project.jpg/960px-John_Martin_-_The_Plains_of_Heaven_-_Google_Art_Project.jpg",
+  },
+  {
+    title: "The Sacrifice of Isaac",
+    artist: "Caravaggio",
+    year: "c. 1603",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Sacrifice_of_Isaac-Caravaggio_(Uffizi).jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Sacrifice_of_Isaac-Caravaggio_%28Uffizi%29.jpg/960px-Sacrifice_of_Isaac-Caravaggio_%28Uffizi%29.jpg",
+  },
+  {
+    title: "Saint Michael Vanquishing Satan",
+    artist: "Raphael",
+    year: "1518",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Raphael_-_St._Michael_Vanquishing_Satan.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/7/74/Raphael_-_St._Michael_Vanquishing_Satan.jpg",
+  },
+  {
+    title: "Satan in Cocytus",
+    artist: "Gustave Doré",
+    year: "1861",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Gustave_Dore_Inferno34.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Gustave_Dore_Inferno34.jpg/960px-Gustave_Dore_Inferno34.jpg",
+  },
+  {
+    title: "Sodom and Gomorrah",
+    artist: "John Martin",
+    year: "1852",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:John_Martin_-_Sodom_and_Gomorrah.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/John_Martin_-_Sodom_and_Gomorrah.jpg/960px-John_Martin_-_Sodom_and_Gomorrah.jpg",
+  },
+  {
+    title: "The Tower of Babel",
+    artist: "Gustave Doré",
+    year: "1865",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Gustave_Dore_Bible_The_Tower_of_Babel.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Gustave_Dore_Bible_The_Tower_of_Babel.jpg/960px-Gustave_Dore_Bible_The_Tower_of_Babel.jpg",
+  },
+  {
+    title: "The Transfiguration",
+    artist: "Raphael",
+    year: "1516–1520",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Transfiguration_Raphael.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Transfiguration_Raphael.jpg/960px-Transfiguration_Raphael.jpg",
+  },
+  {
+    title: "The Triumph of Christianity Over Paganism",
+    artist: "Gustave Doré",
+    year: "1868",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:The_Triumph_Of_Christianity_Over_Paganism.Gustave_Dor%C3%A9.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/The_Triumph_Of_Christianity_Over_Paganism.Gustave_Dor%C3%A9.jpg/960px-The_Triumph_Of_Christianity_Over_Paganism.Gustave_Dor%C3%A9.jpg",
+  },
+  {
+    title: "The Woman Taken in Adultery",
+    artist: "Rembrandt van Rijn",
+    year: "1644",
+    wikiUrl: "https://commons.wikimedia.org/wiki/File:Rembrandt_Christ_and_the_Woman_Taken_in_Adultery.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Rembrandt_Christ_and_the_Woman_Taken_in_Adultery.jpg/960px-Rembrandt_Christ_and_the_Woman_Taken_in_Adultery.jpg",
+  },
+];

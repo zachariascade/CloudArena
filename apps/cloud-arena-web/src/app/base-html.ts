@@ -1018,6 +1018,115 @@ export function renderCloudArcanumWebHtml(
         letter-spacing: 0.02em;
       }
 
+      .cloud-arena-gallery-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem 1.25rem;
+        padding-inline: clamp(1.5rem, 4vw, 3rem);
+        padding-block: 0.5rem 0.75rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .cloud-arena-gallery-search {
+        flex: 1 1 14rem;
+        min-width: 0;
+        padding: 0.45rem 0.85rem;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 0.5rem;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.875rem;
+        outline: none;
+        transition: border-color 0.15s;
+      }
+      .cloud-arena-gallery-search::placeholder {
+        color: rgba(255, 255, 255, 0.35);
+      }
+      .cloud-arena-gallery-search:focus {
+        border-color: rgba(180, 140, 255, 0.55);
+      }
+
+      .cloud-arena-gallery-sort-group {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        flex-shrink: 0;
+      }
+
+      .cloud-arena-gallery-sort-label {
+        font-size: 0.78rem;
+        color: rgba(255, 255, 255, 0.45);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-right: 0.15rem;
+      }
+
+      .cloud-arena-gallery-sort-btn {
+        padding: 0.3rem 0.75rem;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 0.4rem;
+        color: rgba(255, 255, 255, 0.65);
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s, border-color 0.15s;
+      }
+      .cloud-arena-gallery-sort-btn:hover {
+        background: rgba(255, 255, 255, 0.12);
+        color: rgba(255, 255, 255, 0.9);
+      }
+      .cloud-arena-gallery-sort-btn.is-active {
+        background: rgba(180, 140, 255, 0.2);
+        border-color: rgba(180, 140, 255, 0.45);
+        color: rgba(220, 200, 255, 0.95);
+      }
+
+      .cloud-arena-gallery-pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        padding: 0.75rem clamp(1.5rem, 4vw, 3rem);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        flex-shrink: 0;
+      }
+
+      .cloud-arena-gallery-page-btn {
+        padding: 0.35rem 0.9rem;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 0.4rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s;
+      }
+      .cloud-arena-gallery-page-btn:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.12);
+        color: rgba(255, 255, 255, 0.95);
+      }
+      .cloud-arena-gallery-page-btn:disabled {
+        opacity: 0.3;
+        cursor: default;
+      }
+
+      .cloud-arena-gallery-page-info {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .cloud-arena-gallery-page-count {
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .cloud-arena-gallery-empty {
+        padding: 2rem;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 0.95rem;
+      }
+
       .cloud-arena-gallery-stage {
         display: grid;
         grid-template-columns: minmax(0, 1fr);

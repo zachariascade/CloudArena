@@ -1,151 +1,12 @@
-import { useState, type ReactElement } from "react";
+import { useState, useMemo, type ReactElement } from "react";
 import { Link } from "react-router-dom";
 
 import { CloudArenaAppShell } from "../components/index.js";
+import { GALLERY, type GalleryEntry } from "./gallery-data.js";
 
-type GalleryEntry = {
-  title: string;
-  artist: string;
-  year: string;
-  wikiUrl: string;
-  imageUrl: string;
-};
-
-const GALLERY: GalleryEntry[] = [
-  {
-    title: "The Ancient of Days",
-    artist: "William Blake",
-    year: "1794",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:The_Ancient_of_Days_(Blake,_Research_Issues).jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg/960px-The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg",
-  },
-  {
-    title: "The Angel Stopping Abraham",
-    artist: "Rembrandt van Rijn",
-    year: "1635",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Rembrandt_The_Angel_Preventing_Abraham_from_Sacrificing_his_Son,_Isaac.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/9/96/Rembrandt_The_Angel_Preventing_Abraham_from_Sacrificing_his_Son%2C_Isaac.jpg",
-  },
-  {
-    title: "The Annunciation",
-    artist: "Fra Angelico",
-    year: "c. 1440–1445",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Angelico_-_Annunciation_-_San_Marco_north_corridor.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Angelico_-_Annunciation_-_San_Marco_north_corridor.jpg",
-  },
-  {
-    title: "Belshazzar's Feast",
-    artist: "John Martin",
-    year: "1820",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:John_Martin_-_Belshazzar%27s_Feast_-_Google_Art_Project.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/John_Martin_-_Belshazzar%27s_Feast_-_Google_Art_Project.jpg/960px-John_Martin_-_Belshazzar%27s_Feast_-_Google_Art_Project.jpg",
-  },
-  {
-    title: "The Creation of Adam",
-    artist: "Michelangelo",
-    year: "c. 1508–1512",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Michelangelo_-_Creation_of_Adam_(cropped).jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg/960px-Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg",
-  },
-  {
-    title: "The Deluge",
-    artist: "Gustave Doré",
-    year: "1866",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Gustave_Dor%C3%A9_-_The_Holy_Bible_-_Plate_I,_The_Deluge.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Gustave_Dor%C3%A9_-_The_Holy_Bible_-_Plate_I%2C_The_Deluge.jpg/960px-Gustave_Dor%C3%A9_-_The_Holy_Bible_-_Plate_I%2C_The_Deluge.jpg",
-  },
-  {
-    title: "The Great Day of His Wrath",
-    artist: "John Martin",
-    year: "1853",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:John_Martin_-_The_Great_Day_of_His_Wrath_-_Google_Art_Project.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/John_Martin_-_The_Great_Day_of_His_Wrath_-_Google_Art_Project.jpg/960px-John_Martin_-_The_Great_Day_of_His_Wrath_-_Google_Art_Project.jpg",
-  },
-  {
-    title: "The Great Red Dragon",
-    artist: "William Blake",
-    year: "c. 1805",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:William_Blake_-_The_Great_Red_Dragon_and_the_Woman_Clothed_with_the_Sun_-_Google_Art_Project.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/William_Blake_-_The_Great_Red_Dragon_and_the_Woman_Clothed_with_the_Sun_-_Google_Art_Project.jpg/960px-William_Blake_-_The_Great_Red_Dragon_and_the_Woman_Clothed_with_the_Sun_-_Google_Art_Project.jpg",
-  },
-  {
-    title: "Jacob Wrestles with the Angel",
-    artist: "Gustave Doré",
-    year: "1866",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:024.Jacob_Wrestles_with_the_Angel.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/024.Jacob_Wrestles_with_the_Angel.jpg/960px-024.Jacob_Wrestles_with_the_Angel.jpg",
-  },
-  {
-    title: "The Last Judgment",
-    artist: "Hieronymus Bosch",
-    year: "c. 1482",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Hieronymus_Bosch_-_The_Last_Judgement.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Hieronymus_Bosch_-_The_Last_Judgement.jpg/960px-Hieronymus_Bosch_-_The_Last_Judgement.jpg",
-  },
-  {
-    title: "The Last Supper",
-    artist: "Jacopo Tintoretto",
-    year: "1592–1594",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Jacopo_Tintoretto_-_The_Last_Supper_-_WGA22649.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Jacopo_Tintoretto_-_The_Last_Supper_-_WGA22649.jpg/960px-Jacopo_Tintoretto_-_The_Last_Supper_-_WGA22649.jpg",
-  },
-  {
-    title: "The Opening of the Fifth Seal",
-    artist: "El Greco",
-    year: "c. 1608–1614",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:El_Greco_-_The_Opening_of_the_Fifth_Seal_(The_Vision_of_St_John)_-_WGA10637.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/El_Greco_-_The_Opening_of_the_Fifth_Seal_%28The_Vision_of_St_John%29_-_WGA10637.jpg/960px-El_Greco_-_The_Opening_of_the_Fifth_Seal_%28The_Vision_of_St_John%29_-_WGA10637.jpg",
-  },
-  {
-    title: "The Plains of Heaven",
-    artist: "John Martin",
-    year: "1851",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:John_Martin_-_The_Plains_of_Heaven_-_Google_Art_Project.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/John_Martin_-_The_Plains_of_Heaven_-_Google_Art_Project.jpg/960px-John_Martin_-_The_Plains_of_Heaven_-_Google_Art_Project.jpg",
-  },
-  {
-    title: "The Sacrifice of Isaac",
-    artist: "Caravaggio",
-    year: "c. 1603",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Sacrifice_of_Isaac-Caravaggio_(Uffizi).jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Sacrifice_of_Isaac-Caravaggio_%28Uffizi%29.jpg/960px-Sacrifice_of_Isaac-Caravaggio_%28Uffizi%29.jpg",
-  },
-  {
-    title: "Saint Michael Vanquishing Satan",
-    artist: "Raphael",
-    year: "1518",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Raphael_-_St._Michael_Vanquishing_Satan.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/7/74/Raphael_-_St._Michael_Vanquishing_Satan.jpg",
-  },
-  {
-    title: "Satan in Cocytus",
-    artist: "Gustave Doré",
-    year: "1861",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Gustave_Dore_Inferno34.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Gustave_Dore_Inferno34.jpg/960px-Gustave_Dore_Inferno34.jpg",
-  },
-  {
-    title: "Sodom and Gomorrah",
-    artist: "John Martin",
-    year: "1852",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:John_Martin_-_Sodom_and_Gomorrah.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/John_Martin_-_Sodom_and_Gomorrah.jpg/960px-John_Martin_-_Sodom_and_Gomorrah.jpg",
-  },
-  {
-    title: "The Tower of Babel",
-    artist: "Gustave Doré",
-    year: "1865",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Gustave_Dore_Bible_The_Tower_of_Babel.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Gustave_Dore_Bible_The_Tower_of_Babel.jpg/960px-Gustave_Dore_Bible_The_Tower_of_Babel.jpg",
-  },
-  {
-    title: "The Transfiguration",
-    artist: "Raphael",
-    year: "1516–1520",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Transfiguration_Raphael.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Transfiguration_Raphael.jpg/960px-Transfiguration_Raphael.jpg",
-  },
-];
+const PAGE_SIZE = 12;
+type SortKey = "title" | "artist" | "year";
+type SortDir = "asc" | "desc";
 
 type CloudArenaGalleryPageProps = {
   cloudArcanumWebBaseUrl: string;
@@ -156,6 +17,48 @@ export function CloudArenaGalleryPage({
 }: CloudArenaGalleryPageProps): ReactElement {
   const [active, setActive] = useState<GalleryEntry | null>(null);
   const [copied, setCopied] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortKey, setSortKey] = useState<SortKey>("title");
+  const [sortDir, setSortDir] = useState<SortDir>("asc");
+  const [page, setPage] = useState(0);
+
+  const filtered = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return GALLERY;
+    return GALLERY.filter(
+      (e) =>
+        e.title.toLowerCase().includes(q) ||
+        e.artist.toLowerCase().includes(q),
+    );
+  }, [searchQuery]);
+
+  const sorted = useMemo(() => {
+    return [...filtered].sort((a, b) => {
+      const av = a[sortKey].toLowerCase();
+      const bv = b[sortKey].toLowerCase();
+      const cmp = av < bv ? -1 : av > bv ? 1 : 0;
+      return sortDir === "asc" ? cmp : -cmp;
+    });
+  }, [filtered, sortKey, sortDir]);
+
+  const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages - 1);
+  const paginated = sorted.slice(safePage * PAGE_SIZE, (safePage + 1) * PAGE_SIZE);
+
+  function handleSearch(q: string): void {
+    setSearchQuery(q);
+    setPage(0);
+  }
+
+  function handleSort(key: SortKey): void {
+    if (key === sortKey) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+    setPage(0);
+  }
 
   function openLightbox(entry: GalleryEntry): void {
     setActive(entry);
@@ -173,6 +76,11 @@ export function CloudArenaGalleryPage({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
+  }
+
+  function sortLabel(key: SortKey): string {
+    if (key !== sortKey) return key.charAt(0).toUpperCase() + key.slice(1);
+    return `${key.charAt(0).toUpperCase() + key.slice(1)} ${sortDir === "asc" ? "↑" : "↓"}`;
   }
 
   return (
@@ -193,38 +101,91 @@ export function CloudArenaGalleryPage({
             </Link>
           </header>
 
+          <div className="cloud-arena-gallery-toolbar">
+            <input
+              className="cloud-arena-gallery-search"
+              type="search"
+              placeholder="Search title or artist…"
+              value={searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+              aria-label="Search gallery"
+            />
+            <div className="cloud-arena-gallery-sort-group">
+              <span className="cloud-arena-gallery-sort-label">Sort:</span>
+              {(["title", "artist", "year"] as SortKey[]).map((k) => (
+                <button
+                  key={k}
+                  type="button"
+                  className={`cloud-arena-gallery-sort-btn${sortKey === k ? " is-active" : ""}`}
+                  onClick={() => handleSort(k)}
+                >
+                  {sortLabel(k)}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="cloud-arena-gallery-stage">
             <section className="cloud-arena-gallery-column">
               <div className="cloud-arena-gallery-scroll-pane">
                 <div className="cloud-arena-gallery-panel">
-                  <div className="cloud-arena-gallery-grid">
-                    {GALLERY.map((entry) => (
-                      <button
-                        key={entry.wikiUrl}
-                        type="button"
-                        className="cloud-arena-gallery-entry"
-                        onClick={() => openLightbox(entry)}
-                        aria-label={`View ${entry.title} by ${entry.artist}`}
-                      >
-                        <div className="cloud-arena-gallery-thumb-wrap">
-                          <img
-                            src={entry.imageUrl}
-                            alt={entry.title}
-                            className="cloud-arena-gallery-thumb"
-                            loading="lazy"
-                          />
-                        </div>
-                        <div className="cloud-arena-gallery-caption">
-                          <span className="cloud-arena-gallery-entry-title">{entry.title}</span>
-                          <span className="cloud-arena-gallery-entry-artist">{entry.artist}, {entry.year}</span>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
+                  {paginated.length === 0 ? (
+                    <p className="cloud-arena-gallery-empty">No results found.</p>
+                  ) : (
+                    <div className="cloud-arena-gallery-grid">
+                      {paginated.map((entry) => (
+                        <button
+                          key={entry.wikiUrl}
+                          type="button"
+                          className="cloud-arena-gallery-entry"
+                          onClick={() => openLightbox(entry)}
+                          aria-label={`View ${entry.title} by ${entry.artist}`}
+                        >
+                          <div className="cloud-arena-gallery-thumb-wrap">
+                            <img
+                              src={entry.imageUrl}
+                              alt={entry.title}
+                              className="cloud-arena-gallery-thumb"
+                              loading="lazy"
+                            />
+                          </div>
+                          <div className="cloud-arena-gallery-caption">
+                            <span className="cloud-arena-gallery-entry-title">{entry.title}</span>
+                            <span className="cloud-arena-gallery-entry-artist">{entry.artist}, {entry.year}</span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </section>
           </div>
+
+          {totalPages > 1 && (
+            <div className="cloud-arena-gallery-pagination">
+              <button
+                type="button"
+                className="cloud-arena-gallery-page-btn"
+                onClick={() => setPage((p) => Math.max(0, p - 1))}
+                disabled={safePage === 0}
+              >
+                ← Prev
+              </button>
+              <span className="cloud-arena-gallery-page-info">
+                Page {safePage + 1} of {totalPages}
+                <span className="cloud-arena-gallery-page-count"> ({sorted.length} works)</span>
+              </span>
+              <button
+                type="button"
+                className="cloud-arena-gallery-page-btn"
+                onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                disabled={safePage >= totalPages - 1}
+              >
+                Next →
+              </button>
+            </div>
+          )}
         </div>
 
         {active && (
