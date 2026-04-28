@@ -199,6 +199,21 @@ function matchesRelation(
   return objectId !== referenceObjectId;
 }
 
+function matchesDefending(
+  object: SelectedObject,
+  selector: Selector,
+): boolean {
+  if (selector.defending === undefined) {
+    return true;
+  }
+
+  if (object.kind !== "permanent") {
+    return false;
+  }
+
+  return object.permanent.isDefending === selector.defending;
+}
+
 export function matchesSelectorObject(
   object: SelectedObject,
   selector: Selector,
@@ -212,7 +227,8 @@ export function matchesSelectorObject(
     matchesController(object.controllerId, selector) &&
     matchesCardType(object, selector) &&
     matchesSubtype(object, selector) &&
-    matchesRelation(object, selector, context)
+    matchesRelation(object, selector, context) &&
+    matchesDefending(object, selector)
   );
 }
 

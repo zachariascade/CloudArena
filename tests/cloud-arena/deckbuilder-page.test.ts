@@ -157,4 +157,13 @@ describe("cloud arena deckbuilder helpers", () => {
         .map((option) => option.id),
     ).toContain("saved_1");
   });
+
+  it("includes the counters preset in the default deck chooser fallback", () => {
+    const presetIds = buildDeckSelectionGroups(null, "master_deck")[1]?.options.map((option) => option.id) ?? [];
+
+    expect(presetIds).toContain("master_deck");
+    expect(presetIds).toContain("counters");
+    expect(presetIds).toContain("tall_creatures");
+    expect(presetIds).toContain("mixed_guardian");
+  });
 });

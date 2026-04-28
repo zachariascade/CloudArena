@@ -4,6 +4,7 @@ import {
   LEAN_V1_DEFAULT_TURN_ENERGY,
   LEAN_V1_HAND_SIZE,
   LEAN_V1_NON_CREATURE_SLOT_COUNT,
+  LEAN_V1_DEFAULT_SUMMONING_SICKNESS_POLICY,
   LEAN_V1_STARTING_PLAYER_HEALTH,
 } from "./constants.js";
 import { cardDefinitions } from "../cards/definitions.js";
@@ -95,6 +96,8 @@ export function createBattle(input: CreateBattleInput): BattleState {
   const playerHealth = input.playerHealth ?? LEAN_V1_STARTING_PLAYER_HEALTH;
   const handSize = input.handSize ?? LEAN_V1_HAND_SIZE;
   const drawPolicy = input.drawPolicy ?? LEAN_V1_DEFAULT_DRAW_POLICY;
+  const summoningSicknessPolicy =
+    input.summoningSicknessPolicy ?? LEAN_V1_DEFAULT_SUMMONING_SICKNESS_POLICY;
   const resolvedCardDefinitions = input.cardDefinitions
     ? {
         enemy_leader: cardDefinitions.enemy_leader,
@@ -161,6 +164,7 @@ export function createBattle(input: CreateBattleInput): BattleState {
     cardDefinitions: resolvedCardDefinitions,
     handSize,
     drawPolicy,
+    summoningSicknessPolicy,
     playerCreatureSlotCount,
     playerNonCreatureSlotCount,
     enemyCreatureSlotCount,
@@ -212,6 +216,7 @@ export function createBattle(input: CreateBattleInput): BattleState {
 
   const enemyLeaderPermanent = createPermanentForEnemyActor(state, primaryEnemyActor, {
     isLeader: true,
+    enteredBattlefieldTurnNumber: undefined,
   });
   state.enemy.leaderPermanentId = enemyLeaderPermanent.instanceId;
   primaryEnemyActor.permanentId = enemyLeaderPermanent.instanceId;
@@ -237,6 +242,7 @@ export function createBattle(input: CreateBattleInput): BattleState {
     actor.definitionId = getRequiredEnemyDefinitionId(enemyEntry);
     const permanent = createPermanentForEnemyActor(state, actor, {
       isLeader: false,
+      enteredBattlefieldTurnNumber: undefined,
     });
     actor.permanentId = permanent.instanceId;
     actor.intentQueueLabels = getEnemyIntentQueueLabels(actor, 2);
@@ -257,6 +263,7 @@ export function createBattle(input: CreateBattleInput): BattleState {
         definitionId: permanentCardId,
       },
       "enemy",
+      undefined,
     );
     state.nextEnemyTokenIndex += 1;
   }
@@ -271,6 +278,7 @@ export function createBattle(input: CreateBattleInput): BattleState {
         definitionId: tokenCardId,
       },
       "enemy",
+      undefined,
     );
     state.nextEnemyTokenIndex += 1;
   }

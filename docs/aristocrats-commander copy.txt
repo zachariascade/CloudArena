@@ -1,0 +1,149 @@
+# 🩸 Teysa Karlov Aristocrats (Commander)
+
+## Commander
+1 Teysa Karlov
+
+---
+
+## Creatures (28)
+1 Blood Artist
+1 Zulaport Cutthroat
+1 Cruel Celebrant
+1 Falkenrath Noble
+1 Doomed Traveler
+1 Hunted Witness
+1 Reassembling Skeleton
+1 Gutterbones
+1 Nether Traitor
+1 Pitiless Plunderer
+1 Pawn of Ulamog
+1 Sifter of Skulls
+1 Carrion Feeder
+1 Viscera Seer
+1 Yahenni, Undying Partisan
+1 Woe Strider
+1 Midnight Reaper
+1 Grim Haruspex
+1 Morbid Opportunist
+1 Skullport Merchant
+1 Solemn Simulacrum
+1 Elenda, the Dusk Rose
+1 Kokusho, the Evening Star
+1 Gray Merchant of Asphodel
+1 Sun Titan
+1 Reveillark
+1 Karmic Guide
+1 Lurrus of the Dream-Den
+
+---
+
+## Artifacts (10)
+1 Sol Ring
+1 Arcane Signet
+1 Orzhov Signet
+1 Talisman of Hierarchy
+1 Skullclamp
+1 Ashnod's Altar
+1 Phyrexian Altar
+1 Altar of Dementia
+1 Mind Stone
+1 Wayfarer's Bauble
+
+---
+
+## Enchantments (8)
+1 Bastion of Remembrance
+1 Smothering Tithe
+1 Grave Pact
+1 Dictate of Erebos
+1 Black Market
+1 Animate Dead
+1 Dance of the Dead
+1 Necromancy
+
+---
+
+## Instants (7)
+1 Swords to Plowshares
+1 Path to Exile
+1 Anguished Unmaking
+1 Utter End
+1 Village Rites
+1 Deadly Dispute
+1 Teferi's Protection
+
+---
+
+## Sorceries (9)
+1 Demonic Tutor
+1 Diabolic Intent
+1 Sign in Blood
+1 Night's Whisper
+1 Toxic Deluge
+1 Damn
+1 Living Death
+1 Victimize
+1 Buried Alive
+
+---
+
+## Planeswalkers (2)
+1 Liliana, Dreadhorde General
+1 Sorin, Vengeful Bloodlord
+
+---
+
+## Lands (35)
+1 Command Tower
+1 Godless Shrine
+1 Isolated Chapel
+1 Concealed Courtyard
+1 Shattered Sanctum
+1 Brightclimb Pathway
+1 Caves of Koilos
+1 Temple of Silence
+1 Fetid Heath
+1 Orzhov Basilica
+1 Vault of the Archangel
+1 Phyrexian Tower
+1 High Market
+1 Westvale Abbey
+1 Bojuka Bog
+1 Myriad Landscape
+1 Marsh Flats
+1 Terramorphic Expanse
+1 Evolving Wilds
+10 Swamp
+8 Plains
+
+---
+
+## Strategy Summary
+
+### Core Engine
+- Sacrifice creatures → trigger drain effects
+- Generate tokens → repeat
+
+### Key Combos
+- Pitiless Plunderer + Sac Outlet → infinite mana
+- Reveillark + Karmic Guide → infinite death triggers
+- Blood Artist effects → win condition
+
+### Play Pattern
+1. Build board with cheap creatures/tokens  
+2. Establish sac outlet  
+3. Drop payoff (Blood Artist effects)  
+4. Loop sacrifices → drain table  
+
+---
+
+## Power Level
+- Mid to high (7–8 range)
+- Can combo finish or grind value
+
+---
+
+## Upgrade Ideas
+- Add tutors for consistency
+- Add faster mana for higher power tables
+- Add protection if meta is removal-heavy

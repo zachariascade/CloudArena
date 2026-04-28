@@ -29,6 +29,9 @@ const allowedScenarioIds: CloudArenaSessionScenarioId[] = [
   "demon_pack",
   "lake_of_ice",
   "imp_caller",
+  "malchior_binder_of_wills",
+  "rebel_angel",
+  "viper_shade",
 ];
 
 function parseCreateSessionBody(body: unknown): CloudArenaCreateSessionRequest {
@@ -40,8 +43,7 @@ function parseCreateSessionBody(body: unknown): CloudArenaCreateSessionRequest {
     throw new CloudArenaInvalidSetupError("Session request body must be an object.");
   }
 
-  const { scenarioId, deckId, seed } = body;
-  const { shuffleDeck } = body;
+  const { scenarioId, deckId, seed, shuffleDeck, summoningSicknessPolicy } = body;
 
   if (scenarioId !== undefined && !allowedScenarioIds.includes(scenarioId as CloudArenaSessionScenarioId)) {
     throw new CloudArenaInvalidSetupError(
@@ -64,11 +66,24 @@ function parseCreateSessionBody(body: unknown): CloudArenaCreateSessionRequest {
     throw new CloudArenaInvalidSetupError("shuffleDeck must be a boolean.");
   }
 
+  if (
+    summoningSicknessPolicy !== undefined &&
+    summoningSicknessPolicy !== "enabled" &&
+    summoningSicknessPolicy !== "disabled"
+  ) {
+    throw new CloudArenaInvalidSetupError(
+      'summoningSicknessPolicy must be "enabled" or "disabled" when provided.',
+    );
+  }
+
   return {
     scenarioId: scenarioId as CloudArenaCreateSessionRequest["scenarioId"],
     deckId: deckId as CloudArenaCreateSessionRequest["deckId"],
     seed: seed as number | undefined,
     shuffleDeck: shuffleDeck as boolean | undefined,
+    summoningSicknessPolicy: summoningSicknessPolicy as
+      | CloudArenaCreateSessionRequest["summoningSicknessPolicy"]
+      | undefined,
   };
 }
 

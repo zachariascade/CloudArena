@@ -387,6 +387,13 @@ function describeRemoveCounterEffect(effect: Extract<Effect, { type: "remove_cou
   return `${target === "this" ? "This" : `Choose ${target}; it`} loses ${formatCount(amount)} ${effect.counter} counter${amount === 1 ? "" : "s"}.`;
 }
 
+function describeGrantKeywordEffect(effect: Extract<Effect, { type: "grant_keyword" }>): string {
+  const target = describeCounterTarget(effect);
+  const durationSuffix = effect.duration === "end_of_turn" ? " until end of turn" : "";
+
+  return `${target === "this" ? "This" : `Choose ${target}; it`} gains ${effect.keyword}${durationSuffix}.`;
+}
+
 function describeSacrificeTarget(selector: Selector): string {
   if (selector.controller === "you" && selector.cardType === "creature") {
     return "another creature you control";
@@ -594,6 +601,8 @@ function describeEffect(effect: CardEffect | Effect, preSummon = false): string 
         return describeAddCounterEffect(effect);
       case "remove_counter":
         return describeRemoveCounterEffect(effect);
+      case "grant_keyword":
+        return describeGrantKeywordEffect(effect);
       case "deal_damage":
         return describeDealDamageEffect(effect);
       case "gain_block":
@@ -735,6 +744,14 @@ export function summarizeCardDefinition(definition: CardDefinition): string[] {
         if (keyword === "pierce") {
           summaryLines.push("Equipped creature has **Pierce**.");
         }
+
+        if (keyword === "hexproof") {
+          summaryLines.push("Equipped creature has **Hexproof**.");
+        }
+
+        if (keyword === "indestructible") {
+          summaryLines.push("Equipped creature has **Indestructible**.");
+        }
       }
     } else if (!hasCardType(definition, "creature") && !(definition.abilities?.length ?? 0)) {
       summaryLines.push(`Summon ${definition.name}.`);
@@ -758,6 +775,14 @@ export function summarizeCardDefinition(definition: CardDefinition): string[] {
 
     if (definition.keywords?.includes("pierce")) {
       summaryLines.push("**Pierce** — This creature's damage ignores block and is dealt directly to health.");
+    }
+
+    if (definition.keywords?.includes("hexproof")) {
+      summaryLines.push("**Hexproof** — Debuff effects can't target or affect this permanent.");
+    }
+
+    if (definition.keywords?.includes("indestructible")) {
+      summaryLines.push("**Indestructible** — This creature takes no damage.");
     }
 
     summaryLines.push(...summarizeEffects(definition.preSummonEffects, true));

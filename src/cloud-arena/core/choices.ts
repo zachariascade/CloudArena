@@ -58,9 +58,12 @@ export function choosePermanents(
     controllerId?: string;
     context?: SelectorContext;
     optional?: boolean;
+    filter?: (permanent: PermanentState) => boolean;
   },
 ): PermanentState[] {
-  const candidates = selectPermanents(state, input.selector, input.context ?? {});
+  const candidates = selectPermanents(state, input.selector, input.context ?? {}).filter(
+    input.filter ?? (() => true),
+  );
   const selected = candidates.slice(0, Math.max(0, input.amount));
 
   recordChoice(state, {

@@ -16,6 +16,15 @@ describe("cloud arena interactive page deck chooser", () => {
         notes: null,
       },
       {
+        id: "counters",
+        kind: "preset",
+        name: "Counters",
+        cardCount: 20,
+        uniqueCardCount: 9,
+        tags: [],
+        notes: null,
+      },
+      {
         id: "saved_1",
         kind: "saved",
         name: "Saved Control",
@@ -30,6 +39,7 @@ describe("cloud arena interactive page deck chooser", () => {
 
     expect(groups[0]?.label).toBe("Built-in presets");
     expect(groups[0]?.options.map((option) => option.id)).toContain("master_deck");
+    expect(groups[0]?.options.map((option) => option.id)).toContain("counters");
     expect(groups[1]?.label).toBe("Saved decks");
     expect(groups[1]?.options.map((option) => option.id)).toContain("saved_1");
     expect(groups[1]?.options.find((option) => option.id === "saved_1")?.description).toContain("40 cards");
@@ -39,6 +49,7 @@ describe("cloud arena interactive page deck chooser", () => {
     const groups = buildCloudArenaDeckChooserGroups(null, "saved_missing");
 
     expect(groups[0]?.options.map((option) => option.id)).toContain("master_deck");
+    expect(groups[0]?.options.map((option) => option.id)).toContain("counters");
     expect(groups[1]?.options[0]).toMatchObject({
       id: "saved_missing",
       kind: "saved",

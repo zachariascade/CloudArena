@@ -274,6 +274,7 @@ function renderDisplayImage(model: DisplayCardModel): ReactElement {
 
 export function DisplayCard({ model, className, detailsAction }: DisplayCardProps): ReactElement {
   const [activeKeywordId, setActiveKeywordId] = useState<DisplayCardKeywordId | null>(null);
+  const [activeCounterLabel, setActiveCounterLabel] = useState<"Power" | "Health" | null>(null);
   const [isCardHovered, setIsCardHovered] = useState(false);
   const displayName = formatCardDisplayName(model.name, model.title);
   const healthBar = model.healthBar ?? null;
@@ -281,6 +282,7 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
   const footerStat = model.footerStat ?? null;
   const textBlocks = model.textBlocks;
   const stats = model.stats;
+  const counterPills = model.counterPills ?? [];
   const statusLabel = model.statusLabel ?? null;
   const statusTone = model.statusTone;
   const badges = model.badges;
@@ -313,6 +315,19 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
   const isHealthRising = stateFlags.includes("health-rising");
   const isInspectorCurrent = stateFlags.includes("inspector-current");
   const blockValue = blockStat?.value ?? "0";
+  const formatCounterValue = (value: number): string => (value > 0 ? `+${value}` : String(value));
+  const formatCounterTooltip = (label: "Power" | "Health", value: number): string =>
+    `${label} counter ${formatCounterValue(value)}`;
+  const counterPanelLabel = counterPills.length > 0
+    ? `${model.name} counters: ${counterPills.map((counter) => `${counter.label} counter ${formatCounterValue(counter.value)}`).join(", ")}`
+    : null;
+  const getCounterTone = (label: "Power" | "Health", value: number): string => {
+    if (value < 0) {
+      return "is-negative";
+    }
+
+    return label === "Power" ? "is-power" : "is-health";
+  };
   const detailsButton = detailsAction ? (
     <button
       type="button"
@@ -482,6 +497,40 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
           </div>
         </div>
       ) : null}
+      {counterPills.length > 0 ? (
+        <div
+          className="display-card-counter-panel"
+          aria-label={counterPanelLabel ?? `${model.name} counters`}
+        >
+          {counterPills.map((counter) => (
+            <div key={counter.label} className="display-card-counter-orb-wrap">
+              <div
+                className={`display-card-counter-orb ${getCounterTone(counter.label, counter.value)}`}
+                aria-label={formatCounterTooltip(counter.label, counter.value)}
+                tabIndex={0}
+                onMouseEnter={() => setActiveCounterLabel(counter.label)}
+                onMouseLeave={() => setActiveCounterLabel((current) => (current === counter.label ? null : current))}
+                onFocus={() => setActiveCounterLabel(counter.label)}
+                onBlur={() => setActiveCounterLabel((current) => (current === counter.label ? null : current))}
+              >
+                <strong>{formatCounterValue(counter.value)}</strong>
+              </div>
+              <span
+                className={[
+                  "display-card-counter-tooltip",
+                  activeCounterLabel === counter.label ? "is-visible" : null,
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+                role="note"
+                aria-hidden={activeCounterLabel === counter.label ? undefined : "true"}
+              >
+                {formatCounterTooltip(counter.label, counter.value)}
+              </span>
+            </div>
+          ))}
+        </div>
+      ) : null}
     </div>
   ) : null;
   const lowerContent = (
@@ -555,33 +604,52 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
         .filter(Boolean)
         .join(" ")}
       data-variant={model.variant}
-      onMouseEnter={() => setIsCardHovered(true)}
-      onMouseLeave={() => {
-        setIsCardHovered(false);
-        setActiveKeywordId(null);
-      }}
     >
-      {isTopCombatCard && combatPanel ? (
-        <div className="display-card-enemy-stack">
-          {combatPanel}
-          {faceContent}
-          {lowerContent}
-        </div>
-      ) : usesSideCombatPanel && combatPanel ? (
-        <div className={`display-card-character-layout display-card-character-layout-${model.variant}`}>
-          <div className="display-card-main-column">
+      <div className="display-card-hover-zone">
+        {isTopCombatCard && combatPanel ? (
+          <div className="display-card-enemy-stack">
+            {combatPanel}
+            <div
+              className="display-card-combat-hover-zone"
+              onMouseEnter={() => setIsCardHovered(true)}
+              onMouseLeave={() => {
+                setIsCardHovered(false);
+                setActiveKeywordId(null);
+              }}
+            >
+              {faceContent}
+              {lowerContent}
+            </div>
+          </div>
+        ) : usesSideCombatPanel && combatPanel ? (
+          <div className={`display-card-character-layout display-card-character-layout-${model.variant}`}>
+            <div
+              className="display-card-main-column display-card-combat-hover-zone"
+              onMouseEnter={() => setIsCardHovered(true)}
+              onMouseLeave={() => {
+                setIsCardHovered(false);
+                setActiveKeywordId(null);
+              }}
+            >
+              {faceContent}
+              {lowerContent}
+            </div>
+            {model.variant === "player" ? combatPanel : null}
+          </div>
+        ) : (
+          <div
+            className="display-card-combat-hover-zone"
+            onMouseEnter={() => setIsCardHovered(true)}
+            onMouseLeave={() => {
+              setIsCardHovered(false);
+              setActiveKeywordId(null);
+            }}
+          >
             {faceContent}
             {lowerContent}
           </div>
-          {model.variant === "player" ? combatPanel : null}
-        </div>
-      ) : (
-        <>
-          {faceContent}
-          {lowerContent}
-          {combatPanel}
-        </>
-      )}
+        )}
+      </div>
       {glossaryKeywordIds.length > 0 ? (
         <aside
           className={`display-card-keyword-tooltip${visibleKeywordId ? " is-visible" : ""}`}

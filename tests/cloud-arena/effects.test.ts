@@ -8,6 +8,7 @@ import {
   resolveEffects,
   type CardDefinitionLibrary,
 } from "../../src/cloud-arena/index.js";
+import { denialBeforeTheRoostersCryCardDefinition } from "../../src/cloud-arena/cards/definitions/denial-before-the-rooster-s-cry.js";
 import { createTestBattle } from "./helpers.js";
 
 const EFFECT_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
@@ -104,6 +105,31 @@ const EFFECT_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
     health: 0,
     abilities: [],
   },
+  stunning_rebuke: {
+    id: "stunning_rebuke",
+    name: "Stunning Rebuke",
+    cardTypes: ["instant"],
+    cost: 2,
+    onPlay: [],
+    spellEffects: [
+      {
+        type: "stun",
+        target: "enemy",
+      },
+    ],
+  },
+  hexproof_enemy_leader: {
+    id: "hexproof_enemy_leader",
+    name: "Hexproof Enemy Leader",
+    cardTypes: ["creature"],
+    cost: 0,
+    onPlay: [],
+    power: 0,
+    health: 0,
+    keywords: ["hexproof"],
+    abilities: [],
+  },
+  denial_before_the_rooster_s_cry: denialBeforeTheRoostersCryCardDefinition,
   banner_blessing: {
     id: "banner_blessing",
     name: "Banner Blessing",
@@ -238,6 +264,7 @@ function createEffectBattle() {
 
 function createDrawEffectBattle() {
   return createTestBattle({
+    summoningSicknessPolicy: "disabled",
     cardDefinitions: EFFECT_TEST_CARD_DEFINITIONS,
     playerDeck: [
       "vision_surge",
@@ -420,6 +447,108 @@ describe("cloud arena effect primitives", () => {
 
     expect(battlefieldPermanents.every((permanent) => getPermanentCounterCount(permanent, "+1/+1") === 0)).toBe(true);
     expect(battle.player.discardPile.map((card) => card.definitionId)).toContain("banner_purge");
+  });
+
+  it("does not stun an enemy that has hexproof", () => {
+    const battle = createTestBattle({
+      cardDefinitions: EFFECT_TEST_CARD_DEFINITIONS,
+      playerDeck: ["stunning_rebuke", "attack", "defend", "attack", "defend"],
+      enemy: {
+        name: "Hexproof Enemy",
+        health: 30,
+        basePower: 12,
+        leaderDefinitionId: "hexproof_enemy_leader",
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+
+    battle.player.energy = 10;
+
+    const stunCard = battle.player.hand.find((card) => card.definitionId === "stunning_rebuke");
+
+    if (!stunCard) {
+      throw new Error("Expected stunning_rebuke in hand.");
+    }
+
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: stunCard.instanceId });
+
+    expect(battle.enemy.stunnedThisTurn).toBe(false);
+    expect(battle.log.some((event) => event.type === "enemy_stunned")).toBe(false);
+  });
+
+  it("prevents damage to a creature with indestructible until end of turn", () => {
+    const battle = createTestBattle({
+      cardDefinitions: EFFECT_TEST_CARD_DEFINITIONS,
+      playerDeck: ["angel_host", "denial_before_the_rooster_s_cry", "attack", "defend", "attack"],
+      enemy: {
+        name: "Indestructible Dummy",
+        health: 30,
+        basePower: 12,
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+
+    battle.player.energy = 10;
+
+    const guardianCard = battle.player.hand.find((card) => card.definitionId === "angel_host");
+    const blessingCard = battle.player.hand.find(
+      (card) => card.definitionId === "denial_before_the_rooster_s_cry",
+    );
+
+    if (!guardianCard || !blessingCard) {
+      throw new Error("Expected angel_host and denial_before_the_rooster_s_cry in hand.");
+    }
+
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: guardianCard.instanceId });
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: blessingCard.instanceId });
+
+    const guardian = battle.battlefield.find((permanent) => permanent?.definitionId === "angel_host");
+    if (!guardian) {
+      throw new Error("Expected angel_host on the battlefield.");
+    }
+
+    applyBattleAction(battle, {
+      type: "choose_target",
+      targetPermanentId: guardian.instanceId,
+    });
+
+    expect(getDerivedPermanentStat(battle, guardian, "health")).toBe(10);
+
+    resolveEffect(
+      battle,
+      {
+        type: "deal_damage",
+        target: {
+          zone: "battlefield",
+          controller: "you",
+          cardType: "creature",
+          relation: "self",
+        },
+        amount: { type: "constant", value: 3 },
+      },
+      { abilitySourcePermanentId: guardian.instanceId },
+    );
+
+    expect(getDerivedPermanentStat(battle, guardian, "health")).toBe(10);
+
+    applyBattleAction(battle, { type: "end_turn" });
+
+    resolveEffect(
+      battle,
+      {
+        type: "deal_damage",
+        target: {
+          zone: "battlefield",
+          controller: "you",
+          cardType: "creature",
+          relation: "self",
+        },
+        amount: { type: "constant", value: 3 },
+      },
+      { abilitySourcePermanentId: guardian.instanceId },
+    );
+
+    expect(getDerivedPermanentStat(battle, guardian, "health")).toBe(7);
   });
 
   it("draws cards from an instant spell and a permanent activated ability", () => {

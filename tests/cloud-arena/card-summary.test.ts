@@ -7,6 +7,7 @@ import { forbiddenInsightCardDefinition } from "../../src/cloud-arena/cards/defi
 import { focusedBlessingCardDefinition } from "../../src/cloud-arena/cards/definitions/focused-blessing.js";
 import { choirCaptainCardDefinition } from "../../src/cloud-arena/cards/definitions/choir-captain.js";
 import { guardianCardDefinition } from "../../src/cloud-arena/cards/definitions/guardian.js";
+import { denialBeforeTheRoostersCryCardDefinition } from "../../src/cloud-arena/cards/definitions/denial-before-the-rooster-s-cry.js";
 import { haltBucklerCardDefinition } from "../../src/cloud-arena/cards/definitions/halt-buckler.js";
 import { graveyardHymnCardDefinition } from "../../src/cloud-arena/cards/definitions/graveyard-hymn.js";
 import { massBenedictionCardDefinition } from "../../src/cloud-arena/cards/definitions/mass-benediction.js";
@@ -45,6 +46,18 @@ const PIERCE_SABER_DEFINITION: CardDefinition = {
   power: 0,
   health: 2,
   grantedKeywords: ["pierce"],
+};
+
+const HEXPROOF_CREATURE_DEFINITION: CardDefinition = {
+  id: "hexproof_creature",
+  name: "Hexproof Creature",
+  cardTypes: ["creature"],
+  cost: 2,
+  onPlay: [],
+  power: 2,
+  health: 3,
+  keywords: ["hexproof"],
+  abilities: [],
 };
 
 describe("cloud arena card summary", () => {
@@ -121,6 +134,9 @@ describe("cloud arena card summary", () => {
       "**Halt**",
     );
     expect(summarizeCardDefinition(guardianCardDefinition)).toContain(
+      "**Hexproof** — Debuff effects can't target or affect this permanent.",
+    );
+    expect(summarizeCardDefinition(guardianCardDefinition)).toContain(
       "Pay 1 energy: Gain 5 block.",
     );
   });
@@ -133,6 +149,18 @@ describe("cloud arena card summary", () => {
       "Equip a permanent.",
       "Equipped permanent gets +0/+3.",
       "Equipped creature has **Pierce**.",
+    ]);
+  });
+
+  it("describes the indestructible instant", () => {
+    expect(summarizeCardDefinition(denialBeforeTheRoostersCryCardDefinition)).toEqual([
+      "Choose a creature you control; it gains indestructible until end of turn.",
+    ]);
+  });
+
+  it("describes the hexproof keyword", () => {
+    expect(summarizeCardDefinition(HEXPROOF_CREATURE_DEFINITION)).toEqual([
+      "**Hexproof** — Debuff effects can't target or affect this permanent.",
     ]);
   });
 

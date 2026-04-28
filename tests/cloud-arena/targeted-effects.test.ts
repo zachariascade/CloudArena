@@ -8,7 +8,7 @@ import {
   getPermanentCounterCount,
   type CardDefinitionLibrary,
 } from "../../src/cloud-arena/index.js";
-import { TEST_CARD_DEFINITIONS } from "./helpers.js";
+import { TEST_CARD_DEFINITIONS, createTestBattle } from "./helpers.js";
 
 const TARGETED_EFFECT_TEST_DEFINITIONS: CardDefinitionLibrary = {
   sentinel: {
@@ -152,11 +152,55 @@ const TARGETED_EFFECT_TEST_DEFINITIONS: CardDefinitionLibrary = {
       },
     ],
   },
+  hexproof_curse: {
+    id: "hexproof_curse",
+    name: "Hexproof Curse",
+    cardTypes: ["instant"],
+    cost: 1,
+    onPlay: [],
+    spellEffects: [
+      {
+        type: "add_counter",
+        target: {
+          zone: "enemy_battlefield",
+          controller: "opponent",
+          cardType: "creature",
+        },
+        targeting: {
+          prompt: "Choose an enemy creature to weaken",
+        },
+        powerDelta: -3,
+      },
+    ],
+  },
+  hexproof_shade: {
+    id: "hexproof_shade",
+    name: "Hexproof Shade",
+    cardTypes: ["creature"],
+    cost: 0,
+    onPlay: [],
+    power: 3,
+    health: 5,
+    keywords: ["hexproof"],
+    abilities: [],
+  },
+  hexproof_enemy_leader: {
+    id: "hexproof_enemy_leader",
+    name: "Hexproof Enemy Leader",
+    cardTypes: ["creature"],
+    cost: 0,
+    onPlay: [],
+    power: 0,
+    health: 0,
+    keywords: ["hexproof"],
+    abilities: [],
+  },
 };
 
 function createTargetedEffectsBattle() {
   return createBattle({
     seed: 1,
+    summoningSicknessPolicy: "disabled",
     cardDefinitions: {
       ...TEST_CARD_DEFINITIONS,
       ...TARGETED_EFFECT_TEST_DEFINITIONS,
@@ -181,6 +225,7 @@ describe("cloud arena targeted effects", () => {
   it("fizzles a targeted spell when there are no legal battlefield targets", () => {
     const battle = createBattle({
       seed: 1,
+      summoningSicknessPolicy: "disabled",
       cardDefinitions: {
         ...TEST_CARD_DEFINITIONS,
         ...TARGETED_EFFECT_TEST_DEFINITIONS,
@@ -216,6 +261,43 @@ describe("cloud arena targeted effects", () => {
     expect(
       getLegalActions(battle).some((action) => action.type === "end_turn"),
     ).toBe(true);
+  });
+
+  it("does not let a targeted debuff choose a hexproof enemy creature", () => {
+    const battle = createTestBattle({
+      cardDefinitions: {
+        ...TEST_CARD_DEFINITIONS,
+        ...TARGETED_EFFECT_TEST_DEFINITIONS,
+      },
+      playerDeck: ["hexproof_curse"],
+      enemy: {
+        name: "Hexproof Target",
+        health: 30,
+        basePower: 12,
+        leaderDefinitionId: "hexproof_enemy_leader",
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+
+    battle.player.energy = 10;
+
+    const curseCard = battle.player.hand.find((card) => card.definitionId === "hexproof_curse");
+    const hexproofLeader = battle.enemyBattlefield.find(
+      (permanent) => permanent?.definitionId === "hexproof_enemy_leader",
+    );
+
+    if (!curseCard || !hexproofLeader) {
+      throw new Error("Expected a hexproof curse and hexproof enemy leader in the battle setup.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: curseCard.instanceId,
+    });
+
+    expect(battle.pendingTargetRequest).toBeNull();
+    expect(battle.player.discardPile.map((card) => card.definitionId)).toContain("hexproof_curse");
+    expect(getDerivedPermanentStat(battle, hexproofLeader, "power")).toBe(12);
   });
 
   it("deals damage to the clicked creature", () => {
@@ -287,6 +369,7 @@ describe("cloud arena targeted effects", () => {
   it("lets an attack target a specific enemy permanent", () => {
     const battle = createBattle({
       seed: 1,
+      summoningSicknessPolicy: "disabled",
       cardDefinitions: {
         ...TEST_CARD_DEFINITIONS,
         ...TARGETED_EFFECT_TEST_DEFINITIONS,
@@ -486,6 +569,7 @@ describe("cloud arena targeted effects", () => {
   it("allows a permanent to target itself when its ability opts in", () => {
     const battle = createBattle({
       seed: 1,
+      summoningSicknessPolicy: "disabled",
       cardDefinitions: {
         ...TEST_CARD_DEFINITIONS,
         ...TARGETED_EFFECT_TEST_DEFINITIONS,

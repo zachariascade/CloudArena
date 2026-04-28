@@ -17,7 +17,12 @@ import {
 import { evaluateCondition } from "../core/conditions.js";
 import { getDerivedPermanentActionAmount } from "../core/derived-stats.js";
 import { findPermanentById, selectPermanents } from "../core/selectors.js";
-import { destroyPermanent, permanentAttacksAllEnemyPermanents, permanentHasKeyword } from "../core/permanents.js";
+import {
+  destroyPermanent,
+  permanentAttacksAllEnemyPermanents,
+  permanentHasKeyword,
+  permanentHasSummoningSickness,
+} from "../core/permanents.js";
 import { emitRulesEvent } from "../core/rules-events.js";
 import type {
   ActivatedAbility,
@@ -57,6 +62,10 @@ export function usePermanentAction(
     throw new Error(`Permanent ${action.permanentId} has already acted this turn.`);
   }
 
+  const definition = getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId);
+  const isCreature = hasCardType(definition, "creature");
+  const isSummoningSick = isCreature && permanentHasSummoningSickness(state, permanent);
+
   const abilityId =
     actionSource === "ability"
       ? action.abilityId ??
@@ -65,16 +74,11 @@ export function usePermanentAction(
         )?.id
       : undefined;
 
-  state.log.push({
-    type: "permanent_acted",
-    turnNumber: state.turnNumber,
-    permanentId: action.permanentId,
-    source: actionSource,
-    action: action.action,
-    abilityId,
-  });
-
   if (actionSource === "ability") {
+    if (isSummoningSick) {
+      throw new Error(`Permanent ${action.permanentId} has summoning sickness and cannot use abilities this turn.`);
+    }
+
     if (!abilityId) {
       throw new Error(`Permanent ${action.permanentId} cannot use action ${action.action}.`);
     }
@@ -115,6 +119,10 @@ export function usePermanentAction(
       });
     }
   } else if (action.action === "attack") {
+    if (isSummoningSick) {
+      throw new Error(`Permanent ${action.permanentId} has summoning sickness and cannot attack this turn.`);
+    }
+
     const attackAmount = getDerivedPermanentActionAmount(state, permanent, "attack");
     const attackAllEnemyPermanents = permanentAttacksAllEnemyPermanents(state, permanent);
 
@@ -187,8 +195,6 @@ export function usePermanentAction(
     dealDamageToEnemy(state, attackAmount, "permanent_action", permanent.instanceId);
     permanent.isDefending = false;
   } else if (action.action === "defend") {
-    const definition = getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId);
-
     if (!hasCardType(definition, "creature")) {
       throw new Error(`Permanent ${action.permanentId} cannot use defend because it is not a creature.`);
     }
@@ -230,6 +236,15 @@ export function usePermanentAction(
       slotIndex: permanent.slotIndex,
     });
   }
+
+  state.log.push({
+    type: "permanent_acted",
+    turnNumber: state.turnNumber,
+    permanentId: action.permanentId,
+    source: actionSource,
+    action: action.action,
+    abilityId,
+  });
 
   permanent.hasActedThisTurn = true;
 

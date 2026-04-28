@@ -85,6 +85,8 @@ function getDeckLabel(deckId: string | null): string {
       return "Master Deck";
     case "starter_deck":
       return "Wide Angels";
+    case "counters":
+      return "Counters";
     case "tall_creatures":
       return "Tall Creatures";
     default:

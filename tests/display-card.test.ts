@@ -687,7 +687,7 @@ describe("shared display card mappers", () => {
     expect(renderPanel("enemy_battlefield")).toContain("cloud-arena-permanent-intent-bubble");
   });
 
-  it("only renders permanent counter chips for enemy battlefield permanents", () => {
+  it("renders permanent counter orbs in the card health panel", () => {
     const counteredPermanent = {
       instanceId: "guide_1",
       sourceCardInstanceId: "card_2",
@@ -698,6 +698,8 @@ describe("shared display card mappers", () => {
       health: 4,
       maxHealth: 4,
       block: 0,
+      powerCounter: 2,
+      healthCounter: -1,
       counters: { "+1/+1": 1 },
       hasActedThisTurn: false,
       isTapped: false,
@@ -730,9 +732,14 @@ describe("shared display card mappers", () => {
       );
 
     expect(renderPanel()).not.toContain("trace-viewer-counter-row");
-    expect(renderPanel()).not.toContain("+1/+1 x1");
-    expect(renderPanel("enemy_battlefield")).toContain("trace-viewer-counter-row");
-    expect(renderPanel("enemy_battlefield")).toContain("+1/+1 x1");
+    expect(renderPanel()).toContain("display-card-counter-panel");
+    expect(renderPanel()).toContain("display-card-counter-orb-wrap");
+    expect(renderPanel()).toContain("display-card-counter-tooltip");
+    expect(renderPanel()).toContain("Sanctified Guide counters: Power counter +2, Health counter -1");
+    expect(renderPanel()).toContain("Power counter +2");
+    expect(renderPanel()).toContain("Health counter -1");
+    expect(renderPanel()).toContain(">+2<");
+    expect(renderPanel()).toContain(">-1<");
   });
 
   it("maps graveyard hymn as a creature instead of a spell", () => {

@@ -115,6 +115,7 @@ const THRESHOLD_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
 describe("cloud arena threshold payoffs", () => {
   it("hides activated threshold payoffs until the battlefield count is met", () => {
     const battle = createTestBattle({
+      summoningSicknessPolicy: "disabled",
       cardDefinitions: THRESHOLD_TEST_CARD_DEFINITIONS,
       playerDeck: [
         "threshold_marshal",

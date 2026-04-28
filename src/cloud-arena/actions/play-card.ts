@@ -160,7 +160,7 @@ export function playCard(state: BattleState, cardInstanceId: string): BattleStat
     return state;
   }
 
-  summonPermanentFromCard(state, card);
+  summonPermanentFromCard(state, card, "player", state.turnNumber);
 
   return state;
 }

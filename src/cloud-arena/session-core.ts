@@ -23,6 +23,7 @@ import {
 } from "./core/derived-stats.js";
 import {
   summarizePermanentCounters,
+  getPermanentCounterAmount,
 } from "./core/counters.js";
 import {
   getPrimaryEnemyPermanent,
@@ -43,6 +44,7 @@ import type {
   BattleAction,
   BattleState,
   CreateBattleEnemyInput,
+  SummoningSicknessPolicy,
 } from "./core/types.js";
 
 export type CloudArenaSessionRecord = {
@@ -51,6 +53,7 @@ export type CloudArenaSessionRecord = {
   deckId: string | null;
   seed: number;
   shuffleDeck: boolean;
+  summoningSicknessPolicy: SummoningSicknessPolicy;
   createdAt: string;
   resetSource: {
     scenarioId: CloudArenaSessionScenarioId;
@@ -124,6 +127,7 @@ export function createScenarioBattle(
   seed: number,
   shuffleDeck: boolean,
   playerHealthOverride?: number,
+  summoningSicknessPolicy?: SummoningSicknessPolicy,
 ): BattleState {
   const [primaryEnemy] = scenario.enemies;
 
@@ -163,6 +167,7 @@ export function createScenarioBattle(
     playerHealth: playerHealthOverride ?? scenario.playerHealth,
     playerDeck,
     shuffleDeck,
+    summoningSicknessPolicy,
     enemies: battleEnemies,
   });
 }
@@ -177,6 +182,7 @@ export function createCloudArenaSessionRecord(input: {
   const request = input.request ?? {};
   const seed = request.seed ?? 1;
   const shuffleDeck = request.shuffleDeck ?? false;
+  const summoningSicknessPolicy = request.summoningSicknessPolicy ?? "enabled";
 
   return {
     id: input.id,
@@ -191,7 +197,15 @@ export function createCloudArenaSessionRecord(input: {
       seed,
     },
     actionHistory: [],
-    state: createScenarioBattle(input.scenario, input.playerDeck.cards, seed, shuffleDeck, request.playerHealth),
+    summoningSicknessPolicy,
+    state: createScenarioBattle(
+      input.scenario,
+      input.playerDeck.cards,
+      seed,
+      shuffleDeck,
+      request.playerHealth,
+      summoningSicknessPolicy,
+    ),
     playerDeck: [...input.playerDeck.cards],
   };
 }
@@ -399,6 +413,8 @@ export function buildCloudArenaSessionSnapshot(
             health: permanent.health,
             maxHealth: permanent.maxHealth,
             block: permanent.block,
+            powerCounter: getPermanentCounterAmount(permanent, "power"),
+            healthCounter: getPermanentCounterAmount(permanent, "health"),
             counters: summarizePermanentCounters(permanent.counters),
             attachments: [...(permanent.attachments ?? [])],
             attachedTo: permanent.attachedTo ?? null,
@@ -429,6 +445,8 @@ export function buildCloudArenaSessionSnapshot(
             health: permanent.health,
             maxHealth: permanent.maxHealth,
             block: permanent.block,
+            powerCounter: getPermanentCounterAmount(permanent, "power"),
+            healthCounter: getPermanentCounterAmount(permanent, "health"),
             counters: summarizePermanentCounters(permanent.counters),
             attachments: [...(permanent.attachments ?? [])],
             attachedTo: permanent.attachedTo ?? null,
@@ -479,7 +497,14 @@ export function resetCloudArenaSessionRecord(record: CloudArenaSessionRecord): v
   const scenario = getScenarioPreset(record.scenarioId);
 
   record.actionHistory = [];
-  record.state = createScenarioBattle(scenario, record.playerDeck, record.seed, record.shuffleDeck);
+  record.state = createScenarioBattle(
+    scenario,
+    record.playerDeck,
+    record.seed,
+    record.shuffleDeck,
+    undefined,
+    record.summoningSicknessPolicy,
+  );
 }
 
 export function applyCloudArenaSessionAction(

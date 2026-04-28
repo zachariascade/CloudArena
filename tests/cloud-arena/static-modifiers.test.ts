@@ -77,6 +77,7 @@ const STATIC_MODIFIER_CARD_DEFINITIONS: CardDefinitionLibrary = {
 describe("cloud arena static modifiers", () => {
   it("recomputes permanent damage from static abilities based on board state", () => {
     const battle = createTestBattle({
+      summoningSicknessPolicy: "disabled",
       cardDefinitions: STATIC_MODIFIER_CARD_DEFINITIONS,
       playerDeck: [
         "choir_captain",

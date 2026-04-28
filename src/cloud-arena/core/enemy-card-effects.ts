@@ -2,6 +2,7 @@ import {
   applyTemporaryPowerDeltaToAllPermanents,
   applyTemporaryPowerDeltaToControlledPermanents,
 } from "./effects.js";
+import { getDerivedPermanentStat } from "./derived-stats.js";
 import { getCardDefinitionFromLibrary } from "../cards/definitions.js";
 import {
   permanentHasKeyword,
@@ -24,18 +25,14 @@ export function getEnemyEffectResolveTiming(effect: EnemyCardEffect): EnemyEffec
   return effect.resolveTiming ?? "end_of_player_turn";
 }
 
-function summonEnemyToken(state: BattleState, cardId: string, enterSick = false): void {
+function summonEnemyToken(state: BattleState, cardId: string): void {
   const card: CardInstance = {
     instanceId: `card_${state.turnNumber}_${state.nextEnemyTokenIndex}`,
     definitionId: cardId,
   };
 
   state.nextEnemyTokenIndex += 1;
-  const permanent = trySummonPermanentFromCard(state, card, "enemy");
-
-  if (enterSick && permanent) {
-    permanent.hasActedThisTurn = true;
-  }
+  trySummonPermanentFromCard(state, card, "enemy", state.turnNumber);
 }
 
 export function getEnemyCardForResolveTiming(
@@ -62,8 +59,15 @@ export function applyEnemyCardEffect(
   effect: EnemyCardEffect,
   actor?: EnemyActorState,
 ): void {
-  const actorBasePower = actor ? actor.basePower : state.enemy.basePower;
-  const actorHealth = actor ? actor.health : state.enemy.health;
+  const actorPermanent = actor?.permanentId
+    ? state.enemyBattlefield.find((p) => p?.instanceId === actor.permanentId) ?? null
+    : getEnemyLeaderPermanent(state);
+  const actorBasePower = actorPermanent
+    ? getDerivedPermanentStat(state, actorPermanent, "power")
+    : actor
+      ? actor.basePower
+      : state.enemy.basePower;
+  const actorHealth = actorPermanent ? getDerivedPermanentStat(state, actorPermanent, "health") : actor ? actor.health : state.enemy.health;
   const attackSourceId = actor?.permanentId ?? state.enemy.leaderPermanentId ?? "enemy_intent";
 
   if (effect.target === "player") {
@@ -76,9 +80,7 @@ export function applyEnemyCardEffect(
     const hitCount = Math.max(1, effect.attackTimes ?? 1);
 
     if (baseAttackAmount > 0) {
-      const attackSourcePermanent = actor?.permanentId
-        ? state.enemyBattlefield.find((p) => p?.instanceId === actor.permanentId) ?? null
-        : getEnemyLeaderPermanent(state);
+      const attackSourcePermanent = actorPermanent;
       const attackSourceDefinition = actor?.definitionId
         ? getCardDefinitionFromLibrary(state.cardDefinitions, actor.definitionId)
         : state.enemy.leaderDefinitionId
@@ -181,7 +183,7 @@ export function applyEnemyCardEffect(
     const count = effect.spawnCount ?? 1;
 
     for (let index = 0; index < count; index += 1) {
-      summonEnemyToken(state, effect.spawnCardId, true);
+      summonEnemyToken(state, effect.spawnCardId);
     }
   }
 }

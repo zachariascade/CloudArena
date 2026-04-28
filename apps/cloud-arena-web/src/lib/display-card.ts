@@ -11,6 +11,7 @@ import type {
 import { summarizeCardDefinition } from "../../../../src/cloud-arena/card-summary.js";
 import {
   buildDisplayCardModel,
+  type DisplayCardCounterPill,
   type DisplayCardImage,
   type DisplayCardModel,
   type DisplayCardTextBlock,
@@ -75,6 +76,22 @@ function getFallbackCardDisplay(definition: CardDefinition): CardDisplayDefiniti
 
 function getCardDisplay(definition: CardDefinition): CardDisplayDefinition {
   return definition.display ?? getFallbackCardDisplay(definition);
+}
+
+function getPermanentCounterPills(permanent: CloudArenaPermanentSnapshot): DisplayCardCounterPill[] {
+  const pills: DisplayCardCounterPill[] = [];
+  const powerCounter = permanent.powerCounter ?? 0;
+  const healthCounter = permanent.healthCounter ?? 0;
+
+  if (powerCounter !== 0) {
+    pills.push({ label: "Power", value: powerCounter });
+  }
+
+  if (healthCounter !== 0) {
+    pills.push({ label: "Health", value: healthCounter });
+  }
+
+  return pills;
 }
 
 const ARENA_PLAYER_PRESENTATION = {
@@ -495,9 +512,10 @@ export function mapArenaPermanentToDisplayCard(
           current: permanent.health,
           max: permanent.maxHealth,
           label: `${permanent.health}/${permanent.maxHealth}`,
-        }
+      }
       : null,
     energyBar: null,
+    counterPills: getPermanentCounterPills(permanent),
     statusLabel: permanent.isTapped
       ? "tapped"
       : permanent.isDefending

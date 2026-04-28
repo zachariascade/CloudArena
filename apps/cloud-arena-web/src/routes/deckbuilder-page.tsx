@@ -286,6 +286,12 @@ export function buildDeckSelectionGroups(
           kind: "preset",
         },
         {
+          id: "counters",
+          label: "Counters",
+          description: "Creature shells with plus and minus counter play",
+          kind: "preset",
+        },
+        {
           id: "tall_creatures",
           label: "Tall Creatures",
           description: "Grow one or two bigger bodies",

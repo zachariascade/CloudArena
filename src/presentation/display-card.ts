@@ -14,6 +14,11 @@ export type DisplayCardStat = {
   value: string;
 };
 
+export type DisplayCardCounterPill = {
+  label: "Power" | "Health";
+  value: number;
+};
+
 export type DisplayCardTextBlock = {
   kind: "rules" | "flavor" | "intent" | "passive" | "meta";
   text: string;
@@ -57,6 +62,7 @@ export type DisplayCardModelBase = {
   footerStat?: string | null;
   healthBar?: DisplayCardHealthBar | null;
   energyBar?: DisplayCardEnergyBar | null;
+  counterPills?: DisplayCardCounterPill[];
   statusLabel?: string | null;
   statusTone?: "draft" | "templating" | "balanced" | "approved";
   stats: DisplayCardStat[];

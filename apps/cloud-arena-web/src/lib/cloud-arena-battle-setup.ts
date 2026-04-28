@@ -47,6 +47,11 @@ export const CLOUD_ARENA_SCENARIO_OPTIONS: Array<{
     label: "Malchior, Binder of Wills",
     description: "Base-power control duel",
   },
+  {
+    id: "rebel_angel",
+    label: "The Rebel Angel",
+    description: "Fallen-angel duel",
+  },
 ];
 
 const CLOUD_ARENA_DECK_OPTIONS: Array<{
@@ -63,6 +68,11 @@ const CLOUD_ARENA_DECK_OPTIONS: Array<{
     id: "starter_deck",
     label: "Wide Angels",
     description: "Token angels and blessing scale",
+  },
+  {
+    id: "counters",
+    label: "Counters",
+    description: "Creature shells with plus and minus counter play",
   },
   {
     id: "tall_creatures",

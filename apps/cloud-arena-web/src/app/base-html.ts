@@ -4376,6 +4376,101 @@ export function renderCloudArcanumWebHtml(
         line-height: 1;
       }
 
+      .display-card-counter-panel {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        margin-top: 0.05rem;
+      }
+
+      .display-card-counter-orb-wrap {
+        position: relative;
+        display: inline-grid;
+        place-items: center;
+      }
+
+      .display-card-counter-orb {
+        display: inline-grid;
+        place-items: center;
+        width: 1.95rem;
+        height: 1.95rem;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        box-shadow:
+          inset 0 1px 1px rgba(255, 255, 255, 0.35),
+          0 6px 12px rgba(15, 23, 42, 0.12);
+        color: #f8fafc;
+        cursor: help;
+        outline: none;
+      }
+
+      .display-card-counter-orb:focus-visible {
+        outline: 2px solid rgba(154, 52, 18, 0.42);
+        outline-offset: 2px;
+      }
+
+      .display-card-counter-tooltip {
+        position: absolute;
+        bottom: calc(100% + 0.45rem);
+        left: 50%;
+        z-index: 40;
+        width: max-content;
+        max-width: min(11rem, 70vw);
+        padding: 0.42rem 0.55rem;
+        border: 1px solid rgba(95, 74, 36, 0.22);
+        border-radius: 8px;
+        background: rgba(255, 252, 246, 0.98);
+        box-shadow: 0 10px 20px rgba(55, 31, 8, 0.16);
+        color: #3d2d17;
+        font-size: 0.72rem;
+        line-height: 1.15;
+        opacity: 0;
+        pointer-events: none;
+        transform: translate(-50%, 0.2rem);
+        transition: opacity 120ms ease, transform 120ms ease;
+        white-space: nowrap;
+      }
+
+      .display-card-counter-tooltip::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        width: 0.55rem;
+        height: 0.55rem;
+        border-right: 1px solid rgba(95, 74, 36, 0.22);
+        border-bottom: 1px solid rgba(95, 74, 36, 0.22);
+        background: rgba(255, 252, 246, 0.98);
+        transform: translate(-50%, -55%) rotate(45deg);
+      }
+
+      .display-card-counter-tooltip.is-visible {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+
+      .display-card-counter-orb.is-power {
+        border-color: rgba(30, 64, 175, 0.28);
+        background: linear-gradient(180deg, #93c5fd, #2563eb);
+      }
+
+      .display-card-counter-orb.is-health {
+        border-color: rgba(21, 128, 61, 0.28);
+        background: linear-gradient(180deg, #86efac, #16a34a);
+      }
+
+      .display-card-counter-orb.is-negative {
+        border-color: rgba(153, 27, 27, 0.34);
+        background: linear-gradient(180deg, #fca5a5, #dc2626);
+      }
+
+      .display-card-counter-orb strong {
+        font-size: 0.72rem;
+        font-weight: 900;
+        letter-spacing: 0;
+        line-height: 1;
+      }
+
       .display-card-health-strip {
         display: grid;
         align-items: center;

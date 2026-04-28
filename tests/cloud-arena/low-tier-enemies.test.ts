@@ -6,7 +6,7 @@ import {
   getEnemyPlanStepAtIndexFromInput,
   formatEnemyIntent,
 } from "../../src/cloud-arena/index.js";
-import { createTestBattle, formatBattleLog } from "./helpers.js";
+import { TEST_CARD_DEFINITIONS, createTestBattle, formatBattleLog } from "./helpers.js";
 
 describe("cloud arena low-tier enemies", () => {
   it("resolves grunt demon attacks from base power", () => {
@@ -210,6 +210,131 @@ describe("cloud arena low-tier enemies", () => {
     expect(battle.player.health).toBeLessThan(startHealth);
   });
 
+  it("does not reduce power on hexproof permanents with a global weaken effect", () => {
+    const battle = createTestBattle({
+      cardDefinitions: {
+        ...TEST_CARD_DEFINITIONS,
+        hexproof_shade: {
+          id: "hexproof_shade",
+          name: "Hexproof Shade",
+          cardTypes: ["creature"],
+          cost: 0,
+          onPlay: [],
+          power: 3,
+          health: 5,
+          keywords: ["hexproof"],
+          abilities: [],
+        },
+      },
+      playerDeck: ["hexproof_shade", "attack", "defend", "attack", "defend"],
+      enemy: {
+        name: "Global Weaken Dummy",
+        health: 18,
+        basePower: 3,
+        cards: [
+          {
+            id: "weaken_all_permanents",
+            name: "Weaken All Permanents",
+            effects: [{ target: "enemy", powerDeltaAllPermanents: -1 }],
+          },
+        ],
+      },
+    });
+
+    battle.player.energy = 10;
+
+    const hexproofShade = battle.player.hand.find((card) => card.definitionId === "hexproof_shade");
+
+    if (!hexproofShade) {
+      throw new Error("Expected hexproof_shade in hand.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: hexproofShade.instanceId,
+    });
+
+    const hexproofPermanent = battle.battlefield.find(
+      (permanent) => permanent?.definitionId === "hexproof_shade",
+    );
+
+    if (!hexproofPermanent) {
+      throw new Error("Expected hexproof_shade on the battlefield.");
+    }
+
+    expect(getDerivedPermanentStat(battle, hexproofPermanent, "power")).toBe(3);
+
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(getDerivedPermanentStat(battle, hexproofPermanent, "power")).toBe(3);
+  });
+
+  it("reduces enemy attack damage after a negative power counter lands on the leader", () => {
+    const battle = createTestBattle({
+      cardDefinitions: {
+        ...TEST_CARD_DEFINITIONS,
+        enemy_leader_malaise: {
+          id: "enemy_leader_malaise",
+          name: "Enemy Leader Malaise",
+          cardTypes: ["instant"],
+          cost: 1,
+          onPlay: [],
+          spellEffects: [
+            {
+              type: "add_counter",
+              target: {
+                zone: "enemy_battlefield",
+                controller: "opponent",
+                cardType: "creature",
+              },
+              targeting: {
+                prompt: "Choose an enemy creature to weaken",
+              },
+              powerDelta: -1,
+            },
+          ],
+        },
+      },
+      playerDeck: ["enemy_leader_malaise", "attack", "defend", "attack", "defend"],
+      enemy: {
+        name: "Power Counter Dummy",
+        health: 18,
+        basePower: 5,
+        cards: [
+          { id: "single_slash", name: "Single Slash", effects: [{ attackPowerMultiplier: 1, target: "player" }] },
+        ],
+      },
+    });
+
+    battle.player.energy = 10;
+
+    const malaise = battle.player.hand.find((card) => card.definitionId === "enemy_leader_malaise");
+    const enemyLeader = battle.enemyBattlefield.find((permanent) => permanent?.isEnemyLeader);
+
+    if (!malaise || !enemyLeader) {
+      throw new Error("Expected enemy leader malaise and an enemy leader in the battle setup.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: malaise.instanceId,
+    });
+
+    expect(battle.pendingTargetRequest).not.toBeNull();
+
+    applyBattleAction(battle, {
+      type: "choose_target",
+      targetPermanentId: enemyLeader.instanceId,
+    });
+
+    expect(getDerivedPermanentStat(battle, enemyLeader, "power")).toBe(4);
+
+    const startingHealth = battle.player.health;
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(battle.player.health).toBe(startingHealth - 4);
+  });
+
   it("resolves an immediate block card when it becomes active", () => {
     const immediateBlockCard = {
       id: "gain_block_equal_health",
@@ -294,7 +419,7 @@ describe("cloud arena low-tier enemies", () => {
     applyBattleAction(battle, { type: "end_turn" });
 
     expect(battle.turnNumber).toBe(6);
-    expect(getDerivedPermanentStat(battle, guardian, "power")).toBe(4);
+    expect(getDerivedPermanentStat(battle, guardian, "power")).toBe(3);
   });
 
   it("formats the battlefield-wide debuff intent as Debuff", () => {

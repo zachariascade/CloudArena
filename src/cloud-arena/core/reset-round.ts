@@ -14,6 +14,7 @@ import {
 import {
   cleanupDefeatedPermanents,
   permanentHasKeyword,
+  expireTemporaryKeywordModifiers,
   syncEnemyStateFromLeaderPermanent,
   syncEnemyLeaderPermanentFromState,
 } from "./permanents.js";
@@ -25,6 +26,7 @@ import type { BattleState } from "./types.js";
 export function resetRound(state: BattleState): BattleState {
   state.turnNumber += 1;
   expireTemporaryCounters(state);
+  expireTemporaryKeywordModifiers(state);
   state.phase = "player_action";
   state.player.block = 0;
   state.player.energy = LEAN_V1_DEFAULT_TURN_ENERGY;

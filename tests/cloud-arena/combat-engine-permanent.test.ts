@@ -328,6 +328,7 @@ describe("cloud arena combat engine permanent flow", () => {
     };
     const battle = createTestBattle({
       cardDefinitions,
+      summoningSicknessPolicy: "disabled",
       playerDeck: [
         "guardian",
         "judgment_blade",

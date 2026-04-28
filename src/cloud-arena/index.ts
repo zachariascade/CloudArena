@@ -2,6 +2,7 @@ export {
   LEAN_V1_BOARD_SLOT_COUNT,
   LEAN_V1_DEFAULT_TURN_ENERGY,
   LEAN_V1_DEFAULT_RECOVERY_POLICY,
+  LEAN_V1_DEFAULT_SUMMONING_SICKNESS_POLICY,
   LEAN_V1_HAND_SIZE,
   LEAN_V1_STARTING_PLAYER_HEALTH,
 } from "./core/constants.js";
@@ -245,6 +246,7 @@ export type {
   PermanentCardType,
   PermanentState,
   PlayerState,
+  SummoningSicknessPolicy,
   RulesEvent,
   RulesActionId,
   ReplacementAbility,

@@ -26,6 +26,7 @@ export type CloudArenaSessionScenarioId =
   | "lake_of_ice"
   | "imp_caller"
   | "malchior_binder_of_wills"
+  | "rebel_angel"
   | "viper_shade";
 
 export type CloudArenaDeckId = string;
@@ -93,6 +94,7 @@ export type CloudArenaCreateSessionRequest = {
   seed?: number;
   shuffleDeck?: boolean;
   playerHealth?: number;
+  summoningSicknessPolicy?: "enabled" | "disabled";
 };
 
 export type CloudArenaActionRequest = {
@@ -139,6 +141,8 @@ export type CloudArenaPermanentSnapshot = {
   health: number;
   maxHealth: number;
   block: number;
+  powerCounter?: number;
+  healthCounter?: number;
   counters?: Record<string, number>;
   attachments?: string[];
   attachedTo?: string | null;

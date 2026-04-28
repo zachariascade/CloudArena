@@ -26,7 +26,15 @@ export type ChoiceStrategy = "first_available" | "auto_yes" | "auto_no";
 export type DamageOverflowPolicy = "overflow" | "stop_at_blocker" | "trample";
 export type DefenderRecoveryPolicy = "none" | "full_heal";
 export type DrawPolicy = "full_refresh" | "draw_to_full" | "draw_one";
-export type PermanentKeyword = "refresh" | "halt" | "menace" | "deathtouch" | "pierce";
+export type SummoningSicknessPolicy = "enabled" | "disabled";
+export type PermanentKeyword =
+  | "refresh"
+  | "halt"
+  | "menace"
+  | "deathtouch"
+  | "pierce"
+  | "hexproof"
+  | "indestructible";
 export type CounterStat = "power" | "health";
 export type CounterSourceKind = "card" | "permanent";
 export type ModifierSourceKind = "equipment" | "card" | "permanent";
@@ -73,6 +81,7 @@ export type Selector = {
   subtype?: string;
   relation?: SelectorRelation;
   source?: SelectorSource;
+  defending?: boolean;
 };
 
 export type PendingTargetRequest = {
@@ -205,6 +214,13 @@ export type Effect =
       counter?: CounterName;
       stat?: CounterStat;
       amount?: ValueExpression;
+      duration?: "end_of_turn";
+      targeting?: Targeting;
+    }
+  | {
+      type: "grant_keyword";
+      target: "self" | Selector;
+      keyword: PermanentKeyword;
       duration?: "end_of_turn";
       targeting?: Targeting;
     }
@@ -745,6 +761,7 @@ export type PermanentState = {
   maxHealth: number;
   block: number;
   recoveryPolicy: DefenderRecoveryPolicy;
+  enteredBattlefieldTurnNumber?: number;
   keywords: PermanentKeyword[];
   counters?: PermanentCounter[];
   modifiers?: PermanentModifier[];
@@ -782,6 +799,7 @@ export type PermanentKeywordModifier = {
   keyword: PermanentKeyword;
   sourceKind: ModifierSourceKind;
   sourceId: string;
+  expiresAtTurnNumber?: number;
 };
 
 export type BattleState = {
@@ -794,6 +812,7 @@ export type BattleState = {
   cardDefinitions: CardDefinitionLibrary;
   handSize: number;
   drawPolicy: DrawPolicy;
+  summoningSicknessPolicy: SummoningSicknessPolicy;
   playerCreatureSlotCount: number;
   playerNonCreatureSlotCount: number;
   enemyCreatureSlotCount: number;
@@ -883,6 +902,7 @@ export type CreateBattleInput = {
   playerHealth?: number;
   handSize?: number;
   drawPolicy?: DrawPolicy;
+  summoningSicknessPolicy?: SummoningSicknessPolicy;
   cardDefinitions?: CardDefinitionLibrary;
   playerDeck: CardDefinitionId[];
   shuffleDeck?: boolean;

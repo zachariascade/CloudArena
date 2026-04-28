@@ -10,6 +10,7 @@ import {
   selectObjects,
   selectPermanents,
 } from "../core/selectors.js";
+import { permanentHasSummoningSickness } from "../core/permanents.js";
 import type { BattleAction, BattleState, Effect, Selector } from "../core/types.js";
 import type { SelectedObject } from "../core/selectors.js";
 
@@ -112,9 +113,11 @@ export function getLegalActions(state: BattleState): BattleAction[] {
     .filter((permanent): permanent is NonNullable<typeof permanent> => permanent !== null)
     .flatMap((permanent) => {
       const definition = getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId);
+      const isSummoningSick = permanentHasSummoningSickness(state, permanent);
       const activatedAbilityActions = getActivatedAbilities(permanent.abilities)
         .filter((ability) => ability.activation.actionId !== "attack")
         .filter((ability) => !(permanent.disabledAbilityIds ?? []).includes(ability.id))
+        .filter(() => !isSummoningSick)
         .filter((ability) =>
           (ability.conditions ?? []).every((condition) =>
             evaluateCondition(state, condition, {
@@ -168,29 +171,26 @@ export function getLegalActions(state: BattleState): BattleAction[] {
           abilityId: ability.id,
         }))
         .filter(() => !permanent.hasActedThisTurn);
-      const creatureRulesActions =
-        hasCardType(definition, "creature") &&
-        !permanent.hasActedThisTurn &&
-        (permanent.disabledRulesActions ?? []).length < 2
-          ? ([
-              ...( !(permanent.disabledRulesActions ?? []).includes("attack")
-                ? [{
-                    type: "use_permanent_action" as const,
-                    permanentId: permanent.instanceId,
-                    source: "rules" as const,
-                    action: "attack" as const,
-                  }]
-                : []),
-              ...( !(permanent.disabledRulesActions ?? []).includes("defend")
-                ? [{
-                    type: "use_permanent_action" as const,
-                    permanentId: permanent.instanceId,
-                    source: "rules" as const,
-                    action: "defend" as const,
-                  }]
-                : []),
-            ])
-          : [];
+      const creatureRulesActions = hasCardType(definition, "creature") && !permanent.hasActedThisTurn
+        ? [
+            ...(isSummoningSick || (permanent.disabledRulesActions ?? []).includes("attack")
+              ? []
+              : [{
+                  type: "use_permanent_action" as const,
+                  permanentId: permanent.instanceId,
+                  source: "rules" as const,
+                  action: "attack" as const,
+                }]),
+            ...((permanent.disabledRulesActions ?? []).includes("defend")
+              ? []
+              : [{
+                  type: "use_permanent_action" as const,
+                  permanentId: permanent.instanceId,
+                  source: "rules" as const,
+                  action: "defend" as const,
+                }]),
+          ]
+        : [];
 
       return [...creatureRulesActions, ...activatedAbilityActions];
     });

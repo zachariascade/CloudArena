@@ -199,6 +199,7 @@ type CreateTestBattleInput = {
   cardDefinitions?: CardDefinitionLibrary;
   playerDeck: CardDefinitionId[];
   playerHealth?: number;
+  summoningSicknessPolicy?: "enabled" | "disabled";
   enemy?: {
     name?: string;
     health?: number;
@@ -219,6 +220,7 @@ export function createTestBattle(input: CreateTestBattleInput): BattleState {
     playerHealth: input.playerHealth ?? 100,
     cardDefinitions: input.cardDefinitions ?? TEST_CARD_DEFINITIONS,
     playerDeck: input.playerDeck,
+    summoningSicknessPolicy: input.summoningSicknessPolicy ?? "enabled",
     enemy: {
       name: input.enemy?.name ?? "Test Enemy",
       health: input.enemy?.health ?? 30,

@@ -14,6 +14,7 @@ import {
   destroyPermanent,
   isEquipmentPermanent,
   permanentHasKeyword,
+  getEnemyLeaderPermanent,
   syncEnemyStateFromLeaderPermanent,
   syncEnemyLeaderPermanentFromState,
 } from "./permanents.js";
@@ -36,6 +37,7 @@ import type {
   CardEffect,
   Targeting,
   PermanentState,
+  PermanentKeyword,
   Selector,
   BattleAction,
   PendingHandCardContext,
@@ -129,6 +131,19 @@ function addCounterInstance(
   return counter.id;
 }
 
+function addKeywordModifierInstance(
+  state: BattleState,
+  permanent: PermanentState,
+  modifier: {
+    keyword: PermanentKeyword;
+    sourceKind: "card" | "permanent" | "equipment";
+    sourceId: string;
+    expiresAtTurnNumber?: number;
+  },
+): void {
+  permanent.keywordModifiers = [...(permanent.keywordModifiers ?? []), modifier];
+}
+
 function removeCounterInstance(
   state: BattleState,
   permanent: PermanentState,
@@ -171,6 +186,10 @@ export function dealDamageToEnemy(
     : null;
 
   if (leaderPermanent) {
+    if (permanentHasKeyword(leaderPermanent, "indestructible")) {
+      return 0;
+    }
+
     const damageDealt = Math.max(0, Math.min(amount, leaderPermanent.block + leaderPermanent.health));
 
     if (leaderPermanent.block >= amount) {
@@ -270,6 +289,11 @@ export function dealDamageToPermanent(
 ): number {
   const sourcePermanent = sourcePermanentId ? findPermanentById(state, sourcePermanentId) : null;
   const shouldBypassBlock = bypassBlock || (sourcePermanent ? permanentHasKeyword(sourcePermanent, "pierce") : false);
+
+  if (permanentHasKeyword(permanent, "indestructible")) {
+    return 0;
+  }
+
   const damageDealt = shouldBypassBlock
     ? Math.max(0, Math.min(amount, permanent.health))
     : Math.max(0, Math.min(amount, permanent.block + permanent.health));
@@ -338,11 +362,37 @@ function isTargetedEffect(effect: Effect): boolean {
   return "targeting" in effect && effect.targeting !== undefined;
 }
 
+function isHexproofBlockedEffect(effect: Effect): boolean {
+  switch (effect.type) {
+    case "add_counter":
+      return (
+        (effect.powerDelta ?? 0) < 0 ||
+        (effect.healthDelta ?? 0) < 0 ||
+        (effect.counter?.startsWith("-") ?? false) ||
+        (effect.counter?.toLowerCase().includes("stun") ?? false)
+      );
+    case "deal_damage":
+    case "sacrifice":
+      return true;
+    default:
+      return false;
+  }
+}
+
+function filterHexproofTargets(effect: Effect, targets: SelectedObject[]): SelectedObject[] {
+  if (!isHexproofBlockedEffect(effect)) {
+    return targets;
+  }
+
+  return targets.filter((target) => target.kind !== "permanent" || !permanentHasKeyword(target.permanent, "hexproof"));
+}
+
 function getTargetSelectorForEffect(effect: Effect): Selector | null {
   switch (effect.type) {
     case "sacrifice":
       return effect.selector;
     case "add_counter":
+    case "grant_keyword":
     case "remove_counter":
     case "deal_damage":
     case "gain_block":
@@ -393,7 +443,10 @@ function queueTargetRequest(
     throw new Error("Targeted effects must specify a selector target.");
   }
 
-  const legalTargets = selectObjects(state, applyTargetingToSelector(selector, targeting), context);
+  const legalTargets = filterHexproofTargets(
+    effect,
+    selectObjects(state, applyTargetingToSelector(selector, targeting), context),
+  );
   const targetKind = legalTargets[0]?.kind ?? (
     selector.zone === "hand" || selector.zone === "graveyard" || selector.zone === "discard"
       ? "card"
@@ -435,7 +488,9 @@ function resolveAddCounterEffect(
   effect: Extract<Effect, { type: "add_counter" }>,
   context: EffectResolutionContext,
 ): void {
-  const targets = resolvePermanentTargets(state, effect.target, context);
+  const targets = resolvePermanentTargets(state, effect.target, context).filter(
+    (permanent) => !isHexproofBlockedEffect(effect) || !permanentHasKeyword(permanent, "hexproof"),
+  );
   const source = getCounterSource(context);
 
   if (typeof effect.powerDelta === "number" || typeof effect.healthDelta === "number") {
@@ -493,6 +548,24 @@ function resolveAddCounterEffect(
   }
 }
 
+function resolveGrantKeywordEffect(
+  state: BattleState,
+  effect: Extract<Effect, { type: "grant_keyword" }>,
+  context: EffectResolutionContext,
+): void {
+  const source = getCounterSource(context);
+  const targets = resolvePermanentTargets(state, effect.target, context);
+
+  for (const permanent of targets) {
+    addKeywordModifierInstance(state, permanent, {
+      keyword: effect.keyword,
+      sourceKind: source.sourceKind,
+      sourceId: source.sourceId,
+      expiresAtTurnNumber: effect.duration === "end_of_turn" ? state.turnNumber + 1 : undefined,
+    });
+  }
+}
+
 export function applyTemporaryPowerDeltaToAllPermanents(
   state: BattleState,
   amount: number,
@@ -512,15 +585,18 @@ export function applyTemporaryPowerDeltaToAllPermanents(
         continue;
       }
 
-      const counterId = createCounterId(state);
+      if (amount < 0 && permanentHasKeyword(permanent, "hexproof")) {
+        continue;
+      }
+
       addCounterInstance(state, permanent, {
-        id: counterId,
+        id: createCounterId(state),
         counter: "power",
         stat: "power",
         amount,
         sourceKind,
         sourceId,
-      }, expiresAtTurnNumber);
+      });
     }
   }
 }
@@ -544,15 +620,18 @@ export function applyTemporaryPowerDeltaToControlledPermanents(
       continue;
     }
 
-    const counterId = createCounterId(state);
+    if (amount < 0 && permanentHasKeyword(permanent, "hexproof")) {
+      continue;
+    }
+
     addCounterInstance(state, permanent, {
-      id: counterId,
+      id: createCounterId(state),
       counter: "power",
       stat: "power",
       amount,
       sourceKind,
       sourceId,
-    }, expiresAtTurnNumber);
+    });
   }
 }
 
@@ -641,11 +720,14 @@ function resolveSacrificeEffect(
   effect: Extract<Effect, { type: "sacrifice" }>,
   context: EffectResolutionContext,
 ): void {
+  const ignoreHexproof = isHexproofBlockedEffect(effect);
+
   if (context.chosenTargetPermanentId) {
     const legalTargets = selectPermanents(state, effect.selector, {
       ...context,
       chosenTargetPermanentId: undefined,
-    });
+    }).filter((permanent) => !ignoreHexproof || !permanentHasKeyword(permanent, "hexproof"));
+
     const chosenTarget = legalTargets.find(
       (permanent) => permanent.instanceId === context.chosenTargetPermanentId,
     );
@@ -662,6 +744,7 @@ function resolveSacrificeEffect(
     reason: "Resolve sacrifice effect",
     controllerId: "player",
     context,
+    filter: (permanent) => !ignoreHexproof || !permanentHasKeyword(permanent, "hexproof"),
   });
 
   for (const permanent of targets) {
@@ -697,7 +780,13 @@ function resolveDealDamageEffect(
     return;
   }
 
-  for (const permanent of resolvePermanentTargets(state, effect.target, context)) {
+  for (const permanent of resolvePermanentTargets(state, effect.target, context).filter(
+    (candidate) => !isHexproofBlockedEffect(effect) || !permanentHasKeyword(candidate, "hexproof"),
+  )) {
+    if (permanentHasKeyword(permanent, "indestructible")) {
+      continue;
+    }
+
     const shouldBypassBlock = context.attackBypassesBlock ?? false;
     if (shouldBypassBlock) {
       const damageDealt = Math.max(0, Math.min(amount, permanent.health));
@@ -864,6 +953,7 @@ function resolveSummonPermanentEffect(
         definitionId: effect.cardId,
       },
       controllerId,
+      state.turnNumber,
     );
   }
 }
@@ -926,7 +1016,7 @@ function resolveAttachFromHandEffect(
   }
 
   const card = removeCardFromHand(state, attachmentCard.card.instanceId);
-  const attachmentPermanent = trySummonPermanentFromCard(state, card);
+  const attachmentPermanent = trySummonPermanentFromCard(state, card, "player", state.turnNumber);
   if (!attachmentPermanent) {
     return;
   }
@@ -993,6 +1083,12 @@ function resolveReturnFromGraveyardEffect(
 
 function resolveStunEffect(state: BattleState, effect: Extract<Effect, { type: "stun" }>): void {
   if (effect.target === "enemy") {
+    const enemyLeaderPermanent = getEnemyLeaderPermanent(state);
+
+    if (enemyLeaderPermanent && permanentHasKeyword(enemyLeaderPermanent, "hexproof")) {
+      return;
+    }
+
     state.enemy.stunnedThisTurn = true;
     syncEnemyLeaderPermanentFromState(state);
   }
@@ -1060,10 +1156,9 @@ function resolveEffectsFromIndex(
           ...(context.abilityTargeting ?? {}),
           ...((effect as { targeting?: Targeting }).targeting ?? {}),
         };
-        const legalTargets = selectObjects(
-          state,
-          applyTargetingToSelector(selector, targeting),
-          context,
+        const legalTargets = filterHexproofTargets(
+          effect,
+          selectObjects(state, applyTargetingToSelector(selector, targeting), context),
         );
 
         if (legalTargets.length === 0) {
@@ -1095,6 +1190,9 @@ export function resolveEffect(
   switch (effect.type) {
     case "add_counter":
       resolveAddCounterEffect(state, effect, context);
+      return;
+    case "grant_keyword":
+      resolveGrantKeywordEffect(state, effect, context);
       return;
     case "remove_counter":
       resolveRemoveCounterEffect(state, effect, context);
@@ -1166,7 +1264,13 @@ export function resolvePendingTargetRequest(
       throw new Error("A card must be chosen before taking another action.");
     }
 
-    const legalTargets = selectObjects(state, pending.selector, pending.context);
+    const pendingEffect = pending.effects[pending.nextEffectIndex];
+    const legalTargets = pendingEffect
+      ? filterHexproofTargets(
+          pendingEffect,
+          selectObjects(state, pending.selector, pending.context),
+        )
+      : selectObjects(state, pending.selector, pending.context);
     const chosenTarget = legalTargets.find(
       (object) => object.kind === "card" && object.card.instanceId === action.targetCardInstanceId,
     );
@@ -1204,6 +1308,8 @@ export function resolvePendingTargetRequest(
           instanceId: pending.context.pendingCardPlay.cardInstanceId,
           definitionId: pending.context.pendingCardPlay.definitionId,
         },
+        "player",
+        state.turnNumber,
       );
     }
 
@@ -1220,7 +1326,13 @@ export function resolvePendingTargetRequest(
     throw new Error(`Permanent ${action.targetPermanentId} was not found on the battlefield.`);
   }
 
-  const legalTargets = selectObjects(state, pending.selector, pending.context);
+  const pendingEffect = pending.effects[pending.nextEffectIndex];
+  const legalTargets = pendingEffect
+    ? filterHexproofTargets(
+        pendingEffect,
+        selectObjects(state, pending.selector, pending.context),
+      )
+    : selectObjects(state, pending.selector, pending.context);
   if (!legalTargets.some((object) => object.kind === "permanent" && object.permanent.instanceId === chosenTarget.instanceId)) {
     throw new Error(`Permanent ${action.targetPermanentId} is not a valid target.`);
   }

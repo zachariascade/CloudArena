@@ -3,9 +3,27 @@ import { armoryDiscipleCardDefinition } from "./definitions/armory-disciple.js";
 import { anointedBannerCardDefinition } from "./definitions/anointed-banner.js";
 import { armorySeraphCardDefinition } from "./definitions/armory-seraph.js";
 import { galleryCreationOfAdamCardDefinition } from "./definitions/gallery-creation-of-adam.js";
+import { galleryDanielInTheLionsDenCardDefinition } from "./definitions/gallery-daniel-in-the-lions-den.js";
+import { galleryCastingTheRebelAngelsIntoHellCardDefinition } from "./definitions/gallery-casting-the-rebel-angels-into-hell.js";
+import { enemyFallenAngelCabanelCardDefinition } from "./definitions/enemy-fallen-angel-cabanel.js";
+import { enemyGreatRedDragonBeastFromSeaCardDefinition } from "./definitions/enemy-great-red-dragon-beast-from-sea.js";
+import { enemyGreatRedDragonDragonOfTheSunCardDefinition } from "./definitions/enemy-great-red-dragon-dragon-of-the-sun.js";
+import { enemyGardenOfEarthlyDelightsHellDetailCardDefinition } from "./definitions/enemy-garden-of-earthly-delights-hell-detail.js";
+import { enemyMedusaCaravaggioCardDefinition } from "./definitions/enemy-medusa-caravaggio.js";
+import { enemyNumberOfTheBeast666CardDefinition } from "./definitions/enemy-number-of-the-beast-666.js";
+import { enemySatanAsTheFallenAngelCardDefinition } from "./definitions/enemy-satan-as-the-fallen-angel.js";
+import { enemySatanCallingUpHisLegionsCardDefinition } from "./definitions/enemy-satan-calling-up-his-legions.js";
+import { enemySatanExultingOverEveCardDefinition } from "./definitions/enemy-satan-exulting-over-eve.js";
+import { enemySatanInCocytusCardDefinition } from "./definitions/enemy-satan-in-cocytus.js";
+import { enemySaturnDevouringHisSonGoyaCardDefinition } from "./definitions/enemy-saturn-devouring-his-son-goya.js";
+import { enemyTriumphOfDeathCardDefinition } from "./definitions/enemy-triumph-of-death.js";
+import { galleryFallOfTheRebelAngelsRubensCardDefinition } from "./definitions/gallery-fall-of-the-rebel-angels-rubens.js";
+import { galleryTemptationOfStAnthonyBoschCardDefinition } from "./definitions/gallery-temptation-of-st-anthony-bosch.js";
+import { galleryPandemoniumJohnMartinCardDefinition } from "./definitions/gallery-pandemonium-john-martin.js";
+import { galleryRebelAngelKalmakovCardDefinition } from "./definitions/gallery-rebel-angel-kalmakov.js";
+import { enemyRebelAngelCardDefinition } from "./definitions/enemy-rebel-angel.js";
 import { galleryDelugeCardDefinition } from "./definitions/gallery-deluge.js";
 import { galleryGreatDayOfHisWrathCardDefinition } from "./definitions/gallery-great-day-of-his-wrath.js";
-import { galleryGreatRedDragonCardDefinition } from "./definitions/gallery-great-red-dragon.js";
 import { galleryJacobWrestlesWithTheAngelCardDefinition } from "./definitions/gallery-jacob-wrestles-with-the-angel.js";
 import { galleryAncientOfDaysCardDefinition } from "./definitions/gallery-ancient-of-days.js";
 import { galleryAngelStoppingAbrahamCardDefinition } from "./definitions/gallery-angel-stopping-abraham.js";
@@ -19,7 +37,6 @@ import { galleryOpeningOfTheFifthSealCardDefinition } from "./definitions/galler
 import { galleryPlainsOfHeavenCardDefinition } from "./definitions/gallery-plains-of-heaven.js";
 import { gallerySacrificeOfIsaacCardDefinition } from "./definitions/gallery-sacrifice-of-isaac.js";
 import { gallerySaintMichaelVanquishingSatanCardDefinition } from "./definitions/gallery-saint-michael-vanquishing-satan.js";
-import { gallerySatanInCocytusCardDefinition } from "./definitions/gallery-satan-in-cocytus.js";
 import { gallerySodomAndGomorrahCardDefinition } from "./definitions/gallery-sodom-and-gomorrah.js";
 import { galleryTowerOfBabelCardDefinition } from "./definitions/gallery-tower-of-babel.js";
 import { galleryTransfigurationCardDefinition } from "./definitions/gallery-transfiguration.js";
@@ -65,6 +82,7 @@ import { resurrectCardDefinition } from "./definitions/resurrect.js";
 import { sacrificialSeraphCardDefinition } from "./definitions/sacrificial-seraph.js";
 import { radiantConduitCardDefinition } from "./definitions/radiant-conduit.js";
 import { sanctifiedGuideCardDefinition } from "./definitions/sanctified-guide.js";
+import { denialBeforeTheRoostersCryCardDefinition } from "./definitions/denial-before-the-rooster-s-cry.js";
 import { sappingCurseCardDefinition } from "./definitions/sapping-curse.js";
 import { targetedStrikeCardDefinition } from "./definitions/targeted-strike.js";
 import { stunningRebukeCardDefinition } from "./definitions/stunning-rebuke.js";
@@ -97,9 +115,27 @@ export const cardDefinitions: CardDefinitionLibrary = {
   armory_seraph: armorySeraphCardDefinition,
   anointed_banner: anointedBannerCardDefinition,
   gallery_creation_of_adam: galleryCreationOfAdamCardDefinition,
+  gallery_daniel_in_the_lions_den: galleryDanielInTheLionsDenCardDefinition,
+  gallery_casting_the_rebel_angels_into_hell: galleryCastingTheRebelAngelsIntoHellCardDefinition,
+  enemy_fallen_angel_cabanel: enemyFallenAngelCabanelCardDefinition,
+  enemy_satan_as_the_fallen_angel: enemySatanAsTheFallenAngelCardDefinition,
+  enemy_satan_exulting_over_eve: enemySatanExultingOverEveCardDefinition,
+  enemy_satan_calling_up_his_legions: enemySatanCallingUpHisLegionsCardDefinition,
+  enemy_great_red_dragon_beast_from_sea: enemyGreatRedDragonBeastFromSeaCardDefinition,
+  enemy_great_red_dragon_dragon_of_the_sun: enemyGreatRedDragonDragonOfTheSunCardDefinition,
+  enemy_number_of_the_beast_666: enemyNumberOfTheBeast666CardDefinition,
+  enemy_triumph_of_death: enemyTriumphOfDeathCardDefinition,
+  enemy_garden_of_earthly_delights_hell_detail:
+    enemyGardenOfEarthlyDelightsHellDetailCardDefinition,
+  enemy_medusa_caravaggio: enemyMedusaCaravaggioCardDefinition,
+  enemy_saturn_devouring_his_son_goya: enemySaturnDevouringHisSonGoyaCardDefinition,
+  enemy_satan_in_cocytus: enemySatanInCocytusCardDefinition,
+  gallery_fall_of_the_rebel_angels_rubens: galleryFallOfTheRebelAngelsRubensCardDefinition,
+  gallery_temptation_of_st_anthony_bosch: galleryTemptationOfStAnthonyBoschCardDefinition,
+  gallery_pandemonium_john_martin: galleryPandemoniumJohnMartinCardDefinition,
+  gallery_rebel_angel_kalmakov: galleryRebelAngelKalmakovCardDefinition,
   gallery_deluge: galleryDelugeCardDefinition,
   gallery_great_day_of_his_wrath: galleryGreatDayOfHisWrathCardDefinition,
-  gallery_great_red_dragon: galleryGreatRedDragonCardDefinition,
   gallery_jacob_wrestles_with_the_angel: galleryJacobWrestlesWithTheAngelCardDefinition,
   gallery_ancient_of_days: galleryAncientOfDaysCardDefinition,
   gallery_angel_stopping_abraham: galleryAngelStoppingAbrahamCardDefinition,
@@ -114,7 +150,6 @@ export const cardDefinitions: CardDefinitionLibrary = {
   gallery_plains_of_heaven: galleryPlainsOfHeavenCardDefinition,
   gallery_sacrifice_of_isaac: gallerySacrificeOfIsaacCardDefinition,
   gallery_saint_michael_vanquishing_satan: gallerySaintMichaelVanquishingSatanCardDefinition,
-  gallery_satan_in_cocytus: gallerySatanInCocytusCardDefinition,
   gallery_sodom_and_gomorrah: gallerySodomAndGomorrahCardDefinition,
   gallery_tower_of_babel: galleryTowerOfBabelCardDefinition,
   gallery_transfiguration: galleryTransfigurationCardDefinition,
@@ -146,6 +181,7 @@ export const cardDefinitions: CardDefinitionLibrary = {
   enemy_brute: enemyBruteCardDefinition,
   enemy_pack_alpha: enemyPackAlphaCardDefinition,
   enemy_shielded_slash: enemyShieldedSlashCardDefinition,
+  enemy_rebel_angel: enemyRebelAngelCardDefinition,
   single_slash: enemySingleSlashCardDefinition,
   double_slash: enemyDoubleSlashCardDefinition,
   triple_slash: enemyTripleSlashCardDefinition,
@@ -158,6 +194,7 @@ export const cardDefinitions: CardDefinitionLibrary = {
   sacrificial_seraph: sacrificialSeraphCardDefinition,
   radiant_conduit: radiantConduitCardDefinition,
   sanctified_guide: sanctifiedGuideCardDefinition,
+  denial_before_the_rooster_s_cry: denialBeforeTheRoostersCryCardDefinition,
   sapping_curse: sappingCurseCardDefinition,
   targeted_strike: targetedStrikeCardDefinition,
   stunning_rebuke: stunningRebukeCardDefinition,

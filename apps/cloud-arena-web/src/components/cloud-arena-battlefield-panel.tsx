@@ -482,19 +482,7 @@ export function CloudArenaBattlefieldPanel({
                               </div>
                             ) : null;
                           })() : null}
-                          {zoneKeyPrefix === "enemy_battlefield" && getPermanentCounterEntries(slot).length > 0 ? (
-                            <div className="trace-viewer-counter-row" aria-label={`${slot.name} counters`}>
-                              {getPermanentCounterEntries(slot).map((entry) => (
-                                <span
-                                  key={`${slot.instanceId}-${entry.counter}`}
-                                  className="trace-viewer-counter-chip"
-                                >
-                                  {entry.counter} x{entry.amount}
-                                </span>
-                              ))}
-                      </div>
-                    ) : null}
-                    {telegraphOverlayCard ? (
+                          {telegraphOverlayCard ? (
                       <div
                         className={`cloud-arena-battlefield-action-play-overlay${isRaised ? " is-interactive" : ""}`}
                         aria-hidden={!isRaised}

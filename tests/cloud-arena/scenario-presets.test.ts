@@ -25,6 +25,7 @@ describe("cloud arena scenario presets", () => {
   it("exposes reusable deck and enemy preset registries", () => {
     const deckKeys = Object.keys(cloudArenaDeckPresets);
     expect(deckKeys).toContain("master_deck");
+    expect(deckKeys).toContain("counters");
     expect(deckKeys).toContain("mixed_guardian");
 
     const enemyKeys = Object.keys(cloudArenaEnemyPresets);
@@ -37,6 +38,18 @@ describe("cloud arena scenario presets", () => {
     expect(enemyKeys).toContain("malchior_binder_of_wills");
     expect(enemyKeys).toContain("long_battle_demon");
     expect(enemyKeys).toContain("viper_shade");
+    expect(enemyKeys).toContain("fallen_angel_cabanel");
+    expect(enemyKeys).toContain("satan_as_the_fallen_angel");
+    expect(enemyKeys).toContain("satan_exulting_over_eve");
+    expect(enemyKeys).toContain("satan_calling_up_his_legions");
+    expect(enemyKeys).toContain("number_of_the_beast_666");
+    expect(enemyKeys).toContain("saturn_devouring_his_son_goya");
+    expect(enemyKeys).toContain("medusa_caravaggio");
+    expect(enemyKeys).toContain("great_red_dragon_beast_from_sea");
+    expect(enemyKeys).toContain("great_red_dragon_dragon_of_the_sun");
+    expect(enemyKeys).toContain("garden_of_earthly_delights_hell_detail");
+    expect(enemyKeys).toContain("triumph_of_death");
+    expect(enemyKeys).toContain("satan_in_cocytus");
   });
 
   it("keeps enemy-only slash cards out of the master deck preset", () => {
@@ -76,6 +89,34 @@ describe("cloud arena scenario presets", () => {
       "enemy_pack_alpha",
       "enemy_cocytus",
       "enemy_brute",
+    ]);
+  });
+
+  it("defines the counters deck as a creature-heavy counter shell", () => {
+    const countersDeck = getDeckPreset("counters");
+
+    expect(countersDeck.label).toBe("Counters");
+    expect(countersDeck.cards).toEqual([
+      "guardian",
+      "guardian",
+      "sanctified_guide",
+      "sanctified_guide",
+      "choir_captain",
+      "choir_captain",
+      "token_angel",
+      "token_angel",
+      "focused_blessing",
+      "focused_blessing",
+      "focused_blessing",
+      "sapping_curse",
+      "sapping_curse",
+      "sapping_curse",
+      "restorative_touch",
+      "restorative_touch",
+      "graveyard_hymn",
+      "graveyard_hymn",
+      "mass_benediction",
+      "targeted_strike",
     ]);
   });
 

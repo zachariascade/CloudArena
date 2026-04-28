@@ -4,7 +4,9 @@ import {
   hasCardType,
   isEquipmentCardDefinition,
 } from "../cards/definitions.js";
-import { LEAN_V1_DEFAULT_RECOVERY_POLICY } from "./constants.js";
+import {
+  LEAN_V1_DEFAULT_RECOVERY_POLICY,
+} from "./constants.js";
 import { emitRulesEvent } from "./rules-events.js";
 import type {
   Ability,
@@ -145,6 +147,23 @@ function removeSourceKeywordModifiers(
   return removedModifiers;
 }
 
+function removeExpiredKeywordModifiersFromPermanent(
+  permanent: PermanentState,
+  turnNumber: number,
+): void {
+  const retainedModifiers: NonNullable<PermanentState["keywordModifiers"]> = [];
+
+  for (const modifier of permanent.keywordModifiers ?? []) {
+    if (modifier.expiresAtTurnNumber !== undefined && modifier.expiresAtTurnNumber <= turnNumber) {
+      continue;
+    }
+
+    retainedModifiers.push(modifier);
+  }
+
+  permanent.keywordModifiers = retainedModifiers;
+}
+
 function createDefaultEquipmentAbility(): ActivatedAbility {
   return {
     id: "equip",
@@ -256,10 +275,29 @@ export function toPermanentInstanceId(card: CardInstance): string {
   return `${card.definitionId}_${cardNumber}`;
 }
 
+export function permanentHasSummoningSickness(
+  state: BattleState,
+  permanent: PermanentState,
+): boolean {
+  if (state.summoningSicknessPolicy === "disabled") {
+    return false;
+  }
+
+  const definition = asPermanentCardDefinition(
+    getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId),
+  );
+
+  return (
+    hasCardType(definition, "creature") &&
+    permanent.enteredBattlefieldTurnNumber === state.turnNumber
+  );
+}
+
 export function summonPermanentFromCard(
   state: BattleState,
   card: CardInstance,
   controllerId: "player" | "enemy" = "player",
+  enteredBattlefieldTurnNumber?: number,
 ): PermanentState {
   const battlefield = getBattlefieldForController(state, controllerId);
   const definition = asPermanentCardDefinition(
@@ -284,6 +322,7 @@ export function summonPermanentFromCard(
     maxHealth: definition.health,
     block: 0,
     recoveryPolicy: definition.recoveryPolicy ?? LEAN_V1_DEFAULT_RECOVERY_POLICY,
+    enteredBattlefieldTurnNumber,
     keywords: getPermanentKeywordsForDefinition(definition),
     counters: [],
     modifiers: [],
@@ -340,12 +379,13 @@ export function trySummonPermanentFromCard(
   state: BattleState,
   card: CardInstance,
   controllerId: "player" | "enemy" = "player",
+  enteredBattlefieldTurnNumber?: number,
 ): PermanentState | null {
   if (!canSummonPermanentFromCard(state, card, controllerId)) {
     return null;
   }
 
-  return summonPermanentFromCard(state, card, controllerId);
+  return summonPermanentFromCard(state, card, controllerId, enteredBattlefieldTurnNumber);
 }
 
 export function createEnemyLeaderPermanent(
@@ -354,6 +394,7 @@ export function createEnemyLeaderPermanent(
     definitionId?: CardDefinitionId;
     enemyActorId?: string | null;
   },
+  enteredBattlefieldTurnNumber?: number,
 ): PermanentState {
   const openSlot = state.enemyBattlefield.findIndex(
     (slot, index) => index < state.enemyCreatureSlotCount && slot === null,
@@ -385,6 +426,7 @@ export function createEnemyLeaderPermanent(
     maxHealth: enemy.health,
     block: 0,
     recoveryPolicy: "none",
+    enteredBattlefieldTurnNumber,
     keywords: leaderKeywords,
     counters: [],
     modifiers: [],
@@ -434,6 +476,7 @@ export function createEnemyPermanent(
     basePower: number;
     enemyActorId?: string | null;
   },
+  enteredBattlefieldTurnNumber?: number,
 ): PermanentState {
   const definition = asPermanentCardDefinition(
     getCardDefinitionFromLibrary(state.cardDefinitions, enemy.definitionId),
@@ -459,6 +502,7 @@ export function createEnemyPermanent(
     maxHealth: enemy.health,
     block: 0,
     recoveryPolicy: definition.recoveryPolicy ?? LEAN_V1_DEFAULT_RECOVERY_POLICY,
+    enteredBattlefieldTurnNumber,
     keywords: getPermanentKeywordsForDefinition(definition),
     counters: [],
     modifiers: [],
@@ -504,6 +548,7 @@ export function createPermanentForEnemyActor(
   enemyActor: Pick<EnemyActorState, "id" | "definitionId" | "name" | "health" | "basePower" | "intent">,
   options: {
     isLeader: boolean;
+    enteredBattlefieldTurnNumber?: number;
   },
 ): PermanentState {
   if (options.isLeader) {
@@ -514,7 +559,7 @@ export function createPermanentForEnemyActor(
       intent: enemyActor.intent,
       definitionId: enemyActor.definitionId ?? undefined,
       enemyActorId: enemyActor.id,
-    });
+    }, options.enteredBattlefieldTurnNumber);
   }
 
   if (!enemyActor.definitionId) {
@@ -527,7 +572,7 @@ export function createPermanentForEnemyActor(
     health: enemyActor.health,
     basePower: enemyActor.basePower,
     enemyActorId: enemyActor.id,
-  });
+  }, options.enteredBattlefieldTurnNumber);
 }
 
 export function getEnemyLeaderPermanent(state: BattleState): PermanentState | null {
@@ -568,6 +613,16 @@ export function permanentHasKeyword(
     permanent.keywords.includes(keyword) ||
     (permanent.keywordModifiers ?? []).some((modifier) => modifier.keyword === keyword)
   );
+}
+
+export function expireTemporaryKeywordModifiers(state: BattleState): void {
+  for (const permanent of [...state.battlefield, ...state.enemyBattlefield]) {
+    if (!permanent) {
+      continue;
+    }
+
+    removeExpiredKeywordModifiersFromPermanent(permanent, state.turnNumber);
+  }
 }
 
 export function hasLivingEnemyCreatures(state: BattleState): boolean {

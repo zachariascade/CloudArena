@@ -99,6 +99,20 @@ These are set on permanent card definitions and copied into live permanent state
   - `src/cloud-arena/core/permanents.ts` uses it when a card definition does not specify an override
   - `src/cloud-arena/core/reset-round.ts` checks it and restores health when it is `full_heal`
 
+### `summoningSicknessPolicy`
+
+- What it does: controls whether creatures can attack or use activated abilities on the turn they enter the battlefield.
+- Current default: `enabled`
+- Where to set it:
+  - `src/cloud-arena/core/constants.ts` as `LEAN_V1_DEFAULT_SUMMONING_SICKNESS_POLICY`
+  - `src/cloud-arena/core/types.ts` in `CreateBattleInput` and `BattleState`
+  - `src/cloud-arena/api-contract.ts` in `CloudArenaCreateSessionRequest`
+- Where it is applied:
+  - `src/cloud-arena/core/create-battle.ts` copies the default into battle state
+  - `src/cloud-arena/core/permanents.ts` marks each permanent with the turn it entered
+  - `src/cloud-arena/actions/legal-actions.ts`, `src/cloud-arena/actions/use-permanent-action.ts`, and `src/cloud-arena/combat/enemy-turn.ts` enforce the restriction
+  - `src/cloud-arena/session-core.ts` and the Cloud Arena session route forward overrides through session creation and reset
+
 ## Enemy Damage Knobs
 
 These control how enemy attacks are resolved.

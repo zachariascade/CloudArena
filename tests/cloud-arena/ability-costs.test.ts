@@ -5,6 +5,7 @@ import {
   createBattle,
   getDerivedPermanentStat,
   getLegalActions,
+  type BattleAction,
   type CardDefinitionLibrary,
 } from "../../src/cloud-arena/index.js";
 
@@ -110,6 +111,7 @@ describe("cloud arena ability costs", () => {
     const battle = createBattle({
       seed: 1,
       playerHealth: 100,
+      summoningSicknessPolicy: "disabled",
       cardDefinitions: ABILITY_COST_TEST_DEFINITIONS,
       playerDeck: [
         "test_guardian",
@@ -170,10 +172,58 @@ describe("cloud arena ability costs", () => {
     )).toBe(false);
   });
 
+  it("keeps summoning sickness on by default for creature attacks and activated abilities", () => {
+    const battle = createBattle({
+      seed: 1,
+      playerHealth: 100,
+      cardDefinitions: ABILITY_COST_TEST_DEFINITIONS,
+      playerDeck: [
+        "test_guardian",
+        "attack",
+        "defend",
+        "attack",
+        "defend",
+      ],
+      enemy: {
+        name: "Cost Dummy",
+        health: 30,
+        basePower: 12,
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+
+    const guardianCard = battle.player.hand.find((card) => card.definitionId === "test_guardian");
+
+    if (!guardianCard) {
+      throw new Error("Expected test_guardian in opening hand.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: guardianCard.instanceId,
+    });
+
+    const guardian = battle.battlefield[0];
+
+    if (!guardian) {
+      throw new Error("Expected test_guardian on battlefield.");
+    }
+
+    const legalActions = getLegalActions(battle).filter(
+      (action): action is Extract<BattleAction, { type: "use_permanent_action" }> =>
+        action.type === "use_permanent_action" && action.permanentId === guardian.instanceId,
+    );
+
+    expect(legalActions.some((action) => action.action === "attack")).toBe(false);
+    expect(legalActions.some((action) => action.action === "apply_block")).toBe(false);
+    expect(legalActions.some((action) => action.action === "defend")).toBe(true);
+  });
+
   it("taps permanents when an activated ability pays a tap cost", () => {
     const battle = createBattle({
       seed: 1,
       playerHealth: 100,
+      summoningSicknessPolicy: "disabled",
       cardDefinitions: ABILITY_COST_TEST_DEFINITIONS,
       playerDeck: [
         "test_blesser",
@@ -274,6 +324,7 @@ describe("cloud arena ability costs", () => {
     const battle = createBattle({
       seed: 1,
       playerHealth: 100,
+      summoningSicknessPolicy: "disabled",
       cardDefinitions: ABILITY_COST_TEST_DEFINITIONS,
       playerDeck: [
         "test_energizer",

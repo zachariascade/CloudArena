@@ -62,6 +62,7 @@ describe("cloud arena combat engine edge cases", () => {
 
   it("cannot use a permanent action twice in one round", () => {
     const battle = createTestBattle({
+      summoningSicknessPolicy: "disabled",
       playerDeck: ["guardian", "attack", "defend", "attack", "defend"],
       enemy: {
         name: "Ravaging Demon",
@@ -660,6 +661,7 @@ describe("cloud arena combat engine edge cases", () => {
 
   it("playing a permanent card places it on the battlefield instead of discard", () => {
     const battle = createTestBattle({
+      summoningSicknessPolicy: "disabled",
       playerDeck: ["guardian", "attack", "defend", "attack", "defend"],
       enemy: {
         name: "Ravaging Demon",
@@ -1093,6 +1095,7 @@ describe("cloud arena combat engine edge cases", () => {
 
   it("lets creature attacks target enemy permanents and respects full heal recovery policy", () => {
     const battle = createTestBattle({
+      summoningSicknessPolicy: "disabled",
       playerDeck: ["guardian", "defend", "attack", "defend", "attack"],
       enemy: {
         name: "Enemy Husk",
@@ -1145,6 +1148,7 @@ describe("cloud arena combat engine edge cases", () => {
 
   it("keeps damage on enemy permanents with none recovery policy", () => {
     const battle = createTestBattle({
+      summoningSicknessPolicy: "disabled",
       playerDeck: ["guardian", "defend", "attack", "defend", "attack"],
       enemy: {
         name: "Enemy Shade",

@@ -73,6 +73,7 @@ const COMBAT_TRIGGER_TEST_DEFINITIONS: CardDefinitionLibrary = {
 function createCombatTriggerBattle() {
   return createBattle({
     seed: 1,
+    summoningSicknessPolicy: "disabled",
     cardDefinitions: {
       ...TEST_CARD_DEFINITIONS,
       ...COMBAT_TRIGGER_TEST_DEFINITIONS,

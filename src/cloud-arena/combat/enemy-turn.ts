@@ -4,6 +4,7 @@ import { applyEnemyCardEffect } from "../core/enemy-card-effects.js";
 import {
   getEnemyLeaderPermanent,
   permanentHasKeyword,
+  permanentHasSummoningSickness,
   syncEnemyLeaderPermanentFromState,
   syncEnemyStateFromLeaderPermanent,
 } from "../core/permanents.js";
@@ -90,6 +91,10 @@ function resolveEnemyBattlefieldCreatures(state: BattleState): void {
     const definition = getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId);
 
     if (!hasCardType(definition, "creature")) {
+      continue;
+    }
+
+    if (permanentHasSummoningSickness(state, permanent)) {
       continue;
     }
 
