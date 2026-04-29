@@ -366,17 +366,25 @@ export function buildCloudArenaSessionSnapshot(
       discardPile: state.player.discardPile.map((card) => toCardSnapshot(state, card)),
       graveyard: state.player.graveyard.map((card) => toCardSnapshot(state, card)),
     },
-    enemy: {
-      name: primaryEnemyPermanent?.name ?? state.enemy.name,
-      health: primaryEnemyPermanent?.health ?? state.enemy.health,
-      maxHealth: primaryEnemyPermanent?.maxHealth ?? state.enemy.maxHealth,
-      block: primaryEnemyPermanent?.block ?? state.enemy.block,
-      leaderDefinitionId: state.enemy.leaderDefinitionId,
-      currentCardId: state.enemy.currentCardId ?? state.enemy.currentCard?.id ?? null,
-      intent: { ...state.enemy.intent },
-      intentLabel: primaryEnemyPermanent?.intentLabel ?? (state.enemy.stunnedThisTurn ? "Stunned" : formatEnemyIntent(state.enemy.intent)),
-      intentQueueLabels: primaryEnemyPermanent?.intentQueueLabels ?? [...state.enemy.intentQueueLabels],
-    },
+    enemy: (() => {
+      const primaryActor = state.enemies[0];
+      return {
+        name: primaryEnemyPermanent?.name ?? primaryActor?.name ?? "",
+        health: primaryEnemyPermanent?.health ?? primaryActor?.health ?? 0,
+        maxHealth: primaryEnemyPermanent?.maxHealth ?? primaryActor?.maxHealth ?? 0,
+        block: primaryEnemyPermanent?.block ?? primaryActor?.block ?? 0,
+        leaderDefinitionId: primaryActor?.definitionId ?? null,
+        currentCardId: primaryActor?.currentCardId ?? primaryActor?.currentCard?.id ?? null,
+        intent: { ...(primaryActor?.intent ?? {}) },
+        intentLabel:
+          primaryEnemyPermanent?.intentLabel ??
+          (primaryActor?.stunnedThisTurn
+            ? "Stunned"
+            : formatEnemyIntent(primaryActor?.intent ?? {})),
+        intentQueueLabels:
+          primaryEnemyPermanent?.intentQueueLabels ?? [...(primaryActor?.intentQueueLabels ?? [])],
+      };
+    })(),
     enemies: state.enemies.map((actor) => {
       const actorPermanent = actor.permanentId
         ? (state.enemyBattlefield.find((p) => p?.instanceId === actor.permanentId) ?? null)

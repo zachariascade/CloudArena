@@ -14,9 +14,7 @@ import {
   destroyPermanent,
   isEquipmentPermanent,
   permanentHasKeyword,
-  getEnemyLeaderPermanent,
-  syncEnemyStateFromLeaderPermanent,
-  syncEnemyLeaderPermanentFromState,
+  getEnemyActorPermanent,
 } from "./permanents.js";
 import { emitRulesEvent } from "./rules-events.js";
 import { drawCards } from "./draw.js";
@@ -179,51 +177,31 @@ export function dealDamageToEnemy(
   amount: number,
   source: "card" | "permanent_action" = "card",
   sourceId?: string,
+  targetPermanentId?: string,
 ): number {
-  const leaderPermanentId = state.enemy.leaderPermanentId;
-  const leaderPermanent = leaderPermanentId
-    ? state.enemyBattlefield.find((permanent) => permanent?.instanceId === leaderPermanentId) ?? null
-    : null;
+  const targetPermanent = targetPermanentId
+    ? state.enemyBattlefield.find((permanent) => permanent?.instanceId === targetPermanentId) ?? null
+    : (() => {
+        const primaryActor = state.enemies[0];
+        return primaryActor ? getEnemyActorPermanent(state, primaryActor) : null;
+      })();
 
-  if (leaderPermanent) {
-    if (permanentHasKeyword(leaderPermanent, "indestructible")) {
-      return 0;
-    }
-
-    const damageDealt = Math.max(0, Math.min(amount, leaderPermanent.block + leaderPermanent.health));
-
-    if (leaderPermanent.block >= amount) {
-      leaderPermanent.block -= amount;
-    } else {
-      const remainingDamage = amount - leaderPermanent.block;
-      leaderPermanent.block = 0;
-      leaderPermanent.health -= remainingDamage;
-    }
-
-    syncEnemyStateFromLeaderPermanent(state);
-
-    if (damageDealt > 0) {
-      state.log.push({
-        type: "damage_dealt",
-        turnNumber: state.turnNumber,
-        source,
-        sourceId,
-        target: "enemy",
-        amount: damageDealt,
-      });
-    }
-
-    return damageDealt;
+  if (!targetPermanent) {
+    return 0;
   }
 
-  const damageDealt = Math.max(0, Math.min(amount, state.enemy.block + state.enemy.health));
+  if (permanentHasKeyword(targetPermanent, "indestructible")) {
+    return 0;
+  }
 
-  if (state.enemy.block >= amount) {
-    state.enemy.block -= amount;
+  const damageDealt = Math.max(0, Math.min(amount, targetPermanent.block + targetPermanent.health));
+
+  if (targetPermanent.block >= amount) {
+    targetPermanent.block -= amount;
   } else {
-    const remainingDamage = amount - state.enemy.block;
-    state.enemy.block = 0;
-    state.enemy.health -= remainingDamage;
+    const remainingDamage = amount - targetPermanent.block;
+    targetPermanent.block = 0;
+    targetPermanent.health -= remainingDamage;
   }
 
   if (damageDealt > 0) {
@@ -265,9 +243,6 @@ export function gainBlockToPermanent(
   }
 
   permanent.block += amount;
-  if (permanent.isEnemyLeader) {
-    syncEnemyStateFromLeaderPermanent(state);
-  }
   state.log.push({
     type: "block_gained",
     turnNumber: state.turnNumber,
@@ -306,10 +281,6 @@ export function dealDamageToPermanent(
     const remainingDamage = amount - permanent.block;
     permanent.block = 0;
     permanent.health -= remainingDamage;
-  }
-
-  if (permanent.isEnemyLeader) {
-    syncEnemyStateFromLeaderPermanent(state);
   }
 
   if (damageDealt > 0) {
@@ -791,9 +762,6 @@ function resolveDealDamageEffect(
     if (shouldBypassBlock) {
       const damageDealt = Math.max(0, Math.min(amount, permanent.health));
       permanent.health -= damageDealt;
-      if (permanent.isEnemyLeader) {
-        syncEnemyStateFromLeaderPermanent(state);
-      }
       if (damageDealt > 0) {
         state.log.push({
           type: "damage_dealt",
@@ -873,10 +841,6 @@ function resolveRestoreHealthEffect(
 
   for (const permanent of targets) {
     permanent.health = permanent.maxHealth;
-
-    if (permanent.isEnemyLeader) {
-      syncEnemyStateFromLeaderPermanent(state);
-    }
   }
 }
 
@@ -1083,14 +1047,20 @@ function resolveReturnFromGraveyardEffect(
 
 function resolveStunEffect(state: BattleState, effect: Extract<Effect, { type: "stun" }>): void {
   if (effect.target === "enemy") {
-    const enemyLeaderPermanent = getEnemyLeaderPermanent(state);
+    const primaryActor = state.enemies[0];
+    if (!primaryActor) {
+      return;
+    }
+    const primaryPermanent = getEnemyActorPermanent(state, primaryActor);
 
-    if (enemyLeaderPermanent && permanentHasKeyword(enemyLeaderPermanent, "hexproof")) {
+    if (primaryPermanent && permanentHasKeyword(primaryPermanent, "hexproof")) {
       return;
     }
 
-    state.enemy.stunnedThisTurn = true;
-    syncEnemyLeaderPermanentFromState(state);
+    primaryActor.stunnedThisTurn = true;
+    if (primaryPermanent) {
+      primaryPermanent.intentLabel = "Stunned";
+    }
   }
 }
 

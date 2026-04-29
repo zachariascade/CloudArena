@@ -37,7 +37,7 @@ describe("menace keyword", () => {
         name: "Menace Demon",
         health: 30,
         basePower: 10,
-        leaderDefinitionId: "menace_demon",
+        definitionId: "menace_demon",
         behavior: [{ attackAmount: 10 }],
       },
     });
@@ -74,7 +74,7 @@ describe("menace keyword", () => {
         name: "Menace Demon",
         health: 30,
         basePower: 10,
-        leaderDefinitionId: "menace_demon",
+        definitionId: "menace_demon",
         behavior: [{ attackAmount: 10 }],
       },
     });

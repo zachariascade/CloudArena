@@ -1,11 +1,11 @@
 import type {
   CreateBattleEnemyInput,
   CreateBattleInput,
+  EnemyActorState,
   EnemyCardDefinition,
   EnemyCardEffect,
   EnemyEffectResolveTiming,
   EnemyIntent,
-  EnemyState,
 } from "./types.js";
 import { formatEnemyIntent } from "./enemy-intent.js";
 import { getEnemyEffectResolveTiming } from "./enemy-card-effects.js";
@@ -135,7 +135,7 @@ type EnemyPlanStep = {
 };
 
 type EnemyPlanStateSource = Pick<
-  EnemyState,
+  EnemyActorState,
   "behavior" | "cards" | "basePower" | "health" | "behaviorIndex"
 >;
 
@@ -153,7 +153,7 @@ function buildEnemyPlanStepFromInput(
 }
 
 export function getEnemyPlanLength(
-  enemy: Pick<EnemyState, "behavior" | "cards"> | CreateBattleEnemyInput | EnemyPlanStateSource,
+  enemy: Pick<EnemyActorState, "behavior" | "cards"> | CreateBattleEnemyInput | EnemyPlanStateSource,
 ): number {
   if ("cards" in enemy && Array.isArray(enemy.cards) && enemy.cards.length > 0) {
     return enemy.cards.length;
@@ -220,7 +220,7 @@ export function cloneEnemyConfig(
       health: enemy.health,
       basePower: enemy.basePower,
       behavior: enemy.behavior.map((step) => ({ ...step })),
-      leaderDefinitionId: enemy.leaderDefinitionId,
+      definitionId: enemy.definitionId,
       startingTokens: enemy.startingTokens ? [...enemy.startingTokens] : undefined,
       startingPermanents: enemy.startingPermanents ? [...enemy.startingPermanents] : undefined,
     };
@@ -230,7 +230,7 @@ export function cloneEnemyConfig(
     name: enemy.name,
     health: enemy.health,
     basePower: enemy.basePower,
-    leaderDefinitionId: enemy.leaderDefinitionId,
+    definitionId: enemy.definitionId,
     startingTokens: enemy.startingTokens ? [...enemy.startingTokens] : undefined,
     startingPermanents: enemy.startingPermanents ? [...enemy.startingPermanents] : undefined,
     cards: (enemy.cards ?? []).map((card) => ({

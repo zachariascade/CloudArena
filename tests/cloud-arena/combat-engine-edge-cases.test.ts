@@ -9,7 +9,7 @@ import {
   usePermanentAction,
   type CardDefinitionLibrary,
 } from "../../src/cloud-arena/index.js";
-import { createTestBattle, formatBattleLog, TEST_CARD_DEFINITIONS } from "./helpers.js";
+import { createTestBattle, getEnemyHealth, getEnemyBlock, getEnemyPermanent, formatBattleLog, TEST_CARD_DEFINITIONS } from "./helpers.js";
 
 const RESURRECT_TEST_DEFINITIONS: CardDefinitionLibrary = {
   resurrect: {
@@ -95,7 +95,7 @@ describe("cloud arena combat engine edge cases", () => {
       action: "attack",
     });
 
-    const leaderTarget = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+    const leaderTarget = battle.enemyBattlefield.find((entry) => entry?.enemyActorId === "enemy_actor_1");
 
     if (!leaderTarget) {
       throw new Error("Expected an enemy leader target.");
@@ -286,7 +286,7 @@ describe("cloud arena combat engine edge cases", () => {
       permanentId: guardianPermanent.instanceId,
       action: "defend",
     });
-    const leaderTarget = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+    const leaderTarget = battle.enemyBattlefield.find((entry) => entry?.enemyActorId === "enemy_actor_1");
 
     if (!leaderTarget) {
       throw new Error("Expected an enemy leader target.");
@@ -516,7 +516,7 @@ describe("cloud arena combat engine edge cases", () => {
       cardInstanceId: attackCard.instanceId,
     });
 
-    const leaderTarget = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+    const leaderTarget = battle.enemyBattlefield.find((entry) => entry?.enemyActorId === "enemy_actor_1");
 
     if (!leaderTarget) {
       throw new Error("Expected an enemy leader target.");
@@ -528,13 +528,13 @@ describe("cloud arena combat engine edge cases", () => {
     });
 
     expect(battle.phase).toBe("finished");
-    expect(battle.enemy.health).toBe(0);
+    expect(getEnemyHealth(battle)).toBe(0);
     expect(battle.log.at(-1)).toEqual({
       type: "battle_finished",
       turnNumber: 1,
       winner: "player",
       playerHealth: battle.player.health,
-      enemyHealth: battle.enemy.health,
+      enemyHealth: getEnemyHealth(battle),
       permanents: [],
     });
   });
@@ -551,7 +551,7 @@ describe("cloud arena combat engine edge cases", () => {
       },
     });
 
-    const leader = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+    const leader = battle.enemyBattlefield.find((entry) => entry?.enemyActorId === "enemy_actor_1");
     const token = battle.enemyBattlefield.find((entry) => entry?.definitionId === "token_imp");
     const firstAttackCard = battle.player.hand.find((card) => card.definitionId === "attack");
     const secondAttackCard = battle.player.hand.find(
@@ -573,7 +573,7 @@ describe("cloud arena combat engine edge cases", () => {
 
     expect(battle.phase).toBe("player_action");
     expect(battle.enemyBattlefield.some((entry) => entry?.definitionId === "token_imp")).toBe(true);
-    expect(battle.enemyBattlefield.some((entry) => entry?.isEnemyLeader)).toBe(false);
+    expect(battle.enemyBattlefield.some((entry) => entry?.enemyActorId === "enemy_actor_1")).toBe(false);
 
     applyBattleAction(battle, {
       type: "play_card",
@@ -609,7 +609,7 @@ describe("cloud arena combat engine edge cases", () => {
       turnNumber: 1,
       winner: "enemy",
       playerHealth: battle.player.health,
-      enemyHealth: battle.enemy.health,
+      enemyHealth: getEnemyHealth(battle),
       permanents: [],
     });
   });
@@ -982,7 +982,7 @@ describe("cloud arena combat engine edge cases", () => {
     });
     applyBattleAction(battle, { type: "play_card", cardInstanceId: attackCard.instanceId });
 
-    const leaderTarget = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+    const leaderTarget = battle.enemyBattlefield.find((entry) => entry?.enemyActorId === "enemy_actor_1");
 
     if (!leaderTarget) {
       throw new Error("Expected an enemy leader target.");
@@ -1223,14 +1223,14 @@ describe("cloud arena combat engine edge cases", () => {
       cardInstanceId: stunCard.instanceId,
     });
 
-    const enemyLeader = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+    const enemyLeader = battle.enemyBattlefield.find((entry) => entry?.enemyActorId === "enemy_actor_1");
 
     expect(enemyLeader?.intentLabel).toBe("Stunned");
 
     applyBattleAction(battle, { type: "end_turn" });
 
     expect(battle.player.health).toBe(startingHealth);
-    expect(battle.enemy.stunnedThisTurn).toBe(false);
+    expect((battle.enemies[0]?.stunnedThisTurn ?? false)).toBe(false);
     expect(battle.log.some((event) => event.type === "enemy_stunned")).toBe(true);
   });
 });

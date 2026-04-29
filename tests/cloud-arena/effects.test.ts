@@ -9,7 +9,7 @@ import {
   type CardDefinitionLibrary,
 } from "../../src/cloud-arena/index.js";
 import { denialBeforeTheRoostersCryCardDefinition } from "../../src/cloud-arena/cards/definitions/denial-before-the-rooster-s-cry.js";
-import { createTestBattle } from "./helpers.js";
+import { createTestBattle, getEnemyHealth, getEnemyBlock, getEnemyPermanent } from "./helpers.js";
 
 const EFFECT_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
   angel_host: {
@@ -408,7 +408,7 @@ describe("cloud arena effect primitives", () => {
     );
 
     expect(battle.player.block).toBe(5);
-    expect(battle.enemy.health).toBe(26);
+    expect(getEnemyHealth(battle)).toBe(26);
     expect(battle.battlefield.filter(Boolean)).toHaveLength(3);
     expect(angelPermanent.attachments).toHaveLength(1);
     expect(
@@ -457,7 +457,7 @@ describe("cloud arena effect primitives", () => {
         name: "Hexproof Enemy",
         health: 30,
         basePower: 12,
-        leaderDefinitionId: "hexproof_enemy_leader",
+        definitionId: "hexproof_enemy_leader",
         behavior: [{ attackAmount: 12 }],
       },
     });
@@ -472,7 +472,7 @@ describe("cloud arena effect primitives", () => {
 
     applyBattleAction(battle, { type: "play_card", cardInstanceId: stunCard.instanceId });
 
-    expect(battle.enemy.stunnedThisTurn).toBe(false);
+    expect((battle.enemies[0]?.stunnedThisTurn ?? false)).toBe(false);
     expect(battle.log.some((event) => event.type === "enemy_stunned")).toBe(false);
   });
 

@@ -6,11 +6,9 @@ import { getDerivedPermanentStat } from "./derived-stats.js";
 import { getCardDefinitionFromLibrary } from "../cards/definitions.js";
 import {
   permanentHasKeyword,
-  syncEnemyLeaderPermanentFromState,
-  getEnemyLeaderPermanent,
+  getEnemyActorPermanent,
   trySummonPermanentFromCard,
 } from "./permanents.js";
-import { formatEnemyIntent } from "./enemy-intent.js";
 import { settleEnemyAttackDamage } from "../combat/settle-damage.js";
 import type {
   BattleState,
@@ -59,16 +57,20 @@ export function applyEnemyCardEffect(
   effect: EnemyCardEffect,
   actor?: EnemyActorState,
 ): void {
-  const actorPermanent = actor?.permanentId
-    ? state.enemyBattlefield.find((p) => p?.instanceId === actor.permanentId) ?? null
-    : getEnemyLeaderPermanent(state);
+  const resolvedActor = actor ?? state.enemies[0];
+
+  if (!resolvedActor) {
+    return;
+  }
+
+  const actorPermanent = getEnemyActorPermanent(state, resolvedActor);
   const actorBasePower = actorPermanent
     ? getDerivedPermanentStat(state, actorPermanent, "power")
-    : actor
-      ? actor.basePower
-      : state.enemy.basePower;
-  const actorHealth = actorPermanent ? getDerivedPermanentStat(state, actorPermanent, "health") : actor ? actor.health : state.enemy.health;
-  const attackSourceId = actor?.permanentId ?? state.enemy.leaderPermanentId ?? "enemy_intent";
+    : resolvedActor.basePower;
+  const actorHealth = actorPermanent
+    ? getDerivedPermanentStat(state, actorPermanent, "health")
+    : resolvedActor.health;
+  const attackSourceId = resolvedActor.permanentId ?? "enemy_intent";
 
   if (effect.target === "player") {
     const baseAttackAmount =
@@ -80,15 +82,12 @@ export function applyEnemyCardEffect(
     const hitCount = Math.max(1, effect.attackTimes ?? 1);
 
     if (baseAttackAmount > 0) {
-      const attackSourcePermanent = actorPermanent;
-      const attackSourceDefinition = actor?.definitionId
-        ? getCardDefinitionFromLibrary(state.cardDefinitions, actor.definitionId)
-        : state.enemy.leaderDefinitionId
-          ? getCardDefinitionFromLibrary(state.cardDefinitions, state.enemy.leaderDefinitionId)
-          : null;
+      const attackSourceDefinition = resolvedActor.definitionId
+        ? getCardDefinitionFromLibrary(state.cardDefinitions, resolvedActor.definitionId)
+        : null;
       const attackBypassesBlock =
         !!effect.bypassBlock ||
-        (attackSourcePermanent ? permanentHasKeyword(attackSourcePermanent, "pierce") : false) ||
+        (actorPermanent ? permanentHasKeyword(actorPermanent, "pierce") : false) ||
         !!(attackSourceDefinition && "keywords" in attackSourceDefinition && attackSourceDefinition.keywords?.includes("pierce"));
       for (let hit = 0; hit < hitCount; hit++) {
         settleEnemyAttackDamage(
@@ -117,14 +116,10 @@ export function applyEnemyCardEffect(
             ? Math.max(0, Math.floor(actorHealth * effect.blockHealthMultiplier))
             : 0;
 
-    if (actor?.permanentId) {
-      const actorPermanent = state.enemyBattlefield.find((p) => p?.instanceId === actor.permanentId);
-      if (actorPermanent) {
-        actorPermanent.block += blockAmount;
-      }
-    } else {
-      state.enemy.block += blockAmount;
+    if (actorPermanent) {
+      actorPermanent.block += blockAmount;
     }
+    resolvedActor.block += blockAmount;
 
     state.log.push({
       type: "block_gained",
@@ -135,22 +130,15 @@ export function applyEnemyCardEffect(
   }
 
   if (effect.target === "enemy" && typeof effect.powerDelta === "number") {
-    if (actor) {
-      actor.basePower += effect.powerDelta;
-      if (actor.permanentId) {
-        const actorPermanent = state.enemyBattlefield.find((p) => p?.instanceId === actor.permanentId);
-        if (actorPermanent) {
-          actorPermanent.power += effect.powerDelta;
-        }
-      }
-    } else {
-      state.enemy.basePower += effect.powerDelta;
+    resolvedActor.basePower += effect.powerDelta;
+    if (actorPermanent) {
+      actorPermanent.power += effect.powerDelta;
     }
     state.log.push({
       type: "enemy_power_gained",
       turnNumber: state.turnNumber,
       amount: effect.powerDelta,
-      newBasePower: actor ? actor.basePower : state.enemy.basePower,
+      newBasePower: resolvedActor.basePower,
     });
   }
 
@@ -191,6 +179,7 @@ export function applyEnemyCardEffect(
 export function primeEnemyCardForTurn(
   state: BattleState,
   card: EnemyCardDefinition | null,
+  actor?: EnemyActorState,
 ): EnemyCardDefinition | null {
   if (!card) {
     return null;
@@ -200,7 +189,7 @@ export function primeEnemyCardForTurn(
 
   if (immediateCard) {
     for (const effect of immediateCard.effects) {
-      applyEnemyCardEffect(state, card.id, effect);
+      applyEnemyCardEffect(state, card.id, effect, actor);
     }
   }
 
@@ -215,12 +204,6 @@ export function primeEnemyCardForTurn(
       });
     }
   }
-
-  syncEnemyLeaderPermanentFromState(
-    state,
-    formatEnemyIntent(state.enemy.intent),
-    state.enemy.intentQueueLabels,
-  );
 
   return getEnemyCardForResolveTiming(card, "end_of_player_turn");
 }

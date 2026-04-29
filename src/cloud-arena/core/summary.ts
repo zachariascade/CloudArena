@@ -30,10 +30,10 @@ export function buildBattleSummary(state: BattleState): BattleSummary {
   const compactSlots = 5;
   const primaryEnemyPermanent = getPrimaryEnemyPermanent(state);
   const primaryEnemyActor = state.enemies[0] ?? null;
-  const enemyName = primaryEnemyPermanent?.name ?? primaryEnemyActor?.name ?? state.enemy.name;
-  const enemyHealth = primaryEnemyPermanent?.health ?? primaryEnemyActor?.health ?? state.enemy.health;
-  const enemyMaxHealth = primaryEnemyPermanent?.maxHealth ?? primaryEnemyActor?.maxHealth ?? state.enemy.maxHealth;
-  const enemyBlock = primaryEnemyPermanent?.block ?? primaryEnemyActor?.block ?? state.enemy.block;
+  const enemyName = primaryEnemyPermanent?.name ?? primaryEnemyActor?.name ?? "";
+  const enemyHealth = primaryEnemyPermanent?.health ?? primaryEnemyActor?.health ?? 0;
+  const enemyMaxHealth = primaryEnemyPermanent?.maxHealth ?? primaryEnemyActor?.maxHealth ?? 0;
+  const enemyBlock = primaryEnemyPermanent?.block ?? primaryEnemyActor?.block ?? 0;
 
   return {
     turnNumber: state.turnNumber,
@@ -52,7 +52,7 @@ export function buildBattleSummary(state: BattleState): BattleSummary {
       health: enemyHealth,
       maxHealth: enemyMaxHealth,
       block: enemyBlock,
-      intent: formatEnemyIntent(primaryEnemyActor?.intent ?? state.enemy.intent),
+      intent: formatEnemyIntent(primaryEnemyActor?.intent ?? {}),
     },
     battlefield: state.battlefield.slice(0, compactSlots).map((permanent, index) => {
       if (!permanent) {

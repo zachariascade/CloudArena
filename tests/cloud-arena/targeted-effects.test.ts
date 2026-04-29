@@ -274,7 +274,7 @@ describe("cloud arena targeted effects", () => {
         name: "Hexproof Target",
         health: 30,
         basePower: 12,
-        leaderDefinitionId: "hexproof_enemy_leader",
+        definitionId: "hexproof_enemy_leader",
         behavior: [{ attackAmount: 12 }],
       },
     });
