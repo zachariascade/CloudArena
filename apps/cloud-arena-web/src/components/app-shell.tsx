@@ -36,11 +36,12 @@ export function CloudArenaAppShell({
 }: CloudArenaAppShellProps): ReactElement {
   const cloudArcanumCardsUrl = `${cloudArcanumWebBaseUrl.replace(/\/$/, "")}/cards`;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isHeaderVisible, setIsHeaderVisible] = useState(false);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(pageVariant !== "battle");
   const { resetTheme, theme, updateThemeColor } = useCloudArenaTheme();
   const hideHeaderTimeoutRef = useRef<number | null>(null);
   const pointerYRef = useRef(Number.POSITIVE_INFINITY);
   const isPointerOverHeaderRef = useRef(false);
+  const shouldAutoHideHeader = pageVariant === "battle";
 
   function clearHideHeaderTimeout(): void {
     if (hideHeaderTimeoutRef.current !== null) {
@@ -64,6 +65,11 @@ export function CloudArenaAppShell({
 
   useEffect(() => {
     if (typeof window === "undefined") {
+      return;
+    }
+
+    if (!shouldAutoHideHeader) {
+      setIsHeaderVisible(true);
       return;
     }
 
@@ -92,7 +98,7 @@ export function CloudArenaAppShell({
       window.removeEventListener("pointermove", onWindowPointerMove);
       clearHideHeaderTimeout();
     };
-  }, [isSidebarOpen]);
+  }, [isSidebarOpen, shouldAutoHideHeader]);
 
   useEffect(() => {
     if (!isSidebarOpen) {
@@ -114,6 +120,11 @@ export function CloudArenaAppShell({
       return;
     }
 
+    if (!shouldAutoHideHeader) {
+      setIsHeaderVisible(true);
+      return;
+    }
+
     if (window.matchMedia("(pointer: coarse)").matches) {
       return;
     }
@@ -124,13 +135,13 @@ export function CloudArenaAppShell({
     }
 
     scheduleHideHeader();
-  }, [isSidebarOpen]);
+  }, [isSidebarOpen, shouldAutoHideHeader]);
 
   return (
     <main className={`app-shell${fullBleed ? " is-full-bleed" : ""}${pageVariant === "battle" ? " is-battle-page" : ""}`}>
       <header
         className={`panel app-header${isHeaderVisible || isSidebarOpen ? " is-visible" : ""}`}
-        aria-hidden={!isHeaderVisible && !isSidebarOpen}
+        aria-hidden={shouldAutoHideHeader && !isHeaderVisible && !isSidebarOpen}
         onMouseEnter={() => {
           isPointerOverHeaderRef.current = true;
           showHeader();
@@ -154,7 +165,7 @@ export function CloudArenaAppShell({
         <button
           type="button"
           className="cloud-arena-menu-button"
-          tabIndex={isHeaderVisible || isSidebarOpen ? 0 : -1}
+          tabIndex={isHeaderVisible || isSidebarOpen || !shouldAutoHideHeader ? 0 : -1}
           aria-expanded={isSidebarOpen}
           aria-controls="cloud-arena-menu-sidebar"
           onClick={() => setIsSidebarOpen((current) => !current)}

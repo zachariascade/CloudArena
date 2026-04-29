@@ -1056,7 +1056,7 @@ export function renderCloudArcanumWebHtml(
 
       .cloud-arena-gallery-header {
         display: flex;
-        align-items: center;
+        align-items: start;
         justify-content: space-between;
         gap: 1.25rem;
         max-width: none;
@@ -1080,66 +1080,99 @@ export function renderCloudArcanumWebHtml(
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        gap: 0.75rem 1.25rem;
-        padding-inline: clamp(1.5rem, 4vw, 3rem);
-        padding-block: 0.5rem 0.75rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        gap: 0.75rem 1rem;
+        margin-inline: clamp(1.5rem, 4vw, 3rem);
+        padding: 1rem 1.1rem;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 24px;
+        background:
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 38%),
+          rgba(255, 251, 246, 0.08);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 20px 60px rgba(6, 12, 40, 0.32);
       }
 
       .cloud-arena-gallery-search {
         flex: 1 1 14rem;
         min-width: 0;
-        padding: 0.45rem 0.85rem;
-        background: rgba(255, 255, 255, 0.07);
+        min-height: 2.8rem;
+        padding: 0.6rem 0.95rem;
+        background: rgba(255, 251, 246, 0.18);
         border: 1px solid rgba(255, 255, 255, 0.18);
         border-radius: 0.5rem;
-        color: rgba(255, 255, 255, 0.9);
-        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.96);
+        font-size: 0.92rem;
         outline: none;
-        transition: border-color 0.15s;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+        transition:
+          border-color 0.15s,
+          background 0.15s,
+          box-shadow 0.15s;
       }
       .cloud-arena-gallery-search::placeholder {
-        color: rgba(255, 255, 255, 0.35);
+        color: rgba(255, 255, 255, 0.64);
       }
       .cloud-arena-gallery-search:focus {
-        border-color: rgba(180, 140, 255, 0.55);
+        border-color: rgba(180, 140, 255, 0.7);
+        background: rgba(255, 251, 246, 0.24);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.16),
+          0 0 0 3px rgba(180, 140, 255, 0.14);
       }
 
       .cloud-arena-gallery-sort-group,
       .cloud-arena-gallery-filter-group {
         display: flex;
         align-items: center;
-        gap: 0.4rem;
+        gap: 0.45rem;
         flex-shrink: 0;
       }
 
       .cloud-arena-gallery-sort-label,
       .cloud-arena-gallery-filter-label {
-        font-size: 0.78rem;
-        color: rgba(255, 255, 255, 0.45);
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.56);
         text-transform: uppercase;
         letter-spacing: 0.06em;
         margin-right: 0.15rem;
       }
 
       .cloud-arena-gallery-sort-btn {
-        padding: 0.3rem 0.75rem;
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.14);
+        min-height: 2.4rem;
+        padding: 0.38rem 0.85rem;
+        background:
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 42%),
+          rgba(255, 251, 246, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.18);
         border-radius: 0.4rem;
-        color: rgba(255, 255, 255, 0.65);
-        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.94);
+        font-size: 0.84rem;
+        font-weight: 600;
         cursor: pointer;
-        transition: background 0.15s, color 0.15s, border-color 0.15s;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        transition:
+          background 0.15s,
+          color 0.15s,
+          border-color 0.15s,
+          transform 0.15s,
+          box-shadow 0.15s;
       }
       .cloud-arena-gallery-sort-btn:hover {
-        background: rgba(255, 255, 255, 0.12);
-        color: rgba(255, 255, 255, 0.9);
+        background:
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.1), transparent 42%),
+          rgba(255, 251, 246, 0.18);
+        color: rgba(255, 255, 255, 0.98);
+        transform: translateY(-1px);
       }
       .cloud-arena-gallery-sort-btn.is-active {
-        background: rgba(180, 140, 255, 0.2);
-        border-color: rgba(180, 140, 255, 0.45);
-        color: rgba(220, 200, 255, 0.95);
+        background:
+          radial-gradient(circle at top left, rgba(255, 244, 192, 0.26), transparent 42%),
+          linear-gradient(135deg, rgba(245, 215, 116, 0.22), rgba(193, 134, 19, 0.2));
+        border-color: rgba(188, 139, 26, 0.42);
+        color: #fff7df;
+        box-shadow:
+          inset 0 0 0 1px rgba(255, 247, 214, 0.08),
+          0 10px 22px rgba(91, 59, 8, 0.12);
       }
 
       .cloud-arena-gallery-pagination {
@@ -1153,31 +1186,43 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cloud-arena-gallery-page-btn {
-        padding: 0.35rem 0.9rem;
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.14);
+        min-height: 2.4rem;
+        padding: 0.38rem 0.9rem;
+        background:
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 42%),
+          rgba(255, 251, 246, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.18);
         border-radius: 0.4rem;
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.94);
+        font-size: 0.86rem;
+        font-weight: 600;
         cursor: pointer;
-        transition: background 0.15s, color 0.15s;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        transition:
+          background 0.15s,
+          color 0.15s,
+          border-color 0.15s,
+          transform 0.15s;
       }
       .cloud-arena-gallery-page-btn:hover:not(:disabled) {
-        background: rgba(255, 255, 255, 0.12);
-        color: rgba(255, 255, 255, 0.95);
+        background:
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.1), transparent 42%),
+          rgba(255, 251, 246, 0.18);
+        color: rgba(255, 255, 255, 1);
+        transform: translateY(-1px);
       }
       .cloud-arena-gallery-page-btn:disabled {
-        opacity: 0.3;
+        opacity: 0.45;
         cursor: default;
       }
 
       .cloud-arena-gallery-page-info {
-        font-size: 0.85rem;
-        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.88);
       }
 
       .cloud-arena-gallery-page-count {
-        color: rgba(255, 255, 255, 0.4);
+        color: rgba(255, 255, 255, 0.68);
       }
 
       .cloud-arena-gallery-empty {
@@ -1301,15 +1346,15 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cloud-arena-gallery-entry-title {
-        color: rgba(255, 255, 255, 0.92);
-        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.96);
+        font-size: 0.86rem;
         font-weight: 600;
         line-height: 1.3;
       }
 
       .cloud-arena-gallery-entry-artist {
-        color: rgba(255, 255, 255, 0.5);
-        font-size: 0.72rem;
+        color: rgba(255, 255, 255, 0.64);
+        font-size: 0.76rem;
         line-height: 1.3;
       }
 
@@ -1553,7 +1598,7 @@ export function renderCloudArcanumWebHtml(
 
       .cloud-arena-bestiary-header {
         display: flex;
-        align-items: center;
+        align-items: start;
         justify-content: space-between;
         gap: 1.25rem;
         max-width: none;
@@ -2280,8 +2325,9 @@ export function renderCloudArcanumWebHtml(
       .cloud-arena-campaign-progress {
         margin: 0;
         font-size: 1rem;
-        color: rgba(224, 235, 255, 0.6);
+        color: rgba(224, 235, 255, 0.72);
         font-weight: 600;
+        line-height: 1.45;
       }
 
       .cloud-arena-campaign-track-col {
@@ -2372,8 +2418,9 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cloud-arena-campaign-note {
-        color: rgba(224, 235, 255, 0.5);
-        font-size: 0.93rem;
+        color: rgba(224, 235, 255, 0.64);
+        font-size: 0.95rem;
+        line-height: 1.45;
         margin: 0;
       }
 
@@ -2402,8 +2449,8 @@ export function renderCloudArcanumWebHtml(
       /* abandon link */
       .cloud-arena-campaign-abandon {
         font: inherit;
-        font-size: 0.82rem;
-        color: rgba(224, 235, 255, 0.38);
+        font-size: 0.88rem;
+        color: rgba(224, 235, 255, 0.52);
         background: none;
         border: none;
         cursor: pointer;
@@ -2414,7 +2461,7 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cloud-arena-campaign-abandon:hover {
-        color: rgba(224, 235, 255, 0.62);
+        color: rgba(224, 235, 255, 0.82);
       }
 
       /* deck panel */
@@ -2428,7 +2475,7 @@ export function renderCloudArcanumWebHtml(
 
       .cloud-arena-campaign-deck-body {
         display: grid;
-        gap: 0.6rem;
+        gap: 0.75rem;
         padding: 1rem 1.05rem;
         border-radius: 22px;
         border: 1px solid rgba(194, 213, 255, 0.08);
@@ -2444,19 +2491,20 @@ export function renderCloudArcanumWebHtml(
         padding: 0;
         margin: 0;
         display: grid;
-        gap: 0.22rem;
+        gap: 0.35rem;
       }
 
       .cloud-arena-campaign-deck-entry {
         display: flex;
-        gap: 0.5rem;
-        font-size: 0.86rem;
-        color: rgba(224, 235, 255, 0.82);
+        gap: 0.55rem;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        color: rgba(224, 235, 255, 0.88);
         align-items: baseline;
       }
 
       .cloud-arena-campaign-deck-count {
-        color: rgba(224, 235, 255, 0.42);
+        color: rgba(224, 235, 255, 0.58);
         font-variant-numeric: tabular-nums;
         min-width: 1.4rem;
       }
