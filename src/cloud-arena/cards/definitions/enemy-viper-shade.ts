@@ -6,6 +6,7 @@ export const enemyViperShadeCardDefinition: CardDefinition = {
   cardTypes: ["creature"],
   cost: 0,
   display: {
+    name: "Viper Shade",
     title: "Viper Shade",
     frameTone: "split-black-red",
     imagePath: "classics/card_0048_the_serpent_whisperer_in_the_garden.png",

@@ -18,6 +18,7 @@ import {
 } from "../../../../src/presentation/display-card.js";
 
 type ResolvedCardDisplay = CardDisplayDefinition & {
+  name: string;
   manaCost: string | null;
   subtitle: string | null;
   footerStat: string | null;
@@ -94,8 +95,13 @@ export function buildCardManaCost(definition: Pick<CardDefinition, "cost" | "man
   return definition.manaCost ?? (definition.cost > 0 ? `{${definition.cost}}` : "{0}");
 }
 
+export function buildCardDisplayName(definition: Pick<CardDefinition, "name" | "display">): string {
+  return definition.display?.name ?? definition.name;
+}
+
 function getFallbackCardDisplay(definition: CardDefinition): CardDisplayDefinition {
   return {
+    name: definition.name,
     title: null,
     frameTone: "colorless",
     artist: null,
@@ -110,6 +116,7 @@ function getCardDisplay(definition: CardDefinition): ResolvedCardDisplay {
 
   return {
     ...display,
+    name: buildCardDisplayName(definition),
     manaCost: buildCardManaCost(definition),
     subtitle: buildCardSubtitle(definition),
     footerStat: buildCardFooterStat(definition),
@@ -263,7 +270,9 @@ export function mapArenaEnemyToDisplayCard(
         footerCode: "ARE",
         footerCredit: "Cloud Arena",
         collectorNumber: "E01",
+        name: "Harbinger of Attrition",
         title: "Harbinger of Attrition",
+        artist: null,
         subtitle: "Enemy - Demon",
         manaCost: null,
         flavorText: null,

@@ -7,6 +7,7 @@ export const galleryTowerOfBabelCardDefinition: CardDefinition = {
   cost: 3,
   rarity: "mythic",
   display: {
+    name: "The Tower of Babel",
     title: "The Great Tower",
     frameTone: "split-white-blue",
     artist: "Gustave Doré",

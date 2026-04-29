@@ -6,6 +6,7 @@ export const galleryLastJudgmentCardDefinition: CardDefinition = {
   cardTypes: ["sorcery"],
   cost: 3,
   display: {
+    name: "The Last Judgment",
     title: "Final Reckoning",
     frameTone: "split-black-red",
     artist: "Hieronymus Bosch",

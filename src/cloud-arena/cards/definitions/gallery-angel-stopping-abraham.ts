@@ -7,6 +7,7 @@ export const galleryAngelStoppingAbrahamCardDefinition: CardDefinition = {
   cost: 3,
   rarity: "mythic",
   display: {
+    name: "Angel Stopping Abraham",
     title: "Voice of Stayed Hand",
     frameTone: "split-white-green",
     artist: "Rembrandt van Rijn",

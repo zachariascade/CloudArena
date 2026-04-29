@@ -6,6 +6,7 @@ export const gallerySodomAndGomorrahCardDefinition: CardDefinition = {
   cardTypes: ["sorcery"],
   cost: 3,
   display: {
+    name: "Sodom and Gomorrah",
     title: "Fire on the Cities",
     frameTone: "split-black-red",
     artist: "John Martin",

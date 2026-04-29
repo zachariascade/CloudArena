@@ -6,6 +6,7 @@ export const enemyDemonicBoostCardDefinition: CardDefinition = {
   cardTypes: ["instant"],
   cost: 0,
   display: {
+    name: "Demonic Boost",
     title: "Demonic Boost",
     frameTone: "split-black-red",
     imagePath: "demonic-boost.png",

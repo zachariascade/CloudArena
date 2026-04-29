@@ -6,6 +6,7 @@ export const tokenAngelCardDefinition: CardDefinition = {
   cardTypes: ["creature"],
   cost: 1,
   display: {
+    name: "Angel of the Lord",
     title: "Angel of the Lord",
     frameTone: "white",
     imagePath: "classics/card_0059_dove_with_the_olive_branch.jpg",

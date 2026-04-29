@@ -7,6 +7,7 @@ export const galleryTransfigurationCardDefinition: CardDefinition = {
   cost: 3,
   rarity: "mythic",
   display: {
+    name: "The Transfiguration",
     title: "Shining on the Mountain",
     frameTone: "split-white-blue",
     artist: "Raphael",

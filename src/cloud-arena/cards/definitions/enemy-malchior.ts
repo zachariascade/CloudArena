@@ -6,6 +6,7 @@ export const enemyMalchiorCardDefinition: CardDefinition = {
   cardTypes: ["creature"],
   cost: 0,
   display: {
+    name: "Malchior, Binder of Wills",
     title: "Malchior, Binder of Wills",
     frameTone: "split-black-red",
     imagePath: "dante-eagle.jpg",

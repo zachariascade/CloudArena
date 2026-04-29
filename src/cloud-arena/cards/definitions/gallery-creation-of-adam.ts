@@ -7,6 +7,7 @@ export const galleryCreationOfAdamCardDefinition: CardDefinition = {
   cost: 3,
   rarity: "mythic",
   display: {
+    name: "Creation of Adam",
     title: "Spark of Life",
     frameTone: "split-white-blue",
     artist: "Michelangelo",

@@ -6,6 +6,7 @@ export const targetedStrikeCardDefinition: CardDefinition = {
   cardTypes: ["instant"],
   cost: 1,
   display: {
+    name: "David's Stone",
     title: "David's Stone",
     frameTone: "red",
     imagePath: "card_0023_cain_marked_exile.jpg",

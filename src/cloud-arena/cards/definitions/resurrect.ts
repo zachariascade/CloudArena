@@ -6,6 +6,7 @@ export const resurrectCardDefinition: CardDefinition = {
   cardTypes: ["instant"],
   cost: 2,
   display: {
+    name: "Raised from the Tomb",
     title: "Raised from the Tomb",
     frameTone: "white",
     imagePath: "https://commons.wikimedia.org/wiki/Special:FilePath/Benozzo%20Gozzoli%2C%20The%20Raising%20of%20Lazarus%2C%20mid%201490s%2C%20NGA%201163.jpg",

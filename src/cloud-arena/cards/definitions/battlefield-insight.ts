@@ -6,6 +6,7 @@ export const battlefieldInsightCardDefinition: CardDefinition = {
   cardTypes: ["instant"],
   cost: 1,
   display: {
+    name: "Watchman on the Wall",
     title: "Watchman on the Wall",
     frameTone: "white",
     imagePath: "card_0037_builder_of_the_tower.jpg",

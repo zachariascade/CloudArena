@@ -6,6 +6,7 @@ export const enemyBruteCardDefinition: CardDefinition = {
   cardTypes: ["creature"],
   cost: 0,
   display: {
+    name: "Pan, Horned Brute",
     title: "Pan, Horned Brute",
     frameTone: "split-black-red",
     imagePath: "dante-swarm.jpeg",

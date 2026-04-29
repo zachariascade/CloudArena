@@ -6,6 +6,7 @@ export const enemyDemonicCurseCardDefinition: CardDefinition = {
   cardTypes: ["instant"],
   cost: 0,
   display: {
+    name: "Demonic Curse",
     title: "Demonic Curse",
     frameTone: "split-black-red",
     imagePath: "demonic-curse",

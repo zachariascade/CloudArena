@@ -6,6 +6,7 @@ export const sacrificialSeraphCardDefinition: CardDefinition = {
   cardTypes: ["creature"],
   cost: 2,
   display: {
+    name: "Seraph of the Altar",
     title: "Seraph of the Altar",
     frameTone: "white",
     imagePath: "card_0003_michael.avif",

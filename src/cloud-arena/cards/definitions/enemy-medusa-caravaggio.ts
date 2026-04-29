@@ -6,6 +6,7 @@ export const enemyMedusaCaravaggioCardDefinition: CardDefinition = {
   cardTypes: ["creature"],
   cost: 0,
   display: {
+    name: "Medusa",
     title: "Medusa",
     frameTone: "black-green",
     artist: "Caravaggio",

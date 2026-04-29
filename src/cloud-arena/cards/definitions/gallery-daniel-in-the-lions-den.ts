@@ -7,6 +7,7 @@ export const galleryDanielInTheLionsDenCardDefinition: CardDefinition = {
   cost: 3,
   rarity: "mythic",
   display: {
+    name: "Daniel in the Lions' Den",
     title: "Daniel in the Lions' Den",
     frameTone: "white",
     artist: "Gustave Doré",

@@ -7,6 +7,7 @@ export const galleryTriumphOfChristianityOverPaganismCardDefinition: CardDefinit
   cost: 3,
   rarity: "mythic",
   display: {
+    name: "The Triumph of Christianity Over Paganism",
     title: "Triumph of the Cross",
     frameTone: "white",
     artist: "Gustave Doré",

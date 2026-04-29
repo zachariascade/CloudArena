@@ -6,6 +6,7 @@ export const galleryJoshuaCommandingTheSunToStandStillUponGibeonCardDefinition: 
   cardTypes: ["sorcery"],
   cost: 3,
   display: {
+    name: "Joshua Commanding the Sun to Stand Still upon Gibeon",
     title: "The Sun Stands Still",
     frameTone: "white",
     artist: "John Martin",

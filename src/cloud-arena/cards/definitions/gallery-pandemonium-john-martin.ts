@@ -6,6 +6,7 @@ export const galleryPandemoniumJohnMartinCardDefinition: CardDefinition = {
   cardTypes: ["creature"],
   cost: 3,
   display: {
+    name: "Pandemonium",
     title: "Pandemonium",
     frameTone: "split-black-red",
     artist: "John Martin",

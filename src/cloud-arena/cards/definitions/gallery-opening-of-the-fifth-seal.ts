@@ -6,6 +6,7 @@ export const galleryOpeningOfTheFifthSealCardDefinition: CardDefinition = {
   cardTypes: ["sorcery"],
   cost: 3,
   display: {
+    name: "The Opening of the Fifth Seal",
     title: "The Unsealed Witnesses",
     frameTone: "white",
     artist: "El Greco",

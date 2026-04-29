@@ -6,6 +6,7 @@ export const enemyShieldedSlashCardDefinition: CardDefinition = {
   cardTypes: ["instant"],
   cost: 0,
   display: {
+    name: "Shielded Slash",
     title: "Shielded Slash",
     frameTone: "split-black-red",
     imagePath: "shielded-slash.png",

@@ -6,6 +6,7 @@ export const enemyImpCallerCardDefinition: CardDefinition = {
   cardTypes: ["creature"],
   cost: 0,
   display: {
+    name: "Belzaphor, Swarm of the Pit",
     title: "Belzaphor, Swarm of the Pit",
     frameTone: "split-black-red",
     imagePath: "0AF7C779-AF9B-4662-82E4-F481882E7788.jpeg",

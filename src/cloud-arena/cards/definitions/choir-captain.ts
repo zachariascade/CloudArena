@@ -6,6 +6,7 @@ export const choirCaptainCardDefinition: CardDefinition = {
   cardTypes: ["creature"],
   cost: 3,
   display: {
+    name: "Choir Captain",
     title: "Voice Above the Host",
     frameTone: "white",
     imagePath: "classics/card_0055_image_of_god.jpg",

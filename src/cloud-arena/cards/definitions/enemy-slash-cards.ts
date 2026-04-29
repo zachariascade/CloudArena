@@ -12,6 +12,7 @@ function createSlashCardDefinition(
     cardTypes: ["instant"],
     cost: 0,
     display: {
+      name,
       title: name,
       frameTone: "split-black-red",
       imagePath,

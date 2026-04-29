@@ -6,6 +6,7 @@ export const enemyFallenAngelCabanelCardDefinition: CardDefinition = {
   cardTypes: ["creature"],
   cost: 0,
   display: {
+    name: "The Fallen Angel",
     title: "The Fallen Angel",
     frameTone: "split-black-red",
     artist: "Alexandre Cabanel",

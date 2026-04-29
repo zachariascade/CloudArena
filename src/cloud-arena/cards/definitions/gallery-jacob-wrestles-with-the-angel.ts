@@ -7,6 +7,7 @@ export const galleryJacobWrestlesWithTheAngelCardDefinition: CardDefinition = {
   cost: 3,
   rarity: "mythic",
   display: {
+    name: "Jacob Wrestles with the Angel",
     title: "Wrestler at the Ford",
     frameTone: "split-white-green",
     artist: "Gustave Doré",

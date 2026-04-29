@@ -6,6 +6,7 @@ export const anointedBannerCardDefinition: CardDefinition = {
   cardTypes: ["artifact"],
   cost: 2,
   display: {
+    name: "Ark of the Covenant",
     title: "Ark of the Covenant",
     frameTone: "white",
     imagePath: "classics/card_0057_ark_of_the_covenant.jpg",

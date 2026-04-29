@@ -6,6 +6,7 @@ export const enemyGardenOfEarthlyDelightsHellDetailCardDefinition: CardDefinitio
   cardTypes: ["creature"],
   cost: 0,
   display: {
+    name: "Garden of Earthly Delights - Hell Detail",
     title: "Garden of Earthly Delights - Hell Detail",
     frameTone: "split-black-red",
     artist: "Hieronymus Bosch",

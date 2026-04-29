@@ -6,6 +6,7 @@ export const graveyardHymnCardDefinition: CardDefinition = {
   cardTypes: ["creature"],
   cost: 2,
   display: {
+    name: "Song of the Dry Bones",
     title: "Song of the Dry Bones",
     frameTone: "white",
     imagePath: "https://commons.wikimedia.org/wiki/Special:FilePath/Quinten%20Massys%20Vision%20des%20Propheten%20Ezechiels.jpg",

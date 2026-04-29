@@ -7,6 +7,7 @@ export const gallerySacrificeOfIsaacCardDefinition: CardDefinition = {
   cost: 3,
   rarity: "mythic",
   display: {
+    name: "The Sacrifice of Isaac",
     title: "Faith Tested",
     frameTone: "split-white-red",
     artist: "Caravaggio",

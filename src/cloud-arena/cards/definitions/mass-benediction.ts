@@ -6,6 +6,7 @@ export const massBenedictionCardDefinition: CardDefinition = {
   cardTypes: ["instant"],
   cost: 2,
   display: {
+    name: "Priestly Benediction",
     title: "Priestly Benediction",
     frameTone: "white",
     imagePath: "card_0027_let_there_be_light.png",

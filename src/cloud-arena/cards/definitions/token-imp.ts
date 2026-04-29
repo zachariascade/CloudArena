@@ -6,6 +6,7 @@ export const tokenImpCardDefinition: CardDefinition = {
   cardTypes: ["creature"],
   cost: 0,
   display: {
+    name: "Unclean Spirit",
     title: "Unclean Spirit",
     frameTone: "split-black-red",
     imagePath: "38790FFE-A07F-43DA-ACBD-AFAED530BB8E.jpeg",

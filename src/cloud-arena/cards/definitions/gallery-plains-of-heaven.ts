@@ -7,6 +7,7 @@ export const galleryPlainsOfHeavenCardDefinition: CardDefinition = {
   cost: 3,
   rarity: "mythic",
   display: {
+    name: "The Plains of Heaven",
     title: "Plains of Heaven",
     frameTone: "white",
     artist: "John Martin",

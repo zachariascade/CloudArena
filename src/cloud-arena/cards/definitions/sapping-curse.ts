@@ -6,6 +6,7 @@ export const sappingCurseCardDefinition: CardDefinition = {
   cardTypes: ["instant"],
   cost: 1,
   display: {
+    name: "Sapping Curse",
     title: "Sapping Curse",
     frameTone: "blue",
     imagePath: "card_0031_tree_of_forbidden_knowledge.jpg",

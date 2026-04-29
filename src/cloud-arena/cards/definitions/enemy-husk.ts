@@ -6,6 +6,7 @@ export const enemyHuskCardDefinition: CardDefinition = {
   cardTypes: ["creature"],
   cost: 0,
   display: {
+    name: "Cocytus, Lake of Ice",
     title: "Cocytus, Lake of Ice",
     frameTone: "split-black-red",
     imagePath: "dante-cocytus.jpg",

@@ -6,6 +6,7 @@ export const enemySatanExultingOverEveCardDefinition: CardDefinition = {
   cardTypes: ["creature"],
   cost: 0,
   display: {
+    name: "Satan Exulting over Eve",
     title: "Satan Exulting over Eve",
     frameTone: "split-black-red",
     artist: "William Blake",

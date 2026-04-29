@@ -6,6 +6,7 @@ export const enemySatanInCocytusCardDefinition: CardDefinition = {
   cardTypes: ["creature"],
   cost: 0,
   display: {
+    name: "Satan in Cocytus",
     title: "Satan in Cocytus, The Frozen Betrayer",
     frameTone: "split-black-red",
     artist: "Gustave Doré",

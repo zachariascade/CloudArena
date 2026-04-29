@@ -6,6 +6,7 @@ export const galleryDelugeCardDefinition: CardDefinition = {
   cardTypes: ["sorcery"],
   cost: 3,
   display: {
+    name: "The Deluge",
     title: "Flood of Judgment",
     frameTone: "blue",
     artist: "Gustave Doré",

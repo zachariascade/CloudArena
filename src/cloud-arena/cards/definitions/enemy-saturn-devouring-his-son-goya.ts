@@ -6,6 +6,7 @@ export const enemySaturnDevouringHisSonGoyaCardDefinition: CardDefinition = {
   cardTypes: ["creature"],
   cost: 0,
   display: {
+    name: "Saturn Devouring His Son",
     title: "Saturn Devouring His Son",
     frameTone: "split-black-red",
     artist: "Francisco de Goya",

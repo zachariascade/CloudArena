@@ -7,6 +7,7 @@ export const gallerySaintMichaelVanquishingSatanCardDefinition: CardDefinition =
   cost: 3,
   rarity: "mythic",
   display: {
+    name: "Saint Michael Vanquishing Satan",
     title: "Champion of Heaven",
     frameTone: "split-white-red",
     artist: "Raphael",

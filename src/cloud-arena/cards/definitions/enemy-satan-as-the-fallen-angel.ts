@@ -6,6 +6,7 @@ export const enemySatanAsTheFallenAngelCardDefinition: CardDefinition = {
   cardTypes: ["creature"],
   cost: 0,
   display: {
+    name: "Satan as the Fallen Angel",
     title: "Satan as the Fallen Angel",
     frameTone: "split-black-red",
     artist: "Sir Thomas Lawrence",

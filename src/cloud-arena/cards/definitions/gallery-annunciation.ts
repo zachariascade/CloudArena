@@ -7,6 +7,7 @@ export const galleryAnnunciationCardDefinition: CardDefinition = {
   cost: 3,
   rarity: "mythic",
   display: {
+    name: "The Annunciation",
     title: "Herald of the First Sign",
     frameTone: "split-white-blue",
     artist: "Fra Angelico",

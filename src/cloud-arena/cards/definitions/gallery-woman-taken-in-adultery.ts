@@ -6,6 +6,7 @@ export const galleryWomanTakenInAdulteryCardDefinition: CardDefinition = {
   cardTypes: ["instant"],
   cost: 3,
   display: {
+    name: "The Woman Taken in Adultery",
     title: "Neither Do I Condemn You",
     frameTone: "white",
     artist: "Rembrandt van Rijn",

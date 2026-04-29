@@ -6,6 +6,7 @@ export const guardianCardDefinition: CardDefinition = {
   cardTypes: ["creature"],
   cost: 3,
   display: {
+    name: "Watcher at Eden's Gate",
     title: "Watcher at Eden's Gate",
     frameTone: "white",
     imagePath: "card_0036_watcher_at_edens_gate.jpg",

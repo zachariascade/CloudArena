@@ -7,6 +7,7 @@ export const galleryChristAndMaryMagdalenCardDefinition: CardDefinition = {
   cost: 3,
   rarity: "mythic",
   display: {
+    name: "Christ and St Mary Magdalen at the Tomb",
     title: "Witness at the Empty Tomb",
     frameTone: "white",
     artist: "Rembrandt van Rijn",

@@ -6,6 +6,7 @@ export const enemyDemonPierceCardDefinition: CardDefinition = {
   cardTypes: ["instant"],
   cost: 0,
   display: {
+    name: "Pierce",
     title: "Pierce",
     frameTone: "split-black-red",
     imagePath: "demon-pierce.png",

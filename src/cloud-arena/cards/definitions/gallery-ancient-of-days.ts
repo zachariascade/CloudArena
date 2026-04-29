@@ -7,6 +7,7 @@ export const galleryAncientOfDaysCardDefinition: CardDefinition = {
   cost: 3,
   rarity: "mythic",
   display: {
+    name: "Ancient of Days",
     title: "Keeper of the First Dawn",
     frameTone: "white",
     artist: "William Blake",

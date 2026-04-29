@@ -7,6 +7,7 @@ export const galleryLastSupperCardDefinition: CardDefinition = {
   cost: 3,
   rarity: "mythic",
   display: {
+    name: "The Last Supper",
     title: "Bread and Cup",
     frameTone: "white",
     artist: "Jacopo Tintoretto",

@@ -6,6 +6,7 @@ export const galleryGreatDayOfHisWrathCardDefinition: CardDefinition = {
   cardTypes: ["sorcery"],
   cost: 3,
   display: {
+    name: "The Great Day of His Wrath",
     title: "Day of Wrath",
     frameTone: "split-black-red",
     artist: "John Martin",

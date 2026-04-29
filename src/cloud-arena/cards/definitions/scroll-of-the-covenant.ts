@@ -6,6 +6,7 @@ export const scrollOfTheCovenanCardDefinition: CardDefinition = {
   cardTypes: ["artifact"],
   cost: 3,
   display: {
+    name: "Scroll of the Covenant",
     title: "Scroll of the Covenant",
     frameTone: "colorless",
     imagePath: "classics/card_0052_tower_of_babel.jpg",

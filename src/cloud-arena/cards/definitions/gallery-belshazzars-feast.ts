@@ -6,6 +6,7 @@ export const galleryBelshazzarsFeastCardDefinition: CardDefinition = {
   cardTypes: ["sorcery"],
   cost: 3,
   display: {
+    name: "Belshazzar's Feast",
     title: "Banquet of Empty Crowns",
     frameTone: "split-black-red",
     artist: "John Martin",
