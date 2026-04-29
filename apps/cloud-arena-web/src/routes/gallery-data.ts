@@ -1719,6 +1719,16 @@ export const GALLERY: GalleryEntry[] = [
     cardUsed: [],
   },
   {
+    title: "Ecce Homo",
+    artist: "Antonio Ciseri",
+    year: "1871–1888",
+    wikiUrl: createCommonsFilePageUrl("Antonio Ciseri - Ecce Homo.jpg"),
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/9/9a/Antonio_Ciseri_-_Ecce_Homo.jpg",
+    createdAt: "2026-04-29T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
     title: "The Fallen Angel",
     artist: "Alexandre Cabanel",
     year: "1847",

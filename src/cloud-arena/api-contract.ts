@@ -3,6 +3,7 @@ import type {
   BattleAction,
   BattleEvent,
   BattlePhase,
+  CardAvailabilityStatus,
   CardDefinitionId,
   CloudArenaDeckPresetId,
   EnemyIntent,
@@ -51,6 +52,7 @@ export type CloudArenaCardSummary = {
   id: CardDefinitionId;
   name: string;
   cost: number;
+  availabilityStatus: CardAvailabilityStatus;
   typeLine: string;
   cardTypes: string[];
   subtypes: string[];

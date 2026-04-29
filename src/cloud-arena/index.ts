@@ -21,6 +21,8 @@ export {
 export {
   asPermanentCardDefinition,
   cardDefinitions,
+  isCardReady,
+  isCardSelectableByPlayers,
   getCardDefinition,
   getCardDefinitionFromLibrary,
   hasCardType,
@@ -216,6 +218,7 @@ export type {
   BattleAction,
   BattleEvent,
   BattlePhase,
+  CardAvailabilityStatus,
   BattleState,
   BehaviorEnemyConfig,
   CardDefinition,

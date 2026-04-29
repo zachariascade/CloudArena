@@ -1,5 +1,12 @@
+import {
+  cardDefinitions,
+  isCardSelectableByPlayers,
+} from "../../../../src/cloud-arena/index.js";
 import type { CardDefinitionId } from "../../../../src/cloud-arena/index.js";
-import type { CloudArenaSessionScenarioId, CloudArenaDeckCardEntry } from "../../../../src/cloud-arena/api-contract.js";
+import type {
+  CloudArenaDeckCardEntry,
+  CloudArenaSessionScenarioId,
+} from "../../../../src/cloud-arena/api-contract.js";
 import { createCloudArenaLocalDeckRepository } from "./cloud-arena-local-decks.js";
 
 export type CampaignLevelStatus = "locked" | "unlocked" | "complete";
@@ -60,6 +67,11 @@ export const CAMPAIGN_REWARD_POOL: CardDefinitionId[] = [
   "scroll_of_the_covenant",
 ];
 
+const READY_CAMPAIGN_REWARD_POOL = CAMPAIGN_REWARD_POOL.filter((cardId) => {
+  const definition = cardDefinitions[cardId];
+  return definition ? isCardSelectableByPlayers(definition) : false;
+});
+
 const CAMPAIGN_RUN_KEY = "cloud-arena-campaign-run";
 const CAMPAIGN_DECK_ID_KEY = "cloud-arena-campaign-deck-id";
 
@@ -100,7 +112,7 @@ export function clearCampaignRun(): void {
 }
 
 export function drawRewardOptions(): CardDefinitionId[] {
-  const pool = [...CAMPAIGN_REWARD_POOL];
+  const pool = [...READY_CAMPAIGN_REWARD_POOL];
   const result: CardDefinitionId[] = [];
   for (let i = 0; i < 3 && pool.length > 0; i++) {
     const index = Math.floor(Math.random() * pool.length);
@@ -111,10 +123,14 @@ export function drawRewardOptions(): CardDefinitionId[] {
 }
 
 function drawRandomStarterDeck(): CardDefinitionId[] {
+  if (READY_CAMPAIGN_REWARD_POOL.length === 0) {
+    return [];
+  }
+
   const result: CardDefinitionId[] = [];
   for (let i = 0; i < 15; i++) {
-    const index = Math.floor(Math.random() * CAMPAIGN_REWARD_POOL.length);
-    result.push(CAMPAIGN_REWARD_POOL[index]!);
+    const index = Math.floor(Math.random() * READY_CAMPAIGN_REWARD_POOL.length);
+    result.push(READY_CAMPAIGN_REWARD_POOL[index]!);
   }
   return result;
 }

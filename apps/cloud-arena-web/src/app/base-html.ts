@@ -822,6 +822,51 @@ export function renderCloudArcanumWebHtml(
           0 0 0 3px rgba(180, 140, 255, 0.14);
       }
 
+      .deckbuilder-search-input,
+      .deckbuilder-status-select {
+        flex: 1 1 14rem;
+        min-width: 0;
+        min-height: 2.8rem;
+        padding: 0.6rem 0.95rem;
+        background: rgba(255, 251, 246, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 0.5rem;
+        color: rgba(255, 255, 255, 0.96);
+        font-size: 0.92rem;
+        outline: none;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+        transition:
+          border-color 0.15s,
+          background 0.15s,
+          box-shadow 0.15s;
+      }
+
+      .deckbuilder-search-input::placeholder {
+        color: rgba(255, 255, 255, 0.64);
+      }
+
+      .deckbuilder-search-input:focus,
+      .deckbuilder-status-select:focus {
+        border-color: rgba(180, 140, 255, 0.7);
+        background: rgba(255, 251, 246, 0.24);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.16),
+          0 0 0 3px rgba(180, 140, 255, 0.14);
+      }
+
+      .deckbuilder-status-select {
+        appearance: none;
+        background-image:
+          linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.78) 50%),
+          linear-gradient(135deg, rgba(255, 255, 255, 0.78) 50%, transparent 50%);
+        background-position:
+          calc(100% - 1rem) 55%,
+          calc(100% - 0.7rem) 55%;
+        background-size: 0.35rem 0.35rem, 0.35rem 0.35rem;
+        background-repeat: no-repeat;
+        padding-right: 2rem;
+      }
+
       .cloud-arena-gallery-sort-group,
       .cloud-arena-gallery-filter-group {
         display: flex;
@@ -1460,7 +1505,6 @@ export function renderCloudArcanumWebHtml(
         min-height: 0;
       }
 
-      .deckbuilder-top-panel,
       .deckbuilder-catalog-panel,
       .deckbuilder-warning-panel,
       .deckbuilder-error-panel,
@@ -1471,9 +1515,58 @@ export function renderCloudArcanumWebHtml(
         padding: 1.5rem;
         border: 1px solid rgba(255, 255, 255, 0.12);
         border-radius: 24px;
-        background: rgba(255, 251, 246, 0.08);
+        background:
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 38%),
+          rgba(255, 251, 246, 0.08);
         backdrop-filter: blur(10px);
         box-shadow: 0 20px 60px rgba(6, 12, 40, 0.32);
+      }
+
+      .deckbuilder-disclosure {
+        display: grid;
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 24px;
+        background:
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 38%),
+          rgba(255, 251, 246, 0.08);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 20px 60px rgba(6, 12, 40, 0.32);
+      }
+
+      .deckbuilder-disclosure > summary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        width: fit-content;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.96);
+        font-size: 1rem;
+        font-weight: 700;
+        list-style: none;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.34);
+      }
+
+      .deckbuilder-disclosure > summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .deckbuilder-disclosure > summary::before {
+        content: "▸";
+        color: var(--accent);
+        font-size: 0.9rem;
+        transition: transform 140ms ease;
+      }
+
+      .deckbuilder-disclosure[open] > summary::before {
+        transform: rotate(90deg);
+      }
+
+      .deckbuilder-disclosure-content {
+        display: grid;
+        gap: 1rem;
+        padding-top: 0.25rem;
       }
 
       .deckbuilder-top-panel,
@@ -1502,19 +1595,41 @@ export function renderCloudArcanumWebHtml(
         --display-card-width: clamp(11rem, 13vw, 14rem);
       }
 
+      .deckbuilder-catalog-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem 1rem;
+        padding: 1rem 1.1rem;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 24px;
+        background:
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 38%),
+          rgba(255, 251, 246, 0.08);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 20px 60px rgba(6, 12, 40, 0.32);
+      }
+
+      .deckbuilder-search-input {
+        flex: 1 1 16rem;
+      }
+
+      .deckbuilder-filter-group {
+        flex-shrink: 0;
+      }
+
+      .deckbuilder-catalog-toolbar .cloud-arena-gallery-sort-label,
+      .deckbuilder-catalog-toolbar .cloud-arena-gallery-filter-label {
+        color: rgba(255, 255, 255, 0.72);
+      }
+
       @media (min-width: 900px) {
         .deckbuilder-top-row {
           grid-template-columns: minmax(18rem, 1fr) auto;
         }
-
-        .deckbuilder-catalog-header {
-          grid-template-columns: minmax(0, 1fr) minmax(20rem, 28rem);
-          align-items: end;
-        }
       }
 
       .deckbuilder-top-actions,
-      .deckbuilder-catalog-controls,
       .deckbuilder-modal-actions {
         display: flex;
         flex-wrap: wrap;
@@ -1534,6 +1649,11 @@ export function renderCloudArcanumWebHtml(
 
       .deckbuilder-status-row {
         align-items: center;
+      }
+
+      .deckbuilder-status-row .card-face-status {
+        color: rgba(255, 255, 255, 0.96) !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.34);
       }
 
       .deckbuilder-card-grid {
@@ -5361,10 +5481,11 @@ export function renderCloudArcanumWebHtml(
         gap: 0.45rem;
       }
 
-      .field span {
-        color: var(--muted);
+      .cloud-arena-deckbuilder .field span {
+        color: rgba(255, 255, 255, 0.96);
         font-size: 0.92rem;
         font-weight: 600;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.32);
       }
 
       .field input,

@@ -10,6 +10,7 @@ import type {
   CloudArenaDeckSummary,
   CloudArenaDeckWriteRequest,
 } from "../../../../src/cloud-arena/api-contract.js";
+import type { CardAvailabilityStatus } from "../../../../src/cloud-arena/core/types.js";
 import {
   CloudArenaAppShell,
   ErrorState,
@@ -59,6 +60,8 @@ type DeckBuilderDraft = {
 };
 
 const ALL_CARD_TYPES_OPTION = "all";
+const ALL_CARD_STATUSES_OPTION = "all";
+const ALL_SELECTED_FILTER_OPTION = "all";
 const NEW_DECK_OPTION = "__new__";
 
 export function createEmptyDraft(): DeckBuilderDraft {
@@ -72,7 +75,9 @@ export function createEmptyDraft(): DeckBuilderDraft {
   };
 }
 
-function normalizeDeckBuilderDraft(draft: Partial<DeckBuilderDraft>): DeckBuilderDraft {
+function normalizeDeckBuilderDraft(
+  draft: Partial<DeckBuilderDraft>,
+): DeckBuilderDraft {
   return {
     sourceId: draft.sourceId ?? null,
     sourceKind: draft.sourceKind ?? "new",
@@ -88,7 +93,9 @@ function normalizeDeckBuilderDraft(draft: Partial<DeckBuilderDraft>): DeckBuilde
   };
 }
 
-export function cloneEntries(entries: CloudArenaDeckCardEntry[]): CloudArenaDeckCardEntry[] {
+export function cloneEntries(
+  entries: CloudArenaDeckCardEntry[],
+): CloudArenaDeckCardEntry[] {
   return entries.map((entry) => ({ ...entry }));
 }
 
@@ -123,7 +130,9 @@ export function buildDraftFingerprint(draft: DeckBuilderDraft): string {
   });
 }
 
-export function buildDraftFromDetail(detail: CloudArenaDeckDetail): DeckBuilderDraft {
+export function buildDraftFromDetail(
+  detail: CloudArenaDeckDetail,
+): DeckBuilderDraft {
   return {
     sourceId: detail.id,
     sourceKind: detail.kind,
@@ -134,7 +143,9 @@ export function buildDraftFromDetail(detail: CloudArenaDeckDetail): DeckBuilderD
   };
 }
 
-export function buildDeckWriteRequest(draft: DeckBuilderDraft): CloudArenaDeckWriteRequest {
+export function buildDeckWriteRequest(
+  draft: DeckBuilderDraft,
+): CloudArenaDeckWriteRequest {
   const safeDraft = normalizeDeckBuilderDraft(draft);
   const tags = safeDraft.tagsText
     .split(/[\n,]/g)
@@ -175,11 +186,17 @@ export function toggleDeckCardSelection(
   return [...cloneEntries(cards), { cardId, quantity: 1 }];
 }
 
-export function isDeckCardSelected(cards: CloudArenaDeckCardEntry[], cardId: string): boolean {
+export function isDeckCardSelected(
+  cards: CloudArenaDeckCardEntry[],
+  cardId: string,
+): boolean {
   return cards.some((entry) => entry.cardId === cardId && entry.quantity > 0);
 }
 
-export function getDeckCardQuantity(cards: CloudArenaDeckCardEntry[], cardId: string): number {
+export function getDeckCardQuantity(
+  cards: CloudArenaDeckCardEntry[],
+  cardId: string,
+): number {
   return cards.find((entry) => entry.cardId === cardId)?.quantity ?? 0;
 }
 
@@ -194,21 +211,19 @@ export function incrementDeckCard(
 
   let found = false;
 
-  return cards.map((entry) => {
-    if (entry.cardId !== cardId) {
-      return { ...entry };
-    }
+  return cards
+    .map((entry) => {
+      if (entry.cardId !== cardId) {
+        return { ...entry };
+      }
 
-    found = true;
-    return {
-      ...entry,
-      quantity: entry.quantity + quantity,
-    };
-  }).concat(
-    found
-      ? []
-      : [{ cardId, quantity }],
-  );
+      found = true;
+      return {
+        ...entry,
+        quantity: entry.quantity + quantity,
+      };
+    })
+    .concat(found ? [] : [{ cardId, quantity }]);
 }
 
 export function decrementDeckCard(
@@ -216,34 +231,39 @@ export function decrementDeckCard(
   cardId: string,
   quantity = 1,
 ): CloudArenaDeckCardEntry[] {
-  return cards
-    .flatMap((entry) => {
-      if (entry.cardId !== cardId) {
-        return [{ ...entry }];
-      }
+  return cards.flatMap((entry) => {
+    if (entry.cardId !== cardId) {
+      return [{ ...entry }];
+    }
 
-      const nextQuantity = entry.quantity - quantity;
-      if (nextQuantity > 0) {
-        return [{
+    const nextQuantity = entry.quantity - quantity;
+    if (nextQuantity > 0) {
+      return [
+        {
           ...entry,
           quantity: nextQuantity,
-        }];
-      }
+        },
+      ];
+    }
 
-      return [];
-    });
+    return [];
+  });
 }
 
 export function filterCards(
   cards: CloudArenaCardSummary[],
   searchText: string,
   cardType: string,
+  cardStatus: CardAvailabilityStatus | typeof ALL_CARD_STATUSES_OPTION,
 ): CloudArenaCardSummary[] {
   const normalizedSearch = searchText.trim().toLowerCase();
 
   return cards.filter((card) => {
     const matchesType =
       cardType === ALL_CARD_TYPES_OPTION || card.cardTypes.includes(cardType);
+    const matchesStatus =
+      cardStatus === ALL_CARD_STATUSES_OPTION ||
+      card.availabilityStatus === cardStatus;
     const haystack = [
       card.name,
       card.typeLine,
@@ -254,7 +274,11 @@ export function filterCards(
       .join(" ")
       .toLowerCase();
 
-    return matchesType && (normalizedSearch.length === 0 || haystack.includes(normalizedSearch));
+    return (
+      matchesType &&
+      matchesStatus &&
+      (normalizedSearch.length === 0 || haystack.includes(normalizedSearch))
+    );
   });
 }
 
@@ -265,45 +289,46 @@ export function buildDeckSelectionGroups(
   const availableDecks = decks ?? [];
   const presetDecks = availableDecks.filter((deck) => deck.kind === "preset");
   const savedDecks = availableDecks.filter((deck) => deck.kind === "saved");
-  const presetOptions: DeckBuilderSelectionOption[] = presetDecks.length > 0
-    ? presetDecks.map((deck) => ({
-        id: deck.id,
-        label: deck.name,
-        description: `${deck.cardCount} cards, ${deck.uniqueCardCount} unique`,
-        kind: deck.kind,
-      }))
-    : [
-        {
-          id: "master_deck",
-          label: "Master Deck",
-          description: "All available player cards",
-          kind: "preset",
-        },
-        {
-          id: "starter_deck",
-          label: "Wide Angels",
-          description: "Token angels and blessing scale",
-          kind: "preset",
-        },
-        {
-          id: "counters",
-          label: "Counters",
-          description: "Creature shells with plus and minus counter play",
-          kind: "preset",
-        },
-        {
-          id: "tall_creatures",
-          label: "Tall Creatures",
-          description: "Grow one or two bigger bodies",
-          kind: "preset",
-        },
-        {
-          id: "mixed_guardian",
-          label: "Mixed Guardian",
-          description: "Balanced baseline battle",
-          kind: "preset",
-        },
-      ];
+  const presetOptions: DeckBuilderSelectionOption[] =
+    presetDecks.length > 0
+      ? presetDecks.map((deck) => ({
+          id: deck.id,
+          label: deck.name,
+          description: `${deck.cardCount} cards, ${deck.uniqueCardCount} unique`,
+          kind: deck.kind,
+        }))
+      : [
+          {
+            id: "master_deck",
+            label: "Master Deck",
+            description: "All available player cards",
+            kind: "preset",
+          },
+          {
+            id: "starter_deck",
+            label: "Wide Angels",
+            description: "Token angels and blessing scale",
+            kind: "preset",
+          },
+          {
+            id: "counters",
+            label: "Counters",
+            description: "Creature shells with plus and minus counter play",
+            kind: "preset",
+          },
+          {
+            id: "tall_creatures",
+            label: "Tall Creatures",
+            description: "Grow one or two bigger bodies",
+            kind: "preset",
+          },
+          {
+            id: "mixed_guardian",
+            label: "Mixed Guardian",
+            description: "Balanced baseline battle",
+            kind: "preset",
+          },
+        ];
   const savedOptions: DeckBuilderSelectionOption[] = savedDecks.map((deck) => ({
     id: deck.id,
     label: deck.name,
@@ -341,7 +366,9 @@ export function buildDeckSelectionGroups(
     },
     {
       label: "Saved decks",
-      options: injectedSelectedOption ? [injectedSelectedOption, ...savedOptions] : savedOptions,
+      options: injectedSelectedOption
+        ? [injectedSelectedOption, ...savedOptions]
+        : savedOptions,
     },
     {
       label: "Actions",
@@ -391,43 +418,75 @@ export function CloudArenaDeckBuilderPage({
     [apiBaseUrl, contentMode],
   );
   const [status, setStatus] = useState<DeckBuilderStatus>("loading");
-  const [error, setError] = useState<Error | CloudArcanumApiClientError | null>(null);
+  const [error, setError] = useState<Error | CloudArcanumApiClientError | null>(
+    null,
+  );
   const [cards, setCards] = useState<CloudArenaCardSummary[]>([]);
   const [decks, setDecks] = useState<CloudArenaDeckSummary[]>([]);
   const [draft, setDraft] = useState<DeckBuilderDraft>(createEmptyDraft);
   const [cardSearch, setCardSearch] = useState("");
-  const [showSelectedOnly, setShowSelectedOnly] = useState(false);
+  const [cardStatusFilter, setCardStatusFilter] = useState<
+    CardAvailabilityStatus | typeof ALL_CARD_STATUSES_OPTION
+  >(
+    ALL_CARD_STATUSES_OPTION,
+  );
+  const [selectedCardFilter, setSelectedCardFilter] = useState<
+    typeof ALL_SELECTED_FILTER_OPTION | "selected"
+  >(ALL_SELECTED_FILTER_OPTION);
   const [isCreateDeckModalOpen, setIsCreateDeckModalOpen] = useState(false);
-  const [createModalDraft, setCreateModalDraft] = useState<DeckBuilderCreateModalDraft>(createEmptyCreateModalDraft);
-  const [createModalMode, setCreateModalMode] = useState<DeckBuilderCreateModalMode>("create");
+  const [createModalDraft, setCreateModalDraft] =
+    useState<DeckBuilderCreateModalDraft>(createEmptyCreateModalDraft);
+  const [createModalMode, setCreateModalMode] =
+    useState<DeckBuilderCreateModalMode>("create");
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [deckCatalogWarning, setDeckCatalogWarning] = useState<string | null>(null);
+  const [deckCatalogWarning, setDeckCatalogWarning] = useState<string | null>(
+    null,
+  );
   const draftFingerprintRef = useRef(buildDraftFingerprint(createEmptyDraft()));
   const deferredCardSearch = useDeferredValue(cardSearch);
   const safeDraft = useMemo(() => normalizeDeckBuilderDraft(draft), [draft]);
 
-  const deckStats = useMemo(() => summarizeDeckCards(safeDraft.cards), [safeDraft.cards]);
+  const deckStats = useMemo(
+    () => summarizeDeckCards(safeDraft.cards),
+    [safeDraft.cards],
+  );
   const deckSelectionGroups = useMemo(
-    () => buildDeckSelectionGroups(decks, safeDraft.sourceId ?? NEW_DECK_OPTION),
+    () =>
+      buildDeckSelectionGroups(decks, safeDraft.sourceId ?? NEW_DECK_OPTION),
     [decks, safeDraft.sourceId],
   );
   const selectedDeckOption = useMemo(
-    () => deckSelectionGroups.flatMap((group) => group.options).find((option) => option.id === safeDraft.sourceId) ?? null,
+    () =>
+      deckSelectionGroups
+        .flatMap((group) => group.options)
+        .find((option) => option.id === safeDraft.sourceId) ?? null,
     [deckSelectionGroups, safeDraft.sourceId],
   );
   const filteredCards = useMemo(
-    () => filterCards(cards, deferredCardSearch, ALL_CARD_TYPES_OPTION)
-      .filter((card) => !showSelectedOnly || isDeckCardSelected(safeDraft.cards, card.id)),
-    [cards, deferredCardSearch, safeDraft.cards, showSelectedOnly],
+    () =>
+      filterCards(
+        cards,
+        deferredCardSearch,
+        ALL_CARD_TYPES_OPTION,
+        cardStatusFilter,
+      ).filter(
+        (card) =>
+          selectedCardFilter === ALL_SELECTED_FILTER_OPTION ||
+          isDeckCardSelected(safeDraft.cards, card.id),
+      ),
+    [
+      cards,
+      cardStatusFilter,
+      deferredCardSearch,
+      safeDraft.cards,
+      selectedCardFilter,
+    ],
   );
   const isDirty = useMemo(
     () => buildDraftFingerprint(safeDraft) !== draftFingerprintRef.current,
     [safeDraft],
   );
-  const startBattleHref = safeDraft.sourceId
-    ? `/run?deck=${encodeURIComponent(safeDraft.sourceId)}`
-    : "/run";
 
   async function refreshCatalog(): Promise<void> {
     const [cardsResult, decksResult] = await Promise.allSettled([
@@ -444,7 +503,9 @@ export function CloudArenaDeckBuilderPage({
     if (decksResult.status === "rejected") {
       setDecks([]);
       setDeckCatalogWarning(
-        decksResult.reason instanceof Error ? decksResult.reason.message : "Saved decks could not be loaded.",
+        decksResult.reason instanceof Error
+          ? decksResult.reason.message
+          : "Saved decks could not be loaded.",
       );
     } else {
       setDecks(decksResult.value.data);
@@ -485,7 +546,9 @@ export function CloudArenaDeckBuilderPage({
       draftFingerprintRef.current = buildDraftFingerprint(nextDraft);
       await refreshCatalog();
     } catch (nextError: unknown) {
-      setError(nextError instanceof Error ? nextError : new Error(String(nextError)));
+      setError(
+        nextError instanceof Error ? nextError : new Error(String(nextError)),
+      );
     } finally {
       setIsSaving(false);
     }
@@ -506,7 +569,9 @@ export function CloudArenaDeckBuilderPage({
       setDraft(nextDraft);
       draftFingerprintRef.current = buildDraftFingerprint(nextDraft);
     } catch (nextError: unknown) {
-      setError(nextError instanceof Error ? nextError : new Error(String(nextError)));
+      setError(
+        nextError instanceof Error ? nextError : new Error(String(nextError)),
+      );
     } finally {
       setIsDeleting(false);
     }
@@ -519,7 +584,9 @@ export function CloudArenaDeckBuilderPage({
 
   function openCreateDeckModal(draft?: DeckBuilderDraft): void {
     setCreateModalDraft(
-      draft ? buildCreateModalDraftFromDeckDraft(draft) : createEmptyCreateModalDraft(),
+      draft
+        ? buildCreateModalDraftFromDeckDraft(draft)
+        : createEmptyCreateModalDraft(),
     );
     setCreateModalMode(draft ? "save_as" : "create");
     setIsCreateDeckModalOpen(true);
@@ -533,21 +600,32 @@ export function CloudArenaDeckBuilderPage({
   function handleSelectCard(cardId: string): void {
     setDraft((current) => ({
       ...current,
-      cards: toggleDeckCardSelection(normalizeDeckBuilderDraft(current).cards, cardId),
+      cards: toggleDeckCardSelection(
+        normalizeDeckBuilderDraft(current).cards,
+        cardId,
+      ),
     }));
   }
 
   function handleIncreaseCardCopies(cardId: string): void {
     setDraft((current) => ({
       ...current,
-      cards: incrementDeckCard(normalizeDeckBuilderDraft(current).cards, cardId, 1),
+      cards: incrementDeckCard(
+        normalizeDeckBuilderDraft(current).cards,
+        cardId,
+        1,
+      ),
     }));
   }
 
   function handleDecreaseCardCopies(cardId: string): void {
     setDraft((current) => ({
       ...current,
-      cards: decrementDeckCard(normalizeDeckBuilderDraft(current).cards, cardId, 1),
+      cards: decrementDeckCard(
+        normalizeDeckBuilderDraft(current).cards,
+        cardId,
+        1,
+      ),
     }));
   }
 
@@ -572,7 +650,10 @@ export function CloudArenaDeckBuilderPage({
           .split(/[\n,]/g)
           .map((tag) => tag.trim())
           .filter((tag) => tag.length > 0),
-        notes: createModalDraft.notes.trim().length > 0 ? createModalDraft.notes.trim() : null,
+        notes:
+          createModalDraft.notes.trim().length > 0
+            ? createModalDraft.notes.trim()
+            : null,
         cards: safeDraft.cards.map((entry) => ({ ...entry })),
       });
 
@@ -580,7 +661,9 @@ export function CloudArenaDeckBuilderPage({
       await refreshCatalog();
       await loadDeck(response.data.id);
     } catch (nextError: unknown) {
-      setError(nextError instanceof Error ? nextError : new Error(String(nextError)));
+      setError(
+        nextError instanceof Error ? nextError : new Error(String(nextError)),
+      );
     } finally {
       setIsSaving(false);
     }
@@ -607,7 +690,11 @@ export function CloudArenaDeckBuilderPage({
         }
       } catch (nextError: unknown) {
         if (!isCancelled) {
-          setError(nextError instanceof Error ? nextError : new Error(String(nextError)));
+          setError(
+            nextError instanceof Error
+              ? nextError
+              : new Error(String(nextError)),
+          );
           setStatus("error");
         }
       }
@@ -622,15 +709,24 @@ export function CloudArenaDeckBuilderPage({
 
   if (status === "loading") {
     return (
-      <CloudArenaAppShell cloudArcanumWebBaseUrl={cloudArcanumWebBaseUrl} fullBleed>
-        <LoadingState title="Loading deck builder" description="Fetching the card catalog and saved decks." />
+      <CloudArenaAppShell
+        cloudArcanumWebBaseUrl={cloudArcanumWebBaseUrl}
+        fullBleed
+      >
+        <LoadingState
+          title="Loading deck builder"
+          description="Fetching the card catalog and saved decks."
+        />
       </CloudArenaAppShell>
     );
   }
 
   if (status === "error") {
     return (
-      <CloudArenaAppShell cloudArcanumWebBaseUrl={cloudArcanumWebBaseUrl} fullBleed>
+      <CloudArenaAppShell
+        cloudArcanumWebBaseUrl={cloudArcanumWebBaseUrl}
+        fullBleed
+      >
         <ErrorState
           title="Deck builder failed to load"
           description="The deckbuilder could not reach the content API."
@@ -641,7 +737,10 @@ export function CloudArenaDeckBuilderPage({
   }
 
   return (
-    <CloudArenaAppShell cloudArcanumWebBaseUrl={cloudArcanumWebBaseUrl} fullBleed>
+    <CloudArenaAppShell
+      cloudArcanumWebBaseUrl={cloudArcanumWebBaseUrl}
+      fullBleed
+    >
       <section className="cloud-arena-start-screen cloud-arena-run-screen cloud-arena-deckbuilder">
         <div className="cloud-arena-start-backdrop" aria-hidden="true">
           <span className="cloud-arena-start-orb cloud-arena-start-orb-left" />
@@ -658,11 +757,11 @@ export function CloudArenaDeckBuilderPage({
                   Deck Builder
                 </Link>
               </h2>
-              <p className="cloud-arena-deckbuilder-subtitle">
-                Switch decks, tune the list, and save new versions from the catalog below.
-              </p>
             </div>
-            <Link className="cloud-arena-start-menu-item cloud-arena-deckbuilder-back" to="/">
+            <Link
+              className="cloud-arena-start-menu-item cloud-arena-deckbuilder-back"
+              to="/"
+            >
               <strong>← Back</strong>
             </Link>
           </header>
@@ -671,170 +770,233 @@ export function CloudArenaDeckBuilderPage({
             <section className="cloud-arena-run-column cloud-arena-deckbuilder-column">
               <div className="cloud-arena-run-scroll-pane cloud-arena-deckbuilder-scroll-pane">
                 <div className="deckbuilder-shell">
-                  <section className="panel deckbuilder-top-panel">
-                    <div className="deckbuilder-top-row">
-                      <label className="field deckbuilder-deck-select">
-                        <span>Deck</span>
-                        <select
-                          value={safeDraft.sourceId ?? NEW_DECK_OPTION}
-                          onChange={(event) => {
-                            const nextDeckId = event.target.value;
+                  <details className="panel deckbuilder-disclosure">
+                    <summary className="deckbuilder-disclosure-toggle">
+                      Deck building
+                    </summary>
+                    <div className="deckbuilder-disclosure-content">
+                      <section className="deckbuilder-top-panel">
+                        <div className="deckbuilder-top-row">
+                          <label className="field deckbuilder-deck-select">
+                            <span>Deck</span>
+                            <select
+                              value={safeDraft.sourceId ?? NEW_DECK_OPTION}
+                              onChange={(event) => {
+                                const nextDeckId = event.target.value;
 
-                            if (nextDeckId === NEW_DECK_OPTION) {
-                              openCreateDeckModal();
-                              event.currentTarget.value = safeDraft.sourceId ?? NEW_DECK_OPTION;
-                              return;
-                            }
+                                if (nextDeckId === NEW_DECK_OPTION) {
+                                  openCreateDeckModal();
+                                  event.currentTarget.value =
+                                    safeDraft.sourceId ?? NEW_DECK_OPTION;
+                                  return;
+                                }
 
-                            void handleSelectDeck(nextDeckId);
-                          }}
-                        >
-                          {deckSelectionGroups.map((group) => (
-                            <optgroup key={group.label} label={group.label}>
-                              {group.options.map((option) => (
-                                <option key={option.id} value={option.id} disabled={option.disabled}>
-                                  {option.label} - {option.description}
-                                </option>
+                                void handleSelectDeck(nextDeckId);
+                              }}
+                            >
+                              {deckSelectionGroups.map((group) => (
+                                <optgroup key={group.label} label={group.label}>
+                                  {group.options.map((option) => (
+                                    <option
+                                      key={option.id}
+                                      value={option.id}
+                                      disabled={option.disabled}
+                                    >
+                                      {option.label} - {option.description}
+                                    </option>
+                                  ))}
+                                </optgroup>
                               ))}
-                            </optgroup>
-                          ))}
-                        </select>
-                      </label>
+                            </select>
+                          </label>
 
-                      <div className="deckbuilder-top-actions">
-                        <button
-                          type="button"
-                          className="primary-button"
-                          onClick={() => void handleSaveDraft()}
-                          disabled={isSaving}
-                        >
-                          {isSaving
-                            ? "Saving..."
-                            : safeDraft.sourceKind === "saved"
-                              ? "Save changes"
-                              : "Save as deck"}
-                        </button>
-                        <button
-                          type="button"
-                          className="ghost-button"
-                          onClick={() => openCreateDeckModal()}
-                        >
-                          Add new deck
-                        </button>
-                        <button
-                          type="button"
-                          className="ghost-button"
-                          onClick={() => void handleDeleteDraft()}
-                          disabled={isDeleting || safeDraft.sourceKind !== "saved" || safeDraft.sourceId === null}
-                        >
-                          {isDeleting ? "Deleting..." : "Delete deck"}
-                        </button>
-                        {startBattleHref ? (
-                          <Link className="ghost-button" to={startBattleHref}>
-                            Start battle
-                          </Link>
-                        ) : null}
-                      </div>
+                          <div className="deckbuilder-top-actions">
+                            <button
+                              type="button"
+                              className="primary-button"
+                              onClick={() => void handleSaveDraft()}
+                              disabled={isSaving}
+                            >
+                              {isSaving
+                                ? "Saving..."
+                                : safeDraft.sourceKind === "saved"
+                                  ? "Save changes"
+                                  : "Save as deck"}
+                            </button>
+                            <button
+                              type="button"
+                              className="ghost-button"
+                              onClick={() => openCreateDeckModal()}
+                            >
+                              Add new deck
+                            </button>
+                            <button
+                              type="button"
+                              className="ghost-button"
+                              onClick={() => void handleDeleteDraft()}
+                              disabled={
+                                isDeleting ||
+                                safeDraft.sourceKind !== "saved" ||
+                                safeDraft.sourceId === null
+                              }
+                            >
+                              {isDeleting ? "Deleting..." : "Delete deck"}
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="deckbuilder-metadata-grid">
+                          <label className="field">
+                            <span>Deck name</span>
+                            <input
+                              type="text"
+                              value={safeDraft.name}
+                              onChange={(event) =>
+                                setDraft((current) => ({
+                                  ...current,
+                                  name: event.target.value,
+                                }))
+                              }
+                              placeholder="Deck name"
+                            />
+                          </label>
+                          <label className="field">
+                            <span>Tags</span>
+                            <input
+                              type="text"
+                              value={safeDraft.tagsText}
+                              onChange={(event) =>
+                                setDraft((current) => ({
+                                  ...current,
+                                  tagsText: event.target.value,
+                                }))
+                              }
+                              placeholder="control, tokens, lightning"
+                            />
+                          </label>
+                          <label className="field">
+                            <span>Notes</span>
+                            <input
+                              type="text"
+                              value={safeDraft.notes}
+                              onChange={(event) =>
+                                setDraft((current) => ({
+                                  ...current,
+                                  notes: event.target.value,
+                                }))
+                              }
+                              placeholder="Optional deck notes"
+                            />
+                          </label>
+                        </div>
+
+                        <div className="status-chip-row deckbuilder-status-row">
+                          <span className="card-face-status">
+                            {selectedDeckOption?.label ?? safeDraft.name}
+                          </span>
+                          <span className="card-face-status">
+                            Cards: {deckStats.cardCount}
+                          </span>
+                          <span className="card-face-status">
+                            Unique: {deckStats.uniqueCardCount}
+                          </span>
+                          <span className="card-face-status">
+                            {getDeckSourceLabel(safeDraft.sourceKind)}
+                          </span>
+                          {deckStats.cardCount < 10 ? (
+                            <span className="card-face-status">
+                              Need 10 cards to save
+                            </span>
+                          ) : null}
+                          {isDirty ? (
+                            <span className="card-face-status">
+                              Unsaved changes
+                            </span>
+                          ) : null}
+                        </div>
+                      </section>
+
+                      {deckCatalogWarning ? (
+                        <section className="panel warning-callout deckbuilder-warning-panel">
+                          <strong>Saved decks unavailable</strong>
+                          <p>{deckCatalogWarning}</p>
+                          <p>
+                            You can still use the card grid and save new decks from
+                            the current selection.
+                          </p>
+                        </section>
+                      ) : null}
                     </div>
-
-                    <div className="deckbuilder-metadata-grid">
-                      <label className="field">
-                        <span>Deck name</span>
-                        <input
-                          type="text"
-                          value={safeDraft.name}
-                          onChange={(event) =>
-                            setDraft((current) => ({
-                              ...current,
-                              name: event.target.value,
-                            }))
-                          }
-                          placeholder="Deck name"
-                        />
-                      </label>
-                      <label className="field">
-                        <span>Tags</span>
-                        <input
-                          type="text"
-                          value={safeDraft.tagsText}
-                          onChange={(event) =>
-                            setDraft((current) => ({
-                              ...current,
-                              tagsText: event.target.value,
-                            }))
-                          }
-                          placeholder="control, tokens, lightning"
-                        />
-                      </label>
-                      <label className="field">
-                        <span>Notes</span>
-                        <input
-                          type="text"
-                          value={safeDraft.notes}
-                          onChange={(event) =>
-                            setDraft((current) => ({
-                              ...current,
-                              notes: event.target.value,
-                            }))
-                          }
-                          placeholder="Optional deck notes"
-                        />
-                      </label>
-                    </div>
-
-                    <div className="status-chip-row deckbuilder-status-row">
-                      <span className="card-face-status">{selectedDeckOption?.label ?? safeDraft.name}</span>
-                      <span className="card-face-status">Cards: {deckStats.cardCount}</span>
-                      <span className="card-face-status">Unique: {deckStats.uniqueCardCount}</span>
-                      <span className="card-face-status">{getDeckSourceLabel(safeDraft.sourceKind)}</span>
-                      {deckStats.cardCount < 10 ? <span className="card-face-status">Need 10 cards to save</span> : null}
-                      {isDirty ? <span className="card-face-status">Unsaved changes</span> : null}
-                    </div>
-                  </section>
-
-                  {deckCatalogWarning ? (
-                    <section className="panel warning-callout deckbuilder-warning-panel">
-                      <strong>Saved decks unavailable</strong>
-                      <p>{deckCatalogWarning}</p>
-                      <p>You can still use the card grid and save new decks from the current selection.</p>
-                    </section>
-                  ) : null}
+                  </details>
 
                   <section className="panel deckbuilder-catalog-panel">
-                    <div className="deckbuilder-catalog-header">
-                      <div>
-                        <div className="section-kicker">Card Catalog</div>
-                        <h2>Tap cards to add or remove them</h2>
-                        <p>
-                          Selected cards stay in color. Unselected cards are greyed out. Use search and the
-                          selected-only filter to narrow the grid.
-                        </p>
+                    <div className="deckbuilder-catalog-toolbar">
+                      {(() => {
+                        const statusFilterOptions = [
+                          { key: ALL_CARD_STATUSES_OPTION, label: "All" },
+                          { key: "ready" as const, label: "Ready" },
+                          { key: "in_progress" as const, label: "In progress" },
+                        ] as const;
+                        const selectedFilterOptions = [
+                          { key: ALL_SELECTED_FILTER_OPTION, label: "All" },
+                          { key: "selected" as const, label: "Selected" },
+                        ] as const;
+
+                        return (
+                          <>
+                      <input
+                        className="cloud-arena-gallery-search deckbuilder-search-input"
+                        type="search"
+                        value={cardSearch}
+                        onChange={(event) => setCardSearch(event.target.value)}
+                        placeholder="Search cards"
+                        aria-label="Search cards"
+                      />
+                      <div className="cloud-arena-gallery-sort-group deckbuilder-filter-group">
+                        <span className="cloud-arena-gallery-sort-label">
+                          Status:
+                        </span>
+                        {statusFilterOptions.map((option) => (
+                          <button
+                            key={option.key}
+                            type="button"
+                            className={`cloud-arena-gallery-sort-btn${cardStatusFilter === option.key ? " is-active" : ""}`}
+                            onClick={() => setCardStatusFilter(option.key)}
+                          >
+                            {option.label}
+                          </button>
+                        ))}
                       </div>
-                      <div className="deckbuilder-catalog-controls">
-                        <label className="field">
-                          <span>Search cards</span>
-                          <input
-                            type="search"
-                            value={cardSearch}
-                            onChange={(event) => setCardSearch(event.target.value)}
-                            placeholder="Search by name, type, or rules text"
-                          />
-                        </label>
-                        <label className="toggle-chip">
-                          <input
-                            type="checkbox"
-                            checked={showSelectedOnly}
-                            onChange={(event) => setShowSelectedOnly(event.target.checked)}
-                          />
-                          <span>Selected only</span>
-                        </label>
+                      <div className="cloud-arena-gallery-filter-group deckbuilder-filter-group">
+                        <span className="cloud-arena-gallery-filter-label">
+                          Selected:
+                        </span>
+                        {selectedFilterOptions.map((option) => (
+                          <button
+                            key={option.key}
+                            type="button"
+                            className={`cloud-arena-gallery-sort-btn${selectedCardFilter === option.key ? " is-active" : ""}`}
+                            onClick={() => setSelectedCardFilter(option.key)}
+                          >
+                            {option.label}
+                          </button>
+                        ))}
                       </div>
+                          </>
+                        );
+                      })()}
                     </div>
 
                     <div className="deckbuilder-card-grid">
                       {filteredCards.map((card) => {
-                        const isSelected = isDeckCardSelected(safeDraft.cards, card.id);
-                        const cardQuantity = getDeckCardQuantity(safeDraft.cards, card.id);
+                        const isSelected = isDeckCardSelected(
+                          safeDraft.cards,
+                          card.id,
+                        );
+                        const cardQuantity = getDeckCardQuantity(
+                          safeDraft.cards,
+                          card.id,
+                        );
                         const model = mapArenaHandCardToDisplayCard(
                           {
                             instanceId: card.id,
@@ -889,17 +1051,25 @@ export function CloudArenaDeckBuilderPage({
                                 </button>
                               </div>
                               {isSelected ? (
-                                <span className="deckbuilder-card-selection-chip">{cardQuantity}</span>
+                                <span className="deckbuilder-card-selection-chip">
+                                  {cardQuantity}
+                                </span>
                               ) : null}
                             </div>
-                            <DisplayCard model={model} className="deckbuilder-card-face" />
+                            <DisplayCard
+                              model={model}
+                              className="deckbuilder-card-face"
+                            />
                           </div>
                         );
                       })}
                       {filteredCards.length === 0 ? (
                         <div className="card deckbuilder-empty-state">
                           <strong>No cards found.</strong>
-                          <p>Try a different search term or turn off the selected-only filter.</p>
+                          <p>
+                            Try a different search term or turn off the
+                            selected-only filter.
+                          </p>
                         </div>
                       ) : null}
                     </div>
@@ -910,16 +1080,28 @@ export function CloudArenaDeckBuilderPage({
           </div>
 
           {isCreateDeckModalOpen ? (
-            <div className="deckbuilder-modal-backdrop" role="presentation" onClick={closeCreateDeckModal}>
+            <div
+              className="deckbuilder-modal-backdrop"
+              role="presentation"
+              onClick={closeCreateDeckModal}
+            >
               <div
                 className="panel deckbuilder-modal"
                 role="dialog"
                 aria-modal="true"
-                aria-label={createModalMode === "save_as" ? "Save as deck" : "Create new deck"}
+                aria-label={
+                  createModalMode === "save_as"
+                    ? "Save as deck"
+                    : "Create new deck"
+                }
                 onClick={(event) => event.stopPropagation()}
               >
                 <header className="deckbuilder-modal-header">
-                  <strong>{createModalMode === "save_as" ? "Save as deck" : "Create new deck"}</strong>
+                  <strong>
+                    {createModalMode === "save_as"
+                      ? "Save as deck"
+                      : "Create new deck"}
+                  </strong>
                   <span>
                     {createModalMode === "save_as"
                       ? "This will save the current selected card set as a new deck."
@@ -928,7 +1110,8 @@ export function CloudArenaDeckBuilderPage({
                 </header>
                 {deckStats.cardCount < 10 ? (
                   <p className="deckbuilder-modal-error">
-                    You need at least 10 cards selected before this deck can be saved.
+                    You need at least 10 cards selected before this deck can be
+                    saved.
                   </p>
                 ) : null}
                 <div className="deckbuilder-modal-fields">
@@ -990,11 +1173,17 @@ export function CloudArenaDeckBuilderPage({
                         ? "Save deck"
                         : "Create deck"}
                   </button>
-                  <button type="button" className="ghost-button" onClick={closeCreateDeckModal}>
+                  <button
+                    type="button"
+                    className="ghost-button"
+                    onClick={closeCreateDeckModal}
+                  >
                     Cancel
                   </button>
                 </div>
-                {error ? <p className="deckbuilder-modal-error">{error.message}</p> : null}
+                {error ? (
+                  <p className="deckbuilder-modal-error">{error.message}</p>
+                ) : null}
               </div>
             </div>
           ) : null}

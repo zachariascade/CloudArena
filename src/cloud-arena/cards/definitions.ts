@@ -93,6 +93,7 @@ import { scrollOfTheCovenanCardDefinition } from "./definitions/scroll-of-the-co
 import { enemyViperShadeCardDefinition } from "./definitions/enemy-viper-shade.js";
 import type {
   CardDefinition,
+  CardAvailabilityStatus,
   CardDefinitionLibrary,
   CardDefinitionId,
   CardType,
@@ -108,6 +109,20 @@ const permanentCardTypes = new Set<PermanentCardType>([
   "land",
   "planeswalker",
 ]);
+
+function getCardAvailabilityStatus(
+  definition: Pick<CardDefinition, "availabilityStatus">,
+): CardAvailabilityStatus {
+  return definition.availabilityStatus ?? "ready";
+}
+
+export function isCardReady(definition: Pick<CardDefinition, "availabilityStatus">): boolean {
+  return getCardAvailabilityStatus(definition) === "ready";
+}
+
+export function isCardSelectableByPlayers(definition: CardDefinition): boolean {
+  return isCardReady(definition) && definition.playableInPlayerDecks !== false;
+}
 
 export const cardDefinitions: CardDefinitionLibrary = {
   attack: attackCardDefinition,

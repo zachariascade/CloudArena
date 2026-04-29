@@ -16,6 +16,7 @@ import type {
 import { summarizeCardDefinition } from "./card-summary.js";
 import {
   cardDefinitions,
+  isCardSelectableByPlayers,
 } from "./cards/definitions.js";
 import type {
   CardDefinition,
@@ -145,8 +146,12 @@ function createCardTypeLine(definition: CardDefinition): string {
   return `${baseLine}${subtypeLine}`;
 }
 
-function isPlayableCloudArenaCardDefinition(definition: CardDefinition): boolean {
-  return definition.playableInPlayerDecks !== false;
+function isPlayableCloudArenaCardDefinition(definition: CardDefinition | undefined): boolean {
+  if (!definition) {
+    return false;
+  }
+
+  return isCardSelectableByPlayers(definition);
 }
 
 function toCardSummary(definition: CardDefinition): CloudArenaCardSummary {
@@ -154,6 +159,7 @@ function toCardSummary(definition: CardDefinition): CloudArenaCardSummary {
     id: definition.id,
     name: definition.name,
     cost: definition.cost,
+    availabilityStatus: definition.availabilityStatus ?? "ready",
     typeLine: createCardTypeLine(definition),
     cardTypes: [...definition.cardTypes],
     subtypes: [...(definition.subtypes ?? [])],
@@ -187,12 +193,16 @@ function compressCardIds(cards: CardDefinitionId[]): CloudArenaSavedDeckCardEntr
   return compressed;
 }
 
+function filterSelectableCardIds(cards: CardDefinitionId[]): CardDefinitionId[] {
+  return cards.filter((cardId) => isPlayableCloudArenaCardDefinition(cardDefinitions[cardId]));
+}
+
 export function createCloudArenaDeckSummary(
   deck: CloudArenaSavedDeck | CloudArenaDeckPreset,
   kind: CloudArenaDeckKind,
 ): CloudArenaDeckSummary {
   const cards = kind === "preset"
-    ? compressCardIds((deck as CloudArenaDeckPreset).cards)
+    ? compressCardIds(filterSelectableCardIds((deck as CloudArenaDeckPreset).cards))
     : (deck as CloudArenaSavedDeck).cards;
   const { cardCount, uniqueCardCount } = summarizeDeckCards(cards);
   const deckName = kind === "preset"
@@ -215,12 +225,13 @@ export function createCloudArenaDeckDetail(
   deck: CloudArenaSavedDeck | CloudArenaDeckPreset,
   kind: CloudArenaDeckKind,
 ): CloudArenaDeckDetail {
+  const cards = kind === "preset"
+    ? compressCardIds(filterSelectableCardIds((deck as CloudArenaDeckPreset).cards))
+    : (deck as CloudArenaSavedDeck).cards.map((entry) => ({ ...entry }));
+
   return {
     ...createCloudArenaDeckSummary(deck, kind),
-    cards:
-      kind === "preset"
-        ? compressCardIds((deck as CloudArenaDeckPreset).cards)
-        : (deck as CloudArenaSavedDeck).cards.map((entry) => ({ ...entry })),
+    cards,
   };
 }
 
@@ -390,7 +401,9 @@ export function expandCloudArenaSavedDeck(deck: CloudArenaSavedDeck): CardDefini
 export function expandCloudArenaDeckSource(
   source: CloudArenaResolvedDeckSource,
 ): CardDefinitionId[] {
-  return source.kind === "preset" ? [...source.deck.cards] : expandCloudArenaSavedDeck(source.deck);
+  return source.kind === "preset"
+    ? filterSelectableCardIds(source.deck.cards)
+    : expandCloudArenaSavedDeck(source.deck);
 }
 
 export function resolveCloudArenaDeckSourceFromCollection(

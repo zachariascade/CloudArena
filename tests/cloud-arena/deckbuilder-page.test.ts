@@ -112,6 +112,7 @@ describe("cloud arena deckbuilder helpers", () => {
         id: "attack",
         name: "Attack",
         cost: 1,
+        availabilityStatus: "ready",
         typeLine: "Creature",
         cardTypes: ["creature"],
         subtypes: [],
@@ -121,6 +122,7 @@ describe("cloud arena deckbuilder helpers", () => {
         id: "defend",
         name: "Defend",
         cost: 0,
+        availabilityStatus: "ready",
         typeLine: "Instant",
         cardTypes: ["instant"],
         subtypes: [],
@@ -149,8 +151,10 @@ describe("cloud arena deckbuilder helpers", () => {
       },
     ];
 
-    expect(filterCards(cards, "def", "all").map((card) => card.id)).toEqual(["defend"]);
-    expect(filterCards(cards, "", "creature").map((card) => card.id)).toEqual(["attack"]);
+    expect(filterCards(cards, "def", "all", "all").map((card) => card.id)).toEqual(["defend"]);
+    expect(filterCards(cards, "", "creature", "all").map((card) => card.id)).toEqual(["attack"]);
+    expect(filterCards(cards, "", "all", "ready").map((card) => card.id)).toEqual(["attack", "defend"]);
+    expect(filterCards(cards, "", "all", "in_progress").map((card) => card.id)).toEqual([]);
     expect(
       buildDeckSelectionGroups(decks, "saved_1")
         .flatMap((group) => group.options)
