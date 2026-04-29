@@ -289,7 +289,8 @@ export function permanentHasSummoningSickness(
 
   return (
     hasCardType(definition, "creature") &&
-    permanent.enteredBattlefieldTurnNumber === state.turnNumber
+    permanent.enteredBattlefieldTurnNumber === state.turnNumber &&
+    !permanentHasKeyword(permanent, "haste")
   );
 }
 

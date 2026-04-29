@@ -32,6 +32,7 @@ export type PermanentKeyword =
   | "halt"
   | "menace"
   | "deathtouch"
+  | "haste"
   | "pierce"
   | "hexproof"
   | "indestructible";

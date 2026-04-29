@@ -20,6 +20,6 @@ export const tokenAngelCardDefinition: CardDefinition = {
   onPlay: [],
   power: 1,
   health: 1,
-  // keywords: ["halt"],
+  keywords: ["halt"],
   abilities: [],
 };

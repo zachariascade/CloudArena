@@ -23,6 +23,7 @@ At beginning of your turn, target creature you control gets x power until end of
 When this creature attacks, target creature gains flying until end of turn
 Counter generators
 Move counters to target creature
+
 Medium effort
 
 Fix all tests
@@ -44,6 +45,7 @@ Graveyard abilities: pay 3 to sacrifice a creature and return this card from the
 Sacrifice x card to gain y ability
 Whenever you cast a spell, proliferate
 Yuna type - counters don't die with creatures
+
 High effort
 
 UI overhaul

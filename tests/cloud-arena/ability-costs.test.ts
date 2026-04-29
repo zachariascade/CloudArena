@@ -29,6 +29,36 @@ const ABILITY_COST_TEST_DEFINITIONS: CardDefinitionLibrary = {
       },
     ],
   },
+  hasty_guardian: {
+    id: "hasty_guardian",
+    name: "Hasty Guardian",
+    cardTypes: ["creature"],
+    cost: 3,
+    onPlay: [],
+    power: 4,
+    health: 4,
+    keywords: ["halt", "haste"],
+    abilities: [
+      {
+        id: "hasty_guardian_apply_block",
+        kind: "activated",
+        activation: { type: "action", actionId: "apply_block" },
+        costs: [{ type: "energy", amount: 1 }],
+        effects: [{ type: "gain_block", target: "player", amount: { type: "constant", value: 5 } }],
+      },
+    ],
+  },
+  hasty_soldier: {
+    id: "hasty_soldier",
+    name: "Hasty Soldier",
+    cardTypes: ["creature"],
+    cost: 2,
+    onPlay: [],
+    power: 3,
+    health: 2,
+    keywords: ["haste"],
+    abilities: [],
+  },
   test_blesser: {
     id: "test_blesser",
     name: "Test Blesser",
@@ -217,6 +247,82 @@ describe("cloud arena ability costs", () => {
     expect(legalActions.some((action) => action.action === "attack")).toBe(false);
     expect(legalActions.some((action) => action.action === "apply_block")).toBe(false);
     expect(legalActions.some((action) => action.action === "defend")).toBe(true);
+  });
+
+  it("lets haste creatures attack and use activated abilities on the turn they enter", () => {
+    const battle = createBattle({
+      seed: 1,
+      playerHealth: 100,
+      cardDefinitions: ABILITY_COST_TEST_DEFINITIONS,
+      playerDeck: [
+        "hasty_guardian",
+        "hasty_soldier",
+        "attack",
+        "defend",
+        "attack",
+      ],
+      enemy: {
+        name: "Cost Dummy",
+        health: 30,
+        basePower: 12,
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+
+    battle.player.energy = 10;
+
+    const guardianCard = battle.player.hand.find((card) => card.definitionId === "hasty_guardian");
+    const soldierCard = battle.player.hand.find((card) => card.definitionId === "hasty_soldier");
+
+    if (!guardianCard || !soldierCard) {
+      throw new Error("Expected hasty creatures in opening hand.");
+    }
+
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: guardianCard.instanceId });
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: soldierCard.instanceId });
+
+    const guardian = battle.battlefield.find((permanent) => permanent?.definitionId === "hasty_guardian");
+    const soldier = battle.battlefield.find((permanent) => permanent?.definitionId === "hasty_soldier");
+    const enemyTarget = battle.enemyBattlefield.find((permanent) => permanent !== null);
+
+    if (!guardian || !soldier || !enemyTarget) {
+      throw new Error("Expected hasty permanents and an enemy target.");
+    }
+
+    const legalActions = getLegalActions(battle).filter(
+      (action): action is Extract<BattleAction, { type: "use_permanent_action" }> =>
+        action.type === "use_permanent_action",
+    );
+
+    expect(legalActions.some(
+      (action) => action.permanentId === guardian.instanceId && action.action === "apply_block",
+    )).toBe(true);
+    expect(legalActions.some(
+      (action) => action.permanentId === soldier.instanceId && action.action === "attack",
+    )).toBe(true);
+
+    applyBattleAction(battle, {
+      type: "use_permanent_action",
+      permanentId: guardian.instanceId,
+      source: "ability",
+      action: "apply_block",
+      abilityId: "hasty_guardian_apply_block",
+    });
+
+    expect(battle.player.block).toBe(5);
+
+    applyBattleAction(battle, {
+      type: "use_permanent_action",
+      permanentId: soldier.instanceId,
+      source: "rules",
+      action: "attack",
+    });
+    applyBattleAction(battle, {
+      type: "choose_target",
+      targetPermanentId: enemyTarget.instanceId,
+    });
+
+    expect(enemyTarget.health).toBe(27);
   });
 
   it("taps permanents when an activated ability pays a tap cost", () => {
