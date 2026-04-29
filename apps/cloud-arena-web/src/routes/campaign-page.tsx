@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { getCardDefinition } from "../../../../src/cloud-arena/index.js";
 import { CloudArenaAppShell } from "../components/index.js";
@@ -88,12 +88,19 @@ export function CloudArenaCampaignPage({
 
         <div className="cloud-arena-start-hero cloud-arena-campaign-hero">
           <div className="cloud-arena-start-copy">
-            <h2>Campaign</h2>
+            <h2>
+              <Link className="cloud-arena-title-link" to="/">
+                Campaign
+              </Link>
+            </h2>
             {!isLoading && (
               <p className="cloud-arena-campaign-progress">
                 {isComplete ? "Campaign complete!" : `${clearedCount} / ${totalLevels} cleared`}
               </p>
             )}
+            <Link className="cloud-arena-start-menu-item cloud-arena-page-back" to="/">
+              <strong>← Back</strong>
+            </Link>
           </div>
 
           <div className="cloud-arena-start-stage cloud-arena-campaign-stage">

@@ -97,7 +97,11 @@ export function CloudArenaBestiaryPage({
 
         <div className="cloud-arena-start-hero cloud-arena-run-hero cloud-arena-bestiary-layout">
           <header className="cloud-arena-start-copy cloud-arena-run-copy cloud-arena-bestiary-header">
-            <h2 className="cloud-arena-bestiary-title">Bestiary</h2>
+            <h2 className="cloud-arena-bestiary-title">
+              <Link className="cloud-arena-title-link" to="/">
+                Bestiary
+              </Link>
+            </h2>
             <Link
               className="cloud-arena-start-menu-item cloud-arena-bestiary-back"
               to="/"

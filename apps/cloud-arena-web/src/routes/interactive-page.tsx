@@ -1,7 +1,7 @@
 import type { ReactElement, ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import type {
   CloudArenaDeckSummary,
@@ -746,6 +746,9 @@ export function CloudArenaInteractivePage({
         pageVariant="battle"
       >
         <section className="cloud-arena-game-frame">
+          <Link className="cloud-arena-battle-root-back" to="/">
+            ← Back
+          </Link>
           <section className="cloud-arena-game-screen">
             <CloudArenaBattleState
               battle={viewModel.battle}

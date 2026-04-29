@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactElement } from "react";
 import { useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import type { CloudArenaDeckSummary } from "../../../../src/cloud-arena/api-contract.js";
 import type { CloudArenaSessionScenarioId } from "../../../../src/cloud-arena/api-contract.js";
@@ -189,7 +189,14 @@ export function CloudArenaSetupPage({
 
         <div className="cloud-arena-start-hero cloud-arena-run-hero">
           <div className="cloud-arena-start-copy cloud-arena-run-copy">
-            <h2>Cloud Arena</h2>
+            <h2>
+              <Link className="cloud-arena-title-link" to="/">
+                Cloud Arena
+              </Link>
+            </h2>
+            <Link className="cloud-arena-start-menu-item cloud-arena-page-back" to="/">
+              <strong>← Back</strong>
+            </Link>
           </div>
 
           <div className="cloud-arena-start-stage cloud-arena-run-stage">

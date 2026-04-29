@@ -31,7 +31,11 @@ export function CloudArenaStartPage({
 
         <div className="cloud-arena-start-hero">
           <div className="cloud-arena-start-copy">
-            <h2>Cloud Arena</h2>
+            <h2>
+              <Link className="cloud-arena-title-link" to="/">
+                Cloud Arena
+              </Link>
+            </h2>
           </div>
 
           <div className="cloud-arena-start-stage">

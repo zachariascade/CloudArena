@@ -653,7 +653,11 @@ export function CloudArenaDeckBuilderPage({
         <div className="cloud-arena-start-hero cloud-arena-run-hero cloud-arena-deckbuilder-layout">
           <header className="cloud-arena-start-copy cloud-arena-run-copy cloud-arena-deckbuilder-header">
             <div className="cloud-arena-deckbuilder-heading">
-              <h2 className="cloud-arena-deckbuilder-title">Deck Builder</h2>
+              <h2 className="cloud-arena-deckbuilder-title">
+                <Link className="cloud-arena-title-link" to="/">
+                  Deck Builder
+                </Link>
+              </h2>
               <p className="cloud-arena-deckbuilder-subtitle">
                 Switch decks, tune the list, and save new versions from the catalog below.
               </p>

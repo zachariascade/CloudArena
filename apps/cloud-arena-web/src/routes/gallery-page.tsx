@@ -130,7 +130,11 @@ export function CloudArenaGalleryPage({
 
         <div className="cloud-arena-gallery-layout">
           <header className="cloud-arena-gallery-header">
-            <h2 className="cloud-arena-gallery-title">Art Gallery</h2>
+            <h2 className="cloud-arena-gallery-title">
+              <Link className="cloud-arena-title-link" to="/">
+                Gallery
+              </Link>
+            </h2>
             <Link className="cloud-arena-start-menu-item cloud-arena-gallery-back" to="/">
               <strong>← Back</strong>
             </Link>
