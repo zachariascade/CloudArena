@@ -7,7 +7,6 @@ export const sanctifiedGuideCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     title: "Pillar of Cloud",
-    subtitle: "Creature - Angel",
     frameTone: "white",
     manaCost: "{3}",
     imagePath: "card_0037_builder_of_the_tower.jpg",
@@ -16,7 +15,6 @@ export const sanctifiedGuideCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "014",
-    footerStat: "2/4",
   },
   subtypes: ["Angel"],
   onPlay: [],

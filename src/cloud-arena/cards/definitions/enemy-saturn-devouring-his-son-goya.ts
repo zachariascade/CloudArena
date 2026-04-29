@@ -7,7 +7,6 @@ export const enemySaturnDevouringHisSonGoyaCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "Saturn Devouring His Son",
-    subtitle: "Enemy - Titan",
     frameTone: "split-black-red",
     manaCost: "{0}",
     artist: "Francisco de Goya",
@@ -18,7 +17,6 @@ export const enemySaturnDevouringHisSonGoyaCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "E18",
-    footerStat: "6/6",
   },
   onPlay: [],
   playableInPlayerDecks: false,

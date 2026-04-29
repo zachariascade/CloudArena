@@ -7,7 +7,6 @@ export const sappingCurseCardDefinition: CardDefinition = {
   cost: 1,
   display: {
     title: "Sapping Curse",
-    subtitle: "Instant",
     frameTone: "blue",
     manaCost: "{1}",
     imagePath: "card_0031_tree_of_forbidden_knowledge.jpg",

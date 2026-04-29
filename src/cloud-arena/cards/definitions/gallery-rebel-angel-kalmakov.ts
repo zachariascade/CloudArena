@@ -7,7 +7,6 @@ export const galleryRebelAngelKalmakovCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     title: "The Rebel Angel",
-    subtitle: "Creature - Angel Demon",
     frameTone: "split-black-red",
     manaCost: "{3}",
     artist: "Nicholas Kalmakoff",
@@ -18,7 +17,6 @@ export const galleryRebelAngelKalmakovCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "062",
-    footerStat: "4/4",
   },
   onPlay: [],
   power: 4,

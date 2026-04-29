@@ -7,7 +7,6 @@ export const galleryTemptationOfStAnthonyBoschCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     title: "The Temptation of St Anthony",
-    subtitle: "Creature - Demon",
     frameTone: "split-black-red",
     manaCost: "{3}",
     artist: "Hieronymus Bosch",
@@ -18,7 +17,6 @@ export const galleryTemptationOfStAnthonyBoschCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "057",
-    footerStat: "4/6",
   },
   onPlay: [],
   power: 4,

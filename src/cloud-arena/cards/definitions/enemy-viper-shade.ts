@@ -7,7 +7,6 @@ export const enemyViperShadeCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "Viper Shade",
-    subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",
     imagePath: "classics/card_0048_the_serpent_whisperer_in_the_garden.png",

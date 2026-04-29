@@ -7,7 +7,6 @@ export const stunningRebukeCardDefinition: CardDefinition = {
   cost: 2,
   display: {
     title: "Rebuke from the Whirlwind",
-    subtitle: "Instant",
     frameTone: "red",
     manaCost: "{2}",
     imagePath: "card_0032_flaming_sword_of_the_east.png",

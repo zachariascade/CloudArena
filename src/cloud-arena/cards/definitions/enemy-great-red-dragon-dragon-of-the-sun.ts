@@ -7,7 +7,6 @@ export const enemyGreatRedDragonDragonOfTheSunCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "Great Red Dragon, Dragon of the Sun",
-    subtitle: "Enemy - Dragon",
     frameTone: "split-black-red",
     manaCost: "{0}",
     artist: "William Blake",
@@ -18,7 +17,6 @@ export const enemyGreatRedDragonDragonOfTheSunCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "E21",
-    footerStat: "7/7",
   },
   onPlay: [],
   playableInPlayerDecks: false,

@@ -7,7 +7,6 @@ export const enemyHuskCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "Cocytus, Lake of Ice",
-    subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",
     imagePath: "dante-cocytus.jpg",

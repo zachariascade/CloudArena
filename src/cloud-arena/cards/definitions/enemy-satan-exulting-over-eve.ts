@@ -7,7 +7,6 @@ export const enemySatanExultingOverEveCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "Satan Exulting over Eve",
-    subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",
     artist: "William Blake",
@@ -18,7 +17,6 @@ export const enemySatanExultingOverEveCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "E15",
-    footerStat: "5/4",
   },
   onPlay: [],
   playableInPlayerDecks: false,

@@ -7,7 +7,6 @@ export const gardenOfEarthlyDelightsCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     title: "Garden of Earthly Delights",
-    subtitle: "Legendary Enchantment",
     frameTone: "white",
     manaCost: "{3}",
     imagePath: "669F9BF4-F0AF-4A1B-9CB5-9A083E3EEEF9.jpeg",

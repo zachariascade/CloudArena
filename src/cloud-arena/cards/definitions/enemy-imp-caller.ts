@@ -7,7 +7,6 @@ export const enemyImpCallerCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "Belzaphor, Swarm of the Pit",
-    subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",
     imagePath: "0AF7C779-AF9B-4662-82E4-F481882E7788.jpeg",

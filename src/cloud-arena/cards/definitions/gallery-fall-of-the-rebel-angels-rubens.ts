@@ -7,7 +7,6 @@ export const galleryFallOfTheRebelAngelsRubensCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     title: "Fall of the Rebel Angels",
-    subtitle: "Creature - Angel",
     frameTone: "split-black-red",
     manaCost: "{3}",
     artist: "Peter Paul Rubens",
@@ -18,7 +17,6 @@ export const galleryFallOfTheRebelAngelsRubensCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "055",
-    footerStat: "5/6",
   },
   onPlay: [],
   power: 5,

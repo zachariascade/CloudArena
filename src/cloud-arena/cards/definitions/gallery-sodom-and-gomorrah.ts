@@ -7,7 +7,6 @@ export const gallerySodomAndGomorrahCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     title: "Fire on the Cities",
-    subtitle: "Sorcery",
     frameTone: "split-black-red",
     manaCost: "{3}",
     artist: "John Martin",

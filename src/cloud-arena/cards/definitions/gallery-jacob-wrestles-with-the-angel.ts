@@ -17,7 +17,6 @@ export const galleryJacobWrestlesWithTheAngelCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "040",
-    footerStat: "3/5",
   },
   subtypes: ["Human", "Warrior"],
   onPlay: [],

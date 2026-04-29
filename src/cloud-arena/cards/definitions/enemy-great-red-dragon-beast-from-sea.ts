@@ -7,7 +7,6 @@ export const enemyGreatRedDragonBeastFromSeaCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "Great Red Dragon, Beast from the Sea",
-    subtitle: "Enemy - Dragon",
     frameTone: "split-black-red",
     manaCost: "{0}",
     artist: "William Blake",
@@ -18,7 +17,6 @@ export const enemyGreatRedDragonBeastFromSeaCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "E20",
-    footerStat: "6/6",
   },
   onPlay: [],
   playableInPlayerDecks: false,

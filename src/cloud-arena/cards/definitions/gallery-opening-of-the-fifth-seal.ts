@@ -7,7 +7,6 @@ export const galleryOpeningOfTheFifthSealCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     title: "The Unsealed Witnesses",
-    subtitle: "Sorcery",
     frameTone: "white",
     manaCost: "{3}",
     artist: "El Greco",

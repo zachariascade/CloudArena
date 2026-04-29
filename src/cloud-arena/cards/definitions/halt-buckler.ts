@@ -7,7 +7,6 @@ export const haltBucklerCardDefinition: CardDefinition = {
   cost: 2,
   display: {
     title: "Bulwark of Intercession",
-    subtitle: "Artifact - Equipment",
     frameTone: "colorless",
     manaCost: "{2}",
     imagePath: "card_0036_watcher_at_edens_gate.jpg",

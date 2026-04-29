@@ -7,7 +7,6 @@ export const enemyPackAlphaCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "Legion",
-    subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",
     imagePath: "Christ_healing_the_man_possessed_with_devils.jpg",

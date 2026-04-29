@@ -7,7 +7,6 @@ export const galleryLastJudgmentCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     title: "Final Reckoning",
-    subtitle: "Sorcery",
     frameTone: "split-black-red",
     manaCost: "{3}",
     artist: "Hieronymus Bosch",

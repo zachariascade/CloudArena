@@ -7,7 +7,6 @@ export const enemyDemonPierceCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "Pierce",
-    subtitle: "Enemy - Attack",
     frameTone: "split-black-red",
     manaCost: "{0}",
     imagePath: "demon-pierce.png",

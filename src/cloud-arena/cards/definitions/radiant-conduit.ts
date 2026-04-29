@@ -7,7 +7,6 @@ export const radiantConduitCardDefinition: CardDefinition = {
   cost: 2,
   display: {
     title: "Pillar of Fire",
-    subtitle: "Creature - Angel",
     frameTone: "white",
     manaCost: "{2}",
     imagePath: "2B5A00FD-D279-48BD-AEFE-0711AC4E9F54.jpeg",

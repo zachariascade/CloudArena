@@ -17,7 +17,6 @@ export const gallerySaintMichaelVanquishingSatanCardDefinition: CardDefinition =
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "047",
-    footerStat: "5/6",
   },
   subtypes: ["Angel"],
   onPlay: [],

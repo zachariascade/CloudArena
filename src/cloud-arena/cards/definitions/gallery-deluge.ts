@@ -7,7 +7,6 @@ export const galleryDelugeCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     title: "Flood of Judgment",
-    subtitle: "Sorcery",
     frameTone: "blue",
     manaCost: "{3}",
     artist: "Gustave Doré",

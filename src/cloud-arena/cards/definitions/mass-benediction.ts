@@ -7,7 +7,6 @@ export const massBenedictionCardDefinition: CardDefinition = {
   cost: 2,
   display: {
     title: "Priestly Benediction",
-    subtitle: "Instant",
     frameTone: "white",
     manaCost: "{2}",
     imagePath: "card_0027_let_there_be_light.png",

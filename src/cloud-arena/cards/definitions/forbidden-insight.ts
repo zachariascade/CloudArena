@@ -7,7 +7,6 @@ export const forbiddenInsightCardDefinition: CardDefinition = {
   cost: 2,
   display: {
     title: "Tree of Forbidden Knowledge",
-    subtitle: "Instant",
     frameTone: "blue",
     manaCost: "{2}",
     imagePath: "card_0031_tree_of_forbidden_knowledge.jpg",

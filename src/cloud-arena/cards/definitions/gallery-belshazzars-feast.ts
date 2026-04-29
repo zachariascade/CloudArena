@@ -7,7 +7,6 @@ export const galleryBelshazzarsFeastCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     title: "Banquet of Empty Crowns",
-    subtitle: "Sorcery",
     frameTone: "split-black-red",
     manaCost: "{3}",
     artist: "John Martin",

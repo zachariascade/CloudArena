@@ -7,7 +7,6 @@ export const enemyMedusaCaravaggioCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "Medusa",
-    subtitle: "Enemy - Gorgon",
     frameTone: "black-green",
     manaCost: "{0}",
     artist: "Caravaggio",
@@ -18,7 +17,6 @@ export const enemyMedusaCaravaggioCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "E19",
-    footerStat: "4/5",
   },
   onPlay: [],
   playableInPlayerDecks: false,

@@ -7,7 +7,6 @@ export const sacrificialSeraphCardDefinition: CardDefinition = {
   cost: 2,
   display: {
     title: "Seraph of the Altar",
-    subtitle: "Creature - Angel",
     frameTone: "white",
     manaCost: "{2}",
     imagePath: "card_0003_michael.avif",
@@ -16,7 +15,6 @@ export const sacrificialSeraphCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "006",
-    footerStat: "3/5",
   },
   subtypes: ["Angel"],
   onPlay: [],

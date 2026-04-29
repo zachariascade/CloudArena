@@ -7,7 +7,6 @@ export const enemySatanInCocytusCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "Satan in Cocytus, The Frozen Betrayer",
-    subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",
     artist: "Gustave Doré",
@@ -18,7 +17,6 @@ export const enemySatanInCocytusCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "E24",
-    footerStat: "6/7",
   },
   onPlay: [],
   playableInPlayerDecks: false,

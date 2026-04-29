@@ -17,7 +17,6 @@ export const galleryCreationOfAdamCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "036",
-    footerStat: "0/4",
   },
   onPlay: [],
   power: 0,

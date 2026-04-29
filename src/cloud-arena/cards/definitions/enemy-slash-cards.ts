@@ -13,7 +13,6 @@ function createSlashCardDefinition(
     cost: 0,
     display: {
       title: name,
-      subtitle: "Enemy - Slash",
       frameTone: "split-black-red",
       manaCost: "{0}",
       imagePath,

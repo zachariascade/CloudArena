@@ -7,7 +7,6 @@ export const enemySatanCallingUpHisLegionsCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "Satan Calling Up His Legions",
-    subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",
     artist: "William Blake",
@@ -18,7 +17,6 @@ export const enemySatanCallingUpHisLegionsCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "E16",
-    footerStat: "6/6",
   },
   onPlay: [],
   playableInPlayerDecks: false,

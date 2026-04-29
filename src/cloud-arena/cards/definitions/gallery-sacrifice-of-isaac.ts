@@ -17,7 +17,6 @@ export const gallerySacrificeOfIsaacCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "046",
-    footerStat: "4/4",
   },
   subtypes: ["Human"],
   onPlay: [],

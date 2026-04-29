@@ -9,6 +9,7 @@ import { CloudArenaHandTray } from "../apps/cloud-arena-web/src/components/cloud
 import { CloudArenaInspectorPanel } from "../apps/cloud-arena-web/src/components/cloud-arena-inspector-panel.js";
 import {
   buildCardSubtitle,
+  buildCardFooterStat,
   mapArenaEnemyToDisplayCard,
   mapArenaHandCardToDisplayCard,
   mapArenaPermanentToDisplayCard,
@@ -69,6 +70,21 @@ describe("shared display card mappers", () => {
     const generatedSubtitle = buildCardSubtitle(galleryAncientOfDaysCardDefinition);
 
     expect(generatedSubtitle).toBe("Legendary Creature - Sage");
+  });
+
+  it("derives the footer stat from the card definition power and health", () => {
+    const footerStat = buildCardFooterStat({
+      id: "test-permanent",
+      name: "Test Permanent",
+      cardTypes: ["creature"],
+      cost: 2,
+      onPlay: [],
+      power: 4,
+      health: 6,
+      abilities: [],
+    });
+
+    expect(footerStat).toBe("4/6");
   });
 
   it("maps arena player and enemy summaries into display cards", () => {

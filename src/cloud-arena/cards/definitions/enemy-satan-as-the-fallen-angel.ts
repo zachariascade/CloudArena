@@ -7,7 +7,6 @@ export const enemySatanAsTheFallenAngelCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "Satan as the Fallen Angel",
-    subtitle: "Enemy - Angel Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",
     artist: "Sir Thomas Lawrence",
@@ -18,7 +17,6 @@ export const enemySatanAsTheFallenAngelCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "E14",
-    footerStat: "4/5",
   },
   onPlay: [],
   playableInPlayerDecks: false,

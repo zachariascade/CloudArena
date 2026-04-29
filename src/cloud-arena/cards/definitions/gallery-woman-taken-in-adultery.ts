@@ -7,7 +7,6 @@ export const galleryWomanTakenInAdulteryCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     title: "Neither Do I Condemn You",
-    subtitle: "Instant",
     frameTone: "white",
     manaCost: "{3}",
     artist: "Rembrandt van Rijn",

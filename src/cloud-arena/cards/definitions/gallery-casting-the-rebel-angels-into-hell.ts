@@ -7,7 +7,6 @@ export const galleryCastingTheRebelAngelsIntoHellCardDefinition: CardDefinition 
   cost: 3,
   display: {
     title: "The Casting of the Rebel Angels into Hell",
-    subtitle: "Creature - Angel",
     frameTone: "split-black-red",
     manaCost: "{3}",
     artist: "William Blake",
@@ -18,7 +17,6 @@ export const galleryCastingTheRebelAngelsIntoHellCardDefinition: CardDefinition 
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "052",
-    footerStat: "4/4",
   },
   onPlay: [],
   power: 4,

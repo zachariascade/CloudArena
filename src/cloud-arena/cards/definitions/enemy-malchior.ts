@@ -7,7 +7,6 @@ export const enemyMalchiorCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "Malchior, Binder of Wills",
-    subtitle: "Enemy - Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",
     imagePath: "dante-eagle.jpg",

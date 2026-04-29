@@ -7,7 +7,6 @@ export const graveyardHymnCardDefinition: CardDefinition = {
   cost: 2,
   display: {
     title: "Song of the Dry Bones",
-    subtitle: "Creature - Angel",
     frameTone: "white",
     manaCost: "{2}",
     imagePath: "https://commons.wikimedia.org/wiki/Special:FilePath/Quinten%20Massys%20Vision%20des%20Propheten%20Ezechiels.jpg",
@@ -16,7 +15,6 @@ export const graveyardHymnCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "015",
-    footerStat: "2/2",
   },
   subtypes: ["Angel"],
   onPlay: [],

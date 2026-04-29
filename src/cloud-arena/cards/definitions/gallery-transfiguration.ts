@@ -17,7 +17,6 @@ export const galleryTransfigurationCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "051",
-    footerStat: "4/5",
   },
   subtypes: ["Human"],
   onPlay: [],

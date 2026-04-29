@@ -7,7 +7,6 @@ export const galleryGreatDayOfHisWrathCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     title: "Day of Wrath",
-    subtitle: "Sorcery",
     frameTone: "split-black-red",
     manaCost: "{3}",
     artist: "John Martin",

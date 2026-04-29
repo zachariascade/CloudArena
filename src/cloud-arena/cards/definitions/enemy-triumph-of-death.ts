@@ -7,7 +7,6 @@ export const enemyTriumphOfDeathCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "The Triumph of Death",
-    subtitle: "Enemy - Horror",
     frameTone: "split-black-red",
     manaCost: "{0}",
     artist: "Pieter Bruegel the Elder",
@@ -18,7 +17,6 @@ export const enemyTriumphOfDeathCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "E23",
-    footerStat: "6/7",
   },
   onPlay: [],
   playableInPlayerDecks: false,

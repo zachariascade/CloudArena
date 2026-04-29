@@ -7,7 +7,6 @@ export const restorativeTouchCardDefinition: CardDefinition = {
   cost: 1,
   display: {
     title: "Your Faith Has Made You Well",
-    subtitle: "Instant",
     frameTone: "white",
     manaCost: "{1}",
     imagePath: "card_0030_tree_of_life.jpg",

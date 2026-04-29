@@ -7,7 +7,6 @@ export const enemyNumberOfTheBeast666CardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "The Number of the Beast is 666",
-    subtitle: "Enemy - Beast",
     frameTone: "split-black-red",
     manaCost: "{0}",
     artist: "William Blake",
@@ -18,7 +17,6 @@ export const enemyNumberOfTheBeast666CardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "E17",
-    footerStat: "5/5",
   },
   onPlay: [],
   playableInPlayerDecks: false,

@@ -7,7 +7,6 @@ export const scrollOfTheCovenanCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     title: "Scroll of the Covenant",
-    subtitle: "Artifact",
     frameTone: "colorless",
     manaCost: "{3}",
     imagePath: "classics/card_0052_tower_of_babel.jpg",

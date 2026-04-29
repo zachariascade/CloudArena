@@ -15,6 +15,7 @@ import {
 
 import {
   buildDisplayCardModel,
+  buildCardSubtitle,
   type DisplayCardModel,
 } from "./display-card.js";
 
@@ -311,7 +312,7 @@ export function buildEnemyPreviewCardModel(
     variant: "enemy",
     name: card.name,
     title: display?.title ?? null,
-    subtitle: display?.subtitle ?? "Enemy Card",
+    subtitle: buildCardSubtitle(definition),
     frameTone: display?.frameTone ?? "split-black-red",
     manaCost: display?.manaCost ?? null,
     image: display?.imagePath && display?.imageAlt

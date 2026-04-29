@@ -7,7 +7,6 @@ export const choirCaptainCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     title: "Voice Above the Host",
-    subtitle: "Creature - Angel",
     frameTone: "white",
     manaCost: "{3}",
     imagePath: "classics/card_0055_image_of_god.jpg",
@@ -16,7 +15,6 @@ export const choirCaptainCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "007",
-    footerStat: "2/3",
   },
   subtypes: ["Angel"],
   keywords: ["refresh"],

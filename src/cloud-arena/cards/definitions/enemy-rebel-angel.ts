@@ -7,7 +7,6 @@ export const enemyRebelAngelCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "The Rebel Angel",
-    subtitle: "Enemy - Angel Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",
     artist: "Nicholas Kalmakoff",

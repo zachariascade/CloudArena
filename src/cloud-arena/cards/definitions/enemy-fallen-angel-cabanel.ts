@@ -7,7 +7,6 @@ export const enemyFallenAngelCabanelCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "The Fallen Angel",
-    subtitle: "Enemy - Angel Demon",
     frameTone: "split-black-red",
     manaCost: "{0}",
     artist: "Alexandre Cabanel",
@@ -17,7 +16,6 @@ export const enemyFallenAngelCabanelCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "E13",
-    footerStat: "5/5",
   },
   onPlay: [],
   playableInPlayerDecks: false,

@@ -19,7 +19,6 @@ export const galleryAngelStoppingAbrahamCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "032",
-    footerStat: "2/5",
   },
   subtypes: ["Angel"],
   onPlay: [],

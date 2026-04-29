@@ -7,7 +7,6 @@ export const armorySeraphCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     title: "Gabriel, Herald of the Armory",
-    subtitle: "Creature - Angel",
     frameTone: "white",
     manaCost: "{3}",
     imagePath: "https://commons.wikimedia.org/wiki/Special:FilePath/Annonciation%20Nardo%20di%20Cione.jpg",

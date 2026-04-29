@@ -7,7 +7,6 @@ export const galleryPandemoniumJohnMartinCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     title: "Pandemonium",
-    subtitle: "Creature - Demon",
     frameTone: "split-black-red",
     manaCost: "{3}",
     artist: "John Martin",
@@ -17,7 +16,6 @@ export const galleryPandemoniumJohnMartinCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "059",
-    footerStat: "6/5",
   },
   onPlay: [],
   power: 6,

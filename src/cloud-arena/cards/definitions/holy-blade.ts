@@ -7,7 +7,6 @@ export const holyBladeCardDefinition: CardDefinition = {
   cost: 1,
   display: {
     title: "Sword of the Cherubim",
-    subtitle: "Artifact - Equipment",
     frameTone: "colorless",
     manaCost: "{1}",
     imagePath: "card_0027_let_there_be_light.png",

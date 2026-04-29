@@ -17,7 +17,6 @@ export const galleryAnnunciationCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "033",
-    footerStat: "0/4",
   },
   onPlay: [],
   power: 0,

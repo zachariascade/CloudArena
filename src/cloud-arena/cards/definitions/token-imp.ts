@@ -7,7 +7,6 @@ export const tokenImpCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     title: "Unclean Spirit",
-    subtitle: "Creature - Demon Imp",
     frameTone: "split-black-red",
     manaCost: "{0}",
     imagePath: "38790FFE-A07F-43DA-ACBD-AFAED530BB8E.jpeg",
@@ -16,7 +15,6 @@ export const tokenImpCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "006B",
-    footerStat: "2/4",
   },
   subtypes: ["Demon", "Imp"],
   onPlay: [],

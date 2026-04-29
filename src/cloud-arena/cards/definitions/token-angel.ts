@@ -7,7 +7,6 @@ export const tokenAngelCardDefinition: CardDefinition = {
   cost: 1,
   display: {
     title: "Angel of the Lord",
-    subtitle: "Creature - Angel",
     frameTone: "white",
     manaCost: "{1}",
     imagePath: "classics/card_0059_dove_with_the_olive_branch.jpg",
@@ -16,7 +15,6 @@ export const tokenAngelCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "006A",
-    footerStat: "1/1",
   },
   subtypes: ["Angel"],
   onPlay: [],

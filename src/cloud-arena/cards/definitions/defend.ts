@@ -7,7 +7,6 @@ export const defendCardDefinition: CardDefinition = {
   cost: 1,
   display: {
     title: "Shield of Faith",
-    subtitle: "Instant - Guard",
     frameTone: "white",
     manaCost: "{1}",
     imagePath: "card_0033_eden_garden_of_delight.jpg",

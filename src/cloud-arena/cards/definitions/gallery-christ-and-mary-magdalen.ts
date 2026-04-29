@@ -17,7 +17,6 @@ export const galleryChristAndMaryMagdalenCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "035",
-    footerStat: "2/4",
   },
   subtypes: ["Mystic"],
   onPlay: [],

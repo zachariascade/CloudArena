@@ -7,7 +7,6 @@ export const judgmentBladeCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     title: "Sword of Judgment",
-    subtitle: "Artifact - Equipment",
     frameTone: "colorless",
     manaCost: "{3}",
     imagePath: "card_0027_let_there_be_light.png",

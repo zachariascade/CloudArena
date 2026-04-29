@@ -18,7 +18,6 @@ export const galleryAncientOfDaysCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "031",
-    footerStat: "4/6",
   },
   subtypes: ["Sage"],
   onPlay: [],

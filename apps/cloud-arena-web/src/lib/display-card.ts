@@ -17,6 +17,11 @@ import {
   type DisplayCardTextBlock,
 } from "../../../../src/presentation/display-card.js";
 
+type ResolvedCardDisplay = CardDisplayDefinition & {
+  subtitle: string | null;
+  footerStat: string | null;
+};
+
 export { buildDisplayCardModel } from "../../../../src/presentation/display-card.js";
 export type {
   DisplayCardAction,
@@ -73,27 +78,36 @@ export function buildCardSubtitle(
   return isLegendaryOrHigher ? `Legendary ${typeLine}` : typeLine;
 }
 
+export function buildCardFooterStat(definition: CardDefinition): string | null {
+  const displayableTypes = new Set(["creature", "enchantment", "battle", "land", "planeswalker"]);
+  const shouldShowStat = definition.cardTypes.some((cardType) => displayableTypes.has(cardType));
+
+  if (shouldShowStat && "power" in definition && "health" in definition) {
+    return `${definition.power}/${definition.health}`;
+  }
+
+  return null;
+}
+
 function getFallbackCardDisplay(definition: CardDefinition): CardDisplayDefinition {
   return {
     title: null,
-    subtitle: buildCardSubtitle(definition),
     frameTone: "colorless",
     manaCost: definition.cost > 0 ? `{${definition.cost}}` : "{0}",
     artist: null,
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: definition.id.toUpperCase().replace(/[^A-Z0-9]+/g, "_").slice(0, 12) || "CARD",
-    footerStat:
-      "power" in definition && "health" in definition ? `${definition.power}/${definition.health}` : null,
   };
 }
 
-function getCardDisplay(definition: CardDefinition): CardDisplayDefinition {
+function getCardDisplay(definition: CardDefinition): ResolvedCardDisplay {
   const display = definition.display ?? getFallbackCardDisplay(definition);
 
   return {
     ...display,
     subtitle: buildCardSubtitle(definition),
+    footerStat: buildCardFooterStat(definition),
   };
 }
 
@@ -250,6 +264,7 @@ export function mapArenaEnemyToDisplayCard(
         flavorText: null,
         footerStat: null,
       };
+  const footerStat = leaderDefinition ? buildCardFooterStat(leaderDefinition) : null;
   const leaderKeywordBlocks: DisplayCardTextBlock[] =
     leaderDefinition && "keywords" in leaderDefinition && leaderDefinition.keywords?.length
       ? [
@@ -328,7 +343,7 @@ export function mapArenaEnemyToDisplayCard(
     footerCode: presentation.footerCode,
     footerCredit: presentation.footerCredit,
     collectorNumber: presentation.collectorNumber,
-    footerStat: presentation.footerStat ?? null,
+    footerStat,
     healthBar: {
       current: enemy.health,
       max: enemy.maxHealth,
@@ -380,7 +395,7 @@ export function mapArenaHandCardToDisplayCard(
     footerCode: presentation.footerCode,
     footerCredit: presentation.footerCredit,
     collectorNumber: presentation.collectorNumber,
-    footerStat: presentation.footerStat ?? null,
+    footerStat: buildCardFooterStat(definition),
     healthBar: null,
     energyBar: null,
     statusLabel: null,
@@ -587,7 +602,7 @@ export function mapCardDefinitionIdToDisplayCard(definitionId: string): DisplayC
     footerCode: presentation.footerCode,
     footerCredit: presentation.footerCredit,
     collectorNumber: presentation.collectorNumber,
-    footerStat: presentation.footerStat ?? null,
+    footerStat: buildCardFooterStat(definition),
     healthBar: null,
     energyBar: null,
     statusLabel: null,

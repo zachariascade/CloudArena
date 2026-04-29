@@ -19,7 +19,11 @@ import {
   getScenarioDraftFromUrl,
   type CloudArenaContentMode,
 } from "../lib/cloud-arena-web-lib.js";
-import { buildDisplayCardModel, type DisplayCardModel } from "../lib/display-card.js";
+import {
+  buildCardSubtitle,
+  buildDisplayCardModel,
+  type DisplayCardModel,
+} from "../lib/display-card.js";
 
 type CloudArenaSetupPageProps = {
   apiBaseUrl: string;
@@ -46,7 +50,7 @@ function buildEnemySetupCardModel(
     variant: "enemy",
     name: definition.name,
     title: display?.title ?? null,
-    subtitle: display?.subtitle ?? "Enemy Card",
+    subtitle: buildCardSubtitle(definition),
     frameTone: display?.frameTone ?? "split-black-red",
     manaCost: display?.manaCost ?? null,
     image: display?.imagePath && display?.imageAlt

@@ -7,7 +7,6 @@ export const focusedBlessingCardDefinition: CardDefinition = {
   cost: 1,
   display: {
     title: "Aaronic Blessing",
-    subtitle: "Instant",
     frameTone: "white",
     manaCost: "{1}",
     imagePath: "https://commons.wikimedia.org/wiki/Special:FilePath/Fra%20Angelico%20-%20The%20Annunciation.jpg",

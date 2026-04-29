@@ -7,7 +7,6 @@ export const galleryJoshuaCommandingTheSunToStandStillUponGibeonCardDefinition: 
   cost: 3,
   display: {
     title: "The Sun Stands Still",
-    subtitle: "Sorcery",
     frameTone: "white",
     manaCost: "{3}",
     artist: "John Martin",

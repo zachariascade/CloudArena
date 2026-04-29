@@ -7,7 +7,6 @@ export const armoryDiscipleCardDefinition: CardDefinition = {
   cost: 2,
   display: {
     title: "Tubal-Cain, Forger of Bronze and Iron",
-    subtitle: "Creature - Human",
     frameTone: "white",
     manaCost: "{2}",
     imagePath: "classics/card_0041_tubal_cain_forger_of_bronze_and_iron.jpg",
@@ -16,7 +15,6 @@ export const armoryDiscipleCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "008",
-    footerStat: "2/4",
   },
   onPlay: [],
   power: 2,

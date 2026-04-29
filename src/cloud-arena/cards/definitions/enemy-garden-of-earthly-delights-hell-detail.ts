@@ -7,7 +7,6 @@ export const enemyGardenOfEarthlyDelightsHellDetailCardDefinition: CardDefinitio
   cost: 0,
   display: {
     title: "Garden of Earthly Delights - Hell Detail",
-    subtitle: "Enemy - Horror",
     frameTone: "split-black-red",
     manaCost: "{0}",
     artist: "Hieronymus Bosch",
@@ -18,7 +17,6 @@ export const enemyGardenOfEarthlyDelightsHellDetailCardDefinition: CardDefinitio
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "E22",
-    footerStat: "5/6",
   },
   onPlay: [],
   playableInPlayerDecks: false,

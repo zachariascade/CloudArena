@@ -7,7 +7,6 @@ export const guardianCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     title: "Watcher at Eden's Gate",
-    subtitle: "Creature - Angel",
     frameTone: "white",
     manaCost: "{3}",
     imagePath: "card_0036_watcher_at_edens_gate.jpg",
@@ -16,7 +15,6 @@ export const guardianCardDefinition: CardDefinition = {
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
     collectorNumber: "004",
-    footerStat: "4/4",
   },
   subtypes: ["Angel"],
   onPlay: [],

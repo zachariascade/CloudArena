@@ -7,7 +7,6 @@ export const refreshSignetCardDefinition: CardDefinition = {
   cost: 2,
   display: {
     title: "Signet of Renewal",
-    subtitle: "Artifact - Equipment",
     frameTone: "colorless",
     manaCost: "{2}",
     imagePath: "card_0030_tree_of_life.jpg",

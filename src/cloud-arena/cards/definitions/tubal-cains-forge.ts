@@ -7,7 +7,6 @@ export const tubalCainsForgeCardDefinition: CardDefinition = {
   cost: 2,
   display: {
     title: "Forge of Tubal-Cain",
-    subtitle: "Artifact",
     frameTone: "colorless",
     manaCost: "{2}",
     imagePath: "classics/card_0041_tubal_cain_forger_of_bronze_and_iron.jpg",
