@@ -8,7 +8,6 @@ export const choirCaptainCardDefinition: CardDefinition = {
   display: {
     title: "Voice Above the Host",
     frameTone: "white",
-    manaCost: "{3}",
     imagePath: "classics/card_0055_image_of_god.jpg",
     imageAlt: "An angelic captain calling ranks into formation",
     flavorText: "Its song counts every wing and turns presence into power.",

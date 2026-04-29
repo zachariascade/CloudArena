@@ -8,7 +8,6 @@ export const attackCardDefinition: CardDefinition = {
   display: {
     title: "Flaming Sword of the East",
     frameTone: "red",
-    manaCost: "{1}",
     imagePath: "card_0032_flaming_sword_of_the_east.png",
     imageAlt: "A flaming sword cutting across the dark",
     flavorText: "Commit first. Let hesitation fall away after the strike lands.",

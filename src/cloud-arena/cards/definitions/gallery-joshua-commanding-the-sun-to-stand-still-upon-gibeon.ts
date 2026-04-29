@@ -8,7 +8,6 @@ export const galleryJoshuaCommandingTheSunToStandStillUponGibeonCardDefinition: 
   display: {
     title: "The Sun Stands Still",
     frameTone: "white",
-    manaCost: "{3}",
     artist: "John Martin",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Joshua_Commanding_the_Sun_to_Stand_Still_upon_Gibeon_%281816%29_John_Martin_-_NGA_2004.64.1.jpg/960px-Joshua_Commanding_the_Sun_to_Stand_Still_upon_Gibeon_%281816%29_John_Martin_-_NGA_2004.64.1.jpg",
     imageAlt: "John Martin's Joshua Commanding the Sun to Stand Still upon Gibeon",

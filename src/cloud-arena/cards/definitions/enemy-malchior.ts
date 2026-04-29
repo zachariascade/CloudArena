@@ -8,7 +8,6 @@ export const enemyMalchiorCardDefinition: CardDefinition = {
   display: {
     title: "Malchior, Binder of Wills",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     imagePath: "dante-eagle.jpg",
     imageAlt: "A dark sovereign presiding over a scene of domination and judgment",
     footerCode: "ARE",

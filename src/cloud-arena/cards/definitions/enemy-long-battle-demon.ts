@@ -8,7 +8,6 @@ export const enemyLongBattleDemonCardDefinition: CardDefinition = {
   display: {
     title: "Long Battle Demon",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     imagePath: "card_0009_lucifer_fallen_angel_of_light.webp",
     imageAlt: "A battle-worn demon lord marked by the length of the fight",
     footerCode: "ARE",

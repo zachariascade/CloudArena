@@ -20,6 +20,7 @@ import {
   type CloudArenaContentMode,
 } from "../lib/cloud-arena-web-lib.js";
 import {
+  buildCardManaCost,
   buildCardSubtitle,
   buildDisplayCardModel,
   type DisplayCardModel,
@@ -52,7 +53,7 @@ function buildEnemySetupCardModel(
     title: display?.title ?? null,
     subtitle: buildCardSubtitle(definition),
     frameTone: display?.frameTone ?? "split-black-red",
-    manaCost: display?.manaCost ?? null,
+    manaCost: buildCardManaCost(definition),
     image: display?.imagePath && display?.imageAlt
       ? {
           alt: display.imageAlt,

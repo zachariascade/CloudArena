@@ -8,7 +8,6 @@ export const enemySaturnDevouringHisSonGoyaCardDefinition: CardDefinition = {
   display: {
     title: "Saturn Devouring His Son",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     artist: "Francisco de Goya",
     imagePath:
       "https://commons.wikimedia.org/wiki/Special:FilePath/Saturn%20Devouring%20His%20Son.jpg",

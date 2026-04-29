@@ -8,7 +8,6 @@ export const enemyDemonicCurseCardDefinition: CardDefinition = {
   display: {
     title: "Demonic Curse",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     imagePath: "demonic-curse",
     imageAlt: "A demonic curse spreading across the battlefield",
     footerCode: "ARE",

@@ -8,7 +8,6 @@ export const enemyCocytusCardDefinition: CardDefinition = {
   display: {
     title: "Cocytus, Lake of Ice",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     imagePath: "dante-cocytus.jpg",
     imageAlt: "A frozen infernal scene inspired by Dante's ninth circle",
     footerCode: "ARE",

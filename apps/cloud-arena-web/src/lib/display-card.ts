@@ -18,6 +18,7 @@ import {
 } from "../../../../src/presentation/display-card.js";
 
 type ResolvedCardDisplay = CardDisplayDefinition & {
+  manaCost: string | null;
   subtitle: string | null;
   footerStat: string | null;
 };
@@ -89,11 +90,14 @@ export function buildCardFooterStat(definition: CardDefinition): string | null {
   return null;
 }
 
+export function buildCardManaCost(definition: Pick<CardDefinition, "cost" | "manaCost">): string | null {
+  return definition.manaCost ?? (definition.cost > 0 ? `{${definition.cost}}` : "{0}");
+}
+
 function getFallbackCardDisplay(definition: CardDefinition): CardDisplayDefinition {
   return {
     title: null,
     frameTone: "colorless",
-    manaCost: definition.cost > 0 ? `{${definition.cost}}` : "{0}",
     artist: null,
     footerCode: "ARE",
     footerCredit: "Cloud Arena",
@@ -106,6 +110,7 @@ function getCardDisplay(definition: CardDefinition): ResolvedCardDisplay {
 
   return {
     ...display,
+    manaCost: buildCardManaCost(definition),
     subtitle: buildCardSubtitle(definition),
     footerStat: buildCardFooterStat(definition),
   };

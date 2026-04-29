@@ -8,7 +8,6 @@ export const refreshSignetCardDefinition: CardDefinition = {
   display: {
     title: "Signet of Renewal",
     frameTone: "colorless",
-    manaCost: "{2}",
     imagePath: "card_0030_tree_of_life.jpg",
     imageAlt: "A shining signet carrying a warm pulse of restoring light",
     flavorText: "Even a worn guardian can be called back to the shape it was meant to hold.",

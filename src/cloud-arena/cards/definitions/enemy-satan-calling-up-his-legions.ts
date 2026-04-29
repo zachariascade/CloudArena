@@ -8,7 +8,6 @@ export const enemySatanCallingUpHisLegionsCardDefinition: CardDefinition = {
   display: {
     title: "Satan Calling Up His Legions",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     artist: "William Blake",
     imagePath:
       "https://commons.wikimedia.org/wiki/Special:FilePath/Satan%20Calling%20up%20his%20legions.jpg",

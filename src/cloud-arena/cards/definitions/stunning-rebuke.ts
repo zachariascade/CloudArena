@@ -8,7 +8,6 @@ export const stunningRebukeCardDefinition: CardDefinition = {
   display: {
     title: "Rebuke from the Whirlwind",
     frameTone: "red",
-    manaCost: "{2}",
     imagePath: "card_0032_flaming_sword_of_the_east.png",
     imageAlt: "A blazing sword cutting off the enemy’s momentum",
     flavorText: "A rebuke can hit so hard the next move never arrives.",

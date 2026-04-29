@@ -8,7 +8,6 @@ export const gallerySodomAndGomorrahCardDefinition: CardDefinition = {
   display: {
     title: "Fire on the Cities",
     frameTone: "split-black-red",
-    manaCost: "{3}",
     artist: "John Martin",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/John_Martin_-_Sodom_and_Gomorrah.jpg/960px-John_Martin_-_Sodom_and_Gomorrah.jpg",
     imageAlt: "John Martin's Sodom and Gomorrah",

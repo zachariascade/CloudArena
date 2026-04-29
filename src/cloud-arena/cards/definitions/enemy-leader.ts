@@ -8,7 +8,6 @@ export const enemyLeaderCardDefinition: CardDefinition = {
   display: {
     title: "Prince of This World",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     imagePath: "card_0009_lucifer_fallen_angel_of_light.webp",
     imageAlt: "A fallen angel wreathed in fire and shadow",
     footerCode: "ARE",

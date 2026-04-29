@@ -9,7 +9,6 @@ export const galleryPlainsOfHeavenCardDefinition: CardDefinition = {
   display: {
     title: "Plains of Heaven",
     frameTone: "white",
-    manaCost: "{3}",
     artist: "John Martin",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/John_Martin_-_The_Plains_of_Heaven_-_Google_Art_Project.jpg/960px-John_Martin_-_The_Plains_of_Heaven_-_Google_Art_Project.jpg",
     imageAlt: "John Martin's The Plains of Heaven",

@@ -8,7 +8,6 @@ export const judgmentBladeCardDefinition: CardDefinition = {
   display: {
     title: "Sword of Judgment",
     frameTone: "colorless",
-    manaCost: "{3}",
     imagePath: "card_0027_let_there_be_light.png",
     imageAlt: "A blade of bright judgment poised above the battlefield",
     flavorText: "Where it falls, every enemy line feels the verdict at once.",

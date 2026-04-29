@@ -8,7 +8,6 @@ export const enemyGreatRedDragonDragonOfTheSunCardDefinition: CardDefinition = {
   display: {
     title: "Great Red Dragon, Dragon of the Sun",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     artist: "William Blake",
     imagePath:
       "https://commons.wikimedia.org/wiki/Special:FilePath/The%20Great%20Red%20Dragon%20and%20the%20Woman%20Clothed%20with%20the%20Sun.jpg",

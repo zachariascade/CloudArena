@@ -9,7 +9,6 @@ export const gallerySaintMichaelVanquishingSatanCardDefinition: CardDefinition =
   display: {
     title: "Champion of Heaven",
     frameTone: "split-white-red",
-    manaCost: "{3}",
     artist: "Raphael",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/7/74/Raphael_-_St._Michael_Vanquishing_Satan.jpg",
     imageAlt: "Raphael's Saint Michael Vanquishing Satan",

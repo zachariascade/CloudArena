@@ -8,7 +8,6 @@ export const tokenImpCardDefinition: CardDefinition = {
   display: {
     title: "Unclean Spirit",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     imagePath: "38790FFE-A07F-43DA-ACBD-AFAED530BB8E.jpeg",
     imageAlt: "A small imp with ember wings and a sly grin",
     flavorText: "Small enough to underestimate, loud enough to matter.",

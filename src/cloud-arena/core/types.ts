@@ -606,7 +606,6 @@ export type ChoiceRecord = {
 export type CardDisplayDefinition = {
   title: string | null;
   frameTone: string;
-  manaCost: string | null;
   imagePath?: string;
   imageAlt?: string;
   artist?: string | null;
@@ -620,6 +619,7 @@ export type BaseCardDefinition = {
   id: CardDefinitionId;
   name: string;
   cost: number;
+  manaCost?: string | null;
   cardTypes: CardType[];
   subtypes?: string[];
   rarity?: "common" | "uncommon" | "rare" | "mythic" | "special" | "bonus" | null;

@@ -8,7 +8,6 @@ export const holyBladeCardDefinition: CardDefinition = {
   display: {
     title: "Sword of the Cherubim",
     frameTone: "colorless",
-    manaCost: "{1}",
     imagePath: "card_0027_let_there_be_light.png",
     imageAlt: "A radiant blade formed from sacred light",
     flavorText: "No hand keeps it long; it belongs where the charge is fiercest.",

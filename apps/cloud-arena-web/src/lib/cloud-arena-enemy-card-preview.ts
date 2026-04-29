@@ -14,6 +14,7 @@ import {
 } from "../../../../src/cloud-arena/index.js";
 
 import {
+  buildCardManaCost,
   buildDisplayCardModel,
   buildCardSubtitle,
   type DisplayCardModel,
@@ -314,7 +315,7 @@ export function buildEnemyPreviewCardModel(
     title: display?.title ?? null,
     subtitle: buildCardSubtitle(definition),
     frameTone: display?.frameTone ?? "split-black-red",
-    manaCost: display?.manaCost ?? null,
+    manaCost: buildCardManaCost(definition),
     image: display?.imagePath && display?.imageAlt
       ? {
           alt: display.imageAlt,

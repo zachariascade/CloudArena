@@ -8,7 +8,6 @@ export const sacrificialSeraphCardDefinition: CardDefinition = {
   display: {
     title: "Seraph of the Altar",
     frameTone: "white",
-    manaCost: "{2}",
     imagePath: "card_0003_michael.avif",
     imageAlt: "An angel descending over a battlefield altar",
     flavorText: "Every offering leaves it brighter, sharper, and harder to oppose.",

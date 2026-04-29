@@ -8,7 +8,6 @@ export const enemyBruteCardDefinition: CardDefinition = {
   display: {
     title: "Pan, Horned Brute",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     imagePath: "dante-swarm.jpeg",
     imageAlt: "A hulking demon brute wrapped in fire and shadow",
     footerCode: "ARE",

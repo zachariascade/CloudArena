@@ -8,7 +8,6 @@ export const restorativeTouchCardDefinition: CardDefinition = {
   display: {
     title: "Your Faith Has Made You Well",
     frameTone: "white",
-    manaCost: "{1}",
     imagePath: "card_0030_tree_of_life.jpg",
     imageAlt: "A living tree radiating restorative strength",
     flavorText: "A careful touch can steady what battle has worn thin.",

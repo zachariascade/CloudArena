@@ -8,7 +8,6 @@ export const galleryGreatDayOfHisWrathCardDefinition: CardDefinition = {
   display: {
     title: "Day of Wrath",
     frameTone: "split-black-red",
-    manaCost: "{3}",
     artist: "John Martin",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/John_Martin_-_The_Great_Day_of_His_Wrath_-_Google_Art_Project.jpg/960px-John_Martin_-_The_Great_Day_of_His_Wrath_-_Google_Art_Project.jpg",
     imageAlt: "John Martin's The Great Day of His Wrath",

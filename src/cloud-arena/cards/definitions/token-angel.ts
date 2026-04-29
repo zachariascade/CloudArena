@@ -8,7 +8,6 @@ export const tokenAngelCardDefinition: CardDefinition = {
   display: {
     title: "Angel of the Lord",
     frameTone: "white",
-    manaCost: "{1}",
     imagePath: "classics/card_0059_dove_with_the_olive_branch.jpg",
     imageAlt: "A small angel token hovering over the battlefield",
     flavorText: "A little light, repeated where it is needed, still holds the line.",

@@ -8,7 +8,6 @@ export const enemySatanAsTheFallenAngelCardDefinition: CardDefinition = {
   display: {
     title: "Satan as the Fallen Angel",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     artist: "Sir Thomas Lawrence",
     imagePath:
       "https://commons.wikimedia.org/wiki/Special:FilePath/%27Satan%20as%20the%20Fallen%20Angel%27%20by%20Sir%20Thomas%20Lawrence,%20chalk.jpg",

@@ -8,7 +8,6 @@ export const enemyRebelAngelCardDefinition: CardDefinition = {
   display: {
     title: "The Rebel Angel",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     artist: "Nicholas Kalmakoff",
     imagePath:
       "https://commons.wikimedia.org/wiki/Special:FilePath/L%E2%80%99ange%20rebelle%20%28The%20Rebel%20Angel%29%20%281924%29%20-%20Nikolai%20Kalmakov.jpg",

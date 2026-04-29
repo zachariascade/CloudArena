@@ -8,7 +8,6 @@ export const enemyGardenOfEarthlyDelightsHellDetailCardDefinition: CardDefinitio
   display: {
     title: "Garden of Earthly Delights - Hell Detail",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     artist: "Hieronymus Bosch",
     imagePath:
       "https://commons.wikimedia.org/wiki/Special:FilePath/Hieronymus%20Bosch%20-%20The%20Garden%20of%20Earthly%20Delights%20-%20Hell%20Detail.jpg",

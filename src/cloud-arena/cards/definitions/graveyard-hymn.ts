@@ -8,7 +8,6 @@ export const graveyardHymnCardDefinition: CardDefinition = {
   display: {
     title: "Song of the Dry Bones",
     frameTone: "white",
-    manaCost: "{2}",
     imagePath: "https://commons.wikimedia.org/wiki/Special:FilePath/Quinten%20Massys%20Vision%20des%20Propheten%20Ezechiels.jpg",
     imageAlt: "Quinten Massys's Vision of the Prophet Ezekiel",
     flavorText: "Even in ruin, a faithful voice can make the whole field rise again.",

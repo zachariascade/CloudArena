@@ -8,7 +8,6 @@ export const enemySatanExultingOverEveCardDefinition: CardDefinition = {
   display: {
     title: "Satan Exulting over Eve",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     artist: "William Blake",
     imagePath:
       "https://commons.wikimedia.org/wiki/Special:FilePath/Satan%20Exulting%20over%20Eve.jpg",

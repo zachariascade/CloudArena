@@ -8,7 +8,6 @@ export const galleryWomanTakenInAdulteryCardDefinition: CardDefinition = {
   display: {
     title: "Neither Do I Condemn You",
     frameTone: "white",
-    manaCost: "{3}",
     artist: "Rembrandt van Rijn",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Rembrandt_Christ_and_the_Woman_Taken_in_Adultery.jpg/960px-Rembrandt_Christ_and_the_Woman_Taken_in_Adultery.jpg",
     imageAlt: "Rembrandt van Rijn's The Woman Taken in Adultery",

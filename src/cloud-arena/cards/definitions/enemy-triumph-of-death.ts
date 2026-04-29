@@ -8,7 +8,6 @@ export const enemyTriumphOfDeathCardDefinition: CardDefinition = {
   display: {
     title: "The Triumph of Death",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     artist: "Pieter Bruegel the Elder",
     imagePath:
       "https://commons.wikimedia.org/wiki/Special:FilePath/The%20Triumph%20of%20Death%20by%20Pieter%20Bruegel%20the%20Elder.jpg",

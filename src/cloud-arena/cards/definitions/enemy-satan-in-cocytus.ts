@@ -8,7 +8,6 @@ export const enemySatanInCocytusCardDefinition: CardDefinition = {
   display: {
     title: "Satan in Cocytus, The Frozen Betrayer",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     artist: "Gustave Doré",
     imagePath:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Gustave_Dore_Inferno34.jpg/960px-Gustave_Dore_Inferno34.jpg",

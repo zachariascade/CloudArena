@@ -8,7 +8,6 @@ export const galleryLastJudgmentCardDefinition: CardDefinition = {
   display: {
     title: "Final Reckoning",
     frameTone: "split-black-red",
-    manaCost: "{3}",
     artist: "Hieronymus Bosch",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Hieronymus_Bosch_-_The_Last_Judgement.jpg/960px-Hieronymus_Bosch_-_The_Last_Judgement.jpg",
     imageAlt: "Hieronymus Bosch's The Last Judgment",

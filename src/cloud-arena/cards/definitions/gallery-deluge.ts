@@ -8,7 +8,6 @@ export const galleryDelugeCardDefinition: CardDefinition = {
   display: {
     title: "Flood of Judgment",
     frameTone: "blue",
-    manaCost: "{3}",
     artist: "Gustave Doré",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Gustave_Dor%C3%A9_-_The_Holy_Bible_-_Plate_I%2C_The_Deluge.jpg/960px-Gustave_Dor%C3%A9_-_The_Holy_Bible_-_Plate_I%2C_The_Deluge.jpg",
     imageAlt: "Gustave Doré's The Deluge",

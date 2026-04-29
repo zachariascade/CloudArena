@@ -9,7 +9,6 @@ export const galleryTowerOfBabelCardDefinition: CardDefinition = {
   display: {
     title: "The Great Tower",
     frameTone: "split-white-blue",
-    manaCost: "{3}",
     artist: "Gustave Doré",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Gustave_Dore_Bible_The_Tower_of_Babel.jpg/960px-Gustave_Dore_Bible_The_Tower_of_Babel.jpg",
     imageAlt: "Gustave Doré's Tower of Babel",

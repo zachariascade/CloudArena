@@ -8,7 +8,6 @@ export const sanctifiedGuideCardDefinition: CardDefinition = {
   display: {
     title: "Pillar of Cloud",
     frameTone: "white",
-    manaCost: "{3}",
     imagePath: "card_0037_builder_of_the_tower.jpg",
     imageAlt: "An angel guiding a single blessing onto the field",
     flavorText: "A steady hand can direct grace exactly where the line is thinnest.",

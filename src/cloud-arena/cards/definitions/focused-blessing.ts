@@ -8,7 +8,6 @@ export const focusedBlessingCardDefinition: CardDefinition = {
   display: {
     title: "Aaronic Blessing",
     frameTone: "white",
-    manaCost: "{1}",
     imagePath: "https://commons.wikimedia.org/wiki/Special:FilePath/Fra%20Angelico%20-%20The%20Annunciation.jpg",
     imageAlt: "Fra Angelico's Annunciation with the Archangel Gabriel",
     flavorText: "A single faithful touch can sharpen a whole line of resolve.",

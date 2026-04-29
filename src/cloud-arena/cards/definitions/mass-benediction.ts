@@ -8,7 +8,6 @@ export const massBenedictionCardDefinition: CardDefinition = {
   display: {
     title: "Priestly Benediction",
     frameTone: "white",
-    manaCost: "{2}",
     imagePath: "card_0027_let_there_be_light.png",
     imageAlt: "A radiant blessing washing over a gathered host",
     flavorText: "When the field is already crowded with resolve, every presence turns brighter.",

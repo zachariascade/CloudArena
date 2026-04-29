@@ -8,7 +8,6 @@ export const galleryPandemoniumJohnMartinCardDefinition: CardDefinition = {
   display: {
     title: "Pandemonium",
     frameTone: "split-black-red",
-    manaCost: "{3}",
     artist: "John Martin",
     imagePath: "https://commons.wikimedia.org/wiki/Special:FilePath/Pandemonium.jpg",
     imageAlt: "John Martin's Pandemonium",

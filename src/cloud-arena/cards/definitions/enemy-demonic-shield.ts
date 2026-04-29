@@ -8,7 +8,6 @@ export const enemyDemonicShieldCardDefinition: CardDefinition = {
   display: {
     title: "Demonic Shield",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     imagePath: "demonic-shield.png",
     imageAlt: "A demonic shield flaring with infernal protection",
     footerCode: "ARE",

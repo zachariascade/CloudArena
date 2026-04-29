@@ -9,7 +9,6 @@ export const galleryAngelStoppingAbrahamCardDefinition: CardDefinition = {
   display: {
     title: "Voice of Stayed Hand",
     frameTone: "split-white-green",
-    manaCost: "{3}",
     artist: "Rembrandt van Rijn",
     imagePath:
       "https://upload.wikimedia.org/wikipedia/commons/9/96/Rembrandt_The_Angel_Preventing_Abraham_from_Sacrificing_his_Son%2C_Isaac.jpg",

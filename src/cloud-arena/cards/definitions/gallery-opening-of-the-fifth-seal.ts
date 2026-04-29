@@ -8,7 +8,6 @@ export const galleryOpeningOfTheFifthSealCardDefinition: CardDefinition = {
   display: {
     title: "The Unsealed Witnesses",
     frameTone: "white",
-    manaCost: "{3}",
     artist: "El Greco",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/El_Greco_-_The_Opening_of_the_Fifth_Seal_%28The_Vision_of_St_John%29_-_WGA10637.jpg/960px-El_Greco_-_The_Opening_of_the_Fifth_Seal_%28The_Vision_of_St_John%29_-_WGA10637.jpg",
     imageAlt: "El Greco's The Opening of the Fifth Seal",

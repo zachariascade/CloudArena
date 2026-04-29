@@ -8,7 +8,6 @@ export const enemyDemonPierceCardDefinition: CardDefinition = {
   display: {
     title: "Pierce",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     imagePath: "demon-pierce.png",
     imageAlt: "A demon driving forward in a lethal spearpoint of shadow and flame",
     footerCode: "ARE",

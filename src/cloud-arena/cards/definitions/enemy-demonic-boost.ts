@@ -8,7 +8,6 @@ export const enemyDemonicBoostCardDefinition: CardDefinition = {
   display: {
     title: "Demonic Boost",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     imagePath: "demonic-boost.png",
     imageAlt: "A demon surging with stolen power",
     footerCode: "ARE",

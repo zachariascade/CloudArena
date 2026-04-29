@@ -8,7 +8,6 @@ export const radiantConduitCardDefinition: CardDefinition = {
   display: {
     title: "Pillar of Fire",
     frameTone: "white",
-    manaCost: "{2}",
     imagePath: "2B5A00FD-D279-48BD-AEFE-0711AC4E9F54.jpeg",
     imageAlt: "An angel channeling radiant energy through the battlefield",
     flavorText: "A steady conduit turns a single spark into momentum.",

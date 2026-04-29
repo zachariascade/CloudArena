@@ -9,7 +9,6 @@ export const galleryJacobWrestlesWithTheAngelCardDefinition: CardDefinition = {
   display: {
     title: "Wrestler at the Ford",
     frameTone: "split-white-green",
-    manaCost: "{3}",
     artist: "Gustave Doré",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/024.Jacob_Wrestles_with_the_Angel.jpg/960px-024.Jacob_Wrestles_with_the_Angel.jpg",
     imageAlt: "Gustave Doré's Jacob Wrestles with the Angel",

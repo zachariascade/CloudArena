@@ -8,7 +8,6 @@ export const sappingCurseCardDefinition: CardDefinition = {
   display: {
     title: "Sapping Curse",
     frameTone: "blue",
-    manaCost: "{1}",
     imagePath: "card_0031_tree_of_forbidden_knowledge.jpg",
     imageAlt: "A dark burden draining strength from a creature",
     flavorText: "By the time the blade falls, the prey is already too heavy to lift.",

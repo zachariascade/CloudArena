@@ -9,7 +9,6 @@ export const galleryDanielInTheLionsDenCardDefinition: CardDefinition = {
   display: {
     title: "Daniel in the Lions' Den",
     frameTone: "white",
-    manaCost: "{3}",
     artist: "Gustave Doré",
     imagePath:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/131.Daniel_in_the_Lions%27_Den.jpg/960px-131.Daniel_in_the_Lions%27_Den.jpg",

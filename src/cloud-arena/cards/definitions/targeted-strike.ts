@@ -8,7 +8,6 @@ export const targetedStrikeCardDefinition: CardDefinition = {
   display: {
     title: "David's Stone",
     frameTone: "red",
-    manaCost: "{1}",
     imagePath: "card_0023_cain_marked_exile.jpg",
     imageAlt: "A marked exile struck by a precise blow",
     flavorText: "The sharpest strike is the one that lands exactly where it should.",

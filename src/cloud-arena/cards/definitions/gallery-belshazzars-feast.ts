@@ -8,7 +8,6 @@ export const galleryBelshazzarsFeastCardDefinition: CardDefinition = {
   display: {
     title: "Banquet of Empty Crowns",
     frameTone: "split-black-red",
-    manaCost: "{3}",
     artist: "John Martin",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/John_Martin_-_Belshazzar%27s_Feast_-_Google_Art_Project.jpg/960px-John_Martin_-_Belshazzar%27s_Feast_-_Google_Art_Project.jpg",
     imageAlt: "John Martin's Belshazzar's Feast",

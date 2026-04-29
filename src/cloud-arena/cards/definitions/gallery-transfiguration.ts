@@ -9,7 +9,6 @@ export const galleryTransfigurationCardDefinition: CardDefinition = {
   display: {
     title: "Shining on the Mountain",
     frameTone: "split-white-blue",
-    manaCost: "{3}",
     artist: "Raphael",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Transfiguration_Raphael.jpg/960px-Transfiguration_Raphael.jpg",
     imageAlt: "Raphael's The Transfiguration",

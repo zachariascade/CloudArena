@@ -14,7 +14,6 @@ function createSlashCardDefinition(
     display: {
       title: name,
       frameTone: "split-black-red",
-      manaCost: "{0}",
       imagePath,
       imageAlt: `${name} art showing a blade slash through the frame`,
       footerCode: "ARE",

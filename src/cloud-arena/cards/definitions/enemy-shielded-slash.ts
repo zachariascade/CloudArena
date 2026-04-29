@@ -8,7 +8,6 @@ export const enemyShieldedSlashCardDefinition: CardDefinition = {
   display: {
     title: "Shielded Slash",
     frameTone: "split-black-red",
-    manaCost: "{0}",
     imagePath: "shielded-slash.png",
     imageAlt: "A demon cutting forward behind a wall of infernal armor",
     footerCode: "ARE",

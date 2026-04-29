@@ -9,7 +9,6 @@ export const galleryAnnunciationCardDefinition: CardDefinition = {
   display: {
     title: "Herald of the First Sign",
     frameTone: "split-white-blue",
-    manaCost: "{3}",
     artist: "Fra Angelico",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Angelico_-_Annunciation_-_San_Marco_north_corridor.jpg",
     imageAlt: "Fra Angelico's Annunciation",

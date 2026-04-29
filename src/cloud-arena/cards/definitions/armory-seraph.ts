@@ -8,7 +8,6 @@ export const armorySeraphCardDefinition: CardDefinition = {
   display: {
     title: "Gabriel, Herald of the Armory",
     frameTone: "white",
-    manaCost: "{3}",
     imagePath: "https://commons.wikimedia.org/wiki/Special:FilePath/Annonciation%20Nardo%20di%20Cione.jpg",
     imageAlt: "Nardo di Cione's Annunciation with the Archangel Gabriel",
     flavorText: "Every steel edge arriving on the field is another line of sight.",

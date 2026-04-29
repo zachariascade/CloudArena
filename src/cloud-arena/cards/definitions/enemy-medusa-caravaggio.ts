@@ -8,7 +8,6 @@ export const enemyMedusaCaravaggioCardDefinition: CardDefinition = {
   display: {
     title: "Medusa",
     frameTone: "black-green",
-    manaCost: "{0}",
     artist: "Caravaggio",
     imagePath:
       "https://commons.wikimedia.org/wiki/Special:FilePath/Medusa-Caravaggio%20(Uffizi).jpg",

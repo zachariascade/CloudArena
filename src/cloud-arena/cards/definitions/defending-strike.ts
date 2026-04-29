@@ -8,7 +8,6 @@ export const defendingStrikeCardDefinition: CardDefinition = {
   display: {
     title: "Zeal of Phinehas",
     frameTone: "split-white-red",
-    manaCost: "{2}",
     imagePath: "card_0031_tree_of_forbidden_knowledge.jpg",
     imageAlt: "A hard-earned warning wrapped around a burning edge",
     flavorText: "Turn defense into pressure before the enemy can reset.",

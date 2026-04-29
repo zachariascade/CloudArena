@@ -8,7 +8,6 @@ export const galleryFallOfTheRebelAngelsRubensCardDefinition: CardDefinition = {
   display: {
     title: "Fall of the Rebel Angels",
     frameTone: "split-black-red",
-    manaCost: "{3}",
     artist: "Peter Paul Rubens",
     imagePath:
       "https://commons.wikimedia.org/wiki/Special:FilePath/Fall%20of%20the%20rebel%20angels%20-%20Peter%20Paul%20Rubens%20(Unframed).jpg",

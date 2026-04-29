@@ -8,7 +8,6 @@ export const guardianCardDefinition: CardDefinition = {
   display: {
     title: "Watcher at Eden's Gate",
     frameTone: "white",
-    manaCost: "{3}",
     imagePath: "card_0036_watcher_at_edens_gate.jpg",
     imageAlt: "A guardian standing watch before a sacred gate",
     flavorText: "A faithful body on the field buys time for every plan behind it.",

@@ -9,7 +9,6 @@ export const gallerySacrificeOfIsaacCardDefinition: CardDefinition = {
   display: {
     title: "Faith Tested",
     frameTone: "split-white-red",
-    manaCost: "{3}",
     artist: "Caravaggio",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Sacrifice_of_Isaac-Caravaggio_%28Uffizi%29.jpg/960px-Sacrifice_of_Isaac-Caravaggio_%28Uffizi%29.jpg",
     imageAlt: "Caravaggio's The Sacrifice of Isaac",

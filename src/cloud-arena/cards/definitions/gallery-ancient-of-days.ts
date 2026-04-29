@@ -9,7 +9,6 @@ export const galleryAncientOfDaysCardDefinition: CardDefinition = {
   display: {
     title: "Keeper of the First Dawn",
     frameTone: "white",
-    manaCost: "{3}",
     artist: "William Blake",
     imagePath:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg/960px-The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg",

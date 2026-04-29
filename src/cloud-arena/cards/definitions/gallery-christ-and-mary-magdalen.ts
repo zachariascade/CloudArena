@@ -9,7 +9,6 @@ export const galleryChristAndMaryMagdalenCardDefinition: CardDefinition = {
   display: {
     title: "Witness at the Empty Tomb",
     frameTone: "white",
-    manaCost: "{3}",
     artist: "Rembrandt van Rijn",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Rembrandt_van_Rijn_-_Christ_and_St_Mary_Magdalen_at_the_Tomb_-_Google_Art_Project.jpg/960px-Rembrandt_van_Rijn_-_Christ_and_St_Mary_Magdalen_at_the_Tomb_-_Google_Art_Project.jpg",
     imageAlt: "Rembrandt van Rijn's Christ and St Mary Magdalen at the Tomb",

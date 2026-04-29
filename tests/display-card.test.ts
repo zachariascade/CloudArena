@@ -10,6 +10,7 @@ import { CloudArenaInspectorPanel } from "../apps/cloud-arena-web/src/components
 import {
   buildCardSubtitle,
   buildCardFooterStat,
+  buildCardManaCost,
   mapArenaEnemyToDisplayCard,
   mapArenaHandCardToDisplayCard,
   mapArenaPermanentToDisplayCard,
@@ -19,6 +20,7 @@ import { buildEnemyPreviewCards } from "../apps/cloud-arena-web/src/lib/cloud-ar
 import type { CloudArenaBattleViewModel } from "../apps/cloud-arena-web/src/lib/cloud-arena-battle-view-model.js";
 import type { CloudArenaBattleMotionState } from "../apps/cloud-arena-web/src/lib/cloud-arena-battle-motion.js";
 import type { CardDefinition } from "../src/cloud-arena/core/types.js";
+import { denialBeforeTheRoostersCryCardDefinition } from "../src/cloud-arena/cards/definitions/denial-before-the-rooster-s-cry.js";
 import { galleryAncientOfDaysCardDefinition } from "../src/cloud-arena/cards/definitions/gallery-ancient-of-days.js";
 import { getEnemyPreset } from "../src/cloud-arena/index.js";
 
@@ -85,6 +87,11 @@ describe("shared display card mappers", () => {
     });
 
     expect(footerStat).toBe("4/6");
+  });
+
+  it("derives the mana cost from the card definition manaCost or cost", () => {
+    expect(buildCardManaCost(galleryAncientOfDaysCardDefinition)).toBe("{3}");
+    expect(buildCardManaCost(denialBeforeTheRoostersCryCardDefinition)).toBe("{1}{W}{U}");
   });
 
   it("maps arena player and enemy summaries into display cards", () => {

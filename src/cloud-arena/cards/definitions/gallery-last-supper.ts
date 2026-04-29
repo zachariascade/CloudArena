@@ -9,7 +9,6 @@ export const galleryLastSupperCardDefinition: CardDefinition = {
   display: {
     title: "Bread and Cup",
     frameTone: "white",
-    manaCost: "{3}",
     artist: "Jacopo Tintoretto",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Jacopo_Tintoretto_-_The_Last_Supper_-_WGA22649.jpg/960px-Jacopo_Tintoretto_-_The_Last_Supper_-_WGA22649.jpg",
     imageAlt: "Jacopo Tintoretto's The Last Supper",

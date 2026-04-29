@@ -9,7 +9,6 @@ export const galleryCreationOfAdamCardDefinition: CardDefinition = {
   display: {
     title: "Spark of Life",
     frameTone: "split-white-blue",
-    manaCost: "{3}",
     artist: "Michelangelo",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg/960px-Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg",
     imageAlt: "Michelangelo's Creation of Adam",

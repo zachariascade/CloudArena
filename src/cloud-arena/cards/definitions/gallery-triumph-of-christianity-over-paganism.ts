@@ -9,7 +9,6 @@ export const galleryTriumphOfChristianityOverPaganismCardDefinition: CardDefinit
   display: {
     title: "Triumph of the Cross",
     frameTone: "white",
-    manaCost: "{3}",
     artist: "Gustave Doré",
     imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/The_Triumph_Of_Christianity_Over_Paganism.Gustave_Dor%C3%A9.jpg/960px-The_Triumph_Of_Christianity_Over_Paganism.Gustave_Dor%C3%A9.jpg",
     imageAlt: "Gustave Doré's The Triumph of Christianity Over Paganism",
