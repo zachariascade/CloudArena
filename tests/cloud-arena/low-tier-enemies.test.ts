@@ -6,7 +6,7 @@ import {
   getEnemyPlanStepAtIndexFromInput,
   formatEnemyIntent,
 } from "../../src/cloud-arena/index.js";
-import { TEST_CARD_DEFINITIONS, createTestBattle, formatBattleLog } from "./helpers.js";
+import { TEST_CARD_DEFINITIONS, createTestBattle, getEnemyHealth, getEnemyBlock, getEnemyPermanent, formatBattleLog } from "./helpers.js";
 
 describe("cloud arena low-tier enemies", () => {
   it("resolves grunt demon attacks from base power", () => {
@@ -25,9 +25,9 @@ describe("cloud arena low-tier enemies", () => {
     });
 
     const startingHealth = battle.player.health;
-    const leader = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+    const leader = battle.enemyBattlefield.find((entry) => entry?.enemyActorId === "enemy_actor_1");
 
-    expect(battle.enemy.intent).toEqual({ attackAmount: 5 });
+    expect((battle.enemies[0]?.intent ?? {})).toEqual({ attackAmount: 5 });
     expect(leader?.name).toBe("Test Attacker");
     expect(leader?.definitionId).toBe("enemy_leader");
 
@@ -54,12 +54,12 @@ describe("cloud arena low-tier enemies", () => {
 
     const startingHealth = battle.player.health;
 
-    expect(battle.enemy.intent).toEqual({ attackAmount: 6, attackTimes: 2 });
+    expect((battle.enemies[0]?.intent ?? {})).toEqual({ attackAmount: 6, attackTimes: 2 });
 
     applyBattleAction(battle, { type: "end_turn" });
     applyBattleAction(battle, { type: "end_turn" });
 
-    expect(battle.enemy.basePower).toBe(7);
+    expect((battle.enemies[0]?.basePower ?? 0)).toBe(7);
     expect(battle.player.health).toBe(startingHealth - 12);
     expect(formatBattleLog(battle)).toContain("turn 2: enemy gained 1 power, base power now 7");
   });
@@ -81,17 +81,17 @@ describe("cloud arena low-tier enemies", () => {
     });
 
     const startingTokens = battle.enemyBattlefield.filter(
-      (entry): entry is NonNullable<typeof entry> => entry !== null && !entry.isEnemyLeader,
+      (entry): entry is NonNullable<typeof entry> => entry !== null && entry?.enemyActorId !== "enemy_actor_1",
     );
     const startingHealth = battle.player.health;
 
     expect(startingTokens.map((token) => token.definitionId)).toEqual(["token_imp"]);
-    expect(battle.enemy.intent).toEqual({ spawnCardId: "token_imp", spawnCount: 1 });
+    expect((battle.enemies[0]?.intent ?? {})).toEqual({ spawnCardId: "token_imp", spawnCount: 1 });
 
     applyBattleAction(battle, { type: "end_turn" });
 
     const tokensAfterSpawn = battle.enemyBattlefield.filter(
-      (entry): entry is NonNullable<typeof entry> => entry !== null && !entry.isEnemyLeader,
+      (entry): entry is NonNullable<typeof entry> => entry !== null && entry?.enemyActorId !== "enemy_actor_1",
     );
 
     expect(tokensAfterSpawn.length).toBe(2);
@@ -193,7 +193,7 @@ describe("cloud arena low-tier enemies", () => {
     expect(enemyBodies).toHaveLength(3);
     expect(enemyBodies.filter((entry) => entry.definitionId === "enemy_husk")).toHaveLength(1);
     expect(enemyBodies.filter((entry) => entry.definitionId === "enemy_brute")).toHaveLength(1);
-    expect(battle.enemyBattlefield.some((entry) => entry?.isEnemyLeader)).toBe(true);
+    expect(battle.enemyBattlefield.some((entry) => entry?.enemyActorId === "enemy_actor_1")).toBe(true);
 
     const startHealth = battle.player.health;
     applyBattleAction(battle, { type: "end_turn" });
@@ -309,7 +309,7 @@ describe("cloud arena low-tier enemies", () => {
     battle.player.energy = 10;
 
     const malaise = battle.player.hand.find((card) => card.definitionId === "enemy_leader_malaise");
-    const enemyLeader = battle.enemyBattlefield.find((permanent) => permanent?.isEnemyLeader);
+    const enemyLeader = battle.enemyBattlefield.find((permanent) => permanent?.enemyActorId === "enemy_actor_1");
 
     if (!malaise || !enemyLeader) {
       throw new Error("Expected enemy leader malaise and an enemy leader in the battle setup.");
@@ -357,14 +357,14 @@ describe("cloud arena low-tier enemies", () => {
       },
     });
 
-    expect(battle.enemy.intent).toEqual({ attackAmount: 3 });
-    expect(battle.enemy.block).toBe(0);
+    expect((battle.enemies[0]?.intent ?? {})).toEqual({ attackAmount: 3 });
+    expect(getEnemyBlock(battle)).toBe(0);
 
     applyBattleAction(battle, { type: "end_turn" });
 
     expect(battle.turnNumber).toBe(2);
-    expect(battle.enemy.block).toBe(24);
-    expect(battle.enemy.intent).toEqual({});
+    expect(getEnemyBlock(battle)).toBe(24);
+    expect((battle.enemies[0]?.intent ?? {})).toEqual({});
   });
 
   it("applies a battlefield-wide debuff to permanents for a turn", () => {
@@ -408,7 +408,7 @@ describe("cloud arena low-tier enemies", () => {
     applyBattleAction(battle, { type: "end_turn" });
     applyBattleAction(battle, { type: "end_turn" });
 
-    const enemyLeader = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+    const enemyLeader = battle.enemyBattlefield.find((entry) => entry?.enemyActorId === "enemy_actor_1");
 
     expect(enemyLeader?.intentLabel).toBe("Debuff");
     applyBattleAction(battle, { type: "end_turn" });

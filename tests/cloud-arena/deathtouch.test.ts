@@ -41,7 +41,7 @@ describe("deathtouch keyword", () => {
         name: "Viper Shade",
         health: 20,
         basePower: 2,
-        leaderDefinitionId: "deathtouch_enemy",
+        definitionId: "deathtouch_enemy",
         behavior: [{ attackAmount: 2 }],
       },
     });
@@ -79,7 +79,7 @@ describe("deathtouch keyword", () => {
         name: "Viper Shade",
         health: 20,
         basePower: 2,
-        leaderDefinitionId: "deathtouch_enemy",
+        definitionId: "deathtouch_enemy",
         behavior: [{ attackAmount: 0 }],
       },
     });

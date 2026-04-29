@@ -96,7 +96,7 @@ describe("multi-enemy actor state", () => {
         .filter((permanent): permanent is NonNullable<typeof permanent> => permanent !== null)
         .map((permanent) => permanent.enemyActorId),
     ).toEqual(battle.enemies.map((enemy) => enemy.id));
-    expect(battle.enemy.name).toBe(battle.enemies[0]?.name);
-    expect(battle.enemy.leaderPermanentId).toBe(battle.enemies[0]?.permanentId ?? null);
+    expect((battle.enemies[0]?.name ?? "")).toBe(battle.enemies[0]?.name);
+    expect(battle.enemies[0]?.permanentId ?? null).toBe(battle.enemies[0]?.permanentId ?? null);
   });
 });

@@ -15,7 +15,6 @@ import type {
   CardInstance,
   CardDefinitionId,
   EnemyActorState,
-  EnemyState,
   PermanentKeyword,
   PermanentKeywordModifier,
   PermanentState,
@@ -388,85 +387,6 @@ export function trySummonPermanentFromCard(
   return summonPermanentFromCard(state, card, controllerId, enteredBattlefieldTurnNumber);
 }
 
-export function createEnemyLeaderPermanent(
-  state: BattleState,
-  enemy: Pick<EnemyState, "name" | "health" | "basePower" | "intent"> & {
-    definitionId?: CardDefinitionId;
-    enemyActorId?: string | null;
-  },
-  enteredBattlefieldTurnNumber?: number,
-): PermanentState {
-  const openSlot = state.enemyBattlefield.findIndex(
-    (slot, index) => index < state.enemyCreatureSlotCount && slot === null,
-  );
-
-  if (openSlot === -1) {
-    throw new Error(`Cannot create enemy leader ${enemy.name} without an open battlefield slot.`);
-  }
-
-  const leaderDefinitionId = enemy.definitionId ?? "enemy_leader";
-  const leaderDefinition = state.cardDefinitions[leaderDefinitionId];
-  const leaderKeywords =
-    leaderDefinition && "keywords" in leaderDefinition
-      ? getPermanentKeywordsForDefinition(asPermanentCardDefinition(leaderDefinition))
-      : [];
-
-  const permanent: PermanentState = {
-    instanceId: `enemy_leader_${state.turnNumber}_${state.nextEnemyTokenIndex}`,
-    sourceCardInstanceId: `enemy_leader_${state.turnNumber}_${state.nextEnemyTokenIndex}`,
-    name: enemy.name,
-    definitionId: leaderDefinitionId,
-    controllerId: "enemy",
-    enemyActorId: enemy.enemyActorId ?? null,
-    isEnemyLeader: true,
-    intentLabel: null,
-    intentQueueLabels: [],
-    power: enemy.basePower,
-    health: enemy.health,
-    maxHealth: enemy.health,
-    block: 0,
-    recoveryPolicy: "none",
-    enteredBattlefieldTurnNumber,
-    keywords: leaderKeywords,
-    counters: [],
-    modifiers: [],
-    keywordModifiers: [],
-    attachments: [],
-    attachedTo: null,
-    abilities: [],
-    disabledAbilityIds: [],
-    disabledRulesActions: [],
-    hasActedThisTurn: false,
-    isTapped: false,
-    isDefending: false,
-    blockingTargetPermanentId: null,
-    slotIndex: openSlot,
-  };
-
-  state.enemyBattlefield[openSlot] = permanent;
-
-  emitRulesEvent(state, {
-    type: "permanent_entered",
-    turnNumber: state.turnNumber,
-    permanentId: permanent.instanceId,
-    sourceCardInstanceId: permanent.sourceCardInstanceId,
-    definitionId: permanent.definitionId,
-    controllerId: "enemy",
-    slotIndex: openSlot,
-  });
-
-  state.log.push({
-    type: "permanent_summoned",
-    turnNumber: state.turnNumber,
-    permanentId: permanent.instanceId,
-    definitionId: permanent.definitionId,
-    slotIndex: openSlot,
-    controllerId: "enemy",
-  });
-
-  return permanent;
-}
-
 export function createEnemyPermanent(
   state: BattleState,
   enemy: {
@@ -494,7 +414,6 @@ export function createEnemyPermanent(
     definitionId: enemy.definitionId,
     controllerId: "enemy",
     enemyActorId: enemy.enemyActorId ?? null,
-    isEnemyLeader: false,
     intentLabel: null,
     intentQueueLabels: [],
     power: enemy.basePower,
@@ -547,27 +466,13 @@ export function createPermanentForEnemyActor(
   state: BattleState,
   enemyActor: Pick<EnemyActorState, "id" | "definitionId" | "name" | "health" | "basePower" | "intent">,
   options: {
-    isLeader: boolean;
     enteredBattlefieldTurnNumber?: number;
-  },
+  } = {},
 ): PermanentState {
-  if (options.isLeader) {
-    return createEnemyLeaderPermanent(state, {
-      name: enemyActor.name,
-      health: enemyActor.health,
-      basePower: enemyActor.basePower,
-      intent: enemyActor.intent,
-      definitionId: enemyActor.definitionId ?? undefined,
-      enemyActorId: enemyActor.id,
-    }, options.enteredBattlefieldTurnNumber);
-  }
-
-  if (!enemyActor.definitionId) {
-    throw new Error(`Enemy actor "${enemyActor.name}" must define a definitionId.`);
-  }
+  const definitionId = enemyActor.definitionId ?? "enemy_leader";
 
   return createEnemyPermanent(state, {
-    definitionId: enemyActor.definitionId,
+    definitionId,
     name: enemyActor.name,
     health: enemyActor.health,
     basePower: enemyActor.basePower,
@@ -575,22 +480,22 @@ export function createPermanentForEnemyActor(
   }, options.enteredBattlefieldTurnNumber);
 }
 
-export function getEnemyLeaderPermanent(state: BattleState): PermanentState | null {
-  if (state.enemy.leaderPermanentId) {
-    return (
-      state.enemyBattlefield.find((permanent) => permanent?.instanceId === state.enemy.leaderPermanentId) ??
-      null
-    );
+export function getEnemyActorPermanent(
+  state: BattleState,
+  actor: Pick<EnemyActorState, "permanentId">,
+): PermanentState | null {
+  if (!actor.permanentId) {
+    return null;
   }
-
-  return state.enemyBattlefield.find((permanent) => permanent?.isEnemyLeader) ?? null;
+  return state.enemyBattlefield.find((permanent) => permanent?.instanceId === actor.permanentId) ?? null;
 }
 
 export function getPrimaryEnemyPermanent(state: BattleState): PermanentState | null {
-  const enemyLeaderPermanent = getEnemyLeaderPermanent(state);
+  const primaryActor = state.enemies[0];
+  const primaryPermanent = primaryActor ? getEnemyActorPermanent(state, primaryActor) : null;
 
-  if (enemyLeaderPermanent && enemyLeaderPermanent.health > 0) {
-    return enemyLeaderPermanent;
+  if (primaryPermanent && primaryPermanent.health > 0) {
+    return primaryPermanent;
   }
 
   return (
@@ -634,43 +539,6 @@ export function hasLivingEnemyCreatures(state: BattleState): boolean {
     const definition = getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId);
     return hasCardType(definition, "creature");
   });
-}
-
-export function syncEnemyStateFromLeaderPermanent(state: BattleState): void {
-  const leaderPermanent = getEnemyLeaderPermanent(state);
-
-  if (!leaderPermanent) {
-    return;
-  }
-
-  state.enemy.name = leaderPermanent.name;
-  state.enemy.health = leaderPermanent.health;
-  state.enemy.maxHealth = leaderPermanent.maxHealth;
-  state.enemy.block = leaderPermanent.block;
-  state.enemy.basePower = leaderPermanent.power;
-  state.enemy.intentQueueLabels = [...(leaderPermanent.intentQueueLabels ?? [])];
-}
-
-export function syncEnemyLeaderPermanentFromState(
-  state: BattleState,
-  intentLabel?: string | null,
-  intentQueueLabels?: string[] | null,
-): void {
-  const leaderPermanent = getEnemyLeaderPermanent(state);
-
-  if (!leaderPermanent) {
-    return;
-  }
-
-  leaderPermanent.name = state.enemy.name;
-  leaderPermanent.health = state.enemy.health;
-  leaderPermanent.maxHealth = state.enemy.maxHealth;
-  leaderPermanent.block = state.enemy.block;
-  leaderPermanent.power = state.enemy.basePower;
-  leaderPermanent.intentLabel = state.enemy.stunnedThisTurn
-    ? "Stunned"
-    : intentLabel ?? leaderPermanent.intentLabel ?? null;
-  leaderPermanent.intentQueueLabels = intentQueueLabels ?? leaderPermanent.intentQueueLabels ?? [];
 }
 
 export function isEquipmentPermanent(state: BattleState, permanent: PermanentState): boolean {
@@ -866,13 +734,6 @@ export function destroyPermanent(
       instanceId: permanent.sourceCardInstanceId,
       definitionId: permanent.definitionId,
     });
-  }
-
-  if (permanent.isEnemyLeader) {
-    state.enemy.health = 0;
-    state.enemy.block = 0;
-    state.enemy.intentQueueLabels = [];
-    state.enemy.leaderPermanentId = null;
   }
 
   if (permanent.enemyActorId) {

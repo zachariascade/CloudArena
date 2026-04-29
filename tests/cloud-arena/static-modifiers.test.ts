@@ -6,7 +6,7 @@ import {
   getDerivedPermanentStat,
   type CardDefinitionLibrary,
 } from "../../src/cloud-arena/index.js";
-import { createTestBattle } from "./helpers.js";
+import { createTestBattle, getEnemyHealth, getEnemyBlock, getEnemyPermanent } from "./helpers.js";
 
 const STATIC_MODIFIER_CARD_DEFINITIONS: CardDefinitionLibrary = {
   angel_host: {
@@ -135,7 +135,7 @@ describe("cloud arena static modifiers", () => {
       permanentId: captain.instanceId,
       action: "attack",
     });
-    const leaderTarget = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+    const leaderTarget = battle.enemyBattlefield.find((entry) => entry?.enemyActorId === "enemy_actor_1");
 
     if (!leaderTarget) {
       throw new Error("Expected enemy leader target.");
@@ -146,6 +146,6 @@ describe("cloud arena static modifiers", () => {
       targetPermanentId: leaderTarget.instanceId,
     });
 
-    expect(battle.enemy.health).toBe(35);
+    expect(getEnemyHealth(battle)).toBe(35);
   });
 });

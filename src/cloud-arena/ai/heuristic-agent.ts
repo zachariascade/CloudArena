@@ -22,7 +22,7 @@ type ScoredAction = {
 };
 
 function getIncomingAttack(state: BattleState): number {
-  return getEnemyIntentAttackAmount(state.enemy.intent);
+  return getEnemyIntentAttackAmount((state.enemies[0]?.intent ?? {}));
 }
 
 function getRemainingIncomingDamageAfterCurrentDefense(state: BattleState): number {
@@ -39,7 +39,7 @@ function getRemainingIncomingDamageAfterCurrentDefense(state: BattleState): numb
       continue;
     }
 
-    if (permanent.blockingTargetPermanentId !== state.enemy.leaderPermanentId) {
+    if (permanent.blockingTargetPermanentId !== state.enemies[0]?.permanentId) {
       continue;
     }
 
@@ -48,11 +48,11 @@ function getRemainingIncomingDamageAfterCurrentDefense(state: BattleState): numb
     remainingDamage = Math.max(0, remainingDamage - (permanent.block + permanent.health));
   }
 
-  if (defended && state.enemy.intent.overflowPolicy === "stop_at_blocker") {
+  if (defended && (state.enemies[0]?.intent ?? {}).overflowPolicy === "stop_at_blocker") {
     return 0;
   }
 
-  if (halted && state.enemy.intent.overflowPolicy !== "trample") {
+  if (halted && (state.enemies[0]?.intent ?? {}).overflowPolicy !== "trample") {
     return 0;
   }
 
@@ -79,11 +79,19 @@ function findCardIdForAction(
 }
 
 function getEffectiveEnemyDamage(state: BattleState, damage: number): number {
-  return Math.max(0, Math.min(damage, state.enemy.block + state.enemy.health));
+  const primary = state.enemies[0];
+  if (!primary) {
+    return 0;
+  }
+  return Math.max(0, Math.min(damage, primary.block + primary.health));
 }
 
 function getEnemyHealthDamage(state: BattleState, damage: number): number {
-  return Math.max(0, damage - state.enemy.block);
+  const primary = state.enemies[0];
+  if (!primary) {
+    return 0;
+  }
+  return Math.max(0, damage - primary.block);
 }
 
 function getPermanentActionAmount(
@@ -230,7 +238,7 @@ function isLethalAction(state: BattleState, action: BattleAction): boolean {
     const damageAmount = getCardDamageAmount(state, cardId);
 
     if (damageAmount > 0) {
-      return getEnemyHealthDamage(state, damageAmount) >= state.enemy.health;
+      return getEnemyHealthDamage(state, damageAmount) >= (state.enemies[0]?.health ?? 0);
     }
 
     return false;
@@ -245,7 +253,7 @@ function isLethalAction(state: BattleState, action: BattleAction): boolean {
       getEnemyHealthDamage(
         state,
         getPermanentActionAmount(state, action.permanentId, "attack"),
-      ) >= state.enemy.health
+      ) >= (state.enemies[0]?.health ?? 0)
     );
   }
 

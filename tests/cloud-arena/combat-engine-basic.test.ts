@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 
 import { applyBattleAction, assault } from "../../src/cloud-arena/index.js";
-import { createTestBattle, formatBattleLog, requireCardInstanceId } from "./helpers.js";
+import { createTestBattle, getEnemyHealth, getEnemyBlock, getEnemyPermanent, formatBattleLog, requireCardInstanceId } from "./helpers.js";
 
 function chooseEnemyLeaderTarget(battle: ReturnType<typeof createTestBattle>): void {
-  const leaderTarget = battle.enemyBattlefield.find((entry) => entry?.isEnemyLeader);
+  const leaderTarget = battle.enemyBattlefield.find((entry) => entry?.enemyActorId === "enemy_actor_1");
 
   if (!leaderTarget) {
     throw new Error("Expected enemy leader target.");
@@ -37,7 +37,7 @@ describe("cloud arena combat engine basic flow", () => {
     expect(battle.phase).toBe("player_action");
     expect(battle.player.hand).toHaveLength(5);
     expect(battle.player.energy).toBe(3);
-    expect(battle.enemy.intent).toEqual({ attackAmount: 12 });
+    expect((battle.enemies[0]?.intent ?? {})).toEqual({ attackAmount: 12 });
 
     const openingHandIds = battle.player.hand.map((card) => card.definitionId);
     expect(openingHandIds).toEqual(["attack", "attack", "attack", "defend", "defend"]);
@@ -57,8 +57,8 @@ describe("cloud arena combat engine basic flow", () => {
     chooseEnemyLeaderTarget(battle);
 
     expect(battle.player.energy).toBe(2);
-    expect(battle.enemy.health).toBe(24);
-    expect(battle.enemy.block).toBe(0);
+    expect(getEnemyHealth(battle)).toBe(24);
+    expect(getEnemyBlock(battle)).toBe(0);
 
     applyBattleAction(battle, {
       type: "play_card",
@@ -67,7 +67,7 @@ describe("cloud arena combat engine basic flow", () => {
     chooseEnemyLeaderTarget(battle);
 
     expect(battle.player.energy).toBe(1);
-    expect(battle.enemy.health).toBe(18);
+    expect(getEnemyHealth(battle)).toBe(18);
 
     applyBattleAction(battle, {
       type: "play_card",
@@ -84,10 +84,10 @@ describe("cloud arena combat engine basic flow", () => {
     expect(battle.phase).toBe("player_action");
     expect(battle.player.health).toBe(startingHealth - 5);
     expect(battle.player.block).toBe(0);
-    expect(battle.enemy.health).toBe(18);
-    expect(battle.enemy.block).toBe(0);
+    expect(getEnemyHealth(battle)).toBe(18);
+    expect(getEnemyBlock(battle)).toBe(0);
     expect(battle.player.energy).toBe(3);
-    expect(battle.enemy.intent).toEqual({ blockAmount: 8 });
+    expect((battle.enemies[0]?.intent ?? {})).toEqual({ blockAmount: 8 });
     expect(battle.player.hand).toHaveLength(5);
     expect(battle.player.discardPile).toHaveLength(0);
 
@@ -116,7 +116,7 @@ describe("cloud arena combat engine basic flow", () => {
       cardInstanceId: turnTwoDefend.instanceId,
     });
 
-    expect(battle.enemy.health).toBe(6);
+    expect(getEnemyHealth(battle)).toBe(6);
     expect(battle.player.block).toBe(7);
 
     applyBattleAction(battle, { type: "end_turn" });
@@ -124,9 +124,9 @@ describe("cloud arena combat engine basic flow", () => {
     expect(battle.turnNumber).toBe(3);
     expect(battle.player.health).toBe(startingHealth - 5);
     expect(battle.player.block).toBe(0);
-    expect(battle.enemy.health).toBe(6);
-    expect(battle.enemy.block).toBe(8);
-    expect(battle.enemy.intent).toEqual({ attackAmount: 14 });
+    expect(getEnemyHealth(battle)).toBe(6);
+    expect(getEnemyBlock(battle)).toBe(8);
+    expect((battle.enemies[0]?.intent ?? {})).toEqual({ attackAmount: 14 });
     expect(battle.player.hand).toHaveLength(5);
 
     const battleFinishedEvents = battle.log.filter((event) => event.type === "battle_finished");
@@ -147,13 +147,13 @@ describe("cloud arena combat engine basic flow", () => {
       },
     });
 
-    expect(battle.enemy.intent).toEqual({ blockAmount: 8 });
+    expect((battle.enemies[0]?.intent ?? {})).toEqual({ blockAmount: 8 });
 
     applyBattleAction(battle, { type: "end_turn" });
 
     expect(battle.turnNumber).toBe(2);
-    expect(battle.enemy.block).toBe(8);
-    expect(battle.enemy.intent).toEqual({ attackAmount: 12 });
+    expect(getEnemyBlock(battle)).toBe(8);
+    expect((battle.enemies[0]?.intent ?? {})).toEqual({ attackAmount: 12 });
 
     const attackCard = battle.player.hand.find((card) => card.definitionId === "attack");
 
@@ -167,12 +167,12 @@ describe("cloud arena combat engine basic flow", () => {
     });
     chooseEnemyLeaderTarget(battle);
 
-    expect(battle.enemy.block).toBe(2);
+    expect(getEnemyBlock(battle)).toBe(2);
 
     applyBattleAction(battle, { type: "end_turn" });
 
     expect(battle.turnNumber).toBe(3);
-    expect(battle.enemy.block).toBe(0);
+    expect(getEnemyBlock(battle)).toBe(0);
   });
 
   it("enemy attack_and_block deals damage and gains block in the same resolution", () => {
@@ -187,7 +187,7 @@ describe("cloud arena combat engine basic flow", () => {
     });
     const startingHealth = battle.player.health;
 
-    expect(battle.enemy.intent).toEqual({ attackAmount: 12,
+    expect((battle.enemies[0]?.intent ?? {})).toEqual({ attackAmount: 12,
       blockAmount: 5,
     });
 
@@ -202,7 +202,7 @@ describe("cloud arena combat engine basic flow", () => {
 
     expect(battle.turnNumber).toBe(2);
     expect(battle.player.health).toBe(startingHealth - 5);
-    expect(battle.enemy.block).toBe(5);
+    expect(getEnemyBlock(battle)).toBe(5);
     expect(formatBattleLog(battle)).toContain("turn 1: enemy resolved attack 12 + block 5");
   });
 
@@ -218,7 +218,7 @@ describe("cloud arena combat engine basic flow", () => {
     });
     const startingHealth = battle.player.health;
 
-    expect(battle.enemy.intent).toEqual({ attackAmount: 12,
+    expect((battle.enemies[0]?.intent ?? {})).toEqual({ attackAmount: 12,
       attackTimes: 2,
     });
 
@@ -245,7 +245,7 @@ describe("cloud arena combat engine basic flow", () => {
 
     expect(battle.turnNumber).toBe(2);
     expect(battle.player.health).toBe(startingHealth - 24);
-    expect(battle.enemy.block).toBe(5);
+    expect(getEnemyBlock(battle)).toBe(5);
     expect(formatBattleLog(battle)).toContain("turn 1: enemy resolved attack 12 x2 + block 5");
   });
 
@@ -263,13 +263,13 @@ describe("cloud arena combat engine basic flow", () => {
     });
     const startingHealth = battle.player.health;
 
-    expect(battle.enemy.intent).toEqual({ attackAmount: 12, attackTimes: 2, blockAmount: 5 });
+    expect((battle.enemies[0]?.intent ?? {})).toEqual({ attackAmount: 12, attackTimes: 2, blockAmount: 5 });
 
     applyBattleAction(battle, { type: "end_turn" });
 
     expect(battle.turnNumber).toBe(2);
     expect(battle.player.health).toBe(startingHealth - 24);
-    expect(battle.enemy.block).toBe(5);
+    expect(getEnemyBlock(battle)).toBe(5);
     expect(formatBattleLog(battle)).toContain("turn 1: enemy played assault_12_x2_block_5");
   });
 
@@ -301,8 +301,8 @@ describe("cloud arena combat engine basic flow", () => {
     });
     const startingHealth = battle.player.health;
 
-    expect(battle.enemy.block).toBe(6);
-    expect(battle.enemy.intent).toEqual({ attackAmount: 8 });
+    expect(getEnemyBlock(battle)).toBe(6);
+    expect((battle.enemies[0]?.intent ?? {})).toEqual({ attackAmount: 8 });
 
     const firstAttack = battle.player.hand.find((card) => card.definitionId === "attack");
 
@@ -316,15 +316,15 @@ describe("cloud arena combat engine basic flow", () => {
     });
     chooseEnemyLeaderTarget(battle);
 
-    expect(battle.enemy.block).toBe(0);
-    expect(battle.enemy.health).toBe(30);
+    expect(getEnemyBlock(battle)).toBe(0);
+    expect(getEnemyHealth(battle)).toBe(30);
 
     applyBattleAction(battle, { type: "end_turn" });
 
     expect(battle.player.health).toBe(startingHealth - 8);
     expect(battle.turnNumber).toBe(2);
-    expect(battle.enemy.block).toBe(6);
-    expect(battle.enemy.intent).toEqual({ attackAmount: 8 });
+    expect(getEnemyBlock(battle)).toBe(6);
+    expect((battle.enemies[0]?.intent ?? {})).toEqual({ attackAmount: 8 });
   });
 
   it("can defer enemy energy drain to the start of the next turn", () => {
@@ -351,7 +351,7 @@ describe("cloud arena combat engine basic flow", () => {
     });
 
     expect(battle.player.energy).toBe(3);
-    expect(battle.enemy.intent).toEqual({});
+    expect((battle.enemies[0]?.intent ?? {})).toEqual({});
 
     applyBattleAction(battle, { type: "end_turn" });
 
@@ -402,7 +402,7 @@ describe("cloud arena combat engine basic flow", () => {
     chooseEnemyLeaderTarget(battle);
 
     expect(battle.player.energy).toBe(1);
-    expect(battle.enemy.health).toBe(16);
+    expect(getEnemyHealth(battle)).toBe(16);
     expect(battle.player.block).toBe(4);
     expect(formatBattleLog(battle).slice(-4)).toEqual([
       "turn 1: played defending_strike",
@@ -435,7 +435,7 @@ describe("cloud arena combat engine basic flow", () => {
     });
     chooseEnemyLeaderTarget(battle);
 
-    expect(battle.enemy.health).toBe(14);
+    expect(getEnemyHealth(battle)).toBe(14);
     expect(formatBattleLog(battle).slice(-3)).toEqual([
       "turn 1: played twin_strike",
       "turn 1: cast twin_strike",

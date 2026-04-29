@@ -8,7 +8,7 @@ import {
   type BattleAction,
   type BattleState,
 } from "../../src/cloud-arena/index.js";
-import { createTestBattle, TEST_CARD_DEFINITIONS } from "./helpers.js";
+import { createTestBattle, TEST_CARD_DEFINITIONS, getEnemyHealth, getEnemyPermanent } from "./helpers.js";
 
 function simpleDeterministicAgent(
   _state: BattleState,
@@ -121,7 +121,7 @@ describe("cloud arena simulation runner", () => {
       turnNumber: 1,
       winner: "player",
       playerHealth: result.finalState.player.health,
-      enemyHealth: result.finalState.enemy.health,
+      enemyHealth: getEnemyHealth(result.finalState),
       permanents: [],
     });
     expect(result.trace).toEqual({
@@ -491,7 +491,7 @@ describe("cloud arena simulation runner", () => {
         behavior: [{ blockAmount: 8 }],
       },
     });
-    battleState.enemy.block = 8;
+    { const _p = getEnemyPermanent(battleState); if (_p) _p.block = 8; if (battleState.enemies[0]) battleState.enemies[0].block = 8; }
 
     const action = chooseHeuristicAction(battleState, [
       { type: "play_card", cardInstanceId: "card_1" },
@@ -514,7 +514,7 @@ describe("cloud arena simulation runner", () => {
         behavior: [{ attackAmount: 14 }],
       },
     });
-    battleState.enemy.block = 8;
+    { const _p = getEnemyPermanent(battleState); if (_p) _p.block = 8; if (battleState.enemies[0]) battleState.enemies[0].block = 8; }
 
     const action = chooseHeuristicAction(battleState, [
       { type: "play_card", cardInstanceId: "card_1" },
@@ -536,7 +536,7 @@ describe("cloud arena simulation runner", () => {
         behavior: [{ blockAmount: 8 }],
       },
     });
-    battleState.enemy.block = 8;
+    { const _p = getEnemyPermanent(battleState); if (_p) _p.block = 8; if (battleState.enemies[0]) battleState.enemies[0].block = 8; }
 
     const decision = chooseHeuristicDecision(battleState, [
       { type: "play_card", cardInstanceId: "card_1" },

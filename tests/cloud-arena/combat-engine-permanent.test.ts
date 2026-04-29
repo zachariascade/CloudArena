@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { applyBattleAction, createBattle, type CardDefinitionLibrary } from "../../src/cloud-arena/index.js";
-import { createTestBattle, formatBattleLog, TEST_CARD_DEFINITIONS } from "./helpers.js";
+import { createTestBattle, getEnemyHealth, getEnemyBlock, getEnemyPermanent, formatBattleLog, TEST_CARD_DEFINITIONS } from "./helpers.js";
 
 const judgmentBladeCardDefinition: CardDefinitionLibrary["judgment_blade"] = {
   id: "judgment_blade",
@@ -76,7 +76,7 @@ describe("cloud arena combat engine permanent flow", () => {
     expect(battle.turnNumber).toBe(2);
     expect(battle.player.health).toBe(startingHealth - 10);
     expect(battle.player.block).toBe(0);
-    expect(battle.enemy.intent).toEqual({ attackAmount: 15 });
+    expect((battle.enemies[0]?.intent ?? {})).toEqual({ attackAmount: 15 });
     expect(battle.battlefield[0]?.health).toBe(10);
     expect(battle.battlefield[0]?.block).toBe(0);
     expect(battle.battlefield[0]?.hasActedThisTurn).toBe(false);
@@ -110,7 +110,7 @@ describe("cloud arena combat engine permanent flow", () => {
       type: "play_card",
       cardInstanceId: roundTwoAttackOne.instanceId,
     });
-    const firstAttackTarget = battle.enemyBattlefield.find((permanent) => permanent?.isEnemyLeader);
+    const firstAttackTarget = battle.enemyBattlefield.find((permanent) => permanent?.enemyActorId === "enemy_actor_1");
 
     if (!firstAttackTarget) {
       throw new Error("Expected enemy leader to target.");
@@ -129,7 +129,7 @@ describe("cloud arena combat engine permanent flow", () => {
       type: "play_card",
       cardInstanceId: roundTwoAttackTwo.instanceId,
     });
-    const secondAttackTarget = battle.enemyBattlefield.find((permanent) => permanent?.isEnemyLeader);
+    const secondAttackTarget = battle.enemyBattlefield.find((permanent) => permanent?.enemyActorId === "enemy_actor_1");
 
     if (!secondAttackTarget) {
       throw new Error("Expected enemy leader to target.");
@@ -140,7 +140,7 @@ describe("cloud arena combat engine permanent flow", () => {
       targetPermanentId: secondAttackTarget.instanceId,
     });
 
-    expect(battle.enemy.health).toBe(18);
+    expect(getEnemyHealth(battle)).toBe(18);
     expect(battle.player.block).toBe(7);
 
     applyBattleAction(battle, { type: "end_turn" });
@@ -148,8 +148,8 @@ describe("cloud arena combat engine permanent flow", () => {
     expect(battle.turnNumber).toBe(3);
     expect(battle.player.health).toBe(startingHealth - 10);
     expect(battle.player.block).toBe(0);
-    expect(battle.enemy.health).toBe(18);
-    expect(battle.enemy.intent).toEqual({ attackAmount: 12 });
+    expect(getEnemyHealth(battle)).toBe(18);
+    expect((battle.enemies[0]?.intent ?? {})).toEqual({ attackAmount: 12 });
     expect(battle.battlefield[0]?.health).toBe(2);
     expect(battle.battlefield[0]?.block).toBe(0);
     expect(battle.blockingQueue).toEqual([]);
@@ -202,7 +202,7 @@ describe("cloud arena combat engine permanent flow", () => {
       action: "attack",
     });
 
-    const attackTarget = battle.enemyBattlefield.find((permanent) => permanent?.isEnemyLeader);
+    const attackTarget = battle.enemyBattlefield.find((permanent) => permanent?.enemyActorId === "enemy_actor_1");
 
     if (!attackTarget) {
       throw new Error("Expected enemy leader to target.");
@@ -213,7 +213,7 @@ describe("cloud arena combat engine permanent flow", () => {
       targetPermanentId: attackTarget.instanceId,
     });
 
-    expect(battle.enemy.health).toBe(18);
+    expect(getEnemyHealth(battle)).toBe(18);
   });
 
   it("full-heal defenders restore their health at the start of the next round", () => {
@@ -401,7 +401,7 @@ describe("cloud arena combat engine permanent flow", () => {
     expect(battle.pendingTargetRequest).toBeNull();
     expect(enemyPermanents).toHaveLength(3);
     expect(enemyPermanents.map((permanent) => permanent.health)).toEqual([25, 1, 3]);
-    expect(battle.enemy.health).toBe(25);
+    expect(getEnemyHealth(battle)).toBe(25);
     expect(formatBattleLog(battle)).toContain(
       `turn 1: permanent_action ${guardianPermanent.instanceId} dealt 5 damage to permanent ${enemyPermanents[1]?.instanceId}`,
     );

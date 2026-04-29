@@ -204,7 +204,7 @@ type CreateTestBattleInput = {
     name?: string;
     health?: number;
     basePower?: number;
-    leaderDefinitionId?: CardDefinitionId;
+    definitionId?: CardDefinitionId;
     behavior?: EnemyBehaviorStep[];
     cards?: EnemyCardDefinition[];
     startingTokens?: CardDefinitionId[];
@@ -225,7 +225,7 @@ export function createTestBattle(input: CreateTestBattleInput): BattleState {
       name: input.enemy?.name ?? "Test Enemy",
       health: input.enemy?.health ?? 30,
       basePower: input.enemy?.basePower ?? 12,
-      leaderDefinitionId: input.enemy?.leaderDefinitionId,
+      definitionId: input.enemy?.definitionId,
       ...(input.enemy?.cards
         ? { cards: input.enemy.cards }
         : { behavior: input.enemy?.behavior ?? [{ attackAmount: 12 }] }),
@@ -233,6 +233,30 @@ export function createTestBattle(input: CreateTestBattleInput): BattleState {
       startingPermanents: input.enemy?.startingPermanents,
     },
   });
+}
+
+export function getEnemyHealth(state: BattleState): number {
+  const actor = state.enemies[0];
+  if (!actor) return 0;
+  const permanent = actor.permanentId
+    ? state.enemyBattlefield.find((p) => p?.instanceId === actor.permanentId)
+    : null;
+  return permanent?.health ?? actor.health;
+}
+
+export function getEnemyBlock(state: BattleState): number {
+  const actor = state.enemies[0];
+  if (!actor) return 0;
+  const permanent = actor.permanentId
+    ? state.enemyBattlefield.find((p) => p?.instanceId === actor.permanentId)
+    : null;
+  return permanent?.block ?? actor.block;
+}
+
+export function getEnemyPermanent(state: BattleState) {
+  const actor = state.enemies[0];
+  if (!actor?.permanentId) return null;
+  return state.enemyBattlefield.find((p) => p?.instanceId === actor.permanentId) ?? null;
 }
 
 export function requireCardInstanceId(state: BattleState, cardId: CardDefinitionId): string {

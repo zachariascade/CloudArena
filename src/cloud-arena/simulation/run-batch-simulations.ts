@@ -147,7 +147,14 @@ export function runBatchSimulations(
       winner: result.trace.result.winner,
       finalTurnNumber: result.trace.result.finalTurnNumber,
       playerHealth: result.finalState.player.health,
-      enemyHealth: result.finalState.enemy.health,
+      enemyHealth: (() => {
+        const primary = result.finalState.enemies[0];
+        if (!primary) return 0;
+        const permanent = primary.permanentId
+          ? result.finalState.enemyBattlefield.find((p) => p?.instanceId === primary.permanentId)
+          : null;
+        return permanent?.health ?? primary.health;
+      })(),
       survivingPermanents: result.finalState.battlefield.filter((entry) => entry !== null).length,
       damageTaken: result.finalState.player.maxHealth - result.finalState.player.health,
       averageUnusedEnergyPerTurn: calculateAverageUnusedEnergyPerTurnFromTrace(result.trace),

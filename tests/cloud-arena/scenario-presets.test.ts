@@ -169,7 +169,7 @@ describe("cloud arena scenario presets", () => {
         health: scenario.enemies[0]!.health,
         basePower: scenario.enemies[0]!.basePower,
         cards: scenario.enemies[0]!.cards!,
-        leaderDefinitionId: scenario.enemies[0]!.definitionId,
+        definitionId: scenario.enemies[0]!.definitionId,
       },
       maxSteps: scenario.recommendedMaxSteps,
       agentName: "heuristic_baseline",

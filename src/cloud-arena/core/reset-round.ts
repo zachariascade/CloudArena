@@ -16,8 +16,7 @@ import {
   cleanupDefeatedPermanents,
   permanentHasKeyword,
   expireTemporaryKeywordModifiers,
-  syncEnemyStateFromLeaderPermanent,
-  syncEnemyLeaderPermanentFromState,
+  getEnemyActorPermanent,
 } from "./permanents.js";
 import { expireTemporaryCounters } from "./effects.js";
 import { formatEnemyIntent } from "./enemy-intent.js";
@@ -53,9 +52,8 @@ export function resetRound(state: BattleState): BattleState {
       return;
     }
 
-    if (!permanent.isEnemyLeader) {
-      permanent.block = 0;
-    }
+    // Enemy block persists through the player's next turn — it clears at the
+    // start of each enemy intent resolution (see resolveActorIntent).
     if (permanent.recoveryPolicy === "full_heal" || permanentHasKeyword(permanent, "refresh")) {
       permanent.health = permanent.maxHealth;
     }
@@ -64,56 +62,16 @@ export function resetRound(state: BattleState): BattleState {
     permanent.isDefending = false;
     permanent.blockingTargetPermanentId = null;
   });
-  syncEnemyStateFromLeaderPermanent(state);
 
   resolveScheduledEnemyCardEffects(state);
 
-  const enemyPlanLength = getEnemyPlanLength(state.enemy);
+  for (const actor of state.enemies) {
+    const planLength = getEnemyPlanLength(actor);
+    if (planLength <= 0) {
+      continue;
+    }
 
-  state.enemy.behaviorIndex = (state.enemy.behaviorIndex + 1) % enemyPlanLength;
-  state.enemy.stunnedThisTurn = false;
-
-  const nextEnemyPlan = getEnemyPlanStepAtIndexFromState(
-    state.enemy,
-    state.enemy.behaviorIndex,
-  );
-
-  if (!nextEnemyPlan) {
-    throw new Error("Enemy plan step was missing during round reset.");
-  }
-
-  state.enemy.intent = nextEnemyPlan.intent;
-  state.enemy.currentCardId = nextEnemyPlan.card?.id ?? null;
-  state.enemy.currentCard = nextEnemyPlan.card;
-  state.enemy.currentCard = primeEnemyCardForTurn(state, state.enemy.currentCard);
-  state.enemy.intentQueueLabels = getEnemyIntentQueueLabels(state.enemy, 2);
-  syncEnemyLeaderPermanentFromState(
-    state,
-    formatEnemyIntent(state.enemy.intent),
-    state.enemy.intentQueueLabels,
-  );
-
-  // Sync primary actor from enemy state
-  const primaryActor = state.enemies[0];
-  if (primaryActor) {
-    primaryActor.health = state.enemy.health;
-    primaryActor.maxHealth = state.enemy.maxHealth;
-    primaryActor.block = state.enemy.block;
-    primaryActor.basePower = state.enemy.basePower;
-    primaryActor.behaviorIndex = state.enemy.behaviorIndex;
-    primaryActor.stunnedThisTurn = false;
-    primaryActor.intent = { ...state.enemy.intent };
-    primaryActor.currentCardId = state.enemy.currentCardId;
-    primaryActor.currentCard = state.enemy.currentCard;
-    primaryActor.intentQueueLabels = [...state.enemy.intentQueueLabels];
-  }
-
-  // Advance non-primary actors
-  for (const actor of state.enemies.slice(1)) {
-    const actorPermanent = actor.permanentId
-      ? (state.enemyBattlefield.find((p) => p?.instanceId === actor.permanentId) ?? null)
-      : null;
-
+    const actorPermanent = getEnemyActorPermanent(state, actor);
     if (actorPermanent) {
       actor.health = actorPermanent.health;
       actor.maxHealth = actorPermanent.maxHealth;
@@ -121,26 +79,26 @@ export function resetRound(state: BattleState): BattleState {
       actor.basePower = actorPermanent.power;
     }
 
-    const actorPlanLength = getEnemyPlanLength(actor);
-    if (actorPlanLength <= 0) {
-      continue;
-    }
-
-    actor.behaviorIndex = (actor.behaviorIndex + 1) % actorPlanLength;
+    actor.behaviorIndex = (actor.behaviorIndex + 1) % planLength;
     actor.stunnedThisTurn = false;
 
-    const actorPlan = getEnemyPlanStepAtIndexFromState(actor, actor.behaviorIndex);
-    if (actorPlan) {
-      actor.intent = actorPlan.intent;
-      actor.currentCardId = actorPlan.card?.id ?? null;
-      actor.currentCard = actorPlan.card;
+    const nextPlan = getEnemyPlanStepAtIndexFromState(actor, actor.behaviorIndex);
+    if (nextPlan) {
+      actor.intent = nextPlan.intent;
+      actor.currentCardId = nextPlan.card?.id ?? null;
+      actor.currentCard = nextPlan.card;
+      actor.currentCard = primeEnemyCardForTurn(state, actor.currentCard, actor);
     }
 
     actor.intentQueueLabels = getEnemyIntentQueueLabels(actor, 2);
 
     if (actorPermanent) {
       const actorIntentLabel = formatEnemyIntent(actor.intent);
-      actorPermanent.intentLabel = actorIntentLabel.length > 0 ? actorIntentLabel : null;
+      actorPermanent.intentLabel = actor.stunnedThisTurn
+        ? "Stunned"
+        : actorIntentLabel.length > 0
+          ? actorIntentLabel
+          : null;
       actorPermanent.intentQueueLabels = [...actor.intentQueueLabels];
     }
   }
@@ -160,7 +118,7 @@ export function resetRound(state: BattleState): BattleState {
     turnNumber: state.turnNumber,
     cardsDrawn: drawResult.count,
     energy: state.player.energy,
-    enemyIntent: state.enemy.intent,
+    enemyIntent: state.enemies[0]?.intent ?? {},
   });
   for (const card of drawResult.cards) {
     state.log.push({

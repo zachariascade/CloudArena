@@ -52,7 +52,7 @@ describe("pierce keyword", () => {
         name: "Shield Dummy",
         health: 30,
         basePower: 0,
-        leaderDefinitionId: "enemy_leader",
+        definitionId: "enemy_leader",
         behavior: [{ attackAmount: 0 }],
         startingPermanents: ["blocking_wall"],
       },
@@ -120,7 +120,7 @@ describe("pierce keyword", () => {
         name: "Pierce Enemy",
         health: 30,
         basePower: 0,
-        leaderDefinitionId: "pierce_enemy",
+        definitionId: "pierce_enemy",
         behavior: [{ attackAmount: 6 }],
       },
     });
@@ -140,7 +140,7 @@ describe("pierce keyword", () => {
     });
 
     expect(battle.player.block).toBe(7);
-    expect(battle.enemy.leaderPermanentId).toBeTruthy();
+    expect(battle.enemies[0]?.permanentId ?? null).toBeTruthy();
 
     applyBattleAction(battle, { type: "end_turn" });
 

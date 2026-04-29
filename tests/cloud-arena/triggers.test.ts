@@ -8,7 +8,7 @@ import {
   processTriggeredAbilities,
   type CardDefinitionLibrary,
 } from "../../src/cloud-arena/index.js";
-import { createTestBattle } from "./helpers.js";
+import { createTestBattle, getEnemyHealth, getEnemyBlock, getEnemyPermanent } from "./helpers.js";
 
 const TRIGGER_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
   offering_thrall: {
@@ -335,7 +335,7 @@ describe("cloud arena trigger resolution", () => {
     destroyPermanent(battle, sentinelPermanent.instanceId);
     processTriggeredAbilities(battle);
 
-    expect(battle.enemy.health).toBe(28);
+    expect(getEnemyHealth(battle)).toBe(28);
     expect(
       battle.rules.some((event) => event.type === "permanent_left_battlefield"),
     ).toBe(true);
@@ -345,7 +345,7 @@ describe("cloud arena trigger resolution", () => {
       cardInstanceId: verseCard.instanceId,
     });
 
-    expect(battle.enemy.health).toBe(27);
+    expect(getEnemyHealth(battle)).toBe(27);
     expect(
       battle.rules.some((event) => event.type === "card_discarded" && event.cardInstanceId === verseCard.instanceId),
     ).toBe(true);

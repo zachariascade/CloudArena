@@ -2,39 +2,44 @@ import { getCardDefinitionFromLibrary, hasCardType } from "../cards/definitions.
 import { getDerivedPermanentActionAmount } from "../core/derived-stats.js";
 import { applyEnemyCardEffect } from "../core/enemy-card-effects.js";
 import {
-  getEnemyLeaderPermanent,
   permanentHasKeyword,
   permanentHasSummoningSickness,
-  syncEnemyLeaderPermanentFromState,
-  syncEnemyStateFromLeaderPermanent,
+  getEnemyActorPermanent,
 } from "../core/permanents.js";
-import { formatEnemyIntent } from "../core/enemy-intent.js";
 import { emitRulesEvent } from "../core/rules-events.js";
 import { settleEnemyAttackDamage } from "./settle-damage.js";
-import type { BattleState, EnemyActorState, EnemyCardDefinition } from "../core/types.js";
+import type { BattleState, EnemyActorState } from "../core/types.js";
 import {
   getEnemyIntentAttackAmount,
   getEnemyIntentBlockAmount,
 } from "../core/enemy-intent.js";
 
-function resolveEnemyCard(state: BattleState, card: EnemyCardDefinition): void {
-  state.log.push({
-    type: "enemy_card_played",
-    turnNumber: state.turnNumber,
-    cardId: card.id,
-  });
-
-  for (const effect of card.effects) {
-    applyEnemyCardEffect(state, card.id, effect);
-  }
-}
-
-function resolveSecondaryActorCard(state: BattleState, actor: EnemyActorState): void {
-  const actorPermanent = actor.permanentId
-    ? state.enemyBattlefield.find((p) => p?.instanceId === actor.permanentId) ?? null
-    : null;
+function resolveActorIntent(state: BattleState, actor: EnemyActorState): void {
+  const actorPermanent = getEnemyActorPermanent(state, actor);
 
   if (actorPermanent && actorPermanent.health <= 0) {
+    return;
+  }
+
+  // Block clears at the start of each enemy intent resolution (it persisted
+  // through the player's previous turn).
+  actor.block = 0;
+  if (actorPermanent) {
+    actorPermanent.block = 0;
+  }
+
+  state.log.push({
+    type: "enemy_intent_resolved",
+    turnNumber: state.turnNumber,
+    intent: actor.intent,
+  });
+
+  if (actor.stunnedThisTurn) {
+    state.log.push({
+      type: "enemy_stunned",
+      turnNumber: state.turnNumber,
+    });
+    actor.currentCard = null;
     return;
   }
 
@@ -50,8 +55,14 @@ function resolveSecondaryActorCard(state: BattleState, actor: EnemyActorState): 
     }
   } else {
     const attackAmount = getEnemyIntentAttackAmount(actor.intent);
+
     if (attackAmount > 0) {
-      const attackBypassesBlock = actorPermanent ? permanentHasKeyword(actorPermanent, "pierce") : false;
+      const attackSourceDefinition = actor.definitionId
+        ? getCardDefinitionFromLibrary(state.cardDefinitions, actor.definitionId)
+        : null;
+      const attackBypassesBlock =
+        (actorPermanent ? permanentHasKeyword(actorPermanent, "pierce") : false) ||
+        !!(attackSourceDefinition && "keywords" in attackSourceDefinition && attackSourceDefinition.keywords?.includes("pierce"));
       settleEnemyAttackDamage(
         state,
         attackAmount,
@@ -62,8 +73,12 @@ function resolveSecondaryActorCard(state: BattleState, actor: EnemyActorState): 
     }
 
     const blockAmount = getEnemyIntentBlockAmount(actor.intent);
-    if (blockAmount > 0 && actorPermanent) {
-      actorPermanent.block += blockAmount;
+
+    if (blockAmount > 0) {
+      actor.block += blockAmount;
+      if (actorPermanent) {
+        actorPermanent.block += blockAmount;
+      }
       state.log.push({
         type: "block_gained",
         turnNumber: state.turnNumber,
@@ -79,8 +94,16 @@ function resolveSecondaryActorCard(state: BattleState, actor: EnemyActorState): 
 }
 
 function resolveEnemyBattlefieldCreatures(state: BattleState): void {
+  const actorPermanentIds = new Set(
+    state.enemies.map((actor) => actor.permanentId).filter((id): id is string => Boolean(id)),
+  );
+
   for (const permanent of state.enemyBattlefield) {
-    if (!permanent || permanent.health <= 0 || permanent.isEnemyLeader) {
+    if (!permanent || permanent.health <= 0) {
+      continue;
+    }
+
+    if (actorPermanentIds.has(permanent.instanceId)) {
       continue;
     }
 
@@ -138,87 +161,20 @@ export function resolveEnemyTurn(state: BattleState): BattleState {
     throw new Error("Enemy turn can only resolve during the enemy_resolution phase.");
   }
 
-  // Lean V1 rule: enemy block lasts through the player's next turn, then clears
-  // right before the enemy resolves its next intent.
-  state.enemy.block = 0;
-  syncEnemyLeaderPermanentFromState(
-    state,
-    formatEnemyIntent(state.enemy.intent),
-    state.enemy.intentQueueLabels,
-  );
-
-  state.log.push({
-    type: "enemy_intent_resolved",
-    turnNumber: state.turnNumber,
-    intent: state.enemy.intent,
-  });
-
-  if (state.enemy.stunnedThisTurn) {
-    state.log.push({
-      type: "enemy_stunned",
-      turnNumber: state.turnNumber,
-    });
-    state.enemy.currentCard = null;
-    return state;
-  }
-
-  if (state.enemy.currentCard) {
-    resolveEnemyCard(state, state.enemy.currentCard);
-  } else {
-    const attackAmount = getEnemyIntentAttackAmount(state.enemy.intent);
-
-    if (attackAmount > 0) {
-      const attackSourcePermanent = getEnemyLeaderPermanent(state);
-      const attackSourceDefinition = state.enemy.leaderDefinitionId
-        ? getCardDefinitionFromLibrary(state.cardDefinitions, state.enemy.leaderDefinitionId)
-        : null;
-      const attackBypassesBlock =
-        (attackSourcePermanent ? permanentHasKeyword(attackSourcePermanent, "pierce") : false) ||
-        !!(attackSourceDefinition && "keywords" in attackSourceDefinition && attackSourceDefinition.keywords?.includes("pierce"));
-      settleEnemyAttackDamage(
-        state,
-        attackAmount,
-        state.enemy.leaderPermanentId ?? "enemy_intent",
-        state.enemy.intent.overflowPolicy,
-        attackBypassesBlock,
-      );
-    }
-
-    const blockAmount = getEnemyIntentBlockAmount(state.enemy.intent);
-
-    if (blockAmount > 0) {
-      state.enemy.block += blockAmount;
-      state.log.push({
-        type: "block_gained",
-        turnNumber: state.turnNumber,
-        target: "enemy",
-        amount: blockAmount,
-      });
-    }
-  }
-
-  syncEnemyLeaderPermanentFromState(
-    state,
-    formatEnemyIntent(state.enemy.intent),
-    state.enemy.intentQueueLabels,
-  );
-
-  for (const actor of state.enemies.slice(1)) {
-    if (!actor.stunnedThisTurn) {
-      resolveSecondaryActorCard(state, actor);
-    }
+  for (const actor of state.enemies) {
+    resolveActorIntent(state, actor);
   }
 
   resolveEnemyBattlefieldCreatures(state);
-  syncEnemyStateFromLeaderPermanent(state);
 
-  const primaryActor = state.enemies[0];
-  if (primaryActor) {
-    primaryActor.health = state.enemy.health;
-    primaryActor.maxHealth = state.enemy.maxHealth;
-    primaryActor.block = state.enemy.block;
-    primaryActor.basePower = state.enemy.basePower;
-    primaryActor.stunnedThisTurn = state.enemy.stunnedThisTurn;
+  for (const actor of state.enemies) {
+    const actorPermanent = getEnemyActorPermanent(state, actor);
+    if (actorPermanent) {
+      actor.health = actorPermanent.health;
+      actor.maxHealth = actorPermanent.maxHealth;
+      actor.block = actorPermanent.block;
+      actor.basePower = actorPermanent.power;
+    }
   }
 
   return state;
