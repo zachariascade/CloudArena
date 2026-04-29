@@ -23,43 +23,5 @@ export const galleryChristAndMaryMagdalenCardDefinition: CardDefinition = {
   onPlay: [],
   power: 2,
   health: 4,
-  abilities: [
-    {
-      kind: "triggered",
-      trigger: { event: "self_enters_battlefield" },
-      effects: [
-        {
-          type: "return_from_graveyard",
-          selector: {
-            zone: "graveyard",
-            controller: "you",
-            cardType: "creature",
-          },
-          targeting: {
-            prompt: "Choose a creature card from your graveyard",
-          },
-        },
-      ],
-    },
-    {
-      id: "christ_and_mary_magdalen_keep_watch",
-      kind: "activated",
-      activation: { type: "action", actionId: "keep_watch" },
-      costs: [
-        { type: "energy", amount: 1 },
-        { type: "tap" },
-      ],
-      effects: [
-        {
-          type: "draw_card",
-          target: "self",
-          amount: { type: "constant", value: 1 },
-        },
-        {
-          type: "restore_health",
-          target: "self",
-        },
-      ],
-    },
-  ],
+  abilities: [],
 };

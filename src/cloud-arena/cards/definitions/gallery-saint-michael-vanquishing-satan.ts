@@ -23,37 +23,5 @@ export const gallerySaintMichaelVanquishingSatanCardDefinition: CardDefinition =
   onPlay: [],
   power: 5,
   health: 6,
-  abilities: [
-    {
-      kind: "triggered",
-      trigger: { event: "self_enters_battlefield" },
-      effects: [
-        {
-          type: "deal_damage",
-          target: "enemy",
-          amount: { type: "constant", value: 3 },
-        },
-        {
-          type: "gain_block",
-          target: "player",
-          amount: { type: "constant", value: 3 },
-        },
-      ],
-    },
-    {
-      id: "gallery_saint_michael_vanquishing_satan_smite",
-      kind: "activated",
-      activation: { type: "action", actionId: "smite_fiend" },
-      costs: [
-        { type: "energy", amount: 2 },
-      ],
-      effects: [
-        {
-          type: "deal_damage",
-          target: "enemy",
-          amount: { type: "constant", value: 2 },
-        },
-      ],
-    },
-  ],
+  abilities: [],
 };

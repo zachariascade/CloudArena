@@ -21,6 +21,7 @@ import {
   syncEnemyLeaderPermanentFromState,
   summonPermanentFromCard,
 } from "./permanents.js";
+import { emitRulesEvent } from "./rules-events.js";
 import { processTriggeredAbilities } from "./triggers.js";
 import type {
   BattleState,
@@ -285,6 +286,11 @@ export function createBattle(input: CreateBattleInput): BattleState {
 
   const openingDraw = drawUpToHandSize(state, handSize);
   cleanupDefeatedPermanents(state);
+  emitRulesEvent(state, {
+    type: "turn_started",
+    turnNumber: 1,
+    player: "self",
+  });
   processTriggeredAbilities(state);
   cleanupDefeatedPermanents(state);
   state.log.push({

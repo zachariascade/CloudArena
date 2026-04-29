@@ -48,7 +48,7 @@ function buildArenaImage(
   };
 }
 
-function getFallbackCardDisplay(definition: CardDefinition): CardDisplayDefinition {
+function formatCardTypeLine(definition: Pick<CardDefinition, "cardTypes" | "subtypes">): string {
   const typeLine = [
     definition.cardTypes
       .map((cardType) => cardType.replace(/_/g, " "))
@@ -60,9 +60,23 @@ function getFallbackCardDisplay(definition: CardDefinition): CardDisplayDefiniti
     .join(" ")
     .trim();
 
+  return typeLine;
+}
+
+export function buildCardSubtitle(
+  definition: Pick<CardDefinition, "cardTypes" | "subtypes" | "rarity">,
+): string {
+  const typeLine = formatCardTypeLine(definition);
+  const isLegendaryOrHigher =
+    definition.rarity === "mythic" || definition.rarity === "special" || definition.rarity === "bonus";
+
+  return isLegendaryOrHigher ? `Legendary ${typeLine}` : typeLine;
+}
+
+function getFallbackCardDisplay(definition: CardDefinition): CardDisplayDefinition {
   return {
     title: null,
-    subtitle: typeLine || null,
+    subtitle: buildCardSubtitle(definition),
     frameTone: "colorless",
     manaCost: definition.cost > 0 ? `{${definition.cost}}` : "{0}",
     artist: null,
@@ -75,7 +89,12 @@ function getFallbackCardDisplay(definition: CardDefinition): CardDisplayDefiniti
 }
 
 function getCardDisplay(definition: CardDefinition): CardDisplayDefinition {
-  return definition.display ?? getFallbackCardDisplay(definition);
+  const display = definition.display ?? getFallbackCardDisplay(definition);
+
+  return {
+    ...display,
+    subtitle: buildCardSubtitle(definition),
+  };
 }
 
 function getPermanentCounterPills(permanent: CloudArenaPermanentSnapshot): DisplayCardCounterPill[] {

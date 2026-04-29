@@ -21,36 +21,5 @@ export const galleryPlainsOfHeavenCardDefinition: CardDefinition = {
   onPlay: [],
   power: 0,
   health: 5,
-  abilities: [
-    {
-      kind: "triggered",
-      trigger: { event: "self_enters_battlefield" },
-      effects: [
-        {
-          type: "gain_block",
-          target: "player",
-          amount: { type: "constant", value: 4 },
-        },
-      ],
-    },
-    {
-      kind: "triggered",
-      trigger: {
-        event: "turn_started",
-        player: "self",
-      },
-      effects: [
-        {
-          type: "gain_energy",
-          target: "player",
-          amount: { type: "constant", value: 1 },
-        },
-        {
-          type: "gain_block",
-          target: "player",
-          amount: { type: "constant", value: 1 },
-        },
-      ],
-    },
-  ],
+  abilities: [],
 };

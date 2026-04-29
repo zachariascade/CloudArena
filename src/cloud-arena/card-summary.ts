@@ -19,12 +19,7 @@ function formatCount(amount: number): string {
 }
 
 function scaleEquipmentBonusAmount(amount: number): number {
-  if (amount === 0) {
-    return 0;
-  }
-
-  const scaledAmount = amount * 1.3;
-  return amount > 0 ? Math.ceil(scaledAmount) : Math.floor(scaledAmount);
+  return amount;
 }
 
 function lowercaseFirst(text: string): string {

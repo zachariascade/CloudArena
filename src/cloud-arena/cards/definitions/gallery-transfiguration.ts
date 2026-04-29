@@ -23,50 +23,5 @@ export const galleryTransfigurationCardDefinition: CardDefinition = {
   onPlay: [],
   power: 4,
   health: 5,
-  abilities: [
-    {
-      kind: "triggered",
-      trigger: { event: "self_enters_battlefield" },
-      effects: [
-        {
-          type: "draw_card",
-          target: "self",
-          amount: { type: "constant", value: 1 },
-        },
-        {
-          type: "gain_block",
-          target: "player",
-          amount: { type: "constant", value: 3 },
-        },
-      ],
-    },
-    {
-      id: "gallery_transfiguration_lift",
-      kind: "activated",
-      activation: { type: "action", actionId: "lift_up" },
-      costs: [
-        { type: "energy", amount: 2 },
-        { type: "tap" },
-      ],
-      targeting: {
-        prompt: "Choose a creature you control",
-      },
-      effects: [
-        {
-          type: "add_counter",
-          target: {
-            zone: "battlefield",
-            controller: "you",
-            cardType: "creature",
-            relation: "another",
-          },
-          powerDelta: 1,
-          healthDelta: 1,
-          targeting: {
-            prompt: "Choose a creature to transfigure",
-          },
-        },
-      ],
-    },
-  ],
+  abilities: [],
 };

@@ -99,7 +99,7 @@ describe("cloud arena session service", () => {
     }
 
     expect(blade.effectSummary).toContain("Equip a permanent.");
-    expect(blade.effectSummary).toContain("Equipped permanent gets +2/+2.");
+    expect(blade.effectSummary).toContain("Equipped permanent gets +1/+1.");
   });
 
   it("surfaces enemy telegraph queue labels in the session snapshot", () => {

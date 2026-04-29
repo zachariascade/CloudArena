@@ -23,38 +23,5 @@ export const galleryJacobWrestlesWithTheAngelCardDefinition: CardDefinition = {
   onPlay: [],
   power: 3,
   health: 5,
-  abilities: [
-    {
-      kind: "triggered",
-      trigger: { event: "self_enters_battlefield" },
-      effects: [
-        {
-          type: "gain_block",
-          target: "player",
-          amount: { type: "constant", value: 3 },
-        },
-      ],
-    },
-    {
-      id: "gallery_jacob_wrestles_with_the_angel_hold_fast",
-      kind: "activated",
-      activation: { type: "action", actionId: "hold_fast" },
-      costs: [
-        { type: "energy", amount: 1 },
-        { type: "tap" },
-      ],
-      effects: [
-        {
-          type: "add_counter",
-          target: "self",
-          powerDelta: 1,
-          healthDelta: 1,
-        },
-        {
-          type: "restore_health",
-          target: "self",
-        },
-      ],
-    },
-  ],
+  abilities: [],
 };

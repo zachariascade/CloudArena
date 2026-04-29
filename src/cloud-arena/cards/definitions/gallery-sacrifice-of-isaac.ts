@@ -39,17 +39,5 @@ export const gallerySacrificeOfIsaacCardDefinition: CardDefinition = {
       choice: "controller",
     },
   ],
-  abilities: [
-    {
-      kind: "triggered",
-      trigger: { event: "self_enters_battlefield" },
-      effects: [
-        {
-          type: "gain_block",
-          target: "player",
-          amount: { type: "constant", value: 5 },
-        },
-      ],
-    },
-  ],
+  abilities: [],
 };

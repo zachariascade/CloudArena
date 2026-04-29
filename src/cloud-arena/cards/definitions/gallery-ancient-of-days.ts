@@ -11,7 +11,8 @@ export const galleryAncientOfDaysCardDefinition: CardDefinition = {
     frameTone: "white",
     manaCost: "{3}",
     artist: "William Blake",
-    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg/960px-The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg",
+    imagePath:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg/960px-The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg",
     imageAlt: "William Blake's The Ancient of Days",
     flavorText: "A single patient mind can hold the sky in its proper shape.",
     footerCode: "ARE",
@@ -23,38 +24,5 @@ export const galleryAncientOfDaysCardDefinition: CardDefinition = {
   onPlay: [],
   power: 4,
   health: 6,
-  abilities: [
-    {
-      kind: "triggered",
-      trigger: { event: "self_enters_battlefield" },
-      effects: [
-        {
-          type: "gain_block",
-          target: "player",
-          amount: { type: "constant", value: 6 },
-        },
-        {
-          type: "gain_energy",
-          target: "player",
-          amount: { type: "constant", value: 1 },
-        },
-      ],
-    },
-    {
-      id: "ancient_of_days_meditate",
-      kind: "activated",
-      activation: { type: "action", actionId: "meditate" },
-      costs: [
-        { type: "energy", amount: 2 },
-        { type: "tap" },
-      ],
-      effects: [
-        {
-          type: "draw_card",
-          target: "self",
-          amount: { type: "constant", value: 2 },
-        },
-      ],
-    },
-  ],
+  abilities: [],
 };

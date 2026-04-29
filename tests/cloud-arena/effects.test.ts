@@ -81,6 +81,31 @@ const EFFECT_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
     health: 1,
     abilities: [],
   },
+  turn_started_sentinel: {
+    id: "turn_started_sentinel",
+    name: "Turn Started Sentinel",
+    cardTypes: ["enchantment"],
+    cost: 3,
+    onPlay: [],
+    power: 0,
+    health: 4,
+    abilities: [
+      {
+        kind: "triggered",
+        trigger: {
+          event: "turn_started",
+          player: "self",
+        },
+        effects: [
+          {
+            type: "gain_energy",
+            target: "player",
+            amount: { type: "constant", value: 1 },
+          },
+        ],
+      },
+    ],
+  },
   defend: {
     id: "defend",
     name: "Defend",
@@ -474,6 +499,53 @@ describe("cloud arena effect primitives", () => {
 
     expect(battle.enemy.stunnedThisTurn).toBe(false);
     expect(battle.log.some((event) => event.type === "enemy_stunned")).toBe(false);
+  });
+
+  it("fires turn_started triggers at the start of the player's turn", () => {
+    const battle = createTestBattle({
+      cardDefinitions: EFFECT_TEST_CARD_DEFINITIONS,
+      playerDeck: ["turn_started_sentinel", "attack", "defend", "attack", "defend"],
+      enemy: {
+        name: "Turn Start Dummy",
+        health: 30,
+        basePower: 12,
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+
+    battle.player.energy = 10;
+
+    const plains = battle.player.hand.find((card) => card.definitionId === "turn_started_sentinel");
+
+    if (!plains) {
+      throw new Error("Expected turn_started_sentinel in hand.");
+    }
+
+    applyBattleAction(battle, {
+      type: "play_card",
+      cardInstanceId: plains.instanceId,
+    });
+
+    const plainsPermanent = battle.battlefield.find(
+      (permanent) => permanent?.definitionId === "turn_started_sentinel",
+    );
+
+    if (!plainsPermanent) {
+      throw new Error("Expected turn_started_sentinel on the battlefield.");
+    }
+
+    expect(battle.player.energy).toBe(7);
+
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(battle.player.energy).toBe(4);
+    expect(
+      battle.log.some(
+        (event) =>
+          event.type === "energy_gained" &&
+          event.amount === 1,
+      ),
+    ).toBe(true);
   });
 
   it("prevents damage to a creature with indestructible until end of turn", () => {

@@ -70,19 +70,19 @@ describe("cloud arena card summary", () => {
   it("describes the equipment benefit on Holy Blade", () => {
     expect(summarizeCardDefinition(holyBladeCardDefinition)).toEqual([
       "Equip a permanent.",
-      "Equipped permanent gets +2/+2.",
+      "Equipped permanent gets +1/+1.",
     ]);
   });
 
   it("describes equipment-granted keyword abilities", () => {
     expect(summarizeCardDefinition(refreshSignetCardDefinition)).toEqual([
       "Equip a permanent.",
-      "Equipped permanent gets +0/+2.",
+      "Equipped permanent gets +0/+1.",
       "Equipped creature has **Refresh**.",
     ]);
     expect(summarizeCardDefinition(haltBucklerCardDefinition)).toEqual([
       "Equip a permanent.",
-      "Equipped permanent gets +0/+2.",
+      "Equipped permanent gets +0/+1.",
       "Equipped creature has **Halt**.",
     ]);
   });
@@ -90,7 +90,7 @@ describe("cloud arena card summary", () => {
   it("describes the sweeping attack on Judgment Blade", () => {
     expect(summarizeCardDefinition(judgmentBladeCardDefinition)).toEqual([
       "Equip a permanent.",
-      "Equipped permanent gets +2/+2.",
+      "Equipped permanent gets +1/+1.",
       "Equipped creature attacks all enemy permanents.",
     ]);
   });
@@ -147,7 +147,7 @@ describe("cloud arena card summary", () => {
     ]);
     expect(summarizeCardDefinition(PIERCE_SABER_DEFINITION)).toEqual([
       "Equip a permanent.",
-      "Equipped permanent gets +0/+3.",
+      "Equipped permanent gets +0/+2.",
       "Equipped creature has **Pierce**.",
     ]);
   });

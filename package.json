@@ -23,6 +23,7 @@
     "dev:web:once": "npm run dev:web",
     "dev:arena:api": "npm run dev:api",
     "dev:arena:web": "npm run dev:web",
+    "kill:arena-ports": "sh -lc 'pids=$(lsof -tiTCP:4311 -sTCP:LISTEN; lsof -tiTCP:4321 -sTCP:LISTEN); [ -n \"$pids\" ] && kill $pids || true'",
     "arena:demo": "npm run build:types && ./scripts/node18.sh dist/scripts/run-cloud-arena-demo.js",
     "arena:simulate": "npm run build:types && ./scripts/node18.sh dist/scripts/run-cloud-arena-simulation.js",
     "arena:simulate:batch": "npm run build:types && ./scripts/node18.sh dist/scripts/run-cloud-arena-batch-simulation.js",

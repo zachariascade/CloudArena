@@ -499,6 +499,11 @@ export type RulesEvent =
       controllerId: string;
     }
   | {
+      type: "turn_started";
+      turnNumber: number;
+      player: "self" | "controller" | "opponent";
+    }
+  | {
       type: "permanent_entered";
       turnNumber: number;
       permanentId: string;
@@ -619,6 +624,7 @@ export type BaseCardDefinition = {
   cost: number;
   cardTypes: CardType[];
   subtypes?: string[];
+  rarity?: "common" | "uncommon" | "rare" | "mythic" | "special" | "bonus" | null;
   display?: CardDisplayDefinition;
   onPlay: CardEffect[];
   spellEffects?: Effect[];

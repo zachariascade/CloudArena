@@ -8,6 +8,7 @@ import { CloudArenaBattleState } from "../apps/cloud-arena-web/src/components/cl
 import { CloudArenaHandTray } from "../apps/cloud-arena-web/src/components/cloud-arena-hand-tray.js";
 import { CloudArenaInspectorPanel } from "../apps/cloud-arena-web/src/components/cloud-arena-inspector-panel.js";
 import {
+  buildCardSubtitle,
   mapArenaEnemyToDisplayCard,
   mapArenaHandCardToDisplayCard,
   mapArenaPermanentToDisplayCard,
@@ -16,6 +17,7 @@ import {
 import { buildEnemyPreviewCards } from "../apps/cloud-arena-web/src/lib/cloud-arena-enemy-card-preview.js";
 import type { CloudArenaBattleViewModel } from "../apps/cloud-arena-web/src/lib/cloud-arena-battle-view-model.js";
 import type { CloudArenaBattleMotionState } from "../apps/cloud-arena-web/src/lib/cloud-arena-battle-motion.js";
+import type { CardDefinition } from "../src/cloud-arena/core/types.js";
 import { getEnemyPreset } from "../src/cloud-arena/index.js";
 
 const EMPTY_BATTLE_MOTION_STATE: CloudArenaBattleMotionState = {
@@ -48,6 +50,16 @@ describe("shared display card mappers", () => {
     expect(model.image?.url).toContain("/images/cards/card_0036_watcher_at_edens_gate.jpg");
     expect(model.textBlocks.map((entry) => entry.text)).toContain("Summon a guardian with 10 health.");
     expect(model.badges).toEqual([]);
+  });
+
+  it("generates subtitles from card types, subtypes, and rarity", () => {
+    const generatedSubtitle = buildCardSubtitle({
+      cardTypes: ["creature"],
+      subtypes: ["Angel", "Warrior"],
+      rarity: "mythic",
+    } satisfies Pick<CardDefinition, "cardTypes" | "subtypes" | "rarity">);
+
+    expect(generatedSubtitle).toBe("Legendary Creature - Angel Warrior");
   });
 
   it("maps arena player and enemy summaries into display cards", () => {
@@ -1143,7 +1155,33 @@ describe("shared display card mappers", () => {
   });
 
   it("describes slash attack multipliers and repeat counts distinctly", () => {
-    const previewCards = buildEnemyPreviewCards(getEnemyPreset("lake_of_ice").cards);
+    const previewCards = buildEnemyPreviewCards([
+      {
+        id: "single_slash_preview",
+        name: "Single Slash",
+        effects: [{ attackPowerMultiplier: 1, target: "player" }],
+      },
+      {
+        id: "double_slash_preview",
+        name: "Double Slash",
+        effects: [{ attackPowerMultiplier: 2, target: "player" }],
+      },
+      {
+        id: "triple_slash_preview",
+        name: "Triple Slash",
+        effects: [{ attackPowerMultiplier: 3, target: "player" }],
+      },
+      {
+        id: "pierce_preview",
+        name: "Pierce Slash",
+        effects: [{ attackPowerMultiplier: 1, bypassBlock: true, target: "player" }],
+      },
+      {
+        id: "weaken_preview",
+        name: "Weaken",
+        effects: [{ powerDeltaAllPermanents: -1, target: "enemy" }],
+      },
+    ]);
 
     expect(previewCards[0]?.textBlocks[0]?.text).toBe("Attack with base power");
     expect(previewCards[1]?.textBlocks[0]?.text).toBe("Attack with 2x base power");

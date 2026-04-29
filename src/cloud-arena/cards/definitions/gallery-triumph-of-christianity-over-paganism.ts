@@ -21,31 +21,5 @@ export const galleryTriumphOfChristianityOverPaganismCardDefinition: CardDefinit
   onPlay: [],
   power: 0,
   health: 7,
-  abilities: [
-    {
-      kind: "triggered",
-      trigger: { event: "self_enters_battlefield" },
-      effects: [
-        {
-          type: "gain_block",
-          target: "player",
-          amount: { type: "constant", value: 6 },
-        },
-      ],
-    },
-    {
-      kind: "triggered",
-      trigger: {
-        event: "turn_started",
-        player: "self",
-      },
-      effects: [
-        {
-          type: "gain_block",
-          target: "player",
-          amount: { type: "constant", value: 1 },
-        },
-      ],
-    },
-  ],
+  abilities: [],
 };

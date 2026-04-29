@@ -842,6 +842,7 @@ describe("cloud arena combat engine edge cases", () => {
       "card_drawn",
       "card_drawn",
       "card_drawn",
+      "turn_started",
     ]);
 
     applyBattleAction(battle, {

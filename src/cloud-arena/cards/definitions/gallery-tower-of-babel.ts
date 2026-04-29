@@ -21,33 +21,5 @@ export const galleryTowerOfBabelCardDefinition: CardDefinition = {
   onPlay: [],
   power: 0,
   health: 6,
-  abilities: [
-    {
-      kind: "triggered",
-      trigger: { event: "self_enters_battlefield" },
-      effects: [
-        {
-          type: "gain_block",
-          target: "player",
-          amount: { type: "constant", value: 3 },
-        },
-      ],
-    },
-    {
-      kind: "triggered",
-      trigger: {
-        event: "spell_cast",
-        selector: {
-          controller: "you",
-        },
-      },
-      effects: [
-        {
-          type: "gain_energy",
-          target: "player",
-          amount: { type: "constant", value: 1 },
-        },
-      ],
-    },
-  ],
+  abilities: [],
 };

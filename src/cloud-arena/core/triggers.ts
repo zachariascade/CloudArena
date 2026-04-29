@@ -384,7 +384,15 @@ function matchesTrigger(
           matchesSelectorObject(triggerSubject, ability.trigger.selector, context))
       );
     case "turn_started":
-      return false;
+      if (event.type !== "turn_started" || abilitySource.kind !== "permanent") {
+        return false;
+      }
+
+      if (ability.trigger.player === "opponent") {
+        return abilitySource.controllerId === "enemy";
+      }
+
+      return abilitySource.controllerId === "player";
   }
 }
 
@@ -392,6 +400,37 @@ function collectTriggeredAbilities(
   state: BattleState,
   event: RulesEvent,
 ): TriggerResolution[] {
+  if (event.type === "turn_started") {
+    const abilitySources = selectObjects(state, { zone: "battlefield", controller: "any" });
+
+    return abilitySources.flatMap((abilitySource) => {
+      const abilities =
+        abilitySource.kind === "permanent"
+          ? abilitySource.permanent.abilities ?? []
+          : abilitySource.definition.abilities ?? [];
+
+      return abilities.flatMap((ability) =>
+        matchesTrigger(ability, event, abilitySource, abilitySource)
+          ? [
+              {
+                ability,
+                abilitySourcePermanentId:
+                  abilitySource.kind === "permanent" ? abilitySource.permanent.instanceId : undefined,
+                abilitySourceCardInstanceId:
+                  abilitySource.kind === "card" ? abilitySource.card.instanceId : undefined,
+                triggerSubjectPermanentId:
+                  abilitySource.kind === "permanent" ? abilitySource.permanent.instanceId : undefined,
+                triggerSubjectCardInstanceId:
+                  abilitySource.kind === "card" ? abilitySource.card.instanceId : undefined,
+                sourceCardInstanceId:
+                  abilitySource.kind === "card" ? abilitySource.card.instanceId : undefined,
+              },
+            ]
+          : [],
+      );
+    });
+  }
+
   const triggerSubject = getTriggerSubjectObject(state, event);
 
   if (!triggerSubject) {

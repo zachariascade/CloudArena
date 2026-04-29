@@ -11,6 +11,7 @@ import {
   getEnemyPlanLength,
   getEnemyPlanStepAtIndexFromState,
 } from "./enemy-plan.js";
+import { emitRulesEvent } from "./rules-events.js";
 import {
   cleanupDefeatedPermanents,
   permanentHasKeyword,
@@ -146,6 +147,11 @@ export function resetRound(state: BattleState): BattleState {
 
   const drawResult = applyDrawPolicy(state);
   cleanupDefeatedPermanents(state);
+  emitRulesEvent(state, {
+    type: "turn_started",
+    turnNumber: state.turnNumber,
+    player: "self",
+  });
   processTriggeredAbilities(state);
   cleanupDefeatedPermanents(state);
 

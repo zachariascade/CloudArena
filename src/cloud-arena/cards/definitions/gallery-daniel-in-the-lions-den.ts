@@ -22,44 +22,5 @@ export const galleryDanielInTheLionsDenCardDefinition: CardDefinition = {
   onPlay: [],
   power: 0,
   health: 5,
-  abilities: [
-    {
-      kind: "triggered",
-      trigger: {
-        event: "permanent_blocked",
-        selector: {
-          zone: "battlefield",
-          controller: "you",
-          cardType: "creature",
-        },
-      },
-      conditions: [
-        {
-          type: "threshold",
-          selector: {
-            zone: "battlefield",
-            controller: "you",
-            cardType: "creature",
-            defending: true,
-          },
-          op: "==",
-          value: 1,
-        },
-      ],
-      effects: [
-        {
-          type: "grant_keyword",
-          target: {
-            zone: "battlefield",
-            controller: "you",
-            cardType: "creature",
-            relation: "self",
-            source: "trigger_subject",
-          },
-          keyword: "indestructible",
-          duration: "end_of_turn",
-        },
-      ],
-    },
-  ],
+  abilities: [],
 };

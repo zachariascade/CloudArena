@@ -22,53 +22,5 @@ export const galleryAnnunciationCardDefinition: CardDefinition = {
   onPlay: [],
   power: 0,
   health: 4,
-  abilities: [
-    {
-      kind: "triggered",
-      trigger: { event: "self_enters_battlefield" },
-      effects: [
-        {
-          type: "gain_energy",
-          target: "player",
-          amount: { type: "constant", value: 1 },
-        },
-      ],
-    },
-    {
-      kind: "triggered",
-      trigger: {
-        event: "spell_cast",
-        selector: {
-          zone: "hand",
-          controller: "you",
-          cardType: "instant",
-        },
-      },
-      effects: [
-        {
-          type: "draw_card",
-          target: "self",
-          amount: { type: "constant", value: 1 },
-        },
-      ],
-    },
-    {
-      kind: "triggered",
-      trigger: {
-        event: "spell_cast",
-        selector: {
-          zone: "hand",
-          controller: "you",
-          cardType: "sorcery",
-        },
-      },
-      effects: [
-        {
-          type: "gain_block",
-          target: "player",
-          amount: { type: "constant", value: 2 },
-        },
-      ],
-    },
-  ],
+  abilities: [],
 };
