@@ -7,7 +7,6 @@ export const defendingStrikeCardDefinition: CardDefinition = {
   cost: 2,
   display: {
     name: "Zeal of Phinehas",
-    title: "Zeal of Phinehas",
     frameTone: "split-white-red",
     imagePath: "card_0031_tree_of_forbidden_knowledge.jpg",
     imageAlt: "A hard-earned warning wrapped around a burning edge",

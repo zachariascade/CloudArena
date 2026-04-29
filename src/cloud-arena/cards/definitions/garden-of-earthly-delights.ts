@@ -7,7 +7,6 @@ export const gardenOfEarthlyDelightsCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     name: "Garden of Earthly Delights",
-    title: "Garden of Earthly Delights",
     frameTone: "white",
     imagePath: "669F9BF4-F0AF-4A1B-9CB5-9A083E3EEEF9.jpeg",
     imageAlt: "Hieronymus Bosch's Garden of Earthly Delights",

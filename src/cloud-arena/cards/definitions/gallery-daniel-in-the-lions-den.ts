@@ -8,7 +8,6 @@ export const galleryDanielInTheLionsDenCardDefinition: CardDefinition = {
   rarity: "mythic",
   display: {
     name: "Daniel in the Lions' Den",
-    title: "Daniel in the Lions' Den",
     frameTone: "white",
     artist: "Gustave Doré",
     imagePath:
@@ -22,5 +21,44 @@ export const galleryDanielInTheLionsDenCardDefinition: CardDefinition = {
   onPlay: [],
   power: 0,
   health: 5,
-  abilities: [],
+  abilities: [
+    {
+      id: "daniel_single_defender_indestructible",
+      kind: "triggered",
+      trigger: {
+        event: "permanent_blocked",
+        selector: {
+          zone: "battlefield",
+          controller: "you",
+          cardType: "creature",
+        },
+      },
+      conditions: [
+        {
+          type: "threshold",
+          selector: {
+            zone: "battlefield",
+            controller: "you",
+            cardType: "creature",
+            defending: true,
+          },
+          op: "==",
+          value: 1,
+        },
+      ],
+      effects: [
+        {
+          type: "grant_keyword",
+          target: {
+            zone: "battlefield",
+            controller: "you",
+            cardType: "creature",
+            defending: true,
+          },
+          keyword: "indestructible",
+          duration: "end_of_turn",
+        },
+      ],
+    },
+  ],
 };

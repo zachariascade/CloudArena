@@ -8,7 +8,6 @@ export const denialBeforeTheRoostersCryCardDefinition: CardDefinition = {
   manaCost: "{1}{W}{U}",
   display: {
     name: "Denial Before the Rooster's Cry",
-    title: "Denial Before the Rooster's Cry",
     frameTone: "white",
     imagePath: "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Third_Denial_of_Peter._Jesus%27_Look_of_Reproach_-_James_Tissot.jpg",
     imageAlt: "James Tissot's The Third Denial of Peter. Jesus' Look of Reproach",

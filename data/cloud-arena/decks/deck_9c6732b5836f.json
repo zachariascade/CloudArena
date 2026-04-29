@@ -1,0 +1,16 @@
+{
+  "id": "deck_9c6732b5836f",
+  "name": "Daniel Test",
+  "cards": [
+    {
+      "cardId": "token_angel",
+      "quantity": 10
+    },
+    {
+      "cardId": "gallery_daniel_in_the_lions_den",
+      "quantity": 2
+    }
+  ],
+  "tags": [],
+  "notes": null
+}

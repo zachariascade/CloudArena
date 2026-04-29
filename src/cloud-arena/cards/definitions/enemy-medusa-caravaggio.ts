@@ -7,7 +7,6 @@ export const enemyMedusaCaravaggioCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     name: "Medusa",
-    title: "Medusa",
     frameTone: "black-green",
     artist: "Caravaggio",
     imagePath:

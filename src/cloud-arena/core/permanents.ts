@@ -8,6 +8,7 @@ import {
   LEAN_V1_DEFAULT_RECOVERY_POLICY,
 } from "./constants.js";
 import { emitRulesEvent } from "./rules-events.js";
+import { findPermanentById } from "./selectors.js";
 import type {
   Ability,
   ActivatedAbility,
@@ -125,9 +126,9 @@ function removeSourceModifiers(
   return removedModifiers;
 }
 
-function removeSourceKeywordModifiers(
+function removeKeywordModifiersBySource(
   permanent: PermanentState,
-  sourceKind: "equipment",
+  sourceKind: PermanentKeywordModifier["sourceKind"],
   sourceId: string,
 ): PermanentKeywordModifier[] {
   const retainedModifiers: NonNullable<PermanentState["keywordModifiers"]> = [];
@@ -520,6 +521,72 @@ export function permanentHasKeyword(
   );
 }
 
+export function removeKeywordModifiersFromBattlefieldBySource(
+  state: BattleState,
+  sourceKind: PermanentKeywordModifier["sourceKind"],
+  sourceId: string,
+): void {
+  for (const permanent of [...state.battlefield, ...state.enemyBattlefield]) {
+    if (!permanent) {
+      continue;
+    }
+
+    removeKeywordModifiersBySource(permanent, sourceKind, sourceId);
+  }
+}
+
+export function syncDanielInTheLionsDenProtection(state: BattleState): void {
+  const danielPermanentIds = state.battlefield
+    .filter(
+      (permanent): permanent is PermanentState =>
+        permanent !== null && permanent.definitionId === "gallery_daniel_in_the_lions_den",
+    )
+    .map((permanent) => permanent.instanceId);
+
+  for (const danielPermanentId of danielPermanentIds) {
+    removeKeywordModifiersFromBattlefieldBySource(state, "permanent", danielPermanentId);
+  }
+
+  if (danielPermanentIds.length === 0) {
+    return;
+  }
+
+  const defenders = state.blockingQueue
+    .map((permanentId) => findPermanentById(state, permanentId))
+    .filter((permanent): permanent is PermanentState => {
+      if (
+        permanent === null ||
+        permanent.controllerId !== "player" ||
+        !permanent.isDefending ||
+        permanent.health <= 0
+      ) {
+        return false;
+      }
+
+      const definition = getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId);
+      return hasCardType(definition, "creature");
+    });
+
+  if (defenders.length !== 1) {
+    return;
+  }
+
+  const defender = defenders[0];
+  if (!defender || permanentHasKeyword(defender, "indestructible")) {
+    return;
+  }
+
+  defender.keywordModifiers = [
+    ...(defender.keywordModifiers ?? []),
+    {
+      keyword: "indestructible",
+      sourceKind: "permanent",
+      sourceId: danielPermanentIds[0],
+      expiresAtTurnNumber: state.turnNumber + 1,
+    },
+  ];
+}
+
 export function expireTemporaryKeywordModifiers(state: BattleState): void {
   for (const permanent of [...state.battlefield, ...state.enemyBattlefield]) {
     if (!permanent) {
@@ -620,7 +687,7 @@ export function detachPermanent(
 
   if (attachedTarget) {
     const removedModifiers = removeSourceModifiers(attachedTarget, "equipment", attachmentPermanent.instanceId);
-    removeSourceKeywordModifiers(attachedTarget, "equipment", attachmentPermanent.instanceId);
+    removeKeywordModifiersBySource(attachedTarget, "equipment", attachmentPermanent.instanceId);
 
     for (const removedModifier of removedModifiers) {
       if (removedModifier.stat === "health") {
@@ -710,6 +777,9 @@ export function destroyPermanent(
 
   detachPermanent(state, permanent.instanceId);
   detachAttachmentsFromTarget(state, permanent);
+  if (permanent.definitionId === "gallery_daniel_in_the_lions_den") {
+    removeKeywordModifiersFromBattlefieldBySource(state, "permanent", permanent.instanceId);
+  }
 
   emitRulesEvent(state, {
     type: "permanent_left_battlefield",

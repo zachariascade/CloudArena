@@ -7,7 +7,6 @@ export const enemySatanCallingUpHisLegionsCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     name: "Satan Calling Up His Legions",
-    title: "Satan Calling Up His Legions",
     frameTone: "split-black-red",
     artist: "William Blake",
     imagePath:

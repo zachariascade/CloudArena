@@ -7,7 +7,6 @@ export const enemyGruntDemonCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     name: "Demon Horde",
-    title: "Demon Horde",
     frameTone: "split-black-red",
     imagePath: "grunt_demon.svg",
     imageAlt: "A horned demon soldier framed by smoke and ember light",

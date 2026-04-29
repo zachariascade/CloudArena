@@ -7,7 +7,6 @@ export const haltBucklerCardDefinition: CardDefinition = {
   cost: 2,
   display: {
     name: "Bulwark of Intercession",
-    title: "Bulwark of Intercession",
     frameTone: "colorless",
     imagePath: "card_0036_watcher_at_edens_gate.jpg",
     imageAlt: "A holy buckler lifted to catch the full force of an oncoming strike",

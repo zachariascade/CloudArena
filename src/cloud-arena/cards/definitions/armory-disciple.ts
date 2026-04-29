@@ -7,7 +7,6 @@ export const armoryDiscipleCardDefinition: CardDefinition = {
   cost: 2,
   display: {
     name: "Tubal-Cain, Forger of Bronze and Iron",
-    title: "Tubal-Cain, Forger of Bronze and Iron",
     frameTone: "white",
     imagePath: "classics/card_0041_tubal_cain_forger_of_bronze_and_iron.jpg",
     imageAlt: "Tubal-Cain forging bronze and iron in a biblical illustration",

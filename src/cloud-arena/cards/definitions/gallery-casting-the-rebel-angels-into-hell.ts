@@ -7,7 +7,6 @@ export const galleryCastingTheRebelAngelsIntoHellCardDefinition: CardDefinition 
   cost: 3,
   display: {
     name: "The Casting of the Rebel Angels into Hell",
-    title: "The Casting of the Rebel Angels into Hell",
     frameTone: "split-black-red",
     artist: "William Blake",
     imagePath:

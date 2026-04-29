@@ -9,6 +9,7 @@ import {
   type CardDefinitionLibrary,
 } from "../../src/cloud-arena/index.js";
 import { denialBeforeTheRoostersCryCardDefinition } from "../../src/cloud-arena/cards/definitions/denial-before-the-rooster-s-cry.js";
+import { galleryDanielInTheLionsDenCardDefinition } from "../../src/cloud-arena/cards/definitions/gallery-daniel-in-the-lions-den.js";
 import { createTestBattle, getEnemyHealth, getEnemyBlock, getEnemyPermanent } from "./helpers.js";
 
 const EFFECT_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
@@ -105,6 +106,35 @@ const EFFECT_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
         ],
       },
     ],
+  },
+  gallery_daniel_in_the_lions_den: galleryDanielInTheLionsDenCardDefinition,
+  guardian: {
+    id: "guardian",
+    name: "Guardian",
+    cardTypes: ["creature"],
+    cost: 2,
+    onPlay: [],
+    power: 4,
+    health: 10,
+    keywords: ["halt"],
+    abilities: [
+      {
+        id: "guardian_apply_block",
+        kind: "activated",
+        activation: { type: "action", actionId: "apply_block" },
+        effects: [{ type: "gain_block", target: "player", amount: { type: "constant", value: 3 } }],
+      },
+    ],
+  },
+  sparrow: {
+    id: "sparrow",
+    name: "Sparrow",
+    cardTypes: ["creature"],
+    cost: 1,
+    onPlay: [],
+    power: 1,
+    health: 1,
+    abilities: [],
   },
   defend: {
     id: "defend",
@@ -621,6 +651,179 @@ describe("cloud arena effect primitives", () => {
     );
 
     expect(getDerivedPermanentStat(battle, guardian, "health")).toBe(7);
+  });
+
+  it("gives the only defending creature indestructible", () => {
+    const battle = createTestBattle({
+      cardDefinitions: EFFECT_TEST_CARD_DEFINITIONS,
+      playerDeck: [
+        "gallery_daniel_in_the_lions_den",
+        "guardian",
+        "attack",
+        "defend",
+        "attack",
+      ],
+      enemy: {
+        name: "Lion Den Dummy",
+        health: 30,
+        basePower: 12,
+        behavior: [{ attackAmount: 12 }],
+      },
+    });
+
+    battle.player.energy = 10;
+
+    const danielCard = battle.player.hand.find(
+      (card) => card.definitionId === "gallery_daniel_in_the_lions_den",
+    );
+    const guardianCard = battle.player.hand.find((card) => card.definitionId === "guardian");
+
+    if (!danielCard || !guardianCard) {
+      throw new Error("Expected Daniel and Guardian in hand.");
+    }
+
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: danielCard.instanceId });
+    applyBattleAction(battle, { type: "end_turn" });
+
+    battle.player.energy = 10;
+
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: guardianCard.instanceId });
+
+    const guardian = battle.battlefield.find((permanent) => permanent?.definitionId === "guardian");
+
+    if (!guardian) {
+      throw new Error("Expected guardian on the battlefield.");
+    }
+
+    const healthBeforeDefend = battle.player.health;
+
+    applyBattleAction(battle, {
+      type: "use_permanent_action",
+      permanentId: guardian.instanceId,
+      action: "defend",
+    });
+
+    expect(battle.battlefield.find((permanent) => permanent?.definitionId === "guardian")?.isDefending).toBe(true);
+
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(battle.player.health).toBe(healthBeforeDefend);
+    expect(getDerivedPermanentStat(battle, guardian, "health")).toBe(10);
+  });
+
+  it("lets damage flow through Daniel's indestructible defender without halt", () => {
+    const battle = createTestBattle({
+      cardDefinitions: EFFECT_TEST_CARD_DEFINITIONS,
+      playerDeck: [
+        "gallery_daniel_in_the_lions_den",
+        "sparrow",
+        "attack",
+        "defend",
+        "attack",
+      ],
+      enemy: {
+        name: "Lion Den Dummy",
+        health: 30,
+        basePower: 8,
+        behavior: [{ attackAmount: 8 }],
+      },
+    });
+
+    battle.player.energy = 10;
+
+    const danielCard = battle.player.hand.find(
+      (card) => card.definitionId === "gallery_daniel_in_the_lions_den",
+    );
+    const sparrowCard = battle.player.hand.find((card) => card.definitionId === "sparrow");
+
+    if (!danielCard || !sparrowCard) {
+      throw new Error("Expected Daniel and Sparrow in hand.");
+    }
+
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: danielCard.instanceId });
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: sparrowCard.instanceId });
+
+    const sparrow = battle.battlefield.find((permanent) => permanent?.definitionId === "sparrow");
+
+    if (!sparrow) {
+      throw new Error("Expected sparrow on the battlefield.");
+    }
+
+    const healthBeforeDefend = battle.player.health;
+
+    applyBattleAction(battle, {
+      type: "use_permanent_action",
+      permanentId: sparrow.instanceId,
+      action: "defend",
+    });
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(battle.player.health).toBe(healthBeforeDefend - 7);
+    expect(battle.battlefield.find((permanent) => permanent?.instanceId === sparrow.instanceId)?.health).toBe(1);
+  });
+
+  it("does not leave Daniel's indestructible on multiple defenders for the same attack", () => {
+    const battle = createTestBattle({
+      cardDefinitions: EFFECT_TEST_CARD_DEFINITIONS,
+      playerDeck: [
+        "gallery_daniel_in_the_lions_den",
+        "sparrow",
+        "sparrow",
+        "attack",
+        "defend",
+        "defend",
+      ],
+      enemy: {
+        name: "Lion Den Dummy",
+        health: 30,
+        basePower: 8,
+        behavior: [{ attackAmount: 8 }],
+      },
+    });
+
+    battle.player.energy = 10;
+
+    const danielCard = battle.player.hand.find(
+      (card) => card.definitionId === "gallery_daniel_in_the_lions_den",
+    );
+    if (!danielCard) {
+      throw new Error("Expected Daniel in hand.");
+    }
+
+    const sparrows = battle.player.hand.filter((card) => card.definitionId === "sparrow");
+    if (sparrows.length < 2) {
+      throw new Error("Expected two sparrows in hand.");
+    }
+
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: danielCard.instanceId });
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: sparrows[0].instanceId });
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: sparrows[1].instanceId });
+
+    const firstSparrow = battle.battlefield.find((permanent) => permanent?.definitionId === "sparrow");
+    const secondSparrow = battle.battlefield.find(
+      (permanent) => permanent?.definitionId === "sparrow" && permanent.instanceId !== firstSparrow?.instanceId,
+    );
+
+    if (!firstSparrow || !secondSparrow) {
+      throw new Error("Expected both sparrows on the battlefield.");
+    }
+
+    applyBattleAction(battle, {
+      type: "use_permanent_action",
+      permanentId: firstSparrow.instanceId,
+      action: "defend",
+    });
+    applyBattleAction(battle, {
+      type: "use_permanent_action",
+      permanentId: secondSparrow.instanceId,
+      action: "defend",
+    });
+
+    applyBattleAction(battle, { type: "end_turn" });
+
+    expect(battle.player.health).toBe(94);
+    expect(battle.battlefield.find((permanent) => permanent?.instanceId === firstSparrow.instanceId)).toBeUndefined();
+    expect(battle.battlefield.find((permanent) => permanent?.instanceId === secondSparrow.instanceId)).toBeUndefined();
   });
 
   it("draws cards from an instant spell and a permanent activated ability", () => {

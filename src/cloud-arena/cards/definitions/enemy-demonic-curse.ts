@@ -7,7 +7,6 @@ export const enemyDemonicCurseCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     name: "Demonic Curse",
-    title: "Demonic Curse",
     frameTone: "split-black-red",
     imagePath: "demonic-curse",
     imageAlt: "A demonic curse spreading across the battlefield",

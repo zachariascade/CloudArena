@@ -1,6 +1,9 @@
 import { emitRulesEvent } from "../core/rules-events.js";
 import { findPermanentById } from "../core/selectors.js";
-import { destroyPermanent, permanentHasKeyword } from "../core/permanents.js";
+import {
+  destroyPermanent,
+  permanentHasKeyword,
+} from "../core/permanents.js";
 import type { BattleState, DamageOverflowPolicy } from "../core/types.js";
 
 function applyDamageToBlockAndHealth(
@@ -101,9 +104,13 @@ function applyEnemyDamageToDefenders(
     defended = true;
     halted ||= permanentHasKeyword(permanent, "halt");
     const beforeCombined = permanent.block + permanent.health;
-    remainingDamage = sourceHasPierce
-      ? Math.max(0, remainingDamage - applyDamageToHealthOnly(remainingDamage, permanent))
-      : applyDamageToBlockAndHealth(remainingDamage, permanent);
+    if (permanentHasKeyword(permanent, "indestructible")) {
+      remainingDamage = Math.max(0, remainingDamage - permanent.health);
+    } else {
+      remainingDamage = sourceHasPierce
+        ? Math.max(0, remainingDamage - applyDamageToHealthOnly(remainingDamage, permanent))
+        : applyDamageToBlockAndHealth(remainingDamage, permanent);
+    }
     const absorbedByPermanent = beforeCombined - (permanent.block + permanent.health);
     logEnemyDamage(state, absorbedByPermanent, "permanent", permanent.instanceId);
     if (absorbedByPermanent > 0) {

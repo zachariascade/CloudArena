@@ -7,7 +7,6 @@ export const galleryTemptationOfStAnthonyBoschCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     name: "The Temptation of St Anthony",
-    title: "The Temptation of St Anthony",
     frameTone: "split-black-red",
     artist: "Hieronymus Bosch",
     imagePath:

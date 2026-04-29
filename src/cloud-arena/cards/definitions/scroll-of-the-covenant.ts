@@ -7,7 +7,6 @@ export const scrollOfTheCovenanCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     name: "Scroll of the Covenant",
-    title: "Scroll of the Covenant",
     frameTone: "colorless",
     imagePath: "classics/card_0052_tower_of_babel.jpg",
     imageAlt: "An ancient scroll unrolling to reveal the full weight of binding words",

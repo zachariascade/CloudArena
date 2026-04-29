@@ -7,7 +7,6 @@ export const enemyNumberOfTheBeast666CardDefinition: CardDefinition = {
   cost: 0,
   display: {
     name: "The Number of the Beast is 666",
-    title: "The Number of the Beast is 666",
     frameTone: "split-black-red",
     artist: "William Blake",
     imagePath:

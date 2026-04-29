@@ -7,7 +7,6 @@ export const enemyGreatRedDragonDragonOfTheSunCardDefinition: CardDefinition = {
   cost: 0,
   display: {
     name: "Great Red Dragon, Dragon of the Sun",
-    title: "Great Red Dragon, Dragon of the Sun",
     frameTone: "split-black-red",
     artist: "William Blake",
     imagePath:

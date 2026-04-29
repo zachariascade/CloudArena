@@ -53,7 +53,7 @@ const DISPLAY_CARD_KEYWORD_GLOSSARY = {
 type DisplayCardKeywordId = keyof typeof DISPLAY_CARD_KEYWORD_GLOSSARY;
 
 function formatCardDisplayName(name: string, title: string | null | undefined): string {
-  if (!title || title === name) {
+  if (!title) {
     return name;
   }
 

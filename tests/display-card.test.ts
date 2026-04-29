@@ -49,7 +49,7 @@ describe("shared display card mappers", () => {
 
     expect(model.variant).toBe("mtg");
     expect(model.name).toBe("Guardian");
-    expect(model.title).toBe("Watcher at Eden's Gate");
+    expect(model.title).toBeUndefined();
     expect(model.subtitle).toBe("Creature - Angel");
     expect(model.image?.url).toContain("/images/cards/card_0036_watcher_at_edens_gate.jpg");
     expect(model.textBlocks.map((entry) => entry.text)).toContain("Summon a guardian with 10 health.");
@@ -167,7 +167,7 @@ describe("shared display card mappers", () => {
     );
 
     expect(conduit.subtitle).toBe("Creature - Angel");
-    expect(conduit.title).toBe("Pillar of Fire");
+    expect(conduit.title).toBeUndefined();
     expect(conduit.textBlocks[0]?.text).toBe("Tap: Gain 1 energy.");
     expect(conduit.image?.url).toContain("/images/cards/2B5A00FD-D279-48BD-AEFE-0711AC4E9F54.jpeg");
   });
@@ -235,7 +235,7 @@ describe("shared display card mappers", () => {
     );
 
     expect(seraph.subtitle).toBe("Creature - Angel");
-    expect(seraph.title).toBe("Gabriel, Herald of the Armory");
+    expect(seraph.title).toBeUndefined();
     expect(seraph.textBlocks[0]?.text).toBe(
       "Whenever an equipment you control enters the battlefield, draw a card.",
     );
@@ -286,7 +286,7 @@ describe("shared display card mappers", () => {
 
     expect(impCaller.image?.url).toContain("/images/cards/0AF7C779-AF9B-4662-82E4-F481882E7788.jpeg");
     expect(impCaller.image?.alt).toContain("Belzaphor");
-    expect(impCaller.title).toBe("Belzaphor, Swarm of the Pit");
+    expect(impCaller.title).toBeUndefined();
   });
 
   it("uses the provided JPEG for the Belzaphor battlefield leader", () => {
@@ -334,7 +334,7 @@ describe("shared display card mappers", () => {
 
     expect(garden.image?.url).toContain("/images/cards/669F9BF4-F0AF-4A1B-9CB5-9A083E3EEEF9.jpeg");
     expect(garden.image?.alt).toContain("Garden of Earthly Delights");
-    expect(garden.title).toBe("Garden of Earthly Delights");
+    expect(garden.title).toBeUndefined();
   });
 
   it("maps arena hand cards and permanents with actions", () => {
@@ -408,7 +408,7 @@ describe("shared display card mappers", () => {
     });
 
     expect(handCard.actions).toHaveLength(1);
-    expect(handCard.title).toBe("Watcher at Eden's Gate");
+    expect(handCard.title).toBeUndefined();
     expect(handCard.image?.url).toContain("/images/cards/card_0036_watcher_at_edens_gate.jpg");
     expect(handCard.footerStat).toBe("4/4");
     handCard.actions[0]?.onSelect?.();
@@ -821,8 +821,8 @@ describe("shared display card mappers", () => {
     });
 
     expect(hymn.subtitle).toBe("Creature - Angel");
-    expect(hymn.title).toBe("Song of the Dry Bones");
-    expect(permanentHymn.title).toBe("Song of the Dry Bones");
+    expect(hymn.title).toBeUndefined();
+    expect(permanentHymn.title).toBeUndefined();
     expect(permanentHymn.subtitle).toBe("Creature - Angel");
     expect(permanentHymn.textBlocks.map((entry) => entry.text)).toEqual(
       hymn.textBlocks.map((entry) => entry.text),
@@ -1275,7 +1275,7 @@ describe("shared display card mappers", () => {
     });
 
     expect(bannerCard.name).toBe("Ark of the Covenant");
-    expect(bannerCard.title).toBe("Ark of the Covenant");
+    expect(bannerCard.title).toBeUndefined();
     expect(bannerCard.subtitle).toBe("Artifact");
     expect(bannerCard.textBlocks.some((entry) => entry.text.length > 0)).toBe(true);
     expect(bannerCard.actions.map((action) => action.label)).not.toContain("Defend");
@@ -1316,13 +1316,13 @@ describe("shared display card component", () => {
     expect(html).not.toContain(">Plain Card, Plain Card<");
   });
 
-  it("does not repeat the name when the title matches the name", () => {
+  it("does not repeat the name when the title is omitted", () => {
     const html = renderToStaticMarkup(
       createElement(DisplayCard, {
         model: {
           variant: "mtg",
           name: "Radiant Conduit",
-          title: "Radiant Conduit",
+          title: null,
           subtitle: "Creature - Angel",
           frameTone: "white",
           manaCost: "{2}",

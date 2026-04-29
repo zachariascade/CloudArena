@@ -7,7 +7,6 @@ export const sanctifiedGuideCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     name: "Pillar of Cloud",
-    title: "Pillar of Cloud",
     frameTone: "white",
     imagePath: "card_0037_builder_of_the_tower.jpg",
     imageAlt: "An angel guiding a single blessing onto the field",

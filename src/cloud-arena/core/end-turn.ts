@@ -1,4 +1,5 @@
 import type { BattleState } from "./types.js";
+import { syncDanielInTheLionsDenProtection } from "./permanents.js";
 
 export function endTurn(state: BattleState): BattleState {
   if (state.phase !== "player_action") {
@@ -11,6 +12,7 @@ export function endTurn(state: BattleState): BattleState {
     turnNumber: state.turnNumber,
   });
 
+  syncDanielInTheLionsDenProtection(state);
+
   return state;
 }
-

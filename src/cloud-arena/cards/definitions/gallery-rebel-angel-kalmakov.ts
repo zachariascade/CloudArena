@@ -7,7 +7,6 @@ export const galleryRebelAngelKalmakovCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     name: "The Rebel Angel",
-    title: "The Rebel Angel",
     frameTone: "split-black-red",
     artist: "Nicholas Kalmakoff",
     imagePath:

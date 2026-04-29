@@ -7,7 +7,6 @@ export const guardianCardDefinition: CardDefinition = {
   cost: 3,
   display: {
     name: "Watcher at Eden's Gate",
-    title: "Watcher at Eden's Gate",
     frameTone: "white",
     imagePath: "card_0036_watcher_at_edens_gate.jpg",
     imageAlt: "A guardian standing watch before a sacred gate",
