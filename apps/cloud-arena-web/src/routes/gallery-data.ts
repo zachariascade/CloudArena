@@ -21,8 +21,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Ancient of Days",
     artist: "William Blake",
     year: "1794",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:The_Ancient_of_Days_(Blake,_Research_Issues).jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg/960px-The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:The_Ancient_of_Days_(Blake,_Research_Issues).jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg/960px-The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg",
     createdAt: "2026-04-27T22:20:25-05:00",
     cardUsed: ["/cards/gallery_ancient_of_days"],
   },
@@ -30,8 +32,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Angel Stopping Abraham",
     artist: "Rembrandt van Rijn",
     year: "1635",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Rembrandt_The_Angel_Preventing_Abraham_from_Sacrificing_his_Son,_Isaac.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/9/96/Rembrandt_The_Angel_Preventing_Abraham_from_Sacrificing_his_Son%2C_Isaac.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Rembrandt_The_Angel_Preventing_Abraham_from_Sacrificing_his_Son,_Isaac.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/9/96/Rembrandt_The_Angel_Preventing_Abraham_from_Sacrificing_his_Son%2C_Isaac.jpg",
     createdAt: "2026-04-27T22:20:25-05:00",
     cardUsed: ["/cards/gallery_angel_stopping_abraham"],
   },
@@ -39,8 +43,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Annunciation",
     artist: "Fra Angelico",
     year: "c. 1440–1445",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Angelico_-_Annunciation_-_San_Marco_north_corridor.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Angelico_-_Annunciation_-_San_Marco_north_corridor.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Angelico_-_Annunciation_-_San_Marco_north_corridor.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/f/fa/Angelico_-_Annunciation_-_San_Marco_north_corridor.jpg",
     createdAt: "2026-04-27T22:20:25-05:00",
     cardUsed: ["/cards/gallery_annunciation"],
   },
@@ -48,8 +54,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Belshazzar's Feast",
     artist: "John Martin",
     year: "1820",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:John_Martin_-_Belshazzar%27s_Feast_-_Google_Art_Project.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/John_Martin_-_Belshazzar%27s_Feast_-_Google_Art_Project.jpg/960px-John_Martin_-_Belshazzar%27s_Feast_-_Google_Art_Project.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:John_Martin_-_Belshazzar%27s_Feast_-_Google_Art_Project.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/John_Martin_-_Belshazzar%27s_Feast_-_Google_Art_Project.jpg/960px-John_Martin_-_Belshazzar%27s_Feast_-_Google_Art_Project.jpg",
     createdAt: "2026-04-27T22:20:25-05:00",
     cardUsed: ["/cards/gallery_belshazzars_feast"],
   },
@@ -57,8 +65,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Christ and St Mary Magdalen at the Tomb",
     artist: "Rembrandt van Rijn",
     year: "1638",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Rembrandt_van_Rijn_-_Christ_and_St_Mary_Magdalen_at_the_Tomb_-_Google_Art_Project.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Rembrandt_van_Rijn_-_Christ_and_St_Mary_Magdalen_at_the_Tomb_-_Google_Art_Project.jpg/960px-Rembrandt_van_Rijn_-_Christ_and_St_Mary_Magdalen_at_the_Tomb_-_Google_Art_Project.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Rembrandt_van_Rijn_-_Christ_and_St_Mary_Magdalen_at_the_Tomb_-_Google_Art_Project.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Rembrandt_van_Rijn_-_Christ_and_St_Mary_Magdalen_at_the_Tomb_-_Google_Art_Project.jpg/960px-Rembrandt_van_Rijn_-_Christ_and_St_Mary_Magdalen_at_the_Tomb_-_Google_Art_Project.jpg",
     createdAt: "2026-04-27T22:20:25-05:00",
     cardUsed: ["/cards/gallery_christ_and_mary_magdalen"],
   },
@@ -66,8 +76,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Creation of Adam",
     artist: "Michelangelo",
     year: "c. 1508–1512",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Michelangelo_-_Creation_of_Adam_(cropped).jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg/960px-Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Michelangelo_-_Creation_of_Adam_(cropped).jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg/960px-Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg",
     createdAt: "2026-04-27T22:20:25-05:00",
     cardUsed: ["/cards/gallery_creation_of_adam"],
   },
@@ -75,8 +87,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Deluge",
     artist: "Gustave Doré",
     year: "1866",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Gustave_Dor%C3%A9_-_The_Holy_Bible_-_Plate_I,_The_Deluge.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Gustave_Dor%C3%A9_-_The_Holy_Bible_-_Plate_I%2C_The_Deluge.jpg/960px-Gustave_Dor%C3%A9_-_The_Holy_Bible_-_Plate_I%2C_The_Deluge.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Gustave_Dor%C3%A9_-_The_Holy_Bible_-_Plate_I,_The_Deluge.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Gustave_Dor%C3%A9_-_The_Holy_Bible_-_Plate_I%2C_The_Deluge.jpg/960px-Gustave_Dor%C3%A9_-_The_Holy_Bible_-_Plate_I%2C_The_Deluge.jpg",
     createdAt: "2026-04-27T22:20:25-05:00",
     cardUsed: ["/cards/gallery_deluge"],
   },
@@ -84,8 +98,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Great Day of His Wrath",
     artist: "John Martin",
     year: "1853",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:John_Martin_-_The_Great_Day_of_His_Wrath_-_Google_Art_Project.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/John_Martin_-_The_Great_Day_of_His_Wrath_-_Google_Art_Project.jpg/960px-John_Martin_-_The_Great_Day_of_His_Wrath_-_Google_Art_Project.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:John_Martin_-_The_Great_Day_of_His_Wrath_-_Google_Art_Project.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/John_Martin_-_The_Great_Day_of_His_Wrath_-_Google_Art_Project.jpg/960px-John_Martin_-_The_Great_Day_of_His_Wrath_-_Google_Art_Project.jpg",
     createdAt: "2026-04-27T22:20:25-05:00",
     cardUsed: ["/cards/gallery_great_day_of_his_wrath"],
   },
@@ -93,17 +109,24 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Great Red Dragon",
     artist: "William Blake",
     year: "c. 1805",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:William_Blake_-_The_Great_Red_Dragon_and_the_Woman_Clothed_with_the_Sun_-_Google_Art_Project.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/William_Blake_-_The_Great_Red_Dragon_and_the_Woman_Clothed_with_the_Sun_-_Google_Art_Project.jpg/960px-William_Blake_-_The_Great_Red_Dragon_and_the_Woman_Clothed_with_the_Sun_-_Google_Art_Project.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:William_Blake_-_The_Great_Red_Dragon_and_the_Woman_Clothed_with_the_Sun_-_Google_Art_Project.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/William_Blake_-_The_Great_Red_Dragon_and_the_Woman_Clothed_with_the_Sun_-_Google_Art_Project.jpg/960px-William_Blake_-_The_Great_Red_Dragon_and_the_Woman_Clothed_with_the_Sun_-_Google_Art_Project.jpg",
     createdAt: "2026-04-27T22:20:25-05:00",
-    cardUsed: ["/cards/gallery_great_red_dragon", "/cards/enemy_great_red_dragon_dragon_of_the_sun"],
+    cardUsed: [
+      "/cards/gallery_great_red_dragon",
+      "/cards/enemy_great_red_dragon_dragon_of_the_sun",
+    ],
   },
   {
     title: "Jacob Wrestles with the Angel",
     artist: "Gustave Doré",
     year: "1866",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:024.Jacob_Wrestles_with_the_Angel.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/024.Jacob_Wrestles_with_the_Angel.jpg/960px-024.Jacob_Wrestles_with_the_Angel.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:024.Jacob_Wrestles_with_the_Angel.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/024.Jacob_Wrestles_with_the_Angel.jpg/960px-024.Jacob_Wrestles_with_the_Angel.jpg",
     createdAt: "2026-04-27T22:20:25-05:00",
     cardUsed: ["/cards/gallery_jacob_wrestles_with_the_angel"],
   },
@@ -111,17 +134,23 @@ export const GALLERY: GalleryEntry[] = [
     title: "Joshua Commanding the Sun to Stand Still upon Gibeon",
     artist: "John Martin",
     year: "1816",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Joshua_Commanding_the_Sun_to_Stand_Still_upon_Gibeon_(1816)_John_Martin_-_NGA_2004.64.1.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Joshua_Commanding_the_Sun_to_Stand_Still_upon_Gibeon_%281816%29_John_Martin_-_NGA_2004.64.1.jpg/960px-Joshua_Commanding_the_Sun_to_Stand_Still_upon_Gibeon_%281816%29_John_Martin_-_NGA_2004.64.1.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Joshua_Commanding_the_Sun_to_Stand_Still_upon_Gibeon_(1816)_John_Martin_-_NGA_2004.64.1.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Joshua_Commanding_the_Sun_to_Stand_Still_upon_Gibeon_%281816%29_John_Martin_-_NGA_2004.64.1.jpg/960px-Joshua_Commanding_the_Sun_to_Stand_Still_upon_Gibeon_%281816%29_John_Martin_-_NGA_2004.64.1.jpg",
     createdAt: "2026-04-27T22:26:33-05:00",
-    cardUsed: ["/cards/gallery_joshua_commanding_the_sun_to_stand_still_upon_gibeon"],
+    cardUsed: [
+      "/cards/gallery_joshua_commanding_the_sun_to_stand_still_upon_gibeon",
+    ],
   },
   {
     title: "The Last Judgment",
     artist: "Hieronymus Bosch",
     year: "c. 1482",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Hieronymus_Bosch_-_The_Last_Judgement.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Hieronymus_Bosch_-_The_Last_Judgement.jpg/960px-Hieronymus_Bosch_-_The_Last_Judgement.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Hieronymus_Bosch_-_The_Last_Judgement.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Hieronymus_Bosch_-_The_Last_Judgement.jpg/960px-Hieronymus_Bosch_-_The_Last_Judgement.jpg",
     createdAt: "2026-04-27T22:26:33-05:00",
     cardUsed: ["/cards/gallery_last_judgment"],
   },
@@ -129,8 +158,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Last Supper",
     artist: "Jacopo Tintoretto",
     year: "1592–1594",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Jacopo_Tintoretto_-_The_Last_Supper_-_WGA22649.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Jacopo_Tintoretto_-_The_Last_Supper_-_WGA22649.jpg/960px-Jacopo_Tintoretto_-_The_Last_Supper_-_WGA22649.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Jacopo_Tintoretto_-_The_Last_Supper_-_WGA22649.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Jacopo_Tintoretto_-_The_Last_Supper_-_WGA22649.jpg/960px-Jacopo_Tintoretto_-_The_Last_Supper_-_WGA22649.jpg",
     createdAt: "2026-04-27T22:26:33-05:00",
     cardUsed: ["/cards/gallery_last_supper"],
   },
@@ -138,8 +169,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Opening of the Fifth Seal",
     artist: "El Greco",
     year: "c. 1608–1614",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:El_Greco_-_The_Opening_of_the_Fifth_Seal_(The_Vision_of_St_John)_-_WGA10637.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/El_Greco_-_The_Opening_of_the_Fifth_Seal_%28The_Vision_of_St_John%29_-_WGA10637.jpg/960px-El_Greco_-_The_Opening_of_the_Fifth_Seal_%28The_Vision_of_St_John%29_-_WGA10637.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:El_Greco_-_The_Opening_of_the_Fifth_Seal_(The_Vision_of_St_John)_-_WGA10637.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/El_Greco_-_The_Opening_of_the_Fifth_Seal_%28The_Vision_of_St_John%29_-_WGA10637.jpg/960px-El_Greco_-_The_Opening_of_the_Fifth_Seal_%28The_Vision_of_St_John%29_-_WGA10637.jpg",
     createdAt: "2026-04-27T22:26:33-05:00",
     cardUsed: ["/cards/gallery_opening_of_the_fifth_seal"],
   },
@@ -147,8 +180,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Plains of Heaven",
     artist: "John Martin",
     year: "1851",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:John_Martin_-_The_Plains_of_Heaven_-_Google_Art_Project.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/John_Martin_-_The_Plains_of_Heaven_-_Google_Art_Project.jpg/960px-John_Martin_-_The_Plains_of_Heaven_-_Google_Art_Project.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:John_Martin_-_The_Plains_of_Heaven_-_Google_Art_Project.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/John_Martin_-_The_Plains_of_Heaven_-_Google_Art_Project.jpg/960px-John_Martin_-_The_Plains_of_Heaven_-_Google_Art_Project.jpg",
     createdAt: "2026-04-27T22:26:33-05:00",
     cardUsed: ["/cards/gallery_plains_of_heaven"],
   },
@@ -156,8 +191,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Sacrifice of Isaac",
     artist: "Caravaggio",
     year: "c. 1603",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Sacrifice_of_Isaac-Caravaggio_(Uffizi).jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Sacrifice_of_Isaac-Caravaggio_%28Uffizi%29.jpg/960px-Sacrifice_of_Isaac-Caravaggio_%28Uffizi%29.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Sacrifice_of_Isaac-Caravaggio_(Uffizi).jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Sacrifice_of_Isaac-Caravaggio_%28Uffizi%29.jpg/960px-Sacrifice_of_Isaac-Caravaggio_%28Uffizi%29.jpg",
     createdAt: "2026-04-27T22:26:33-05:00",
     cardUsed: ["/cards/gallery_sacrifice_of_isaac"],
   },
@@ -165,8 +202,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Saint Michael Vanquishing Satan",
     artist: "Raphael",
     year: "1518",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Raphael_-_St._Michael_Vanquishing_Satan.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/7/74/Raphael_-_St._Michael_Vanquishing_Satan.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Raphael_-_St._Michael_Vanquishing_Satan.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/7/74/Raphael_-_St._Michael_Vanquishing_Satan.jpg",
     createdAt: "2026-04-27T22:26:33-05:00",
     cardUsed: ["/cards/gallery_saint_michael_vanquishing_satan"],
   },
@@ -174,17 +213,24 @@ export const GALLERY: GalleryEntry[] = [
     title: "Satan in Cocytus",
     artist: "Gustave Doré",
     year: "1861",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Gustave_Dore_Inferno34.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Gustave_Dore_Inferno34.jpg/960px-Gustave_Dore_Inferno34.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Gustave_Dore_Inferno34.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Gustave_Dore_Inferno34.jpg/960px-Gustave_Dore_Inferno34.jpg",
     createdAt: "2026-04-27T22:26:33-05:00",
-    cardUsed: ["/cards/gallery_satan_in_cocytus", "/cards/enemy_satan_in_cocytus"],
+    cardUsed: [
+      "/cards/gallery_satan_in_cocytus",
+      "/cards/enemy_satan_in_cocytus",
+    ],
   },
   {
     title: "Sodom and Gomorrah",
     artist: "John Martin",
     year: "1852",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:John_Martin_-_Sodom_and_Gomorrah.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/John_Martin_-_Sodom_and_Gomorrah.jpg/960px-John_Martin_-_Sodom_and_Gomorrah.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:John_Martin_-_Sodom_and_Gomorrah.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/John_Martin_-_Sodom_and_Gomorrah.jpg/960px-John_Martin_-_Sodom_and_Gomorrah.jpg",
     createdAt: "2026-04-27T22:26:33-05:00",
     cardUsed: ["/cards/gallery_sodom_and_gomorrah"],
   },
@@ -192,8 +238,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Tower of Babel",
     artist: "Gustave Doré",
     year: "1865",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Gustave_Dore_Bible_The_Tower_of_Babel.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Gustave_Dore_Bible_The_Tower_of_Babel.jpg/960px-Gustave_Dore_Bible_The_Tower_of_Babel.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Gustave_Dore_Bible_The_Tower_of_Babel.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Gustave_Dore_Bible_The_Tower_of_Babel.jpg/960px-Gustave_Dore_Bible_The_Tower_of_Babel.jpg",
     createdAt: "2026-04-27T22:26:33-05:00",
     cardUsed: ["/cards/gallery_tower_of_babel"],
   },
@@ -201,8 +249,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Transfiguration",
     artist: "Raphael",
     year: "1516–1520",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Transfiguration_Raphael.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Transfiguration_Raphael.jpg/960px-Transfiguration_Raphael.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Transfiguration_Raphael.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Transfiguration_Raphael.jpg/960px-Transfiguration_Raphael.jpg",
     createdAt: "2026-04-27T22:45:30-05:00",
     cardUsed: ["/cards/gallery_transfiguration"],
   },
@@ -210,8 +260,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Triumph of Christianity Over Paganism",
     artist: "Gustave Doré",
     year: "1868",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:The_Triumph_Of_Christianity_Over_Paganism.Gustave_Dor%C3%A9.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/The_Triumph_Of_Christianity_Over_Paganism.Gustave_Dor%C3%A9.jpg/960px-The_Triumph_Of_Christianity_Over_Paganism.Gustave_Dor%C3%A9.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:The_Triumph_Of_Christianity_Over_Paganism.Gustave_Dor%C3%A9.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/The_Triumph_Of_Christianity_Over_Paganism.Gustave_Dor%C3%A9.jpg/960px-The_Triumph_Of_Christianity_Over_Paganism.Gustave_Dor%C3%A9.jpg",
     createdAt: "2026-04-27T22:45:30-05:00",
     cardUsed: ["/cards/gallery_triumph_of_christianity_over_paganism"],
   },
@@ -219,8 +271,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Woman Taken in Adultery",
     artist: "Rembrandt van Rijn",
     year: "1644",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Rembrandt_Christ_and_the_Woman_Taken_in_Adultery.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Rembrandt_Christ_and_the_Woman_Taken_in_Adultery.jpg/960px-Rembrandt_Christ_and_the_Woman_Taken_in_Adultery.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Rembrandt_Christ_and_the_Woman_Taken_in_Adultery.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Rembrandt_Christ_and_the_Woman_Taken_in_Adultery.jpg/960px-Rembrandt_Christ_and_the_Woman_Taken_in_Adultery.jpg",
     createdAt: "2026-04-27T22:45:30-05:00",
     cardUsed: ["/cards/gallery_woman_taken_in_adultery"],
   },
@@ -228,8 +282,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Christ in the Storm on the Sea of Galilee",
     artist: "Rembrandt van Rijn",
     year: "1633",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg",
-    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg",
+    imageUrl:
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg",
     createdAt: "2026-04-27T22:45:30-05:00",
     cardUsed: [],
   },
@@ -237,8 +293,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Christ Driving the Money Changers from the Temple",
     artist: "Rembrandt van Rijn",
     year: "1626",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Rembrandt_Christ_Driving_the_Money_Changers_from_the_Temple.jpg",
-    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Rembrandt_Christ_Driving_the_Money_Changers_from_the_Temple.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Rembrandt_Christ_Driving_the_Money_Changers_from_the_Temple.jpg",
+    imageUrl:
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Rembrandt_Christ_Driving_the_Money_Changers_from_the_Temple.jpg",
     createdAt: "2026-04-27T22:45:30-05:00",
     cardUsed: [],
   },
@@ -246,8 +304,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Baptism of Jesus",
     artist: "James Tissot",
     year: "c. 1886–1894",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Baptism_of_Jesus_(Bapt%C3%AAme_de_J%C3%A9sus)_-_James_Tissot_-_overall.jpg",
-    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Baptism_of_Jesus_(Bapt%C3%AAme_de_J%C3%A9sus)_-_James_Tissot_-_overall.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Baptism_of_Jesus_(Bapt%C3%AAme_de_J%C3%A9sus)_-_James_Tissot_-_overall.jpg",
+    imageUrl:
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Baptism_of_Jesus_(Bapt%C3%AAme_de_J%C3%A9sus)_-_James_Tissot_-_overall.jpg",
     createdAt: "2026-04-27T22:45:30-05:00",
     cardUsed: [],
   },
@@ -255,8 +315,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Good Samaritan",
     artist: "James Tissot",
     year: "c. 1886–1894",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Good_Samaritan_(Le_bon_samaritain)_-_James_Tissot.jpg",
-    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Good_Samaritan_(Le_bon_samaritain)_-_James_Tissot.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Good_Samaritan_(Le_bon_samaritain)_-_James_Tissot.jpg",
+    imageUrl:
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Good_Samaritan_(Le_bon_samaritain)_-_James_Tissot.jpg",
     createdAt: "2026-04-27T22:45:30-05:00",
     cardUsed: [],
   },
@@ -264,8 +326,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Flight into Egypt",
     artist: "James Tissot",
     year: "c. 1886–1894",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Flight_into_Egypt_(La_fuite_en_%C3%89gypte)_-_James_Tissot_-_overall.jpg",
-    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Flight_into_Egypt_(La_fuite_en_%C3%89gypte)_-_James_Tissot_-_overall.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Flight_into_Egypt_(La_fuite_en_%C3%89gypte)_-_James_Tissot_-_overall.jpg",
+    imageUrl:
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Flight_into_Egypt_(La_fuite_en_%C3%89gypte)_-_James_Tissot_-_overall.jpg",
     createdAt: "2026-04-27T22:45:30-05:00",
     cardUsed: [],
   },
@@ -273,8 +337,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Visitation",
     artist: "James Tissot",
     year: "c. 1886–1894",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Visitation_(La_visitation)_-_James_Tissot_-_overall.jpg",
-    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Visitation_(La_visitation)_-_James_Tissot_-_overall.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Visitation_(La_visitation)_-_James_Tissot_-_overall.jpg",
+    imageUrl:
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Visitation_(La_visitation)_-_James_Tissot_-_overall.jpg",
     createdAt: "2026-04-27T22:45:30-05:00",
     cardUsed: [],
   },
@@ -282,8 +348,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Jesus Appears to Mary Magdalene",
     artist: "James Tissot",
     year: "c. 1886–1894",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_Jesus_Appears_to_Mary_Magdalene_(Apparition_de_J%C3%A9sus_%C3%A0_Madeleine)_-_James_Tissot.jpg",
-    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_Jesus_Appears_to_Mary_Magdalene_(Apparition_de_J%C3%A9sus_%C3%A0_Madeleine)_-_James_Tissot.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_Jesus_Appears_to_Mary_Magdalene_(Apparition_de_J%C3%A9sus_%C3%A0_Madeleine)_-_James_Tissot.jpg",
+    imageUrl:
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_Jesus_Appears_to_Mary_Magdalene_(Apparition_de_J%C3%A9sus_%C3%A0_Madeleine)_-_James_Tissot.jpg",
     createdAt: "2026-04-27T22:45:30-05:00",
     cardUsed: [],
   },
@@ -291,8 +359,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Resurrection of Lazarus",
     artist: "James Tissot",
     year: "c. 1886–1894",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Resurrection_of_Lazarus_(La_r%C3%A9surrection_de_Lazare)_-_James_Tissot.jpg",
-    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Resurrection_of_Lazarus_(La_r%C3%A9surrection_de_Lazare)_-_James_Tissot.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Resurrection_of_Lazarus_(La_r%C3%A9surrection_de_Lazare)_-_James_Tissot.jpg",
+    imageUrl:
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn_Museum_-_The_Resurrection_of_Lazarus_(La_r%C3%A9surrection_de_Lazare)_-_James_Tissot.jpg",
     createdAt: "2026-04-27T22:45:30-05:00",
     cardUsed: [],
   },
@@ -300,8 +370,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Incredulity of Saint Thomas",
     artist: "Caravaggio",
     year: "1601–1602",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:The_Incredulity_of_Saint_Thomas.jpg",
-    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/The_Incredulity_of_Saint_Thomas.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:The_Incredulity_of_Saint_Thomas.jpg",
+    imageUrl:
+      "https://commons.wikimedia.org/wiki/Special:FilePath/The_Incredulity_of_Saint_Thomas.jpg",
     createdAt: "2026-04-27T22:45:30-05:00",
     cardUsed: [],
   },
@@ -413,8 +485,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Saint Joseph",
     artist: "James Tissot",
     year: "c. 1886–1894",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn Museum - Saint Joseph - James Tissot - overall.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn Museum - Saint Joseph - James Tissot - overall.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn Museum - Saint Joseph - James Tissot - overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn Museum - Saint Joseph - James Tissot - overall.jpg",
+    ),
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -749,8 +825,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Separation of Light from Darkness",
     artist: "Michelangelo",
     year: "c. 1511–1512",
-    wikiUrl: createCommonsFilePageUrl("Michelangelo, Separation of Light from Darkness 00.jpg"),
-    imageUrl: createCommonsFilePathUrl("Michelangelo, Separation of Light from Darkness 00.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Michelangelo, Separation of Light from Darkness 00.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Michelangelo, Separation of Light from Darkness 00.jpg",
+    ),
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -767,8 +847,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Fall and Expulsion from Paradise",
     artist: "Michelangelo",
     year: "c. 1510–1511",
-    wikiUrl: createCommonsFilePageUrl("Michelangelo, Fall and Expulsion from Garden of Eden 04.jpg"),
-    imageUrl: createCommonsFilePathUrl("Michelangelo, Fall and Expulsion from Garden of Eden 04.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Michelangelo, Fall and Expulsion from Garden of Eden 04.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Michelangelo, Fall and Expulsion from Garden of Eden 04.jpg",
+    ),
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -813,7 +897,9 @@ export const GALLERY: GalleryEntry[] = [
     artist: "Michelangelo",
     year: "c. 1511",
     wikiUrl: createCommonsFilePageUrl("Michelangelo, profeti, Jeremiah 01.jpg"),
-    imageUrl: createCommonsFilePathUrl("Michelangelo, profeti, Jeremiah 01.jpg"),
+    imageUrl: createCommonsFilePathUrl(
+      "Michelangelo, profeti, Jeremiah 01.jpg",
+    ),
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -821,8 +907,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Prophet Isaiah",
     artist: "Michelangelo",
     year: "c. 1511–1512",
-    wikiUrl: createCommonsFilePageUrl("'Isaiah Sistine Chapel ceiling' by Michelangelo JBU36FXD.jpg"),
-    imageUrl: createCommonsFilePathUrl("'Isaiah Sistine Chapel ceiling' by Michelangelo JBU36FXD.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "'Isaiah Sistine Chapel ceiling' by Michelangelo JBU36FXD.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "'Isaiah Sistine Chapel ceiling' by Michelangelo JBU36FXD.jpg",
+    ),
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -839,8 +929,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Nativity of Jesus",
     artist: "Unknown",
     year: "before 20th century",
-    wikiUrl: createCommonsFilePageUrl("031 Nativity of Jesus Icon from Saint Paraskevi Church in Langadas.jpg"),
-    imageUrl: createCommonsFilePathUrl("031 Nativity of Jesus Icon from Saint Paraskevi Church in Langadas.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "031 Nativity of Jesus Icon from Saint Paraskevi Church in Langadas.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "031 Nativity of Jesus Icon from Saint Paraskevi Church in Langadas.jpg",
+    ),
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -897,8 +991,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Baptism of Christ",
     artist: "Athanasios Margaritis",
     year: "1850",
-    wikiUrl: createCommonsFilePageUrl("019 Baptism of Jesus Icon from Saint Paraskevi Church in Langadas.jpg"),
-    imageUrl: createCommonsFilePathUrl("019 Baptism of Jesus Icon from Saint Paraskevi Church in Langadas.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "019 Baptism of Jesus Icon from Saint Paraskevi Church in Langadas.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "019 Baptism of Jesus Icon from Saint Paraskevi Church in Langadas.jpg",
+    ),
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -906,8 +1004,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Crucifixion of Jesus",
     artist: "Unknown",
     year: "1855",
-    wikiUrl: createCommonsFilePageUrl("024 Crucifixion of Jesus Icon from Saint Paraskevi Church in Langadas.jpg"),
-    imageUrl: createCommonsFilePathUrl("024 Crucifixion of Jesus Icon from Saint Paraskevi Church in Langadas.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "024 Crucifixion of Jesus Icon from Saint Paraskevi Church in Langadas.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "024 Crucifixion of Jesus Icon from Saint Paraskevi Church in Langadas.jpg",
+    ),
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -951,8 +1053,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Trinity",
     artist: "Andrei Rublev",
     year: "early 15th century",
-    wikiUrl: createCommonsFilePageUrl("Andrey Rublev - Св. Троица - Google Art Project.jpg"),
-    imageUrl: createCommonsFilePathUrl("Andrey Rublev - Св. Троица - Google Art Project.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Andrey Rublev - Св. Троица - Google Art Project.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Andrey Rublev - Св. Троица - Google Art Project.jpg",
+    ),
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -973,8 +1079,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Transfiguration (Theophanes the Cretan)",
     artist: "Theophanes the Cretan",
     year: "16th century",
-    wikiUrl: createCommonsFilePageUrl("Icon of the Transfiguration by Theophanes the Cretan.jpg"),
-    imageUrl: createCommonsFilePathUrl("Icon of the Transfiguration by Theophanes the Cretan.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Icon of the Transfiguration by Theophanes the Cretan.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Icon of the Transfiguration by Theophanes the Cretan.jpg",
+    ),
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1004,8 +1114,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Archangel Michael (Serbian Orthodox Icon)",
     artist: "DKjellby",
     year: "2023",
-    wikiUrl: createCommonsFilePageUrl("Archangel Michael Serbian-Orthodox Icon.jpg"),
-    imageUrl: createCommonsFilePathUrl("Archangel Michael Serbian-Orthodox Icon.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Archangel Michael Serbian-Orthodox Icon.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Archangel Michael Serbian-Orthodox Icon.jpg",
+    ),
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1013,8 +1127,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Our Lady of the Sign",
     artist: "Unknown",
     year: "first half of 12th century",
-    wikiUrl: createCommonsFilePageUrl("Orthodox icon of Our Lady of the Sign. Veliky Novgorod, Russia.jpg"),
-    imageUrl: createCommonsFilePathUrl("Orthodox icon of Our Lady of the Sign. Veliky Novgorod, Russia.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Orthodox icon of Our Lady of the Sign. Veliky Novgorod, Russia.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Orthodox icon of Our Lady of the Sign. Veliky Novgorod, Russia.jpg",
+    ),
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1022,8 +1140,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Adam and Eve",
     artist: "Lucas Cranach the Elder",
     year: "1526",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Lucas_Cranach_the_Elder_-_Adam_and_Eve_-_Google_Art_Project.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Lucas_Cranach_the_Elder_-_Adam_and_Eve_-_Google_Art_Project.jpg/960px-Lucas_Cranach_the_Elder_-_Adam_and_Eve_-_Google_Art_Project.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Lucas_Cranach_the_Elder_-_Adam_and_Eve_-_Google_Art_Project.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Lucas_Cranach_the_Elder_-_Adam_and_Eve_-_Google_Art_Project.jpg/960px-Lucas_Cranach_the_Elder_-_Adam_and_Eve_-_Google_Art_Project.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1031,8 +1151,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Angel with the Millstone",
     artist: "Albrecht Dürer",
     year: "1498",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_14.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/c/c1/D%C3%BCrer_Apocalypse_14.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_14.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/c/c1/D%C3%BCrer_Apocalypse_14.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1040,8 +1162,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Bard",
     artist: "John Martin",
     year: "1817",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:John_Martin_-_The_Bard_-_Google_Art_Project.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/John_Martin_-_The_Bard_-_Google_Art_Project.jpg/960px-John_Martin_-_The_Bard_-_Google_Art_Project.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:John_Martin_-_The_Bard_-_Google_Art_Project.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/John_Martin_-_The_Bard_-_Google_Art_Project.jpg/960px-John_Martin_-_The_Bard_-_Google_Art_Project.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1049,8 +1173,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Cain and Abel Offer Their Sacrifices",
     artist: "Gustave Doré",
     year: "1866",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:004.Cain_and_Abel_Offer_Their_Sacrifices.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/004.Cain_and_Abel_Offer_Their_Sacrifices.jpg/960px-004.Cain_and_Abel_Offer_Their_Sacrifices.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:004.Cain_and_Abel_Offer_Their_Sacrifices.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/004.Cain_and_Abel_Offer_Their_Sacrifices.jpg/960px-004.Cain_and_Abel_Offer_Their_Sacrifices.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1059,7 +1185,8 @@ export const GALLERY: GalleryEntry[] = [
     artist: "Gustave Doré",
     year: "1866",
     wikiUrl: "https://commons.wikimedia.org/wiki/File:005.Cain_Slays_Abel.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/005.Cain_Slays_Abel.jpg/960px-005.Cain_Slays_Abel.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/005.Cain_Slays_Abel.jpg/960px-005.Cain_Slays_Abel.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1067,8 +1194,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Calling of Saint Matthew",
     artist: "Caravaggio",
     year: "1599–1600",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Calling-of-st-matthew.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Calling-of-st-matthew.jpg/960px-Calling-of-st-matthew.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Calling-of-st-matthew.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Calling-of-st-matthew.jpg/960px-Calling-of-st-matthew.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1076,8 +1205,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Christ Carrying the Cross",
     artist: "El Greco",
     year: "c. 1580",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:El_Greco_-_Christ_Carrying_the_Cross_-_Google_Art_Project.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/El_Greco_-_Christ_Carrying_the_Cross_-_Google_Art_Project.jpg/960px-El_Greco_-_Christ_Carrying_the_Cross_-_Google_Art_Project.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:El_Greco_-_Christ_Carrying_the_Cross_-_Google_Art_Project.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/El_Greco_-_Christ_Carrying_the_Cross_-_Google_Art_Project.jpg/960px-El_Greco_-_Christ_Carrying_the_Cross_-_Google_Art_Project.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1085,8 +1216,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Crucifixion of Jesus",
     artist: "Gustave Doré",
     year: "1866",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Gustave_Dor%C3%A9_-_Crucifixion_of_Jesus.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Gustave_Dor%C3%A9_-_Crucifixion_of_Jesus.jpg/960px-Gustave_Dor%C3%A9_-_Crucifixion_of_Jesus.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Gustave_Dor%C3%A9_-_Crucifixion_of_Jesus.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Gustave_Dor%C3%A9_-_Crucifixion_of_Jesus.jpg/960px-Gustave_Dor%C3%A9_-_Crucifixion_of_Jesus.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1094,8 +1227,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Daniel in the Lions' Den",
     artist: "Gustave Doré",
     year: "1866",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:131.Daniel_in_the_Lions%27_Den.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/131.Daniel_in_the_Lions%27_Den.jpg/960px-131.Daniel_in_the_Lions%27_Den.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:131.Daniel_in_the_Lions%27_Den.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/131.Daniel_in_the_Lions%27_Den.jpg/960px-131.Daniel_in_the_Lions%27_Den.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: ["/cards/gallery_daniel_in_the_lions_den"],
   },
@@ -1103,8 +1238,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "David Slays Goliath",
     artist: "Gustave Doré",
     year: "1866",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:071A.David_Slays_Goliath.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/071A.David_Slays_Goliath.jpg/960px-071A.David_Slays_Goliath.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:071A.David_Slays_Goliath.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/071A.David_Slays_Goliath.jpg/960px-071A.David_Slays_Goliath.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1112,8 +1249,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "A Dove Is Sent Forth from the Ark",
     artist: "Gustave Doré",
     year: "1866",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:008.A_Dove_Is_Sent_Forth_from_the_Ark.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/008.A_Dove_Is_Sent_Forth_from_the_Ark.jpg/960px-008.A_Dove_Is_Sent_Forth_from_the_Ark.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:008.A_Dove_Is_Sent_Forth_from_the_Ark.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/008.A_Dove_Is_Sent_Forth_from_the_Ark.jpg/960px-008.A_Dove_Is_Sent_Forth_from_the_Ark.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1121,8 +1260,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Dragon and the Two Beasts",
     artist: "Albrecht Dürer",
     year: "1498",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_13.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/a/ad/D%C3%BCrer_Apocalypse_13.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_13.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/a/ad/D%C3%BCrer_Apocalypse_13.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1130,8 +1271,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Elijah Ascends to Heaven in a Chariot of Fire",
     artist: "Gustave Doré",
     year: "1866",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:095.Elijah_Ascends_to_Heaven_in_a_Chariot_of_Fire.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/095.Elijah_Ascends_to_Heaven_in_a_Chariot_of_Fire.jpg/960px-095.Elijah_Ascends_to_Heaven_in_a_Chariot_of_Fire.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:095.Elijah_Ascends_to_Heaven_in_a_Chariot_of_Fire.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/095.Elijah_Ascends_to_Heaven_in_a_Chariot_of_Fire.jpg/960px-095.Elijah_Ascends_to_Heaven_in_a_Chariot_of_Fire.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1139,8 +1282,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Four Angels at the Four Corners of the Earth",
     artist: "Albrecht Dürer",
     year: "1498",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_6.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/4/44/D%C3%BCrer_Apocalypse_6.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_6.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/4/44/D%C3%BCrer_Apocalypse_6.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1148,8 +1293,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Four Angels of the Euphrates",
     artist: "Albrecht Dürer",
     year: "1498",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_11.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/4/47/D%C3%BCrer_Apocalypse_11.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_11.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/4/47/D%C3%BCrer_Apocalypse_11.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1157,8 +1304,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Four Horsemen of the Apocalypse",
     artist: "Albrecht Dürer",
     year: "1498",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_4.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/8/84/D%C3%BCrer_Apocalypse_4.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_4.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/8/84/D%C3%BCrer_Apocalypse_4.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1166,8 +1315,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Garden of Earthly Delights",
     artist: "Hieronymus Bosch",
     year: "c. 1490–1510",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg/960px-The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg/960px-The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1175,8 +1326,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Garden of Earthly Delights: The Earthly Paradise",
     artist: "Hieronymus Bosch",
     year: "c. 1490–1510",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Hieronymus_Bosch_-_The_Garden_of_Earthly_Delights_-_The_Earthly_Paradise_(Garden_of_Eden).jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Hieronymus_Bosch_-_The_Garden_of_Earthly_Delights_-_The_Earthly_Paradise_%28Garden_of_Eden%29.jpg/960px-Hieronymus_Bosch_-_The_Garden_of_Earthly_Delights_-_The_Earthly_Paradise_%28Garden_of_Eden%29.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Hieronymus_Bosch_-_The_Garden_of_Earthly_Delights_-_The_Earthly_Paradise_(Garden_of_Eden).jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Hieronymus_Bosch_-_The_Garden_of_Earthly_Delights_-_The_Earthly_Paradise_%28Garden_of_Eden%29.jpg/960px-Hieronymus_Bosch_-_The_Garden_of_Earthly_Delights_-_The_Earthly_Paradise_%28Garden_of_Eden%29.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1184,8 +1337,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Jesus Praying in the Garden of Gethsemane",
     artist: "Gustave Doré",
     year: "1878",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Jesus_Praying_in_the_Garden_(1878)_(14577654100).jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Jesus_Praying_in_the_Garden_%281878%29_%2814577654100%29.jpg/960px-Jesus_Praying_in_the_Garden_%281878%29_%2814577654100%29.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Jesus_Praying_in_the_Garden_(1878)_(14577654100).jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Jesus_Praying_in_the_Garden_%281878%29_%2814577654100%29.jpg/960px-Jesus_Praying_in_the_Garden_%281878%29_%2814577654100%29.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1193,8 +1348,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Jonah Is Spewed Forth by the Whale",
     artist: "Gustave Doré",
     year: "1866",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:137.Jonah_Is_Spewed_Forth_by_the_Whale.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/137.Jonah_Is_Spewed_Forth_by_the_Whale.jpg/960px-137.Jonah_Is_Spewed_Forth_by_the_Whale.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:137.Jonah_Is_Spewed_Forth_by_the_Whale.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/137.Jonah_Is_Spewed_Forth_by_the_Whale.jpg/960px-137.Jonah_Is_Spewed_Forth_by_the_Whale.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1202,8 +1359,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Judith Beheading Holofernes",
     artist: "Caravaggio",
     year: "c. 1598–1599",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Judith_Beheading_Holofernes_-_Caravaggio.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Judith_Beheading_Holofernes_-_Caravaggio.jpg/960px-Judith_Beheading_Holofernes_-_Caravaggio.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Judith_Beheading_Holofernes_-_Caravaggio.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Judith_Beheading_Holofernes_-_Caravaggio.jpg/960px-Judith_Beheading_Holofernes_-_Caravaggio.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1211,8 +1370,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Key to the Bottomless Pit",
     artist: "Albrecht Dürer",
     year: "1498",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_10.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/9/9e/D%C3%BCrer_Apocalypse_10.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_10.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/9/9e/D%C3%BCrer_Apocalypse_10.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1220,8 +1381,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Landscape with Saint John on Patmos",
     artist: "Nicolas Poussin",
     year: "c. 1640",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Nicolas_Poussin_-_Landscape_with_Saint_John_on_Patmos_-_Google_Art_Project.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Nicolas_Poussin_-_Landscape_with_Saint_John_on_Patmos_-_Google_Art_Project.jpg/960px-Nicolas_Poussin_-_Landscape_with_Saint_John_on_Patmos_-_Google_Art_Project.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Nicolas_Poussin_-_Landscape_with_Saint_John_on_Patmos_-_Google_Art_Project.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Nicolas_Poussin_-_Landscape_with_Saint_John_on_Patmos_-_Google_Art_Project.jpg/960px-Nicolas_Poussin_-_Landscape_with_Saint_John_on_Patmos_-_Google_Art_Project.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1229,8 +1392,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Last Judgment (Winged Altar)",
     artist: "Fra Angelico",
     year: "c. 1425–1430",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Fra_Angelico_-_The_Last_Judgement_(Winged_Altar)_-_Google_Art_Project.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Fra_Angelico_-_The_Last_Judgement_%28Winged_Altar%29_-_Google_Art_Project.jpg/960px-Fra_Angelico_-_The_Last_Judgement_%28Winged_Altar%29_-_Google_Art_Project.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Fra_Angelico_-_The_Last_Judgement_(Winged_Altar)_-_Google_Art_Project.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Fra_Angelico_-_The_Last_Judgement_%28Winged_Altar%29_-_Google_Art_Project.jpg/960px-Fra_Angelico_-_The_Last_Judgement_%28Winged_Altar%29_-_Google_Art_Project.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1238,8 +1403,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Martyrdom of St. John",
     artist: "Albrecht Dürer",
     year: "1498",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_3.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a5/D%C3%BCrer_Apocalypse_3.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_3.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/a/a5/D%C3%BCrer_Apocalypse_3.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1247,8 +1414,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Moses Comes Down from Mount Sinai",
     artist: "Gustave Doré",
     year: "1866",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:039.Moses_Comes_Down_from_Mount_Sinai.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/039.Moses_Comes_Down_from_Mount_Sinai.jpg/960px-039.Moses_Comes_Down_from_Mount_Sinai.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:039.Moses_Comes_Down_from_Mount_Sinai.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/039.Moses_Comes_Down_from_Mount_Sinai.jpg/960px-039.Moses_Comes_Down_from_Mount_Sinai.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1256,8 +1425,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Moses Smashing the Tablets of the Law",
     artist: "Rembrandt van Rijn",
     year: "1659",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Rembrandt_-_Moses_Smashing_the_Tablets_of_the_Law_-_WGA19132.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Rembrandt_-_Moses_Smashing_the_Tablets_of_the_Law_-_WGA19132.jpg/960px-Rembrandt_-_Moses_Smashing_the_Tablets_of_the_Law_-_WGA19132.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Rembrandt_-_Moses_Smashing_the_Tablets_of_the_Law_-_WGA19132.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Rembrandt_-_Moses_Smashing_the_Tablets_of_the_Law_-_WGA19132.jpg/960px-Rembrandt_-_Moses_Smashing_the_Tablets_of_the_Law_-_WGA19132.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1265,8 +1436,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Nebuchadnezzar",
     artist: "William Blake",
     year: "1795",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:William_Blake_-_Nebuchadnezzar_-_Google_Art_Project.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/William_Blake_-_Nebuchadnezzar_-_Google_Art_Project.jpg/960px-William_Blake_-_Nebuchadnezzar_-_Google_Art_Project.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:William_Blake_-_Nebuchadnezzar_-_Google_Art_Project.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/William_Blake_-_Nebuchadnezzar_-_Google_Art_Project.jpg/960px-William_Blake_-_Nebuchadnezzar_-_Google_Art_Project.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1274,8 +1447,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The New Jerusalem",
     artist: "Albrecht Dürer",
     year: "1498",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_15.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/b/b3/D%C3%BCrer_Apocalypse_15.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_15.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/b/b3/D%C3%BCrer_Apocalypse_15.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1283,8 +1458,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Opening of the Fifth and Sixth Seals",
     artist: "Albrecht Dürer",
     year: "1498",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_5.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/1/14/D%C3%BCrer_Apocalypse_5.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_5.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/1/14/D%C3%BCrer_Apocalypse_5.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1292,8 +1469,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Raising of the Cross",
     artist: "Peter Paul Rubens",
     year: "1611",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Peter_Paul_Rubens_-_The_Raising_of_the_Cross.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Peter_Paul_Rubens_-_The_Raising_of_the_Cross.jpg/960px-Peter_Paul_Rubens_-_The_Raising_of_the_Cross.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Peter_Paul_Rubens_-_The_Raising_of_the_Cross.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Peter_Paul_Rubens_-_The_Raising_of_the_Cross.jpg/960px-Peter_Paul_Rubens_-_The_Raising_of_the_Cross.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1301,8 +1480,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Return of the Prodigal Son",
     artist: "Rembrandt van Rijn",
     year: "1668",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Rembrandt_-_The_Return_of_the_Prodigal_Son_-_WGA19133.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Rembrandt_-_The_Return_of_the_Prodigal_Son_-_WGA19133.jpg/960px-Rembrandt_-_The_Return_of_the_Prodigal_Son_-_WGA19133.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Rembrandt_-_The_Return_of_the_Prodigal_Son_-_WGA19133.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Rembrandt_-_The_Return_of_the_Prodigal_Son_-_WGA19133.jpg/960px-Rembrandt_-_The_Return_of_the_Prodigal_Son_-_WGA19133.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1310,8 +1491,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Sadak in Search of the Waters of Oblivion",
     artist: "John Martin",
     year: "1812",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:John_Martin_-_Sadak_in_Search_of_the_Waters_of_Oblivion.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/7/7d/John_Martin_-_Sadak_in_Search_of_the_Waters_of_Oblivion.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:John_Martin_-_Sadak_in_Search_of_the_Waters_of_Oblivion.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/7/7d/John_Martin_-_Sadak_in_Search_of_the_Waters_of_Oblivion.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1319,8 +1502,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Samson and Delilah",
     artist: "Peter Paul Rubens",
     year: "c. 1609–1610",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Peter_Paul_Rubens_-_Samson_and_Delilah_-_Google_Art_Project.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Peter_Paul_Rubens_-_Samson_and_Delilah_-_Google_Art_Project.jpg/960px-Peter_Paul_Rubens_-_Samson_and_Delilah_-_Google_Art_Project.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Peter_Paul_Rubens_-_Samson_and_Delilah_-_Google_Art_Project.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Peter_Paul_Rubens_-_Samson_and_Delilah_-_Google_Art_Project.jpg/960px-Peter_Paul_Rubens_-_Samson_and_Delilah_-_Google_Art_Project.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1328,8 +1513,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "Satan Smiting Job with Sore Boils",
     artist: "William Blake",
     year: "c. 1826",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:William_Blake_-_Satan_Smiting_Job_with_Sore_Boils_-_Google_Art_Project.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/William_Blake_-_Satan_Smiting_Job_with_Sore_Boils_-_Google_Art_Project.jpg/960px-William_Blake_-_Satan_Smiting_Job_with_Sore_Boils_-_Google_Art_Project.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:William_Blake_-_Satan_Smiting_Job_with_Sore_Boils_-_Google_Art_Project.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/William_Blake_-_Satan_Smiting_Job_with_Sore_Boils_-_Google_Art_Project.jpg/960px-William_Blake_-_Satan_Smiting_Job_with_Sore_Boils_-_Google_Art_Project.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1337,8 +1524,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Sermon on the Mount",
     artist: "Gustave Doré",
     year: "1866",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Dore_Bible_Sermon_on_the_Mount.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Dore_Bible_Sermon_on_the_Mount.jpg/960px-Dore_Bible_Sermon_on_the_Mount.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Dore_Bible_Sermon_on_the_Mount.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Dore_Bible_Sermon_on_the_Mount.jpg/960px-Dore_Bible_Sermon_on_the_Mount.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1346,8 +1535,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Seven Trumpets",
     artist: "Albrecht Dürer",
     year: "1498",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_7.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/0/01/D%C3%BCrer_Apocalypse_7.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_7.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/0/01/D%C3%BCrer_Apocalypse_7.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1355,8 +1546,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Seventh Plague of Egypt",
     artist: "John Martin",
     year: "1823",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Martin,_John_-_The_Seventh_Plague_-_1823.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Martin%2C_John_-_The_Seventh_Plague_-_1823.jpg/960px-Martin%2C_John_-_The_Seventh_Plague_-_1823.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Martin,_John_-_The_Seventh_Plague_-_1823.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Martin%2C_John_-_The_Seventh_Plague_-_1823.jpg/960px-Martin%2C_John_-_The_Seventh_Plague_-_1823.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1364,8 +1557,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "St. John Before God and the Elders",
     artist: "Albrecht Dürer",
     year: "1498",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_2.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e0/D%C3%BCrer_Apocalypse_2.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_2.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/e/e0/D%C3%BCrer_Apocalypse_2.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1373,8 +1568,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "St. John the Evangelist on Patmos",
     artist: "Albrecht Dürer",
     year: "1498",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_1.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/c/c0/D%C3%BCrer_Apocalypse_1.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_1.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/c/c0/D%C3%BCrer_Apocalypse_1.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1382,8 +1579,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "St. Michael Fighting the Dragon",
     artist: "Albrecht Dürer",
     year: "1498",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_8.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/0/00/D%C3%BCrer_Apocalypse_8.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_8.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/0/00/D%C3%BCrer_Apocalypse_8.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1391,8 +1590,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Vision of Ezekiel",
     artist: "Raphael",
     year: "1518",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:Raffaello_Sanzio_-_The_Vision_of_Ezekiel_-_WGA18874.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Raffaello_Sanzio_-_The_Vision_of_Ezekiel_-_WGA18874.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:Raffaello_Sanzio_-_The_Vision_of_Ezekiel_-_WGA18874.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/c/cd/Raffaello_Sanzio_-_The_Vision_of_Ezekiel_-_WGA18874.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1400,8 +1601,10 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Whore of Babylon",
     artist: "Albrecht Dürer",
     year: "1498",
-    wikiUrl: "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_12.jpg",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/6/6e/D%C3%BCrer_Apocalypse_12.jpg",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:D%C3%BCrer_Apocalypse_12.jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/6/6e/D%C3%BCrer_Apocalypse_12.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1409,8 +1612,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Elohim Creating Adam",
     artist: "William Blake",
     year: "1795",
-    wikiUrl: createCommonsFilePageUrl("William Blake - Elohim Creating Adam - WGA2219.jpg"),
-    imageUrl: createCommonsFilePathUrl("William Blake - Elohim Creating Adam - WGA2219.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "William Blake - Elohim Creating Adam - WGA2219.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "William Blake - Elohim Creating Adam - WGA2219.jpg",
+    ),
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1454,8 +1661,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Ghost of a Flea",
     artist: "William Blake",
     year: "c. 1819",
-    wikiUrl: createCommonsFilePageUrl("William Blake - The Ghost of a Flea - Google Art Project.jpg"),
-    imageUrl: createCommonsFilePathUrl("William Blake - The Ghost of a Flea - Google Art Project.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "William Blake - The Ghost of a Flea - Google Art Project.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "William Blake - The Ghost of a Flea - Google Art Project.jpg",
+    ),
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1463,8 +1674,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Body of Abel Found by Adam and Eve",
     artist: "William Blake",
     year: "c. 1826",
-    wikiUrl: createCommonsFilePageUrl("The Body of Abel Found by Adam and Eve by William Blake c1826 Tate.jpg"),
-    imageUrl: createCommonsFilePathUrl("The Body of Abel Found by Adam and Eve by William Blake c1826 Tate.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "The Body of Abel Found by Adam and Eve by William Blake c1826 Tate.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "The Body of Abel Found by Adam and Eve by William Blake c1826 Tate.jpg",
+    ),
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1510,7 +1725,10 @@ export const GALLERY: GalleryEntry[] = [
     wikiUrl: createCommonsFilePageUrl("The_Fallen_Angel.jpg"),
     imageUrl: createCommonsFilePathUrl("The_Fallen_Angel.jpg"),
     createdAt: "2026-04-28T00:00:00-05:00",
-    cardUsed: ["/cards/gallery_fallen_angel_cabanel", "/cards/enemy_fallen_angel_cabanel"],
+    cardUsed: [
+      "/cards/gallery_fallen_angel_cabanel",
+      "/cards/enemy_fallen_angel_cabanel",
+    ],
   },
   {
     title: "Satan as the Fallen Angel",
@@ -1535,7 +1753,10 @@ export const GALLERY: GalleryEntry[] = [
     wikiUrl: createCommonsFilePageUrl("Satan_Exulting_over_Eve.jpg"),
     imageUrl: createCommonsFilePathUrl("Satan_Exulting_over_Eve.jpg"),
     createdAt: "2026-04-28T00:00:00-05:00",
-    cardUsed: ["/cards/gallery_satan_exulting_over_eve", "/cards/enemy_satan_exulting_over_eve"],
+    cardUsed: [
+      "/cards/gallery_satan_exulting_over_eve",
+      "/cards/enemy_satan_exulting_over_eve",
+    ],
   },
   {
     title: "Satan Calling Up His Legions",
@@ -1589,14 +1810,19 @@ export const GALLERY: GalleryEntry[] = [
       "The number of the beast is 666 Philadelphia, Rosenbach Museum and Library.jpg",
     ),
     createdAt: "2026-04-28T00:00:00-05:00",
-    cardUsed: ["/cards/gallery_number_of_the_beast_666", "/cards/enemy_number_of_the_beast_666"],
+    cardUsed: [
+      "/cards/gallery_number_of_the_beast_666",
+      "/cards/enemy_number_of_the_beast_666",
+    ],
   },
   {
     title: "The Fall of the Rebel Angels",
     artist: "Lucas Emil Vorsterman after Peter Paul Rubens",
     year: "1621",
     wikiUrl: createCommonsFilePageUrl("The_Fall_of_the_Rebel_Angels,_1621.jpg"),
-    imageUrl: createCommonsFilePathUrl("The_Fall_of_the_Rebel_Angels,_1621.jpg"),
+    imageUrl: createCommonsFilePathUrl(
+      "The_Fall_of_the_Rebel_Angels,_1621.jpg",
+    ),
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: ["/cards/gallery_fall_of_the_rebel_angels_rubens"],
   },
@@ -1604,18 +1830,25 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Triumph of Death",
     artist: "Pieter Bruegel the Elder",
     year: "c. 1562",
-    wikiUrl: createCommonsFilePageUrl("The_Triumph_of_Death_by_Pieter_Bruegel_the_Elder.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "The_Triumph_of_Death_by_Pieter_Bruegel_the_Elder.jpg",
+    ),
     imageUrl: createCommonsFilePathUrl(
       "The_Triumph_of_Death_by_Pieter_Bruegel_the_Elder.jpg",
     ),
     createdAt: "2026-04-28T00:00:00-05:00",
-    cardUsed: ["/cards/gallery_triumph_of_death", "/cards/enemy_triumph_of_death"],
+    cardUsed: [
+      "/cards/gallery_triumph_of_death",
+      "/cards/enemy_triumph_of_death",
+    ],
   },
   {
     title: "The Temptation of St Anthony",
     artist: "Hieronymus Bosch",
     year: "c. 1500",
-    wikiUrl: createCommonsFilePageUrl("Hieronymus Bosch The Temptation of St Anthony.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Hieronymus Bosch The Temptation of St Anthony.jpg",
+    ),
     imageUrl: createCommonsFilePathUrl(
       "Hieronymus Bosch The Temptation of St Anthony.jpg",
     ),
@@ -1654,7 +1887,10 @@ export const GALLERY: GalleryEntry[] = [
     wikiUrl: createCommonsFilePageUrl("Medusa-Caravaggio_(Uffizi).jpg"),
     imageUrl: createCommonsFilePathUrl("Medusa-Caravaggio_(Uffizi).jpg"),
     createdAt: "2026-04-28T00:00:00-05:00",
-    cardUsed: ["/cards/gallery_medusa_caravaggio", "/cards/enemy_medusa_caravaggio"],
+    cardUsed: [
+      "/cards/gallery_medusa_caravaggio",
+      "/cards/enemy_medusa_caravaggio",
+    ],
   },
   {
     title: "Saturn Devouring His Son",
@@ -1679,6 +1915,9 @@ export const GALLERY: GalleryEntry[] = [
       "L’ange rebelle (The Rebel Angel) (1924) - Nikolai Kalmakov.jpg",
     ),
     createdAt: "2026-04-28T00:00:00-05:00",
-    cardUsed: ["/cards/gallery_rebel_angel_kalmakov", "/cards/enemy_rebel_angel"],
+    cardUsed: [
+      "/cards/gallery_rebel_angel_kalmakov",
+      "/cards/enemy_rebel_angel",
+    ],
   },
 ];
