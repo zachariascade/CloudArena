@@ -1,4 +1,5 @@
 import type { FocusEvent, MouseEvent, ReactElement } from "react";
+import type { ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { CloudArenaBattleViewModel } from "../lib/cloud-arena-battle-view-model.js";
@@ -52,6 +53,7 @@ type CloudArenaBattleStateProps = {
     action: BattleAction;
     label: string;
   }>;
+  leadingBattleAction?: ReactNode;
 };
 
 function isEnemyPermanentActedEvent(event: BattleEvent): event is Extract<BattleEvent, { type: "permanent_acted" }> {
@@ -191,6 +193,7 @@ export function CloudArenaBattleState({
   onTurnAction,
   playableHandCardInstanceIds = [],
   turnActions = [],
+  leadingBattleAction,
 }: CloudArenaBattleStateProps): ReactElement {
   const battleWindowRef = useRef<HTMLDivElement | null>(null);
   const battleMainRef = useRef<HTMLDivElement | null>(null);
@@ -1313,6 +1316,7 @@ export function CloudArenaBattleState({
             onOpenDetails={handleDetailsClick}
             isPlayableHandCard={(cardInstanceId) => playableHandCards.has(cardInstanceId)}
             endTurnAction={endTurnAction}
+            leadingBattleAction={leadingBattleAction}
             onBattleAction={onTurnAction}
             onInspectPlayer={bindInspectorInteractions("player")}
           />

@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { CSSProperties, FocusEvent, MouseEvent, ReactElement } from "react";
+import type { CSSProperties, FocusEvent, MouseEvent, ReactElement, ReactNode } from "react";
 
 import type { CloudArenaBattleViewModel } from "../lib/cloud-arena-battle-view-model.js";
 import { DisplayCard } from "./display-card.js";
@@ -30,6 +30,7 @@ type CloudArenaHandTrayProps = {
   isPlayableHandCard: (cardInstanceId: string) => boolean;
   groupedTurnActionsCount?: number;
   endTurnAction?: Extract<BattleAction, { type: "end_turn" }> | null;
+  leadingBattleAction?: ReactNode;
   onBattleAction?: (action: BattleAction) => void;
   onInspectPlayer: {
     onMouseEnter: (event: MouseEvent<HTMLElement>) => void;
@@ -80,6 +81,7 @@ export function CloudArenaHandTray({
   isPlayableHandCard,
   groupedTurnActionsCount: _groupedTurnActionsCount,
   endTurnAction = null,
+  leadingBattleAction,
   onBattleAction,
   onInspectPlayer,
 }: CloudArenaHandTrayProps): ReactElement {
@@ -378,6 +380,7 @@ export function CloudArenaHandTray({
             </button>
           </div>
           <div className="cloud-arena-hand-hud-actions">
+            {leadingBattleAction}
             <button
               type="button"
               className="cloud-arena-hand-hud-end-turn-button"

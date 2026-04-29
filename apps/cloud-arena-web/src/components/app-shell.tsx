@@ -3,7 +3,6 @@ import type { ReactElement, ReactNode } from "react";
 type CloudArenaAppShellProps = {
   children: ReactNode;
   cloudArcanumWebBaseUrl: string;
-  sidebarContent?: ReactNode;
   fullBleed?: boolean;
   pageVariant?: "default" | "battle";
 };

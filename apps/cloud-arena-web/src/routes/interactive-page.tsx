@@ -1,15 +1,13 @@
-import type { ReactElement, ReactNode } from "react";
+import type { ReactElement } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import type {
-  CloudArenaDeckSummary,
   CloudArenaSessionSnapshot,
   CloudArenaSessionScenarioId,
 } from "../../../../src/cloud-arena/api-contract.js";
 import type { BattleAction, BattleEvent } from "../../../../src/cloud-arena/index.js";
-import { LEAN_V1_DEFAULT_TURN_ENERGY } from "../../../../src/cloud-arena/index.js";
 import type { CardDefinitionId } from "../../../../src/cloud-arena/index.js";
 import {
   CAMPAIGN_LEVELS,
@@ -20,7 +18,6 @@ import {
 import {
   CloudArenaAppShell,
   CloudArenaBattleState,
-  CloudArenaLogPanel,
   DisplayCard,
   ErrorState,
   LoadingState,
@@ -28,14 +25,10 @@ import {
 import {
   buildCloudArenaViewModelFromSessionSnapshot,
   CloudArcanumApiClientError,
-  buildCloudArenaDeckChooserGroups,
-  createCloudArenaContentController,
   createCloudArenaSessionController,
   mapCardDefinitionIdToDisplayCard,
   CLOUD_ARENA_DECK_QUERY_PARAM,
-  CLOUD_ARENA_SCENARIO_OPTIONS,
   CLOUD_ARENA_SCENARIO_QUERY_PARAM,
-  formatTraceEvent,
   getDeckDraftFromUrl,
   getScenarioDraftFromUrl,
   type CloudArenaContentMode,
@@ -104,17 +97,12 @@ function createBattleSeed(): number {
 
 export function CloudArenaInteractivePage({
   apiBaseUrl,
-  contentMode,
   sessionMode,
   cloudArcanumWebBaseUrl,
 }: CloudArenaInteractivePageProps): ReactElement {
   const sessions = useMemo(
     () => createCloudArenaSessionController({ apiBaseUrl, mode: sessionMode }),
     [apiBaseUrl, sessionMode],
-  );
-  const content = useMemo(
-    () => createCloudArenaContentController({ apiBaseUrl, mode: contentMode }),
-    [apiBaseUrl, contentMode],
   );
   const location = useLocation();
   const navigate = useNavigate();
@@ -129,15 +117,12 @@ export function CloudArenaInteractivePage({
   const [error, setError] = useState<Error | CloudArcanumApiClientError | null>(null);
   const [isCreatingSession, setIsCreatingSession] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [seedDraft, setSeedDraft] = useState("1");
   const [scenarioDraft, setScenarioDraft] = useState<CloudArenaSessionScenarioId>(
     isCampaignBattle ? campaignLevel.scenarioId : getScenarioDraftFromUrl(),
   );
   const [deckDraft, setDeckDraft] = useState<string>(
     isCampaignBattle ? campaignRun.savedDeckId : getDeckDraftFromUrl(),
   );
-  const [deckSummaries, setDeckSummaries] = useState<CloudArenaDeckSummary[] | null>(null);
-  const [lastSubmittedActionLabel, setLastSubmittedActionLabel] = useState<string | null>(null);
   const [showRewardModal, setShowRewardModal] = useState(false);
   const [rewardOptions, setRewardOptions] = useState<CardDefinitionId[]>([]);
   const [isProcessingReward, setIsProcessingReward] = useState(false);
@@ -145,14 +130,6 @@ export function CloudArenaInteractivePage({
   const initialDeckDraftRef = useRef(deckDraft);
   const isActionInFlightRef = useRef(false);
   const battleIsFinished = snapshot?.status === "finished";
-  const deckChooserGroups = useMemo(
-    () => buildCloudArenaDeckChooserGroups(deckSummaries, deckDraft),
-    [deckDraft, deckSummaries],
-  );
-  const selectedDeckOption = useMemo(
-    () => deckChooserGroups.flatMap((group) => group.options).find((option) => option.id === deckDraft) ?? null,
-    [deckChooserGroups, deckDraft],
-  );
 
   function didSessionAdvance(
     currentSnapshot: CloudArenaSessionSnapshot,
@@ -190,12 +167,9 @@ export function CloudArenaInteractivePage({
   }, [deckDraft, isCampaignBattle, location.pathname, location.search, navigate, scenarioDraft]);
 
   async function createSession(
-    seed?: number,
     scenarioId: CloudArenaSessionScenarioId = scenarioDraft,
     deckId: string = deckDraft,
   ): Promise<void> {
-    const resolvedSeed = seed ?? createBattleSeed();
-
     setIsCreatingSession(true);
     setStatus("loading");
     setError(null);
@@ -204,14 +178,12 @@ export function CloudArenaInteractivePage({
       const response = await sessions.createCloudArenaSession({
         scenarioId,
         deckId,
-        seed: resolvedSeed,
+        seed: createBattleSeed(),
         shuffleDeck: true,
       });
       setSnapshot(response.data);
-      setSeedDraft(String(response.data.seed));
       setScenarioDraft(response.data.scenarioId);
       setDeckDraft(response.data.deckId ?? "master_deck");
-      setLastSubmittedActionLabel(null);
       setStatus("ready");
     } catch (nextError: unknown) {
       setError(nextError instanceof Error ? nextError : new Error(String(nextError)));
@@ -243,7 +215,6 @@ export function CloudArenaInteractivePage({
         }
 
         setSnapshot(response.data);
-        setSeedDraft(String(response.data.seed));
         setScenarioDraft(response.data.scenarioId);
         setDeckDraft(response.data.deckId ?? "master_deck");
         setStatus("ready");
@@ -266,24 +237,6 @@ export function CloudArenaInteractivePage({
 
     return () => abortController.abort();
   }, [sessions]);
-
-  useEffect(() => {
-    const abortController = new AbortController();
-
-    void content.listCloudArenaDecks({}, { signal: abortController.signal })
-      .then((response) => {
-        if (!abortController.signal.aborted) {
-          setDeckSummaries(response.data);
-        }
-      })
-      .catch(() => {
-        if (!abortController.signal.aborted) {
-          setDeckSummaries(null);
-        }
-      });
-
-    return () => abortController.abort();
-  }, [content]);
 
   useEffect(() => {
     if (!isCampaignBattle || !battleIsFinished || !snapshot) return;
@@ -312,11 +265,6 @@ export function CloudArenaInteractivePage({
     isActionInFlightRef.current = true;
     setIsSubmitting(true);
     setError(null);
-    const selectedOption = snapshot.legalActions.find(
-      (option) => JSON.stringify(option.action) === JSON.stringify(action),
-    );
-    setLastSubmittedActionLabel(selectedOption?.label ?? null);
-
     try {
       const response = await sessions.applyCloudArenaAction(snapshot.sessionId, { action });
       setSnapshot(response.data);
@@ -330,9 +278,8 @@ export function CloudArenaInteractivePage({
         resolvedError.code === "invalid_request";
 
       if (isMissingCloudArenaSessionError(resolvedError)) {
-        setLastSubmittedActionLabel(null);
         setError(new Error("The live battle session expired after the API restarted. A fresh battle has been created."));
-        await createSession(undefined, scenarioDraft);
+        await createSession(scenarioDraft);
         return;
       }
 
@@ -350,9 +297,8 @@ export function CloudArenaInteractivePage({
           const resolvedRefreshError = refreshError instanceof Error ? refreshError : new Error(String(refreshError));
 
           if (isMissingCloudArenaSessionError(resolvedRefreshError)) {
-            setLastSubmittedActionLabel(null);
             setError(new Error("The live battle session expired after the API restarted. A fresh battle has been created."));
-            await createSession(undefined, scenarioDraft);
+            await createSession(scenarioDraft);
             return;
           }
 
@@ -383,17 +329,14 @@ export function CloudArenaInteractivePage({
     try {
       const response = await sessions.resetCloudArenaSession(snapshot.sessionId);
       setSnapshot(response.data);
-      setSeedDraft(String(response.data.seed));
       setScenarioDraft(response.data.scenarioId);
-      setLastSubmittedActionLabel(null);
       setStatus("ready");
     } catch (nextError: unknown) {
       const resolvedError = nextError instanceof Error ? nextError : new Error(String(nextError));
 
       if (isMissingCloudArenaSessionError(resolvedError)) {
-        setLastSubmittedActionLabel(null);
         setError(new Error("The live battle session expired after the API restarted. A fresh battle has been created."));
-        await createSession(undefined, scenarioDraft);
+        await createSession(scenarioDraft);
         return;
       }
 
@@ -403,29 +346,6 @@ export function CloudArenaInteractivePage({
       setIsSubmitting(false);
       isActionInFlightRef.current = false;
     }
-  }
-
-  function parseSeedDraft(): number | undefined {
-    const trimmed = seedDraft.trim();
-
-    if (trimmed.length === 0) {
-      return undefined;
-    }
-
-    const parsed = Number(trimmed);
-    return Number.isInteger(parsed) && parsed > 0 ? parsed : undefined;
-  }
-
-  async function handleCreateNewBattle(): Promise<void> {
-    const seed = parseSeedDraft();
-
-    if (seedDraft.trim().length > 0 && seed === undefined) {
-      setError(new Error("Seed must be a positive integer."));
-      setStatus(snapshot ? "ready" : "error");
-      return;
-    }
-
-    await createSession(seed, scenarioDraft);
   }
 
   const turnActions = snapshot?.legalActions
@@ -488,7 +408,6 @@ export function CloudArenaInteractivePage({
     return (
       <CloudArenaAppShell
         cloudArcanumWebBaseUrl={cloudArcanumWebBaseUrl}
-        sidebarContent={buildSidebarContent({})}
         pageVariant="battle"
       >
         <ErrorState
@@ -504,7 +423,6 @@ export function CloudArenaInteractivePage({
     return (
       <CloudArenaAppShell
         cloudArcanumWebBaseUrl={cloudArcanumWebBaseUrl}
-        sidebarContent={buildSidebarContent({})}
         pageVariant="battle"
       >
         <LoadingState
@@ -526,118 +444,6 @@ export function CloudArenaInteractivePage({
     .filter((option): option is typeof option & { action: Extract<BattleAction, { type: "play_card" }> } =>
       option.action.type === "play_card")
     .map((option) => option.action.cardInstanceId);
-
-  function buildSidebarContent(options: {
-    battleViewModel?: ReturnType<typeof buildCloudArenaViewModelFromSessionSnapshot>;
-    finishedEvent?: Extract<BattleEvent, { type: "battle_finished" }> | null;
-    hasFinished?: boolean;
-  }): ReactNode {
-    const { battleViewModel, finishedEvent: sidebarFinishedEvent, hasFinished: sidebarHasFinished = false } = options;
-
-    return (
-      <>
-        <section className="app-shell-sidebar-section">
-          <strong>Battle Setup</strong>
-          <div className="cloud-arena-game-admin-panel">
-            <div className="cloud-arena-game-admin-grid">
-              <label className="field">
-                <span>Scenario</span>
-                <select
-                  value={scenarioDraft}
-                  onChange={(event) => setScenarioDraft(event.target.value as CloudArenaSessionScenarioId)}
-                >
-                  {CLOUD_ARENA_SCENARIO_OPTIONS.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.label} - {option.description}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className="field">
-                <span>Deck</span>
-                <select
-                  value={deckDraft}
-                  onChange={(event) => setDeckDraft(event.target.value)}
-                >
-                  {deckChooserGroups.map((group) => (
-                    <optgroup key={group.label} label={group.label}>
-                      {group.options.map((option) => (
-                        <option key={option.id} value={option.id} disabled={option.disabled}>
-                          {option.label} - {option.description}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ))}
-                </select>
-              </label>
-              <p className="cloud-arena-game-admin-note">
-                {selectedDeckOption
-                  ? `Current deck: ${selectedDeckOption.label} (${selectedDeckOption.kind})`
-                  : `Current deck id: ${deckDraft}`}
-              </p>
-              <label className="field">
-                <span>Seed</span>
-                <input
-                  type="text"
-                  value={seedDraft}
-                  onChange={(event) => setSeedDraft(event.target.value)}
-                  placeholder="1"
-                />
-              </label>
-            </div>
-            <div className="button-row cloud-arena-game-admin-actions">
-              <button type="button" onClick={() => void handleCreateNewBattle()} disabled={isCreatingSession || isSubmitting}>
-                {isCreatingSession ? "Creating..." : "New battle"}
-              </button>
-              <button type="button" onClick={() => void handleReset()} disabled={isCreatingSession || isSubmitting}>
-                {isSubmitting ? "Resetting..." : "Reset battle"}
-              </button>
-            </div>
-            {!battleIsFinished && (
-              <div className="button-row cloud-arena-game-admin-actions">
-                <button
-                  type="button"
-                  onClick={() => void handleApplyAction({ type: "debug_end_battle", winner: "player" })}
-                  disabled={isCreatingSession || isSubmitting}
-                >
-                  End in Victory
-                </button>
-                <button
-                  type="button"
-                  onClick={() => void handleApplyAction({ type: "debug_end_battle", winner: "enemy" })}
-                  disabled={isCreatingSession || isSubmitting}
-                >
-                  End in Defeat
-                </button>
-              </div>
-            )}
-            <p className="cloud-arena-game-admin-note">
-              {lastSubmittedActionLabel
-                ? `Last action: ${lastSubmittedActionLabel}`
-                : `Default energy: ${LEAN_V1_DEFAULT_TURN_ENERGY}`}
-            </p>
-            {sidebarHasFinished && sidebarFinishedEvent ? (
-              <div className="warning-callout cloud-arena-game-finished">
-                <strong>Battle finished</strong>
-                <p>{formatTraceEvent(sidebarFinishedEvent)}</p>
-              </div>
-            ) : null}
-          </div>
-        </section>
-
-        <section className="app-shell-sidebar-section">
-          <strong>Logs</strong>
-          {battleViewModel ? (
-            <div className="cloud-arena-game-log-panel">
-              <CloudArenaLogPanel framed={false} groups={battleViewModel.logGroups} />
-            </div>
-          ) : (
-            <p className="cloud-arena-game-admin-note">The battle log will appear after the session loads.</p>
-          )}
-        </section>
-      </>
-    );
-  }
 
   const finishModal = hasFinished ? (() => {
     const winner = finishedEvent?.winner ?? "unknown";
@@ -738,17 +544,9 @@ export function CloudArenaInteractivePage({
     <>
       <CloudArenaAppShell
         cloudArcanumWebBaseUrl={cloudArcanumWebBaseUrl}
-        sidebarContent={buildSidebarContent({
-          battleViewModel: snapshot ? viewModel : undefined,
-          finishedEvent,
-          hasFinished,
-        })}
         pageVariant="battle"
       >
         <section className="cloud-arena-game-frame">
-          <Link className="cloud-arena-battle-root-back" to="/">
-            ← Back
-          </Link>
           <section className="cloud-arena-game-screen">
             <CloudArenaBattleState
               battle={viewModel.battle}
@@ -768,6 +566,11 @@ export function CloudArenaInteractivePage({
                   : (action) => void handleApplyAction(action)
               }
               playableHandCardInstanceIds={playableHandCardInstanceIds}
+              leadingBattleAction={
+                <Link className="cloud-arena-hand-hud-main-menu-button" to="/">
+                  Main Menu
+                </Link>
+              }
             />
           </section>
         </section>
