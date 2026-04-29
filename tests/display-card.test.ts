@@ -18,6 +18,7 @@ import { buildEnemyPreviewCards } from "../apps/cloud-arena-web/src/lib/cloud-ar
 import type { CloudArenaBattleViewModel } from "../apps/cloud-arena-web/src/lib/cloud-arena-battle-view-model.js";
 import type { CloudArenaBattleMotionState } from "../apps/cloud-arena-web/src/lib/cloud-arena-battle-motion.js";
 import type { CardDefinition } from "../src/cloud-arena/core/types.js";
+import { galleryAncientOfDaysCardDefinition } from "../src/cloud-arena/cards/definitions/gallery-ancient-of-days.js";
 import { getEnemyPreset } from "../src/cloud-arena/index.js";
 
 const EMPTY_BATTLE_MOTION_STATE: CloudArenaBattleMotionState = {
@@ -60,6 +61,14 @@ describe("shared display card mappers", () => {
     } satisfies Pick<CardDefinition, "cardTypes" | "subtypes" | "rarity">);
 
     expect(generatedSubtitle).toBe("Legendary Creature - Angel Warrior");
+  });
+
+  it("uses legendary gallery rarity to generate the subtitle", () => {
+    expect(galleryAncientOfDaysCardDefinition.rarity).toBe("mythic");
+
+    const generatedSubtitle = buildCardSubtitle(galleryAncientOfDaysCardDefinition);
+
+    expect(generatedSubtitle).toBe("Legendary Creature - Sage");
   });
 
   it("maps arena player and enemy summaries into display cards", () => {

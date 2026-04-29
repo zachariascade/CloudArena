@@ -5,9 +5,9 @@ export const gallerySaintMichaelVanquishingSatanCardDefinition: CardDefinition =
   name: "Saint Michael Vanquishing Satan",
   cardTypes: ["creature"],
   cost: 3,
+  rarity: "mythic",
   display: {
     title: "Champion of Heaven",
-    subtitle: "Legendary Creature - Angel",
     frameTone: "split-white-red",
     manaCost: "{3}",
     artist: "Raphael",

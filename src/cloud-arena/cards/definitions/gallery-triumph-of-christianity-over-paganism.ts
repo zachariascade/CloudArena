@@ -5,9 +5,9 @@ export const galleryTriumphOfChristianityOverPaganismCardDefinition: CardDefinit
   name: "The Triumph of Christianity Over Paganism",
   cardTypes: ["enchantment"],
   cost: 3,
+  rarity: "mythic",
   display: {
     title: "Triumph of the Cross",
-    subtitle: "Legendary Enchantment",
     frameTone: "white",
     manaCost: "{3}",
     artist: "Gustave Doré",

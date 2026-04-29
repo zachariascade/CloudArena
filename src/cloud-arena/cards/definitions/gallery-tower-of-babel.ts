@@ -5,9 +5,9 @@ export const galleryTowerOfBabelCardDefinition: CardDefinition = {
   name: "The Tower of Babel",
   cardTypes: ["enchantment"],
   cost: 3,
+  rarity: "mythic",
   display: {
     title: "The Great Tower",
-    subtitle: "Legendary Enchantment",
     frameTone: "split-white-blue",
     manaCost: "{3}",
     artist: "Gustave Doré",

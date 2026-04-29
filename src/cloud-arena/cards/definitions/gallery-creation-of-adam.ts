@@ -5,9 +5,9 @@ export const galleryCreationOfAdamCardDefinition: CardDefinition = {
   name: "Creation of Adam",
   cardTypes: ["enchantment"],
   cost: 3,
+  rarity: "mythic",
   display: {
     title: "Spark of Life",
-    subtitle: "Legendary Enchantment",
     frameTone: "split-white-blue",
     manaCost: "{3}",
     artist: "Michelangelo",

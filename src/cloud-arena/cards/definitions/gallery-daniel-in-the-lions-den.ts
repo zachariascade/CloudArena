@@ -5,9 +5,9 @@ export const galleryDanielInTheLionsDenCardDefinition: CardDefinition = {
   name: "Daniel in the Lions' Den",
   cardTypes: ["enchantment"],
   cost: 3,
+  rarity: "mythic",
   display: {
     title: "Daniel in the Lions' Den",
-    subtitle: "Legendary Enchantment",
     frameTone: "white",
     manaCost: "{3}",
     artist: "Gustave Doré",

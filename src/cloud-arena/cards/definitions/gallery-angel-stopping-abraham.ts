@@ -5,9 +5,9 @@ export const galleryAngelStoppingAbrahamCardDefinition: CardDefinition = {
   name: "Angel Stopping Abraham",
   cardTypes: ["creature"],
   cost: 3,
+  rarity: "mythic",
   display: {
     title: "Voice of Stayed Hand",
-    subtitle: "Legendary Creature - Angel",
     frameTone: "split-white-green",
     manaCost: "{3}",
     artist: "Rembrandt van Rijn",

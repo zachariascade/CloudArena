@@ -5,9 +5,9 @@ export const galleryJacobWrestlesWithTheAngelCardDefinition: CardDefinition = {
   name: "Jacob Wrestles with the Angel",
   cardTypes: ["creature"],
   cost: 3,
+  rarity: "mythic",
   display: {
     title: "Wrestler at the Ford",
-    subtitle: "Legendary Creature - Human Warrior",
     frameTone: "split-white-green",
     manaCost: "{3}",
     artist: "Gustave Doré",

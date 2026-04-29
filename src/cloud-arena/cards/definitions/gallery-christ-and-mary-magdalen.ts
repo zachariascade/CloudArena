@@ -5,9 +5,9 @@ export const galleryChristAndMaryMagdalenCardDefinition: CardDefinition = {
   name: "Christ and St Mary Magdalen at the Tomb",
   cardTypes: ["creature"],
   cost: 3,
+  rarity: "mythic",
   display: {
     title: "Witness at the Empty Tomb",
-    subtitle: "Legendary Creature - Mystic",
     frameTone: "white",
     manaCost: "{3}",
     artist: "Rembrandt van Rijn",

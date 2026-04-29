@@ -605,7 +605,7 @@ export type ChoiceRecord = {
 
 export type CardDisplayDefinition = {
   title: string | null;
-  subtitle: string | null;
+  subtitle?: string | null;
   frameTone: string;
   manaCost: string | null;
   imagePath?: string;

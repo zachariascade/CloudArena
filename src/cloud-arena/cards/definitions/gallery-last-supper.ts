@@ -5,9 +5,9 @@ export const galleryLastSupperCardDefinition: CardDefinition = {
   name: "The Last Supper",
   cardTypes: ["enchantment"],
   cost: 3,
+  rarity: "mythic",
   display: {
     title: "Bread and Cup",
-    subtitle: "Legendary Enchantment",
     frameTone: "white",
     manaCost: "{3}",
     artist: "Jacopo Tintoretto",

@@ -5,9 +5,9 @@ export const gallerySacrificeOfIsaacCardDefinition: CardDefinition = {
   name: "The Sacrifice of Isaac",
   cardTypes: ["creature"],
   cost: 3,
+  rarity: "mythic",
   display: {
     title: "Faith Tested",
-    subtitle: "Legendary Creature - Human",
     frameTone: "split-white-red",
     manaCost: "{3}",
     artist: "Caravaggio",

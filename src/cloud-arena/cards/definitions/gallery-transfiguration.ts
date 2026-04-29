@@ -5,9 +5,9 @@ export const galleryTransfigurationCardDefinition: CardDefinition = {
   name: "The Transfiguration",
   cardTypes: ["creature"],
   cost: 3,
+  rarity: "mythic",
   display: {
     title: "Shining on the Mountain",
-    subtitle: "Legendary Creature - Human",
     frameTone: "split-white-blue",
     manaCost: "{3}",
     artist: "Raphael",

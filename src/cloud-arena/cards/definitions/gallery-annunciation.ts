@@ -5,9 +5,9 @@ export const galleryAnnunciationCardDefinition: CardDefinition = {
   name: "The Annunciation",
   cardTypes: ["enchantment"],
   cost: 3,
+  rarity: "mythic",
   display: {
     title: "Herald of the First Sign",
-    subtitle: "Legendary Enchantment",
     frameTone: "split-white-blue",
     manaCost: "{3}",
     artist: "Fra Angelico",

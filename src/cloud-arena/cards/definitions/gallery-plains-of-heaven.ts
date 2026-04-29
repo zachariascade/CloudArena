@@ -5,9 +5,9 @@ export const galleryPlainsOfHeavenCardDefinition: CardDefinition = {
   name: "The Plains of Heaven",
   cardTypes: ["enchantment"],
   cost: 3,
+  rarity: "mythic",
   display: {
     title: "Plains of Heaven",
-    subtitle: "Legendary Enchantment",
     frameTone: "white",
     manaCost: "{3}",
     artist: "John Martin",

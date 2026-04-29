@@ -5,9 +5,9 @@ export const galleryAncientOfDaysCardDefinition: CardDefinition = {
   name: "Ancient of Days",
   cardTypes: ["creature"],
   cost: 3,
+  rarity: "mythic",
   display: {
     title: "Keeper of the First Dawn",
-    subtitle: "Legendary Creature - Sage",
     frameTone: "white",
     manaCost: "{3}",
     artist: "William Blake",
