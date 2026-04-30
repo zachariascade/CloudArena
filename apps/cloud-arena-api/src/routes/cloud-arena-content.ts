@@ -18,6 +18,7 @@ import {
   updateCloudArenaSavedDeck,
 } from "../services/cloud-arena-decks.js";
 import type { CloudArenaApiRouteModule } from "./index.js";
+import type { CardAvailabilityStatus } from "../../../../src/cloud-arena/core/types.js";
 
 class CloudArenaInvalidContentRequestError extends Error {
   constructor(message: string) {
@@ -35,9 +36,17 @@ function parseCardListQuery(query: unknown): CloudArenaCardListQuery {
     return {};
   }
 
+  const availabilityStatus =
+    query.availabilityStatus === "ready" ||
+    query.availabilityStatus === "in_progress" ||
+    query.availabilityStatus === "all"
+      ? (query.availabilityStatus as CardAvailabilityStatus | "all")
+      : undefined;
+
   return {
     q: typeof query.q === "string" ? query.q : undefined,
     cardType: typeof query.cardType === "string" ? query.cardType : undefined,
+    availabilityStatus,
   };
 }
 

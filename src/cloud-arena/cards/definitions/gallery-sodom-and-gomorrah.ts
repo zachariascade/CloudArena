@@ -5,6 +5,7 @@ export const gallerySodomAndGomorrahCardDefinition: CardDefinition = {
   name: "Sodom and Gomorrah",
   cardTypes: ["sorcery"],
   cost: 3,
+  availabilityStatus: "in_progress",
   display: {
     name: "Sodom and Gomorrah",
     title: "Fire on the Cities",

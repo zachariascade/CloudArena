@@ -5,6 +5,7 @@ export const galleryDelugeCardDefinition: CardDefinition = {
   name: "The Deluge",
   cardTypes: ["sorcery"],
   cost: 3,
+  availabilityStatus: "in_progress",
   display: {
     name: "The Deluge",
     title: "Flood of Judgment",

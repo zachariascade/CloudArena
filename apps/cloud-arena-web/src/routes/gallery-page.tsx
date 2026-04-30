@@ -1,5 +1,5 @@
-import { useState, useMemo, type ReactElement } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState, type ReactElement } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { CloudArenaAppShell } from "../components/index.js";
 import { DisplayCard } from "../components/display-card.js";
@@ -19,8 +19,99 @@ const SORT_LABELS: Record<SortKey, string> = {
   createdAt: "Created",
 };
 
+const GALLERY_SEARCH_PARAM = "q";
+const GALLERY_SORT_KEY_PARAM = "sort";
+const GALLERY_SORT_DIR_PARAM = "dir";
+const GALLERY_USAGE_FILTER_PARAM = "cards";
+const GALLERY_PAGE_PARAM = "page";
+
 function getGalleryCardDefinitionId(cardPath: string): string {
   return cardPath.replace(/^\/cards\//, "");
+}
+
+function isSortKey(value: string): value is SortKey {
+  return value === "title" || value === "artist" || value === "year" || value === "createdAt";
+}
+
+function isSortDir(value: string): value is SortDir {
+  return value === "asc" || value === "desc";
+}
+
+function isUsageFilter(value: string): value is UsageFilter {
+  return value === "all" || value === "used" || value === "unused";
+}
+
+function parsePageFromSearch(searchParams: URLSearchParams): number {
+  const rawPage = searchParams.get(GALLERY_PAGE_PARAM);
+  const pageNumber = rawPage ? Number.parseInt(rawPage, 10) : 1;
+
+  if (!Number.isFinite(pageNumber) || pageNumber < 1) {
+    return 0;
+  }
+
+  return pageNumber - 1;
+}
+
+export function getGalleryStateFromUrl(search = globalThis.location?.search ?? "") {
+  const searchParams = new URLSearchParams(search);
+  const sortKey = searchParams.get(GALLERY_SORT_KEY_PARAM);
+  const sortDir = searchParams.get(GALLERY_SORT_DIR_PARAM);
+  const usageFilter = searchParams.get(GALLERY_USAGE_FILTER_PARAM);
+
+  return {
+    searchQuery: searchParams.get(GALLERY_SEARCH_PARAM) ?? "",
+    sortKey: sortKey && isSortKey(sortKey) ? sortKey : "title",
+    sortDir: sortDir && isSortDir(sortDir) ? sortDir : "asc",
+    usageFilter: usageFilter && isUsageFilter(usageFilter) ? usageFilter : "all",
+    page: parsePageFromSearch(searchParams),
+  };
+}
+
+export function updateGallerySearch(
+  currentSearch: string,
+  state: {
+    searchQuery: string;
+    sortKey: SortKey;
+    sortDir: SortDir;
+    usageFilter: UsageFilter;
+    page: number;
+  },
+): string {
+  const searchParams = new URLSearchParams(currentSearch);
+  const trimmedQuery = state.searchQuery.trim();
+
+  if (trimmedQuery.length > 0) {
+    searchParams.set(GALLERY_SEARCH_PARAM, trimmedQuery);
+  } else {
+    searchParams.delete(GALLERY_SEARCH_PARAM);
+  }
+
+  if (state.sortKey === "title") {
+    searchParams.delete(GALLERY_SORT_KEY_PARAM);
+  } else {
+    searchParams.set(GALLERY_SORT_KEY_PARAM, state.sortKey);
+  }
+
+  if (state.sortDir === "asc") {
+    searchParams.delete(GALLERY_SORT_DIR_PARAM);
+  } else {
+    searchParams.set(GALLERY_SORT_DIR_PARAM, state.sortDir);
+  }
+
+  if (state.usageFilter === "all") {
+    searchParams.delete(GALLERY_USAGE_FILTER_PARAM);
+  } else {
+    searchParams.set(GALLERY_USAGE_FILTER_PARAM, state.usageFilter);
+  }
+
+  if (state.page > 0) {
+    searchParams.set(GALLERY_PAGE_PARAM, String(state.page + 1));
+  } else {
+    searchParams.delete(GALLERY_PAGE_PARAM);
+  }
+
+  const nextSearch = searchParams.toString();
+  return nextSearch.length > 0 ? `?${nextSearch}` : "";
 }
 
 type CloudArenaGalleryPageProps = {
@@ -30,14 +121,17 @@ type CloudArenaGalleryPageProps = {
 export function CloudArenaGalleryPage({
   cloudArcanumWebBaseUrl,
 }: CloudArenaGalleryPageProps): ReactElement {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const initialStateRef = useRef(getGalleryStateFromUrl(location.search));
   const [active, setActive] = useState<GalleryEntry | null>(null);
   const [copied, setCopied] = useState(false);
   const [lightboxTab, setLightboxTab] = useState<LightboxTab>("art");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [sortKey, setSortKey] = useState<SortKey>("title");
-  const [sortDir, setSortDir] = useState<SortDir>("asc");
-  const [usageFilter, setUsageFilter] = useState<UsageFilter>("all");
-  const [page, setPage] = useState(0);
+  const [searchQuery, setSearchQuery] = useState(initialStateRef.current.searchQuery);
+  const [sortKey, setSortKey] = useState<SortKey>(initialStateRef.current.sortKey);
+  const [sortDir, setSortDir] = useState<SortDir>(initialStateRef.current.sortDir);
+  const [usageFilter, setUsageFilter] = useState<UsageFilter>(initialStateRef.current.usageFilter);
+  const [page, setPage] = useState(initialStateRef.current.page);
 
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -72,6 +166,41 @@ export function CloudArenaGalleryPage({
   const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages - 1);
   const paginated = sorted.slice(safePage * PAGE_SIZE, (safePage + 1) * PAGE_SIZE);
+
+  useEffect(() => {
+    if (page !== safePage) {
+      setPage(safePage);
+    }
+  }, [page, safePage]);
+
+  useEffect(() => {
+    const nextSearch = updateGallerySearch(location.search, {
+      searchQuery,
+      sortKey,
+      sortDir,
+      usageFilter,
+      page: safePage,
+    });
+
+    if (nextSearch !== location.search) {
+      navigate(
+        {
+          pathname: location.pathname,
+          search: nextSearch,
+        },
+        { replace: true },
+      );
+    }
+  }, [
+    location.pathname,
+    location.search,
+    navigate,
+    safePage,
+    searchQuery,
+    sortDir,
+    sortKey,
+    usageFilter,
+  ]);
 
   function handleSearch(q: string): void {
     setSearchQuery(q);

@@ -5,6 +5,7 @@ export const galleryLastJudgmentCardDefinition: CardDefinition = {
   name: "The Last Judgment",
   cardTypes: ["sorcery"],
   cost: 3,
+  availabilityStatus: "in_progress",
   display: {
     name: "The Last Judgment",
     title: "Final Reckoning",

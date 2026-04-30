@@ -748,8 +748,6 @@ export function summarizeCardDefinition(definition: CardDefinition): string[] {
           summaryLines.push("Equipped creature has **Indestructible**.");
         }
       }
-    } else if (!hasCardType(definition, "creature") && !(definition.abilities?.length ?? 0)) {
-      summaryLines.push(`Summon ${definition.name}.`);
     }
 
     if (definition.keywords?.includes("refresh") || definition.recoveryPolicy === "full_heal") {

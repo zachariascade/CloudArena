@@ -2,6 +2,10 @@ export type BattlePhase = "player_action" | "enemy_resolution" | "finished";
 
 export type CardDefinitionId = string;
 export type CardAvailabilityStatus = "ready" | "in_progress";
+export type CardSet = {
+  id: string;
+  name: string;
+};
 export type EffectTarget = "player" | "enemy";
 export type PermanentCardType =
   | "artifact"
@@ -624,6 +628,7 @@ export type BaseCardDefinition = {
   cost: number;
   manaCost?: string | null;
   availabilityStatus?: CardAvailabilityStatus;
+  cardSet?: CardSet | null;
   cardTypes: CardType[];
   subtypes?: string[];
   rarity?: "common" | "uncommon" | "rare" | "mythic" | "special" | "bonus" | null;

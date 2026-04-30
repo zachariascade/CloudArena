@@ -5,6 +5,7 @@ export const galleryTriumphOfChristianityOverPaganismCardDefinition: CardDefinit
   name: "The Triumph of Christianity Over Paganism",
   cardTypes: ["enchantment"],
   cost: 3,
+  availabilityStatus: "in_progress",
   rarity: "mythic",
   display: {
     name: "The Triumph of Christianity Over Paganism",

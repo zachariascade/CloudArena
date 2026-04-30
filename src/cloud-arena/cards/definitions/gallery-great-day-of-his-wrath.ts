@@ -5,6 +5,7 @@ export const galleryGreatDayOfHisWrathCardDefinition: CardDefinition = {
   name: "The Great Day of His Wrath",
   cardTypes: ["sorcery"],
   cost: 3,
+  availabilityStatus: "in_progress",
   display: {
     name: "The Great Day of His Wrath",
     title: "Day of Wrath",

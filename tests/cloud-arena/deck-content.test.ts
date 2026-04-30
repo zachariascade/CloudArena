@@ -60,4 +60,20 @@ describe("cloud arena deck content", () => {
     expect(isCardReady(readyCard)).toBe(true);
     expect(isCardSelectableByPlayers(readyCard)).toBe(true);
   });
+
+  it("can list in-progress cards when requested for the full catalog", () => {
+    const cards = listCloudArenaCardSummaries({ availabilityStatus: "all" });
+    const danielCard = cards.find((entry) => entry.id === "gallery_daniel_in_the_lions_den");
+    const danielSetCard = cards.find((entry) => entry.id === "meshach_shadrach_and_abednego");
+    const ancientOfDays = cards.find((entry) => entry.id === "gallery_ancient_of_days");
+    const kingOfBabylon = cards.find((entry) => entry.id === "nebuchadnezzar_king_of_babylon");
+    const beastOfTheField = cards.find((entry) => entry.id === "nebuchadnezzar_beast_of_the_field");
+
+    expect(cards.map((entry) => entry.id)).toContain("gallery_daniel_in_the_lions_den");
+    expect(danielCard?.cardSet?.id).toBe("daniel");
+    expect(danielSetCard?.cardSet?.id).toBe("daniel");
+    expect(ancientOfDays?.cardSet?.id).toBe("daniel");
+    expect(kingOfBabylon?.cardSet?.id).toBe("daniel");
+    expect(beastOfTheField?.cardSet?.id).toBe("daniel");
+  });
 });

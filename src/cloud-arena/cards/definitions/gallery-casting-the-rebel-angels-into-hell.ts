@@ -5,6 +5,7 @@ export const galleryCastingTheRebelAngelsIntoHellCardDefinition: CardDefinition 
   name: "The Casting of the Rebel Angels into Hell",
   cardTypes: ["creature"],
   cost: 3,
+  availabilityStatus: "in_progress",
   display: {
     name: "The Casting of the Rebel Angels into Hell",
     frameTone: "split-black-red",

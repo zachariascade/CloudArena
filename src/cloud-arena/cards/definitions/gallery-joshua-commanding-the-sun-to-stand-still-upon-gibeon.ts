@@ -5,6 +5,7 @@ export const galleryJoshuaCommandingTheSunToStandStillUponGibeonCardDefinition: 
   name: "Joshua Commanding the Sun to Stand Still upon Gibeon",
   cardTypes: ["sorcery"],
   cost: 3,
+  availabilityStatus: "in_progress",
   display: {
     name: "Joshua Commanding the Sun to Stand Still upon Gibeon",
     title: "The Sun Stands Still",

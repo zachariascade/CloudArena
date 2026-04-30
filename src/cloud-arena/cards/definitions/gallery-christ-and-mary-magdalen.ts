@@ -5,6 +5,7 @@ export const galleryChristAndMaryMagdalenCardDefinition: CardDefinition = {
   name: "Christ and St Mary Magdalen at the Tomb",
   cardTypes: ["creature"],
   cost: 3,
+  availabilityStatus: "in_progress",
   rarity: "mythic",
   display: {
     name: "Christ and St Mary Magdalen at the Tomb",

@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import type {
   CloudArenaCardSummary,
@@ -61,8 +61,14 @@ type DeckBuilderDraft = {
 
 const ALL_CARD_TYPES_OPTION = "all";
 const ALL_CARD_STATUSES_OPTION = "all";
+const ALL_CARD_SETS_OPTION = "all";
 const ALL_SELECTED_FILTER_OPTION = "all";
 const NEW_DECK_OPTION = "__new__";
+const DECKBUILDER_SEARCH_PARAM = "q";
+const DECKBUILDER_STATUS_PARAM = "status";
+const DECKBUILDER_SET_PARAM = "set";
+const DECKBUILDER_SELECTED_PARAM = "selected";
+const DECKBUILDER_DECK_PARAM = "deck";
 
 export function createEmptyDraft(): DeckBuilderDraft {
   return {
@@ -255,6 +261,7 @@ export function filterCards(
   searchText: string,
   cardType: string,
   cardStatus: CardAvailabilityStatus | typeof ALL_CARD_STATUSES_OPTION,
+  cardSetId: string | typeof ALL_CARD_SETS_OPTION,
 ): CloudArenaCardSummary[] {
   const normalizedSearch = searchText.trim().toLowerCase();
 
@@ -264,10 +271,13 @@ export function filterCards(
     const matchesStatus =
       cardStatus === ALL_CARD_STATUSES_OPTION ||
       card.availabilityStatus === cardStatus;
+    const matchesSet =
+      cardSetId === ALL_CARD_SETS_OPTION || card.cardSet?.id === cardSetId;
     const haystack = [
       card.name,
       card.typeLine,
       card.effectSummary,
+      card.cardSet?.name ?? "",
       ...card.cardTypes,
       ...card.subtypes,
     ]
@@ -277,9 +287,98 @@ export function filterCards(
     return (
       matchesType &&
       matchesStatus &&
+      matchesSet &&
       (normalizedSearch.length === 0 || haystack.includes(normalizedSearch))
     );
   });
+}
+
+function isDeckBuilderStatusFilter(
+  value: string,
+): value is CardAvailabilityStatus | typeof ALL_CARD_STATUSES_OPTION {
+  return value === "all" || value === "ready" || value === "in_progress";
+}
+
+function isDeckBuilderSelectedFilter(
+  value: string,
+): value is typeof ALL_SELECTED_FILTER_OPTION | "selected" {
+  return value === "all" || value === "selected";
+}
+
+export function getDeckBuilderStateFromUrl(
+  search = globalThis.location?.search ?? "",
+): {
+  cardSearch: string;
+  cardStatusFilter: CardAvailabilityStatus | typeof ALL_CARD_STATUSES_OPTION;
+  cardSetFilter: string;
+  selectedCardFilter: typeof ALL_SELECTED_FILTER_OPTION | "selected";
+  deckId: string | null;
+} {
+  const searchParams = new URLSearchParams(search);
+  const statusFilter = searchParams.get(DECKBUILDER_STATUS_PARAM);
+  const selectedFilter = searchParams.get(DECKBUILDER_SELECTED_PARAM);
+  const deckId = searchParams.get(DECKBUILDER_DECK_PARAM);
+
+  return {
+    cardSearch: searchParams.get(DECKBUILDER_SEARCH_PARAM) ?? "",
+    cardStatusFilter:
+      statusFilter && isDeckBuilderStatusFilter(statusFilter)
+        ? statusFilter
+        : ALL_CARD_STATUSES_OPTION,
+    cardSetFilter: searchParams.get(DECKBUILDER_SET_PARAM) ?? ALL_CARD_SETS_OPTION,
+    selectedCardFilter:
+      selectedFilter && isDeckBuilderSelectedFilter(selectedFilter)
+        ? selectedFilter
+        : ALL_SELECTED_FILTER_OPTION,
+    deckId: deckId && deckId.trim().length > 0 ? deckId : null,
+  };
+}
+
+export function updateDeckBuilderSearch(
+  currentSearch: string,
+  state: {
+    cardSearch: string;
+    cardStatusFilter: CardAvailabilityStatus | typeof ALL_CARD_STATUSES_OPTION;
+    cardSetFilter: string;
+    selectedCardFilter: typeof ALL_SELECTED_FILTER_OPTION | "selected";
+    deckId: string | null;
+  },
+): string {
+  const searchParams = new URLSearchParams(currentSearch);
+  const trimmedSearch = state.cardSearch.trim();
+
+  if (trimmedSearch.length > 0) {
+    searchParams.set(DECKBUILDER_SEARCH_PARAM, trimmedSearch);
+  } else {
+    searchParams.delete(DECKBUILDER_SEARCH_PARAM);
+  }
+
+  if (state.cardStatusFilter === ALL_CARD_STATUSES_OPTION) {
+    searchParams.delete(DECKBUILDER_STATUS_PARAM);
+  } else {
+    searchParams.set(DECKBUILDER_STATUS_PARAM, state.cardStatusFilter);
+  }
+
+  if (state.cardSetFilter === ALL_CARD_SETS_OPTION) {
+    searchParams.delete(DECKBUILDER_SET_PARAM);
+  } else {
+    searchParams.set(DECKBUILDER_SET_PARAM, state.cardSetFilter);
+  }
+
+  if (state.selectedCardFilter === ALL_SELECTED_FILTER_OPTION) {
+    searchParams.delete(DECKBUILDER_SELECTED_PARAM);
+  } else {
+    searchParams.set(DECKBUILDER_SELECTED_PARAM, state.selectedCardFilter);
+  }
+
+  if (state.deckId && state.deckId.trim().length > 0) {
+    searchParams.set(DECKBUILDER_DECK_PARAM, state.deckId);
+  } else {
+    searchParams.delete(DECKBUILDER_DECK_PARAM);
+  }
+
+  const nextSearch = searchParams.toString();
+  return nextSearch.length > 0 ? `?${nextSearch}` : "";
 }
 
 export function buildDeckSelectionGroups(
@@ -413,6 +512,9 @@ export function CloudArenaDeckBuilderPage({
   contentMode,
   cloudArcanumWebBaseUrl,
 }: CloudArenaDeckBuilderPageProps): ReactElement {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const initialStateRef = useRef(getDeckBuilderStateFromUrl(location.search));
   const content = useMemo(
     () => createCloudArenaContentController({ apiBaseUrl, mode: contentMode }),
     [apiBaseUrl, contentMode],
@@ -424,15 +526,14 @@ export function CloudArenaDeckBuilderPage({
   const [cards, setCards] = useState<CloudArenaCardSummary[]>([]);
   const [decks, setDecks] = useState<CloudArenaDeckSummary[]>([]);
   const [draft, setDraft] = useState<DeckBuilderDraft>(createEmptyDraft);
-  const [cardSearch, setCardSearch] = useState("");
+  const [cardSearch, setCardSearch] = useState(initialStateRef.current.cardSearch);
   const [cardStatusFilter, setCardStatusFilter] = useState<
     CardAvailabilityStatus | typeof ALL_CARD_STATUSES_OPTION
-  >(
-    ALL_CARD_STATUSES_OPTION,
-  );
+  >(initialStateRef.current.cardStatusFilter);
+  const [cardSetFilter, setCardSetFilter] = useState<string>(initialStateRef.current.cardSetFilter);
   const [selectedCardFilter, setSelectedCardFilter] = useState<
     typeof ALL_SELECTED_FILTER_OPTION | "selected"
-  >(ALL_SELECTED_FILTER_OPTION);
+  >(initialStateRef.current.selectedCardFilter);
   const [isCreateDeckModalOpen, setIsCreateDeckModalOpen] = useState(false);
   const [createModalDraft, setCreateModalDraft] =
     useState<DeckBuilderCreateModalDraft>(createEmptyCreateModalDraft);
@@ -443,6 +544,7 @@ export function CloudArenaDeckBuilderPage({
   const [deckCatalogWarning, setDeckCatalogWarning] = useState<string | null>(
     null,
   );
+  const initialDeckIdRef = useRef(initialStateRef.current.deckId);
   const draftFingerprintRef = useRef(buildDraftFingerprint(createEmptyDraft()));
   const deferredCardSearch = useDeferredValue(cardSearch);
   const safeDraft = useMemo(() => normalizeDeckBuilderDraft(draft), [draft]);
@@ -463,6 +565,25 @@ export function CloudArenaDeckBuilderPage({
         .find((option) => option.id === safeDraft.sourceId) ?? null,
     [deckSelectionGroups, safeDraft.sourceId],
   );
+  const cardSetFilterOptions = useMemo(() => {
+    const byId = new Map<string, { key: string; label: string }>();
+
+    for (const card of cards) {
+      if (!card.cardSet || byId.has(card.cardSet.id)) {
+        continue;
+      }
+
+      byId.set(card.cardSet.id, {
+        key: card.cardSet.id,
+        label: card.cardSet.name,
+      });
+    }
+
+    return [
+      { key: ALL_CARD_SETS_OPTION, label: "All" },
+      ...Array.from(byId.values()).sort((left, right) => left.label.localeCompare(right.label)),
+    ];
+  }, [cards]);
   const filteredCards = useMemo(
     () =>
       filterCards(
@@ -470,6 +591,7 @@ export function CloudArenaDeckBuilderPage({
         deferredCardSearch,
         ALL_CARD_TYPES_OPTION,
         cardStatusFilter,
+        cardSetFilter,
       ).filter(
         (card) =>
           selectedCardFilter === ALL_SELECTED_FILTER_OPTION ||
@@ -479,6 +601,7 @@ export function CloudArenaDeckBuilderPage({
       cards,
       cardStatusFilter,
       deferredCardSearch,
+      cardSetFilter,
       safeDraft.cards,
       selectedCardFilter,
     ],
@@ -488,9 +611,43 @@ export function CloudArenaDeckBuilderPage({
     [safeDraft],
   );
 
+  useEffect(() => {
+    if (status !== "ready") {
+      return;
+    }
+
+    const nextSearch = updateDeckBuilderSearch(location.search, {
+      cardSearch,
+      cardStatusFilter,
+      cardSetFilter,
+      selectedCardFilter,
+      deckId: safeDraft.sourceId,
+    });
+
+    if (nextSearch !== location.search) {
+      navigate(
+        {
+          pathname: location.pathname,
+          search: nextSearch,
+        },
+        { replace: true },
+      );
+    }
+  }, [
+    cardSearch,
+    cardSetFilter,
+    cardStatusFilter,
+    location.pathname,
+    location.search,
+    navigate,
+    safeDraft.sourceId,
+    selectedCardFilter,
+    status,
+  ]);
+
   async function refreshCatalog(): Promise<void> {
     const [cardsResult, decksResult] = await Promise.allSettled([
-      content.listCloudArenaCards(),
+      content.listCloudArenaCards({ availabilityStatus: "all" }),
       content.listCloudArenaDecks(),
     ]);
 
@@ -680,9 +837,13 @@ export function CloudArenaDeckBuilderPage({
         await refreshCatalog();
 
         if (!isCancelled) {
-          const nextDraft = createEmptyDraft();
-          setDraft(nextDraft);
-          draftFingerprintRef.current = buildDraftFingerprint(nextDraft);
+          if (initialDeckIdRef.current) {
+            await loadDeck(initialDeckIdRef.current);
+          } else {
+            const nextDraft = createEmptyDraft();
+            setDraft(nextDraft);
+            draftFingerprintRef.current = buildDraftFingerprint(nextDraft);
+          }
         }
 
         if (!isCancelled) {
@@ -965,8 +1126,23 @@ export function CloudArenaDeckBuilderPage({
                           >
                             {option.label}
                           </button>
-                        ))}
+                          ))}
                       </div>
+                      <label className="deckbuilder-filter-group deckbuilder-set-select">
+                        <select
+                          aria-label="Set filter"
+                          value={cardSetFilter}
+                          onChange={(event) =>
+                            setCardSetFilter(event.target.value)
+                          }
+                        >
+                          {cardSetFilterOptions.map((option) => (
+                            <option key={option.key} value={option.key}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
                       <div className="cloud-arena-gallery-filter-group deckbuilder-filter-group">
                         <span className="cloud-arena-gallery-filter-label">
                           Selected:
@@ -997,6 +1173,7 @@ export function CloudArenaDeckBuilderPage({
                           safeDraft.cards,
                           card.id,
                         );
+                        const isReady = card.availabilityStatus === "ready";
                         const model = mapArenaHandCardToDisplayCard(
                           {
                             instanceId: card.id,
@@ -1006,19 +1183,28 @@ export function CloudArenaDeckBuilderPage({
                             effectSummary: card.effectSummary,
                           },
                           {
-                            isPlayable: false,
+                            isPlayable: isReady,
                           },
                         );
 
                         return (
                           <div
                             key={card.id}
-                            className={`deckbuilder-card-button${isSelected ? " is-selected" : ""}`}
+                            className={`deckbuilder-card-button${isSelected ? " is-selected" : ""}${isReady ? "" : " is-disabled"}`}
                             role="button"
-                            tabIndex={0}
+                            aria-disabled={!isReady}
+                            tabIndex={isReady ? 0 : -1}
                             aria-pressed={isSelected}
-                            onClick={() => handleSelectCard(card.id)}
+                            onClick={() => {
+                              if (isReady) {
+                                handleSelectCard(card.id);
+                              }
+                            }}
                             onKeyDown={(event) => {
+                              if (!isReady) {
+                                return;
+                              }
+
                               if (event.key === "Enter" || event.key === " ") {
                                 event.preventDefault();
                                 handleSelectCard(card.id);
@@ -1031,8 +1217,10 @@ export function CloudArenaDeckBuilderPage({
                                   type="button"
                                   className="deckbuilder-card-copy-button"
                                   aria-label={`Remove one copy of ${card.name}`}
+                                  disabled={!isReady}
                                   onClick={(event) => {
                                     event.stopPropagation();
+                                    if (!isReady) return;
                                     handleDecreaseCardCopies(card.id);
                                   }}
                                 >
@@ -1042,8 +1230,10 @@ export function CloudArenaDeckBuilderPage({
                                   type="button"
                                   className="deckbuilder-card-copy-button"
                                   aria-label={`Add one copy of ${card.name}`}
+                                  disabled={!isReady}
                                   onClick={(event) => {
                                     event.stopPropagation();
+                                    if (!isReady) return;
                                     handleIncreaseCardCopies(card.id);
                                   }}
                                 >
@@ -1067,8 +1257,7 @@ export function CloudArenaDeckBuilderPage({
                         <div className="card deckbuilder-empty-state">
                           <strong>No cards found.</strong>
                           <p>
-                            Try a different search term or turn off the
-                            selected-only filter.
+                            Try a different search term, status, or set.
                           </p>
                         </div>
                       ) : null}

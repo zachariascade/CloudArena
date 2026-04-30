@@ -5,6 +5,7 @@ export const galleryTransfigurationCardDefinition: CardDefinition = {
   name: "The Transfiguration",
   cardTypes: ["creature"],
   cost: 3,
+  availabilityStatus: "in_progress",
   rarity: "mythic",
   display: {
     name: "The Transfiguration",

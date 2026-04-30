@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { CloudArenaActionOption } from "../../src/cloud-arena/api-contract.js";
 import type { BattleAction } from "../../src/cloud-arena/index.js";
+import { listCloudArenaCardSummaries } from "../../src/cloud-arena/index.js";
 import {
   CloudArenaFinishedBattleError,
   CloudArenaInvalidActionError,
@@ -100,6 +101,18 @@ describe("cloud arena session service", () => {
 
     expect(blade.effectSummary).toContain("Equip a permanent.");
     expect(blade.effectSummary).toContain("Equipped permanent gets +1/+1.");
+  });
+
+  it("does not prepend summon text to blank enchantments", () => {
+    const books = listCloudArenaCardSummaries({ availabilityStatus: "all" }).find(
+      (card) => card.id === "books_were_opened",
+    );
+
+    if (!books) {
+      throw new Error("Expected books_were_opened in the card catalog.");
+    }
+
+    expect(books.effectSummary).not.toContain("Summon");
   });
 
   it("surfaces enemy telegraph queue labels in the session snapshot", () => {

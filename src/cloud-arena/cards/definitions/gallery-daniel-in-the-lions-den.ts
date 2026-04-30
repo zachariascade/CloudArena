@@ -5,6 +5,11 @@ export const galleryDanielInTheLionsDenCardDefinition: CardDefinition = {
   name: "Daniel in the Lions' Den",
   cardTypes: ["enchantment"],
   cost: 3,
+  availabilityStatus: "in_progress",
+  cardSet: {
+    id: "daniel",
+    name: "Daniel",
+  },
   rarity: "mythic",
   display: {
     name: "Daniel in the Lions' Den",

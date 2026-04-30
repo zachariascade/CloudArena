@@ -5,10 +5,14 @@ export const galleryAncientOfDaysCardDefinition: CardDefinition = {
   name: "Ancient of Days",
   cardTypes: ["creature"],
   cost: 3,
+  availabilityStatus: "in_progress",
+  cardSet: {
+    id: "daniel",
+    name: "Daniel",
+  },
   rarity: "mythic",
   display: {
-    name: "Ancient of Days",
-    title: "Keeper of the First Dawn",
+    title: "Throne of Fire",
     frameTone: "white",
     artist: "William Blake",
     imagePath:

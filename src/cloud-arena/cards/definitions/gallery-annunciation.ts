@@ -5,6 +5,7 @@ export const galleryAnnunciationCardDefinition: CardDefinition = {
   name: "The Annunciation",
   cardTypes: ["enchantment"],
   cost: 3,
+  availabilityStatus: "in_progress",
   rarity: "mythic",
   display: {
     name: "The Annunciation",

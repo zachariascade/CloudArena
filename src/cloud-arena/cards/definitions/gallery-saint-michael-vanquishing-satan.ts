@@ -5,6 +5,7 @@ export const gallerySaintMichaelVanquishingSatanCardDefinition: CardDefinition =
   name: "Saint Michael Vanquishing Satan",
   cardTypes: ["creature"],
   cost: 3,
+  availabilityStatus: "in_progress",
   rarity: "mythic",
   display: {
     name: "Saint Michael Vanquishing Satan",

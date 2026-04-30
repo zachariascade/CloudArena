@@ -5,6 +5,7 @@ export const galleryLastSupperCardDefinition: CardDefinition = {
   name: "The Last Supper",
   cardTypes: ["enchantment"],
   cost: 3,
+  availabilityStatus: "in_progress",
   rarity: "mythic",
   display: {
     name: "The Last Supper",

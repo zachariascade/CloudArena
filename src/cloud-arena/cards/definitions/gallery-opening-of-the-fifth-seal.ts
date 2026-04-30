@@ -5,6 +5,7 @@ export const galleryOpeningOfTheFifthSealCardDefinition: CardDefinition = {
   name: "The Opening of the Fifth Seal",
   cardTypes: ["sorcery"],
   cost: 3,
+  availabilityStatus: "in_progress",
   display: {
     name: "The Opening of the Fifth Seal",
     title: "The Unsealed Witnesses",

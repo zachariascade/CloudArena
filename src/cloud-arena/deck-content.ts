@@ -21,6 +21,7 @@ import {
 import type {
   CardDefinition,
   CardDefinitionId,
+  CardAvailabilityStatus,
 } from "./core/types.js";
 import {
   cloudArenaDeckPresets,
@@ -154,12 +155,17 @@ function isPlayableCloudArenaCardDefinition(definition: CardDefinition | undefin
   return isCardSelectableByPlayers(definition);
 }
 
+function isPlayerCloudArenaCardDefinition(definition: CardDefinition): boolean {
+  return definition.playableInPlayerDecks !== false;
+}
+
 function toCardSummary(definition: CardDefinition): CloudArenaCardSummary {
   return {
     id: definition.id,
     name: definition.name,
     cost: definition.cost,
     availabilityStatus: definition.availabilityStatus ?? "ready",
+    cardSet: definition.cardSet ?? null,
     typeLine: createCardTypeLine(definition),
     cardTypes: [...definition.cardTypes],
     subtypes: [...(definition.subtypes ?? [])],
@@ -251,11 +257,15 @@ export function getCloudArenaPresetDeckDetail(deckId: string): CloudArenaDeckDet
   return createCloudArenaDeckDetail(deck, "preset");
 }
 
-function getCloudArenaPlayableCardSummaries(): CloudArenaCardSummary[] {
-  return Object.values(cardDefinitions)
-    .filter((definition) => isPlayableCloudArenaCardDefinition(definition))
-    .map((definition) => toCardSummary(definition))
-    .sort((left, right) => left.name.localeCompare(right.name));
+function matchesCardAvailability(
+  summary: CloudArenaCardSummary,
+  availabilityStatus: CardAvailabilityStatus | "all" | undefined,
+): boolean {
+  if (availabilityStatus === "all") {
+    return true;
+  }
+
+  return summary.availabilityStatus === (availabilityStatus ?? "ready");
 }
 
 function matchesCloudArenaCardQuery(
@@ -287,6 +297,7 @@ function matchesCloudArenaCardQuery(
     summary.name,
     summary.typeLine,
     summary.effectSummary,
+    summary.cardSet?.name ?? "",
     ...summary.cardTypes,
     ...summary.subtypes,
   ]
@@ -436,9 +447,14 @@ export function resolveCloudArenaDeckSourceFromCollection(
 export function listCloudArenaCardSummaries(
   query: CloudArenaCardListQuery = {},
 ): CloudArenaCardSummary[] {
-  return getCloudArenaPlayableCardSummaries().filter((summary) =>
-    matchesCloudArenaCardQuery(summary, query),
-  );
+  const summaries = Object.values(cardDefinitions)
+    .filter((definition) => isPlayerCloudArenaCardDefinition(definition))
+    .map((definition) => toCardSummary(definition))
+    .filter((summary) => matchesCardAvailability(summary, query.availabilityStatus));
+
+  return summaries
+    .filter((summary) => matchesCloudArenaCardQuery(summary, query))
+    .sort((left, right) => left.name.localeCompare(right.name));
 }
 
 export function listCloudArenaDeckSummariesFromCollection(

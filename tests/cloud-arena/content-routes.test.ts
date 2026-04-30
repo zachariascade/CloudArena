@@ -24,6 +24,16 @@ describe("cloud arena content routes", () => {
       expect(cardsResponse.json().data[0].typeLine).toContain("creature");
       expect(cardsResponse.json().data[0].effectSummary).toBeTypeOf("string");
 
+      const allCardsResponse = await app.inject({
+        method: "GET",
+        url: "/api/cloud-arena/cards?availabilityStatus=all",
+      });
+
+      expect(allCardsResponse.statusCode).toBe(200);
+      expect(
+        allCardsResponse.json().data.some((card: { cardSet: { id: string } | null }) => card.cardSet?.id === "daniel"),
+      ).toBe(true);
+
       const createDeckResponse = await app.inject({
         method: "POST",
         url: "/api/cloud-arena/decks",

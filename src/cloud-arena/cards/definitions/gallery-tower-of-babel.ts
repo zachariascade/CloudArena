@@ -5,6 +5,7 @@ export const galleryTowerOfBabelCardDefinition: CardDefinition = {
   name: "The Tower of Babel",
   cardTypes: ["enchantment"],
   cost: 3,
+  availabilityStatus: "in_progress",
   rarity: "mythic",
   display: {
     name: "The Tower of Babel",

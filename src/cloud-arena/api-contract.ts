@@ -5,6 +5,7 @@ import type {
   BattlePhase,
   CardAvailabilityStatus,
   CardDefinitionId,
+  CardSet,
   CloudArenaDeckPresetId,
   EnemyIntent,
 } from "./index.js";
@@ -36,6 +37,7 @@ export type CloudArenaDeckKind = "preset" | "saved";
 export type CloudArenaCardListQuery = {
   q?: string;
   cardType?: string;
+  availabilityStatus?: CardAvailabilityStatus | "all";
 };
 
 export type CloudArenaDeckListQuery = {
@@ -53,6 +55,7 @@ export type CloudArenaCardSummary = {
   name: string;
   cost: number;
   availabilityStatus: CardAvailabilityStatus;
+  cardSet: CardSet | null;
   typeLine: string;
   cardTypes: string[];
   subtypes: string[];

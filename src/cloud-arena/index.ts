@@ -219,6 +219,7 @@ export type {
   BattleEvent,
   BattlePhase,
   CardAvailabilityStatus,
+  CardSet,
   BattleState,
   BehaviorEnemyConfig,
   CardDefinition,

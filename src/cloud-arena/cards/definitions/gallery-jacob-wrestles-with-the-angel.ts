@@ -5,6 +5,7 @@ export const galleryJacobWrestlesWithTheAngelCardDefinition: CardDefinition = {
   name: "Jacob Wrestles with the Angel",
   cardTypes: ["creature"],
   cost: 3,
+  availabilityStatus: "in_progress",
   rarity: "mythic",
   display: {
     name: "Jacob Wrestles with the Angel",

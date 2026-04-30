@@ -5,6 +5,7 @@ export const galleryWomanTakenInAdulteryCardDefinition: CardDefinition = {
   name: "The Woman Taken in Adultery",
   cardTypes: ["instant"],
   cost: 3,
+  availabilityStatus: "in_progress",
   display: {
     name: "The Woman Taken in Adultery",
     title: "Neither Do I Condemn You",

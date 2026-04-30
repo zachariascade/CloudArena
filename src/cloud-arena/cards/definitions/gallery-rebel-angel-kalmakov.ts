@@ -5,6 +5,7 @@ export const galleryRebelAngelKalmakovCardDefinition: CardDefinition = {
   name: "The Rebel Angel",
   cardTypes: ["creature"],
   cost: 3,
+  availabilityStatus: "in_progress",
   display: {
     name: "The Rebel Angel",
     frameTone: "split-black-red",

@@ -14,10 +14,12 @@ import {
   decrementDeckCard,
   filterCards,
   getDeckCardQuantity,
+  getDeckBuilderStateFromUrl,
   incrementDeckCard,
   isDeckCardSelected,
   summarizeDeckCards,
   toggleDeckCardSelection,
+  updateDeckBuilderSearch,
 } from "../../apps/cloud-arena-web/src/routes/deckbuilder-page.js";
 
 describe("cloud arena deckbuilder helpers", () => {
@@ -113,6 +115,7 @@ describe("cloud arena deckbuilder helpers", () => {
         name: "Attack",
         cost: 1,
         availabilityStatus: "ready",
+        cardSet: null,
         typeLine: "Creature",
         cardTypes: ["creature"],
         subtypes: [],
@@ -123,10 +126,28 @@ describe("cloud arena deckbuilder helpers", () => {
         name: "Defend",
         cost: 0,
         availabilityStatus: "ready",
+        cardSet: {
+          id: "daniel",
+          name: "Daniel",
+        },
         typeLine: "Instant",
         cardTypes: ["instant"],
         subtypes: [],
         effectSummary: "Block damage.",
+      },
+      {
+        id: "lion",
+        name: "Lion",
+        cost: 3,
+        availabilityStatus: "in_progress",
+        cardSet: {
+          id: "daniel",
+          name: "Daniel",
+        },
+        typeLine: "Creature",
+        cardTypes: ["creature"],
+        subtypes: [],
+        effectSummary: "A future Daniel set card.",
       },
     ];
 
@@ -151,10 +172,11 @@ describe("cloud arena deckbuilder helpers", () => {
       },
     ];
 
-    expect(filterCards(cards, "def", "all", "all").map((card) => card.id)).toEqual(["defend"]);
-    expect(filterCards(cards, "", "creature", "all").map((card) => card.id)).toEqual(["attack"]);
-    expect(filterCards(cards, "", "all", "ready").map((card) => card.id)).toEqual(["attack", "defend"]);
-    expect(filterCards(cards, "", "all", "in_progress").map((card) => card.id)).toEqual([]);
+    expect(filterCards(cards, "def", "all", "all", "all").map((card) => card.id)).toEqual(["defend"]);
+    expect(filterCards(cards, "", "creature", "all", "all").map((card) => card.id)).toEqual(["attack", "lion"]);
+    expect(filterCards(cards, "", "all", "ready", "all").map((card) => card.id)).toEqual(["attack", "defend"]);
+    expect(filterCards(cards, "", "all", "in_progress", "all").map((card) => card.id)).toEqual(["lion"]);
+    expect(filterCards(cards, "", "all", "all", "daniel").map((card) => card.id)).toEqual(["defend", "lion"]);
     expect(
       buildDeckSelectionGroups(decks, "saved_1")
         .flatMap((group) => group.options)
@@ -169,5 +191,32 @@ describe("cloud arena deckbuilder helpers", () => {
     expect(presetIds).toContain("counters");
     expect(presetIds).toContain("tall_creatures");
     expect(presetIds).toContain("mixed_guardian");
+  });
+
+  it("round-trips deckbuilder query and filter state through the url", () => {
+    const parsed = getDeckBuilderStateFromUrl("?q=angel&status=ready&set=daniel&selected=selected&deck=saved_1");
+
+    expect(parsed).toEqual({
+      cardSearch: "angel",
+      cardStatusFilter: "ready",
+      cardSetFilter: "daniel",
+      selectedCardFilter: "selected",
+      deckId: "saved_1",
+    });
+
+    expect(updateDeckBuilderSearch("", {
+      cardSearch: " angel ",
+      cardStatusFilter: "all",
+      cardSetFilter: "all",
+      selectedCardFilter: "all",
+      deckId: null,
+    })).toBe("?q=angel");
+    expect(updateDeckBuilderSearch("?q=angel", {
+      cardSearch: "angel",
+      cardStatusFilter: "ready",
+      cardSetFilter: "daniel",
+      selectedCardFilter: "selected",
+      deckId: "saved_1",
+    })).toBe("?q=angel&status=ready&set=daniel&selected=selected&deck=saved_1");
   });
 });

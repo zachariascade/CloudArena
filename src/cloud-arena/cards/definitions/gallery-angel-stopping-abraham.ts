@@ -5,6 +5,7 @@ export const galleryAngelStoppingAbrahamCardDefinition: CardDefinition = {
   name: "Angel Stopping Abraham",
   cardTypes: ["creature"],
   cost: 3,
+  availabilityStatus: "in_progress",
   rarity: "mythic",
   display: {
     name: "Angel Stopping Abraham",

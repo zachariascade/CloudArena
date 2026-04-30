@@ -81,6 +81,10 @@ export class CloudArenaApiClient extends BaseCloudApiClient {
       search.set("cardType", query.cardType);
     }
 
+    if (query.availabilityStatus) {
+      search.set("availabilityStatus", query.availabilityStatus);
+    }
+
     const path = search.toString() ? `${buildCloudArenaCardsPath()}?${search.toString()}` : buildCloudArenaCardsPath();
 
     return this.request("cloudArenaCards", path, options) as Promise<CloudArenaApiResponse<"cloudArenaCards">>;

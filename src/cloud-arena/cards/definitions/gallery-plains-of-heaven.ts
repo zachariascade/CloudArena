@@ -5,6 +5,7 @@ export const galleryPlainsOfHeavenCardDefinition: CardDefinition = {
   name: "The Plains of Heaven",
   cardTypes: ["enchantment"],
   cost: 3,
+  availabilityStatus: "in_progress",
   rarity: "mythic",
   display: {
     name: "The Plains of Heaven",

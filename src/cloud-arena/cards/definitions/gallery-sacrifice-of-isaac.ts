@@ -5,6 +5,7 @@ export const gallerySacrificeOfIsaacCardDefinition: CardDefinition = {
   name: "The Sacrifice of Isaac",
   cardTypes: ["creature"],
   cost: 3,
+  availabilityStatus: "in_progress",
   rarity: "mythic",
   display: {
     name: "The Sacrifice of Isaac",

@@ -1618,6 +1618,50 @@ export function renderCloudArcanumWebHtml(
         flex-shrink: 0;
       }
 
+      .deckbuilder-set-select {
+        flex: 0 1 14rem;
+        min-width: 12rem;
+        display: flex;
+      }
+
+      .deckbuilder-set-select select {
+        width: 100%;
+        min-height: 2.4rem;
+        padding: 0.38rem 2rem 0.38rem 0.85rem;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 0.4rem;
+        background:
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 42%),
+          rgba(255, 251, 246, 0.12);
+        color: rgba(255, 255, 255, 0.94);
+        font-size: 0.84rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image:
+          linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.78) 50%),
+          linear-gradient(135deg, rgba(255, 255, 255, 0.78) 50%, transparent 50%),
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 42%);
+        background-position:
+          calc(100% - 1rem) 55%,
+          calc(100% - 0.7rem) 55%,
+          center;
+        background-size: 0.35rem 0.35rem, 0.35rem 0.35rem, cover;
+        background-repeat: no-repeat;
+      }
+
+      .deckbuilder-set-select select:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.35);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.1),
+          0 0 0 3px rgba(255, 255, 255, 0.08);
+      }
+
       .deckbuilder-catalog-toolbar .cloud-arena-gallery-sort-label,
       .deckbuilder-catalog-toolbar .cloud-arena-gallery-filter-label {
         color: rgba(255, 255, 255, 0.72);

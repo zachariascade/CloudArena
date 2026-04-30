@@ -5,6 +5,7 @@ export const galleryTemptationOfStAnthonyBoschCardDefinition: CardDefinition = {
   name: "The Temptation of St Anthony",
   cardTypes: ["creature"],
   cost: 3,
+  availabilityStatus: "in_progress",
   display: {
     name: "The Temptation of St Anthony",
     frameTone: "split-black-red",

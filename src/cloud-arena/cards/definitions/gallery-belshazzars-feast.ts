@@ -5,6 +5,7 @@ export const galleryBelshazzarsFeastCardDefinition: CardDefinition = {
   name: "Belshazzar's Feast",
   cardTypes: ["sorcery"],
   cost: 3,
+  availabilityStatus: "in_progress",
   display: {
     name: "Belshazzar's Feast",
     title: "Banquet of Empty Crowns",

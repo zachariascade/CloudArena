@@ -5,6 +5,7 @@ export const galleryCreationOfAdamCardDefinition: CardDefinition = {
   name: "Creation of Adam",
   cardTypes: ["enchantment"],
   cost: 3,
+  availabilityStatus: "in_progress",
   rarity: "mythic",
   display: {
     name: "Creation of Adam",

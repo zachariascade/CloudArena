@@ -26,7 +26,13 @@ export const GALLERY: GalleryEntry[] = [
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg/960px-The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg",
     createdAt: "2026-04-27T22:20:25-05:00",
-    cardUsed: ["/cards/gallery_ancient_of_days"],
+    cardUsed: [
+      "/cards/gallery_ancient_of_days",
+      "/cards/everlasting_dominion",
+      "/cards/kingdom_without_end",
+      "/cards/son_of_man",
+      "/cards/seventy_weeks",
+    ],
   },
   {
     title: "The Angel Stopping Abraham",
@@ -48,7 +54,11 @@ export const GALLERY: GalleryEntry[] = [
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/f/fa/Angelico_-_Annunciation_-_San_Marco_north_corridor.jpg",
     createdAt: "2026-04-27T22:20:25-05:00",
-    cardUsed: ["/cards/gallery_annunciation"],
+    cardUsed: [
+      "/cards/gallery_annunciation",
+      "/cards/gabriel_the_messenger",
+      "/cards/gabriels_message",
+    ],
   },
   {
     title: "Belshazzar's Feast",
@@ -59,7 +69,32 @@ export const GALLERY: GalleryEntry[] = [
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/John_Martin_-_Belshazzar%27s_Feast_-_Google_Art_Project.jpg/960px-John_Martin_-_Belshazzar%27s_Feast_-_Google_Art_Project.jpg",
     createdAt: "2026-04-27T22:20:25-05:00",
-    cardUsed: ["/cards/gallery_belshazzars_feast"],
+    cardUsed: [
+      "/cards/gallery_belshazzars_feast",
+      "/cards/belshazzar",
+      "/cards/writing_on_the_wall",
+      "/cards/mene_mene_tekel_upharsin",
+    ],
+  },
+  {
+    title: "Belshazzar's Feast",
+    artist: "Rembrandt van Rijn",
+    year: "c. 1635–1638",
+    wikiUrl: createCommonsFilePageUrl("Belshazzar's Feast.jpg"),
+    imageUrl: createCommonsFilePathUrl("Belshazzar's Feast.jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "The Feast of Belshazzar",
+    artist: "Pietro Dandini",
+    year: "late 17th - early 18th century",
+    wikiUrl:
+      "https://italian-art.pushkinmuseum.art/canvas/17-18_century/d/dandini_pietro_pier/belshazzars_feast/index.php?lang=en",
+    imageUrl:
+      "https://www.art-prints-on-demand.com/kunst/pietro_dandini/das_gastmahl_des_belsazar.jpg",
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
   },
   {
     title: "Christ and St Mary Magdalen at the Tomb",
@@ -93,6 +128,133 @@ export const GALLERY: GalleryEntry[] = [
       "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Gustave_Dor%C3%A9_-_The_Holy_Bible_-_Plate_I%2C_The_Deluge.jpg/960px-Gustave_Dor%C3%A9_-_The_Holy_Bible_-_Plate_I%2C_The_Deluge.jpg",
     createdAt: "2026-04-27T22:20:25-05:00",
     cardUsed: ["/cards/gallery_deluge"],
+  },
+  {
+    title: "Abraham and the Three Angels",
+    artist: "Gustave Doré",
+    year: "1866",
+    wikiUrl: createCommonsFilePageUrl("Abraham and the Three Angels.png"),
+    imageUrl: createCommonsFilePathUrl("Abraham and the Three Angels.png"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "Abraham Journeying into the Land of Canaan",
+    artist: "Gustave Doré",
+    year: "1873",
+    wikiUrl:
+      createCommonsFilePageUrl("Abraham Journeying into the Land of Canaan (89393798).jpg"),
+    imageUrl:
+      createCommonsFilePathUrl("Abraham Journeying into the Land of Canaan (89393798).jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "Adam and Eve Driven out of Eden",
+    artist: "Gustave Doré",
+    year: "1866",
+    wikiUrl: createCommonsFilePageUrl("003.Adam and Eve Are Driven out of Eden.jpg"),
+    imageUrl: createCommonsFilePathUrl("003.Adam and Eve Are Driven out of Eden.jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "Achan Is Stoned to Death",
+    artist: "Gustave Doré",
+    year: "1866",
+    wikiUrl: createCommonsFilePageUrl("048.Achan Is Stoned to Death.jpg"),
+    imageUrl: createCommonsFilePathUrl("048.Achan Is Stoned to Death.jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "Baruch Writing Jeremiah's Prophecies",
+    artist: "Gustave Doré",
+    year: "1874",
+    wikiUrl:
+      createCommonsFilePageUrl("Baruch Writing Jeremiah's Prophecies (89467495).jpg"),
+    imageUrl:
+      createCommonsFilePathUrl("Baruch Writing Jeremiah's Prophecies (89467495).jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "Confusion of Tongues",
+    artist: "Gustave Doré",
+    year: "1865",
+    wikiUrl: createCommonsFilePageUrl("Confusion of Tongues.png"),
+    imageUrl: createCommonsFilePathUrl("Confusion of Tongues.png"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "Dove Sent Forth from the Ark",
+    artist: "Gustave Doré",
+    year: "1873",
+    wikiUrl:
+      createCommonsFilePageUrl("Dove Sent Forth from the Ark (89393604).jpg"),
+    imageUrl:
+      createCommonsFilePathUrl("Dove Sent Forth from the Ark (89393604).jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "Expulsion of Ishmael and His Mother",
+    artist: "Gustave Doré",
+    year: "1873",
+    wikiUrl:
+      createCommonsFilePageUrl("Expulsion of Ishmael and His Mother (89393994).jpg"),
+    imageUrl:
+      createCommonsFilePathUrl("Expulsion of Ishmael and His Mother (89393994).jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "Flood Destroying the World",
+    artist: "Gustave Doré",
+    year: "1866",
+    wikiUrl: createCommonsFilePageUrl("Flood destroying the world.jpg"),
+    imageUrl: createCommonsFilePathUrl("Flood destroying the world.jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "Joshua Crossing Jordan",
+    artist: "Gustave Doré",
+    year: "1873",
+    wikiUrl:
+      createCommonsFilePageUrl("Joshua Crossing Jordan (89396850).jpg"),
+    imageUrl:
+      createCommonsFilePathUrl("Joshua Crossing Jordan (89396850).jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "Death of Abimelech",
+    artist: "Gustave Doré",
+    year: "1866",
+    wikiUrl: createCommonsFilePageUrl("057.The Death of Abimelech.jpg"),
+    imageUrl: createCommonsFilePathUrl("057.The Death of Abimelech.jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "The Destruction of Leviathan",
+    artist: "Gustave Doré",
+    year: "1866",
+    wikiUrl: createCommonsFilePageUrl("122.The Destruction of Leviathan.jpg"),
+    imageUrl: createCommonsFilePathUrl("122.The Destruction of Leviathan.jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "Noah Curses Ham and Canaan",
+    artist: "Gustave Doré",
+    year: "1866",
+    wikiUrl: createCommonsFilePageUrl("009.Noah Curses Ham and Canaan.jpg"),
+    imageUrl: createCommonsFilePathUrl("009.Noah Curses Ham and Canaan.jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
   },
   {
     title: "The Great Day of His Wrath",
@@ -152,7 +314,11 @@ export const GALLERY: GalleryEntry[] = [
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Hieronymus_Bosch_-_The_Last_Judgement.jpg/960px-Hieronymus_Bosch_-_The_Last_Judgement.jpg",
     createdAt: "2026-04-27T22:26:33-05:00",
-    cardUsed: ["/cards/gallery_last_judgment"],
+    cardUsed: [
+      "/cards/gallery_last_judgment",
+      "/cards/books_were_opened",
+      "/cards/time_of_the_end",
+    ],
   },
   {
     title: "The Last Supper",
@@ -207,7 +373,12 @@ export const GALLERY: GalleryEntry[] = [
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/7/74/Raphael_-_St._Michael_Vanquishing_Satan.jpg",
     createdAt: "2026-04-27T22:26:33-05:00",
-    cardUsed: ["/cards/gallery_saint_michael_vanquishing_satan"],
+    cardUsed: [
+      "/cards/gallery_saint_michael_vanquishing_satan",
+      "/cards/michael_the_archangel",
+      "/cards/michaels_stand",
+      "/cards/prince_of_persia",
+    ],
   },
   {
     title: "Satan in Cocytus",
@@ -1095,7 +1266,11 @@ export const GALLERY: GalleryEntry[] = [
     wikiUrl: createCommonsFilePageUrl("Mikharkhangel.jpg"),
     imageUrl: createCommonsFilePathUrl("Mikharkhangel.jpg"),
     createdAt: "2026-04-28T00:00:00-05:00",
-    cardUsed: [],
+    cardUsed: [
+      "/cards/michael_the_archangel",
+      "/cards/michaels_stand",
+      "/cards/prince_of_persia",
+    ],
   },
   {
     title: "Saint George",
@@ -1232,7 +1407,90 @@ export const GALLERY: GalleryEntry[] = [
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/131.Daniel_in_the_Lions%27_Den.jpg/960px-131.Daniel_in_the_Lions%27_Den.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
-    cardUsed: ["/cards/gallery_daniel_in_the_lions_den"],
+    cardUsed: ["/cards/gallery_daniel_in_the_lions_den", "/cards/daniel", "/cards/lions_den"],
+  },
+  {
+    title: "The Three Hebrews Cast into the Fiery Furnace",
+    artist: "Unknown",
+    year: "15th century",
+    wikiUrl: createCommonsFilePageUrl(
+      "Folio 40v - The Three Hebrews Cast into the Fiery Furnace.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Folio 40v - The Three Hebrews Cast into the Fiery Furnace.jpg",
+    ),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [
+      "/cards/meshach_shadrach_and_abednego",
+      "/cards/fiery_furnace",
+      "/cards/deliverance_from_fire",
+      "/cards/faithful_companions",
+      "/cards/golden_image",
+    ],
+  },
+  {
+    title: "Daniel Interpreting Nebuchadnezzar's Dream",
+    artist: "W. A. Spicer",
+    year: "1917",
+    wikiUrl: createCommonsFilePageUrl("Daniel Interpreting Nebuchadnezzar's Dream.jpg"),
+    imageUrl: createCommonsFilePathUrl("Daniel Interpreting Nebuchadnezzar's Dream.jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [
+      "/cards/dream_of_the_tree",
+      "/cards/nebuchadnezzar_beast_of_the_field",
+      "/cards/nebuchadnezzar_king_of_babylon",
+    ],
+  },
+  {
+    title: "Nebuchadnezzar's Dream: The Felled Tree",
+    artist: "Unknown",
+    year: "15th century",
+    wikiUrl: createCommonsFilePageUrl("Songe Nabuchodonosor arbre.jpg"),
+    imageUrl: createCommonsFilePathUrl("Songe Nabuchodonosor arbre.jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [
+      "/cards/dream_of_the_tree",
+      "/cards/tree_cut_down",
+      "/cards/watchers_decree",
+    ],
+  },
+  {
+    title: "Daniel and the Four Fantastic Beasts",
+    artist: "Wellcome Library, London",
+    year: "1634",
+    wikiUrl: createCommonsFilePageUrl(
+      "Daniel and the four fantastic beasts. Engraving, 1634. Wellcome V0034350.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Daniel and the four fantastic beasts. Engraving, 1634. Wellcome V0034350.jpg",
+    ),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [
+      "/cards/terrifying_fourth_beast",
+      "/cards/leopard_with_wings",
+      "/cards/books_were_opened",
+      "/cards/time_of_the_end",
+      "/cards/everlasting_dominion",
+      "/cards/kingdom_without_end",
+    ],
+  },
+  {
+    title: "Nebuchadnezzar's Statue",
+    artist: "Unknown",
+    year: "15th century",
+    wikiUrl: createCommonsFilePageUrl(
+      "The Hague, KB, 131 A 3, Nebuchadnezzar's statue.jpeg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "The Hague, KB, 131 A 3, Nebuchadnezzar's statue.jpeg",
+    ),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [
+      "/cards/golden_image",
+      "/cards/dream_of_the_statue",
+      "/cards/hands_and_feet_of_bronze",
+      "/cards/stone_cut_without_hands",
+    ],
   },
   {
     title: "David Slays Goliath",
@@ -1441,7 +1699,29 @@ export const GALLERY: GalleryEntry[] = [
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/William_Blake_-_Nebuchadnezzar_-_Google_Art_Project.jpg/960px-William_Blake_-_Nebuchadnezzar_-_Google_Art_Project.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
-    cardUsed: [],
+    cardUsed: [
+      "/cards/nebuchadnezzar_beast_of_the_field",
+      "/cards/nebuchadnezzar_king_of_babylon",
+      "/cards/dream_of_the_tree",
+    ],
+  },
+  {
+    title: "Cyrus the Great",
+    artist: "Alireza Shakernia",
+    year: "2009",
+    wikiUrl: createCommonsFilePageUrl("Cyrus the Great.jpg"),
+    imageUrl: createCommonsFilePathUrl("Cyrus the Great.jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: ["/cards/cyrus_the_great"],
+  },
+  {
+    title: "Darius I",
+    artist: "Rumlu",
+    year: "2024",
+    wikiUrl: createCommonsFilePageUrl("Darius I.jpg"),
+    imageUrl: createCommonsFilePathUrl("Darius I.jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: ["/cards/darius_the_mede"],
   },
   {
     title: "The New Jerusalem",
@@ -1452,7 +1732,7 @@ export const GALLERY: GalleryEntry[] = [
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/b/b3/D%C3%BCrer_Apocalypse_15.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
-    cardUsed: [],
+    cardUsed: ["/cards/kingdom_without_end"],
   },
   {
     title: "The Opening of the Fifth and Sixth Seals",

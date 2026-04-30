@@ -5,6 +5,7 @@ export const galleryFallOfTheRebelAngelsRubensCardDefinition: CardDefinition = {
   name: "Fall of the Rebel Angels",
   cardTypes: ["creature"],
   cost: 3,
+  availabilityStatus: "in_progress",
   display: {
     name: "Fall of the Rebel Angels",
     frameTone: "split-black-red",
