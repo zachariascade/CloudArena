@@ -1,5 +1,4 @@
 import type { CardDefinition } from "../../core/types.js";
-import { danielTreeDisplay } from "./daniel-display.js";
 import { CARD_SETS } from "../card-sets.js";
 
 export const dreamOfTheTreeCardDefinition: CardDefinition = {
@@ -11,7 +10,6 @@ export const dreamOfTheTreeCardDefinition: CardDefinition = {
 
   availabilityStatus: "in_progress",
   cardSet: CARD_SETS.daniel,
-  display: danielTreeDisplay,
   onPlay: [],
   power: 0,
   health: 1,

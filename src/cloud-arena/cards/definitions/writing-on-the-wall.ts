@@ -1,5 +1,4 @@
 import type { CardDefinition } from "../../core/types.js";
-import { danielBelshazzarDisplay } from "./daniel-display.js";
 import { CARD_SETS } from "../card-sets.js";
 
 export const writingOnTheWallCardDefinition: CardDefinition = {
@@ -10,7 +9,6 @@ export const writingOnTheWallCardDefinition: CardDefinition = {
 
   availabilityStatus: "in_progress",
   cardSet: CARD_SETS.daniel,
-  display: danielBelshazzarDisplay,
   onPlay: [],
   abilities: [],
 };

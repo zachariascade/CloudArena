@@ -1399,7 +1399,7 @@ export const GALLERY: GalleryEntry[] = [
     cardUsed: [],
   },
   {
-    title: "Daniel in the Lions' Den",
+    title: "Deliverance from the Lions' Den",
     artist: "Gustave Doré",
     year: "1866",
     wikiUrl:

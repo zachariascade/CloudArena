@@ -1,5 +1,4 @@
 import type { CardDefinition } from "../../core/types.js";
-import { danielTreeDisplay } from "./daniel-display.js";
 import { CARD_SETS } from "../card-sets.js";
 
 export const treeCutDownCardDefinition: CardDefinition = {
@@ -10,7 +9,6 @@ export const treeCutDownCardDefinition: CardDefinition = {
 
   availabilityStatus: "in_progress",
   cardSet: CARD_SETS.daniel,
-  display: danielTreeDisplay,
   onPlay: [],
   abilities: [],
 };

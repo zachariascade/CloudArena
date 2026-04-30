@@ -1,5 +1,4 @@
 import type { CardDefinition } from "../../core/types.js";
-import { danielLastJudgmentDisplay } from "./daniel-display.js";
 import { CARD_SETS } from "../card-sets.js";
 
 export const booksWereOpenedCardDefinition: CardDefinition = {
@@ -10,7 +9,6 @@ export const booksWereOpenedCardDefinition: CardDefinition = {
 
   availabilityStatus: "in_progress",
   cardSet: CARD_SETS.daniel,
-  display: danielLastJudgmentDisplay,
   onPlay: [],
   power: 0,
   health: 1,
