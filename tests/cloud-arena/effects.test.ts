@@ -4,11 +4,14 @@ import {
   applyBattleAction,
   getDerivedPermanentStat,
   getPermanentCounterCount,
+  permanentHasKeyword,
+  resetRound,
   resolveEffect,
   resolveEffects,
   type CardDefinitionLibrary,
 } from "../../src/cloud-arena/index.js";
 import { denialBeforeTheRoostersCryCardDefinition } from "../../src/cloud-arena/cards/definitions/denial-before-the-rooster-s-cry.js";
+import { deliveranceFromFireCardDefinition } from "../../src/cloud-arena/cards/definitions/deliverance-from-fire.js";
 import { galleryDanielInTheLionsDenCardDefinition } from "../../src/cloud-arena/cards/definitions/gallery-daniel-in-the-lions-den.js";
 import { createTestBattle, getEnemyHealth, getEnemyBlock, getEnemyPermanent } from "./helpers.js";
 
@@ -185,6 +188,7 @@ const EFFECT_TEST_CARD_DEFINITIONS: CardDefinitionLibrary = {
     abilities: [],
   },
   denial_before_the_rooster_s_cry: denialBeforeTheRoostersCryCardDefinition,
+  deliverance_from_fire: deliveranceFromFireCardDefinition,
   banner_blessing: {
     id: "banner_blessing",
     name: "Banner Blessing",
@@ -651,6 +655,44 @@ describe("cloud arena effect primitives", () => {
     );
 
     expect(getDerivedPermanentStat(battle, guardian, "health")).toBe(7);
+  });
+
+  it("makes all player permanents indestructible until end of turn", () => {
+    const battle = createTestBattle({
+      cardDefinitions: EFFECT_TEST_CARD_DEFINITIONS,
+      playerDeck: ["angel_host", "holy_blade", "deliverance_from_fire", "attack", "defend"],
+    });
+    battle.player.energy = 10;
+
+    const angelCard = battle.player.hand.find((card) => card.definitionId === "angel_host");
+    const bladeCard = battle.player.hand.find((card) => card.definitionId === "holy_blade");
+    const deliveranceCard = battle.player.hand.find((card) => card.definitionId === "deliverance_from_fire");
+
+    if (!angelCard || !bladeCard || !deliveranceCard) {
+      throw new Error("Expected angel_host, holy_blade, and deliverance_from_fire in hand.");
+    }
+
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: angelCard.instanceId });
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: bladeCard.instanceId });
+    applyBattleAction(battle, { type: "play_card", cardInstanceId: deliveranceCard.instanceId });
+
+    const playerPermanents = battle.battlefield.filter((permanent): permanent is NonNullable<typeof permanent> => permanent !== null);
+    expect(playerPermanents).toHaveLength(2);
+    expect(playerPermanents.every((permanent) => permanentHasKeyword(permanent, "indestructible"))).toBe(true);
+
+    resolveEffect(battle, {
+      type: "deal_damage",
+      target: {
+        zone: "battlefield",
+        controller: "you",
+        cardType: "permanent",
+      },
+      amount: { type: "constant", value: 99 },
+    });
+
+    expect(playerPermanents.map((permanent) => permanent.health)).toEqual([10, 1]);
+    resetRound(battle);
+    expect(playerPermanents.every((permanent) => permanentHasKeyword(permanent, "indestructible"))).toBe(false);
   });
 
   it("gives the only defending creature indestructible", () => {

@@ -2,6 +2,79 @@ import { attackCardDefinition } from "./definitions/attack.js";
 import { armoryDiscipleCardDefinition } from "./definitions/armory-disciple.js";
 import { anointedBannerCardDefinition } from "./definitions/anointed-banner.js";
 import { armorySeraphCardDefinition } from "./definitions/armory-seraph.js";
+import { behemothCardDefinition } from "./definitions/behemoth.js";
+import { abelCardDefinition } from "./definitions/abel.js";
+import { abrahamCardDefinition } from "./definitions/abraham.js";
+import { aaronCardDefinition } from "./definitions/aaron.js";
+import { adamCardDefinition } from "./definitions/adam.js";
+import { bildadCardDefinition } from "./definitions/bildad.js";
+import { altarOfIncenseCardDefinition } from "./definitions/altar-of-incense.js";
+import { arkOfTheCovenantCardDefinition } from "./definitions/ark-of-the-covenant.js";
+import { callOfAbramCardDefinition } from "./definitions/call-of-abram.js";
+import { cainCardDefinition } from "./definitions/cain.js";
+import { coatOfManyColorsCardDefinition } from "./definitions/coat-of-many-colors.js";
+import { dayOfMyBirthCardDefinition } from "./definitions/day-of-my-birth.js";
+import { doublePortionCardDefinition } from "./definitions/double-portion.js";
+import { bezalelCardDefinition } from "./definitions/bezalel.js";
+import { elihuCardDefinition } from "./definitions/elihu.js";
+import { eliphazCardDefinition } from "./definitions/eliphaz.js";
+import { bronzeSerpentCardDefinition } from "./definitions/bronze-serpent.js";
+import { destructionOfSodomAndGomorrahCardDefinition } from "./definitions/destruction-of-sodom-and-gomorrah.js";
+import { edenCardDefinition } from "./definitions/eden.js";
+import { eveCardDefinition } from "./definitions/eve.js";
+import { exileFromEdenCardDefinition } from "./definitions/exile-from-eden.js";
+import { flamingSwordOfTheEastCardDefinition } from "./definitions/flaming-sword-of-the-east.js";
+import { garmentsOfSkinCardDefinition } from "./definitions/garments-of-skin.js";
+import { goldenCalfCardDefinition } from "./definitions/golden-calf.js";
+import { goldenLampstandCardDefinition } from "./definitions/golden-lampstand.js";
+import { jobCardDefinition } from "./definitions/job.js";
+import { iAmThatIAmCardDefinition } from "./definitions/i-am-that-i-am.js";
+import { isaacCardDefinition } from "./definitions/isaac.js";
+import { jacobCardDefinition } from "./definitions/jacob.js";
+import { jacobsLadderCardDefinition } from "./definitions/jacobs-ladder.js";
+import { joshuaCardDefinition } from "./definitions/joshua.js";
+import { josephCardDefinition } from "./definitions/joseph.js";
+import { jobsLamentCardDefinition } from "./definitions/jobs-lament.js";
+import { jobsTrialCardDefinition } from "./definitions/jobs-trial.js";
+import { leviathanCardDefinition } from "./definitions/leviathan.js";
+import { lawGivenInThunderCardDefinition } from "./definitions/law-given-in-thunder.js";
+import { landOfMilkAndHoneyCardDefinition } from "./definitions/land-of-milk-and-honey.js";
+import { letThereBeLightCardDefinition } from "./definitions/let-there-be-light.js";
+import { letMyPeopleGoCardDefinition } from "./definitions/let-my-people-go.js";
+import { miserableComfortersCardDefinition } from "./definitions/miserable-comforters.js";
+import { mannaFromHeavenCardDefinition } from "./definitions/manna-from-heaven.js";
+import { mercySeatCardDefinition } from "./definitions/mercy-seat.js";
+import { miriamTheProphetessCardDefinition } from "./definitions/miriam-the-prophetess.js";
+import { mosesCardDefinition } from "./definitions/moses.js";
+import { mosesSmashesTheTabletsCardDefinition } from "./definitions/moses-smashes-the-tablets.js";
+import { noahCardDefinition } from "./definitions/noah.js";
+import { restoredFortunesCardDefinition } from "./definitions/restored-fortunes.js";
+import { passoverCardDefinition } from "./definitions/passover.js";
+import { partingOfTheRedSeaCardDefinition } from "./definitions/parting-of-the-red-sea.js";
+import { pharaohCardDefinition } from "./definitions/pharaoh.js";
+import { pillarOfCloudCardDefinition } from "./definitions/pillar-of-cloud.js";
+import { pillarOfFireCardDefinition } from "./definitions/pillar-of-fire.js";
+import { satanCardDefinition } from "./definitions/satan.js";
+import { sevenYearsOfFamineCardDefinition } from "./definitions/seven-years-of-famine.js";
+import { soldIntoEgyptCardDefinition } from "./definitions/sold-into-egypt.js";
+import { testingOfFaithCardDefinition } from "./definitions/testing-of-faith.js";
+import { rodToSerpentCardDefinition } from "./definitions/rod-to-serpent.js";
+import { songOfTheSeaCardDefinition } from "./definitions/song-of-the-sea.js";
+import { tabernacleCardDefinition } from "./definitions/tabernacle.js";
+import { tenPlaguesOfEgyptCardDefinition } from "./definitions/ten-plagues-of-egypt.js";
+import { theArkCardDefinition } from "./definitions/the-ark.js";
+import { theBurningBushCardDefinition } from "./definitions/the-burning-bush.js";
+import { theFallCardDefinition } from "./definitions/the-fall.js";
+import { theFloodCardDefinition } from "./definitions/the-flood.js";
+import { treeOfLifeCardDefinition } from "./definitions/the-tree-of-life.js";
+import { treeOfTheKnowledgeOfGoodAndEvilCardDefinition } from "./definitions/the-tree-of-the-knowledge-of-good-and-evil.js";
+import { theTenCommandmentsCardDefinition } from "./definitions/the-ten-commandments.js";
+import { stoneTabletsCardDefinition } from "./definitions/the-stone-tablets.js";
+import { towerOfBabelCardDefinition } from "./definitions/tower-of-babel.js";
+import { whatGodMeantForGoodCardDefinition } from "./definitions/what-god-meant-for-good.js";
+import { wrestlingWithGodCardDefinition } from "./definitions/wrestling-with-god.js";
+import { waterFromTheRockAtHorebCardDefinition } from "./definitions/water-from-the-rock-at-horeb.js";
+import { gospelsCardDefinitions } from "./definitions/gospels.js";
 import { galleryCreationOfAdamCardDefinition } from "./definitions/gallery-creation-of-adam.js";
 import { galleryDanielInTheLionsDenCardDefinition } from "./definitions/gallery-daniel-in-the-lions-den.js";
 import { meshachShadrachAndAbednegoCardDefinition } from "./definitions/meshach-shadrach-and-abednego.js";
@@ -16,28 +89,13 @@ import { gabrielTheMessengerCardDefinition } from "./definitions/gabriel-the-mes
 import { sonOfManCardDefinition } from "./definitions/son-of-man.js";
 import { terrifyingFourthBeastCardDefinition } from "./definitions/terrifying-fourth-beast.js";
 import { littleHornCardDefinition } from "./definitions/little-horn.js";
-import { princeOfPersiaCardDefinition } from "./definitions/prince-of-persia.js";
 import { goldenImageCardDefinition } from "./definitions/golden-image.js";
-import { stoneCutWithoutHandsCardDefinition } from "./definitions/stone-cut-without-hands.js";
-import { fieryFurnaceCardDefinition } from "./definitions/fiery-furnace.js";
-import { lionsDenCardDefinition } from "./definitions/lions-den.js";
 import { writingOnTheWallCardDefinition } from "./definitions/writing-on-the-wall.js";
 import { deliveranceFromFireCardDefinition } from "./definitions/deliverance-from-fire.js";
 import { meneMeneTekelUpharsinCardDefinition } from "./definitions/mene-mene-tekel-upharsin.js";
-import { treeCutDownCardDefinition } from "./definitions/tree-cut-down.js";
-import { gabrielsMessageCardDefinition } from "./definitions/gabriels-message.js";
 import { dreamOfTheStatueCardDefinition } from "./definitions/dream-of-the-statue.js";
 import { dreamOfTheTreeCardDefinition } from "./definitions/dream-of-the-tree.js";
-import { seventyWeeksCardDefinition } from "./definitions/seventy-weeks.js";
 import { leopardWithWingsCardDefinition } from "./definitions/leopard-with-wings.js";
-import { watchersDecreeCardDefinition } from "./definitions/watchers-decree.js";
-import { kingdomWithoutEndCardDefinition } from "./definitions/kingdom-without-end.js";
-import { booksWereOpenedCardDefinition } from "./definitions/books-were-opened.js";
-import { timeOfTheEndCardDefinition } from "./definitions/time-of-the-end.js";
-import { everlastingDominionCardDefinition } from "./definitions/everlasting-dominion.js";
-import { michaelsStandCardDefinition } from "./definitions/michaels-stand.js";
-import { handsAndFeetOfBronzeCardDefinition } from "./definitions/hands-and-feet-of-bronze.js";
-import { faithfulCompanionsCardDefinition } from "./definitions/faithful-companions.js";
 import { galleryCastingTheRebelAngelsIntoHellCardDefinition } from "./definitions/gallery-casting-the-rebel-angels-into-hell.js";
 import { enemyFallenAngelCabanelCardDefinition } from "./definitions/enemy-fallen-angel-cabanel.js";
 import { enemyGreatRedDragonBeastFromSeaCardDefinition } from "./definitions/enemy-great-red-dragon-beast-from-sea.js";
@@ -62,7 +120,6 @@ import { galleryJacobWrestlesWithTheAngelCardDefinition } from "./definitions/ga
 import { galleryAncientOfDaysCardDefinition } from "./definitions/gallery-ancient-of-days.js";
 import { galleryAngelStoppingAbrahamCardDefinition } from "./definitions/gallery-angel-stopping-abraham.js";
 import { galleryAnnunciationCardDefinition } from "./definitions/gallery-annunciation.js";
-import { galleryBelshazzarsFeastCardDefinition } from "./definitions/gallery-belshazzars-feast.js";
 import { galleryChristAndMaryMagdalenCardDefinition } from "./definitions/gallery-christ-and-mary-magdalen.js";
 import { galleryJoshuaCommandingTheSunToStandStillUponGibeonCardDefinition } from "./definitions/gallery-joshua-commanding-the-sun-to-stand-still-upon-gibeon.js";
 import { galleryLastJudgmentCardDefinition } from "./definitions/gallery-last-judgment.js";
@@ -141,7 +198,7 @@ const permanentCardTypes = new Set<PermanentCardType>([
   "creature",
   "enchantment",
   "land",
-  "planeswalker",
+  "saga",
 ]);
 
 function getCardAvailabilityStatus(
@@ -163,6 +220,79 @@ export const cardDefinitions: CardDefinitionLibrary = {
   armory_disciple: armoryDiscipleCardDefinition,
   armory_seraph: armorySeraphCardDefinition,
   anointed_banner: anointedBannerCardDefinition,
+  ...gospelsCardDefinitions,
+  adam: adamCardDefinition,
+  abel: abelCardDefinition,
+  abraham: abrahamCardDefinition,
+  aaron: aaronCardDefinition,
+  behemoth: behemothCardDefinition,
+  bildad: bildadCardDefinition,
+  call_of_abram: callOfAbramCardDefinition,
+  cain: cainCardDefinition,
+  coat_of_many_colors: coatOfManyColorsCardDefinition,
+  day_of_my_birth: dayOfMyBirthCardDefinition,
+  double_portion: doublePortionCardDefinition,
+  altar_of_incense: altarOfIncenseCardDefinition,
+  ark_of_the_covenant: arkOfTheCovenantCardDefinition,
+  bezalel: bezalelCardDefinition,
+  elihu: elihuCardDefinition,
+  eliphaz: eliphazCardDefinition,
+  bronze_serpent: bronzeSerpentCardDefinition,
+  destruction_of_sodom_and_gomorrah: destructionOfSodomAndGomorrahCardDefinition,
+  eden: edenCardDefinition,
+  eve: eveCardDefinition,
+  exile_from_eden: exileFromEdenCardDefinition,
+  flaming_sword_of_the_east: flamingSwordOfTheEastCardDefinition,
+  garments_of_skin: garmentsOfSkinCardDefinition,
+  golden_calf: goldenCalfCardDefinition,
+  golden_lampstand: goldenLampstandCardDefinition,
+  job: jobCardDefinition,
+  i_am_that_i_am: iAmThatIAmCardDefinition,
+  isaac: isaacCardDefinition,
+  jacob: jacobCardDefinition,
+  jacobs_ladder: jacobsLadderCardDefinition,
+  joshua: joshuaCardDefinition,
+  joseph: josephCardDefinition,
+  jobs_lament: jobsLamentCardDefinition,
+  jobs_trial: jobsTrialCardDefinition,
+  leviathan: leviathanCardDefinition,
+  law_given_in_thunder: lawGivenInThunderCardDefinition,
+  land_of_milk_and_honey: landOfMilkAndHoneyCardDefinition,
+  let_there_be_light: letThereBeLightCardDefinition,
+  let_my_people_go: letMyPeopleGoCardDefinition,
+  miserable_comforters: miserableComfortersCardDefinition,
+  manna_from_heaven: mannaFromHeavenCardDefinition,
+  mercy_seat: mercySeatCardDefinition,
+  miriam_the_prophetess: miriamTheProphetessCardDefinition,
+  moses: mosesCardDefinition,
+  moses_smashes_the_tablets: mosesSmashesTheTabletsCardDefinition,
+  noah: noahCardDefinition,
+  restored_fortunes: restoredFortunesCardDefinition,
+  passover: passoverCardDefinition,
+  parting_of_the_red_sea: partingOfTheRedSeaCardDefinition,
+  pharaoh: pharaohCardDefinition,
+  pillar_of_cloud: pillarOfCloudCardDefinition,
+  pillar_of_fire: pillarOfFireCardDefinition,
+  satan: satanCardDefinition,
+  seven_years_of_famine: sevenYearsOfFamineCardDefinition,
+  sold_into_egypt: soldIntoEgyptCardDefinition,
+  testing_of_faith: testingOfFaithCardDefinition,
+  rod_to_serpent: rodToSerpentCardDefinition,
+  song_of_the_sea: songOfTheSeaCardDefinition,
+  the_ark: theArkCardDefinition,
+  the_stone_tablets: stoneTabletsCardDefinition,
+  tabernacle: tabernacleCardDefinition,
+  ten_plagues_of_egypt: tenPlaguesOfEgyptCardDefinition,
+  the_burning_bush: theBurningBushCardDefinition,
+  the_fall: theFallCardDefinition,
+  the_flood: theFloodCardDefinition,
+  the_tree_of_life: treeOfLifeCardDefinition,
+  the_tree_of_the_knowledge_of_good_evil: treeOfTheKnowledgeOfGoodAndEvilCardDefinition,
+  the_ten_commandments: theTenCommandmentsCardDefinition,
+  tower_of_babel: towerOfBabelCardDefinition,
+  what_god_meant_for_good: whatGodMeantForGoodCardDefinition,
+  wrestling_with_god: wrestlingWithGodCardDefinition,
+  water_from_the_rock_at_horeb: waterFromTheRockAtHorebCardDefinition,
   gallery_creation_of_adam: galleryCreationOfAdamCardDefinition,
   gallery_daniel_in_the_lions_den: galleryDanielInTheLionsDenCardDefinition,
   meshach_shadrach_and_abednego: meshachShadrachAndAbednegoCardDefinition,
@@ -177,28 +307,13 @@ export const cardDefinitions: CardDefinitionLibrary = {
   son_of_man: sonOfManCardDefinition,
   terrifying_fourth_beast: terrifyingFourthBeastCardDefinition,
   little_horn: littleHornCardDefinition,
-  prince_of_persia: princeOfPersiaCardDefinition,
   golden_image: goldenImageCardDefinition,
-  stone_cut_without_hands: stoneCutWithoutHandsCardDefinition,
-  fiery_furnace: fieryFurnaceCardDefinition,
-  lions_den: lionsDenCardDefinition,
   writing_on_the_wall: writingOnTheWallCardDefinition,
   deliverance_from_fire: deliveranceFromFireCardDefinition,
   mene_mene_tekel_upharsin: meneMeneTekelUpharsinCardDefinition,
-  tree_cut_down: treeCutDownCardDefinition,
-  gabriels_message: gabrielsMessageCardDefinition,
   dream_of_the_statue: dreamOfTheStatueCardDefinition,
   dream_of_the_tree: dreamOfTheTreeCardDefinition,
-  seventy_weeks: seventyWeeksCardDefinition,
   leopard_with_wings: leopardWithWingsCardDefinition,
-  watchers_decree: watchersDecreeCardDefinition,
-  kingdom_without_end: kingdomWithoutEndCardDefinition,
-  books_were_opened: booksWereOpenedCardDefinition,
-  time_of_the_end: timeOfTheEndCardDefinition,
-  everlasting_dominion: everlastingDominionCardDefinition,
-  michaels_stand: michaelsStandCardDefinition,
-  hands_and_feet_of_bronze: handsAndFeetOfBronzeCardDefinition,
-  faithful_companions: faithfulCompanionsCardDefinition,
   gallery_casting_the_rebel_angels_into_hell: galleryCastingTheRebelAngelsIntoHellCardDefinition,
   enemy_fallen_angel_cabanel: enemyFallenAngelCabanelCardDefinition,
   enemy_satan_as_the_fallen_angel: enemySatanAsTheFallenAngelCardDefinition,
@@ -223,7 +338,6 @@ export const cardDefinitions: CardDefinitionLibrary = {
   gallery_ancient_of_days: galleryAncientOfDaysCardDefinition,
   gallery_angel_stopping_abraham: galleryAngelStoppingAbrahamCardDefinition,
   gallery_annunciation: galleryAnnunciationCardDefinition,
-  gallery_belshazzars_feast: galleryBelshazzarsFeastCardDefinition,
   gallery_christ_and_mary_magdalen: galleryChristAndMaryMagdalenCardDefinition,
   gallery_joshua_commanding_the_sun_to_stand_still_upon_gibeon:
     galleryJoshuaCommandingTheSunToStandStillUponGibeonCardDefinition,

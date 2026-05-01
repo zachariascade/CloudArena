@@ -1,6 +1,6 @@
 export const danielLionsDenDisplay = {
-  name: "Daniel",
-  title: "Daniel in the Lions' Den",
+  name: "Daniel, God has Judged",
+  title: null,
   frameTone: "white",
   artist: "Gustave Doré",
   imagePath:
@@ -12,8 +12,8 @@ export const danielLionsDenDisplay = {
 };
 
 export const danielFieryFurnaceDisplay = {
-  name: "Meshach, Shadrach and Abednego",
-  title: "The Three Hebrews Cast into the Fiery Furnace",
+  name: "Deliverance from Fire",
+  title: null,
   frameTone: "red",
   artist: "Unknown",
   imagePath:
@@ -25,8 +25,8 @@ export const danielFieryFurnaceDisplay = {
 };
 
 export const danielBelshazzarDisplay = {
-  name: "Belshazzar",
-  title: "Belshazzar's Feast",
+  name: "Belshazzar, Last King of Babylon",
+  title: null,
   frameTone: "split-black-red",
   artist: "John Martin",
   imagePath:
@@ -38,8 +38,8 @@ export const danielBelshazzarDisplay = {
 };
 
 export const danielStatueDisplay = {
-  name: "Nebuchadnezzar, King of Babylon",
-  title: "Nebuchadnezzar's Statue",
+  name: "Many Metal Statue, Dream of Empires",
+  title: null,
   frameTone: "black",
   artist: "Unknown",
   imagePath:
@@ -51,8 +51,8 @@ export const danielStatueDisplay = {
 };
 
 export const danielTreeDisplay = {
-  name: "Dream of the Tree",
-  title: "Nebuchadnezzar's Dream: The Felled Tree",
+  name: "The Great Tree Humbled",
+  title: null,
   frameTone: "blue",
   artist: "Unknown",
   imagePath:
@@ -64,8 +64,8 @@ export const danielTreeDisplay = {
 };
 
 export const danielBeastsDisplay = {
-  name: "Terrifying Fourth Beast",
-  title: "Daniel and the Four Fantastic Beasts",
+  name: "Terrifying Fourth Beast, Devourer of Nations",
+  title: null,
   frameTone: "black",
   artist: "Wellcome Library, London",
   imagePath:
@@ -77,8 +77,8 @@ export const danielBeastsDisplay = {
 };
 
 export const danielAncientOfDaysDisplay = {
-  name: "Ancient of Days",
-  title: "Ancient of Days",
+  name: "Ancient of Days, Judge Eternal",
+  title: null,
   frameTone: "white",
   artist: "William Blake",
   imagePath:
@@ -90,8 +90,8 @@ export const danielAncientOfDaysDisplay = {
 };
 
 export const danielMichaelDisplay = {
-  name: "Michael the Archangel",
-  title: "Saint Michael Vanquishing Satan",
+  name: "Michael the Archangel, Prince of Heaven's Host",
+  title: null,
   frameTone: "white",
   artist: "Raphael",
   imagePath:
@@ -103,8 +103,8 @@ export const danielMichaelDisplay = {
 };
 
 export const danielGabrielDisplay = {
-  name: "Gabriel the Messenger",
-  title: "The Annunciation",
+  name: "Gabriel the Messenger, Herald of Visions",
+  title: null,
   frameTone: "white",
   artist: "Fra Angelico",
   imagePath:
@@ -117,7 +117,7 @@ export const danielGabrielDisplay = {
 
 export const danielLastJudgmentDisplay = {
   name: "Books Were Opened",
-  title: "The Last Judgment",
+  title: null,
   frameTone: "black",
   artist: "Hieronymus Bosch",
   imagePath:
@@ -129,8 +129,8 @@ export const danielLastJudgmentDisplay = {
 };
 
 export const danielCyrusDisplay = {
-  name: "Cyrus the Great",
-  title: "Cyrus the Great",
+  name: "Cyrus the Great, Anointed Liberator",
+  title: null,
   frameTone: "white",
   artist: "Alireza Shakernia",
   imagePath:
@@ -142,11 +142,12 @@ export const danielCyrusDisplay = {
 };
 
 export const danielDariusDisplay = {
-  name: "Darius the Mede",
-  title: "Darius I",
+  name: "Darius the Mede, Bound by Decree",
+  title: null,
   frameTone: "white",
   artist: "Rumlu",
-  imagePath: "https://commons.wikimedia.org/wiki/Special:FilePath/Darius%20I.jpg",
+  imagePath:
+    "https://commons.wikimedia.org/wiki/Special:FilePath/Darius%20I.jpg",
   imageAlt: "Darius I",
   footerCode: "ARE",
   footerCredit: "Cloud Arena",

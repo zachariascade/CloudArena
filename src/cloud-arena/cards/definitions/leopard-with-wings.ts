@@ -3,8 +3,9 @@ import { CARD_SETS } from "../card-sets.js";
 
 export const leopardWithWingsCardDefinition: CardDefinition = {
   id: "leopard_with_wings",
-  name: "Leopard with Wings",
-  cardTypes: ["enchantment"],
+  name: "Leopard with Wings, Swift Dominion",
+  cardTypes: ["enchantment", "creature"],
+  subtypes: ["Beast"],
   cost: 4,
 
   availabilityStatus: "in_progress",

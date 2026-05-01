@@ -6,10 +6,12 @@ export const nebuchadnezzarKingOfBabylonCardDefinition: CardDefinition = {
   name: "Nebuchadnezzar, King of Babylon",
   cardTypes: ["creature"],
   cost: 5,
+  rarity: "mythic",
   availabilityStatus: "in_progress",
   cardSet: CARD_SETS.daniel,
   onPlay: [],
   power: 0,
   health: 1,
+  subtypes: ["Human", "King"],
   abilities: [],
 };

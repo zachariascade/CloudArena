@@ -11,6 +11,8 @@ let arenaApiChild: ChildProcess | null = null;
 let arenaWebChild: ChildProcess | null = null;
 let restartTimer: NodeJS.Timeout | null = null;
 let isRestarting = false;
+const shutdownTimeoutMs = 8000;
+const shutdownPollMs = 250;
 
 function prefixStream(processName: string, stream: NodeJS.ReadableStream | null): void {
   if (!stream) {
@@ -30,14 +32,38 @@ function prefixStream(processName: string, stream: NodeJS.ReadableStream | null)
 }
 
 function terminateChild(child: ChildProcess | null): Promise<void> {
-  if (!child || child.killed || child.exitCode !== null) {
+  if (!child || child.exitCode !== null) {
     return Promise.resolve();
   }
 
   return new Promise((resolve) => {
-    child.once("exit", () => resolve());
+    let resolved = false;
+
+    const finish = (): void => {
+      if (resolved) {
+        return;
+      }
+
+      resolved = true;
+      clearTimeout(forceKillTimer);
+      child.off("exit", handleExit);
+      resolve();
+    };
+
+    const handleExit = (): void => {
+      finish();
+    };
+
+    child.once("exit", handleExit);
     child.kill("SIGTERM");
-    setTimeout(() => resolve(), 500).unref();
+
+    const forceKillTimer = setTimeout(() => {
+      if (child.exitCode === null) {
+        child.kill("SIGKILL");
+      }
+
+      setTimeout(finish, shutdownPollMs).unref();
+    }, shutdownTimeoutMs).unref();
   });
 }
 

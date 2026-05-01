@@ -3,7 +3,7 @@ import { CARD_SETS } from "../card-sets.js";
 
 export const goldenImageCardDefinition: CardDefinition = {
   id: "golden_image",
-  name: "Golden Image",
+  name: "Golden Image, Idol of Dominion",
   cardTypes: ["artifact"],
   cost: 4,
 

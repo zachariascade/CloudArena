@@ -24,6 +24,7 @@ import {
   permanentHasSummoningSickness,
 } from "../core/permanents.js";
 import { emitRulesEvent } from "../core/rules-events.js";
+import { markSagaChapterActivated } from "../core/sagas.js";
 import type {
   ActivatedAbility,
   BattleState,
@@ -64,6 +65,7 @@ export function usePermanentAction(
 
   const definition = getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId);
   const isCreature = hasCardType(definition, "creature");
+  const hasNativeCombatActions = isCreature || hasCardType(definition, "saga");
   const isSummoningSick = isCreature && permanentHasSummoningSickness(state, permanent);
 
   const abilityId =
@@ -117,6 +119,7 @@ export function usePermanentAction(
         abilityTargeting: ability.targeting,
         abilityCosts: ability.costs,
       });
+      markSagaChapterActivated(permanent, ability.id);
     }
   } else if (action.action === "attack") {
     if (isSummoningSick) {
@@ -195,8 +198,8 @@ export function usePermanentAction(
     dealDamageToEnemy(state, attackAmount, "permanent_action", permanent.instanceId);
     permanent.isDefending = false;
   } else if (action.action === "defend") {
-    if (!hasCardType(definition, "creature")) {
-      throw new Error(`Permanent ${action.permanentId} cannot use defend because it is not a creature.`);
+    if (!hasNativeCombatActions) {
+      throw new Error(`Permanent ${action.permanentId} cannot use defend because it is not a creature or Saga.`);
     }
 
     permanent.isDefending = true;

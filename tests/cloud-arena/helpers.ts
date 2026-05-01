@@ -311,6 +311,8 @@ export function formatBattleEvent(event: BattleEvent): string {
       return `turn ${event.turnNumber}: enemy action was stunned and cancelled`;
     case "permanent_destroyed":
       return `turn ${event.turnNumber}: permanent ${event.permanentId} (${event.definitionId}) was destroyed`;
+    case "permanent_sacrificed":
+      return `turn ${event.turnNumber}: permanent ${event.permanentId} (${event.definitionId}) was sacrificed`;
     case "turn_ended":
       return `turn ${event.turnNumber}: end turn`;
     case "battle_finished":

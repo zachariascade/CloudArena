@@ -4,15 +4,17 @@ import { CARD_SETS } from "../card-sets.js";
 
 export const danielCardDefinition: CardDefinition = {
   id: "daniel",
-  name: "Daniel",
+  name: "Daniel, God has Judged",
   cardTypes: ["creature"],
   cost: 3,
 
   availabilityStatus: "in_progress",
   cardSet: CARD_SETS.daniel,
   display: danielLionsDenDisplay,
+  rarity: "mythic",
   onPlay: [],
   power: 0,
   health: 1,
+  subtypes: ["Human", "Prophet"],
   abilities: [],
 };

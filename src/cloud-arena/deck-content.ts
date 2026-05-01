@@ -18,6 +18,7 @@ import {
   cardDefinitions,
   isCardSelectableByPlayers,
 } from "./cards/definitions.js";
+import { CARD_SETS } from "./cards/card-sets.js";
 import type {
   CardDefinition,
   CardDefinitionId,
@@ -165,7 +166,7 @@ function toCardSummary(definition: CardDefinition): CloudArenaCardSummary {
     name: definition.name,
     cost: definition.cost,
     availabilityStatus: definition.availabilityStatus ?? "ready",
-    cardSet: definition.cardSet ?? null,
+    cardSet: definition.cardSet ?? CARD_SETS.none,
     typeLine: createCardTypeLine(definition),
     cardTypes: [...definition.cardTypes],
     subtypes: [...(definition.subtypes ?? [])],
@@ -280,7 +281,7 @@ function matchesCloudArenaCardQuery(
       cardType.toLowerCase() === normalizedCardType,
     );
     const permanentMatch = normalizedCardType === "permanent" && summary.cardTypes.some((cardType) =>
-      ["artifact", "battle", "creature", "enchantment", "land", "planeswalker"].includes(cardType),
+      ["artifact", "battle", "creature", "enchantment", "land", "saga"].includes(cardType),
     );
 
     if (!cardTypeMatch && !permanentMatch) {

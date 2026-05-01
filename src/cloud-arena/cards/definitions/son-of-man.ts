@@ -9,8 +9,10 @@ export const sonOfManCardDefinition: CardDefinition = {
 
   availabilityStatus: "in_progress",
   cardSet: CARD_SETS.daniel,
+  rarity: "mythic",
   onPlay: [],
   power: 0,
   health: 1,
+  subtypes: ["Avatar"],
   abilities: [],
 };

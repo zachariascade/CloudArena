@@ -8,6 +8,7 @@ import {
   LEAN_V1_DEFAULT_RECOVERY_POLICY,
 } from "./constants.js";
 import { emitRulesEvent } from "./rules-events.js";
+import { createSagaChapterAbilities, processSagaPermanentEntered } from "./sagas.js";
 import { findPermanentById } from "./selectors.js";
 import type {
   Ability,
@@ -62,20 +63,20 @@ function getEquipmentModifiersForAttachment(
   }
 
   return [
-    ...(definition.power !== 0
+    ...((definition.power ?? 0) !== 0
       ? [{
           id: createEquipmentModifierId(attachmentPermanent.instanceId, "power"),
           stat: "power" as const,
-          amount: definition.power,
+          amount: definition.power ?? 0,
           sourceKind: "equipment" as const,
           sourceId: attachmentPermanent.instanceId,
         }]
       : []),
-    ...(definition.health !== 0
+    ...((definition.health ?? 0) !== 0
       ? [{
           id: createEquipmentModifierId(attachmentPermanent.instanceId, "health"),
           stat: "health" as const,
-          amount: definition.health,
+          amount: definition.health ?? 0,
           sourceKind: "equipment" as const,
           sourceId: attachmentPermanent.instanceId,
         }]
@@ -203,6 +204,10 @@ function getInitialAbilitiesForDefinition(
 ): Ability[] {
   const abilities = definition.abilities ? definition.abilities.map((ability) => ({ ...ability })) : [];
 
+  if (definition.saga) {
+    abilities.push(...createSagaChapterAbilities(definition.saga));
+  }
+
   if (
     isEquipmentCardDefinition(definition) &&
     !abilities.some(
@@ -318,9 +323,9 @@ export function summonPermanentFromCard(
     name: definition.name,
     definitionId: definition.id,
     controllerId,
-    power: definition.power,
-    health: definition.health,
-    maxHealth: definition.health,
+    power: definition.power ?? 0,
+    health: definition.health ?? 0,
+    maxHealth: definition.health ?? 0,
     block: 0,
     recoveryPolicy: definition.recoveryPolicy ?? LEAN_V1_DEFAULT_RECOVERY_POLICY,
     enteredBattlefieldTurnNumber,
@@ -360,6 +365,7 @@ export function summonPermanentFromCard(
     controllerId,
     slotIndex: openSlot,
   });
+  processSagaPermanentEntered(state, permanent);
 
   return permanent;
 }
@@ -451,6 +457,7 @@ export function createEnemyPermanent(
     controllerId: "enemy",
     slotIndex: openSlot,
   });
+  processSagaPermanentEntered(state, permanent);
 
   state.log.push({
     type: "permanent_summoned",
@@ -756,9 +763,10 @@ function detachAttachmentsFromTarget(
   targetPermanent.attachments = [];
 }
 
-export function destroyPermanent(
+function removePermanentFromBattlefield(
   state: BattleState,
   permanentId: string,
+  reason: "destroyed" | "sacrificed",
 ): boolean {
   const battlefield =
     state.battlefield.findIndex((permanent) => permanent?.instanceId === permanentId) !== -1
@@ -793,7 +801,7 @@ export function destroyPermanent(
   });
 
   state.log.push({
-    type: "permanent_destroyed",
+    type: reason === "sacrificed" ? "permanent_sacrificed" : "permanent_destroyed",
     turnNumber: state.turnNumber,
     permanentId: permanent.instanceId,
     definitionId: permanent.definitionId,
@@ -832,6 +840,20 @@ export function destroyPermanent(
   state.blockingQueue = state.blockingQueue.filter((entry) => entry !== permanent.instanceId);
 
   return true;
+}
+
+export function destroyPermanent(
+  state: BattleState,
+  permanentId: string,
+): boolean {
+  return removePermanentFromBattlefield(state, permanentId, "destroyed");
+}
+
+export function sacrificePermanent(
+  state: BattleState,
+  permanentId: string,
+): boolean {
+  return removePermanentFromBattlefield(state, permanentId, "sacrificed");
 }
 
 export function cleanupDefeatedPermanents(state: BattleState): BattleState {

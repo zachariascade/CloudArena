@@ -12,6 +12,7 @@ import {
   getEnemyPlanStepAtIndexFromState,
 } from "./enemy-plan.js";
 import { emitRulesEvent } from "./rules-events.js";
+import { processSagasAtPlayerTurnStart } from "./sagas.js";
 import {
   cleanupDefeatedPermanents,
   permanentHasKeyword,
@@ -104,6 +105,8 @@ export function resetRound(state: BattleState): BattleState {
   }
 
   const drawResult = applyDrawPolicy(state);
+  cleanupDefeatedPermanents(state);
+  processSagasAtPlayerTurnStart(state);
   cleanupDefeatedPermanents(state);
   emitRulesEvent(state, {
     type: "turn_started",

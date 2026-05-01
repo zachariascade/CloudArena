@@ -8,9 +8,19 @@ export const deliveranceFromFireCardDefinition: CardDefinition = {
   cardTypes: ["sorcery"],
   cost: 3,
 
-  availabilityStatus: "in_progress",
   cardSet: CARD_SETS.daniel,
   display: danielFieryFurnaceDisplay,
   onPlay: [],
-  abilities: [],
+  spellEffects: [
+    {
+      type: "grant_keyword",
+      target: {
+        zone: "battlefield",
+        controller: "you",
+        cardType: "permanent",
+      },
+      keyword: "indestructible",
+      duration: "end_of_turn",
+    },
+  ],
 };

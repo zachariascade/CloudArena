@@ -26,13 +26,22 @@ export function getPermanentCounterAmount(
     .reduce((sum, entry) => sum + entry.amount, 0);
 }
 
+export function getPermanentNamedCounterAmount(
+  permanent: PermanentState,
+  counter: CounterName,
+): number {
+  return (permanent.counters ?? [])
+    .filter((entry) => entry.counter === counter)
+    .reduce((sum, entry) => sum + entry.amount, 0);
+}
+
 export function summarizePermanentCounters(
   counters: PermanentCounter[] | undefined,
 ): CounterSummary {
   const summary: CounterSummary = {};
 
   for (const counter of counters ?? []) {
-    summary[counter.counter] = (summary[counter.counter] ?? 0) + 1;
+    summary[counter.counter] = (summary[counter.counter] ?? 0) + counter.amount;
   }
 
   return summary;
@@ -40,8 +49,8 @@ export function summarizePermanentCounters(
 
 export function getCounterDisplaySummary(
   counters: PermanentCounter[] | undefined,
-): Array<{ counter: CounterName; stat: CounterStat; amount: number; count: number }> {
-  const summary = new Map<string, { counter: CounterName; stat: CounterStat; amount: number; count: number }>();
+): Array<{ counter: CounterName; stat?: CounterStat; amount: number; count: number }> {
+  const summary = new Map<string, { counter: CounterName; stat?: CounterStat; amount: number; count: number }>();
 
   for (const counter of counters ?? []) {
     const key = `${counter.counter}:${counter.stat}`;
@@ -63,4 +72,3 @@ export function getCounterDisplaySummary(
 
   return [...summary.values()];
 }
-

@@ -386,6 +386,12 @@ export function CloudArenaBattleState({
       return "Gain Energy";
     }
 
+    if (action.activation.actionId.startsWith("saga_chapter_")) {
+      const chapter = permanent.saga?.chapters.find((entry) => action.activation.actionId === `saga_chapter_${entry.chapter}`);
+
+      return chapter ? `Chapter ${chapter.label}` : "Saga Chapter";
+    }
+
     return action.activation.actionId.replace(/_/g, " ");
   }
 
@@ -1140,7 +1146,8 @@ export function CloudArenaBattleState({
         }),
     );
 
-    const nativeAttackAction = permanent.isCreature
+    const hasNativeCombatActions = permanent.isCreature || Boolean(permanent.saga);
+    const nativeAttackAction = hasNativeCombatActions
       ? [{
           action: "attack" as const,
           label: `Attack ${permanent.power}`,
@@ -1180,7 +1187,7 @@ export function CloudArenaBattleState({
       }];
     });
 
-    const defendAction = permanent.isCreature
+    const defendAction = hasNativeCombatActions
       ? [{
           action: "defend" as const,
           label: "Defend",

@@ -28,10 +28,7 @@ export const GALLERY: GalleryEntry[] = [
     createdAt: "2026-04-27T22:20:25-05:00",
     cardUsed: [
       "/cards/gallery_ancient_of_days",
-      "/cards/everlasting_dominion",
-      "/cards/kingdom_without_end",
       "/cards/son_of_man",
-      "/cards/seventy_weeks",
     ],
   },
   {
@@ -57,7 +54,6 @@ export const GALLERY: GalleryEntry[] = [
     cardUsed: [
       "/cards/gallery_annunciation",
       "/cards/gabriel_the_messenger",
-      "/cards/gabriels_message",
     ],
   },
   {
@@ -70,7 +66,6 @@ export const GALLERY: GalleryEntry[] = [
       "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/John_Martin_-_Belshazzar%27s_Feast_-_Google_Art_Project.jpg/960px-John_Martin_-_Belshazzar%27s_Feast_-_Google_Art_Project.jpg",
     createdAt: "2026-04-27T22:20:25-05:00",
     cardUsed: [
-      "/cards/gallery_belshazzars_feast",
       "/cards/belshazzar",
       "/cards/writing_on_the_wall",
       "/cards/mene_mene_tekel_upharsin",
@@ -316,8 +311,6 @@ export const GALLERY: GalleryEntry[] = [
     createdAt: "2026-04-27T22:26:33-05:00",
     cardUsed: [
       "/cards/gallery_last_judgment",
-      "/cards/books_were_opened",
-      "/cards/time_of_the_end",
     ],
   },
   {
@@ -376,8 +369,6 @@ export const GALLERY: GalleryEntry[] = [
     cardUsed: [
       "/cards/gallery_saint_michael_vanquishing_satan",
       "/cards/michael_the_archangel",
-      "/cards/michaels_stand",
-      "/cards/prince_of_persia",
     ],
   },
   {
@@ -1268,8 +1259,6 @@ export const GALLERY: GalleryEntry[] = [
     createdAt: "2026-04-28T00:00:00-05:00",
     cardUsed: [
       "/cards/michael_the_archangel",
-      "/cards/michaels_stand",
-      "/cards/prince_of_persia",
     ],
   },
   {
@@ -1407,7 +1396,7 @@ export const GALLERY: GalleryEntry[] = [
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/131.Daniel_in_the_Lions%27_Den.jpg/960px-131.Daniel_in_the_Lions%27_Den.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
-    cardUsed: ["/cards/gallery_daniel_in_the_lions_den", "/cards/daniel", "/cards/lions_den"],
+    cardUsed: ["/cards/gallery_daniel_in_the_lions_den", "/cards/daniel"],
   },
   {
     title: "The Three Hebrews Cast into the Fiery Furnace",
@@ -1422,9 +1411,7 @@ export const GALLERY: GalleryEntry[] = [
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [
       "/cards/meshach_shadrach_and_abednego",
-      "/cards/fiery_furnace",
       "/cards/deliverance_from_fire",
-      "/cards/faithful_companions",
       "/cards/golden_image",
     ],
   },
@@ -1450,8 +1437,6 @@ export const GALLERY: GalleryEntry[] = [
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [
       "/cards/dream_of_the_tree",
-      "/cards/tree_cut_down",
-      "/cards/watchers_decree",
     ],
   },
   {
@@ -1468,10 +1453,6 @@ export const GALLERY: GalleryEntry[] = [
     cardUsed: [
       "/cards/terrifying_fourth_beast",
       "/cards/leopard_with_wings",
-      "/cards/books_were_opened",
-      "/cards/time_of_the_end",
-      "/cards/everlasting_dominion",
-      "/cards/kingdom_without_end",
     ],
   },
   {
@@ -1488,8 +1469,6 @@ export const GALLERY: GalleryEntry[] = [
     cardUsed: [
       "/cards/golden_image",
       "/cards/dream_of_the_statue",
-      "/cards/hands_and_feet_of_bronze",
-      "/cards/stone_cut_without_hands",
     ],
   },
   {
@@ -1732,7 +1711,7 @@ export const GALLERY: GalleryEntry[] = [
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/b/b3/D%C3%BCrer_Apocalypse_15.jpg",
     createdAt: "2026-04-28T00:00:00-05:00",
-    cardUsed: ["/cards/kingdom_without_end"],
+    cardUsed: [],
   },
   {
     title: "The Opening of the Fifth and Sixth Seals",
@@ -2209,5 +2188,103 @@ export const GALLERY: GalleryEntry[] = [
       "/cards/gallery_rebel_angel_kalmakov",
       "/cards/enemy_rebel_angel",
     ],
+  },
+  {
+    title: "The Birth of Venus",
+    artist: "Sandro Botticelli",
+    year: "c. 1485",
+    wikiUrl: createCommonsFilePageUrl("Botticelli Venus.jpg"),
+    imageUrl: createCommonsFilePathUrl("Botticelli Venus.jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "The Triumph of Galatea",
+    artist: "Raphael",
+    year: "c. 1512",
+    wikiUrl: createCommonsFilePageUrl("Galatea Raphael.jpg"),
+    imageUrl: createCommonsFilePathUrl("Galatea Raphael.jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "Bacchus and Ariadne",
+    artist: "Titian",
+    year: "1520-1523",
+    wikiUrl: createCommonsFilePageUrl("Titian Bacchus and Ariadne.jpg"),
+    imageUrl: createCommonsFilePathUrl("Titian Bacchus and Ariadne.jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "Jupiter and Io",
+    artist: "Antonio da Correggio",
+    year: "c. 1530",
+    wikiUrl: createCommonsFilePageUrl("Correggio - Jupiter and Io - WGA05344.jpg"),
+    imageUrl: createCommonsFilePathUrl("Correggio - Jupiter and Io - WGA05344.jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "Mars and Venus",
+    artist: "Paolo Veronese",
+    year: "16th century",
+    wikiUrl: createCommonsFilePageUrl("Mars and Venus (SM 893).png"),
+    imageUrl: createCommonsFilePathUrl("Mars and Venus (SM 893).png"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "The Fall of Phaeton",
+    artist: "Peter Paul Rubens",
+    year: "c. 1604-1605",
+    wikiUrl: createCommonsFilePageUrl(
+      "Peter Paul Rubens - The Fall of Phaeton (National Gallery of Art).jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Peter Paul Rubens - The Fall of Phaeton (National Gallery of Art).jpg",
+    ),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "Venus and Adonis",
+    artist: "Peter Paul Rubens",
+    year: "first half of 17th century",
+    wikiUrl: createCommonsFilePageUrl("Rubens - Venus and Adonis.jpg"),
+    imageUrl: createCommonsFilePathUrl("Rubens - Venus and Adonis.jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "Jupiter and Semele",
+    artist: "Jacopo Tintoretto",
+    year: "1545",
+    wikiUrl: createCommonsFilePageUrl("Jacopo Tintoretto - Jupiter and Semele, 1545.jpg"),
+    imageUrl: createCommonsFilePathUrl(
+      "Jacopo Tintoretto - Jupiter and Semele, 1545.jpg",
+    ),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "The Rape of Europa",
+    artist: "Paolo Veronese",
+    year: "16th century",
+    wikiUrl: createCommonsFilePageUrl("Veronese - Rape of Europa - Google Art Project.jpg"),
+    imageUrl: createCommonsFilePathUrl(
+      "Veronese - Rape of Europa - Google Art Project.jpg",
+    ),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "Apollo and Daphne",
+    artist: "Nicolas Poussin",
+    year: "c. 1627",
+    wikiUrl: createCommonsFilePageUrl("Poussin Apollo and Daphne.jpg"),
+    imageUrl: createCommonsFilePathUrl("Poussin Apollo and Daphne.jpg"),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
   },
 ];

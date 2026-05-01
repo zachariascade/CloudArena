@@ -1712,12 +1712,21 @@ export function renderCloudArcanumWebHtml(
         position: relative;
         display: grid;
         justify-items: center;
-        gap: 0.55rem;
-        padding: 0;
-        border: 0;
-        background: transparent;
+        gap: 0.6rem;
+        padding: 0.65rem 0.65rem 0.75rem;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.08)),
+          rgba(22, 29, 58, 0.24);
+        backdrop-filter: blur(14px) saturate(1.2);
+        -webkit-backdrop-filter: blur(14px) saturate(1.2);
+        border-radius: 22px;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.36),
+          0 14px 32px rgba(4, 10, 30, 0.18);
         cursor: pointer;
         transition: transform 140ms ease;
+        overflow: hidden;
       }
 
       .deckbuilder-card-button:hover {
@@ -1765,10 +1774,12 @@ export function renderCloudArcanumWebHtml(
         align-items: center;
         gap: 0.65rem;
         width: var(--display-card-width);
+        padding-inline: 0.1rem;
       }
 
       .deckbuilder-card-copy-controls {
         display: inline-flex;
+        align-items: center;
         gap: 0.45rem;
       }
 
@@ -6355,6 +6366,136 @@ export function renderCloudArcanumWebHtml(
         padding-top: clamp(0.36rem, 2.5cqw, 0.58rem);
         border-top: 2px solid rgba(102, 74, 28, 0.42);
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58);
+      }
+
+      .display-card-saga .card-face {
+        gap: clamp(0.26rem, 1.4cqw, 0.42rem);
+      }
+
+      .display-card-saga .card-face-typeline {
+        margin-top: 0;
+        margin-bottom: 0;
+        min-height: clamp(1.05rem, 5.6cqw, 1.32rem);
+        padding: clamp(0.03rem, 0.24cqw, 0.06rem) clamp(0.34rem, 1.8cqw, 0.48rem);
+        font-size: clamp(0.48rem, 2.55cqw, 0.62rem);
+        line-height: 0.95;
+      }
+
+      .card-face-saga-body {
+        display: grid;
+        grid-template-columns: minmax(0, 1.45fr) minmax(4.8rem, 0.88fr);
+        gap: clamp(0.34rem, 2.1cqw, 0.56rem);
+        min-height: clamp(9.4rem, 58cqw, 12.75rem);
+        padding: clamp(0.36rem, 2.4cqw, 0.58rem);
+        border: 1.5px solid rgba(100, 70, 23, 0.34);
+        background:
+          linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--card-panel-top) 96%, white 4%),
+            color-mix(in srgb, var(--card-panel-bottom) 90%, rgba(214, 192, 141, 0.92) 10%)
+          );
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.78),
+          inset 0 -1px 0 rgba(133, 101, 36, 0.12),
+          0 0.45rem 0.9rem rgba(94, 65, 19, 0.1);
+      }
+
+      .card-face-saga-chapters {
+        display: grid;
+        align-content: stretch;
+        gap: clamp(0.18rem, 1.25cqw, 0.34rem);
+        min-width: 0;
+      }
+
+      .card-face-saga-lore {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.35rem;
+        padding: clamp(0.16rem, 1.1cqw, 0.26rem) clamp(0.24rem, 1.5cqw, 0.38rem);
+        border: 1px solid rgba(58, 43, 16, 0.28);
+        background: rgba(255, 251, 244, 0.72);
+        color: #2b1e0f;
+        font-size: clamp(0.54rem, 3cqw, 0.68rem);
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .card-face-saga-lore strong {
+        font-family: var(--card-display-font);
+        font-size: clamp(0.68rem, 4.1cqw, 0.9rem);
+        letter-spacing: 0;
+      }
+
+      .card-face-saga-chapter {
+        display: grid;
+        grid-template-columns: clamp(1.25rem, 7cqw, 1.65rem) minmax(0, 1fr);
+        gap: clamp(0.22rem, 1.35cqw, 0.38rem);
+        align-items: start;
+        min-width: 0;
+        padding: clamp(0.16rem, 1.1cqw, 0.28rem) clamp(0.14rem, 0.9cqw, 0.24rem);
+        border-bottom: 1px solid rgba(94, 65, 19, 0.18);
+      }
+
+      .card-face-saga-chapter:last-child {
+        border-bottom: 0;
+      }
+
+      .card-face-saga-chapter.is-resolved {
+        color: color-mix(in srgb, #2d2416 78%, var(--card-accent) 22%);
+      }
+
+      .card-face-saga-chapter.is-active {
+        background: rgba(255, 255, 255, 0.48);
+        box-shadow:
+          inset 0 0 0 1px rgba(102, 74, 28, 0.34),
+          0 0.18rem 0.36rem rgba(94, 65, 19, 0.12);
+      }
+
+      .card-face-saga-chapter.is-active .card-face-saga-marker {
+        background: linear-gradient(180deg, rgba(255, 244, 205, 0.98), rgba(190, 124, 56, 0.88));
+        color: #251504;
+      }
+
+      .card-face-saga-marker {
+        display: inline-grid;
+        place-items: center;
+        min-width: 0;
+        min-height: clamp(1.15rem, 6.4cqw, 1.48rem);
+        border-radius: 999px;
+        border: 1px solid rgba(58, 43, 16, 0.42);
+        background: linear-gradient(180deg, rgba(255, 253, 244, 0.94), rgba(224, 198, 137, 0.82));
+        color: #2b1e0f;
+        font-family: var(--card-display-font);
+        font-size: clamp(0.58rem, 3.5cqw, 0.78rem);
+        font-weight: 800;
+        line-height: 1;
+      }
+
+      .card-face-saga-chapter p {
+        margin: 0;
+        min-width: 0;
+        color: #2d2416;
+        font-family: var(--card-rules-font);
+        font-size: clamp(0.58rem, 3.35cqw, 0.76rem);
+        line-height: 1.08;
+        text-wrap: pretty;
+      }
+
+      .card-face-saga-art-wrap {
+        min-width: 0;
+        min-height: 0;
+      }
+
+      .card-face-saga-art-wrap .card-face-art {
+        height: 100%;
+        margin: 0;
+      }
+
+      .card-face-saga-art-wrap .card-face-art-image,
+      .card-face-saga-art-wrap .card-face-art-fallback {
+        min-height: 100%;
       }
 
       .card-face-inline-mana {

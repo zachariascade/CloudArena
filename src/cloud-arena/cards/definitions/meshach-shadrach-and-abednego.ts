@@ -10,8 +10,10 @@ export const meshachShadrachAndAbednegoCardDefinition: CardDefinition = {
     id: "daniel",
     name: "Daniel",
   },
+  rarity: "mythic",
   onPlay: [],
   power: 0,
   health: 1,
+  subtypes: ["Human", "Cleric"],
   abilities: [],
 };

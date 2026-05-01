@@ -1,6 +1,6 @@
 import type { AbilityCostDisplayPart } from "../cloud-arena/core/activated-abilities.js";
 
-export type DisplayCardVariant = "mtg" | "player" | "enemy" | "permanent";
+export type DisplayCardVariant = "mtg" | "player" | "enemy" | "permanent" | "saga";
 
 export type DisplayCardImage = {
   alt: string;
@@ -22,6 +22,14 @@ export type DisplayCardCounterPill = {
 export type DisplayCardTextBlock = {
   kind: "rules" | "flavor" | "intent" | "passive" | "meta";
   text: string;
+};
+
+export type DisplayCardSagaChapter = {
+  chapter: number;
+  label: string;
+  text: string;
+  resolved?: boolean;
+  active?: boolean;
 };
 
 export type DisplayCardAction = {
@@ -67,6 +75,11 @@ export type DisplayCardModelBase = {
   statusTone?: "draft" | "templating" | "balanced" | "approved";
   stats: DisplayCardStat[];
   textBlocks: DisplayCardTextBlock[];
+  saga?: {
+    loreCounter?: number;
+    finalChapter?: number;
+    chapters: DisplayCardSagaChapter[];
+  } | null;
   badges: string[];
   actions: DisplayCardAction[];
   stateFlags: string[];

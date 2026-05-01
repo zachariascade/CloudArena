@@ -13,7 +13,7 @@ export type PermanentCardType =
   | "creature"
   | "enchantment"
   | "land"
-  | "planeswalker";
+  | "saga";
 export type NonPermanentCardType = "instant" | "sorcery";
 export type CardType = PermanentCardType | NonPermanentCardType;
 export type SelectorCardType = CardType | "permanent" | "equipment";
@@ -437,26 +437,33 @@ export type BattleEvent =
       controllerId?: "player" | "enemy";
     }
   | {
+      type: "permanent_sacrificed";
+      turnNumber: number;
+      permanentId: string;
+      definitionId: CardDefinitionId;
+      controllerId?: "player" | "enemy";
+    }
+  | {
       type: "counter_added";
       turnNumber: number;
       permanentId: string;
-      counterId: string;
-      counter: CounterName;
-      stat: CounterStat;
-      amount: number;
-      sourceKind: CounterSourceKind;
-      sourceId: string;
+    counterId: string;
+    counter: CounterName;
+    stat?: CounterStat;
+    amount: number;
+    sourceKind: CounterSourceKind;
+    sourceId: string;
     }
   | {
       type: "counter_removed";
       turnNumber: number;
       permanentId: string;
-      counterId: string;
-      counter: CounterName;
-      stat: CounterStat;
-      amount: number;
-      sourceKind: CounterSourceKind;
-      sourceId: string;
+    counterId: string;
+    counter: CounterName;
+    stat?: CounterStat;
+    amount: number;
+    sourceKind: CounterSourceKind;
+    sourceId: string;
     }
   | {
       type: "turn_ended";
@@ -567,23 +574,23 @@ export type RulesEvent =
       type: "counter_added";
       turnNumber: number;
       permanentId: string;
-      counterId: string;
-      counter: CounterName;
-      stat: CounterStat;
-      amount: number;
-      sourceKind: CounterSourceKind;
-      sourceId: string;
+    counterId: string;
+    counter: CounterName;
+    stat?: CounterStat;
+    amount: number;
+    sourceKind: CounterSourceKind;
+    sourceId: string;
     }
   | {
       type: "counter_removed";
       turnNumber: number;
       permanentId: string;
-      counterId: string;
-      counter: CounterName;
-      stat: CounterStat;
-      amount: number;
-      sourceKind: CounterSourceKind;
-      sourceId: string;
+    counterId: string;
+    counter: CounterName;
+    stat?: CounterStat;
+    amount: number;
+    sourceKind: CounterSourceKind;
+    sourceId: string;
     }
   | {
       type: "attachment_attached";
@@ -622,6 +629,20 @@ export type CardDisplayDefinition = {
   collectorNumber: string;
 };
 
+export type SagaChapter = {
+  chapter: number;
+  label?: string;
+  title?: string;
+  effects: Effect[];
+};
+
+export type SagaDefinition = {
+  loreCounter?: CounterName;
+  addLoreTiming?: "enters_and_turn_start";
+  chapters: SagaChapter[];
+  sacrificeAfterChapter?: number;
+};
+
 export type BaseCardDefinition = {
   id: CardDefinitionId;
   name: string;
@@ -643,16 +664,46 @@ export type SpellCardDefinition = BaseCardDefinition & {
   cardTypes: NonPermanentCardType[];
 };
 
-export type PermanentCardDefinition = BaseCardDefinition & {
-  cardTypes: PermanentCardType[];
+export type CreaturePermanentCardDefinition = BaseCardDefinition & {
+  cardTypes: ["creature"] | ["artifact", "creature"] | ["enchantment", "creature"];
   power: number;
   health: number;
+  saga?: never;
   recoveryPolicy?: DefenderRecoveryPolicy;
   keywords?: PermanentKeyword[];
   grantedKeywords?: PermanentKeyword[];
   preSummonEffects?: Effect[];
   attackAllEnemyPermanents?: boolean;
 };
+
+export type SagaPermanentCardDefinition = BaseCardDefinition & {
+  cardTypes: ["enchantment", "saga"] | ["saga"];
+  power: number;
+  health: number;
+  saga: SagaDefinition;
+  recoveryPolicy?: DefenderRecoveryPolicy;
+  keywords?: PermanentKeyword[];
+  grantedKeywords?: PermanentKeyword[];
+  preSummonEffects?: Effect[];
+  attackAllEnemyPermanents?: boolean;
+};
+
+export type OtherPermanentCardDefinition = BaseCardDefinition & {
+  cardTypes: ["artifact"] | ["battle"] | ["enchantment"] | ["land"];
+  power?: number;
+  health?: number;
+  saga?: never;
+  recoveryPolicy?: DefenderRecoveryPolicy;
+  keywords?: PermanentKeyword[];
+  grantedKeywords?: PermanentKeyword[];
+  preSummonEffects?: Effect[];
+  attackAllEnemyPermanents?: boolean;
+};
+
+export type PermanentCardDefinition =
+  | CreaturePermanentCardDefinition
+  | SagaPermanentCardDefinition
+  | OtherPermanentCardDefinition;
 
 export type CardDefinition = SpellCardDefinition | PermanentCardDefinition;
 
@@ -758,6 +809,9 @@ export type PermanentState = {
   enteredBattlefieldTurnNumber?: number;
   keywords: PermanentKeyword[];
   counters?: PermanentCounter[];
+  sagaState?: {
+    resolvedChapters: number[];
+  };
   modifiers?: PermanentModifier[];
   keywordModifiers?: PermanentKeywordModifier[];
   attachments?: string[];
@@ -775,7 +829,7 @@ export type PermanentState = {
 export type PermanentCounter = {
   id: string;
   counter: CounterName;
-  stat: CounterStat;
+  stat?: CounterStat;
   amount: number;
   sourceKind: CounterSourceKind;
   sourceId: string;

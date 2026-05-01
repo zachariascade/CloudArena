@@ -56,6 +56,77 @@ describe("shared display card mappers", () => {
     expect(model.badges).toEqual([]);
   });
 
+  it("maps and renders Saga cards with chapter text beside the art", () => {
+    const model = mapArenaHandCardToDisplayCard(
+      {
+        instanceId: "card_saga",
+        definitionId: "writing_on_the_wall",
+        name: "Writing on the Wall",
+        cost: 2,
+        effectSummary: "I - Gain 5 block. II - Deal 4 damage to the enemy. III - Draw 1 card.",
+      },
+      {
+        isPlayable: true,
+      },
+    );
+    const html = renderToStaticMarkup(createElement(DisplayCard, { model }));
+
+    expect(model.variant).toBe("saga");
+    expect(model.subtitle).toBe("Enchantment - Saga");
+    expect(model.footerStat).toBe("1/5");
+    expect(model.saga?.chapters.map((chapter) => chapter.label)).toEqual(["I", "II", "III"]);
+    expect(html).toContain("card-face-saga-body");
+    expect(html).toContain("card-face-saga-chapter");
+    expect(html).toContain("Gain 5 block.");
+    expect(html).toContain("card-face-saga-art-wrap");
+    expect(html.indexOf("card-face-saga-body")).toBeLessThan(html.indexOf("card-face-typeline"));
+  });
+
+  it("shows lore progress on battlefield Saga permanents", () => {
+    const model = mapArenaPermanentToDisplayCard({
+      instanceId: "writing_on_the_wall_1",
+      sourceCardInstanceId: "card_saga",
+      definitionId: "writing_on_the_wall",
+      name: "Writing on the Wall",
+      controllerId: "player",
+      isCreature: false,
+      power: 1,
+      health: 5,
+      maxHealth: 5,
+      block: 0,
+      counters: { lore: 2 },
+      saga: {
+        loreCounter: 2,
+        finalChapter: 3,
+        activeChapter: 2,
+        resolvedChapters: [1, 2],
+        chapters: [
+          { chapter: 1, label: "I", text: "I - Gain 5 block.", resolved: true, active: false },
+          { chapter: 2, label: "II", text: "II - Deal 4 damage to the enemy.", resolved: true, active: true },
+          { chapter: 3, label: "III", text: "III - Draw 1 card.", resolved: false, active: false },
+        ],
+      },
+      attachments: [],
+      attachedTo: null,
+      hasActedThisTurn: true,
+      isTapped: false,
+      isDefending: false,
+      blockingTargetPermanentId: null,
+      slotIndex: 0,
+      actions: [],
+    });
+    const html = renderToStaticMarkup(createElement(DisplayCard, { model }));
+
+    expect(model.variant).toBe("saga");
+    expect(model.statusLabel).toBe("Lore 2/3");
+    expect(model.footerStat).toBe("1/5");
+    expect(model.healthBar?.label).toBe("5/5");
+    expect(model.stateFlags).not.toContain("spent");
+    expect(html).toContain("card-face-saga-lore");
+    expect(html).toContain("2/3");
+    expect(html).toContain("card-face-saga-chapter is-resolved is-active");
+  });
+
   it("generates subtitles from card types, subtypes, and rarity", () => {
     const generatedSubtitle = buildCardSubtitle({
       cardTypes: ["creature"],
@@ -71,7 +142,7 @@ describe("shared display card mappers", () => {
 
     const generatedSubtitle = buildCardSubtitle(galleryAncientOfDaysCardDefinition);
 
-    expect(generatedSubtitle).toBe("Legendary Creature - Sage");
+    expect(generatedSubtitle).toBe("Legendary Creature - God");
   });
 
   it("derives the footer stat from the card definition power and health", () => {

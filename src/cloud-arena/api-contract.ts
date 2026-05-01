@@ -149,6 +149,19 @@ export type CloudArenaPermanentSnapshot = {
   powerCounter?: number;
   healthCounter?: number;
   counters?: Record<string, number>;
+  saga?: {
+    loreCounter: number;
+    finalChapter: number;
+    activeChapter: number | null;
+    resolvedChapters: number[];
+    chapters: Array<{
+      chapter: number;
+      label: string;
+      text: string;
+      resolved: boolean;
+      active: boolean;
+    }>;
+  };
   attachments?: string[];
   attachedTo?: string | null;
   hasActedThisTurn: boolean;
