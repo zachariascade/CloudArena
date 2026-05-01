@@ -12,7 +12,7 @@ export const gallerySaintMichaelVanquishingSatanCardDefinition: CardDefinition =
     title: "Champion of Heaven",
     frameTone: "split-white-red",
     artist: "Raphael",
-    imagePath: "https://upload.wikimedia.org/wikipedia/commons/7/74/Raphael_-_St._Michael_Vanquishing_Satan.jpg",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Raphael_-_St._Michael_Vanquishing_Satan.jpg/960px-Raphael_-_St._Michael_Vanquishing_Satan.jpg",
     imageAlt: "Raphael's Saint Michael Vanquishing Satan",
     flavorText: "The victory is not only force. It is order restored.",
     footerCode: "ARE",

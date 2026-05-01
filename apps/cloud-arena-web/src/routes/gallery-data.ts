@@ -26,10 +26,7 @@ export const GALLERY: GalleryEntry[] = [
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg/960px-The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg",
     createdAt: "2026-04-27T22:20:25-05:00",
-    cardUsed: [
-      "/cards/gallery_ancient_of_days",
-      "/cards/son_of_man",
-    ],
+    cardUsed: ["/cards/gallery_ancient_of_days", "/cards/son_of_man"],
   },
   {
     title: "The Angel Stopping Abraham",
@@ -51,10 +48,7 @@ export const GALLERY: GalleryEntry[] = [
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/f/fa/Angelico_-_Annunciation_-_San_Marco_north_corridor.jpg",
     createdAt: "2026-04-27T22:20:25-05:00",
-    cardUsed: [
-      "/cards/gallery_annunciation",
-      "/cards/gabriel_the_messenger",
-    ],
+    cardUsed: ["/cards/gallery_annunciation", "/cards/gabriel_the_messenger"],
   },
   {
     title: "Belshazzar's Feast",
@@ -137,10 +131,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Abraham Journeying into the Land of Canaan",
     artist: "Gustave Doré",
     year: "1873",
-    wikiUrl:
-      createCommonsFilePageUrl("Abraham Journeying into the Land of Canaan (89393798).jpg"),
-    imageUrl:
-      createCommonsFilePathUrl("Abraham Journeying into the Land of Canaan (89393798).jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Abraham Journeying into the Land of Canaan (89393798).jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Abraham Journeying into the Land of Canaan (89393798).jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -148,8 +144,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Adam and Eve Driven out of Eden",
     artist: "Gustave Doré",
     year: "1866",
-    wikiUrl: createCommonsFilePageUrl("003.Adam and Eve Are Driven out of Eden.jpg"),
-    imageUrl: createCommonsFilePathUrl("003.Adam and Eve Are Driven out of Eden.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "003.Adam and Eve Are Driven out of Eden.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "003.Adam and Eve Are Driven out of Eden.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -166,10 +166,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Baruch Writing Jeremiah's Prophecies",
     artist: "Gustave Doré",
     year: "1874",
-    wikiUrl:
-      createCommonsFilePageUrl("Baruch Writing Jeremiah's Prophecies (89467495).jpg"),
-    imageUrl:
-      createCommonsFilePathUrl("Baruch Writing Jeremiah's Prophecies (89467495).jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Baruch Writing Jeremiah's Prophecies (89467495).jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Baruch Writing Jeremiah's Prophecies (89467495).jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -186,10 +188,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Dove Sent Forth from the Ark",
     artist: "Gustave Doré",
     year: "1873",
-    wikiUrl:
-      createCommonsFilePageUrl("Dove Sent Forth from the Ark (89393604).jpg"),
-    imageUrl:
-      createCommonsFilePathUrl("Dove Sent Forth from the Ark (89393604).jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Dove Sent Forth from the Ark (89393604).jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Dove Sent Forth from the Ark (89393604).jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -197,10 +201,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Expulsion of Ishmael and His Mother",
     artist: "Gustave Doré",
     year: "1873",
-    wikiUrl:
-      createCommonsFilePageUrl("Expulsion of Ishmael and His Mother (89393994).jpg"),
-    imageUrl:
-      createCommonsFilePathUrl("Expulsion of Ishmael and His Mother (89393994).jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Expulsion of Ishmael and His Mother (89393994).jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Expulsion of Ishmael and His Mother (89393994).jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -217,10 +223,8 @@ export const GALLERY: GalleryEntry[] = [
     title: "Joshua Crossing Jordan",
     artist: "Gustave Doré",
     year: "1873",
-    wikiUrl:
-      createCommonsFilePageUrl("Joshua Crossing Jordan (89396850).jpg"),
-    imageUrl:
-      createCommonsFilePathUrl("Joshua Crossing Jordan (89396850).jpg"),
+    wikiUrl: createCommonsFilePageUrl("Joshua Crossing Jordan (89396850).jpg"),
+    imageUrl: createCommonsFilePathUrl("Joshua Crossing Jordan (89396850).jpg"),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -309,16 +313,18 @@ export const GALLERY: GalleryEntry[] = [
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Hieronymus_Bosch_-_The_Last_Judgement.jpg/960px-Hieronymus_Bosch_-_The_Last_Judgement.jpg",
     createdAt: "2026-04-27T22:26:33-05:00",
-    cardUsed: [
-      "/cards/gallery_last_judgment",
-    ],
+    cardUsed: ["/cards/gallery_last_judgment"],
   },
   {
     title: "The Fall of the Damned",
     artist: "Peter Paul Rubens",
     year: "c. 1621",
-    wikiUrl: createCommonsFilePageUrl("Peter Paul Rubens - Fall of the damned.jpg"),
-    imageUrl: createCommonsFilePathUrl("Peter Paul Rubens - Fall of the damned.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Peter Paul Rubens - Fall of the damned.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Peter Paul Rubens - Fall of the damned.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -1297,9 +1303,7 @@ export const GALLERY: GalleryEntry[] = [
     wikiUrl: createCommonsFilePageUrl("Mikharkhangel.jpg"),
     imageUrl: createCommonsFilePathUrl("Mikharkhangel.jpg"),
     createdAt: "2026-04-28T00:00:00-05:00",
-    cardUsed: [
-      "/cards/michael_the_archangel",
-    ],
+    cardUsed: ["/cards/michael_the_archangel"],
   },
   {
     title: "Saint George",
@@ -1459,8 +1463,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Daniel Interpreting Nebuchadnezzar's Dream",
     artist: "W. A. Spicer",
     year: "1917",
-    wikiUrl: createCommonsFilePageUrl("Daniel Interpreting Nebuchadnezzar's Dream.jpg"),
-    imageUrl: createCommonsFilePathUrl("Daniel Interpreting Nebuchadnezzar's Dream.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Daniel Interpreting Nebuchadnezzar's Dream.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Daniel Interpreting Nebuchadnezzar's Dream.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [
       "/cards/dream_of_the_tree",
@@ -1475,9 +1483,7 @@ export const GALLERY: GalleryEntry[] = [
     wikiUrl: createCommonsFilePageUrl("Songe Nabuchodonosor arbre.jpg"),
     imageUrl: createCommonsFilePathUrl("Songe Nabuchodonosor arbre.jpg"),
     createdAt: "2026-04-30T00:00:00-05:00",
-    cardUsed: [
-      "/cards/dream_of_the_tree",
-    ],
+    cardUsed: ["/cards/dream_of_the_tree"],
   },
   {
     title: "Daniel and the Four Fantastic Beasts",
@@ -1490,10 +1496,7 @@ export const GALLERY: GalleryEntry[] = [
       "Daniel and the four fantastic beasts. Engraving, 1634. Wellcome V0034350.jpg",
     ),
     createdAt: "2026-04-30T00:00:00-05:00",
-    cardUsed: [
-      "/cards/terrifying_fourth_beast",
-      "/cards/leopard_with_wings",
-    ],
+    cardUsed: ["/cards/terrifying_fourth_beast", "/cards/leopard_with_wings"],
   },
   {
     title: "Nebuchadnezzar's Statue",
@@ -1506,10 +1509,7 @@ export const GALLERY: GalleryEntry[] = [
       "The Hague, KB, 131 A 3, Nebuchadnezzar's statue.jpeg",
     ),
     createdAt: "2026-04-30T00:00:00-05:00",
-    cardUsed: [
-      "/cards/golden_image",
-      "/cards/dream_of_the_statue",
-    ],
+    cardUsed: ["/cards/golden_image", "/cards/dream_of_the_statue"],
   },
   {
     title: "David Slays Goliath",
@@ -2273,8 +2273,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Jupiter and Io",
     artist: "Antonio da Correggio",
     year: "c. 1530",
-    wikiUrl: createCommonsFilePageUrl("Correggio - Jupiter and Io - WGA05344.jpg"),
-    imageUrl: createCommonsFilePathUrl("Correggio - Jupiter and Io - WGA05344.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Correggio - Jupiter and Io - WGA05344.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Correggio - Jupiter and Io - WGA05344.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2313,7 +2317,9 @@ export const GALLERY: GalleryEntry[] = [
     title: "Jupiter and Semele",
     artist: "Jacopo Tintoretto",
     year: "1545",
-    wikiUrl: createCommonsFilePageUrl("Jacopo Tintoretto - Jupiter and Semele, 1545.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Jacopo Tintoretto - Jupiter and Semele, 1545.jpg",
+    ),
     imageUrl: createCommonsFilePathUrl(
       "Jacopo Tintoretto - Jupiter and Semele, 1545.jpg",
     ),
@@ -2324,7 +2330,9 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Rape of Europa",
     artist: "Paolo Veronese",
     year: "16th century",
-    wikiUrl: createCommonsFilePageUrl("Veronese - Rape of Europa - Google Art Project.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Veronese - Rape of Europa - Google Art Project.jpg",
+    ),
     imageUrl: createCommonsFilePathUrl(
       "Veronese - Rape of Europa - Google Art Project.jpg",
     ),
@@ -2344,8 +2352,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Adoration of the Magi",
     artist: "Gentile da Fabriano",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Gentile_da_Fabriano_-_Adorazione_dei_Magi_-_Google_Art_ProjectFXD.jpg"),
-    imageUrl: createCommonsFilePathUrl("Gentile_da_Fabriano_-_Adorazione_dei_Magi_-_Google_Art_ProjectFXD.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Gentile_da_Fabriano_-_Adorazione_dei_Magi_-_Google_Art_ProjectFXD.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Gentile_da_Fabriano_-_Adorazione_dei_Magi_-_Google_Art_ProjectFXD.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2362,8 +2374,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Christ and the Samaritan Woman at the Well",
     artist: "Giuseppe Passeri",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Christ_and_the_Samaritan_Woman_at_the_Well._MET_DP810988.jpg"),
-    imageUrl: createCommonsFilePathUrl("Christ_and_the_Samaritan_Woman_at_the_Well._MET_DP810988.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Christ_and_the_Samaritan_Woman_at_the_Well._MET_DP810988.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Christ_and_the_Samaritan_Woman_at_the_Well._MET_DP810988.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2371,8 +2387,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Christ before Caiaphas",
     artist: "Sebald Beham",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Sebald_Beham,_Christ_before_Caiaphas,_1535,_NGA_4367.jpg"),
-    imageUrl: createCommonsFilePathUrl("Sebald_Beham,_Christ_before_Caiaphas,_1535,_NGA_4367.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Sebald_Beham,_Christ_before_Caiaphas,_1535,_NGA_4367.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Sebald_Beham,_Christ_before_Caiaphas,_1535,_NGA_4367.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2389,8 +2409,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Christ Crowned with Thorns",
     artist: "Guercino",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Guercino-Christ_Crowned_With_Thorns.jpg"),
-    imageUrl: createCommonsFilePathUrl("Guercino-Christ_Crowned_With_Thorns.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Guercino-Christ_Crowned_With_Thorns.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Guercino-Christ_Crowned_With_Thorns.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2398,8 +2422,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Christ Driving the Money-changers from the Temple",
     artist: "Rembrandt",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Rembrandt_Christ_Driving_the_Money_Changers_from_the_Temple.jpg"),
-    imageUrl: createCommonsFilePathUrl("Rembrandt_Christ_Driving_the_Money_Changers_from_the_Temple.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Rembrandt_Christ_Driving_the_Money_Changers_from_the_Temple.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Rembrandt_Christ_Driving_the_Money_Changers_from_the_Temple.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2416,8 +2444,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Christ Healing the Blind",
     artist: "El Greco",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("El_Greco_(Doménikos_Theotokópoulos)_(1541–1614),_Christ_Healing_the_Blind,_c._1570.jpg"),
-    imageUrl: createCommonsFilePathUrl("El_Greco_(Doménikos_Theotokópoulos)_(1541–1614),_Christ_Healing_the_Blind,_c._1570.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "El_Greco_(Doménikos_Theotokópoulos)_(1541–1614),_Christ_Healing_the_Blind,_c._1570.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "El_Greco_(Doménikos_Theotokópoulos)_(1541–1614),_Christ_Healing_the_Blind,_c._1570.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2425,8 +2457,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Christ in the House of Martha and Mary",
     artist: "Charles de La Fosse",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Christ_in_the_House_of_Martha_and_Mary(113520).jpg"),
-    imageUrl: createCommonsFilePathUrl("Christ_in_the_House_of_Martha_and_Mary(113520).jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Christ_in_the_House_of_Martha_and_Mary(113520).jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Christ_in_the_House_of_Martha_and_Mary(113520).jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2434,8 +2470,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Christ on the Mount of Olives",
     artist: "Albrecht Durer",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Albrecht_Dürer,_Christ_on_the_Mount_of_Olives,_c._1497-1499,_NGA_6686.jpg"),
-    imageUrl: createCommonsFilePathUrl("Albrecht_Dürer,_Christ_on_the_Mount_of_Olives,_c._1497-1499,_NGA_6686.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Albrecht_Dürer,_Christ_on_the_Mount_of_Olives,_c._1497-1499,_NGA_6686.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Albrecht_Dürer,_Christ_on_the_Mount_of_Olives,_c._1497-1499,_NGA_6686.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2452,8 +2492,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Healing of the Lepers at Capernaum",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_Healing_of_the_Lepers_at_Capernaum_(Guérison_des_lépreux_à_Capernaum)_-_James_Tissot_-_overall.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_Healing_of_the_Lepers_at_Capernaum_(Guérison_des_lépreux_à_Capernaum)_-_James_Tissot_-_overall.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_Healing_of_the_Lepers_at_Capernaum_(Guérison_des_lépreux_à_Capernaum)_-_James_Tissot_-_overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_Healing_of_the_Lepers_at_Capernaum_(Guérison_des_lépreux_à_Capernaum)_-_James_Tissot_-_overall.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2479,8 +2523,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Interview between Jesus and Nicodemus",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_Interview_between_Jesus_and_Nicodemus_(Entretien_de_Jésus_et_de_Nicodème)_-_James_Tissot.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_Interview_between_Jesus_and_Nicodemus_(Entretien_de_Jésus_et_de_Nicodème)_-_James_Tissot.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_Interview_between_Jesus_and_Nicodemus_(Entretien_de_Jésus_et_de_Nicodème)_-_James_Tissot.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_Interview_between_Jesus_and_Nicodemus_(Entretien_de_Jésus_et_de_Nicodème)_-_James_Tissot.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2488,8 +2536,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "It Is Finished",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_It_Is_Finished_(Consummatum_Est)_-_James_Tissot.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_It_Is_Finished_(Consummatum_Est)_-_James_Tissot.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_It_Is_Finished_(Consummatum_Est)_-_James_Tissot.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_It_Is_Finished_(Consummatum_Est)_-_James_Tissot.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2497,8 +2549,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Jerusalem From The Mount Of Olives",
     artist: "Gustav Bauernfeind",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("JERUSALEM_FROM_THE_MOUNT_OF_OLIVES_).jpg"),
-    imageUrl: createCommonsFilePathUrl("JERUSALEM_FROM_THE_MOUNT_OF_OLIVES_).jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "JERUSALEM_FROM_THE_MOUNT_OF_OLIVES_).jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "JERUSALEM_FROM_THE_MOUNT_OF_OLIVES_).jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2506,8 +2562,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Jerusalem Jerusalem",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_Jerusalem_Jerusalem_(Jérusalem_Jérusalem)_-_James_Tissot.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_Jerusalem_Jerusalem_(Jérusalem_Jérusalem)_-_James_Tissot.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_Jerusalem_Jerusalem_(Jérusalem_Jérusalem)_-_James_Tissot.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_Jerusalem_Jerusalem_(Jérusalem_Jérusalem)_-_James_Tissot.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2525,7 +2585,9 @@ export const GALLERY: GalleryEntry[] = [
     artist: "Wenceslaus Hollar",
     year: "unknown",
     wikiUrl: createCommonsFilePageUrl("Jesus_before_Caiaphas_MET_DP822864.jpg"),
-    imageUrl: createCommonsFilePathUrl("Jesus_before_Caiaphas_MET_DP822864.jpg"),
+    imageUrl: createCommonsFilePathUrl(
+      "Jesus_before_Caiaphas_MET_DP822864.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2533,8 +2595,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Judas Repentant, Returning the Pieces of Silver",
     artist: "Rembrandt",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Judas_Returning_the_Thirty_Silver_Pieces_-_Rembrandt.jpg"),
-    imageUrl: createCommonsFilePathUrl("Judas_Returning_the_Thirty_Silver_Pieces_-_Rembrandt.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Judas_Returning_the_Thirty_Silver_Pieces_-_Rembrandt.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Judas_Returning_the_Thirty_Silver_Pieces_-_Rembrandt.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2542,8 +2608,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Mary Magdalene and the Holy Women at the Tomb",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_Mary_Magdalene_and_the_Holy_Women_at_the_Tomb_(Madeleine_et_les_saintes_femmes_au_tombeau)_-_James_Tissot.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_Mary_Magdalene_and_the_Holy_Women_at_the_Tomb_(Madeleine_et_les_saintes_femmes_au_tombeau)_-_James_Tissot.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_Mary_Magdalene_and_the_Holy_Women_at_the_Tomb_(Madeleine_et_les_saintes_femmes_au_tombeau)_-_James_Tissot.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_Mary_Magdalene_and_the_Holy_Women_at_the_Tomb_(Madeleine_et_les_saintes_femmes_au_tombeau)_-_James_Tissot.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2551,8 +2621,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Our Lord Jesus Christ",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_Our_Lord_Jesus_Christ_(Notre-Seigneur_Jésus-Christ)_-_James_Tissot.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_Our_Lord_Jesus_Christ_(Notre-Seigneur_Jésus-Christ)_-_James_Tissot.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_Our_Lord_Jesus_Christ_(Notre-Seigneur_Jésus-Christ)_-_James_Tissot.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_Our_Lord_Jesus_Christ_(Notre-Seigneur_Jésus-Christ)_-_James_Tissot.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2560,8 +2634,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Parable of the Lost Sheep",
     artist: "Jan Luyken",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Teachings_of_Jesus_14_of_40._parable_of_the_lost_sheep._Jan_Luyken_etching._Bowyer_Bible.gif"),
-    imageUrl: createCommonsFilePathUrl("Teachings_of_Jesus_14_of_40._parable_of_the_lost_sheep._Jan_Luyken_etching._Bowyer_Bible.gif"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Teachings_of_Jesus_14_of_40._parable_of_the_lost_sheep._Jan_Luyken_etching._Bowyer_Bible.gif",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Teachings_of_Jesus_14_of_40._parable_of_the_lost_sheep._Jan_Luyken_etching._Bowyer_Bible.gif",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2569,8 +2647,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Parable of the Mustard Seed",
     artist: "Jan Luyken",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Teachings_of_Jesus_5_of_40._parable_of_the_mustard_seed._Jan_Luyken_etching._Bowyer_Bible.gif"),
-    imageUrl: createCommonsFilePathUrl("Teachings_of_Jesus_5_of_40._parable_of_the_mustard_seed._Jan_Luyken_etching._Bowyer_Bible.gif"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Teachings_of_Jesus_5_of_40._parable_of_the_mustard_seed._Jan_Luyken_etching._Bowyer_Bible.gif",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Teachings_of_Jesus_5_of_40._parable_of_the_mustard_seed._Jan_Luyken_etching._Bowyer_Bible.gif",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2596,8 +2678,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Saint Andrew",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_Saint_Andrew_(Saint_André)_-_James_Tissot_-_overall.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_Saint_Andrew_(Saint_André)_-_James_Tissot_-_overall.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_Saint_Andrew_(Saint_André)_-_James_Tissot_-_overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_Saint_Andrew_(Saint_André)_-_James_Tissot_-_overall.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2605,8 +2691,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Saint John the Evangelist",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_Saint_John_the_Evangelist_(Saint_Jean_l'Évangeliste)_-_James_Tissot_-_overall.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_Saint_John_the_Evangelist_(Saint_Jean_l'Évangeliste)_-_James_Tissot_-_overall.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_Saint_John_the_Evangelist_(Saint_Jean_l'Évangeliste)_-_James_Tissot_-_overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_Saint_John_the_Evangelist_(Saint_Jean_l'Évangeliste)_-_James_Tissot_-_overall.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2623,8 +2713,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Saint Peter Walks on the Sea",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_Saint_Peter_Walks_on_the_Sea_(Saint_Pierre_marche_sur_la_mer)_-_James_Tissot_-_overall.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_Saint_Peter_Walks_on_the_Sea_(Saint_Pierre_marche_sur_la_mer)_-_James_Tissot_-_overall.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_Saint_Peter_Walks_on_the_Sea_(Saint_Pierre_marche_sur_la_mer)_-_James_Tissot_-_overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_Saint_Peter_Walks_on_the_Sea_(Saint_Pierre_marche_sur_la_mer)_-_James_Tissot_-_overall.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2632,8 +2726,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Shrine of the Annunciation, Nazareth",
     artist: "David Roberts",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Shrine_of_the_Annunciation_Nazareth_April_20th_1839_-_David_Roberts,_R.A._LCCN2002717479.jpg"),
-    imageUrl: createCommonsFilePathUrl("Shrine_of_the_Annunciation_Nazareth_April_20th_1839_-_David_Roberts,_R.A._LCCN2002717479.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Shrine_of_the_Annunciation_Nazareth_April_20th_1839_-_David_Roberts,_R.A._LCCN2002717479.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Shrine_of_the_Annunciation_Nazareth_April_20th_1839_-_David_Roberts,_R.A._LCCN2002717479.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2641,8 +2739,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "Simon of Cyrene Carries the Cross",
     artist: "Theophile Marie Francois Lybaert",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Theophile_Lybaert_-_Simon_of_Cyrene_carries_the_cross.jpg"),
-    imageUrl: createCommonsFilePathUrl("Theophile_Lybaert_-_Simon_of_Cyrene_carries_the_cross.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Theophile_Lybaert_-_Simon_of_Cyrene_carries_the_cross.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Theophile_Lybaert_-_Simon_of_Cyrene_carries_the_cross.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2650,8 +2752,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Adoration of the Shepherds",
     artist: "Giorgione",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Giorgione,_The_Adoration_of_the_Shepherds,_1505-1510,_NGA_432.jpg"),
-    imageUrl: createCommonsFilePathUrl("Giorgione,_The_Adoration_of_the_Shepherds,_1505-1510,_NGA_432.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Giorgione,_The_Adoration_of_the_Shepherds,_1505-1510,_NGA_432.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Giorgione,_The_Adoration_of_the_Shepherds,_1505-1510,_NGA_432.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2659,8 +2765,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Annunciation",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_The_Annunciation_(L'annonciation)_-_James_Tissot_-_overall.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_The_Annunciation_(L'annonciation)_-_James_Tissot_-_overall.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_The_Annunciation_(L'annonciation)_-_James_Tissot_-_overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_The_Annunciation_(L'annonciation)_-_James_Tissot_-_overall.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2668,8 +2778,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Baptism of Christ in the River Jordan",
     artist: "Karoly Marko",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Markó,_Károly_-_The_Baptism_of_Christ_in_the_River_Jordan_(1840-1).jpg"),
-    imageUrl: createCommonsFilePathUrl("Markó,_Károly_-_The_Baptism_of_Christ_in_the_River_Jordan_(1840-1).jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Markó,_Károly_-_The_Baptism_of_Christ_in_the_River_Jordan_(1840-1).jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Markó,_Károly_-_The_Baptism_of_Christ_in_the_River_Jordan_(1840-1).jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2677,8 +2791,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Grotto of the Agony",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_The_Grotto_of_the_Agony_(La_Grotte_de_l'agonie)_-_James_Tissot.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_The_Grotto_of_the_Agony_(La_Grotte_de_l'agonie)_-_James_Tissot.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_The_Grotto_of_the_Agony_(La_Grotte_de_l'agonie)_-_James_Tissot.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_The_Grotto_of_the_Agony_(La_Grotte_de_l'agonie)_-_James_Tissot.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2686,8 +2804,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Healing of the Paralytic",
     artist: "Netherlandish 16th Century",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("The_Healing_of_the_Paralytic_sc000456.jpg"),
-    imageUrl: createCommonsFilePathUrl("The_Healing_of_the_Paralytic_sc000456.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "The_Healing_of_the_Paralytic_sc000456.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "The_Healing_of_the_Paralytic_sc000456.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2695,8 +2817,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Kiss of Judas",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_The_Kiss_of_Judas_(Le_baiser_de_Judas)_-_James_Tissot.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_The_Kiss_of_Judas_(Le_baiser_de_Judas)_-_James_Tissot.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_The_Kiss_of_Judas_(Le_baiser_de_Judas)_-_James_Tissot.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_The_Kiss_of_Judas_(Le_baiser_de_Judas)_-_James_Tissot.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2722,8 +2848,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Miracle of the Loaves and Fishes",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_The_Miracle_of_the_Loaves_and_Fishes_(La_multiplication_des_pains)_by_James_Tissot.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_The_Miracle_of_the_Loaves_and_Fishes_(La_multiplication_des_pains)_by_James_Tissot.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_The_Miracle_of_the_Loaves_and_Fishes_(La_multiplication_des_pains)_by_James_Tissot.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_The_Miracle_of_the_Loaves_and_Fishes_(La_multiplication_des_pains)_by_James_Tissot.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2731,8 +2861,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Miraculous Draught of Fishes",
     artist: "Peter Paul Rubens",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Rubens_-_The_Miraculous_Draught_of_Fishes,_1618-19.jpg"),
-    imageUrl: createCommonsFilePathUrl("Rubens_-_The_Miraculous_Draught_of_Fishes,_1618-19.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Rubens_-_The_Miraculous_Draught_of_Fishes,_1618-19.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Rubens_-_The_Miraculous_Draught_of_Fishes,_1618-19.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2740,8 +2874,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Parable of the Rich Fool",
     artist: "Rembrandt",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Rembrandt_-_The_Parable_of_the_Rich_Fool.jpg"),
-    imageUrl: createCommonsFilePathUrl("Rembrandt_-_The_Parable_of_the_Rich_Fool.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Rembrandt_-_The_Parable_of_the_Rich_Fool.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Rembrandt_-_The_Parable_of_the_Rich_Fool.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2749,8 +2887,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Pharisee and the Publican",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Tissot_The_Pharisee_and_the_publican_Brooklyn.jpg"),
-    imageUrl: createCommonsFilePathUrl("Tissot_The_Pharisee_and_the_publican_Brooklyn.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Tissot_The_Pharisee_and_the_publican_Brooklyn.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Tissot_The_Pharisee_and_the_publican_Brooklyn.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2758,8 +2900,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Pilgrims of Emmaus on the Road",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_The_Pilgrims_of_Emmaus_on_the_Road_(Les_pèlerins_d'Emmaüs_en_chemin)_-_James_Tissot.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_The_Pilgrims_of_Emmaus_on_the_Road_(Les_pèlerins_d'Emmaüs_en_chemin)_-_James_Tissot.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_The_Pilgrims_of_Emmaus_on_the_Road_(Les_pèlerins_d'Emmaüs_en_chemin)_-_James_Tissot.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_The_Pilgrims_of_Emmaus_on_the_Road_(Les_pèlerins_d'Emmaüs_en_chemin)_-_James_Tissot.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2767,8 +2913,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Primacy of Saint Peter",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_The_Primacy_of_Saint_Peter_(La_primauté_de_Saint-Pierre)_-_James_Tissot.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_The_Primacy_of_Saint_Peter_(La_primauté_de_Saint-Pierre)_-_James_Tissot.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_The_Primacy_of_Saint_Peter_(La_primauté_de_Saint-Pierre)_-_James_Tissot.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_The_Primacy_of_Saint_Peter_(La_primauté_de_Saint-Pierre)_-_James_Tissot.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2776,8 +2926,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Return of the Prodigal Son",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_The_Return_of_the_Prodigal_Son_(Le_retour_de_l'enfant_prodigue)_-_James_Tissot.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_The_Return_of_the_Prodigal_Son_(Le_retour_de_l'enfant_prodigue)_-_James_Tissot.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_The_Return_of_the_Prodigal_Son_(Le_retour_de_l'enfant_prodigue)_-_James_Tissot.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_The_Return_of_the_Prodigal_Son_(Le_retour_de_l'enfant_prodigue)_-_James_Tissot.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2785,8 +2939,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Storm on the Sea of Galilee",
     artist: "Rembrandt",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg"),
-    imageUrl: createCommonsFilePathUrl("Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2794,8 +2952,23 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Third Denial of Peter. Jesus' Look of Reproach",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_The_Third_Denial_of_Peter._Jesus'_Look_of_Reproach_-_James_Tissot.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_The_Third_Denial_of_Peter._Jesus'_Look_of_Reproach_-_James_Tissot.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_The_Third_Denial_of_Peter._Jesus'_Look_of_Reproach_-_James_Tissot.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_The_Third_Denial_of_Peter._Jesus'_Look_of_Reproach_-_James_Tissot.jpg",
+    ),
+    createdAt: "2026-04-30T00:00:00-05:00",
+    cardUsed: [],
+  },
+  {
+    title: "The Tower of Babel",
+    artist: "Pieter Bruegel the Elder",
+    year: "1563",
+    wikiUrl:
+      "https://commons.wikimedia.org/wiki/File:The_Tower_of_Babel_(Bruegel).jpg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/The_Tower_of_Babel_%28Bruegel%29.jpg/960px-The_Tower_of_Babel_%28Bruegel%29.jpg",
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2803,8 +2976,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Transfiguration",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_The_Transfiguration_(La_transfiguration)_-_James_Tissot_-_overall.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_The_Transfiguration_(La_transfiguration)_-_James_Tissot_-_overall.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_The_Transfiguration_(La_transfiguration)_-_James_Tissot_-_overall.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_The_Transfiguration_(La_transfiguration)_-_James_Tissot_-_overall.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2821,8 +2998,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "The Woman with an Issue of Blood",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_The_Woman_with_an_Issue_of_Blood_(L'hémoroïsse)_-_James_Tissot.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_The_Woman_with_an_Issue_of_Blood_(L'hémoroïsse)_-_James_Tissot.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_The_Woman_with_an_Issue_of_Blood_(L'hémoroïsse)_-_James_Tissot.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_The_Woman_with_an_Issue_of_Blood_(L'hémoroïsse)_-_James_Tissot.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },
@@ -2830,8 +3011,12 @@ export const GALLERY: GalleryEntry[] = [
     title: "What Our Lord Saw from the Cross",
     artist: "James Tissot",
     year: "unknown",
-    wikiUrl: createCommonsFilePageUrl("Brooklyn_Museum_-_What_Our_Lord_Saw_from_the_Cross_(Ce_que_voyait_Notre-Seigneur_sur_la_Croix)_-_James_Tissot.jpg"),
-    imageUrl: createCommonsFilePathUrl("Brooklyn_Museum_-_What_Our_Lord_Saw_from_the_Cross_(Ce_que_voyait_Notre-Seigneur_sur_la_Croix)_-_James_Tissot.jpg"),
+    wikiUrl: createCommonsFilePageUrl(
+      "Brooklyn_Museum_-_What_Our_Lord_Saw_from_the_Cross_(Ce_que_voyait_Notre-Seigneur_sur_la_Croix)_-_James_Tissot.jpg",
+    ),
+    imageUrl: createCommonsFilePathUrl(
+      "Brooklyn_Museum_-_What_Our_Lord_Saw_from_the_Cross_(Ce_que_voyait_Notre-Seigneur_sur_la_Croix)_-_James_Tissot.jpg",
+    ),
     createdAt: "2026-04-30T00:00:00-05:00",
     cardUsed: [],
   },

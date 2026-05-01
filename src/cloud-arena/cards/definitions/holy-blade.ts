@@ -8,7 +8,7 @@ export const holyBladeCardDefinition: CardDefinition = {
   display: {
     name: "Sword of the Cherubim",
     frameTone: "colorless",
-    imagePath: "card_0027_let_there_be_light.png",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Raphael_-_St._Michael_Vanquishing_Satan.jpg/960px-Raphael_-_St._Michael_Vanquishing_Satan.jpg",
     imageAlt: "A radiant blade formed from sacred light",
     flavorText: "No hand keeps it long; it belongs where the charge is fiercest.",
     footerCode: "ARE",

@@ -8,7 +8,7 @@ export const defendingStrikeCardDefinition: CardDefinition = {
   display: {
     name: "Zeal of Phinehas",
     frameTone: "split-white-red",
-    imagePath: "card_0031_tree_of_forbidden_knowledge.jpg",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/003.Adam%20and%20Eve%20Are%20Driven%20out%20of%20Eden.jpg/960px-003.Adam%20and%20Eve%20Are%20Driven%20out%20of%20Eden.jpg",
     imageAlt: "A hard-earned warning wrapped around a burning edge",
     flavorText: "Turn defense into pressure before the enemy can reset.",
     footerCode: "ARE",

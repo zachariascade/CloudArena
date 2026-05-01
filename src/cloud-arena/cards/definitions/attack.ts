@@ -8,7 +8,7 @@ export const attackCardDefinition: CardDefinition = {
   display: {
     name: "Flaming Sword of the East",
     frameTone: "red",
-    imagePath: "card_0032_flaming_sword_of_the_east.png",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/John_Martin_-_The_Great_Day_of_His_Wrath_-_Google_Art_Project.jpg/960px-John_Martin_-_The_Great_Day_of_His_Wrath_-_Google_Art_Project.jpg",
     imageAlt: "A flaming sword cutting across the dark",
     flavorText: "Commit first. Let hesitation fall away after the strike lands.",
     footerCode: "ARE",

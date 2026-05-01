@@ -8,7 +8,7 @@ export const forbiddenInsightCardDefinition: CardDefinition = {
   display: {
     name: "Tree of Forbidden Knowledge",
     frameTone: "blue",
-    imagePath: "card_0031_tree_of_forbidden_knowledge.jpg",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/003.Adam%20and%20Eve%20Are%20Driven%20out%20of%20Eden.jpg/960px-003.Adam%20and%20Eve%20Are%20Driven%20out%20of%20Eden.jpg",
     imageAlt: "A moment of hidden understanding opening like a book of fire",
     flavorText: "Some truths are dangerous, but they still fill the hand with answers.",
     footerCode: "ARE",

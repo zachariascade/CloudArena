@@ -8,7 +8,7 @@ export const armoryDiscipleCardDefinition: CardDefinition = {
   display: {
     name: "Tubal-Cain, Forger of Bronze and Iron",
     frameTone: "white",
-    imagePath: "classics/card_0041_tubal_cain_forger_of_bronze_and_iron.jpg",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Gustave_Dore_Bible_The_Tower_of_Babel.jpg/960px-Gustave_Dore_Bible_The_Tower_of_Babel.jpg",
     imageAlt: "Tubal-Cain forging bronze and iron in a biblical illustration",
     flavorText: "The right tool arrives the moment discipline becomes devotion.",
     footerCode: "ARE",

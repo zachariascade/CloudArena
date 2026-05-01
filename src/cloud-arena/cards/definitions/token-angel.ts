@@ -8,7 +8,7 @@ export const tokenAngelCardDefinition: CardDefinition = {
   display: {
     name: "Angel of the Lord",
     frameTone: "white",
-    imagePath: "classics/card_0059_dove_with_the_olive_branch.jpg",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Rembrandt_The_Angel_Preventing_Abraham_from_Sacrificing_his_Son%2C_Isaac.jpg/960px-Rembrandt_The_Angel_Preventing_Abraham_from_Sacrificing_his_Son%2C_Isaac.jpg",
     imageAlt: "A small angel token hovering over the battlefield",
     flavorText:
       "A little light, repeated where it is needed, still holds the line.",

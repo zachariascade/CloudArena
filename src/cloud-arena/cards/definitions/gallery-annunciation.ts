@@ -12,7 +12,7 @@ export const galleryAnnunciationCardDefinition: CardDefinition = {
     title: "Herald of the First Sign",
     frameTone: "split-white-blue",
     artist: "Fra Angelico",
-    imagePath: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Angelico_-_Annunciation_-_San_Marco_north_corridor.jpg",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Angelico_-_Annunciation_-_San_Marco_north_corridor.jpg/960px-Angelico_-_Annunciation_-_San_Marco_north_corridor.jpg",
     imageAlt: "Fra Angelico's Annunciation",
     flavorText: "News becomes power the moment it lands in willing hands.",
     footerCode: "ARE",

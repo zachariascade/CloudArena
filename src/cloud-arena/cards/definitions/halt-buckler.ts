@@ -8,7 +8,7 @@ export const haltBucklerCardDefinition: CardDefinition = {
   display: {
     name: "Bulwark of Intercession",
     frameTone: "colorless",
-    imagePath: "card_0036_watcher_at_edens_gate.jpg",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Rembrandt_The_Angel_Preventing_Abraham_from_Sacrificing_his_Son%2C_Isaac.jpg/960px-Rembrandt_The_Angel_Preventing_Abraham_from_Sacrificing_his_Son%2C_Isaac.jpg",
     imageAlt: "A holy buckler lifted to catch the full force of an oncoming strike",
     flavorText: "A bearer behind it becomes a wall, and a wall behind it becomes a promise.",
     footerCode: "ARE",

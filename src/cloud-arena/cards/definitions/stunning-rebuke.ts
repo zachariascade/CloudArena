@@ -8,7 +8,7 @@ export const stunningRebukeCardDefinition: CardDefinition = {
   display: {
     name: "Rebuke from the Whirlwind",
     frameTone: "red",
-    imagePath: "card_0032_flaming_sword_of_the_east.png",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Raphael_-_St._Michael_Vanquishing_Satan.jpg/960px-Raphael_-_St._Michael_Vanquishing_Satan.jpg",
     imageAlt: "A blazing sword cutting off the enemy’s momentum",
     flavorText: "A rebuke can hit so hard the next move never arrives.",
     footerCode: "ARE",

@@ -8,7 +8,7 @@ export const sacrificialSeraphCardDefinition: CardDefinition = {
   display: {
     name: "Seraph of the Altar",
     frameTone: "white",
-    imagePath: "card_0003_michael.avif",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Raphael_-_St._Michael_Vanquishing_Satan.jpg/960px-Raphael_-_St._Michael_Vanquishing_Satan.jpg",
     imageAlt: "An angel descending over a battlefield altar",
     flavorText: "Every offering leaves it brighter, sharper, and harder to oppose.",
     footerCode: "ARE",

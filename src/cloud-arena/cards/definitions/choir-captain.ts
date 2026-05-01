@@ -9,7 +9,7 @@ export const choirCaptainCardDefinition: CardDefinition = {
     name: "Choir Captain",
     title: "Voice Above the Host",
     frameTone: "white",
-    imagePath: "classics/card_0055_image_of_god.jpg",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg/960px-Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg",
     imageAlt: "An angelic captain calling ranks into formation",
     flavorText: "Its song counts every wing and turns presence into power.",
     footerCode: "ARE",

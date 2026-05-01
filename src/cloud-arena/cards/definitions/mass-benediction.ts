@@ -8,7 +8,7 @@ export const massBenedictionCardDefinition: CardDefinition = {
   display: {
     name: "Priestly Benediction",
     frameTone: "white",
-    imagePath: "card_0027_let_there_be_light.png",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg/960px-Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg",
     imageAlt: "A radiant blessing washing over a gathered host",
     flavorText: "When the field is already crowded with resolve, every presence turns brighter.",
     footerCode: "ARE",

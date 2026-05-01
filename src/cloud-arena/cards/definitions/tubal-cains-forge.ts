@@ -8,7 +8,7 @@ export const tubalCainsForgeCardDefinition: CardDefinition = {
   display: {
     name: "Forge of Tubal-Cain",
     frameTone: "colorless",
-    imagePath: "classics/card_0041_tubal_cain_forger_of_bronze_and_iron.jpg",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Gustave_Dore_Bible_The_Tower_of_Babel.jpg/960px-Gustave_Dore_Bible_The_Tower_of_Babel.jpg",
     imageAlt: "An ancient forge blazing with sacred fire, hammering raw ore into power",
     flavorText: "He was the forger of every cutting instrument. From his hands came the fuel of war.",
     footerCode: "ARE",

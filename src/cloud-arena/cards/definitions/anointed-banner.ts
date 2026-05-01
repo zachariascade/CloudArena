@@ -8,7 +8,7 @@ export const anointedBannerCardDefinition: CardDefinition = {
   display: {
     name: "Ark of the Covenant",
     frameTone: "white",
-    imagePath: "classics/card_0057_ark_of_the_covenant.jpg",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg/960px-The_Ancient_of_Days_%28Blake%2C_Research_Issues%29.jpg",
     imageAlt: "Zanobi Strozzi's painting of King David dancing before the Ark of the Covenant",
     flavorText: "The Ark turns procession into promise, and promise into holy momentum.",
     footerCode: "ARE",

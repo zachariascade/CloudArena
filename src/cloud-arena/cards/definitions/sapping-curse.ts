@@ -8,7 +8,7 @@ export const sappingCurseCardDefinition: CardDefinition = {
   display: {
     name: "Sapping Curse",
     frameTone: "blue",
-    imagePath: "card_0031_tree_of_forbidden_knowledge.jpg",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/The%20Temptation%20of%20St%20Anthony%20(Bosch).jpg/960px-The%20Temptation%20of%20St%20Anthony%20(Bosch).jpg",
     imageAlt: "A dark burden draining strength from a creature",
     flavorText: "By the time the blade falls, the prey is already too heavy to lift.",
     footerCode: "ARE",

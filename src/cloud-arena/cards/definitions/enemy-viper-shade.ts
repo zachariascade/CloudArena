@@ -8,7 +8,7 @@ export const enemyViperShadeCardDefinition: CardDefinition = {
   display: {
     name: "Viper Shade",
     frameTone: "split-black-red",
-    imagePath: "classics/card_0048_the_serpent_whisperer_in_the_garden.png",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg/960px-The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg",
     imageAlt: "A shadowy serpentine demon coiled in the dark, its touch bringing instant death",
     flavorText: "It does not need strength. A single touch is enough.",
     footerCode: "ARE",

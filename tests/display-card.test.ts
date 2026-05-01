@@ -20,8 +20,14 @@ import { buildEnemyPreviewCards } from "../apps/cloud-arena-web/src/lib/cloud-ar
 import type { CloudArenaBattleViewModel } from "../apps/cloud-arena-web/src/lib/cloud-arena-battle-view-model.js";
 import type { CloudArenaBattleMotionState } from "../apps/cloud-arena-web/src/lib/cloud-arena-battle-motion.js";
 import type { CardDefinition } from "../src/cloud-arena/core/types.js";
+import { battlefieldInsightCardDefinition } from "../src/cloud-arena/cards/definitions/battlefield-insight.js";
+import { guardianCardDefinition } from "../src/cloud-arena/cards/definitions/guardian.js";
 import { denialBeforeTheRoostersCryCardDefinition } from "../src/cloud-arena/cards/definitions/denial-before-the-rooster-s-cry.js";
 import { galleryAncientOfDaysCardDefinition } from "../src/cloud-arena/cards/definitions/gallery-ancient-of-days.js";
+import { restorativeTouchCardDefinition } from "../src/cloud-arena/cards/definitions/restorative-touch.js";
+import { stunningRebukeCardDefinition } from "../src/cloud-arena/cards/definitions/stunning-rebuke.js";
+import { targetedStrikeCardDefinition } from "../src/cloud-arena/cards/definitions/targeted-strike.js";
+import { tubalCainsForgeCardDefinition } from "../src/cloud-arena/cards/definitions/tubal-cains-forge.js";
 import { getEnemyPreset } from "../src/cloud-arena/index.js";
 
 const EMPTY_BATTLE_MOTION_STATE: CloudArenaBattleMotionState = {
@@ -51,7 +57,7 @@ describe("shared display card mappers", () => {
     expect(model.name).toBe("Guardian");
     expect(model.title).toBeUndefined();
     expect(model.subtitle).toBe("Creature - Angel");
-    expect(model.image?.url).toContain("/images/cards/card_0036_watcher_at_edens_gate.jpg");
+    expect(model.image?.url).toContain(guardianCardDefinition.display.imagePath);
     expect(model.textBlocks.map((entry) => entry.text)).toContain("Summon a guardian with 10 health.");
     expect(model.badges).toEqual([]);
   });
@@ -243,7 +249,7 @@ describe("shared display card mappers", () => {
     expect(conduit.image?.url).toContain("/images/cards/2B5A00FD-D279-48BD-AEFE-0711AC4E9F54.jpeg");
   });
 
-  it("uses local art for the remaining arena hand spells", () => {
+  it("uses the current art for the remaining arena hand spells", () => {
     const battlefieldInsight = mapArenaHandCardToDisplayCard(
       {
         instanceId: "card_3",
@@ -285,10 +291,12 @@ describe("shared display card mappers", () => {
       { isPlayable: true },
     );
 
-    expect(battlefieldInsight.image?.url).toContain("/images/cards/card_0037_builder_of_the_tower.jpg");
-    expect(restorativeTouch.image?.url).toContain("/images/cards/card_0030_tree_of_life.jpg");
-    expect(targetedStrike.image?.url).toContain("/images/cards/card_0023_cain_marked_exile.jpg");
-    expect(stunningRebuke.image?.url).toContain("/images/cards/card_0032_flaming_sword_of_the_east.png");
+    expect(battlefieldInsight.image?.url).toContain(
+      battlefieldInsightCardDefinition.display.imagePath,
+    );
+    expect(restorativeTouch.image?.url).toContain(restorativeTouchCardDefinition.display.imagePath);
+    expect(targetedStrike.image?.url).toContain(targetedStrikeCardDefinition.display.imagePath);
+    expect(stunningRebuke.image?.url).toContain(stunningRebukeCardDefinition.display.imagePath);
   });
 
   it("maps Armory Seraph as a creature in the arena hand face", () => {
@@ -480,7 +488,7 @@ describe("shared display card mappers", () => {
 
     expect(handCard.actions).toHaveLength(1);
     expect(handCard.title).toBeUndefined();
-    expect(handCard.image?.url).toContain("/images/cards/card_0036_watcher_at_edens_gate.jpg");
+    expect(handCard.image?.url).toContain(guardianCardDefinition.display.imagePath);
     expect(handCard.footerStat).toBe("4/4");
     handCard.actions[0]?.onSelect?.();
     expect(onPlay).toHaveBeenCalledWith("card_1");
@@ -497,7 +505,7 @@ describe("shared display card mappers", () => {
     expect(permanentCard.textBlocks.map((entry) => entry.text).join(" ")).toContain(
       handCard.textBlocks[0]?.text ?? "",
     );
-    expect(permanentCard.image?.url).toContain("/images/cards/card_0036_watcher_at_edens_gate.jpg");
+    expect(permanentCard.image?.url).toContain(guardianCardDefinition.display.imagePath);
     expect(permanentCard.badges).toHaveLength(0);
     expect(permanentCard.actions).toHaveLength(1);
     permanentCard.actions[0]?.onSelect?.();
@@ -622,7 +630,7 @@ describe("shared display card mappers", () => {
     expect(panelHtml).toContain("T.svg");
   });
 
-  it("renders Tubal-Cain with his local classics art", () => {
+  it("renders Tubal-Cain with his current art", () => {
     const model = mapArenaHandCardToDisplayCard(
       {
         instanceId: "card_4",
@@ -636,7 +644,7 @@ describe("shared display card mappers", () => {
       },
     );
 
-    expect(model.image?.url).toContain("/images/cards/classics/card_0041_tubal_cain_forger_of_bronze_and_iron.jpg");
+    expect(model.image?.url).toContain(tubalCainsForgeCardDefinition.display.imagePath);
     expect(model.image?.alt).toContain("Tubal-Cain forging bronze and iron");
   });
 

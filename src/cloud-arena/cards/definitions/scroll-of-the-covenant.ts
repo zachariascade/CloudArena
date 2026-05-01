@@ -8,7 +8,7 @@ export const scrollOfTheCovenanCardDefinition: CardDefinition = {
   display: {
     name: "Scroll of the Covenant",
     frameTone: "colorless",
-    imagePath: "classics/card_0052_tower_of_babel.jpg",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Gustave_Dore_Bible_The_Tower_of_Babel.jpg/960px-Gustave_Dore_Bible_The_Tower_of_Babel.jpg",
     imageAlt: "An ancient scroll unrolling to reveal the full weight of binding words",
     flavorText: "Every word written in covenant opens the mind to what must come next.",
     footerCode: "ARE",

@@ -8,7 +8,7 @@ export const guardianCardDefinition: CardDefinition = {
   display: {
     name: "Watcher at Eden's Gate",
     frameTone: "white",
-    imagePath: "card_0036_watcher_at_edens_gate.jpg",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Rembrandt_The_Angel_Preventing_Abraham_from_Sacrificing_his_Son%2C_Isaac.jpg/960px-Rembrandt_The_Angel_Preventing_Abraham_from_Sacrificing_his_Son%2C_Isaac.jpg",
     imageAlt: "A guardian standing watch before a sacred gate",
     flavorText: "A faithful body on the field buys time for every plan behind it.",
     footerCode: "ARE",

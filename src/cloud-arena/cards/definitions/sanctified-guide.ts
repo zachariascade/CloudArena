@@ -8,7 +8,7 @@ export const sanctifiedGuideCardDefinition: CardDefinition = {
   display: {
     name: "Pillar of Cloud",
     frameTone: "white",
-    imagePath: "card_0037_builder_of_the_tower.jpg",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Gustave_Dore_Bible_The_Tower_of_Babel.jpg/960px-Gustave_Dore_Bible_The_Tower_of_Babel.jpg",
     imageAlt: "An angel guiding a single blessing onto the field",
     flavorText: "A steady hand can direct grace exactly where the line is thinnest.",
     footerCode: "ARE",

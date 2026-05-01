@@ -8,7 +8,7 @@ export const battlefieldInsightCardDefinition: CardDefinition = {
   display: {
     name: "Watchman on the Wall",
     frameTone: "white",
-    imagePath: "card_0037_builder_of_the_tower.jpg",
+    imagePath: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Gustave_Dore_Bible_The_Tower_of_Babel.jpg/960px-Gustave_Dore_Bible_The_Tower_of_Babel.jpg",
     imageAlt:
       "A high vantage over the battlefield revealing the shape of the fight",
     flavorText: "Clarity grows where the field can be seen in full.",
