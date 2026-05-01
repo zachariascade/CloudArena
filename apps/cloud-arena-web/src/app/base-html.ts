@@ -121,6 +121,13 @@ export function renderCloudArcanumWebHtml(
         background: rgba(255, 255, 255, 0.4);
       }
 
+      .app-shell.is-battle-page .cloud-arena-hand-tray {
+        border-color: #000;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
+      }
+
       .page-layout {
         min-height: 0;
         overflow: visible;
@@ -238,6 +245,10 @@ export function renderCloudArcanumWebHtml(
           left: 0.75rem;
           bottom: 0.75rem;
         }
+      }
+
+      .app-shell.is-battle-page {
+        padding-bottom: 0;
       }
 
       p {
@@ -2588,16 +2599,22 @@ export function renderCloudArcanumWebHtml(
       .cloud-arena-battlefield-stage {
         flex: 1 1 auto;
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-rows: minmax(0, 1fr) minmax(0, 2fr);
         gap: 0.8rem;
         min-height: 0;
+        width: 100%;
         align-items: stretch;
+        transition: grid-template-rows 180ms ease;
       }
 
-      @media (max-width: 699px) {
-        .cloud-arena-battlefield-stage {
-          grid-template-columns: minmax(0, 1fr);
-        }
+      .cloud-arena-battlefield-stage:has(> .cloud-arena-battlefield-panel:first-child:hover),
+      .cloud-arena-battlefield-stage:has(> .cloud-arena-battlefield-panel:first-child:focus-within) {
+        grid-template-rows: minmax(0, 2fr) minmax(0, 1fr);
+      }
+
+      .cloud-arena-battlefield-stage > .cloud-arena-battlefield-panel {
+        min-width: 0;
+        width: 100%;
       }
 
       .cloud-arena-hud-band {
@@ -2841,12 +2858,14 @@ export function renderCloudArcanumWebHtml(
         gap: 0.65rem;
         min-height: 0;
         height: 100%;
+        padding: 0.75rem;
         overflow: hidden;
       }
 
       .cloud-arena-battlefield-panel .trace-viewer-board-scroll {
         flex: 1 1 auto;
         min-height: 0;
+        padding: 0.15rem 0.15rem 0.45rem;
         overflow-y: auto;
       }
 
@@ -2956,14 +2975,14 @@ export function renderCloudArcanumWebHtml(
         grid-auto-flow: column;
         grid-auto-columns: var(--display-card-width);
         gap: 0;
+        justify-content: center;
         min-height: 0;
         height: auto;
         overflow-x: auto;
-        overflow-y: visible;
-        padding: 0.65rem 0.35rem 0.2rem;
+        overflow-y: hidden;
+        padding: 0 0.35rem;
         scroll-snap-type: x proximity;
         align-content: end;
-        min-height: calc(var(--display-card-width) * 1.35 + 12px);
         --hand-card-rest-shift: calc(var(--display-card-width) * 0.6);
         --hand-card-hover-rise: 8px;
         clip-path: inset(-9999px -9999px 0 -9999px);
@@ -3055,6 +3074,14 @@ export function renderCloudArcanumWebHtml(
         min-width: 0;
         justify-content: start;
         align-content: start;
+      }
+
+      .trace-viewer-board-grid.is-enemy-battlefield-grid {
+        grid-auto-flow: initial;
+        grid-auto-columns: initial;
+        grid-template-columns: repeat(auto-fit, minmax(var(--display-card-width), var(--display-card-width)));
+        width: 100%;
+        justify-content: space-evenly;
       }
 
       .cloud-arena-battlefield-card {
@@ -3158,12 +3185,14 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cloud-arena-battlefield-blocker-stack {
-        position: relative;
+        position: absolute;
+        inset: 0;
         z-index: 3;
         display: grid;
         justify-items: center;
+        align-items: center;
         width: 100%;
-        margin-top: -50%;
+        transform: translateX(52%);
         pointer-events: auto;
       }
 
@@ -3173,7 +3202,8 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cloud-arena-battlefield-blocker-card-shell + .cloud-arena-battlefield-blocker-card-shell {
-        margin-top: -35%;
+        margin-top: 0;
+        margin-left: 22%;
       }
 
       .cloud-arena-battlefield-attachment-stack {
@@ -3217,10 +3247,10 @@ export function renderCloudArcanumWebHtml(
         z-index: 6;
         display: grid;
         justify-items: center;
-        align-items: end;
+        align-items: center;
         pointer-events: none;
         opacity: 1;
-        transform: translateY(50%) scale(1);
+        transform: translateX(30%) translateY(10%)  scale(1);
         transition:
           opacity 320ms ease,
           transform 320ms ease;
@@ -3233,7 +3263,7 @@ export function renderCloudArcanumWebHtml(
 
       .cloud-arena-battlefield-action-play-overlay.is-fading {
         opacity: 0;
-        transform: translateY(-0.35rem) scale(0.99);
+        transform: translateX(46%) scale(0.99);
       }
 
       .cloud-arena-battlefield-action-play-overlay-card {
@@ -3245,24 +3275,24 @@ export function renderCloudArcanumWebHtml(
       }
 
       .trace-viewer-battlefield-slot.is-player-side.is-attacking .trace-viewer-battlefield-card {
-        animation: cloudArenaBattleAttackRight 420ms ease-out both;
+        animation: cloudArenaBattleAttackUp 420ms ease-out both;
         transform-origin: 32% 84%;
       }
 
       .trace-viewer-battlefield-slot.is-enemy-side.is-attacking .trace-viewer-battlefield-card {
-        animation: cloudArenaBattleAttackLeft 420ms ease-out both;
+        animation: cloudArenaBattleAttackDown 420ms ease-out both;
         transform-origin: 68% 84%;
       }
 
       .trace-viewer-battlefield-slot.is-player-side.is-attacking .cloud-arena-permanent-button {
-        animation: cloudArenaBattleAttackRight 420ms ease-out both;
+        animation: cloudArenaBattleAttackUp 420ms ease-out both;
         transform-origin: 32% 84%;
         will-change: transform, filter;
         z-index: 2;
       }
 
       .trace-viewer-battlefield-slot.is-enemy-side.is-attacking .cloud-arena-permanent-button {
-        animation: cloudArenaBattleAttackLeft 420ms ease-out both;
+        animation: cloudArenaBattleAttackDown 420ms ease-out both;
         transform-origin: 68% 84%;
         will-change: transform, filter;
         z-index: 2;
@@ -3301,25 +3331,25 @@ export function renderCloudArcanumWebHtml(
           inset 0 0 0 4px rgba(255, 255, 255, 0.14);
       }
 
-      @keyframes cloudArenaBattleAttackRight {
+      @keyframes cloudArenaBattleAttackUp {
         0% {
           transform: translateY(0) scale(1) rotate(0deg);
           filter: saturate(1);
         }
 
         18% {
-          transform: translate(4px, -4px) scale(1.02) rotate(-1deg);
+          transform: translate(2px, -5px) scale(1.02) rotate(-1deg);
           filter: saturate(1.1) brightness(1.04);
         }
 
         42% {
-          transform: translate(28px, -14px) scale(1.11) rotate(-5deg);
+          transform: translate(8px, -32px) scale(1.11) rotate(-4deg);
           filter: saturate(1.18) brightness(1.1);
           box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.14), 0 24px 34px rgba(28, 23, 19, 0.18);
         }
 
         68% {
-          transform: translate(12px, -6px) scale(1.04) rotate(-2deg);
+          transform: translate(3px, -12px) scale(1.04) rotate(-2deg);
         }
 
         100% {
@@ -3329,25 +3359,25 @@ export function renderCloudArcanumWebHtml(
         }
       }
 
-      @keyframes cloudArenaBattleAttackLeft {
+      @keyframes cloudArenaBattleAttackDown {
         0% {
           transform: translateY(0) scale(1) rotate(0deg);
           filter: saturate(1);
         }
 
         18% {
-          transform: translate(-4px, -4px) scale(1.02) rotate(1deg);
+          transform: translate(-2px, 5px) scale(1.02) rotate(1deg);
           filter: saturate(1.1) brightness(1.04);
         }
 
         42% {
-          transform: translate(-28px, -14px) scale(1.11) rotate(5deg);
+          transform: translate(-8px, 32px) scale(1.11) rotate(4deg);
           filter: saturate(1.18) brightness(1.1);
           box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.14), 0 24px 34px rgba(28, 23, 19, 0.18);
         }
 
         68% {
-          transform: translate(-12px, -6px) scale(1.04) rotate(2deg);
+          transform: translate(-3px, 12px) scale(1.04) rotate(2deg);
         }
 
         100% {
@@ -3510,9 +3540,11 @@ export function renderCloudArcanumWebHtml(
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 0.35rem;
+        gap: 0.22rem;
         max-width: 100%;
-        padding: 0.2rem 0.52rem;
+        min-width: 1.7rem;
+        min-height: 1.35rem;
+        padding: 0.16rem 0.42rem;
         border-radius: 999px;
         border: 1px solid rgba(154, 52, 18, 0.16);
         background: linear-gradient(180deg, rgba(255, 250, 243, 0.98), rgba(249, 239, 222, 0.94));
@@ -3538,12 +3570,20 @@ export function renderCloudArcanumWebHtml(
 
       .cloud-arena-permanent-intent-bubble.is-block {
         border-color: rgba(37, 99, 235, 0.18);
-        background: linear-gradient(180deg, rgba(239, 246, 255, 0.98), rgba(219, 234, 254, 0.92));
+        background: linear-gradient(180deg, rgba(96, 165, 250, 0.98), rgba(37, 99, 235, 0.94));
+        color: #fff;
+      }
+
+      .cloud-arena-permanent-intent-bubble.is-debuff {
+        border-color: rgba(109, 40, 217, 0.22);
+        background: linear-gradient(180deg, rgba(168, 85, 247, 0.98), rgba(109, 40, 217, 0.94));
+        color: #fff;
       }
 
       .cloud-arena-permanent-intent-bubble.is-power {
-        border-color: rgba(22, 163, 74, 0.18);
-        background: linear-gradient(180deg, rgba(240, 253, 244, 0.98), rgba(220, 252, 231, 0.92));
+        border-color: rgba(202, 138, 4, 0.22);
+        background: linear-gradient(180deg, rgba(250, 204, 21, 0.98), rgba(202, 138, 4, 0.94));
+        color: #2f2102;
       }
 
       .cloud-arena-permanent-intent-bubble.is-neutral {
@@ -3551,23 +3591,15 @@ export function renderCloudArcanumWebHtml(
         background: linear-gradient(180deg, rgba(255, 251, 246, 0.98), rgba(245, 238, 228, 0.94));
       }
 
-      .cloud-arena-permanent-intent-badge {
-        display: grid;
-        place-items: center;
-        width: 1.1rem;
-        height: 1.1rem;
-        border-radius: 4px;
-        background: linear-gradient(180deg, #ef4444, #b91c1c);
-        color: #fff;
-        font-size: 0.72rem;
-        font-weight: 900;
-        line-height: 1;
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
-      }
-
-      .cloud-arena-permanent-intent-label,
+      .cloud-arena-permanent-intent-value,
       .cloud-arena-permanent-intent-detail {
         min-width: 0;
+      }
+
+      .cloud-arena-permanent-intent-value {
+        font-size: 0.68rem;
+        font-weight: 900;
+        letter-spacing: 0;
       }
 
       .cloud-arena-permanent-intent-detail {
@@ -3575,7 +3607,9 @@ export function renderCloudArcanumWebHtml(
         opacity: 0.88;
       }
 
-      .cloud-arena-permanent-intent-bubble.is-attack .cloud-arena-permanent-intent-detail {
+      .cloud-arena-permanent-intent-bubble.is-attack .cloud-arena-permanent-intent-detail,
+      .cloud-arena-permanent-intent-bubble.is-block .cloud-arena-permanent-intent-detail,
+      .cloud-arena-permanent-intent-bubble.is-debuff .cloud-arena-permanent-intent-detail {
         opacity: 0.82;
       }
 
@@ -3728,7 +3762,7 @@ export function renderCloudArcanumWebHtml(
 
       @media (max-width: 959px) {
         .cloud-arena-hand-tray {
-          height: auto;
+          height: 100px;
         }
 
         .cloud-arena-hand-tray-layout {
@@ -3745,7 +3779,9 @@ export function renderCloudArcanumWebHtml(
         }
 
         .cloud-arena-hand-hud {
-          width: min(100%, 22rem);
+          width: min(22rem, calc(100vw - 1.5rem));
+          right: 0.75rem;
+          bottom: 0.75rem;
           min-height: 0;
         }
 
@@ -3762,7 +3798,7 @@ export function renderCloudArcanumWebHtml(
 
       @media (max-width: 639px) {
         .cloud-arena-hand-tray {
-          height: auto;
+          height: 100px;
         }
 
         .trace-viewer-hand-scroll {
@@ -4447,6 +4483,15 @@ export function renderCloudArcanumWebHtml(
         height: 0.65rem;
       }
 
+      .display-card-health-row .cloud-arena-permanent-intent-bubble {
+        flex: 0 0 auto;
+        max-width: 46%;
+        padding: 0.16rem 0.42rem;
+        font-size: 0.58rem;
+        letter-spacing: 0.03em;
+        box-shadow: none;
+      }
+
       .display-card-info-button {
         flex: 0 0 auto;
         display: inline-grid;
@@ -4579,29 +4624,37 @@ export function renderCloudArcanumWebHtml(
 
       .cloud-arena-hand-tray {
         min-height: 0;
-        height: auto;
+        height: 100px;
         align-self: stretch;
         width: 100%;
+        padding-block: 0;
+        border-color: #000;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
         margin-top: auto;
       }
 
       .cloud-arena-hand-tray-layout {
         display: grid;
-        grid-template-columns: minmax(20rem, 25rem) minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr);
         gap: 0.5rem;
         min-height: 0;
         height: auto;
-        align-items: start;
+        align-items: end;
         align-content: end;
       }
 
       .cloud-arena-hand-hud {
+        position: fixed;
+        right: max(1rem, env(safe-area-inset-right));
+        bottom: max(1rem, env(safe-area-inset-bottom));
+        z-index: 1600;
+        width: min(25rem, calc(100vw - 2rem));
         display: grid;
         gap: 0.55rem;
-        align-self: start;
         align-content: start;
         min-height: 0;
-        height: auto;
         min-width: 0;
         padding: 0.82rem;
         border: 1px solid rgba(130, 153, 190, 0.22);
@@ -4612,6 +4665,12 @@ export function renderCloudArcanumWebHtml(
         box-shadow:
           inset 0 1px 0 rgba(255, 255, 255, 0.72),
           0 14px 34px rgba(55, 73, 110, 0.1);
+      }
+
+      .cloud-arena-hand-tray-layout > .trace-viewer-hand-scroll {
+        grid-column: 1;
+        grid-row: 1;
+        justify-content: center;
       }
 
       .cloud-arena-hand-hud-header {
@@ -4697,9 +4756,12 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cloud-arena-hand-hud-piles {
-        display: grid;
+        display: flex;
+        align-items: stretch;
         gap: 0.45rem;
+        width: 100%;
         align-content: start;
+        flex-wrap: nowrap;
       }
 
       .cloud-arena-hand-hud-actions {
@@ -4820,10 +4882,12 @@ export function renderCloudArcanumWebHtml(
       }
 
       .cloud-arena-hand-hud-pile-button {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         justify-content: space-between;
         gap: 0.8rem;
+        flex: 1 1 0;
+        min-width: 0;
         min-height: 1.95rem;
         padding: 0.36rem 0.62rem;
         border-radius: 12px;
@@ -4831,13 +4895,16 @@ export function renderCloudArcanumWebHtml(
         background: rgba(255, 255, 255, 0.76);
         color: var(--ink);
         font: inherit;
+        font-size: 0.84rem;
         font-weight: 700;
         cursor: pointer;
         text-align: left;
+        white-space: nowrap;
       }
 
       .cloud-arena-hand-hud-pile-button strong {
-        min-width: 1.55rem;
+        flex: 0 0 auto;
+        min-width: 1.4rem;
         text-align: right;
       }
 

@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import type { ReactElement, ReactNode } from "react";
 import { Fragment, useMemo, useState } from "react";
 import type { MouseEvent } from "react";
 
@@ -21,6 +21,7 @@ import { AbilityCostChip } from "./ability-cost-chip.js";
 type DisplayCardProps = {
   model: DisplayCardModel;
   className?: string;
+  healthAccessory?: ReactNode;
   detailsAction?: {
     ariaLabel?: string;
     onClick: (event: MouseEvent<HTMLButtonElement>) => void;
@@ -272,7 +273,7 @@ function renderDisplayImage(model: DisplayCardModel): ReactElement {
   );
 }
 
-export function DisplayCard({ model, className, detailsAction }: DisplayCardProps): ReactElement {
+export function DisplayCard({ model, className, healthAccessory, detailsAction }: DisplayCardProps): ReactElement {
   const [activeKeywordId, setActiveKeywordId] = useState<DisplayCardKeywordId | null>(null);
   const [activeCounterLabel, setActiveCounterLabel] = useState<"Power" | "Health" | null>(null);
   const [isCardHovered, setIsCardHovered] = useState(false);
@@ -518,6 +519,7 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
                 style={{ width: `${healthPercent}%` }}
               />
             </div>
+            {healthAccessory}
             {detailsButton}
           </div>
         </div>

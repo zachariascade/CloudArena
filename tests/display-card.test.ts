@@ -57,7 +57,7 @@ describe("shared display card mappers", () => {
     expect(model.name).toBe("Guardian");
     expect(model.title).toBeUndefined();
     expect(model.subtitle).toBe("Creature - Angel");
-    expect(model.image?.url).toContain(guardianCardDefinition.display.imagePath);
+    expect(model.image?.url).toContain(guardianCardDefinition.display!.imagePath);
     expect(model.textBlocks.map((entry) => entry.text)).toContain("Summon a guardian with 10 health.");
     expect(model.badges).toEqual([]);
   });
@@ -292,11 +292,11 @@ describe("shared display card mappers", () => {
     );
 
     expect(battlefieldInsight.image?.url).toContain(
-      battlefieldInsightCardDefinition.display.imagePath,
+      battlefieldInsightCardDefinition.display!.imagePath,
     );
-    expect(restorativeTouch.image?.url).toContain(restorativeTouchCardDefinition.display.imagePath);
-    expect(targetedStrike.image?.url).toContain(targetedStrikeCardDefinition.display.imagePath);
-    expect(stunningRebuke.image?.url).toContain(stunningRebukeCardDefinition.display.imagePath);
+    expect(restorativeTouch.image?.url).toContain(restorativeTouchCardDefinition.display!.imagePath);
+    expect(targetedStrike.image?.url).toContain(targetedStrikeCardDefinition.display!.imagePath);
+    expect(stunningRebuke.image?.url).toContain(stunningRebukeCardDefinition.display!.imagePath);
   });
 
   it("maps Armory Seraph as a creature in the arena hand face", () => {
@@ -488,7 +488,7 @@ describe("shared display card mappers", () => {
 
     expect(handCard.actions).toHaveLength(1);
     expect(handCard.title).toBeUndefined();
-    expect(handCard.image?.url).toContain(guardianCardDefinition.display.imagePath);
+    expect(handCard.image?.url).toContain(guardianCardDefinition.display!.imagePath);
     expect(handCard.footerStat).toBe("4/4");
     handCard.actions[0]?.onSelect?.();
     expect(onPlay).toHaveBeenCalledWith("card_1");
@@ -505,7 +505,7 @@ describe("shared display card mappers", () => {
     expect(permanentCard.textBlocks.map((entry) => entry.text).join(" ")).toContain(
       handCard.textBlocks[0]?.text ?? "",
     );
-    expect(permanentCard.image?.url).toContain(guardianCardDefinition.display.imagePath);
+    expect(permanentCard.image?.url).toContain(guardianCardDefinition.display!.imagePath);
     expect(permanentCard.badges).toHaveLength(0);
     expect(permanentCard.actions).toHaveLength(1);
     permanentCard.actions[0]?.onSelect?.();
@@ -644,7 +644,7 @@ describe("shared display card mappers", () => {
       },
     );
 
-    expect(model.image?.url).toContain(tubalCainsForgeCardDefinition.display.imagePath);
+    expect(model.image?.url).toContain(tubalCainsForgeCardDefinition.display!.imagePath);
     expect(model.image?.alt).toContain("Tubal-Cain forging bronze and iron");
   });
 

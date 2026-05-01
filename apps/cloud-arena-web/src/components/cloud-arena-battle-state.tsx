@@ -1273,25 +1273,6 @@ export function CloudArenaBattleState({
         <div ref={battleMainRef} className="cloud-arena-battle-main">
           <div className="cloud-arena-battlefield-stage">
             <CloudArenaBattlefieldPanel
-              zoneKeyPrefix="battlefield"
-              battlefield={battle.battlefield}
-              legalActions={battle.legalActions}
-              motionState={motionState}
-              isTargeting={isTargeting}
-              hiddenPermanentIds={battlefieldAttachmentState.hiddenPermanentIds}
-              getInspectableModel={getInspectableModel}
-              getPermanentMenuActions={getPermanentMenuActions}
-              getPermanentCounterEntries={getPermanentCounterEntries}
-              bindInspectorInteractions={bindInspectorInteractions}
-              onOpenDetails={handleDetailsClick}
-              openPermanentMenuId={openPermanentMenuId}
-              onPermanentMenuToggle={(permanentId) =>
-                setOpenPermanentMenuId((current) => (current === permanentId ? null : permanentId))}
-              onPermanentMenuClose={() => setOpenPermanentMenuId(null)}
-              onTargetPermanentSelect={onTurnAction}
-            />
-
-            <CloudArenaBattlefieldPanel
               zoneKeyPrefix="enemy_battlefield"
               battlefield={enemyBattlefield}
               legalActions={battle.legalActions}
@@ -1309,6 +1290,25 @@ export function CloudArenaBattleState({
               onOpenDetails={handleDetailsClick}
               onTargetPermanentSelect={onTurnAction}
               onToggleEnemyBattlefieldStackOrder={toggleEnemyBattlefieldStackOrder}
+            />
+
+            <CloudArenaBattlefieldPanel
+              zoneKeyPrefix="battlefield"
+              battlefield={battle.battlefield}
+              legalActions={battle.legalActions}
+              motionState={motionState}
+              isTargeting={isTargeting}
+              hiddenPermanentIds={battlefieldAttachmentState.hiddenPermanentIds}
+              getInspectableModel={getInspectableModel}
+              getPermanentMenuActions={getPermanentMenuActions}
+              getPermanentCounterEntries={getPermanentCounterEntries}
+              bindInspectorInteractions={bindInspectorInteractions}
+              onOpenDetails={handleDetailsClick}
+              openPermanentMenuId={openPermanentMenuId}
+              onPermanentMenuToggle={(permanentId) =>
+                setOpenPermanentMenuId((current) => (current === permanentId ? null : permanentId))}
+              onPermanentMenuClose={() => setOpenPermanentMenuId(null)}
+              onTargetPermanentSelect={onTurnAction}
             />
           </div>
 
