@@ -367,9 +367,9 @@ function createPermanentFromCard(
     definitionId: definition.id,
     name: definition.name,
     isCreature: hasCardType(definition, "creature"),
-    power: definition.power,
-    health: definition.health,
-    maxHealth: definition.health,
+    power: definition.power ?? 0,
+    health: definition.health ?? 0,
+    maxHealth: definition.health ?? 0,
     block: 0,
     hasActedThisTurn: false,
     isTapped: false,
@@ -604,7 +604,8 @@ function applyEvent(
       state.enemy.intentLabel = "Stunned";
       state.enemyStunnedThisTurn = true;
       return;
-    case "permanent_destroyed": {
+    case "permanent_destroyed":
+    case "permanent_sacrificed": {
       const battlefieldIndex = state.battlefield.findIndex(
         (entry) => entry?.instanceId === event.permanentId,
       );
@@ -798,6 +799,8 @@ export function formatTraceEvent(event: BattleEvent): string {
       return `Turn ${event.turnNumber}: enemy action was stunned and cancelled`;
     case "permanent_destroyed":
       return `Turn ${event.turnNumber}: permanent ${event.permanentId} (${event.definitionId}) was destroyed`;
+    case "permanent_sacrificed":
+      return `Turn ${event.turnNumber}: permanent ${event.permanentId} (${event.definitionId}) was sacrificed`;
     case "counter_added":
       return `Turn ${event.turnNumber}: permanent ${event.permanentId} gained ${event.amount} ${event.counter} counter`;
     case "counter_removed":

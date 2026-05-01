@@ -5,7 +5,7 @@ import type {
   CloudArenaSessionScenarioId,
   CloudArenaSessionSnapshot,
 } from "./api-contract.js";
-import { summarizeCardDefinition } from "./card-summary.js";
+import { summarizeCardDefinition, summarizeSagaChapter } from "./card-summary.js";
 import {
   applyBattleAction,
 } from "./core/engine.js";
@@ -24,6 +24,7 @@ import {
 import {
   summarizePermanentCounters,
   getPermanentCounterAmount,
+  getPermanentNamedCounterAmount,
 } from "./core/counters.js";
 import {
   getPrimaryEnemyPermanent,
@@ -37,6 +38,7 @@ import {
   type CloudArenaScenarioPreset,
 } from "./scenarios/index.js";
 import {
+  asPermanentCardDefinition,
   getCardDefinitionFromLibrary,
   hasCardType,
 } from "./cards/definitions.js";
@@ -44,6 +46,7 @@ import type {
   BattleAction,
   BattleState,
   CreateBattleEnemyInput,
+  PermanentState,
   SummoningSicknessPolicy,
 } from "./core/types.js";
 
@@ -323,6 +326,42 @@ function getLegalActionOptions(state: BattleState): CloudArenaActionOption[] {
   return getLegalActions(state).map((action) => createActionOption(state, action));
 }
 
+function buildPermanentSagaSnapshot(
+  state: BattleState,
+  permanent: PermanentState,
+) {
+  const definition = asPermanentCardDefinition(
+    getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId),
+  );
+  const saga = definition.saga ?? null;
+
+  if (!saga) {
+    return undefined;
+  }
+
+  const loreCounter = saga.loreCounter ?? "lore";
+  const loreCounterAmount = getPermanentNamedCounterAmount(permanent, loreCounter);
+  const finalChapter = saga.sacrificeAfterChapter ?? Math.max(...saga.chapters.map((chapter) => chapter.chapter));
+  const resolvedChapters = permanent.sagaState?.resolvedChapters ?? [];
+  const activeChapter = saga.chapters.find(
+    (chapter) => chapter.chapter <= loreCounterAmount && !resolvedChapters.includes(chapter.chapter),
+  )?.chapter ?? null;
+
+  return {
+    loreCounter: loreCounterAmount,
+    finalChapter,
+    activeChapter,
+    resolvedChapters,
+    chapters: saga.chapters.map((chapter) => ({
+      chapter: chapter.chapter,
+      label: chapter.label ?? String(chapter.chapter),
+      text: summarizeSagaChapter(chapter),
+      resolved: resolvedChapters.includes(chapter.chapter),
+      active: activeChapter === chapter.chapter,
+    })),
+  };
+}
+
 export function validateCloudArenaBattleAction(state: BattleState, action: BattleAction): void {
   const legalActionKeys = new Set(getLegalActions(state).map(toActionKey));
   const normalizedAction = normalizeBattleAction(action);
@@ -424,6 +463,7 @@ export function buildCloudArenaSessionSnapshot(
             powerCounter: getPermanentCounterAmount(permanent, "power"),
             healthCounter: getPermanentCounterAmount(permanent, "health"),
             counters: summarizePermanentCounters(permanent.counters),
+            saga: buildPermanentSagaSnapshot(state, permanent),
             attachments: [...(permanent.attachments ?? [])],
             attachedTo: permanent.attachedTo ?? null,
             hasActedThisTurn: permanent.hasActedThisTurn,
@@ -456,6 +496,7 @@ export function buildCloudArenaSessionSnapshot(
             powerCounter: getPermanentCounterAmount(permanent, "power"),
             healthCounter: getPermanentCounterAmount(permanent, "health"),
             counters: summarizePermanentCounters(permanent.counters),
+            saga: buildPermanentSagaSnapshot(state, permanent),
             attachments: [...(permanent.attachments ?? [])],
             attachedTo: permanent.attachedTo ?? null,
             hasActedThisTurn: permanent.hasActedThisTurn,

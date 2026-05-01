@@ -82,6 +82,20 @@ function getAssetContentType(assetPath: string): string {
   return "application/octet-stream";
 }
 
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms).unref();
+  });
+}
+
+function isAddressInUseError(error: unknown): boolean {
+  return (
+    error instanceof Error &&
+    "code" in error &&
+    (error as { code?: string }).code === "EADDRINUSE"
+  );
+}
+
 export function startCloudArenaWebApp(
   options: CloudArenaWebServerOptions = {},
 ): Promise<{
@@ -116,9 +130,10 @@ export function startCloudArenaWebApp(
     process.env.CLOUD_ARENA_ROUTER_MODE === "hash" ? "hash" : "browser"
   );
   const devVersion = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  const maxAttempts = 15;
 
-  return new Promise((resolve, reject) => {
-    const server = createServer(async (request, response) => {
+  const createAppServer = (): ReturnType<typeof createServer> =>
+    createServer(async (request, response) => {
       try {
         if (request.url?.startsWith("/assets/")) {
           const assetName = request.url.slice("/assets/".length);
@@ -213,18 +228,41 @@ export function startCloudArenaWebApp(
       }
     });
 
-    server.once("error", reject);
-    server.listen(port, host, () => {
-      resolve({
-        apiBaseUrl,
-        cloudArcanumApiBaseUrl,
-        cloudArcanumWebBaseUrl,
-        contentMode,
-        sessionMode,
-        routerMode,
-        host,
-        port,
-      });
-    });
-  });
+  return (async () => {
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      const server = createAppServer();
+
+      try {
+        await new Promise<void>((resolve, reject) => {
+          server.once("error", reject);
+          server.listen(port, host, () => {
+            resolve();
+          });
+        });
+
+        return {
+          apiBaseUrl,
+          cloudArcanumApiBaseUrl,
+          cloudArcanumWebBaseUrl,
+          contentMode,
+          sessionMode,
+          routerMode,
+          host,
+          port,
+        };
+      } catch (error) {
+        await new Promise<void>((resolve) => {
+          server.close(() => resolve());
+        }).catch(() => undefined);
+
+        if (!isAddressInUseError(error) || attempt === maxAttempts) {
+          throw error;
+        }
+
+        await sleep(150 * attempt);
+      }
+    }
+
+    throw new Error("Failed to start the Cloud Arena web app.");
+  })();
 }

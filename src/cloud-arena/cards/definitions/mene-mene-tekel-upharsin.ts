@@ -11,7 +11,7 @@ export const meneMeneTekelUpharsinCardDefinition: CardDefinition = {
   cardSet: CARD_SETS.daniel,
   display: {
     name: "Mene Mene Tekel Upharsin",
-    title: "Belshazzar's Feast",
+    title: null,
     frameTone: "split-black-red",
     artist: "John Martin",
     imagePath:

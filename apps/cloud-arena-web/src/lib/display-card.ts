@@ -3,7 +3,7 @@ import {
   getAbilityCostDisplayParts,
   getCardDefinition,
 } from "../../../../src/cloud-arena/index.js";
-import type { CardDefinition, CardDisplayDefinition } from "../../../../src/cloud-arena/core/types.js";
+import type { CardDefinition, CardDisplayDefinition, PermanentCardDefinition } from "../../../../src/cloud-arena/core/types.js";
 import type {
   CloudArenaCardSnapshot,
   CloudArenaPermanentSnapshot,
@@ -14,6 +14,7 @@ import {
   type DisplayCardCounterPill,
   type DisplayCardImage,
   type DisplayCardModel,
+  type DisplayCardSagaChapter,
   type DisplayCardTextBlock,
 } from "../../../../src/presentation/display-card.js";
 
@@ -32,6 +33,7 @@ export type {
   DisplayCardImage,
   DisplayCardModel,
   DisplayCardModelBase,
+  DisplayCardSagaChapter,
   DisplayCardStat,
   DisplayCardTextBlock,
   DisplayCardVariant,
@@ -55,7 +57,68 @@ function buildArenaImage(
   };
 }
 
+function summarizeSagaChapterText(chapter: NonNullable<PermanentCardDefinition["saga"]>["chapters"][number]): string {
+  const summary = summarizeCardDefinition({
+    id: `saga_chapter_${chapter.chapter}`,
+    name: `Chapter ${chapter.chapter}`,
+    cardTypes: ["sorcery"],
+    cost: 0,
+    onPlay: [],
+    spellEffects: chapter.effects,
+  });
+
+  return summary.join(" ");
+}
+
+function getDefinitionSagaDisplay(definition: CardDefinition): DisplayCardModel["saga"] {
+  if (!("saga" in definition) || !definition.saga) {
+    return null;
+  }
+
+  return {
+    finalChapter:
+      definition.saga.sacrificeAfterChapter ??
+      Math.max(...definition.saga.chapters.map((chapter) => chapter.chapter)),
+    chapters: definition.saga.chapters.map((chapter): DisplayCardSagaChapter => ({
+      chapter: chapter.chapter,
+      label: chapter.label ?? String(chapter.chapter),
+      text: summarizeSagaChapterText(chapter),
+    })),
+  };
+}
+
+function getPermanentSagaDisplay(permanent: CloudArenaPermanentSnapshot): DisplayCardModel["saga"] {
+  if (!permanent.saga) {
+    return null;
+  }
+
+  return {
+    loreCounter: permanent.saga.loreCounter,
+    finalChapter: permanent.saga.finalChapter,
+    chapters: permanent.saga.chapters.map((chapter): DisplayCardSagaChapter => ({
+      chapter: chapter.chapter,
+      label: chapter.label,
+      text: chapter.text.replace(/^[^-]+ - /, ""),
+      resolved: chapter.resolved,
+      active: chapter.active,
+    })),
+  };
+}
+
 function formatCardTypeLine(definition: Pick<CardDefinition, "cardTypes" | "subtypes">): string {
+  if (definition.cardTypes.includes("saga")) {
+    const baseTypes = definition.cardTypes.filter((cardType) => cardType !== "saga");
+    const typeLine = baseTypes.length > 0
+      ? baseTypes
+          .map((cardType) => cardType.replace(/_/g, " "))
+          .map((cardType) => cardType.charAt(0).toUpperCase() + cardType.slice(1))
+          .join(" ")
+      : "Enchantment";
+    const subtypes = ["Saga", ...(definition.subtypes ?? [])];
+
+    return `${typeLine} - ${subtypes.join(" ")}`;
+  }
+
   const typeLine = [
     definition.cardTypes
       .map((cardType) => cardType.replace(/_/g, " "))
@@ -81,7 +144,7 @@ export function buildCardSubtitle(
 }
 
 export function buildCardFooterStat(definition: CardDefinition): string | null {
-  const displayableTypes = new Set(["creature", "enchantment", "battle", "land", "planeswalker"]);
+  const displayableTypes = new Set(["creature", "enchantment", "battle", "land", "saga"]);
   const shouldShowStat = definition.cardTypes.some((cardType) => displayableTypes.has(cardType));
 
   if (shouldShowStat && "power" in definition && "health" in definition) {
@@ -392,7 +455,7 @@ export function mapArenaHandCardToDisplayCard(
   const presentation = getCardDisplay(definition);
 
   return buildDisplayCardModel({
-    variant: "mtg",
+    variant: definition.cardTypes.includes("saga") ? "saga" : "mtg",
     name: card.name,
     title: presentation.title,
     subtitle: presentation.subtitle,
@@ -421,6 +484,7 @@ export function mapArenaHandCardToDisplayCard(
         text: card.effectSummary,
       },
     ],
+    saga: getDefinitionSagaDisplay(definition),
     badges: [],
     actions:
       options.isPlayable && options.onPlay
@@ -478,7 +542,8 @@ export function mapArenaPermanentToDisplayCard(
   );
   const definition = getCardDefinition(permanent.definitionId);
   const presentation = getCardDisplay(definition);
-  const nativeRuleActions = permanent.isCreature
+  const hasNativeCombatActions = permanent.isCreature || Boolean(permanent.saga);
+  const nativeRuleActions = hasNativeCombatActions
     ? [
         {
           id: `${permanent.instanceId}-attack-native`,
@@ -532,12 +597,16 @@ export function mapArenaPermanentToDisplayCard(
     ];
   });
   const hasAvailableActions =
-    !permanent.hasActedThisTurn && (permanent.isCreature || permanent.actions.length > 0);
-  const permanentAvailabilityState = hasAvailableActions ? "ready" : "spent";
+    !permanent.hasActedThisTurn && (hasNativeCombatActions || permanent.actions.length > 0);
+  const permanentAvailabilityState = permanent.saga
+    ? "ready"
+    : hasAvailableActions
+      ? "ready"
+      : "spent";
   const isEnemyControlled = permanent.controllerId === "enemy";
 
   return buildDisplayCardModel({
-    variant: "permanent",
+    variant: permanent.saga ? "saga" : "permanent",
     name: permanent.name,
     title: presentation.title,
     subtitle: presentation.subtitle,
@@ -554,8 +623,8 @@ export function mapArenaPermanentToDisplayCard(
     footerCode: presentation.footerCode,
     footerCredit: presentation.footerCredit,
     collectorNumber: `${presentation.collectorNumber}-${permanent.slotIndex + 1}`,
-    footerStat: permanent.isCreature ? `${permanent.power}/${permanent.health}` : null,
-    healthBar: permanent.isCreature
+    footerStat: hasNativeCombatActions ? `${permanent.power}/${permanent.health}` : null,
+    healthBar: hasNativeCombatActions
       ? {
           current: permanent.health,
           max: permanent.maxHealth,
@@ -564,12 +633,16 @@ export function mapArenaPermanentToDisplayCard(
       : null,
     energyBar: null,
     counterPills: getPermanentCounterPills(permanent),
-    statusLabel: permanent.isTapped
+    statusLabel: permanent.saga
+      ? `Lore ${permanent.saga.loreCounter}/${permanent.saga.finalChapter}`
+      : permanent.isTapped
       ? "tapped"
       : permanent.isDefending
         ? "defending"
         : null,
-    statusTone: permanent.isTapped
+    statusTone: permanent.saga
+      ? "balanced"
+      : permanent.isTapped
       ? "draft"
       : permanent.isDefending
         ? "approved"
@@ -581,11 +654,12 @@ export function mapArenaPermanentToDisplayCard(
         text: summarizeCardDefinition(definition).join(" • "),
       },
     ],
+    saga: getPermanentSagaDisplay(permanent),
     badges: [],
     actions: [...nativeActionButtons, ...activatedActionButtons],
     stateFlags: [
       ...(options.stateFlags ?? []),
-      permanent.hasActedThisTurn ? "spent" : permanentAvailabilityState,
+      permanent.hasActedThisTurn && !permanent.saga ? "spent" : permanentAvailabilityState,
       permanent.isTapped ? "tapped" : "untapped",
       permanent.isDefending ? "defending" : "open",
       isEnemyControlled ? "enemy-controlled" : null,
@@ -600,7 +674,7 @@ export function mapCardDefinitionIdToDisplayCard(definitionId: string): DisplayC
   const summary = summarizeCardDefinition(definition);
 
   return buildDisplayCardModel({
-    variant: "mtg",
+    variant: definition.cardTypes.includes("saga") ? "saga" : "mtg",
     name: definition.name,
     title: presentation.title,
     subtitle: presentation.subtitle,
@@ -623,6 +697,7 @@ export function mapCardDefinitionIdToDisplayCard(definitionId: string): DisplayC
     statusTone: undefined,
     stats: [],
     textBlocks: summary.map((line) => ({ kind: "rules" as const, text: line })),
+    saga: getDefinitionSagaDisplay(definition),
     badges: [],
     actions: [],
     stateFlags: [],

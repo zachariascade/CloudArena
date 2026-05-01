@@ -288,6 +288,7 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
   const badges = model.badges;
   const stateFlags = model.stateFlags;
   const actions = model.actions;
+  const saga = model.saga ?? null;
   const glossaryKeywordIds = useMemo(() => collectKeywordsFromTextBlocks(textBlocks), [textBlocks]);
   const defaultKeywordId = glossaryKeywordIds[0] ?? null;
   const visibleKeywordId = activeKeywordId ?? (isCardHovered ? defaultKeywordId : null);
@@ -302,7 +303,8 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
     ? stats.filter((stat) => stat !== blockStat)
     : stats;
   const usesSideCombatPanel = model.variant === "player";
-  const isPermanentCard = model.variant === "permanent";
+  const isPermanentCard = model.variant === "permanent" || model.variant === "saga";
+  const isSagaCard = model.variant === "saga";
   const isEnemyCard = model.variant === "enemy";
   const isEnemyControlledCard = isPermanentCard && stateFlags.includes("enemy-controlled");
   const showsEnemyBlockInline = Boolean(blockStat) && (isEnemyCard || isEnemyControlledCard);
@@ -341,6 +343,62 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
       <span aria-hidden="true">i</span>
     </button>
   ) : null;
+  const sagaBody = saga ? (
+    <div className="card-face-saga-body">
+      <div className="card-face-saga-chapters">
+        {typeof saga.loreCounter === "number" && typeof saga.finalChapter === "number" ? (
+          <div className="card-face-saga-lore" aria-label={`${model.name} lore ${saga.loreCounter} of ${saga.finalChapter}`}>
+            <span>Lore</span>
+            <strong>{saga.loreCounter}/{saga.finalChapter}</strong>
+          </div>
+        ) : null}
+        {saga.chapters.map((chapter) => (
+          <div
+            key={`${chapter.chapter}-${chapter.label}`}
+            className={[
+              "card-face-saga-chapter",
+              chapter.resolved ? "is-resolved" : null,
+              chapter.active ? "is-active" : null,
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          >
+            <span className="card-face-saga-marker">{chapter.label}</span>
+            <p>{renderRulesText(chapter.text, {
+              onKeywordEnter: setActiveKeywordId,
+              onKeywordLeave: () => setActiveKeywordId(null),
+            })}</p>
+          </div>
+        ))}
+      </div>
+      <div className="card-face-saga-art-wrap">
+        {renderDisplayImage(model)}
+      </div>
+    </div>
+  ) : null;
+  const typeLine = (
+    <div className="card-face-typeline">
+      <span>{model.subtitle ?? "Card"}</span>
+      {model.rarity ? (
+        <span
+          aria-label={`Rarity: ${model.rarity}`}
+          className={`card-face-rarity-badge is-${model.rarity}`}
+          title={model.rarity}
+        >
+          <span
+            aria-hidden="true"
+            className="card-face-rarity-badge-mark"
+            style={{
+              WebkitMaskImage: `url(${rarityExpansionSymbol})`,
+              maskImage: `url(${rarityExpansionSymbol})`,
+            }}
+          />
+        </span>
+      ) : (
+        <span className="card-face-rarity-badge is-na">{model.variant.toUpperCase()}</span>
+      )}
+    </div>
+  );
   const cardFace = (
     <article className="card-face">
       <header className="card-face-header">
@@ -350,48 +408,32 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
         <div className="card-face-mana-wrap">{renderManaCost(model.manaCost)}</div>
       </header>
 
-      {renderDisplayImage(model)}
+      {sagaBody ? null : renderDisplayImage(model)}
 
-      <div className="card-face-typeline">
-        <span>{model.subtitle ?? "Card"}</span>
-        {model.rarity ? (
-          <span
-            aria-label={`Rarity: ${model.rarity}`}
-            className={`card-face-rarity-badge is-${model.rarity}`}
-            title={model.rarity}
-          >
-            <span
-              aria-hidden="true"
-              className="card-face-rarity-badge-mark"
-              style={{
-                WebkitMaskImage: `url(${rarityExpansionSymbol})`,
-                maskImage: `url(${rarityExpansionSymbol})`,
-              }}
-            />
-          </span>
-        ) : (
-          <span className="card-face-rarity-badge is-na">{model.variant.toUpperCase()}</span>
-        )}
-      </div>
+      {sagaBody ? null : typeLine}
 
-      <div className="card-face-rules">
-        {textBlocks.map((block, index) => (
-          <p
-            key={`${block.kind}-${index}`}
-            className={[
-              "card-face-rules-line",
-              block.kind === "flavor" ? "is-flavor" : null,
-            ]
-              .filter(Boolean)
-              .join(" ")}
-          >
-            {renderRulesText(block.text, {
-              onKeywordEnter: setActiveKeywordId,
-              onKeywordLeave: () => setActiveKeywordId(null),
-            })}
-          </p>
-        ))}
-      </div>
+      {sagaBody ?? (
+        <div className="card-face-rules">
+          {textBlocks.map((block, index) => (
+            <p
+              key={`${block.kind}-${index}`}
+              className={[
+                "card-face-rules-line",
+                block.kind === "flavor" ? "is-flavor" : null,
+              ]
+                .filter(Boolean)
+                .join(" ")}
+            >
+              {renderRulesText(block.text, {
+                onKeywordEnter: setActiveKeywordId,
+                onKeywordLeave: () => setActiveKeywordId(null),
+              })}
+            </p>
+          ))}
+        </div>
+      )}
+
+      {sagaBody ? typeLine : null}
 
       <footer className="card-face-footer">
         <div className="card-face-footer-top">
@@ -414,7 +456,7 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
     </article>
   );
 
-  const isCardButton = actions.length === 1 && model.variant === "mtg";
+  const isCardButton = actions.length === 1 && (model.variant === "mtg" || model.variant === "saga");
   const singleAction = isCardButton ? actions[0] : null;
   const isTappedPermanent = isPermanentCard && stateFlags.includes("tapped");
   const faceContent =
@@ -592,7 +634,8 @@ export function DisplayCard({ model, className, detailsAction }: DisplayCardProp
     <div
       className={[
         `card-face-tile tone-${model.frameTone} display-card-shell display-card-${model.variant}`,
-        isExhaustedPermanent ? "is-exhausted" : null,
+        isSagaCard ? "is-saga" : null,
+        isExhaustedPermanent && !isSagaCard ? "is-exhausted" : null,
         isTappedPermanent ? "is-tapped" : null,
         isTargetablePlayer ? "is-targetable is-targetable-player" : null,
         isTargetableEnemy ? "is-targetable is-targetable-enemy" : null,

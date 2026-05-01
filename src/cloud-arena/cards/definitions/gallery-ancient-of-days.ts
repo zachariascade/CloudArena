@@ -2,7 +2,7 @@ import type { CardDefinition } from "../../core/types.js";
 
 export const galleryAncientOfDaysCardDefinition: CardDefinition = {
   id: "gallery_ancient_of_days",
-  name: "Ancient of Days",
+  name: "Ancient of Days, Judge Eternal",
   cardTypes: ["creature"],
   cost: 3,
   availabilityStatus: "in_progress",
@@ -12,7 +12,8 @@ export const galleryAncientOfDaysCardDefinition: CardDefinition = {
   },
   rarity: "mythic",
   display: {
-    title: "Throne of Fire",
+    name: "Ancient of Days, Judge Eternal",
+    title: null,
     frameTone: "white",
     artist: "William Blake",
     imagePath:
@@ -23,7 +24,7 @@ export const galleryAncientOfDaysCardDefinition: CardDefinition = {
     footerCredit: "Cloud Arena",
     collectorNumber: "031",
   },
-  subtypes: ["Sage"],
+  subtypes: ["God"],
   onPlay: [],
   power: 4,
   health: 6,

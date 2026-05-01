@@ -114,6 +114,7 @@ export function getLegalActions(state: BattleState): BattleAction[] {
     .flatMap((permanent) => {
       const definition = getCardDefinitionFromLibrary(state.cardDefinitions, permanent.definitionId);
       const isSummoningSick = permanentHasSummoningSickness(state, permanent);
+      const hasNativeCombatActions = hasCardType(definition, "creature") || hasCardType(definition, "saga");
       const activatedAbilityActions = getActivatedAbilities(permanent.abilities)
         .filter((ability) => ability.activation.actionId !== "attack")
         .filter((ability) => !(permanent.disabledAbilityIds ?? []).includes(ability.id))
@@ -171,7 +172,7 @@ export function getLegalActions(state: BattleState): BattleAction[] {
           abilityId: ability.id,
         }))
         .filter(() => !permanent.hasActedThisTurn);
-      const creatureRulesActions = hasCardType(definition, "creature") && !permanent.hasActedThisTurn
+      const creatureRulesActions = hasNativeCombatActions && !permanent.hasActedThisTurn
         ? [
             ...(isSummoningSick || (permanent.disabledRulesActions ?? []).includes("attack")
               ? []

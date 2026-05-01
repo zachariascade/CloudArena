@@ -8,6 +8,7 @@ import { focusedBlessingCardDefinition } from "../../src/cloud-arena/cards/defin
 import { choirCaptainCardDefinition } from "../../src/cloud-arena/cards/definitions/choir-captain.js";
 import { guardianCardDefinition } from "../../src/cloud-arena/cards/definitions/guardian.js";
 import { denialBeforeTheRoostersCryCardDefinition } from "../../src/cloud-arena/cards/definitions/denial-before-the-rooster-s-cry.js";
+import { deliveranceFromFireCardDefinition } from "../../src/cloud-arena/cards/definitions/deliverance-from-fire.js";
 import { haltBucklerCardDefinition } from "../../src/cloud-arena/cards/definitions/halt-buckler.js";
 import { graveyardHymnCardDefinition } from "../../src/cloud-arena/cards/definitions/graveyard-hymn.js";
 import { massBenedictionCardDefinition } from "../../src/cloud-arena/cards/definitions/mass-benediction.js";
@@ -155,6 +156,9 @@ describe("cloud arena card summary", () => {
   it("describes the indestructible instant", () => {
     expect(summarizeCardDefinition(denialBeforeTheRoostersCryCardDefinition)).toEqual([
       "Choose a creature you control; it gains indestructible until end of turn.",
+    ]);
+    expect(summarizeCardDefinition(deliveranceFromFireCardDefinition)).toEqual([
+      "Each permanent you control gains indestructible until end of turn.",
     ]);
   });
 

@@ -105,11 +105,11 @@ describe("cloud arena session service", () => {
 
   it("does not prepend summon text to blank enchantments", () => {
     const books = listCloudArenaCardSummaries({ availabilityStatus: "all" }).find(
-      (card) => card.id === "books_were_opened",
+      (card) => card.id === "new_birth_from_above",
     );
 
     if (!books) {
-      throw new Error("Expected books_were_opened in the card catalog.");
+      throw new Error("Expected new_birth_from_above in the card catalog.");
     }
 
     expect(books.effectSummary).not.toContain("Summon");

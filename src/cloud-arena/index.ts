@@ -92,6 +92,7 @@ export {
   isEquipmentPermanent,
   permanentHasKeyword,
   permanentAttacksAllEnemyPermanents,
+  sacrificePermanent,
   summonPermanentFromCard,
   toPermanentInstanceId,
 } from "./core/permanents.js";

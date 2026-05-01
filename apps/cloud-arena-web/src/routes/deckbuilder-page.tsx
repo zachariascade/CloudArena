@@ -1211,45 +1211,43 @@ export function CloudArenaDeckBuilderPage({
                               }
                             }}
                           >
+                            <DisplayCard
+                              model={model}
+                              className="deckbuilder-card-face"
+                            />
                             <div className="deckbuilder-card-controls">
-                              <div className="deckbuilder-card-copy-controls">
-                                <button
-                                  type="button"
-                                  className="deckbuilder-card-copy-button"
-                                  aria-label={`Remove one copy of ${card.name}`}
-                                  disabled={!isReady}
-                                  onClick={(event) => {
-                                    event.stopPropagation();
-                                    if (!isReady) return;
-                                    handleDecreaseCardCopies(card.id);
-                                  }}
-                                >
-                                  -
-                                </button>
-                                <button
-                                  type="button"
-                                  className="deckbuilder-card-copy-button"
-                                  aria-label={`Add one copy of ${card.name}`}
-                                  disabled={!isReady}
-                                  onClick={(event) => {
-                                    event.stopPropagation();
-                                    if (!isReady) return;
-                                    handleIncreaseCardCopies(card.id);
-                                  }}
-                                >
-                                  +
-                                </button>
-                              </div>
+                              {isReady ? (
+                                <div className="deckbuilder-card-copy-controls">
+                                  <button
+                                    type="button"
+                                    className="deckbuilder-card-copy-button"
+                                    aria-label={`Remove one copy of ${card.name}`}
+                                    onClick={(event) => {
+                                      event.stopPropagation();
+                                      handleDecreaseCardCopies(card.id);
+                                    }}
+                                  >
+                                    -
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="deckbuilder-card-copy-button"
+                                    aria-label={`Add one copy of ${card.name}`}
+                                    onClick={(event) => {
+                                      event.stopPropagation();
+                                      handleIncreaseCardCopies(card.id);
+                                    }}
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                              ) : null}
                               {isSelected ? (
                                 <span className="deckbuilder-card-selection-chip">
                                   {cardQuantity}
                                 </span>
                               ) : null}
                             </div>
-                            <DisplayCard
-                              model={model}
-                              className="deckbuilder-card-face"
-                            />
                           </div>
                         );
                       })}

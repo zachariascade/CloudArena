@@ -384,7 +384,18 @@ function describeRemoveCounterEffect(effect: Extract<Effect, { type: "remove_cou
 
 function describeGrantKeywordEffect(effect: Extract<Effect, { type: "grant_keyword" }>): string {
   const target = describeCounterTarget(effect);
+  const targetSelector = effect.target === "self" ? null : effect.target;
+  const hasTargeting = Boolean(effect.targeting);
+  const isMassTarget =
+    targetSelector !== null &&
+    !hasTargeting &&
+    (targetSelector.zone === "battlefield" || targetSelector.zone === "enemy_battlefield");
   const durationSuffix = effect.duration === "end_of_turn" ? " until end of turn" : "";
+
+  if (isMassTarget && targetSelector) {
+    const label = describeCollectionTarget(targetSelector);
+    return `${label[0].toUpperCase()}${label.slice(1)} gains ${effect.keyword}${durationSuffix}.`;
+  }
 
   return `${target === "this" ? "This" : `Choose ${target}; it`} gains ${effect.keyword}${durationSuffix}.`;
 }
@@ -712,15 +723,28 @@ function summarizeEffects(
   return (effects ?? []).map((effect) => describeEffect(effect, preSummon));
 }
 
+export function summarizeSagaChapter(
+  chapter: { chapter: number; label?: string; title?: string; effects: Effect[] },
+): string {
+  const label = chapter.label ?? String(chapter.chapter);
+  const effectText = summarizeEffects(chapter.effects).join(" ");
+  const titleText = chapter.title ? `${chapter.title}. ` : "";
+  return `${label} - ${titleText}${effectText}`;
+}
+
 export function summarizeCardDefinition(definition: CardDefinition): string[] {
   const summaryLines: string[] = [];
 
   if (isPermanentCardDefinition(definition)) {
+    if (definition.saga) {
+      summaryLines.push(...definition.saga.chapters.map(summarizeSagaChapter));
+    }
+
     if (definition.subtypes?.includes("Equipment")) {
       summaryLines.push("Equip a permanent.");
 
-      const powerBonus = scaleEquipmentBonusAmount(definition.power);
-      const healthBonus = scaleEquipmentBonusAmount(definition.health);
+      const powerBonus = scaleEquipmentBonusAmount(definition.power ?? 0);
+      const healthBonus = scaleEquipmentBonusAmount(definition.health ?? 0);
       const powerLabel = `${powerBonus >= 0 ? "+" : ""}${powerBonus}`;
       const healthLabel = `${healthBonus >= 0 ? "+" : ""}${healthBonus}`;
       summaryLines.push(`Equipped permanent gets ${powerLabel}/${healthLabel}.`);

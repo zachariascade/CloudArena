@@ -94,7 +94,7 @@ function addCounterInstance(
   counter: {
     id: string;
     counter: string;
-    stat: "power" | "health";
+    stat?: "power" | "health";
     amount: number;
     sourceKind: "card" | "permanent";
     sourceId: string;
@@ -503,19 +503,32 @@ function resolveAddCounterEffect(
 
   const amount = Math.max(0, evaluateValueExpression(state, effect.amount ?? { type: "constant", value: 0 }, context));
 
-  if (amount <= 0 || !effect.counter || !effect.stat) {
+  if (amount <= 0 || !effect.counter) {
     return;
   }
 
   for (const permanent of targets) {
-    addCounterInstance(state, permanent, {
-      id: createCounterId(state),
-      counter: effect.counter,
-      stat: effect.stat,
-      amount,
-      sourceKind: source.sourceKind,
-      sourceId: source.sourceId,
-    }, effect.duration === "end_of_turn" ? state.turnNumber + 1 : undefined);
+    if (effect.stat) {
+      addCounterInstance(state, permanent, {
+        id: createCounterId(state),
+        counter: effect.counter,
+        stat: effect.stat,
+        amount,
+        sourceKind: source.sourceKind,
+        sourceId: source.sourceId,
+      }, effect.duration === "end_of_turn" ? state.turnNumber + 1 : undefined);
+      continue;
+    }
+
+    for (let index = 0; index < amount; index += 1) {
+      addCounterInstance(state, permanent, {
+        id: createCounterId(state),
+        counter: effect.counter,
+        amount: 1,
+        sourceKind: source.sourceKind,
+        sourceId: source.sourceId,
+      }, effect.duration === "end_of_turn" ? state.turnNumber + 1 : undefined);
+    }
   }
 }
 
